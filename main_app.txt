@@ -1,0 +1,201 @@
+438:export default function App() {
+439-  const [searchTerm, setSearchTerm] = useState("");
+440-  const [activeModule, setActiveModule] = useState<ModuleId>("home");
+441-  const [previousModule, setPreviousModule] = useState<ModuleId | null>(null);
+442-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+443-  const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
+444-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+445-  const [isHelpOpen, setIsHelpOpen] = useState(false);
+446-  const [isAuthOpen, setIsAuthOpen] = useState(false);
+447-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+448-  const [expandedCategory, setExpandedCategory] = useState<string | null>(
+449-    "Core Estimators",
+450-  );
+451-  const scrollRef = useRef<HTMLDivElement>(null);
+452-
+453-  const toolsByCategory = ALL_TOOLS.reduce(
+454-    (acc, tool) => {
+455-      const cat = tool.category || "Uncategorized";
+456-      if (!acc[cat]) acc[cat] = [];
+457-      acc[cat].push(tool);
+458-      return acc;
+459-    },
+460-    {} as Record<string, (typeof ALL_TOOLS)[0][]>,
+461-  );
+462-
+463-  const { user, logOut } = useAuth();
+464-
+465-  useEffect(() => {
+466-    if (scrollRef.current) {
+467-      if (
+468-        activeModule !== "home" ||
+469-        !previousModule ||
+470-        [
+471-          "home",
+472-          "my-estimates",
+473-          "pricing",
+474-          "about",
+475-          "careers",
+476-          "contact",
+477-          "blog",
+478-        ].includes(previousModule)
+479-      ) {
+480-        scrollRef.current.scrollTo(0, 0);
+481-      }
+482-    }
+483-  }, [activeModule, previousModule]);
+484-
+485-  useEffect(() => {
+486-    const handleGoHome = () => {
+487-      setPreviousModule(activeModule);
+488-      setActiveModule("home");
+489-    };
+490-    const handleOpenProfile = () => {
+491-      setIsProfileOpen(true);
+492-    };
+493-
+494-    window.addEventListener("go-home", handleGoHome);
+495-    window.addEventListener("open-profile", handleOpenProfile);
+496-
+497-    return () => {
+498-      window.removeEventListener("go-home", handleGoHome);
+499-      window.removeEventListener("open-profile", handleOpenProfile);
+500-    };
+501-  }, [activeModule]);
+502-
+503-  const handleSelectModule = (id: ModuleId) => {
+504-    setPreviousModule(activeModule);
+505-    setActiveModule(id);
+506-    setIsSidebarOpen(false);
+507-  };
+508-
+509-  return (
+510-    <SmoothScroll>
+511-      <SkipToContent />
+512-      <LoadingScreen />
+513-      <CustomCursor />
+514-      <ScrollToTop />
+515-      <SettingsProvider>
+516-        <HouseSpecsProvider>
+517-          <MarketRatesProvider>
+518-            <TakeoffProvider>
+519-              <ProjectProvider>
+520-                <div className="flex flex-col h-[100dvh] w-full bg-transparent font-sans text-slate-900 transition-colors duration-300">
+521-                  <Toaster position="bottom-right" />
+522-                  <ProductTour />
+523-                  
+524-                  <TopNavbar
+525-                    onOpenSidebar={() => setIsSidebarOpen(true)}
+526-                    onOpenAuth={() => setIsAuthOpen(true)}
+527-                    onOpenProfile={() => setIsProfileOpen(true)}
+528-                    onNavigate={handleSelectModule}
+529-                  />
+530-
+531-                  <div className="flex flex-1 min-h-0 relative w-full">
+532-                    {/* Main Sidebar (Mobile Overlay + Persistent Desktop) */}
+533-                    <Sidebar
+534-                      activeModule={activeModule}
+535-                      onSelectModule={handleSelectModule}
+536-                      isOpen={isSidebarOpen}
+537-                      onClose={() => setIsSidebarOpen(false)}
+538-                      onOpenAuth={() => {
+539-                        setIsSidebarOpen(false);
+540-                        setIsAuthOpen(true);
+541-                      }}
+542-                      onOpenProfile={() => {
+543-                        setIsSidebarOpen(false);
+544-                        setIsProfileOpen(true);
+545-                      }}
+546-                    />
+547-
+548-                    <main
+549-                      id="main-content"
+550-                      className="flex-1 flex flex-col bg-transparent relative w-full min-h-0 pt-[80px] transition-all duration-300"
+551-                    >
+552-                      <div className="w-full h-full flex-1 flex flex-col min-h-0 relative transition-all duration-300">
+553-                        <div className="flex-1 flex flex-col min-h-0 relative w-full transition-colors duration-300 md:bg-white/50 md:backdrop-blur-sm">
+554-                          {[
+555-                            "home",
+556-                            "my-estimates",
+557-                            "about",
+558-                            "careers",
+559-                            "contact",
+560-                            "blog",
+561-                            "privacy",
+562-                            "terms",
+563-                            "cookies",
+564-                          ].includes(activeModule) ? (
+565-                            <div
+566-                              ref={scrollRef}
+567-                              className="flex-1 flex flex-col min-h-0 relative w-full overflow-x-hidden overflow-y-auto"
+568-                            >
+569-                              <div className="flex flex-col min-h-full relative w-full">
+570-                                {activeModule === "home" && (
+571-                                  <Dashboard
+572-                                    previousModule={previousModule}
+573-                                    onSelectModule={handleSelectModule}
+574-                                    onOpenSidebar={() => setIsSidebarOpen(true)}
+575-                                    onOpenSettings={() =>
+576-                                      setIsSettingsOpen(true)
+577-                                    }
+578-                                    onOpenAuth={() => setIsAuthOpen(true)}
+579-                                  />
+580-                                )}
+581-                                {activeModule === "my-estimates" && (
+582-                                  <RecentEstimates
+583-                                    onSelectModule={handleSelectModule}
+584-                                  />
+585-                                )}
+586-                                {activeModule === "pricing" && (
+587-                                  <PricingPage />
+588-                                )}
+589-                                {activeModule === "about" && (
+590-                                  <div className="p-8 pt-12">
+591-                                    <AboutUs />
+592-                                  </div>
+593-                                )}
+594-                                {activeModule === "careers" && (
+595-                                  <div className="p-8 pt-12">
+596-                                    <Careers />
+597-                                  </div>
+598-                                )}
+599-                                {activeModule === "contact" && (
+600-                                  <div className="p-8 pt-12">
+601-                                    <Contact />
+602-                                  </div>
+603-                                )}
+604-                                {activeModule === "blog" && (
+605-                                  <div className="p-8 pt-12">
+606-                                    <Blog />
+607-                                  </div>
+608-                                )}
+609-                                {activeModule === "privacy" && (
+610-                                  <LegalPages
+611-                                    page="privacy"
+612-                                    onNavigate={handleSelectModule}
+613-                                  />
+614-                                )}
+615-                                {activeModule === "terms" && (
+616-                                  <LegalPages
+617-                                    page="terms"
+618-                                    onNavigate={handleSelectModule}
+619-                                  />
+620-                                )}
+621-                                {activeModule === "cookies" && (
+622-                                  <LegalPages
+623-                                    page="cookies"
+624-                                    onNavigate={handleSelectModule}
+625-                                  />
+626-                                )}
+627-                                <Footer
+628-                                  activeModule={activeModule}
+629-                                  onNavigate={handleSelectModule}
+630-                                />
+631-                              </div>
+632-                            </div>
+633-                          ) : (
+634-                            <div className="flex-1 flex flex-col min-h-0 relative w-full bg-transparent">
+635-                              {/* We remove AppHeader for Desktop, handle differently inside module wrappers if needed, but for now we keep ModuleWrapper and conditionally hide AppHeader inside it on desktop */}
+636-                              {activeModule === "tracker" && (
+637-                                <ModuleWrapper
+638-                                  title="Site Progress Tracker"

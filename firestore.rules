@@ -1,0 +1,128 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} { allow read, write: if false; }
+
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null; }
+
+    // User Profile
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email']) &&
+             data.uid is string && data.uid.size() <= 128 &&
+             data.email is string && data.email.size() <= 200 &&
+             data.get('displayName', '') is string &&
+             data.get('photoURL', '') is string &&
+             data.get('createdAt', 0) is number;
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidUser(incoming());
+      allow update: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidUser(incoming()) &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'email', 'createdAt']);
+    }
+
+    // Estimates
+    function isValidEstimate(data) {
+      return data.keys().hasAll(['userId', 'name', 'type', 'createdAt']) &&
+             data.userId is string && data.userId.size() <= 128 &&
+             data.name is string && data.name.size() <= 200 &&
+             data.type is string && data.type.size() <= 100 &&
+             data.get('status', '') is string &&
+             data.createdAt is number;
+    }
+
+    match /estimates/{estimateId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid && isValidId(estimateId) && isValidEstimate(incoming()) && incoming().keys().hasOnly(['userId', 'name', 'type', 'payload', 'status', 'createdAt']);
+      allow update: if isSignedIn() && existing().userId == request.auth.uid && incoming().userId == request.auth.uid && isValidId(estimateId) && isValidEstimate(incoming()) &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['name', 'type', 'payload', 'status']);
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+    // Comments
+    function isValidComment(data) {
+      return data.keys().hasAll(['toolId', 'userName', 'text', 'timestamp', 'status']) &&
+             data.toolId is string && data.toolId.size() <= 128 &&
+             data.userName is string && data.userName.size() <= 100 &&
+             data.text is string && data.text.size() <= 2000 &&
+             data.timestamp is number &&
+             data.status is string && data.status.size() <= 20;
+    }
+
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidId(commentId) && isValidComment(incoming()) && incoming().keys().hasOnly(['toolId', 'userName', 'text', 'timestamp', 'status', 'userId']) && incoming().status == 'approved';
+      allow update: if false;
+      allow delete: if false;
+    }
+    // Projects
+    function isValidProject(data) {
+      return data.keys().hasAll(['name', 'ownerId', 'memberIds', 'roles', 'memberEmails', 'createdAt', 'updatedAt']) &&
+             data.name is string && data.name.size() <= 200 &&
+             data.ownerId is string && data.ownerId.size() <= 128 &&
+             data.memberIds is list && data.memberIds.size() <= 50 &&
+             (data.memberIds.size() == 0 || data.memberIds[0] is string) &&
+             data.roles is map &&
+             data.memberEmails is map &&
+             data.createdAt is number &&
+             data.updatedAt is number &&
+             data.get('location', '') is string &&
+             data.get('type', '') is string &&
+             data.get('startDate', '') is string &&
+             (data.get('budget', 0) is number || data.get('budget', '') is string) &&
+             (data.get('shareLinkEnabled', false) is bool) &&
+             (data.get('shareToken', '') is string) &&
+             (data.get('shareRole', 'viewer') is string) &&
+             (data.get('lastUsedShareToken', '') is string);
+    }
+
+    match /projects/{projectId} {
+      allow get: if isSignedIn() && (existing().memberIds.hasAny([request.auth.uid]) || existing().shareLinkEnabled == true);
+      allow list: if isSignedIn() && resource.data.memberIds.hasAny([request.auth.uid]);
+      allow create: if isSignedIn() && isValidId(projectId) && isValidProject(incoming()) && incoming().ownerId == request.auth.uid && incoming().roles[request.auth.uid] == 'owner' && incoming().memberIds.hasAny([request.auth.uid]);
+      allow update: if isSignedIn() && isValidId(projectId) && isValidProject(incoming()) && incoming().ownerId == existing().ownerId && incoming().createdAt == existing().createdAt && (
+        (
+          existing().memberIds.hasAny([request.auth.uid]) && existing().roles[request.auth.uid] in ['owner', 'editor'] &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['name', 'location', 'type', 'startDate', 'budget', 'memberIds', 'roles', 'memberEmails', 'updatedAt', 'shareLinkEnabled', 'shareToken', 'shareRole', 'lastUsedShareToken'])
+        ) || (
+          !existing().memberIds.hasAny([request.auth.uid]) &&
+          existing().shareLinkEnabled == true &&
+          incoming().lastUsedShareToken == existing().shareToken &&
+          incoming().memberIds.hasAll(existing().memberIds) &&
+          incoming().memberIds.hasAll([request.auth.uid]) &&
+          incoming().memberIds.size() == existing().memberIds.size() + 1 &&
+          incoming().roles[request.auth.uid] == existing().shareRole &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['memberIds', 'roles', 'memberEmails', 'lastUsedShareToken', 'updatedAt'])
+        )
+      );
+      allow delete: if isSignedIn() && existing().ownerId == request.auth.uid;
+    }
+
+    function isValidProjectEstimate(data) {
+      return data.keys().hasAll(['projectId', 'name', 'createdAt', 'updatedAt']) &&
+             data.projectId is string && data.projectId.size() <= 128 &&
+             data.name is string && data.name.size() <= 200 &&
+             data.get('toolId', '') is string &&
+             (data.get('cost', 0) is number || data.get('cost', '') is string) &&
+             data.get('category', '') is string &&
+             data.get('date', '') is string &&
+             data.get('materials', {}) is map &&
+             data.createdAt is number &&
+             data.updatedAt is number;
+    }
+
+    match /projects/{projectId}/estimates/{estimateId} {
+      allow get: if isSignedIn() && get(/databases/$(database)/documents/projects/$(projectId)).data.memberIds.hasAny([request.auth.uid]);
+      allow list: if isSignedIn() && get(/databases/$(database)/documents/projects/$(projectId)).data.memberIds.hasAny([request.auth.uid]);
+      allow create: if isSignedIn() && isValidId(estimateId) && isValidProjectEstimate(incoming()) && get(/databases/$(database)/documents/projects/$(projectId)).data.memberIds.hasAny([request.auth.uid]) && get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid] in ['owner', 'editor'] && incoming().projectId == projectId;
+      allow update: if isSignedIn() && isValidId(estimateId) && isValidProjectEstimate(incoming()) && get(/databases/$(database)/documents/projects/$(projectId)).data.memberIds.hasAny([request.auth.uid]) && get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid] in ['owner', 'editor'] && incoming().projectId == existing().projectId && incoming().createdAt == existing().createdAt &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['name', 'toolId', 'cost', 'materials', 'category', 'date', 'updatedAt']);
+      allow delete: if isSignedIn() && get(/databases/$(database)/documents/projects/$(projectId)).data.memberIds.hasAny([request.auth.uid]) && get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid] in ['owner', 'editor'];
+    }
+  }
+}

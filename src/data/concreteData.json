@@ -1,0 +1,5602 @@
+[
+  {
+    "slug": "cement-sand-aggregate-for-10-cft-m15-concrete",
+    "volume_cft": 10,
+    "mix_ratio": "M15",
+    "cement_bags_required": 2,
+    "sand_cft_required": 4.4,
+    "aggregate_cft_required": 8.8,
+    "target_keyword": "material required for 10 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 10 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-10-cft-m20-concrete",
+    "volume_cft": 10,
+    "mix_ratio": "M20",
+    "cement_bags_required": 3,
+    "sand_cft_required": 4.2,
+    "aggregate_cft_required": 8.4,
+    "target_keyword": "material required for 10 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 10 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-10-cft-m25-concrete",
+    "volume_cft": 10,
+    "mix_ratio": "M25",
+    "cement_bags_required": 4,
+    "sand_cft_required": 3.85,
+    "aggregate_cft_required": 7.7,
+    "target_keyword": "material required for 10 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 10 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-20-cft-m15-concrete",
+    "volume_cft": 20,
+    "mix_ratio": "M15",
+    "cement_bags_required": 4,
+    "sand_cft_required": 8.8,
+    "aggregate_cft_required": 17.6,
+    "target_keyword": "material required for 20 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 20 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-20-cft-m20-concrete",
+    "volume_cft": 20,
+    "mix_ratio": "M20",
+    "cement_bags_required": 5,
+    "sand_cft_required": 8.4,
+    "aggregate_cft_required": 16.8,
+    "target_keyword": "material required for 20 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 20 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-20-cft-m25-concrete",
+    "volume_cft": 20,
+    "mix_ratio": "M25",
+    "cement_bags_required": 7,
+    "sand_cft_required": 7.7,
+    "aggregate_cft_required": 15.4,
+    "target_keyword": "material required for 20 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 20 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-30-cft-m15-concrete",
+    "volume_cft": 30,
+    "mix_ratio": "M15",
+    "cement_bags_required": 6,
+    "sand_cft_required": 13.2,
+    "aggregate_cft_required": 26.4,
+    "target_keyword": "material required for 30 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 30 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-30-cft-m20-concrete",
+    "volume_cft": 30,
+    "mix_ratio": "M20",
+    "cement_bags_required": 7,
+    "sand_cft_required": 12.6,
+    "aggregate_cft_required": 25.2,
+    "target_keyword": "material required for 30 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 30 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-30-cft-m25-concrete",
+    "volume_cft": 30,
+    "mix_ratio": "M25",
+    "cement_bags_required": 10,
+    "sand_cft_required": 11.55,
+    "aggregate_cft_required": 23.1,
+    "target_keyword": "material required for 30 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 30 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-40-cft-m15-concrete",
+    "volume_cft": 40,
+    "mix_ratio": "M15",
+    "cement_bags_required": 8,
+    "sand_cft_required": 17.6,
+    "aggregate_cft_required": 35.2,
+    "target_keyword": "material required for 40 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 40 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-40-cft-m20-concrete",
+    "volume_cft": 40,
+    "mix_ratio": "M20",
+    "cement_bags_required": 10,
+    "sand_cft_required": 16.8,
+    "aggregate_cft_required": 33.6,
+    "target_keyword": "material required for 40 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 40 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-40-cft-m25-concrete",
+    "volume_cft": 40,
+    "mix_ratio": "M25",
+    "cement_bags_required": 13,
+    "sand_cft_required": 15.4,
+    "aggregate_cft_required": 30.8,
+    "target_keyword": "material required for 40 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 40 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-50-cft-m15-concrete",
+    "volume_cft": 50,
+    "mix_ratio": "M15",
+    "cement_bags_required": 9,
+    "sand_cft_required": 22,
+    "aggregate_cft_required": 44,
+    "target_keyword": "material required for 50 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 50 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-50-cft-m20-concrete",
+    "volume_cft": 50,
+    "mix_ratio": "M20",
+    "cement_bags_required": 12,
+    "sand_cft_required": 21,
+    "aggregate_cft_required": 42,
+    "target_keyword": "material required for 50 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 50 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-50-cft-m25-concrete",
+    "volume_cft": 50,
+    "mix_ratio": "M25",
+    "cement_bags_required": 16,
+    "sand_cft_required": 19.25,
+    "aggregate_cft_required": 38.5,
+    "target_keyword": "material required for 50 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 50 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-60-cft-m15-concrete",
+    "volume_cft": 60,
+    "mix_ratio": "M15",
+    "cement_bags_required": 11,
+    "sand_cft_required": 26.4,
+    "aggregate_cft_required": 52.8,
+    "target_keyword": "material required for 60 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 60 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-60-cft-m20-concrete",
+    "volume_cft": 60,
+    "mix_ratio": "M20",
+    "cement_bags_required": 14,
+    "sand_cft_required": 25.2,
+    "aggregate_cft_required": 50.4,
+    "target_keyword": "material required for 60 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 60 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-60-cft-m25-concrete",
+    "volume_cft": 60,
+    "mix_ratio": "M25",
+    "cement_bags_required": 19,
+    "sand_cft_required": 23.1,
+    "aggregate_cft_required": 46.2,
+    "target_keyword": "material required for 60 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 60 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-70-cft-m15-concrete",
+    "volume_cft": 70,
+    "mix_ratio": "M15",
+    "cement_bags_required": 13,
+    "sand_cft_required": 30.8,
+    "aggregate_cft_required": 61.6,
+    "target_keyword": "material required for 70 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 70 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-70-cft-m20-concrete",
+    "volume_cft": 70,
+    "mix_ratio": "M20",
+    "cement_bags_required": 16,
+    "sand_cft_required": 29.4,
+    "aggregate_cft_required": 58.8,
+    "target_keyword": "material required for 70 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 70 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-70-cft-m25-concrete",
+    "volume_cft": 70,
+    "mix_ratio": "M25",
+    "cement_bags_required": 22,
+    "sand_cft_required": 26.95,
+    "aggregate_cft_required": 53.9,
+    "target_keyword": "material required for 70 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 70 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-80-cft-m15-concrete",
+    "volume_cft": 80,
+    "mix_ratio": "M15",
+    "cement_bags_required": 15,
+    "sand_cft_required": 35.2,
+    "aggregate_cft_required": 70.4,
+    "target_keyword": "material required for 80 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 80 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-80-cft-m20-concrete",
+    "volume_cft": 80,
+    "mix_ratio": "M20",
+    "cement_bags_required": 19,
+    "sand_cft_required": 33.6,
+    "aggregate_cft_required": 67.2,
+    "target_keyword": "material required for 80 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 80 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-80-cft-m25-concrete",
+    "volume_cft": 80,
+    "mix_ratio": "M25",
+    "cement_bags_required": 26,
+    "sand_cft_required": 30.8,
+    "aggregate_cft_required": 61.6,
+    "target_keyword": "material required for 80 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 80 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-90-cft-m15-concrete",
+    "volume_cft": 90,
+    "mix_ratio": "M15",
+    "cement_bags_required": 17,
+    "sand_cft_required": 39.6,
+    "aggregate_cft_required": 79.2,
+    "target_keyword": "material required for 90 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 90 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-90-cft-m20-concrete",
+    "volume_cft": 90,
+    "mix_ratio": "M20",
+    "cement_bags_required": 21,
+    "sand_cft_required": 37.8,
+    "aggregate_cft_required": 75.6,
+    "target_keyword": "material required for 90 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 90 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-90-cft-m25-concrete",
+    "volume_cft": 90,
+    "mix_ratio": "M25",
+    "cement_bags_required": 29,
+    "sand_cft_required": 34.65,
+    "aggregate_cft_required": 69.3,
+    "target_keyword": "material required for 90 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 90 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-100-cft-m15-concrete",
+    "volume_cft": 100,
+    "mix_ratio": "M15",
+    "cement_bags_required": 18,
+    "sand_cft_required": 44,
+    "aggregate_cft_required": 88,
+    "target_keyword": "material required for 100 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 100 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-100-cft-m20-concrete",
+    "volume_cft": 100,
+    "mix_ratio": "M20",
+    "cement_bags_required": 23,
+    "sand_cft_required": 42,
+    "aggregate_cft_required": 84,
+    "target_keyword": "material required for 100 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 100 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-100-cft-m25-concrete",
+    "volume_cft": 100,
+    "mix_ratio": "M25",
+    "cement_bags_required": 32,
+    "sand_cft_required": 38.5,
+    "aggregate_cft_required": 77,
+    "target_keyword": "material required for 100 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 100 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-110-cft-m15-concrete",
+    "volume_cft": 110,
+    "mix_ratio": "M15",
+    "cement_bags_required": 20,
+    "sand_cft_required": 48.4,
+    "aggregate_cft_required": 96.8,
+    "target_keyword": "material required for 110 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 110 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-110-cft-m20-concrete",
+    "volume_cft": 110,
+    "mix_ratio": "M20",
+    "cement_bags_required": 26,
+    "sand_cft_required": 46.2,
+    "aggregate_cft_required": 92.4,
+    "target_keyword": "material required for 110 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 110 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-110-cft-m25-concrete",
+    "volume_cft": 110,
+    "mix_ratio": "M25",
+    "cement_bags_required": 35,
+    "sand_cft_required": 42.35,
+    "aggregate_cft_required": 84.7,
+    "target_keyword": "material required for 110 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 110 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-120-cft-m15-concrete",
+    "volume_cft": 120,
+    "mix_ratio": "M15",
+    "cement_bags_required": 22,
+    "sand_cft_required": 52.8,
+    "aggregate_cft_required": 105.6,
+    "target_keyword": "material required for 120 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 120 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-120-cft-m20-concrete",
+    "volume_cft": 120,
+    "mix_ratio": "M20",
+    "cement_bags_required": 28,
+    "sand_cft_required": 50.4,
+    "aggregate_cft_required": 100.8,
+    "target_keyword": "material required for 120 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 120 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-120-cft-m25-concrete",
+    "volume_cft": 120,
+    "mix_ratio": "M25",
+    "cement_bags_required": 38,
+    "sand_cft_required": 46.2,
+    "aggregate_cft_required": 92.4,
+    "target_keyword": "material required for 120 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 120 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-130-cft-m15-concrete",
+    "volume_cft": 130,
+    "mix_ratio": "M15",
+    "cement_bags_required": 24,
+    "sand_cft_required": 57.2,
+    "aggregate_cft_required": 114.4,
+    "target_keyword": "material required for 130 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 130 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-130-cft-m20-concrete",
+    "volume_cft": 130,
+    "mix_ratio": "M20",
+    "cement_bags_required": 30,
+    "sand_cft_required": 54.6,
+    "aggregate_cft_required": 109.2,
+    "target_keyword": "material required for 130 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 130 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-130-cft-m25-concrete",
+    "volume_cft": 130,
+    "mix_ratio": "M25",
+    "cement_bags_required": 41,
+    "sand_cft_required": 50.05,
+    "aggregate_cft_required": 100.1,
+    "target_keyword": "material required for 130 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 130 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-140-cft-m15-concrete",
+    "volume_cft": 140,
+    "mix_ratio": "M15",
+    "cement_bags_required": 26,
+    "sand_cft_required": 61.6,
+    "aggregate_cft_required": 123.2,
+    "target_keyword": "material required for 140 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 140 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-140-cft-m20-concrete",
+    "volume_cft": 140,
+    "mix_ratio": "M20",
+    "cement_bags_required": 32,
+    "sand_cft_required": 58.8,
+    "aggregate_cft_required": 117.6,
+    "target_keyword": "material required for 140 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 140 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-140-cft-m25-concrete",
+    "volume_cft": 140,
+    "mix_ratio": "M25",
+    "cement_bags_required": 44,
+    "sand_cft_required": 53.9,
+    "aggregate_cft_required": 107.8,
+    "target_keyword": "material required for 140 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 140 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-150-cft-m15-concrete",
+    "volume_cft": 150,
+    "mix_ratio": "M15",
+    "cement_bags_required": 27,
+    "sand_cft_required": 66,
+    "aggregate_cft_required": 132,
+    "target_keyword": "material required for 150 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 150 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-150-cft-m20-concrete",
+    "volume_cft": 150,
+    "mix_ratio": "M20",
+    "cement_bags_required": 35,
+    "sand_cft_required": 63,
+    "aggregate_cft_required": 126,
+    "target_keyword": "material required for 150 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 150 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-150-cft-m25-concrete",
+    "volume_cft": 150,
+    "mix_ratio": "M25",
+    "cement_bags_required": 48,
+    "sand_cft_required": 57.75,
+    "aggregate_cft_required": 115.5,
+    "target_keyword": "material required for 150 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 150 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-160-cft-m15-concrete",
+    "volume_cft": 160,
+    "mix_ratio": "M15",
+    "cement_bags_required": 29,
+    "sand_cft_required": 70.4,
+    "aggregate_cft_required": 140.8,
+    "target_keyword": "material required for 160 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 160 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-160-cft-m20-concrete",
+    "volume_cft": 160,
+    "mix_ratio": "M20",
+    "cement_bags_required": 37,
+    "sand_cft_required": 67.2,
+    "aggregate_cft_required": 134.4,
+    "target_keyword": "material required for 160 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 160 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-160-cft-m25-concrete",
+    "volume_cft": 160,
+    "mix_ratio": "M25",
+    "cement_bags_required": 51,
+    "sand_cft_required": 61.6,
+    "aggregate_cft_required": 123.2,
+    "target_keyword": "material required for 160 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 160 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-170-cft-m15-concrete",
+    "volume_cft": 170,
+    "mix_ratio": "M15",
+    "cement_bags_required": 31,
+    "sand_cft_required": 74.8,
+    "aggregate_cft_required": 149.6,
+    "target_keyword": "material required for 170 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 170 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-170-cft-m20-concrete",
+    "volume_cft": 170,
+    "mix_ratio": "M20",
+    "cement_bags_required": 39,
+    "sand_cft_required": 71.4,
+    "aggregate_cft_required": 142.8,
+    "target_keyword": "material required for 170 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 170 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-170-cft-m25-concrete",
+    "volume_cft": 170,
+    "mix_ratio": "M25",
+    "cement_bags_required": 54,
+    "sand_cft_required": 65.45,
+    "aggregate_cft_required": 130.9,
+    "target_keyword": "material required for 170 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 170 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-180-cft-m15-concrete",
+    "volume_cft": 180,
+    "mix_ratio": "M15",
+    "cement_bags_required": 33,
+    "sand_cft_required": 79.2,
+    "aggregate_cft_required": 158.4,
+    "target_keyword": "material required for 180 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 180 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-180-cft-m20-concrete",
+    "volume_cft": 180,
+    "mix_ratio": "M20",
+    "cement_bags_required": 42,
+    "sand_cft_required": 75.6,
+    "aggregate_cft_required": 151.2,
+    "target_keyword": "material required for 180 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 180 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-180-cft-m25-concrete",
+    "volume_cft": 180,
+    "mix_ratio": "M25",
+    "cement_bags_required": 57,
+    "sand_cft_required": 69.3,
+    "aggregate_cft_required": 138.6,
+    "target_keyword": "material required for 180 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 180 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-190-cft-m15-concrete",
+    "volume_cft": 190,
+    "mix_ratio": "M15",
+    "cement_bags_required": 35,
+    "sand_cft_required": 83.6,
+    "aggregate_cft_required": 167.2,
+    "target_keyword": "material required for 190 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 190 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-190-cft-m20-concrete",
+    "volume_cft": 190,
+    "mix_ratio": "M20",
+    "cement_bags_required": 44,
+    "sand_cft_required": 79.8,
+    "aggregate_cft_required": 159.6,
+    "target_keyword": "material required for 190 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 190 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-190-cft-m25-concrete",
+    "volume_cft": 190,
+    "mix_ratio": "M25",
+    "cement_bags_required": 60,
+    "sand_cft_required": 73.15,
+    "aggregate_cft_required": 146.3,
+    "target_keyword": "material required for 190 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 190 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-200-cft-m15-concrete",
+    "volume_cft": 200,
+    "mix_ratio": "M15",
+    "cement_bags_required": 36,
+    "sand_cft_required": 88,
+    "aggregate_cft_required": 176,
+    "target_keyword": "material required for 200 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 200 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-200-cft-m20-concrete",
+    "volume_cft": 200,
+    "mix_ratio": "M20",
+    "cement_bags_required": 46,
+    "sand_cft_required": 84,
+    "aggregate_cft_required": 168,
+    "target_keyword": "material required for 200 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 200 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-200-cft-m25-concrete",
+    "volume_cft": 200,
+    "mix_ratio": "M25",
+    "cement_bags_required": 63,
+    "sand_cft_required": 77,
+    "aggregate_cft_required": 154,
+    "target_keyword": "material required for 200 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 200 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-210-cft-m15-concrete",
+    "volume_cft": 210,
+    "mix_ratio": "M15",
+    "cement_bags_required": 38,
+    "sand_cft_required": 92.4,
+    "aggregate_cft_required": 184.8,
+    "target_keyword": "material required for 210 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 210 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-210-cft-m20-concrete",
+    "volume_cft": 210,
+    "mix_ratio": "M20",
+    "cement_bags_required": 48,
+    "sand_cft_required": 88.2,
+    "aggregate_cft_required": 176.4,
+    "target_keyword": "material required for 210 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 210 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-210-cft-m25-concrete",
+    "volume_cft": 210,
+    "mix_ratio": "M25",
+    "cement_bags_required": 66,
+    "sand_cft_required": 80.85,
+    "aggregate_cft_required": 161.7,
+    "target_keyword": "material required for 210 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 210 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-220-cft-m15-concrete",
+    "volume_cft": 220,
+    "mix_ratio": "M15",
+    "cement_bags_required": 40,
+    "sand_cft_required": 96.8,
+    "aggregate_cft_required": 193.6,
+    "target_keyword": "material required for 220 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 220 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-220-cft-m20-concrete",
+    "volume_cft": 220,
+    "mix_ratio": "M20",
+    "cement_bags_required": 51,
+    "sand_cft_required": 92.4,
+    "aggregate_cft_required": 184.8,
+    "target_keyword": "material required for 220 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 220 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-220-cft-m25-concrete",
+    "volume_cft": 220,
+    "mix_ratio": "M25",
+    "cement_bags_required": 70,
+    "sand_cft_required": 84.7,
+    "aggregate_cft_required": 169.4,
+    "target_keyword": "material required for 220 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 220 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-230-cft-m15-concrete",
+    "volume_cft": 230,
+    "mix_ratio": "M15",
+    "cement_bags_required": 42,
+    "sand_cft_required": 101.2,
+    "aggregate_cft_required": 202.4,
+    "target_keyword": "material required for 230 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 230 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-230-cft-m20-concrete",
+    "volume_cft": 230,
+    "mix_ratio": "M20",
+    "cement_bags_required": 53,
+    "sand_cft_required": 96.6,
+    "aggregate_cft_required": 193.2,
+    "target_keyword": "material required for 230 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 230 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-230-cft-m25-concrete",
+    "volume_cft": 230,
+    "mix_ratio": "M25",
+    "cement_bags_required": 73,
+    "sand_cft_required": 88.55,
+    "aggregate_cft_required": 177.1,
+    "target_keyword": "material required for 230 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 230 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-240-cft-m15-concrete",
+    "volume_cft": 240,
+    "mix_ratio": "M15",
+    "cement_bags_required": 44,
+    "sand_cft_required": 105.6,
+    "aggregate_cft_required": 211.2,
+    "target_keyword": "material required for 240 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 240 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-240-cft-m20-concrete",
+    "volume_cft": 240,
+    "mix_ratio": "M20",
+    "cement_bags_required": 55,
+    "sand_cft_required": 100.8,
+    "aggregate_cft_required": 201.6,
+    "target_keyword": "material required for 240 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 240 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-240-cft-m25-concrete",
+    "volume_cft": 240,
+    "mix_ratio": "M25",
+    "cement_bags_required": 76,
+    "sand_cft_required": 92.4,
+    "aggregate_cft_required": 184.8,
+    "target_keyword": "material required for 240 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 240 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-250-cft-m15-concrete",
+    "volume_cft": 250,
+    "mix_ratio": "M15",
+    "cement_bags_required": 45,
+    "sand_cft_required": 110,
+    "aggregate_cft_required": 220,
+    "target_keyword": "material required for 250 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 250 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-250-cft-m20-concrete",
+    "volume_cft": 250,
+    "mix_ratio": "M20",
+    "cement_bags_required": 58,
+    "sand_cft_required": 105,
+    "aggregate_cft_required": 210,
+    "target_keyword": "material required for 250 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 250 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-250-cft-m25-concrete",
+    "volume_cft": 250,
+    "mix_ratio": "M25",
+    "cement_bags_required": 79,
+    "sand_cft_required": 96.25,
+    "aggregate_cft_required": 192.5,
+    "target_keyword": "material required for 250 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 250 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-260-cft-m15-concrete",
+    "volume_cft": 260,
+    "mix_ratio": "M15",
+    "cement_bags_required": 47,
+    "sand_cft_required": 114.4,
+    "aggregate_cft_required": 228.8,
+    "target_keyword": "material required for 260 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 260 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-260-cft-m20-concrete",
+    "volume_cft": 260,
+    "mix_ratio": "M20",
+    "cement_bags_required": 60,
+    "sand_cft_required": 109.2,
+    "aggregate_cft_required": 218.4,
+    "target_keyword": "material required for 260 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 260 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-260-cft-m25-concrete",
+    "volume_cft": 260,
+    "mix_ratio": "M25",
+    "cement_bags_required": 82,
+    "sand_cft_required": 100.1,
+    "aggregate_cft_required": 200.2,
+    "target_keyword": "material required for 260 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 260 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-270-cft-m15-concrete",
+    "volume_cft": 270,
+    "mix_ratio": "M15",
+    "cement_bags_required": 49,
+    "sand_cft_required": 118.8,
+    "aggregate_cft_required": 237.6,
+    "target_keyword": "material required for 270 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 270 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-270-cft-m20-concrete",
+    "volume_cft": 270,
+    "mix_ratio": "M20",
+    "cement_bags_required": 62,
+    "sand_cft_required": 113.4,
+    "aggregate_cft_required": 226.8,
+    "target_keyword": "material required for 270 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 270 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-270-cft-m25-concrete",
+    "volume_cft": 270,
+    "mix_ratio": "M25",
+    "cement_bags_required": 85,
+    "sand_cft_required": 103.95,
+    "aggregate_cft_required": 207.9,
+    "target_keyword": "material required for 270 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 270 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-280-cft-m15-concrete",
+    "volume_cft": 280,
+    "mix_ratio": "M15",
+    "cement_bags_required": 51,
+    "sand_cft_required": 123.2,
+    "aggregate_cft_required": 246.4,
+    "target_keyword": "material required for 280 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 280 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-280-cft-m20-concrete",
+    "volume_cft": 280,
+    "mix_ratio": "M20",
+    "cement_bags_required": 64,
+    "sand_cft_required": 117.6,
+    "aggregate_cft_required": 235.2,
+    "target_keyword": "material required for 280 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 280 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-280-cft-m25-concrete",
+    "volume_cft": 280,
+    "mix_ratio": "M25",
+    "cement_bags_required": 88,
+    "sand_cft_required": 107.8,
+    "aggregate_cft_required": 215.6,
+    "target_keyword": "material required for 280 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 280 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-290-cft-m15-concrete",
+    "volume_cft": 290,
+    "mix_ratio": "M15",
+    "cement_bags_required": 53,
+    "sand_cft_required": 127.6,
+    "aggregate_cft_required": 255.2,
+    "target_keyword": "material required for 290 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 290 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-290-cft-m20-concrete",
+    "volume_cft": 290,
+    "mix_ratio": "M20",
+    "cement_bags_required": 67,
+    "sand_cft_required": 121.8,
+    "aggregate_cft_required": 243.6,
+    "target_keyword": "material required for 290 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 290 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-290-cft-m25-concrete",
+    "volume_cft": 290,
+    "mix_ratio": "M25",
+    "cement_bags_required": 92,
+    "sand_cft_required": 111.65,
+    "aggregate_cft_required": 223.3,
+    "target_keyword": "material required for 290 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 290 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-300-cft-m15-concrete",
+    "volume_cft": 300,
+    "mix_ratio": "M15",
+    "cement_bags_required": 54,
+    "sand_cft_required": 132,
+    "aggregate_cft_required": 264,
+    "target_keyword": "material required for 300 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 300 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-300-cft-m20-concrete",
+    "volume_cft": 300,
+    "mix_ratio": "M20",
+    "cement_bags_required": 69,
+    "sand_cft_required": 126,
+    "aggregate_cft_required": 252,
+    "target_keyword": "material required for 300 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 300 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-300-cft-m25-concrete",
+    "volume_cft": 300,
+    "mix_ratio": "M25",
+    "cement_bags_required": 95,
+    "sand_cft_required": 115.5,
+    "aggregate_cft_required": 231,
+    "target_keyword": "material required for 300 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 300 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-310-cft-m15-concrete",
+    "volume_cft": 310,
+    "mix_ratio": "M15",
+    "cement_bags_required": 56,
+    "sand_cft_required": 136.4,
+    "aggregate_cft_required": 272.8,
+    "target_keyword": "material required for 310 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 310 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-310-cft-m20-concrete",
+    "volume_cft": 310,
+    "mix_ratio": "M20",
+    "cement_bags_required": 71,
+    "sand_cft_required": 130.2,
+    "aggregate_cft_required": 260.4,
+    "target_keyword": "material required for 310 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 310 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-310-cft-m25-concrete",
+    "volume_cft": 310,
+    "mix_ratio": "M25",
+    "cement_bags_required": 98,
+    "sand_cft_required": 119.35,
+    "aggregate_cft_required": 238.7,
+    "target_keyword": "material required for 310 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 310 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-320-cft-m15-concrete",
+    "volume_cft": 320,
+    "mix_ratio": "M15",
+    "cement_bags_required": 58,
+    "sand_cft_required": 140.8,
+    "aggregate_cft_required": 281.6,
+    "target_keyword": "material required for 320 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 320 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-320-cft-m20-concrete",
+    "volume_cft": 320,
+    "mix_ratio": "M20",
+    "cement_bags_required": 74,
+    "sand_cft_required": 134.4,
+    "aggregate_cft_required": 268.8,
+    "target_keyword": "material required for 320 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 320 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-320-cft-m25-concrete",
+    "volume_cft": 320,
+    "mix_ratio": "M25",
+    "cement_bags_required": 101,
+    "sand_cft_required": 123.2,
+    "aggregate_cft_required": 246.4,
+    "target_keyword": "material required for 320 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 320 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-330-cft-m15-concrete",
+    "volume_cft": 330,
+    "mix_ratio": "M15",
+    "cement_bags_required": 60,
+    "sand_cft_required": 145.2,
+    "aggregate_cft_required": 290.4,
+    "target_keyword": "material required for 330 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 330 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-330-cft-m20-concrete",
+    "volume_cft": 330,
+    "mix_ratio": "M20",
+    "cement_bags_required": 76,
+    "sand_cft_required": 138.6,
+    "aggregate_cft_required": 277.2,
+    "target_keyword": "material required for 330 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 330 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-330-cft-m25-concrete",
+    "volume_cft": 330,
+    "mix_ratio": "M25",
+    "cement_bags_required": 104,
+    "sand_cft_required": 127.05,
+    "aggregate_cft_required": 254.1,
+    "target_keyword": "material required for 330 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 330 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-340-cft-m15-concrete",
+    "volume_cft": 340,
+    "mix_ratio": "M15",
+    "cement_bags_required": 62,
+    "sand_cft_required": 149.6,
+    "aggregate_cft_required": 299.2,
+    "target_keyword": "material required for 340 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 340 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-340-cft-m20-concrete",
+    "volume_cft": 340,
+    "mix_ratio": "M20",
+    "cement_bags_required": 78,
+    "sand_cft_required": 142.8,
+    "aggregate_cft_required": 285.6,
+    "target_keyword": "material required for 340 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 340 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-340-cft-m25-concrete",
+    "volume_cft": 340,
+    "mix_ratio": "M25",
+    "cement_bags_required": 107,
+    "sand_cft_required": 130.9,
+    "aggregate_cft_required": 261.8,
+    "target_keyword": "material required for 340 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 340 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-350-cft-m15-concrete",
+    "volume_cft": 350,
+    "mix_ratio": "M15",
+    "cement_bags_required": 63,
+    "sand_cft_required": 154,
+    "aggregate_cft_required": 308,
+    "target_keyword": "material required for 350 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 350 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-350-cft-m20-concrete",
+    "volume_cft": 350,
+    "mix_ratio": "M20",
+    "cement_bags_required": 80,
+    "sand_cft_required": 147,
+    "aggregate_cft_required": 294,
+    "target_keyword": "material required for 350 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 350 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-350-cft-m25-concrete",
+    "volume_cft": 350,
+    "mix_ratio": "M25",
+    "cement_bags_required": 110,
+    "sand_cft_required": 134.75,
+    "aggregate_cft_required": 269.5,
+    "target_keyword": "material required for 350 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 350 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-360-cft-m15-concrete",
+    "volume_cft": 360,
+    "mix_ratio": "M15",
+    "cement_bags_required": 65,
+    "sand_cft_required": 158.4,
+    "aggregate_cft_required": 316.8,
+    "target_keyword": "material required for 360 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 360 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-360-cft-m20-concrete",
+    "volume_cft": 360,
+    "mix_ratio": "M20",
+    "cement_bags_required": 83,
+    "sand_cft_required": 151.2,
+    "aggregate_cft_required": 302.4,
+    "target_keyword": "material required for 360 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 360 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-360-cft-m25-concrete",
+    "volume_cft": 360,
+    "mix_ratio": "M25",
+    "cement_bags_required": 114,
+    "sand_cft_required": 138.6,
+    "aggregate_cft_required": 277.2,
+    "target_keyword": "material required for 360 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 360 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-370-cft-m15-concrete",
+    "volume_cft": 370,
+    "mix_ratio": "M15",
+    "cement_bags_required": 67,
+    "sand_cft_required": 162.8,
+    "aggregate_cft_required": 325.6,
+    "target_keyword": "material required for 370 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 370 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-370-cft-m20-concrete",
+    "volume_cft": 370,
+    "mix_ratio": "M20",
+    "cement_bags_required": 85,
+    "sand_cft_required": 155.4,
+    "aggregate_cft_required": 310.8,
+    "target_keyword": "material required for 370 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 370 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-370-cft-m25-concrete",
+    "volume_cft": 370,
+    "mix_ratio": "M25",
+    "cement_bags_required": 117,
+    "sand_cft_required": 142.45,
+    "aggregate_cft_required": 284.9,
+    "target_keyword": "material required for 370 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 370 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-380-cft-m15-concrete",
+    "volume_cft": 380,
+    "mix_ratio": "M15",
+    "cement_bags_required": 69,
+    "sand_cft_required": 167.2,
+    "aggregate_cft_required": 334.4,
+    "target_keyword": "material required for 380 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 380 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-380-cft-m20-concrete",
+    "volume_cft": 380,
+    "mix_ratio": "M20",
+    "cement_bags_required": 87,
+    "sand_cft_required": 159.6,
+    "aggregate_cft_required": 319.2,
+    "target_keyword": "material required for 380 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 380 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-380-cft-m25-concrete",
+    "volume_cft": 380,
+    "mix_ratio": "M25",
+    "cement_bags_required": 120,
+    "sand_cft_required": 146.3,
+    "aggregate_cft_required": 292.6,
+    "target_keyword": "material required for 380 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 380 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-390-cft-m15-concrete",
+    "volume_cft": 390,
+    "mix_ratio": "M15",
+    "cement_bags_required": 70,
+    "sand_cft_required": 171.6,
+    "aggregate_cft_required": 343.2,
+    "target_keyword": "material required for 390 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 390 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-390-cft-m20-concrete",
+    "volume_cft": 390,
+    "mix_ratio": "M20",
+    "cement_bags_required": 90,
+    "sand_cft_required": 163.8,
+    "aggregate_cft_required": 327.6,
+    "target_keyword": "material required for 390 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 390 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-390-cft-m25-concrete",
+    "volume_cft": 390,
+    "mix_ratio": "M25",
+    "cement_bags_required": 123,
+    "sand_cft_required": 150.15,
+    "aggregate_cft_required": 300.3,
+    "target_keyword": "material required for 390 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 390 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-400-cft-m15-concrete",
+    "volume_cft": 400,
+    "mix_ratio": "M15",
+    "cement_bags_required": 72,
+    "sand_cft_required": 176,
+    "aggregate_cft_required": 352,
+    "target_keyword": "material required for 400 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 400 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-400-cft-m20-concrete",
+    "volume_cft": 400,
+    "mix_ratio": "M20",
+    "cement_bags_required": 92,
+    "sand_cft_required": 168,
+    "aggregate_cft_required": 336,
+    "target_keyword": "material required for 400 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 400 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-400-cft-m25-concrete",
+    "volume_cft": 400,
+    "mix_ratio": "M25",
+    "cement_bags_required": 126,
+    "sand_cft_required": 154,
+    "aggregate_cft_required": 308,
+    "target_keyword": "material required for 400 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 400 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-410-cft-m15-concrete",
+    "volume_cft": 410,
+    "mix_ratio": "M15",
+    "cement_bags_required": 74,
+    "sand_cft_required": 180.4,
+    "aggregate_cft_required": 360.8,
+    "target_keyword": "material required for 410 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 410 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-410-cft-m20-concrete",
+    "volume_cft": 410,
+    "mix_ratio": "M20",
+    "cement_bags_required": 94,
+    "sand_cft_required": 172.2,
+    "aggregate_cft_required": 344.4,
+    "target_keyword": "material required for 410 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 410 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-410-cft-m25-concrete",
+    "volume_cft": 410,
+    "mix_ratio": "M25",
+    "cement_bags_required": 129,
+    "sand_cft_required": 157.85,
+    "aggregate_cft_required": 315.7,
+    "target_keyword": "material required for 410 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 410 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-420-cft-m15-concrete",
+    "volume_cft": 420,
+    "mix_ratio": "M15",
+    "cement_bags_required": 76,
+    "sand_cft_required": 184.8,
+    "aggregate_cft_required": 369.6,
+    "target_keyword": "material required for 420 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 420 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-420-cft-m20-concrete",
+    "volume_cft": 420,
+    "mix_ratio": "M20",
+    "cement_bags_required": 96,
+    "sand_cft_required": 176.4,
+    "aggregate_cft_required": 352.8,
+    "target_keyword": "material required for 420 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 420 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-420-cft-m25-concrete",
+    "volume_cft": 420,
+    "mix_ratio": "M25",
+    "cement_bags_required": 132,
+    "sand_cft_required": 161.7,
+    "aggregate_cft_required": 323.4,
+    "target_keyword": "material required for 420 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 420 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-430-cft-m15-concrete",
+    "volume_cft": 430,
+    "mix_ratio": "M15",
+    "cement_bags_required": 78,
+    "sand_cft_required": 189.2,
+    "aggregate_cft_required": 378.4,
+    "target_keyword": "material required for 430 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 430 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-430-cft-m20-concrete",
+    "volume_cft": 430,
+    "mix_ratio": "M20",
+    "cement_bags_required": 99,
+    "sand_cft_required": 180.6,
+    "aggregate_cft_required": 361.2,
+    "target_keyword": "material required for 430 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 430 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-430-cft-m25-concrete",
+    "volume_cft": 430,
+    "mix_ratio": "M25",
+    "cement_bags_required": 136,
+    "sand_cft_required": 165.55,
+    "aggregate_cft_required": 331.1,
+    "target_keyword": "material required for 430 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 430 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-440-cft-m15-concrete",
+    "volume_cft": 440,
+    "mix_ratio": "M15",
+    "cement_bags_required": 79,
+    "sand_cft_required": 193.6,
+    "aggregate_cft_required": 387.2,
+    "target_keyword": "material required for 440 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 440 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-440-cft-m20-concrete",
+    "volume_cft": 440,
+    "mix_ratio": "M20",
+    "cement_bags_required": 101,
+    "sand_cft_required": 184.8,
+    "aggregate_cft_required": 369.6,
+    "target_keyword": "material required for 440 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 440 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-440-cft-m25-concrete",
+    "volume_cft": 440,
+    "mix_ratio": "M25",
+    "cement_bags_required": 139,
+    "sand_cft_required": 169.4,
+    "aggregate_cft_required": 338.8,
+    "target_keyword": "material required for 440 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 440 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-450-cft-m15-concrete",
+    "volume_cft": 450,
+    "mix_ratio": "M15",
+    "cement_bags_required": 81,
+    "sand_cft_required": 198,
+    "aggregate_cft_required": 396,
+    "target_keyword": "material required for 450 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 450 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-450-cft-m20-concrete",
+    "volume_cft": 450,
+    "mix_ratio": "M20",
+    "cement_bags_required": 103,
+    "sand_cft_required": 189,
+    "aggregate_cft_required": 378,
+    "target_keyword": "material required for 450 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 450 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-450-cft-m25-concrete",
+    "volume_cft": 450,
+    "mix_ratio": "M25",
+    "cement_bags_required": 142,
+    "sand_cft_required": 173.25,
+    "aggregate_cft_required": 346.5,
+    "target_keyword": "material required for 450 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 450 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-460-cft-m15-concrete",
+    "volume_cft": 460,
+    "mix_ratio": "M15",
+    "cement_bags_required": 83,
+    "sand_cft_required": 202.4,
+    "aggregate_cft_required": 404.8,
+    "target_keyword": "material required for 460 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 460 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-460-cft-m20-concrete",
+    "volume_cft": 460,
+    "mix_ratio": "M20",
+    "cement_bags_required": 106,
+    "sand_cft_required": 193.2,
+    "aggregate_cft_required": 386.4,
+    "target_keyword": "material required for 460 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 460 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-460-cft-m25-concrete",
+    "volume_cft": 460,
+    "mix_ratio": "M25",
+    "cement_bags_required": 145,
+    "sand_cft_required": 177.1,
+    "aggregate_cft_required": 354.2,
+    "target_keyword": "material required for 460 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 460 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-470-cft-m15-concrete",
+    "volume_cft": 470,
+    "mix_ratio": "M15",
+    "cement_bags_required": 85,
+    "sand_cft_required": 206.8,
+    "aggregate_cft_required": 413.6,
+    "target_keyword": "material required for 470 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 470 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-470-cft-m20-concrete",
+    "volume_cft": 470,
+    "mix_ratio": "M20",
+    "cement_bags_required": 108,
+    "sand_cft_required": 197.4,
+    "aggregate_cft_required": 394.8,
+    "target_keyword": "material required for 470 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 470 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-470-cft-m25-concrete",
+    "volume_cft": 470,
+    "mix_ratio": "M25",
+    "cement_bags_required": 148,
+    "sand_cft_required": 180.95,
+    "aggregate_cft_required": 361.9,
+    "target_keyword": "material required for 470 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 470 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-480-cft-m15-concrete",
+    "volume_cft": 480,
+    "mix_ratio": "M15",
+    "cement_bags_required": 87,
+    "sand_cft_required": 211.2,
+    "aggregate_cft_required": 422.4,
+    "target_keyword": "material required for 480 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 480 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-480-cft-m20-concrete",
+    "volume_cft": 480,
+    "mix_ratio": "M20",
+    "cement_bags_required": 110,
+    "sand_cft_required": 201.6,
+    "aggregate_cft_required": 403.2,
+    "target_keyword": "material required for 480 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 480 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-480-cft-m25-concrete",
+    "volume_cft": 480,
+    "mix_ratio": "M25",
+    "cement_bags_required": 151,
+    "sand_cft_required": 184.8,
+    "aggregate_cft_required": 369.6,
+    "target_keyword": "material required for 480 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 480 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-490-cft-m15-concrete",
+    "volume_cft": 490,
+    "mix_ratio": "M15",
+    "cement_bags_required": 88,
+    "sand_cft_required": 215.6,
+    "aggregate_cft_required": 431.2,
+    "target_keyword": "material required for 490 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 490 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-490-cft-m20-concrete",
+    "volume_cft": 490,
+    "mix_ratio": "M20",
+    "cement_bags_required": 112,
+    "sand_cft_required": 205.8,
+    "aggregate_cft_required": 411.6,
+    "target_keyword": "material required for 490 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 490 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-490-cft-m25-concrete",
+    "volume_cft": 490,
+    "mix_ratio": "M25",
+    "cement_bags_required": 154,
+    "sand_cft_required": 188.65,
+    "aggregate_cft_required": 377.3,
+    "target_keyword": "material required for 490 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 490 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-500-cft-m15-concrete",
+    "volume_cft": 500,
+    "mix_ratio": "M15",
+    "cement_bags_required": 90,
+    "sand_cft_required": 220,
+    "aggregate_cft_required": 440,
+    "target_keyword": "material required for 500 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 500 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-500-cft-m20-concrete",
+    "volume_cft": 500,
+    "mix_ratio": "M20",
+    "cement_bags_required": 115,
+    "sand_cft_required": 210,
+    "aggregate_cft_required": 420,
+    "target_keyword": "material required for 500 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 500 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-500-cft-m25-concrete",
+    "volume_cft": 500,
+    "mix_ratio": "M25",
+    "cement_bags_required": 158,
+    "sand_cft_required": 192.5,
+    "aggregate_cft_required": 385,
+    "target_keyword": "material required for 500 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 500 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-510-cft-m15-concrete",
+    "volume_cft": 510,
+    "mix_ratio": "M15",
+    "cement_bags_required": 92,
+    "sand_cft_required": 224.4,
+    "aggregate_cft_required": 448.8,
+    "target_keyword": "material required for 510 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 510 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-510-cft-m20-concrete",
+    "volume_cft": 510,
+    "mix_ratio": "M20",
+    "cement_bags_required": 117,
+    "sand_cft_required": 214.2,
+    "aggregate_cft_required": 428.4,
+    "target_keyword": "material required for 510 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 510 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-510-cft-m25-concrete",
+    "volume_cft": 510,
+    "mix_ratio": "M25",
+    "cement_bags_required": 161,
+    "sand_cft_required": 196.35,
+    "aggregate_cft_required": 392.7,
+    "target_keyword": "material required for 510 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 510 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-520-cft-m15-concrete",
+    "volume_cft": 520,
+    "mix_ratio": "M15",
+    "cement_bags_required": 94,
+    "sand_cft_required": 228.8,
+    "aggregate_cft_required": 457.6,
+    "target_keyword": "material required for 520 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 520 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-520-cft-m20-concrete",
+    "volume_cft": 520,
+    "mix_ratio": "M20",
+    "cement_bags_required": 119,
+    "sand_cft_required": 218.4,
+    "aggregate_cft_required": 436.8,
+    "target_keyword": "material required for 520 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 520 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-520-cft-m25-concrete",
+    "volume_cft": 520,
+    "mix_ratio": "M25",
+    "cement_bags_required": 164,
+    "sand_cft_required": 200.2,
+    "aggregate_cft_required": 400.4,
+    "target_keyword": "material required for 520 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 520 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-530-cft-m15-concrete",
+    "volume_cft": 530,
+    "mix_ratio": "M15",
+    "cement_bags_required": 96,
+    "sand_cft_required": 233.2,
+    "aggregate_cft_required": 466.4,
+    "target_keyword": "material required for 530 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 530 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-530-cft-m20-concrete",
+    "volume_cft": 530,
+    "mix_ratio": "M20",
+    "cement_bags_required": 122,
+    "sand_cft_required": 222.6,
+    "aggregate_cft_required": 445.2,
+    "target_keyword": "material required for 530 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 530 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-530-cft-m25-concrete",
+    "volume_cft": 530,
+    "mix_ratio": "M25",
+    "cement_bags_required": 167,
+    "sand_cft_required": 204.05,
+    "aggregate_cft_required": 408.1,
+    "target_keyword": "material required for 530 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 530 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-540-cft-m15-concrete",
+    "volume_cft": 540,
+    "mix_ratio": "M15",
+    "cement_bags_required": 97,
+    "sand_cft_required": 237.6,
+    "aggregate_cft_required": 475.2,
+    "target_keyword": "material required for 540 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 540 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-540-cft-m20-concrete",
+    "volume_cft": 540,
+    "mix_ratio": "M20",
+    "cement_bags_required": 124,
+    "sand_cft_required": 226.8,
+    "aggregate_cft_required": 453.6,
+    "target_keyword": "material required for 540 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 540 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-540-cft-m25-concrete",
+    "volume_cft": 540,
+    "mix_ratio": "M25",
+    "cement_bags_required": 170,
+    "sand_cft_required": 207.9,
+    "aggregate_cft_required": 415.8,
+    "target_keyword": "material required for 540 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 540 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-550-cft-m15-concrete",
+    "volume_cft": 550,
+    "mix_ratio": "M15",
+    "cement_bags_required": 99,
+    "sand_cft_required": 242,
+    "aggregate_cft_required": 484,
+    "target_keyword": "material required for 550 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 550 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-550-cft-m20-concrete",
+    "volume_cft": 550,
+    "mix_ratio": "M20",
+    "cement_bags_required": 126,
+    "sand_cft_required": 231,
+    "aggregate_cft_required": 462,
+    "target_keyword": "material required for 550 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 550 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-550-cft-m25-concrete",
+    "volume_cft": 550,
+    "mix_ratio": "M25",
+    "cement_bags_required": 173,
+    "sand_cft_required": 211.75,
+    "aggregate_cft_required": 423.5,
+    "target_keyword": "material required for 550 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 550 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-560-cft-m15-concrete",
+    "volume_cft": 560,
+    "mix_ratio": "M15",
+    "cement_bags_required": 101,
+    "sand_cft_required": 246.4,
+    "aggregate_cft_required": 492.8,
+    "target_keyword": "material required for 560 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 560 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-560-cft-m20-concrete",
+    "volume_cft": 560,
+    "mix_ratio": "M20",
+    "cement_bags_required": 128,
+    "sand_cft_required": 235.2,
+    "aggregate_cft_required": 470.4,
+    "target_keyword": "material required for 560 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 560 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-560-cft-m25-concrete",
+    "volume_cft": 560,
+    "mix_ratio": "M25",
+    "cement_bags_required": 176,
+    "sand_cft_required": 215.6,
+    "aggregate_cft_required": 431.2,
+    "target_keyword": "material required for 560 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 560 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-570-cft-m15-concrete",
+    "volume_cft": 570,
+    "mix_ratio": "M15",
+    "cement_bags_required": 103,
+    "sand_cft_required": 250.8,
+    "aggregate_cft_required": 501.6,
+    "target_keyword": "material required for 570 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 570 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-570-cft-m20-concrete",
+    "volume_cft": 570,
+    "mix_ratio": "M20",
+    "cement_bags_required": 131,
+    "sand_cft_required": 239.4,
+    "aggregate_cft_required": 478.8,
+    "target_keyword": "material required for 570 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 570 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-570-cft-m25-concrete",
+    "volume_cft": 570,
+    "mix_ratio": "M25",
+    "cement_bags_required": 179,
+    "sand_cft_required": 219.45,
+    "aggregate_cft_required": 438.9,
+    "target_keyword": "material required for 570 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 570 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-580-cft-m15-concrete",
+    "volume_cft": 580,
+    "mix_ratio": "M15",
+    "cement_bags_required": 105,
+    "sand_cft_required": 255.2,
+    "aggregate_cft_required": 510.4,
+    "target_keyword": "material required for 580 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 580 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-580-cft-m20-concrete",
+    "volume_cft": 580,
+    "mix_ratio": "M20",
+    "cement_bags_required": 133,
+    "sand_cft_required": 243.6,
+    "aggregate_cft_required": 487.2,
+    "target_keyword": "material required for 580 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 580 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-580-cft-m25-concrete",
+    "volume_cft": 580,
+    "mix_ratio": "M25",
+    "cement_bags_required": 183,
+    "sand_cft_required": 223.3,
+    "aggregate_cft_required": 446.6,
+    "target_keyword": "material required for 580 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 580 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-590-cft-m15-concrete",
+    "volume_cft": 590,
+    "mix_ratio": "M15",
+    "cement_bags_required": 106,
+    "sand_cft_required": 259.6,
+    "aggregate_cft_required": 519.2,
+    "target_keyword": "material required for 590 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 590 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-590-cft-m20-concrete",
+    "volume_cft": 590,
+    "mix_ratio": "M20",
+    "cement_bags_required": 135,
+    "sand_cft_required": 247.8,
+    "aggregate_cft_required": 495.6,
+    "target_keyword": "material required for 590 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 590 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-590-cft-m25-concrete",
+    "volume_cft": 590,
+    "mix_ratio": "M25",
+    "cement_bags_required": 186,
+    "sand_cft_required": 227.15,
+    "aggregate_cft_required": 454.3,
+    "target_keyword": "material required for 590 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 590 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-600-cft-m15-concrete",
+    "volume_cft": 600,
+    "mix_ratio": "M15",
+    "cement_bags_required": 108,
+    "sand_cft_required": 264,
+    "aggregate_cft_required": 528,
+    "target_keyword": "material required for 600 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 600 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-600-cft-m20-concrete",
+    "volume_cft": 600,
+    "mix_ratio": "M20",
+    "cement_bags_required": 138,
+    "sand_cft_required": 252,
+    "aggregate_cft_required": 504,
+    "target_keyword": "material required for 600 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 600 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-600-cft-m25-concrete",
+    "volume_cft": 600,
+    "mix_ratio": "M25",
+    "cement_bags_required": 189,
+    "sand_cft_required": 231,
+    "aggregate_cft_required": 462,
+    "target_keyword": "material required for 600 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 600 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-610-cft-m15-concrete",
+    "volume_cft": 610,
+    "mix_ratio": "M15",
+    "cement_bags_required": 110,
+    "sand_cft_required": 268.4,
+    "aggregate_cft_required": 536.8,
+    "target_keyword": "material required for 610 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 610 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-610-cft-m20-concrete",
+    "volume_cft": 610,
+    "mix_ratio": "M20",
+    "cement_bags_required": 140,
+    "sand_cft_required": 256.2,
+    "aggregate_cft_required": 512.4,
+    "target_keyword": "material required for 610 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 610 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-610-cft-m25-concrete",
+    "volume_cft": 610,
+    "mix_ratio": "M25",
+    "cement_bags_required": 192,
+    "sand_cft_required": 234.85,
+    "aggregate_cft_required": 469.7,
+    "target_keyword": "material required for 610 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 610 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-620-cft-m15-concrete",
+    "volume_cft": 620,
+    "mix_ratio": "M15",
+    "cement_bags_required": 112,
+    "sand_cft_required": 272.8,
+    "aggregate_cft_required": 545.6,
+    "target_keyword": "material required for 620 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 620 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-620-cft-m20-concrete",
+    "volume_cft": 620,
+    "mix_ratio": "M20",
+    "cement_bags_required": 142,
+    "sand_cft_required": 260.4,
+    "aggregate_cft_required": 520.8,
+    "target_keyword": "material required for 620 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 620 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-620-cft-m25-concrete",
+    "volume_cft": 620,
+    "mix_ratio": "M25",
+    "cement_bags_required": 195,
+    "sand_cft_required": 238.7,
+    "aggregate_cft_required": 477.4,
+    "target_keyword": "material required for 620 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 620 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-630-cft-m15-concrete",
+    "volume_cft": 630,
+    "mix_ratio": "M15",
+    "cement_bags_required": 114,
+    "sand_cft_required": 277.2,
+    "aggregate_cft_required": 554.4,
+    "target_keyword": "material required for 630 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 630 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-630-cft-m20-concrete",
+    "volume_cft": 630,
+    "mix_ratio": "M20",
+    "cement_bags_required": 144,
+    "sand_cft_required": 264.6,
+    "aggregate_cft_required": 529.2,
+    "target_keyword": "material required for 630 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 630 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-630-cft-m25-concrete",
+    "volume_cft": 630,
+    "mix_ratio": "M25",
+    "cement_bags_required": 198,
+    "sand_cft_required": 242.55,
+    "aggregate_cft_required": 485.1,
+    "target_keyword": "material required for 630 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 630 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-640-cft-m15-concrete",
+    "volume_cft": 640,
+    "mix_ratio": "M15",
+    "cement_bags_required": 115,
+    "sand_cft_required": 281.6,
+    "aggregate_cft_required": 563.2,
+    "target_keyword": "material required for 640 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 640 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-640-cft-m20-concrete",
+    "volume_cft": 640,
+    "mix_ratio": "M20",
+    "cement_bags_required": 147,
+    "sand_cft_required": 268.8,
+    "aggregate_cft_required": 537.6,
+    "target_keyword": "material required for 640 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 640 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-640-cft-m25-concrete",
+    "volume_cft": 640,
+    "mix_ratio": "M25",
+    "cement_bags_required": 201,
+    "sand_cft_required": 246.4,
+    "aggregate_cft_required": 492.8,
+    "target_keyword": "material required for 640 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 640 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-650-cft-m15-concrete",
+    "volume_cft": 650,
+    "mix_ratio": "M15",
+    "cement_bags_required": 117,
+    "sand_cft_required": 286,
+    "aggregate_cft_required": 572,
+    "target_keyword": "material required for 650 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 650 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-650-cft-m20-concrete",
+    "volume_cft": 650,
+    "mix_ratio": "M20",
+    "cement_bags_required": 149,
+    "sand_cft_required": 273,
+    "aggregate_cft_required": 546,
+    "target_keyword": "material required for 650 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 650 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-650-cft-m25-concrete",
+    "volume_cft": 650,
+    "mix_ratio": "M25",
+    "cement_bags_required": 205,
+    "sand_cft_required": 250.25,
+    "aggregate_cft_required": 500.5,
+    "target_keyword": "material required for 650 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 650 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-660-cft-m15-concrete",
+    "volume_cft": 660,
+    "mix_ratio": "M15",
+    "cement_bags_required": 119,
+    "sand_cft_required": 290.4,
+    "aggregate_cft_required": 580.8,
+    "target_keyword": "material required for 660 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 660 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-660-cft-m20-concrete",
+    "volume_cft": 660,
+    "mix_ratio": "M20",
+    "cement_bags_required": 151,
+    "sand_cft_required": 277.2,
+    "aggregate_cft_required": 554.4,
+    "target_keyword": "material required for 660 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 660 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-660-cft-m25-concrete",
+    "volume_cft": 660,
+    "mix_ratio": "M25",
+    "cement_bags_required": 208,
+    "sand_cft_required": 254.1,
+    "aggregate_cft_required": 508.2,
+    "target_keyword": "material required for 660 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 660 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-670-cft-m15-concrete",
+    "volume_cft": 670,
+    "mix_ratio": "M15",
+    "cement_bags_required": 121,
+    "sand_cft_required": 294.8,
+    "aggregate_cft_required": 589.6,
+    "target_keyword": "material required for 670 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 670 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-670-cft-m20-concrete",
+    "volume_cft": 670,
+    "mix_ratio": "M20",
+    "cement_bags_required": 154,
+    "sand_cft_required": 281.4,
+    "aggregate_cft_required": 562.8,
+    "target_keyword": "material required for 670 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 670 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-670-cft-m25-concrete",
+    "volume_cft": 670,
+    "mix_ratio": "M25",
+    "cement_bags_required": 211,
+    "sand_cft_required": 257.95,
+    "aggregate_cft_required": 515.9,
+    "target_keyword": "material required for 670 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 670 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-680-cft-m15-concrete",
+    "volume_cft": 680,
+    "mix_ratio": "M15",
+    "cement_bags_required": 123,
+    "sand_cft_required": 299.2,
+    "aggregate_cft_required": 598.4,
+    "target_keyword": "material required for 680 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 680 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-680-cft-m20-concrete",
+    "volume_cft": 680,
+    "mix_ratio": "M20",
+    "cement_bags_required": 156,
+    "sand_cft_required": 285.6,
+    "aggregate_cft_required": 571.2,
+    "target_keyword": "material required for 680 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 680 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-680-cft-m25-concrete",
+    "volume_cft": 680,
+    "mix_ratio": "M25",
+    "cement_bags_required": 214,
+    "sand_cft_required": 261.8,
+    "aggregate_cft_required": 523.6,
+    "target_keyword": "material required for 680 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 680 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-690-cft-m15-concrete",
+    "volume_cft": 690,
+    "mix_ratio": "M15",
+    "cement_bags_required": 124,
+    "sand_cft_required": 303.6,
+    "aggregate_cft_required": 607.2,
+    "target_keyword": "material required for 690 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 690 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-690-cft-m20-concrete",
+    "volume_cft": 690,
+    "mix_ratio": "M20",
+    "cement_bags_required": 158,
+    "sand_cft_required": 289.8,
+    "aggregate_cft_required": 579.6,
+    "target_keyword": "material required for 690 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 690 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-690-cft-m25-concrete",
+    "volume_cft": 690,
+    "mix_ratio": "M25",
+    "cement_bags_required": 217,
+    "sand_cft_required": 265.65,
+    "aggregate_cft_required": 531.3,
+    "target_keyword": "material required for 690 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 690 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-700-cft-m15-concrete",
+    "volume_cft": 700,
+    "mix_ratio": "M15",
+    "cement_bags_required": 126,
+    "sand_cft_required": 308,
+    "aggregate_cft_required": 616,
+    "target_keyword": "material required for 700 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 700 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-700-cft-m20-concrete",
+    "volume_cft": 700,
+    "mix_ratio": "M20",
+    "cement_bags_required": 160,
+    "sand_cft_required": 294,
+    "aggregate_cft_required": 588,
+    "target_keyword": "material required for 700 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 700 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-700-cft-m25-concrete",
+    "volume_cft": 700,
+    "mix_ratio": "M25",
+    "cement_bags_required": 220,
+    "sand_cft_required": 269.5,
+    "aggregate_cft_required": 539,
+    "target_keyword": "material required for 700 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 700 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-710-cft-m15-concrete",
+    "volume_cft": 710,
+    "mix_ratio": "M15",
+    "cement_bags_required": 128,
+    "sand_cft_required": 312.4,
+    "aggregate_cft_required": 624.8,
+    "target_keyword": "material required for 710 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 710 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-710-cft-m20-concrete",
+    "volume_cft": 710,
+    "mix_ratio": "M20",
+    "cement_bags_required": 163,
+    "sand_cft_required": 298.2,
+    "aggregate_cft_required": 596.4,
+    "target_keyword": "material required for 710 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 710 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-710-cft-m25-concrete",
+    "volume_cft": 710,
+    "mix_ratio": "M25",
+    "cement_bags_required": 223,
+    "sand_cft_required": 273.35,
+    "aggregate_cft_required": 546.7,
+    "target_keyword": "material required for 710 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 710 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-720-cft-m15-concrete",
+    "volume_cft": 720,
+    "mix_ratio": "M15",
+    "cement_bags_required": 130,
+    "sand_cft_required": 316.8,
+    "aggregate_cft_required": 633.6,
+    "target_keyword": "material required for 720 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 720 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-720-cft-m20-concrete",
+    "volume_cft": 720,
+    "mix_ratio": "M20",
+    "cement_bags_required": 165,
+    "sand_cft_required": 302.4,
+    "aggregate_cft_required": 604.8,
+    "target_keyword": "material required for 720 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 720 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-720-cft-m25-concrete",
+    "volume_cft": 720,
+    "mix_ratio": "M25",
+    "cement_bags_required": 227,
+    "sand_cft_required": 277.2,
+    "aggregate_cft_required": 554.4,
+    "target_keyword": "material required for 720 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 720 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-730-cft-m15-concrete",
+    "volume_cft": 730,
+    "mix_ratio": "M15",
+    "cement_bags_required": 131,
+    "sand_cft_required": 321.2,
+    "aggregate_cft_required": 642.4,
+    "target_keyword": "material required for 730 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 730 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-730-cft-m20-concrete",
+    "volume_cft": 730,
+    "mix_ratio": "M20",
+    "cement_bags_required": 167,
+    "sand_cft_required": 306.6,
+    "aggregate_cft_required": 613.2,
+    "target_keyword": "material required for 730 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 730 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-730-cft-m25-concrete",
+    "volume_cft": 730,
+    "mix_ratio": "M25",
+    "cement_bags_required": 230,
+    "sand_cft_required": 281.05,
+    "aggregate_cft_required": 562.1,
+    "target_keyword": "material required for 730 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 730 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-740-cft-m15-concrete",
+    "volume_cft": 740,
+    "mix_ratio": "M15",
+    "cement_bags_required": 133,
+    "sand_cft_required": 325.6,
+    "aggregate_cft_required": 651.2,
+    "target_keyword": "material required for 740 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 740 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-740-cft-m20-concrete",
+    "volume_cft": 740,
+    "mix_ratio": "M20",
+    "cement_bags_required": 170,
+    "sand_cft_required": 310.8,
+    "aggregate_cft_required": 621.6,
+    "target_keyword": "material required for 740 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 740 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-740-cft-m25-concrete",
+    "volume_cft": 740,
+    "mix_ratio": "M25",
+    "cement_bags_required": 233,
+    "sand_cft_required": 284.9,
+    "aggregate_cft_required": 569.8,
+    "target_keyword": "material required for 740 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 740 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-750-cft-m15-concrete",
+    "volume_cft": 750,
+    "mix_ratio": "M15",
+    "cement_bags_required": 135,
+    "sand_cft_required": 330,
+    "aggregate_cft_required": 660,
+    "target_keyword": "material required for 750 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 750 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-750-cft-m20-concrete",
+    "volume_cft": 750,
+    "mix_ratio": "M20",
+    "cement_bags_required": 172,
+    "sand_cft_required": 315,
+    "aggregate_cft_required": 630,
+    "target_keyword": "material required for 750 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 750 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-750-cft-m25-concrete",
+    "volume_cft": 750,
+    "mix_ratio": "M25",
+    "cement_bags_required": 236,
+    "sand_cft_required": 288.75,
+    "aggregate_cft_required": 577.5,
+    "target_keyword": "material required for 750 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 750 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-760-cft-m15-concrete",
+    "volume_cft": 760,
+    "mix_ratio": "M15",
+    "cement_bags_required": 137,
+    "sand_cft_required": 334.4,
+    "aggregate_cft_required": 668.8,
+    "target_keyword": "material required for 760 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 760 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-760-cft-m20-concrete",
+    "volume_cft": 760,
+    "mix_ratio": "M20",
+    "cement_bags_required": 174,
+    "sand_cft_required": 319.2,
+    "aggregate_cft_required": 638.4,
+    "target_keyword": "material required for 760 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 760 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-760-cft-m25-concrete",
+    "volume_cft": 760,
+    "mix_ratio": "M25",
+    "cement_bags_required": 239,
+    "sand_cft_required": 292.6,
+    "aggregate_cft_required": 585.2,
+    "target_keyword": "material required for 760 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 760 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-770-cft-m15-concrete",
+    "volume_cft": 770,
+    "mix_ratio": "M15",
+    "cement_bags_required": 139,
+    "sand_cft_required": 338.8,
+    "aggregate_cft_required": 677.6,
+    "target_keyword": "material required for 770 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 770 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-770-cft-m20-concrete",
+    "volume_cft": 770,
+    "mix_ratio": "M20",
+    "cement_bags_required": 176,
+    "sand_cft_required": 323.4,
+    "aggregate_cft_required": 646.8,
+    "target_keyword": "material required for 770 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 770 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-770-cft-m25-concrete",
+    "volume_cft": 770,
+    "mix_ratio": "M25",
+    "cement_bags_required": 242,
+    "sand_cft_required": 296.45,
+    "aggregate_cft_required": 592.9,
+    "target_keyword": "material required for 770 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 770 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-780-cft-m15-concrete",
+    "volume_cft": 780,
+    "mix_ratio": "M15",
+    "cement_bags_required": 140,
+    "sand_cft_required": 343.2,
+    "aggregate_cft_required": 686.4,
+    "target_keyword": "material required for 780 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 780 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-780-cft-m20-concrete",
+    "volume_cft": 780,
+    "mix_ratio": "M20",
+    "cement_bags_required": 179,
+    "sand_cft_required": 327.6,
+    "aggregate_cft_required": 655.2,
+    "target_keyword": "material required for 780 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 780 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-780-cft-m25-concrete",
+    "volume_cft": 780,
+    "mix_ratio": "M25",
+    "cement_bags_required": 245,
+    "sand_cft_required": 300.3,
+    "aggregate_cft_required": 600.6,
+    "target_keyword": "material required for 780 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 780 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-790-cft-m15-concrete",
+    "volume_cft": 790,
+    "mix_ratio": "M15",
+    "cement_bags_required": 142,
+    "sand_cft_required": 347.6,
+    "aggregate_cft_required": 695.2,
+    "target_keyword": "material required for 790 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 790 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-790-cft-m20-concrete",
+    "volume_cft": 790,
+    "mix_ratio": "M20",
+    "cement_bags_required": 181,
+    "sand_cft_required": 331.8,
+    "aggregate_cft_required": 663.6,
+    "target_keyword": "material required for 790 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 790 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-790-cft-m25-concrete",
+    "volume_cft": 790,
+    "mix_ratio": "M25",
+    "cement_bags_required": 249,
+    "sand_cft_required": 304.15,
+    "aggregate_cft_required": 608.3,
+    "target_keyword": "material required for 790 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 790 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-800-cft-m15-concrete",
+    "volume_cft": 800,
+    "mix_ratio": "M15",
+    "cement_bags_required": 144,
+    "sand_cft_required": 352,
+    "aggregate_cft_required": 704,
+    "target_keyword": "material required for 800 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 800 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-800-cft-m20-concrete",
+    "volume_cft": 800,
+    "mix_ratio": "M20",
+    "cement_bags_required": 183,
+    "sand_cft_required": 336,
+    "aggregate_cft_required": 672,
+    "target_keyword": "material required for 800 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 800 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-800-cft-m25-concrete",
+    "volume_cft": 800,
+    "mix_ratio": "M25",
+    "cement_bags_required": 252,
+    "sand_cft_required": 308,
+    "aggregate_cft_required": 616,
+    "target_keyword": "material required for 800 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 800 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-810-cft-m15-concrete",
+    "volume_cft": 810,
+    "mix_ratio": "M15",
+    "cement_bags_required": 146,
+    "sand_cft_required": 356.4,
+    "aggregate_cft_required": 712.8,
+    "target_keyword": "material required for 810 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 810 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-810-cft-m20-concrete",
+    "volume_cft": 810,
+    "mix_ratio": "M20",
+    "cement_bags_required": 185,
+    "sand_cft_required": 340.2,
+    "aggregate_cft_required": 680.4,
+    "target_keyword": "material required for 810 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 810 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-810-cft-m25-concrete",
+    "volume_cft": 810,
+    "mix_ratio": "M25",
+    "cement_bags_required": 255,
+    "sand_cft_required": 311.85,
+    "aggregate_cft_required": 623.7,
+    "target_keyword": "material required for 810 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 810 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-820-cft-m15-concrete",
+    "volume_cft": 820,
+    "mix_ratio": "M15",
+    "cement_bags_required": 148,
+    "sand_cft_required": 360.8,
+    "aggregate_cft_required": 721.6,
+    "target_keyword": "material required for 820 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 820 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-820-cft-m20-concrete",
+    "volume_cft": 820,
+    "mix_ratio": "M20",
+    "cement_bags_required": 188,
+    "sand_cft_required": 344.4,
+    "aggregate_cft_required": 688.8,
+    "target_keyword": "material required for 820 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 820 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-820-cft-m25-concrete",
+    "volume_cft": 820,
+    "mix_ratio": "M25",
+    "cement_bags_required": 258,
+    "sand_cft_required": 315.7,
+    "aggregate_cft_required": 631.4,
+    "target_keyword": "material required for 820 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 820 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-830-cft-m15-concrete",
+    "volume_cft": 830,
+    "mix_ratio": "M15",
+    "cement_bags_required": 149,
+    "sand_cft_required": 365.2,
+    "aggregate_cft_required": 730.4,
+    "target_keyword": "material required for 830 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 830 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-830-cft-m20-concrete",
+    "volume_cft": 830,
+    "mix_ratio": "M20",
+    "cement_bags_required": 190,
+    "sand_cft_required": 348.6,
+    "aggregate_cft_required": 697.2,
+    "target_keyword": "material required for 830 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 830 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-830-cft-m25-concrete",
+    "volume_cft": 830,
+    "mix_ratio": "M25",
+    "cement_bags_required": 261,
+    "sand_cft_required": 319.55,
+    "aggregate_cft_required": 639.1,
+    "target_keyword": "material required for 830 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 830 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-840-cft-m15-concrete",
+    "volume_cft": 840,
+    "mix_ratio": "M15",
+    "cement_bags_required": 151,
+    "sand_cft_required": 369.6,
+    "aggregate_cft_required": 739.2,
+    "target_keyword": "material required for 840 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 840 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-840-cft-m20-concrete",
+    "volume_cft": 840,
+    "mix_ratio": "M20",
+    "cement_bags_required": 192,
+    "sand_cft_required": 352.8,
+    "aggregate_cft_required": 705.6,
+    "target_keyword": "material required for 840 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 840 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-840-cft-m25-concrete",
+    "volume_cft": 840,
+    "mix_ratio": "M25",
+    "cement_bags_required": 264,
+    "sand_cft_required": 323.4,
+    "aggregate_cft_required": 646.8,
+    "target_keyword": "material required for 840 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 840 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-850-cft-m15-concrete",
+    "volume_cft": 850,
+    "mix_ratio": "M15",
+    "cement_bags_required": 153,
+    "sand_cft_required": 374,
+    "aggregate_cft_required": 748,
+    "target_keyword": "material required for 850 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 850 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-850-cft-m20-concrete",
+    "volume_cft": 850,
+    "mix_ratio": "M20",
+    "cement_bags_required": 195,
+    "sand_cft_required": 357,
+    "aggregate_cft_required": 714,
+    "target_keyword": "material required for 850 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 850 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-850-cft-m25-concrete",
+    "volume_cft": 850,
+    "mix_ratio": "M25",
+    "cement_bags_required": 267,
+    "sand_cft_required": 327.25,
+    "aggregate_cft_required": 654.5,
+    "target_keyword": "material required for 850 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 850 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-860-cft-m15-concrete",
+    "volume_cft": 860,
+    "mix_ratio": "M15",
+    "cement_bags_required": 155,
+    "sand_cft_required": 378.4,
+    "aggregate_cft_required": 756.8,
+    "target_keyword": "material required for 860 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 860 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-860-cft-m20-concrete",
+    "volume_cft": 860,
+    "mix_ratio": "M20",
+    "cement_bags_required": 197,
+    "sand_cft_required": 361.2,
+    "aggregate_cft_required": 722.4,
+    "target_keyword": "material required for 860 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 860 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-860-cft-m25-concrete",
+    "volume_cft": 860,
+    "mix_ratio": "M25",
+    "cement_bags_required": 271,
+    "sand_cft_required": 331.1,
+    "aggregate_cft_required": 662.2,
+    "target_keyword": "material required for 860 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 860 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-870-cft-m15-concrete",
+    "volume_cft": 870,
+    "mix_ratio": "M15",
+    "cement_bags_required": 157,
+    "sand_cft_required": 382.8,
+    "aggregate_cft_required": 765.6,
+    "target_keyword": "material required for 870 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 870 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-870-cft-m20-concrete",
+    "volume_cft": 870,
+    "mix_ratio": "M20",
+    "cement_bags_required": 199,
+    "sand_cft_required": 365.4,
+    "aggregate_cft_required": 730.8,
+    "target_keyword": "material required for 870 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 870 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-870-cft-m25-concrete",
+    "volume_cft": 870,
+    "mix_ratio": "M25",
+    "cement_bags_required": 274,
+    "sand_cft_required": 334.95,
+    "aggregate_cft_required": 669.9,
+    "target_keyword": "material required for 870 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 870 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-880-cft-m15-concrete",
+    "volume_cft": 880,
+    "mix_ratio": "M15",
+    "cement_bags_required": 158,
+    "sand_cft_required": 387.2,
+    "aggregate_cft_required": 774.4,
+    "target_keyword": "material required for 880 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 880 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-880-cft-m20-concrete",
+    "volume_cft": 880,
+    "mix_ratio": "M20",
+    "cement_bags_required": 201,
+    "sand_cft_required": 369.6,
+    "aggregate_cft_required": 739.2,
+    "target_keyword": "material required for 880 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 880 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-880-cft-m25-concrete",
+    "volume_cft": 880,
+    "mix_ratio": "M25",
+    "cement_bags_required": 277,
+    "sand_cft_required": 338.8,
+    "aggregate_cft_required": 677.6,
+    "target_keyword": "material required for 880 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 880 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-890-cft-m15-concrete",
+    "volume_cft": 890,
+    "mix_ratio": "M15",
+    "cement_bags_required": 160,
+    "sand_cft_required": 391.6,
+    "aggregate_cft_required": 783.2,
+    "target_keyword": "material required for 890 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 890 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-890-cft-m20-concrete",
+    "volume_cft": 890,
+    "mix_ratio": "M20",
+    "cement_bags_required": 204,
+    "sand_cft_required": 373.8,
+    "aggregate_cft_required": 747.6,
+    "target_keyword": "material required for 890 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 890 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-890-cft-m25-concrete",
+    "volume_cft": 890,
+    "mix_ratio": "M25",
+    "cement_bags_required": 280,
+    "sand_cft_required": 342.65,
+    "aggregate_cft_required": 685.3,
+    "target_keyword": "material required for 890 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 890 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-900-cft-m15-concrete",
+    "volume_cft": 900,
+    "mix_ratio": "M15",
+    "cement_bags_required": 162,
+    "sand_cft_required": 396,
+    "aggregate_cft_required": 792,
+    "target_keyword": "material required for 900 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 900 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-900-cft-m20-concrete",
+    "volume_cft": 900,
+    "mix_ratio": "M20",
+    "cement_bags_required": 206,
+    "sand_cft_required": 378,
+    "aggregate_cft_required": 756,
+    "target_keyword": "material required for 900 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 900 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-900-cft-m25-concrete",
+    "volume_cft": 900,
+    "mix_ratio": "M25",
+    "cement_bags_required": 283,
+    "sand_cft_required": 346.5,
+    "aggregate_cft_required": 693,
+    "target_keyword": "material required for 900 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 900 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-910-cft-m15-concrete",
+    "volume_cft": 910,
+    "mix_ratio": "M15",
+    "cement_bags_required": 164,
+    "sand_cft_required": 400.4,
+    "aggregate_cft_required": 800.8,
+    "target_keyword": "material required for 910 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 910 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-910-cft-m20-concrete",
+    "volume_cft": 910,
+    "mix_ratio": "M20",
+    "cement_bags_required": 208,
+    "sand_cft_required": 382.2,
+    "aggregate_cft_required": 764.4,
+    "target_keyword": "material required for 910 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 910 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-910-cft-m25-concrete",
+    "volume_cft": 910,
+    "mix_ratio": "M25",
+    "cement_bags_required": 286,
+    "sand_cft_required": 350.35,
+    "aggregate_cft_required": 700.7,
+    "target_keyword": "material required for 910 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 910 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-920-cft-m15-concrete",
+    "volume_cft": 920,
+    "mix_ratio": "M15",
+    "cement_bags_required": 166,
+    "sand_cft_required": 404.8,
+    "aggregate_cft_required": 809.6,
+    "target_keyword": "material required for 920 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 920 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-920-cft-m20-concrete",
+    "volume_cft": 920,
+    "mix_ratio": "M20",
+    "cement_bags_required": 211,
+    "sand_cft_required": 386.4,
+    "aggregate_cft_required": 772.8,
+    "target_keyword": "material required for 920 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 920 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-920-cft-m25-concrete",
+    "volume_cft": 920,
+    "mix_ratio": "M25",
+    "cement_bags_required": 289,
+    "sand_cft_required": 354.2,
+    "aggregate_cft_required": 708.4,
+    "target_keyword": "material required for 920 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 920 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-930-cft-m15-concrete",
+    "volume_cft": 930,
+    "mix_ratio": "M15",
+    "cement_bags_required": 167,
+    "sand_cft_required": 409.2,
+    "aggregate_cft_required": 818.4,
+    "target_keyword": "material required for 930 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 930 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-930-cft-m20-concrete",
+    "volume_cft": 930,
+    "mix_ratio": "M20",
+    "cement_bags_required": 213,
+    "sand_cft_required": 390.6,
+    "aggregate_cft_required": 781.2,
+    "target_keyword": "material required for 930 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 930 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-930-cft-m25-concrete",
+    "volume_cft": 930,
+    "mix_ratio": "M25",
+    "cement_bags_required": 293,
+    "sand_cft_required": 358.05,
+    "aggregate_cft_required": 716.1,
+    "target_keyword": "material required for 930 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 930 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-940-cft-m15-concrete",
+    "volume_cft": 940,
+    "mix_ratio": "M15",
+    "cement_bags_required": 169,
+    "sand_cft_required": 413.6,
+    "aggregate_cft_required": 827.2,
+    "target_keyword": "material required for 940 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 940 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-940-cft-m20-concrete",
+    "volume_cft": 940,
+    "mix_ratio": "M20",
+    "cement_bags_required": 215,
+    "sand_cft_required": 394.8,
+    "aggregate_cft_required": 789.6,
+    "target_keyword": "material required for 940 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 940 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-940-cft-m25-concrete",
+    "volume_cft": 940,
+    "mix_ratio": "M25",
+    "cement_bags_required": 296,
+    "sand_cft_required": 361.9,
+    "aggregate_cft_required": 723.8,
+    "target_keyword": "material required for 940 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 940 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-950-cft-m15-concrete",
+    "volume_cft": 950,
+    "mix_ratio": "M15",
+    "cement_bags_required": 171,
+    "sand_cft_required": 418,
+    "aggregate_cft_required": 836,
+    "target_keyword": "material required for 950 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 950 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-950-cft-m20-concrete",
+    "volume_cft": 950,
+    "mix_ratio": "M20",
+    "cement_bags_required": 217,
+    "sand_cft_required": 399,
+    "aggregate_cft_required": 798,
+    "target_keyword": "material required for 950 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 950 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-950-cft-m25-concrete",
+    "volume_cft": 950,
+    "mix_ratio": "M25",
+    "cement_bags_required": 299,
+    "sand_cft_required": 365.75,
+    "aggregate_cft_required": 731.5,
+    "target_keyword": "material required for 950 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 950 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-960-cft-m15-concrete",
+    "volume_cft": 960,
+    "mix_ratio": "M15",
+    "cement_bags_required": 173,
+    "sand_cft_required": 422.4,
+    "aggregate_cft_required": 844.8,
+    "target_keyword": "material required for 960 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 960 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-960-cft-m20-concrete",
+    "volume_cft": 960,
+    "mix_ratio": "M20",
+    "cement_bags_required": 220,
+    "sand_cft_required": 403.2,
+    "aggregate_cft_required": 806.4,
+    "target_keyword": "material required for 960 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 960 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-960-cft-m25-concrete",
+    "volume_cft": 960,
+    "mix_ratio": "M25",
+    "cement_bags_required": 302,
+    "sand_cft_required": 369.6,
+    "aggregate_cft_required": 739.2,
+    "target_keyword": "material required for 960 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 960 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-970-cft-m15-concrete",
+    "volume_cft": 970,
+    "mix_ratio": "M15",
+    "cement_bags_required": 175,
+    "sand_cft_required": 426.8,
+    "aggregate_cft_required": 853.6,
+    "target_keyword": "material required for 970 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 970 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-970-cft-m20-concrete",
+    "volume_cft": 970,
+    "mix_ratio": "M20",
+    "cement_bags_required": 222,
+    "sand_cft_required": 407.4,
+    "aggregate_cft_required": 814.8,
+    "target_keyword": "material required for 970 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 970 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-970-cft-m25-concrete",
+    "volume_cft": 970,
+    "mix_ratio": "M25",
+    "cement_bags_required": 305,
+    "sand_cft_required": 373.45,
+    "aggregate_cft_required": 746.9,
+    "target_keyword": "material required for 970 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 970 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-980-cft-m15-concrete",
+    "volume_cft": 980,
+    "mix_ratio": "M15",
+    "cement_bags_required": 176,
+    "sand_cft_required": 431.2,
+    "aggregate_cft_required": 862.4,
+    "target_keyword": "material required for 980 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 980 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-980-cft-m20-concrete",
+    "volume_cft": 980,
+    "mix_ratio": "M20",
+    "cement_bags_required": 224,
+    "sand_cft_required": 411.6,
+    "aggregate_cft_required": 823.2,
+    "target_keyword": "material required for 980 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 980 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-980-cft-m25-concrete",
+    "volume_cft": 980,
+    "mix_ratio": "M25",
+    "cement_bags_required": 308,
+    "sand_cft_required": 377.3,
+    "aggregate_cft_required": 754.6,
+    "target_keyword": "material required for 980 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 980 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-990-cft-m15-concrete",
+    "volume_cft": 990,
+    "mix_ratio": "M15",
+    "cement_bags_required": 178,
+    "sand_cft_required": 435.6,
+    "aggregate_cft_required": 871.2,
+    "target_keyword": "material required for 990 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 990 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-990-cft-m20-concrete",
+    "volume_cft": 990,
+    "mix_ratio": "M20",
+    "cement_bags_required": 227,
+    "sand_cft_required": 415.8,
+    "aggregate_cft_required": 831.6,
+    "target_keyword": "material required for 990 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 990 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-990-cft-m25-concrete",
+    "volume_cft": 990,
+    "mix_ratio": "M25",
+    "cement_bags_required": 311,
+    "sand_cft_required": 381.15,
+    "aggregate_cft_required": 762.3,
+    "target_keyword": "material required for 990 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 990 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1000-cft-m15-concrete",
+    "volume_cft": 1000,
+    "mix_ratio": "M15",
+    "cement_bags_required": 180,
+    "sand_cft_required": 440,
+    "aggregate_cft_required": 880,
+    "target_keyword": "material required for 1000 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1000 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1000-cft-m20-concrete",
+    "volume_cft": 1000,
+    "mix_ratio": "M20",
+    "cement_bags_required": 229,
+    "sand_cft_required": 420,
+    "aggregate_cft_required": 840,
+    "target_keyword": "material required for 1000 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1000 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1000-cft-m25-concrete",
+    "volume_cft": 1000,
+    "mix_ratio": "M25",
+    "cement_bags_required": 315,
+    "sand_cft_required": 385,
+    "aggregate_cft_required": 770,
+    "target_keyword": "material required for 1000 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1000 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1010-cft-m15-concrete",
+    "volume_cft": 1010,
+    "mix_ratio": "M15",
+    "cement_bags_required": 182,
+    "sand_cft_required": 444.4,
+    "aggregate_cft_required": 888.8,
+    "target_keyword": "material required for 1010 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1010 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1010-cft-m20-concrete",
+    "volume_cft": 1010,
+    "mix_ratio": "M20",
+    "cement_bags_required": 231,
+    "sand_cft_required": 424.2,
+    "aggregate_cft_required": 848.4,
+    "target_keyword": "material required for 1010 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1010 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1010-cft-m25-concrete",
+    "volume_cft": 1010,
+    "mix_ratio": "M25",
+    "cement_bags_required": 318,
+    "sand_cft_required": 388.85,
+    "aggregate_cft_required": 777.7,
+    "target_keyword": "material required for 1010 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1010 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1020-cft-m15-concrete",
+    "volume_cft": 1020,
+    "mix_ratio": "M15",
+    "cement_bags_required": 184,
+    "sand_cft_required": 448.8,
+    "aggregate_cft_required": 897.6,
+    "target_keyword": "material required for 1020 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1020 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1020-cft-m20-concrete",
+    "volume_cft": 1020,
+    "mix_ratio": "M20",
+    "cement_bags_required": 233,
+    "sand_cft_required": 428.4,
+    "aggregate_cft_required": 856.8,
+    "target_keyword": "material required for 1020 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1020 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1020-cft-m25-concrete",
+    "volume_cft": 1020,
+    "mix_ratio": "M25",
+    "cement_bags_required": 321,
+    "sand_cft_required": 392.7,
+    "aggregate_cft_required": 785.4,
+    "target_keyword": "material required for 1020 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1020 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1030-cft-m15-concrete",
+    "volume_cft": 1030,
+    "mix_ratio": "M15",
+    "cement_bags_required": 185,
+    "sand_cft_required": 453.2,
+    "aggregate_cft_required": 906.4,
+    "target_keyword": "material required for 1030 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1030 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1030-cft-m20-concrete",
+    "volume_cft": 1030,
+    "mix_ratio": "M20",
+    "cement_bags_required": 236,
+    "sand_cft_required": 432.6,
+    "aggregate_cft_required": 865.2,
+    "target_keyword": "material required for 1030 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1030 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1030-cft-m25-concrete",
+    "volume_cft": 1030,
+    "mix_ratio": "M25",
+    "cement_bags_required": 324,
+    "sand_cft_required": 396.55,
+    "aggregate_cft_required": 793.1,
+    "target_keyword": "material required for 1030 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1030 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1040-cft-m15-concrete",
+    "volume_cft": 1040,
+    "mix_ratio": "M15",
+    "cement_bags_required": 187,
+    "sand_cft_required": 457.6,
+    "aggregate_cft_required": 915.2,
+    "target_keyword": "material required for 1040 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1040 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1040-cft-m20-concrete",
+    "volume_cft": 1040,
+    "mix_ratio": "M20",
+    "cement_bags_required": 238,
+    "sand_cft_required": 436.8,
+    "aggregate_cft_required": 873.6,
+    "target_keyword": "material required for 1040 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1040 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1040-cft-m25-concrete",
+    "volume_cft": 1040,
+    "mix_ratio": "M25",
+    "cement_bags_required": 327,
+    "sand_cft_required": 400.4,
+    "aggregate_cft_required": 800.8,
+    "target_keyword": "material required for 1040 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1040 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1050-cft-m15-concrete",
+    "volume_cft": 1050,
+    "mix_ratio": "M15",
+    "cement_bags_required": 189,
+    "sand_cft_required": 462,
+    "aggregate_cft_required": 924,
+    "target_keyword": "material required for 1050 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1050 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1050-cft-m20-concrete",
+    "volume_cft": 1050,
+    "mix_ratio": "M20",
+    "cement_bags_required": 240,
+    "sand_cft_required": 441,
+    "aggregate_cft_required": 882,
+    "target_keyword": "material required for 1050 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1050 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1050-cft-m25-concrete",
+    "volume_cft": 1050,
+    "mix_ratio": "M25",
+    "cement_bags_required": 330,
+    "sand_cft_required": 404.25,
+    "aggregate_cft_required": 808.5,
+    "target_keyword": "material required for 1050 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1050 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1060-cft-m15-concrete",
+    "volume_cft": 1060,
+    "mix_ratio": "M15",
+    "cement_bags_required": 191,
+    "sand_cft_required": 466.4,
+    "aggregate_cft_required": 932.8,
+    "target_keyword": "material required for 1060 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1060 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1060-cft-m20-concrete",
+    "volume_cft": 1060,
+    "mix_ratio": "M20",
+    "cement_bags_required": 243,
+    "sand_cft_required": 445.2,
+    "aggregate_cft_required": 890.4,
+    "target_keyword": "material required for 1060 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1060 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1060-cft-m25-concrete",
+    "volume_cft": 1060,
+    "mix_ratio": "M25",
+    "cement_bags_required": 333,
+    "sand_cft_required": 408.1,
+    "aggregate_cft_required": 816.2,
+    "target_keyword": "material required for 1060 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1060 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1070-cft-m15-concrete",
+    "volume_cft": 1070,
+    "mix_ratio": "M15",
+    "cement_bags_required": 193,
+    "sand_cft_required": 470.8,
+    "aggregate_cft_required": 941.6,
+    "target_keyword": "material required for 1070 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1070 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1070-cft-m20-concrete",
+    "volume_cft": 1070,
+    "mix_ratio": "M20",
+    "cement_bags_required": 245,
+    "sand_cft_required": 449.4,
+    "aggregate_cft_required": 898.8,
+    "target_keyword": "material required for 1070 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1070 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1070-cft-m25-concrete",
+    "volume_cft": 1070,
+    "mix_ratio": "M25",
+    "cement_bags_required": 337,
+    "sand_cft_required": 411.95,
+    "aggregate_cft_required": 823.9,
+    "target_keyword": "material required for 1070 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1070 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1080-cft-m15-concrete",
+    "volume_cft": 1080,
+    "mix_ratio": "M15",
+    "cement_bags_required": 194,
+    "sand_cft_required": 475.2,
+    "aggregate_cft_required": 950.4,
+    "target_keyword": "material required for 1080 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1080 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1080-cft-m20-concrete",
+    "volume_cft": 1080,
+    "mix_ratio": "M20",
+    "cement_bags_required": 247,
+    "sand_cft_required": 453.6,
+    "aggregate_cft_required": 907.2,
+    "target_keyword": "material required for 1080 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1080 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1080-cft-m25-concrete",
+    "volume_cft": 1080,
+    "mix_ratio": "M25",
+    "cement_bags_required": 340,
+    "sand_cft_required": 415.8,
+    "aggregate_cft_required": 831.6,
+    "target_keyword": "material required for 1080 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1080 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1090-cft-m15-concrete",
+    "volume_cft": 1090,
+    "mix_ratio": "M15",
+    "cement_bags_required": 196,
+    "sand_cft_required": 479.6,
+    "aggregate_cft_required": 959.2,
+    "target_keyword": "material required for 1090 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1090 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1090-cft-m20-concrete",
+    "volume_cft": 1090,
+    "mix_ratio": "M20",
+    "cement_bags_required": 249,
+    "sand_cft_required": 457.8,
+    "aggregate_cft_required": 915.6,
+    "target_keyword": "material required for 1090 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1090 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1090-cft-m25-concrete",
+    "volume_cft": 1090,
+    "mix_ratio": "M25",
+    "cement_bags_required": 343,
+    "sand_cft_required": 419.65,
+    "aggregate_cft_required": 839.3,
+    "target_keyword": "material required for 1090 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1090 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1100-cft-m15-concrete",
+    "volume_cft": 1100,
+    "mix_ratio": "M15",
+    "cement_bags_required": 198,
+    "sand_cft_required": 484,
+    "aggregate_cft_required": 968,
+    "target_keyword": "material required for 1100 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1100 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1100-cft-m20-concrete",
+    "volume_cft": 1100,
+    "mix_ratio": "M20",
+    "cement_bags_required": 252,
+    "sand_cft_required": 462,
+    "aggregate_cft_required": 924,
+    "target_keyword": "material required for 1100 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1100 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1100-cft-m25-concrete",
+    "volume_cft": 1100,
+    "mix_ratio": "M25",
+    "cement_bags_required": 346,
+    "sand_cft_required": 423.5,
+    "aggregate_cft_required": 847,
+    "target_keyword": "material required for 1100 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1100 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1110-cft-m15-concrete",
+    "volume_cft": 1110,
+    "mix_ratio": "M15",
+    "cement_bags_required": 200,
+    "sand_cft_required": 488.4,
+    "aggregate_cft_required": 976.8,
+    "target_keyword": "material required for 1110 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1110 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1110-cft-m20-concrete",
+    "volume_cft": 1110,
+    "mix_ratio": "M20",
+    "cement_bags_required": 254,
+    "sand_cft_required": 466.2,
+    "aggregate_cft_required": 932.4,
+    "target_keyword": "material required for 1110 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1110 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1110-cft-m25-concrete",
+    "volume_cft": 1110,
+    "mix_ratio": "M25",
+    "cement_bags_required": 349,
+    "sand_cft_required": 427.35,
+    "aggregate_cft_required": 854.7,
+    "target_keyword": "material required for 1110 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1110 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1120-cft-m15-concrete",
+    "volume_cft": 1120,
+    "mix_ratio": "M15",
+    "cement_bags_required": 201,
+    "sand_cft_required": 492.8,
+    "aggregate_cft_required": 985.6,
+    "target_keyword": "material required for 1120 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1120 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1120-cft-m20-concrete",
+    "volume_cft": 1120,
+    "mix_ratio": "M20",
+    "cement_bags_required": 256,
+    "sand_cft_required": 470.4,
+    "aggregate_cft_required": 940.8,
+    "target_keyword": "material required for 1120 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1120 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1120-cft-m25-concrete",
+    "volume_cft": 1120,
+    "mix_ratio": "M25",
+    "cement_bags_required": 352,
+    "sand_cft_required": 431.2,
+    "aggregate_cft_required": 862.4,
+    "target_keyword": "material required for 1120 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1120 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1130-cft-m15-concrete",
+    "volume_cft": 1130,
+    "mix_ratio": "M15",
+    "cement_bags_required": 203,
+    "sand_cft_required": 497.2,
+    "aggregate_cft_required": 994.4,
+    "target_keyword": "material required for 1130 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1130 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1130-cft-m20-concrete",
+    "volume_cft": 1130,
+    "mix_ratio": "M20",
+    "cement_bags_required": 259,
+    "sand_cft_required": 474.6,
+    "aggregate_cft_required": 949.2,
+    "target_keyword": "material required for 1130 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1130 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1130-cft-m25-concrete",
+    "volume_cft": 1130,
+    "mix_ratio": "M25",
+    "cement_bags_required": 355,
+    "sand_cft_required": 435.05,
+    "aggregate_cft_required": 870.1,
+    "target_keyword": "material required for 1130 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1130 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1140-cft-m15-concrete",
+    "volume_cft": 1140,
+    "mix_ratio": "M15",
+    "cement_bags_required": 205,
+    "sand_cft_required": 501.6,
+    "aggregate_cft_required": 1003.2,
+    "target_keyword": "material required for 1140 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1140 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1140-cft-m20-concrete",
+    "volume_cft": 1140,
+    "mix_ratio": "M20",
+    "cement_bags_required": 261,
+    "sand_cft_required": 478.8,
+    "aggregate_cft_required": 957.6,
+    "target_keyword": "material required for 1140 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1140 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1140-cft-m25-concrete",
+    "volume_cft": 1140,
+    "mix_ratio": "M25",
+    "cement_bags_required": 358,
+    "sand_cft_required": 438.9,
+    "aggregate_cft_required": 877.8,
+    "target_keyword": "material required for 1140 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1140 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1150-cft-m15-concrete",
+    "volume_cft": 1150,
+    "mix_ratio": "M15",
+    "cement_bags_required": 207,
+    "sand_cft_required": 506,
+    "aggregate_cft_required": 1012,
+    "target_keyword": "material required for 1150 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1150 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1150-cft-m20-concrete",
+    "volume_cft": 1150,
+    "mix_ratio": "M20",
+    "cement_bags_required": 263,
+    "sand_cft_required": 483,
+    "aggregate_cft_required": 966,
+    "target_keyword": "material required for 1150 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1150 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1150-cft-m25-concrete",
+    "volume_cft": 1150,
+    "mix_ratio": "M25",
+    "cement_bags_required": 362,
+    "sand_cft_required": 442.75,
+    "aggregate_cft_required": 885.5,
+    "target_keyword": "material required for 1150 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1150 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1160-cft-m15-concrete",
+    "volume_cft": 1160,
+    "mix_ratio": "M15",
+    "cement_bags_required": 209,
+    "sand_cft_required": 510.4,
+    "aggregate_cft_required": 1020.8,
+    "target_keyword": "material required for 1160 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1160 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1160-cft-m20-concrete",
+    "volume_cft": 1160,
+    "mix_ratio": "M20",
+    "cement_bags_required": 265,
+    "sand_cft_required": 487.2,
+    "aggregate_cft_required": 974.4,
+    "target_keyword": "material required for 1160 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1160 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1160-cft-m25-concrete",
+    "volume_cft": 1160,
+    "mix_ratio": "M25",
+    "cement_bags_required": 365,
+    "sand_cft_required": 446.6,
+    "aggregate_cft_required": 893.2,
+    "target_keyword": "material required for 1160 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1160 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1170-cft-m15-concrete",
+    "volume_cft": 1170,
+    "mix_ratio": "M15",
+    "cement_bags_required": 210,
+    "sand_cft_required": 514.8,
+    "aggregate_cft_required": 1029.6,
+    "target_keyword": "material required for 1170 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1170 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1170-cft-m20-concrete",
+    "volume_cft": 1170,
+    "mix_ratio": "M20",
+    "cement_bags_required": 268,
+    "sand_cft_required": 491.4,
+    "aggregate_cft_required": 982.8,
+    "target_keyword": "material required for 1170 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1170 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1170-cft-m25-concrete",
+    "volume_cft": 1170,
+    "mix_ratio": "M25",
+    "cement_bags_required": 368,
+    "sand_cft_required": 450.45,
+    "aggregate_cft_required": 900.9,
+    "target_keyword": "material required for 1170 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1170 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1180-cft-m15-concrete",
+    "volume_cft": 1180,
+    "mix_ratio": "M15",
+    "cement_bags_required": 212,
+    "sand_cft_required": 519.2,
+    "aggregate_cft_required": 1038.4,
+    "target_keyword": "material required for 1180 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1180 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1180-cft-m20-concrete",
+    "volume_cft": 1180,
+    "mix_ratio": "M20",
+    "cement_bags_required": 270,
+    "sand_cft_required": 495.6,
+    "aggregate_cft_required": 991.2,
+    "target_keyword": "material required for 1180 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1180 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1180-cft-m25-concrete",
+    "volume_cft": 1180,
+    "mix_ratio": "M25",
+    "cement_bags_required": 371,
+    "sand_cft_required": 454.3,
+    "aggregate_cft_required": 908.6,
+    "target_keyword": "material required for 1180 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1180 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1190-cft-m15-concrete",
+    "volume_cft": 1190,
+    "mix_ratio": "M15",
+    "cement_bags_required": 214,
+    "sand_cft_required": 523.6,
+    "aggregate_cft_required": 1047.2,
+    "target_keyword": "material required for 1190 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1190 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1190-cft-m20-concrete",
+    "volume_cft": 1190,
+    "mix_ratio": "M20",
+    "cement_bags_required": 272,
+    "sand_cft_required": 499.8,
+    "aggregate_cft_required": 999.6,
+    "target_keyword": "material required for 1190 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1190 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1190-cft-m25-concrete",
+    "volume_cft": 1190,
+    "mix_ratio": "M25",
+    "cement_bags_required": 374,
+    "sand_cft_required": 458.15,
+    "aggregate_cft_required": 916.3,
+    "target_keyword": "material required for 1190 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1190 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1200-cft-m15-concrete",
+    "volume_cft": 1200,
+    "mix_ratio": "M15",
+    "cement_bags_required": 216,
+    "sand_cft_required": 528,
+    "aggregate_cft_required": 1056,
+    "target_keyword": "material required for 1200 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1200 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1200-cft-m20-concrete",
+    "volume_cft": 1200,
+    "mix_ratio": "M20",
+    "cement_bags_required": 275,
+    "sand_cft_required": 504,
+    "aggregate_cft_required": 1008,
+    "target_keyword": "material required for 1200 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1200 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1200-cft-m25-concrete",
+    "volume_cft": 1200,
+    "mix_ratio": "M25",
+    "cement_bags_required": 377,
+    "sand_cft_required": 462,
+    "aggregate_cft_required": 924,
+    "target_keyword": "material required for 1200 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1200 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1210-cft-m15-concrete",
+    "volume_cft": 1210,
+    "mix_ratio": "M15",
+    "cement_bags_required": 218,
+    "sand_cft_required": 532.4,
+    "aggregate_cft_required": 1064.8,
+    "target_keyword": "material required for 1210 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1210 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1210-cft-m20-concrete",
+    "volume_cft": 1210,
+    "mix_ratio": "M20",
+    "cement_bags_required": 277,
+    "sand_cft_required": 508.2,
+    "aggregate_cft_required": 1016.4,
+    "target_keyword": "material required for 1210 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1210 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1210-cft-m25-concrete",
+    "volume_cft": 1210,
+    "mix_ratio": "M25",
+    "cement_bags_required": 380,
+    "sand_cft_required": 465.85,
+    "aggregate_cft_required": 931.7,
+    "target_keyword": "material required for 1210 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1210 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1220-cft-m15-concrete",
+    "volume_cft": 1220,
+    "mix_ratio": "M15",
+    "cement_bags_required": 219,
+    "sand_cft_required": 536.8,
+    "aggregate_cft_required": 1073.6,
+    "target_keyword": "material required for 1220 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1220 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1220-cft-m20-concrete",
+    "volume_cft": 1220,
+    "mix_ratio": "M20",
+    "cement_bags_required": 279,
+    "sand_cft_required": 512.4,
+    "aggregate_cft_required": 1024.8,
+    "target_keyword": "material required for 1220 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1220 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1220-cft-m25-concrete",
+    "volume_cft": 1220,
+    "mix_ratio": "M25",
+    "cement_bags_required": 384,
+    "sand_cft_required": 469.7,
+    "aggregate_cft_required": 939.4,
+    "target_keyword": "material required for 1220 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1220 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1230-cft-m15-concrete",
+    "volume_cft": 1230,
+    "mix_ratio": "M15",
+    "cement_bags_required": 221,
+    "sand_cft_required": 541.2,
+    "aggregate_cft_required": 1082.4,
+    "target_keyword": "material required for 1230 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1230 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1230-cft-m20-concrete",
+    "volume_cft": 1230,
+    "mix_ratio": "M20",
+    "cement_bags_required": 281,
+    "sand_cft_required": 516.6,
+    "aggregate_cft_required": 1033.2,
+    "target_keyword": "material required for 1230 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1230 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1230-cft-m25-concrete",
+    "volume_cft": 1230,
+    "mix_ratio": "M25",
+    "cement_bags_required": 387,
+    "sand_cft_required": 473.55,
+    "aggregate_cft_required": 947.1,
+    "target_keyword": "material required for 1230 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1230 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1240-cft-m15-concrete",
+    "volume_cft": 1240,
+    "mix_ratio": "M15",
+    "cement_bags_required": 223,
+    "sand_cft_required": 545.6,
+    "aggregate_cft_required": 1091.2,
+    "target_keyword": "material required for 1240 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1240 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1240-cft-m20-concrete",
+    "volume_cft": 1240,
+    "mix_ratio": "M20",
+    "cement_bags_required": 284,
+    "sand_cft_required": 520.8,
+    "aggregate_cft_required": 1041.6,
+    "target_keyword": "material required for 1240 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1240 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1240-cft-m25-concrete",
+    "volume_cft": 1240,
+    "mix_ratio": "M25",
+    "cement_bags_required": 390,
+    "sand_cft_required": 477.4,
+    "aggregate_cft_required": 954.8,
+    "target_keyword": "material required for 1240 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1240 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1250-cft-m15-concrete",
+    "volume_cft": 1250,
+    "mix_ratio": "M15",
+    "cement_bags_required": 225,
+    "sand_cft_required": 550,
+    "aggregate_cft_required": 1100,
+    "target_keyword": "material required for 1250 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1250 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1250-cft-m20-concrete",
+    "volume_cft": 1250,
+    "mix_ratio": "M20",
+    "cement_bags_required": 286,
+    "sand_cft_required": 525,
+    "aggregate_cft_required": 1050,
+    "target_keyword": "material required for 1250 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1250 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1250-cft-m25-concrete",
+    "volume_cft": 1250,
+    "mix_ratio": "M25",
+    "cement_bags_required": 393,
+    "sand_cft_required": 481.25,
+    "aggregate_cft_required": 962.5,
+    "target_keyword": "material required for 1250 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1250 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1260-cft-m15-concrete",
+    "volume_cft": 1260,
+    "mix_ratio": "M15",
+    "cement_bags_required": 227,
+    "sand_cft_required": 554.4,
+    "aggregate_cft_required": 1108.8,
+    "target_keyword": "material required for 1260 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1260 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1260-cft-m20-concrete",
+    "volume_cft": 1260,
+    "mix_ratio": "M20",
+    "cement_bags_required": 288,
+    "sand_cft_required": 529.2,
+    "aggregate_cft_required": 1058.4,
+    "target_keyword": "material required for 1260 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1260 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1260-cft-m25-concrete",
+    "volume_cft": 1260,
+    "mix_ratio": "M25",
+    "cement_bags_required": 396,
+    "sand_cft_required": 485.1,
+    "aggregate_cft_required": 970.2,
+    "target_keyword": "material required for 1260 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1260 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1270-cft-m15-concrete",
+    "volume_cft": 1270,
+    "mix_ratio": "M15",
+    "cement_bags_required": 228,
+    "sand_cft_required": 558.8,
+    "aggregate_cft_required": 1117.6,
+    "target_keyword": "material required for 1270 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1270 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1270-cft-m20-concrete",
+    "volume_cft": 1270,
+    "mix_ratio": "M20",
+    "cement_bags_required": 291,
+    "sand_cft_required": 533.4,
+    "aggregate_cft_required": 1066.8,
+    "target_keyword": "material required for 1270 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1270 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1270-cft-m25-concrete",
+    "volume_cft": 1270,
+    "mix_ratio": "M25",
+    "cement_bags_required": 399,
+    "sand_cft_required": 488.95,
+    "aggregate_cft_required": 977.9,
+    "target_keyword": "material required for 1270 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1270 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1280-cft-m15-concrete",
+    "volume_cft": 1280,
+    "mix_ratio": "M15",
+    "cement_bags_required": 230,
+    "sand_cft_required": 563.2,
+    "aggregate_cft_required": 1126.4,
+    "target_keyword": "material required for 1280 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1280 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1280-cft-m20-concrete",
+    "volume_cft": 1280,
+    "mix_ratio": "M20",
+    "cement_bags_required": 293,
+    "sand_cft_required": 537.6,
+    "aggregate_cft_required": 1075.2,
+    "target_keyword": "material required for 1280 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1280 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1280-cft-m25-concrete",
+    "volume_cft": 1280,
+    "mix_ratio": "M25",
+    "cement_bags_required": 402,
+    "sand_cft_required": 492.8,
+    "aggregate_cft_required": 985.6,
+    "target_keyword": "material required for 1280 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1280 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1290-cft-m15-concrete",
+    "volume_cft": 1290,
+    "mix_ratio": "M15",
+    "cement_bags_required": 232,
+    "sand_cft_required": 567.6,
+    "aggregate_cft_required": 1135.2,
+    "target_keyword": "material required for 1290 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1290 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1290-cft-m20-concrete",
+    "volume_cft": 1290,
+    "mix_ratio": "M20",
+    "cement_bags_required": 295,
+    "sand_cft_required": 541.8,
+    "aggregate_cft_required": 1083.6,
+    "target_keyword": "material required for 1290 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1290 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1290-cft-m25-concrete",
+    "volume_cft": 1290,
+    "mix_ratio": "M25",
+    "cement_bags_required": 406,
+    "sand_cft_required": 496.65,
+    "aggregate_cft_required": 993.3,
+    "target_keyword": "material required for 1290 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1290 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1300-cft-m15-concrete",
+    "volume_cft": 1300,
+    "mix_ratio": "M15",
+    "cement_bags_required": 234,
+    "sand_cft_required": 572,
+    "aggregate_cft_required": 1144,
+    "target_keyword": "material required for 1300 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1300 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1300-cft-m20-concrete",
+    "volume_cft": 1300,
+    "mix_ratio": "M20",
+    "cement_bags_required": 297,
+    "sand_cft_required": 546,
+    "aggregate_cft_required": 1092,
+    "target_keyword": "material required for 1300 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1300 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1300-cft-m25-concrete",
+    "volume_cft": 1300,
+    "mix_ratio": "M25",
+    "cement_bags_required": 409,
+    "sand_cft_required": 500.5,
+    "aggregate_cft_required": 1001,
+    "target_keyword": "material required for 1300 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1300 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1310-cft-m15-concrete",
+    "volume_cft": 1310,
+    "mix_ratio": "M15",
+    "cement_bags_required": 236,
+    "sand_cft_required": 576.4,
+    "aggregate_cft_required": 1152.8,
+    "target_keyword": "material required for 1310 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1310 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1310-cft-m20-concrete",
+    "volume_cft": 1310,
+    "mix_ratio": "M20",
+    "cement_bags_required": 300,
+    "sand_cft_required": 550.2,
+    "aggregate_cft_required": 1100.4,
+    "target_keyword": "material required for 1310 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1310 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1310-cft-m25-concrete",
+    "volume_cft": 1310,
+    "mix_ratio": "M25",
+    "cement_bags_required": 412,
+    "sand_cft_required": 504.35,
+    "aggregate_cft_required": 1008.7,
+    "target_keyword": "material required for 1310 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1310 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1320-cft-m15-concrete",
+    "volume_cft": 1320,
+    "mix_ratio": "M15",
+    "cement_bags_required": 237,
+    "sand_cft_required": 580.8,
+    "aggregate_cft_required": 1161.6,
+    "target_keyword": "material required for 1320 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1320 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1320-cft-m20-concrete",
+    "volume_cft": 1320,
+    "mix_ratio": "M20",
+    "cement_bags_required": 302,
+    "sand_cft_required": 554.4,
+    "aggregate_cft_required": 1108.8,
+    "target_keyword": "material required for 1320 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1320 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1320-cft-m25-concrete",
+    "volume_cft": 1320,
+    "mix_ratio": "M25",
+    "cement_bags_required": 415,
+    "sand_cft_required": 508.2,
+    "aggregate_cft_required": 1016.4,
+    "target_keyword": "material required for 1320 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1320 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1330-cft-m15-concrete",
+    "volume_cft": 1330,
+    "mix_ratio": "M15",
+    "cement_bags_required": 239,
+    "sand_cft_required": 585.2,
+    "aggregate_cft_required": 1170.4,
+    "target_keyword": "material required for 1330 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1330 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1330-cft-m20-concrete",
+    "volume_cft": 1330,
+    "mix_ratio": "M20",
+    "cement_bags_required": 304,
+    "sand_cft_required": 558.6,
+    "aggregate_cft_required": 1117.2,
+    "target_keyword": "material required for 1330 cft M20 concrete",
+    "related_keywords": [
+      "M20 concrete material calculation",
+      "how much cement in 1330 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1330-cft-m25-concrete",
+    "volume_cft": 1330,
+    "mix_ratio": "M25",
+    "cement_bags_required": 418,
+    "sand_cft_required": 512.05,
+    "aggregate_cft_required": 1024.1,
+    "target_keyword": "material required for 1330 cft M25 concrete",
+    "related_keywords": [
+      "M25 concrete material calculation",
+      "how much cement in 1330 cft concrete",
+      "civil engineering material estimation"
+    ]
+  },
+  {
+    "slug": "cement-sand-aggregate-for-1340-cft-m15-concrete",
+    "volume_cft": 1340,
+    "mix_ratio": "M15",
+    "cement_bags_required": 241,
+    "sand_cft_required": 589.6,
+    "aggregate_cft_required": 1179.2,
+    "target_keyword": "material required for 1340 cft M15 concrete",
+    "related_keywords": [
+      "M15 concrete material calculation",
+      "how much cement in 1340 cft concrete",
+      "civil engineering material estimation"
+    ]
+  }
+]

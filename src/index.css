@@ -1,0 +1,384 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Syne:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    overflow-x: hidden;
+  }
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer utilities {
+  .hero-mesh-gradient {
+    background: linear-gradient(
+      -45deg,
+      #d1fae5,
+      #dbeafe,
+      #e0e7ff,
+      #ffedd5,
+      #ffffff
+    );
+    background-size: 400% 400%;
+    animation: gradientFlow 15s ease infinite;
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  }
+  
+  .bg-300\% {
+    background-size: 300% auto;
+  }
+  
+  .animate-gradient {
+    animation: textGradient 6s linear infinite;
+  }
+}
+
+@keyframes textGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Global Form Card Mobile Responsiveness */
+@media (max-width: 768px) {
+  .global-form-card-wrapper > div {
+    /* Strip outer module padding to maximize width */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .global-form-card-wrapper .bg-bg-card {
+    /* 
+      1. Maximize Width: spans full screen with minimal padding 
+      2. Global Application: applies to all form cards
+      3. Vertical Responsiveness: dynamic height avoiding clipping
+    */
+    width: 100% !important;
+    max-width: 95vw !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    height: auto !important;
+    min-height: min-content !important;
+    border-radius: 16px !important; /* Adapt border-radius for mobile aesthetics */
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important; /* shadow-sm equivalent */
+  }
+
+  .global-form-card-wrapper .grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-auto-flow: row !important;
+    grid-auto-rows: minmax(min-content, auto) !important;
+    gap: 1rem !important;
+    align-items: center !important;
+    width: auto !important;
+  }
+
+  .global-form-card-wrapper label {
+    font-size: 0.875rem !important; /* text-sm equivalent */
+    line-height: 1.25rem !important;
+  }
+
+  .global-form-card-wrapper input,
+  .global-form-card-wrapper select,
+  .global-form-card-wrapper button {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+}
+
+/* Fix number input spin buttons sizing globally */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  bottom: 0 !important;
+  top: 0 !important;
+  position: relative !important;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* High Contrast Theme */
+html.high-contrast {
+  background-color: #000000 !important;
+  color: #ffff00 !important; /* Yellow on black for extreme contrast */
+}
+
+html.high-contrast body {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast * {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+  border-color: #ffff00 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+html.high-contrast svg {
+  fill: currentColor !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast input, 
+html.high-contrast select, 
+html.high-contrast textarea, 
+html.high-contrast button {
+  border: 2px solid #ffff00 !important;
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast a {
+  text-decoration: underline !important;
+  font-weight: bold !important;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 15mm 20mm;
+  }
+
+  body {
+    background: white !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+  }
+
+  /* Hide navigation, sidebars, headers, and footers */
+  nav, aside, header, footer, .no-print, [role="navigation"], button, input[type="submit"], .fixed, .sticky {
+    display: none !important;
+  }
+
+  /* Add professional reporting header via pseudo-element to main body wrapper */
+  body::before {
+    content: "Civil Estimation Pro - Technical Report";
+    display: block;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14pt;
+    font-weight: 700;
+    color: #0f172a;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* Adjust main container to avoid flex scrolling issues on print */
+  main, #main-content, .overflow-y-auto, .overflow-x-hidden, .overflow-hidden, .flex-1, .h-full, .min-h-0, .min-h-screen, .h-screen, html, body {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+  }
+
+  /* Expand modules to full width */
+  .max-w-7xl, .max-w-5xl, .w-full, .mx-auto, .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* Reset background and shadow on cards to save ink */
+  .bg-white, .dark\:bg-slate-900, .bg-slate-50, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
+    box-shadow: none !important;
+    background: transparent !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+  }
+  
+  /* Clean Table Formatting for BOQ */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    page-break-inside: auto !important;
+    margin-bottom: 20px !important;
+  }
+  
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+  
+  thead {
+    display: table-header-group !important;
+  }
+  
+  tfoot {
+    display: table-footer-group !important;
+  }
+  
+  th, td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 10px !important;
+    text-align: left !important;
+    background-color: transparent !important;
+    color: #0f172a !important;
+  }
+  
+  th {
+    background-color: #f8fafc !important;
+    font-weight: bold !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Form inputs to read-only text displays */
+  .global-form-card-wrapper input,
+  .global-form-card-wrapper select,
+  .global-form-card-wrapper textarea {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    color: #0f172a !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    pointer-events: none !important;
+  }
+
+  /* Grid layout adjustment for print */
+  .grid {
+    display: grid !important;
+    gap: 16px !important;
+  }
+  
+  .sm\:grid-cols-2, .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  
+  .sm\:grid-cols-3, .md\:grid-cols-3, .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  /* Force colors to print properly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Typography formatting */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid !important;
+    color: #0f172a !important;
+    break-after: avoid-page !important;
+  }
+  
+  p, li {
+    widows: 3 !important;
+    orphans: 3 !important;
+  }
+  
+  /* Protection against bad page breaks inside critical elements */
+  img, svg, .chart-container, [class*="chart"] {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  .result-card, .boq-table, .technical-summary, .calculation-breakdown, [class*="card"], [class*="summary"], [class*="breakdown"] {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Add page breaks where needed */
+  .page-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+  .page-break-after {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .page-break-inside-avoid {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Ensure text is dark for readability */
+  .text-white, .text-slate-100, .text-slate-200, .text-slate-300 {
+    color: #0f172a !important;
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-150%) skewX(12deg); }
+  100% { transform: translateX(150%) skewX(12deg); }
+}
+
+/* Touch Target Enhancement for Mobile Devices */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), 
+  select, 
+  button, 
+  [type="range"],
+  .slider {
+    min-height: 48px !important;
+  }
+}
+
+@layer utilities {
+  @media screen {
+    .print-only {
+      display: none !important;
+    }
+  }
+  @media print {
+    .print-only {
+      display: block !important;
+    }
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Tool Screenshots -->
+  <url>
+    <loc>https://civilestimationpro.com/rcc-slab-calculator</loc>
+    <image:image>
+      <image:loc>https://civilestimationpro.com/images/tools/rcc-slab-calculator.jpg</image:loc>
+      <image:title>RCC Slab Concrete and Steel Calculator</image:title>
+      <image:caption>Interactive interface for calculating reinforcement and concrete volume for civil engineering slabs.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://civilestimationpro.com/professional-boq-generator</loc>
+    <image:image>
+      <image:loc>https://civilestimationpro.com/images/tools/boq-generator.jpg</image:loc>
+      <image:title>Professional BOQ Generator Interface</image:title>
+      <image:caption>Automated Bill of Quantities generator with market rates export.</image:caption>
+    </image:image>
+  </url>
+  <!-- Additional tool images follow the same format -->
+</urlset>

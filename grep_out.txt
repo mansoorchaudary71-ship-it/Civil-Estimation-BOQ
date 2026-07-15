@@ -1,0 +1,28 @@
+                <div className="flex flex-col min-h-[100dvh] w-full bg-[#f4f6fa]  text-[#1d1d1f]  font-sans transition-colors duration-300">
+                      className="flex-1 flex flex-col bg-transparent relative w-full pt-0 transition-all duration-300"
+                        <div className="flex-1 flex flex-col relative w-full transition-colors duration-300 md:bg-[#FAFAF8] transition-colors duration-500/50 md:">
+        className={`p-1.5 rounded-lg transition-colors flex items-center justify-center ${isOpen ? "bg-slate-50/10  text-slate-800 " : "hover:bg-slate-50/5 text-slate-500 "}`}
+        <div className="absolute right-0 top-full mt-2 bg-[#FAFAF8] transition-colors duration-500 rounded-xl shadow-lg border border-slate-100 p-1 flex items-center space-x-1 z-50">
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${settings.fontSize === "small" ? "bg-indigo-50  text-slate-900 " : "text-slate-500 hover:bg-slate-50"}`}
+            className={`px-3 py-1.5 text-sm font-bold rounded-lg transition-colors ${settings.fontSize === "medium" ? "bg-indigo-50  text-slate-900 " : "text-slate-500 hover:bg-slate-50"}`}
+            className={`px-3 py-1.5 text-base font-bold rounded-lg transition-colors ${settings.fontSize === "large" ? "bg-indigo-50  text-slate-900 " : "text-slate-500 hover:bg-slate-50"}`}
+    <div className="flex bg-slate-100  p-1 rounded-lg relative z-0 mr-2 border border-slate-200 ">
+            className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-sm"
+            className="absolute inset-0 bg-[#FAFAF8] transition-colors duration-500  rounded-md shadow-sm border border-slate-200 "
+            className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-sm"
+            className="absolute inset-0 bg-[#FAFAF8] transition-colors duration-500  rounded-md shadow-sm border border-slate-200 "
+    <header className="md:hidden flex items-center px-4 py-2.5 m-0 bg-[#FFFFFF] border-b border-slate-300/5 sticky top-3 z-30 shrink-0 min-h-[50px] transition-all duration-300">
+        className="p-2 mr-3 -ml-2 rounded-lg hover:bg-slate-50/5 text-[#888888] transition-all"
+        className="p-2 mr-1 rounded-lg hover:bg-slate-50/5 text-[#888888] transition-all"
+        className="p-2 -mr-2 rounded-lg hover:bg-slate-50/5 text-[#888888] transition-all"
+      className="min-h-[100dvh] flex flex-col bg-transparent relative tool-detail-page w-full"
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-sm font-semibold whitespace-nowrap">
+                          className="flex items-center justify-center gap-2 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100   text-indigo-600  rounded-full transition-colors font-medium shadow-sm border border-indigo-100/50 "
+                          className="flex items-center justify-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200   text-slate-600  rounded-full transition-colors font-medium shadow-sm border border-slate-200/50 "
+                          className="flex items-center justify-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200   text-slate-600  rounded-full transition-colors font-medium shadow-sm border border-slate-200/50 "
+                          className="flex items-center justify-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200   text-slate-600  rounded-full transition-colors font-medium shadow-sm border border-slate-200/50 "
+                          className="flex items-center justify-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200   text-slate-600  rounded-full transition-colors font-medium shadow-sm border border-slate-200/50 "
+                      <div className="mt-8 mb-6 p-6 rounded-[2rem] bg-slate-50 border border-slate-200">
+                              className="bg-[#FAFAF8] transition-colors duration-500 p-4 rounded-xl border border-slate-200"
+                      <div className="mt-8 mb-6 p-6 rounded-[2rem] bg-[#FAFAF8] transition-colors duration-500 border border-slate-200">
+                                className="bg-slate-50 p-4 rounded-xl text-left border border-slate-200 hover:border-indigo-500 transition-colors"

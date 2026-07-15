@@ -1,0 +1,16 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const file = path.join(__dirname, 'src/components/Dashboard.tsx');
+let code = fs.readFileSync(file, 'utf8');
+code = code.replace(/category: "Quantity Estimator"/g, 'category: "Quantity Estimation"');
+code = code.replace(/category: "Concrete Tech"/g, 'category: "Concrete"');
+code = code.replace(/category: "Road Construction"/g, 'category: "Road Pavement"');
+code = code.replace(/category: "Soil Tests"/g, 'category: "Geotechnical"');
+code = code.replace(/category: "Architectural References & Space Planning"/g, 'category: "Architectural"');
+code = code.replace(/category: "Analysis & Tools"/g, 'category: "Quantity Estimation"');
+fs.writeFileSync(file, code);

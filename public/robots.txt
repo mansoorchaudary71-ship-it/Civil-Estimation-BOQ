@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /history/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*?*
+
+# Crawl delay to prevent server overload
+Crawl-delay: 5
+
+# Sitemaps
+Sitemap: https://civilestimationpro.com/sitemap.xml
+Sitemap: https://civilestimationpro.com/sitemap-tools.xml
+Sitemap: https://civilestimationpro.com/sitemap-blog.xml
+Sitemap: https://civilestimationpro.com/sitemap-categories.xml
+Sitemap: https://civilestimationpro.com/sitemap-images.xml

@@ -1,0 +1,313 @@
+import React, { useState } from "react";
+import { UniversalTabs } from "../ui/UniversalTabs";
+import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
+import {
+  Maximize,
+  Box,
+  Layers,
+  ArrowDownToLine,
+  Spade,
+  CheckCircle,
+  AlertTriangle,
+  Sparkles,
+} from "lucide-react";
+import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
+import { useSettings } from "../../context/SettingsContext";
+import { CalculationHistory } from "../ui/CalculationHistory";
+import { ResultCard } from "../ui/ResultCard";
+import { MaterialSummary } from "../ui/MaterialSummary";
+import { FieldTooltip } from "../ui/FieldTooltip";
+import { NumberInput } from "../ui/NumberInput";
+
+const mixRatios: Record<string, { c: number; s: number; a: number }> = {
+  "M10 (1:3:6)": { c: 1, s: 3, a: 6 },
+  "M15 (1:2:4)": { c: 1, s: 2, a: 4 },
+  "M20 (1:1.5:3)": { c: 1, s: 1.5, a: 3 },
+  "M25 (1:1:2)": { c: 1, s: 1, a: 2 },
+};
+
+function InputGroup({
+  label,
+  children,
+  colSpan = 1,
+}: {
+  label: React.ReactNode;
+  children: React.ReactNode;
+  colSpan?: number;
+}) {
+  return (
+    <div
+      className={`flex flex-col gap-2 ${colSpan > 1 ? `md:col-span-${colSpan}` : ""}`}
+    >
+      <label className="text-base font-medium">{label}</label>
+      {children}
+    </div>
+  );
+}
+
+export default function IsolatedFootingCalculator({
+  isEmbedded = false,
+}: {
+  isEmbedded?: boolean;
+}) {
+  const { settings } = useSettings();
+  const [footingType, setFootingType] = useState<
+    "rectangular" | "sloped" | "stepped"
+  >("sloped");
+  const [footingL, setFootingL] = useState("2.2");
+  const [footingW, setFootingW] = useState("2.2");
+  const [footingD, setFootingD] = useState("0.5"); // For rectangular
+
+  const [footingD1, setFootingD1] = useState("0.2"); // Base thickness
+  const [footingD2, setFootingD2] = useState("0.3"); // Sloped or step thickness
+
+  const [topL, setTopL] = useState("0.6"); // Top dimensions for sloped/stepped
+  const [topW, setTopW] = useState("0.6");
+
+  const [columnL, setColumnL] = useState("0.4");
+  const [columnW, setColumnW] = useState("0.4");
+
+  const [workingSpace, setWorkingSpace] = useState("0.3"); // 300mm standard working space
+  const [excavationDepth, setExcavationDepth] = useState("1.5");
+
+  const [workingLoad, setWorkingLoad] = useState("666.67");
+  const [safetyFactor, setSafetyFactor] = useState("1.5");
+
+  const load = (parseFloat(workingLoad) * parseFloat(safetyFactor)).toString();
+  const [sbc, setSbc] = useState("250"); // kN/m2
+
+  const [mix, setMix] = useState("M20 (1:1.5:3)");
+
+  // Reinforcement
+  const [clearCover, setClearCover] = useState("50");
+  const [hasTopMesh, setHasTopMesh] = useState(false);
+  const [diaX, setDiaX] = useState("12");
+  const [spacingX, setSpacingX] = useState("150");
+  const [diaY, setDiaY] = useState("12");
+  const [spacingY, setSpacingY] = useState("150");
+
+  const [diaXTop, setDiaXTop] = useState("10");
+  const [spacingXTop, setSpacingXTop] = useState("200");
+  const [diaYTop, setDiaYTop] = useState("10");
+  const [spacingYTop, setSpacingYTop] = useState("200");
+
+  const fL = parseFloat(footingL) || 0;
+  const fW = parseFloat(footingW) || 0;
+  const fD = parseFloat(footingD) || 0;
+
+  const fD1 = parseFloat(footingD1) || 0;
+  const fD2 = parseFloat(footingD2) || 0;
+  const tL = parseFloat(topL) || 0;
+  const tW = parseFloat(topW) || 0;
+
+  const totalD = footingType === "rectangular" ? fD : fD1 + fD2;
+
+  const cL = parseFloat(columnL) || 0;
+  const cW = parseFloat(columnW) || 0;
+  const ws = parseFloat(workingSpace) || 0;
+  const exD = parseFloat(excavationDepth) || 0;
+  const P = parseFloat(load) || 0;
+  const q_allow = parseFloat(sbc) || 0;
+  const cover = parseFloat(clearCover) || 0;
+
+  // Design Check
+  const reqArea = q_allow > 0 ? (P * 1.1) / q_allow : 0; // 10% extra for self weight
+  const actualArea = fL * fW;
+  const isSafe = actualArea >= reqArea;
+
+  // Concrete Volume
+  let concreteVol = 0;
+  if (footingType === "rectangular") {
+    concreteVol = fL * fW * fD;
+  } else if (footingType === "stepped") {
+    concreteVol = fL * fW * fD1 + tL * tW * fD2;
+  } else if (footingType === "sloped") {
+    // TRAPEZOIDAL_FOOTING_VOLUME rule: V = h/3 * (A1 + A2 + sqrt(A1*A2)) + Rectangular base
+    const vBase = fL * fW * fD1;
+    const A1 = fL * fW;
+    const A2 = tL * tW;
+    const vSloped = (fD2 / 3) * (A1 + A2 + Math.sqrt(A1 * A2));
+    concreteVol = vBase + vSloped;
+  }
+
+  const dryVol = concreteVol * CIVIL_CONSTANTS.DRY_CONCRETE_FACTOR; // RULE: CONCRETE_DRY_VOLUME
+
+  // Materials
+  const ratio = mixRatios[mix];
+  const totalRatio = ratio ? ratio.c + ratio.s + ratio.a : 1;
+  const cementM3 = (dryVol * ratio.c) / totalRatio;
+  const cementBags = Math.ceil(cementM3 / CIVIL_CONSTANTS.CEMENT_BAG_VOLUME_M3);
+  const sandCft = ((dryVol * ratio.s) / totalRatio) * CIVIL_CONSTANTS.M3_TO_CFT;
+  const aggCft = ((dryVol * ratio.a) / totalRatio) * CIVIL_CONSTANTS.M3_TO_CFT;
+
+  // Excavation & Backfilling
+  const exL = fL + 2 * ws;
+  const exW = fW + 2 * ws;
+  const excavationVol = exL * exW * exD;
+  const backfillVol = Math.max(
+    0,
+    excavationVol - concreteVol - cL * cW * Math.max(0, exD - totalD),
+  );
+
+  // Steel Reinforcement
+  // Length Direction (bars placed along Width)
+  const dX = parseFloat(diaX) || 0;
+  const sX = parseFloat(spacingX) || 150;
+  const barsX = Math.ceil((fW * 1000 - 2 * cover) / sX) + 1; // RULE: REBAR_SPACING_COUNT
+
+  // hook length based on bottom step depth for sloped/stepped, or total depth for rect
+  const edgeD = footingType === "rectangular" ? fD : Math.max(fD1, 0.15);
+  const hookL = edgeD * 1000 - 2 * cover;
+  const cutLengthX = fL * 1000 - 2 * cover + 2 * hookL;
+  const wtX = (Math.pow(dX, 2) / 162.28) * (cutLengthX / 1000) * barsX; // RULE: STEEL_WEIGHT_ESTIMATION
+
+  // Width Direction (bars placed along Length)
+  const dY = parseFloat(diaY) || 0;
+  const sY = parseFloat(spacingY) || 150;
+  const barsY = Math.ceil((fL * 1000 - 2 * cover) / sY) + 1;
+  const cutLengthY = fW * 1000 - 2 * cover + 2 * hookL;
+  const wtY = (Math.pow(dY, 2) / 162.28) * (cutLengthY / 1000) * barsY;
+
+  // Top Mesh
+  let wtXTop = 0;
+  let wtYTop = 0;
+  let barsXTop = 0;
+  let barsYTop = 0;
+  let cutLengthXTop = 0;
+  let cutLengthYTop = 0;
+  if (hasTopMesh) {
+    const topEdgeD = footingType === "rectangular" ? fD : fD1 + fD2;
+    const topHookL = topEdgeD * 1000 - 2 * cover;
+
+    const dXT = parseFloat(diaXTop) || 0;
+    const sXT = parseFloat(spacingXTop) || 150;
+    barsXTop = Math.ceil((fW * 1000 - 2 * cover) / sXT) + 1;
+    cutLengthXTop = fL * 1000 - 2 * cover + 2 * topHookL;
+    wtXTop = (Math.pow(dXT, 2) / 162.28) * (cutLengthXTop / 1000) * barsXTop;
+
+    const dYT = parseFloat(diaYTop) || 0;
+    const sYT = parseFloat(spacingYTop) || 150;
+    barsYTop = Math.ceil((fL * 1000 - 2 * cover) / sYT) + 1;
+    cutLengthYTop = fW * 1000 - 2 * cover + 2 * topHookL;
+    wtYTop = (Math.pow(dYT, 2) / 162.28) * (cutLengthYTop / 1000) * barsYTop;
+  }
+
+  const totalSteel = wtX + wtY + wtXTop + wtYTop;
+
+  const handleAiSafetyFactor = () => {
+    let sf = 1.5;
+    if (
+      settings.projectType === "Commercial" ||
+      settings.projectType === "Industrial"
+    ) {
+      sf = 1.6;
+    } else if (settings.projectType === "Residential") {
+      sf = 1.5;
+    }
+    setSafetyFactor(sf.toString());
+  };
+
+  const loadExample = () => {
+    setFootingType("sloped");
+    setWorkingLoad("533.33");
+    setSafetyFactor("1.5");
+    setSbc("150");
+    setFootingL("2.5");
+    setFootingW("2.5");
+    setFootingD1("0.2");
+    setFootingD2("0.3");
+    setTopL("0.6");
+    setTopW("0.6");
+  };
+
+  const resetDefault = () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to reset all inputs? This action cannot be undone.",
+      )
+    )
+      return;
+    setFootingType("sloped");
+    setWorkingLoad("666.67");
+    setSafetyFactor("1.5");
+    setSbc("250");
+    setFootingL("2.2");
+    setFootingW("2.2");
+    setFootingD("0.5");
+    setFootingD1("0.2");
+    setFootingD2("0.3");
+    setTopL("0.6");
+    setTopW("0.6");
+  };
+
+  const sendToBOQ = () => {
+    const items = [
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        division: "03 - Concrete",
+        description: `RCC Isolated Footing (${footingL}x${footingW}m, D=${totalD.toFixed(2)}m) - ${footingType}`,
+        unit: "m³",
+        quantity: concreteVol,
+        rate: 0,
+      },
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        division: "05 - Metals",
+        description: `Steel Reinforcement for Footing`,
+        unit: "kg",
+        quantity: totalSteel,
+        rate: 0,
+      },
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        division: "02 - Site Work & Earthwork",
+        description: `Excavation for Footing (WS=${ws}m)`,
+        unit: "m³",
+        quantity: excavationVol,
+        rate: 0,
+      },
+    ];
+    window.dispatchEvent(new CustomEvent("fill-boq", { detail: items }));
+    alert("Sent to BOQ Generator!");
+  };
+
+  return (
+    <div
+      className={
+        isEmbedded
+          ? "w-full space-y-6"
+          : "w-full h-full bg-transparent text-slate-900 dark:text-white p-6 md:p-8"
+      }
+    >
+      <div className="w-full md:max-w-5xl md:mx-auto space-y-6 px-4 md:px-0">
+        {!isEmbedded && (
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+            <div className="flex flex-col items-end gap-2">
+              <GlobalSettingsToggle align="left" showCurrency={false} />
+              <div className="flex gap-2">
+                <button
+                  onClick={sendToBOQ}
+                  className="text-base font-medium px-3 py-2 bg-emerald-50 text-emerald-600 rounded-full hover:bg-emerald-100 transition-colors border border-emerald-200 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                >
+                  Send to BOQ
+                </button>
+                <button
+                  onClick={loadExample}
+                  className="text-base font-medium px-3 py-2 bg-[#E55A2B]/10 text-[#E55A2B] rounded-full hover:bg-[#E55A2B]/20 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                >
+                  Load Example
+                </button>
+                <button
+                  onClick={resetDefault}
+                  className="text-base font-medium px-3 py-2 bg-slate-100 text-slate-500 rounded-full hover:bg-slate-200 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="bg-bg-card rounded-[24px] shadow-md border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div className="p-6 md:p-8 space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

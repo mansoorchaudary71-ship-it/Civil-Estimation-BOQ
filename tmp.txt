@@ -1,0 +1,80 @@
+src/components/modules/AdvancedBoqGenerator.tsx-                <div>
+src/components/modules/AdvancedBoqGenerator.tsx:                  <h1 className="text-3xl font-semibold tabular-nums tracking-tight text-purple-900 uppercase tracking-tight mb-2">Bill of Quantities</h1>
+--
+src/components/modules/AggregateTestsCalculator.tsx-          <div>
+src/components/modules/AggregateTestsCalculator.tsx:            <h1 className="text-3xl font-semibold text-text-primary flex items-center gap-3">
+--
+src/components/modules/BarBendingSchedule.tsx-              </div>
+src/components/modules/BarBendingSchedule.tsx:              <h1 className="text-3xl font-semibold tracking-tight text-slate-800">BBS Generator</h1>
+--
+src/components/modules/BarBendingSchedule.tsx-         <div className="border-b-2 border-slate-800 pb-4 mb-6">
+src/components/modules/BarBendingSchedule.tsx:            <h1 className="text-2xl font-semibold tabular-nums tracking-tight uppercase text-slate-900">Bar Bending Schedule</h1>
+--
+src/components/modules/BeamCalculator.tsx-      <div className="mb-8">
+src/components/modules/BeamCalculator.tsx:        <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-2 flex items-center gap-3">
+--
+src/components/modules/Calculators.tsx-            <div>
+src/components/modules/Calculators.tsx:              <h1 className="text-3xl font-semibold tabular-nums tracking-tight text-gray-900 mb-2">
+--
+src/components/modules/ColumnEstimator.tsx-          <div>
+src/components/modules/ColumnEstimator.tsx:            <h1 className="text-3xl font-semibold tabular-nums tracking-tight mb-2 flex items-center gap-3 text-text-primary">
+--
+src/components/modules/ConcreteMasonryHub.tsx-          <div className="mb-6 md:mb-8 px-4 md:px-0">
+src/components/modules/ConcreteMasonryHub.tsx:            <h1 className="text-3xl font-semibold tracking-tight text-text-primary mb-2 flex items-center gap-3">
+--
+src/components/modules/EnergyMepCalculator.tsx-      <div className="mb-8">
+src/components/modules/EnergyMepCalculator.tsx:        <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-2 flex items-center gap-3">
+--
+src/components/modules/GeotechnicalCalculator.tsx-          <div>
+src/components/modules/GeotechnicalCalculator.tsx:            <h1 className="text-3xl font-semibold text-text-primary flex items-center gap-3">
+--
+src/components/modules/GradientCalculator.tsx-              </div>
+src/components/modules/GradientCalculator.tsx:              <h1 className="text-3xl font-semibold tracking-tight text-slate-800">Gradient & Slope</h1>
+--
+src/components/modules/IsolatedFootingCalculator.tsx-            <div>
+src/components/modules/IsolatedFootingCalculator.tsx:              <h1 className="text-3xl font-semibold tabular-nums tracking-tight mb-2 flex items-center gap-3 text-text-primary">
+--
+src/components/modules/LabourCalculator.tsx-          <div>
+src/components/modules/LabourCalculator.tsx:            <h1 className="text-3xl font-semibold tabular-nums tracking-tight mb-2 flex items-center gap-3 text-text-primary">
+--
+src/components/modules/MasterQuantityEstimator.tsx-            <div>
+src/components/modules/MasterQuantityEstimator.tsx:              <h1 className="text-3xl font-semibold tabular-nums tracking-tight mb-2 flex items-center gap-3">
+--
+src/components/modules/MasterRccStructure.tsx-          <div className="mb-6 md:mb-8 px-4 md:px-0">
+src/components/modules/MasterRccStructure.tsx:            <h1 className="text-3xl font-semibold tracking-tight text-text-primary mb-2 flex items-center gap-3">
+--
+src/components/modules/MetalWeightCalculator.tsx- <div className="max-w-6xl mx-auto">
+src/components/modules/MetalWeightCalculator.tsx: <h1 className="text-3xl font-semibold tabular-nums tracking-tight mb-2 flex items-center gap-3">
+--
+src/components/modules/MixDesignCalculator.tsx-          <div className="border-b-2 border-black pb-4 mb-6 text-center">
+src/components/modules/MixDesignCalculator.tsx:             <h1 className="text-3xl font-semibold tabular-nums tracking-tight uppercase tracking-widest text-black">Concrete Mix Design Report</h1>
+--
+src/components/modules/ProjectManager.tsx-         <div key={proj.id} className="bg-white border border-slate-200 p-8 rounded-[2rem] shadow-sm">
+src/components/modules/ProjectManager.tsx:            <h1 className="text-2xl font-semibold tabular-nums tracking-tight text-slate-800 mb-6 flex items-center gap-2">
+--
+src/components/modules/ProjectManager.tsx-                      </span>
+src/components/modules/ProjectManager.tsx:                      <h1 className="text-3xl md:text-[clamp(1.75rem,5vw,2.5rem)] break-all font-semibold tabular-nums tracking-tight text-slate-900 mb-2">{project.name}</h1>
+--
+src/components/modules/QSWorkflow.tsx-                  <div>
+src/components/modules/QSWorkflow.tsx:                    <h1 className="text-3xl md:text-[clamp(1.75rem,5vw,2.5rem)] break-all font-semibold tabular-nums tracking-tight uppercase tracking-widest text-slate-900 mb-2">{projectData.name}</h1>
+--
+src/components/modules/RainwaterHarvesting.tsx-          <div>
+src/components/modules/RainwaterHarvesting.tsx:            <h1 className="text-3xl font-bold tabular-nums tracking-tight mb-2 flex items-center gap-3 text-text-primary">
+--
+src/components/modules/RetainingWallCalculator.tsx-            <div>
+src/components/modules/RetainingWallCalculator.tsx:              <h1 className="text-3xl font-bold tabular-nums tracking-tight mb-2 flex items-center gap-3 text-text-primary">
+--
+src/components/modules/RoadPavementEstimator.tsx-        <div>
+src/components/modules/RoadPavementEstimator.tsx:          <h1 className="text-3xl font-bold tracking-tight text-text-primary mb-2 flex items-center gap-3">
+--
+src/components/modules/ShareMenu.tsx-</head>
+src/components/modules/ShareMenu.tsx:<body style="margin: 0; padding: 20px; background-color: #f0f0f0; font-family: Helvetica, Arial, sans-serif;"> <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;"> <div style="background-color: #282A65; color: #ffffff; padding: 20px; text-align: center;"> <h1 style="margin: 0; font-size: 24px;">${title}</h1> </div> <div style="padding: 20px;"> <p style="color: #333333; font-size: 16px;">Hello,</p> <p style="color: #333333; font-size: 16px;">Here is the requested estimate for <strong>${title}</strong>.</p> <table style="width: 100%; border-collapse: collapse; margin-top: 20px;"> <thead> <tr> <th style="background-color: #282A65; color: #ffffff; padding: 12px; text-align: left; border: 1px solid #ddd;">Material / Item</th> <th style="background-color: #282A65; color: #ffffff; padding: 12px; text-align: right; border: 1px solid #ddd;">Quantity</th> <th style="background-color: #282A65; color: #ffffff; padding: 12px; text-align: right; border: 1px solid #ddd;">Amount (Rs)</th> </tr> </thead> <tbody>`;
+--
+src/components/modules/SlabEstimator.tsx-        <div>
+src/components/modules/SlabEstimator.tsx:          <h1 className="text-3xl font-bold tracking-tight text-slate-900 mb-2 flex items-center gap-3">
+--
+src/components/modules/UnitConverter.tsx-        {" "}
+src/components/modules/UnitConverter.tsx:        <h1 className="text-3xl font-bold tabular-nums tracking-tight mb-2 flex items-center gap-3">
+--
+src/components/modules/VolumeEstimator.tsx-      <div className="max-w-5xl mx-auto">
+src/components/modules/VolumeEstimator.tsx:        <h1 className="text-3xl font-bold tabular-nums tracking-tight mb-2 flex items-center gap-3">

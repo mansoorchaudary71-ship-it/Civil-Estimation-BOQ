@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Civil Estimation Pro",
+  "description": "Next-Gen Civil Engineering Estimating Web App with AI-powered estimates and live BOQ.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile data",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "photoURL": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Timestamp"
+        }
+      },
+      "required": [
+        "uid",
+        "email"
+      ]
+    },
+    "Estimate": {
+      "title": "Estimate",
+      "description": "Saved estimation records",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "concrete",
+            "brickwork",
+            "room",
+            "material_calculation"
+          ],
+          "description": "Categorize saved estimates, such as 'concrete', 'brickwork', 'room', etc."
+        },
+        "status": {
+          "type": "string"
+        },
+        "payload": {
+          "type": "object"
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Server Timestamp"
+        }
+      },
+      "required": [
+        "userId",
+        "name",
+        "type",
+        "createdAt"
+      ]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Workspace project containing estimates",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "budget": {
+          "type": "number"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "memberIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "For querying: all users with any access"
+        },
+        "roles": {
+          "type": "object",
+          "description": "Map of userId -> role (owner, editor, viewer)"
+        },
+        "memberEmails": {
+          "type": "object",
+          "description": "Map of userId -> email"
+        },
+        "createdAt": {
+          "type": "number"
+        },
+        "updatedAt": {
+          "type": "number"
+        },
+        "shareLinkEnabled": {
+          "type": "boolean"
+        },
+        "shareToken": {
+          "type": "string"
+        },
+        "shareRole": {
+          "type": "string"
+        },
+        "lastUsedShareToken": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "ownerId",
+        "memberIds",
+        "roles",
+        "memberEmails",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ProjectEstimate": {
+      "title": "ProjectEstimate",
+      "description": "An estimate saved under a project",
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string"
+        },
+        "toolId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number"
+        },
+        "materials": {
+          "type": "object"
+        },
+        "category": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "number"
+        },
+        "updatedAt": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "projectId",
+        "name",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "User reviews/comments for tools",
+      "type": "object",
+      "properties": {
+        "toolId": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "number",
+          "description": "Server Timestamp"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ],
+          "description": "Moderation status"
+        }
+      },
+      "required": [
+        "toolId",
+        "userName",
+        "text",
+        "timestamp",
+        "status"
+      ]
+    }
+  },
+  "firestore": {
+    "/comments/{commentId}": {
+      "schema": {
+        "$ref": "#/entities/Comment"
+      },
+      "description": "Tool discussion comments"
+    },
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "User profiles"
+    },
+    "/estimates/{estimateId}": {
+      "schema": {
+        "$ref": "#/entities/Estimate"
+      },
+      "description": "Saved estimates for users"
+    },
+    "/projects/{projectId}": {
+      "schema": {
+        "$ref": "#/entities/Project"
+      },
+      "description": "Workspace projects"
+    },
+    "/projects/{projectId}/estimates/{estimateId}": {
+      "schema": {
+        "$ref": "#/entities/ProjectEstimate"
+      },
+      "description": "Estimates within a project"
+    }
+  }
+}

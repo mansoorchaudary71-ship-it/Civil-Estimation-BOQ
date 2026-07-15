@@ -1,0 +1,831 @@
+return (
+    <SmoothScroll>
+      <SkipToContent />
+      <LoadingScreen />
+      <CustomCursor />
+      <ScrollToTop />
+      <SettingsProvider>
+        <HouseSpecsProvider>
+          <MarketRatesProvider>
+            <TakeoffProvider>
+              <ProjectProvider>
+                <div className="flex flex-col h-[100dvh] w-full pale-purple-mesh bg-white/80 backdrop-blur-sm font-sans text-slate-900 transition-colors duration-300">
+                  <Toaster position="bottom-right" />
+                  <ProductTour />
+                  
+                  <TopNavbar
+                    onOpenSidebar={() => setIsSidebarOpen(true)}
+                    onOpenAuth={() => setIsAuthOpen(true)}
+                    onOpenProfile={() => setIsProfileOpen(true)}
+                    onNavigate={handleSelectModule}
+                  />
+
+                  <div className="flex flex-1 min-h-0 relative w-full">
+                    {/* Main Sidebar (Mobile Overlay + Persistent Desktop) */}
+                    <Sidebar
+                      activeModule={activeModule}
+                      onSelectModule={handleSelectModule}
+                      isOpen={isSidebarOpen}
+                      onClose={() => setIsSidebarOpen(false)}
+                      onOpenAuth={() => {
+                        setIsSidebarOpen(false);
+                        setIsAuthOpen(true);
+                      }}
+                      onOpenProfile={() => {
+                        setIsSidebarOpen(false);
+                        setIsProfileOpen(true);
+                      }}
+                    />
+
+                    <main
+                      id="main-content"
+                      className="flex-1 flex flex-col bg-transparent relative w-full min-h-0 pt-[80px] transition-all duration-300"
+                    >
+                      <div className="w-full h-full flex-1 flex flex-col min-h-0 relative transition-all duration-300">
+                        <div className="flex-1 flex flex-col min-h-0 relative w-full transition-colors duration-300 md:bg-white/50 md:backdrop-blur-sm">
+                          {[
+                            "home",
+                            "my-estimates",
+                            "about",
+                            "careers",
+                            "contact",
+                            "blog",
+                            "privacy",
+                            "terms",
+                            "cookies",
+                          ].includes(activeModule) ? (
+                            <div
+                              ref={scrollRef}
+                              className="flex-1 flex flex-col min-h-0 relative w-full overflow-x-hidden overflow-y-auto"
+                            >
+                              <div className="flex flex-col min-h-full relative w-full">
+                                {activeModule === "home" && (
+                                  <Dashboard
+                                    previousModule={previousModule}
+                                    onSelectModule={handleSelectModule}
+                                    onOpenSidebar={() => setIsSidebarOpen(true)}
+                                    onOpenSettings={() =>
+                                      setIsSettingsOpen(true)
+                                    }
+                                    onOpenAuth={() => setIsAuthOpen(true)}
+                                  />
+                                )}
+                                {activeModule === "my-estimates" && (
+                                  <RecentEstimates
+                                    onSelectModule={handleSelectModule}
+                                  />
+                                )}
+                                {activeModule === "pricing" && (
+                                  <PricingPage />
+                                )}
+                                {activeModule === "about" && (
+                                  <div className="p-8 pt-12">
+                                    <AboutUs />
+                                  </div>
+                                )}
+                                {activeModule === "careers" && (
+                                  <div className="p-8 pt-12">
+                                    <Careers />
+                                  </div>
+                                )}
+                                {activeModule === "contact" && (
+                                  <div className="p-8 pt-12">
+                                    <Contact />
+                                  </div>
+                                )}
+                                {activeModule === "blog" && (
+                                  <div className="p-8 pt-12">
+                                    <Blog />
+                                  </div>
+                                )}
+                                {activeModule === "privacy" && (
+                                  <LegalPages
+                                    page="privacy"
+                                    onNavigate={handleSelectModule}
+                                  />
+                                )}
+                                {activeModule === "terms" && (
+                                  <LegalPages
+                                    page="terms"
+                                    onNavigate={handleSelectModule}
+                                  />
+                                )}
+                                {activeModule === "cookies" && (
+                                  <LegalPages
+                                    page="cookies"
+                                    onNavigate={handleSelectModule}
+                                  />
+                                )}
+                                <Footer
+                                  activeModule={activeModule}
+                                  onNavigate={handleSelectModule}
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex-1 flex flex-col min-h-0 relative w-full bg-transparent">
+                              {/* We remove AppHeader for Desktop, handle differently inside module wrappers if needed, but for now we keep ModuleWrapper and conditionally hide AppHeader inside it on desktop */}
+                              {activeModule === "tracker" && (
+                                <ModuleWrapper
+                                  title="Site Progress Tracker"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <SiteProgressTracker />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "projects" && (
+                                <ModuleWrapper
+                                  title="Project Manager"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <ProjectManager />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "labour-calculator" && (
+                                <ModuleWrapper
+                                  title="Labour & Workforce"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <LabourCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "qs-workflow" && (
+                                <ModuleWrapper
+                                  title="Guided QS Workflow"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <QSWorkflow />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "boq" && (
+                                <ModuleWrapper
+                                  title="Professional BOQ Generator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <BOQGenerator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "mix-design" && (
+                                <ModuleWrapper
+                                  title="Concrete Mix Design"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <MixDesignCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "takeoff" && (
+                                <ModuleWrapper
+                                  title="2D Takeoff"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <Takeoff />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "area-space-calculator" && (
+                                <ModuleWrapper
+                                  title="Area & Space Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <AreaSpaceCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "volume-estimator" && (
+                                <ModuleWrapper
+                                  title="Volume & Tank Capacity"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSettingsOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <VolumeEstimator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "unit-converter" && (
+                                <ModuleWrapper
+                                  title="Universal Unit Converter"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <UnitConverter />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "steel-hub" && (
+                                <ModuleWrapper
+                                  title="Steel & Reinforcement Hub"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <SteelReinforcementHub />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "mep-calculator" && (
+                                <ModuleWrapper
+                                  title="Energy & MEP Calculators"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <EnergyMepCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "rainwater-harvesting" && (
+                                <ModuleWrapper
+                                  title="Rainwater Harvesting"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <RainwaterHarvesting />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "gradient-calculator" && (
+                                <ModuleWrapper
+                                  title="Gradient & Slope Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <GradientCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "concrete-masonry-hub" && (
+                                <ModuleWrapper
+                                  title="Concrete & Masonry Hub"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <ConcreteMasonryHub
+                                    onNavigate={handleSelectModule}
+                                  />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "master-quantity" && (
+                                <ModuleWrapper
+                                  title="Master Quantity Estimator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <MasterQuantityEstimator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "measurement-sheet" && (
+                                <ModuleWrapper
+                                  title="Measurement Sheet Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <MeasurementSheetCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "quick-estimation" && (
+                                <ModuleWrapper
+                                  title="Quick Rough Estimation"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <QuickRoughEstimation
+                                    onNavigate={handleSelectModule}
+                                  />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "material-takeoff" && (
+                                <ModuleWrapper
+                                  title="Material Takeoff Sheet"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <MaterialTakeoffSheet />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "cost-summary" && (
+                                <ModuleWrapper
+                                  title="Cost Summary Sheet"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <ConstructionCostSummary />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "master-rcc" && (
+                                <ModuleWrapper
+                                  title="Master RCC Estimator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <MasterRccStructure />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "metal-weight" && (
+                                <ModuleWrapper
+                                  title="Metal Weight"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <MetalWeightCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "calculators" && (
+                                <ModuleWrapper
+                                  title="Construction Material"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <Calculators />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "bbs-generator" && (
+                                <ModuleWrapper
+                                  title="BBS Generator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <BarBendingSchedule />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "reinforcement" && (
+                                <ModuleWrapper
+                                  title="Reinforcement Detailing Visualizer"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <ReinforcementVisualizer />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "isolated-footing" && (
+                                <ModuleWrapper
+                                  title="Isolated Footing Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <IsolatedFootingCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "retaining-wall" && (
+                                <ModuleWrapper
+                                  title="Retaining Wall Estimator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <RetainingWallCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "aggregate-tests" && (
+                                <ModuleWrapper
+                                  title="Aggregate Tests"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <AggregateTestsCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "chainage" && (
+                                <ModuleWrapper
+                                  title="Chainage Volume"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <ChainageVolumeEstimator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "geotechnical" && (
+                                <ModuleWrapper
+                                  title="Geotechnical & Soil Tests"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <GeotechnicalCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "cbr-test" && (
+                                <ModuleWrapper
+                                  title="CBR Test Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <CbrTestCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "master-sieve" && (
+                                <ModuleWrapper
+                                  title="Master Sieve Analysis"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <MasterSieveAnalysis />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "aggregate-blending" && (
+                                <ModuleWrapper
+                                  title="Aggregate Blending"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <AggregateBlendingCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "direct-shear" && (
+                                <ModuleWrapper
+                                  title="Direct Shear Test"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <DirectShearTestCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "permeability-test" && (
+                                <ModuleWrapper
+                                  title="Permeability Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <PermeabilityCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "ai" && (
+                                <ModuleWrapper
+                                  title="AI Assistant"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <AIAssistant />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "earthworks" && (
+                                <ModuleWrapper
+                                  title="Earthworks Suite"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <EarthworksEstimator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "precast-wall" && (
+                                <ModuleWrapper
+                                  title="Precast Wall Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <PrecastWallCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "soil-lab-suite" && (
+                                <ModuleWrapper
+                                  title="Soil & Materials Lab Suite"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <SoilLabSuite />
+                                </ModuleWrapper>
+                              )}
+                              {/* Roof pitch calculator functionality moved to AreaSpaceCalculator */}
+                              {activeModule === "anti-termite" && (
+                                <ModuleWrapper
+                                  title="Anti-Termite Treatment Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <AntiTermiteCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "solar-roof" && (
+                                <ModuleWrapper
+                                  title="Solar Roof Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <SolarRoofCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "road-pavement" && (
+                                <ModuleWrapper
+                                  title="Road & Pavement Estimator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <RoadPavementEstimator
+                                    onNavigate={handleSelectModule}
+                                  />
+                                </ModuleWrapper>
+                              )}
+
+                              {activeModule === "beam-design" && (
+                                <ModuleWrapper
+                                  title="Beam Design Tool"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <BeamDesignTool />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "column-design" && (
+                                <ModuleWrapper
+                                  title="Column Design Tool"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <ColumnDesignTool />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "raft-foundation" && (
+                                <ModuleWrapper
+                                  title="Raft Foundation Designer"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <RaftFoundationDesigner />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "water-tank-design" && (
+                                <ModuleWrapper
+                                  title="Water Tank Design"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <WaterTankDesign />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "pile-foundation" && (
+                                <ModuleWrapper
+                                  title="Pile Foundation Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <PileFoundationCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "prestressed-concrete" && (
+                                <ModuleWrapper
+                                  title="Pre-stressed Concrete Estimator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <PrestressedConcreteEstimator />
+                                </ModuleWrapper>
+                              )}
+
+                              {activeModule === "room-area-calculator" && (
+                                <ModuleWrapper
+                                  title="Room Area Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <RoomAreaCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule ===
+                                "building-setback-calculator" && (
+                                <ModuleWrapper
+                                  title="Building Setback Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <BuildingSetbackCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "far-fsi-calculator" && (
+                                <ModuleWrapper
+                                  title="FAR/FSI Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <FarFsiCalculator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule ===
+                                "staircase-design-reference" && (
+                                <ModuleWrapper
+                                  title="Staircase Design Reference"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <StaircaseDesignReference />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "door-window-schedule" && (
+                                <ModuleWrapper
+                                  title="Door & Window Schedule Generator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <DoorWindowSchedule />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "ventilation-checker" && (
+                                <ModuleWrapper
+                                  title="Ventilation & Lighting Checker"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <VentilationChecker />
+                                </ModuleWrapper>
+                              )}
+
+                              {/* Restored individual calculators */}
+                              {activeModule === "staircase-calculator" && (
+                                <ModuleWrapper
+                                  title="Staircase Calculator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <StaircaseCalculator />
+                                </ModuleWrapper>
+                              )}
+
+                              {activeModule === "interiors-finishes" && (
+                                <ModuleWrapper
+                                  title="Interiors & Finishes"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <InteriorsFinishesEstimator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "house" && (
+                                <ModuleWrapper
+                                  title="House Estimator"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <HouseEstimator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "formwork" && (
+                                <ModuleWrapper
+                                  title="Formwork & Scaffold"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <FormworkEstimator />
+                                </ModuleWrapper>
+                              )}
+                              {activeModule === "rates" && (
+                                <ModuleWrapper
+                                  title="Market Rates"
+                                  activeModule={activeModule}
+                                  setActiveModule={handleSelectModule}
+                                  setIsSidebarOpen={setIsSidebarOpen}
+                                  setIsSettingsOpen={setIsSettingsOpen}
+                                >
+                                  <RateAnalysis />
+                                </ModuleWrapper>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </main>
+                  </div>
+
+                  <SettingsModal
+                    isOpen={isSettingsOpen}
+                    onClose={() => setIsSettingsOpen(false)}
+                  />
+                  <AuthModal
+                    isOpen={isAuthOpen}
+                    onClose={() => setIsAuthOpen(false)}
+                  />
+                  <ProfileSettings
+                    isOpen={isProfileOpen}
+                    onClose={() => setIsProfileOpen(false)}
+                  />
+                  <WelcomeModal />
+                  <HelpGuideModal
+                    isOpen={isHelpOpen}
+                    onClose={() => setIsHelpOpen(false)}
+                  />
+
+                  {/* Floating Help Button */}
+                  <button
+                    onClick={() => setIsHelpOpen(true)}
+                    className="fixed bottom-4 md:bottom-8 right-4 md:right-8 z-50 p-3 bg-white text-slate-600 rounded-full shadow-lg border border-slate-200 hover:bg-slate-50 transition-all hover:scale-110 flex items-center justify-center group focus:outline-none"
+                    title="Help Guide"
+                  >
+                    <HelpCircle className="w-6 h-6 group-hover:text-amber-500 transition-colors" />
+                  </button>
+
+                  <MobileToolsSheet
+                    isOpen={isMobileToolsOpen}
+                    onClose={() => setIsMobileToolsOpen(false)}
+                    onSelectModule={handleSelectModule}
+                  />
+                </div>
+              

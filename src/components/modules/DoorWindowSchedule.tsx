@@ -43,7 +43,7 @@ export default function DoorWindowSchedule() {
   };
 
   return (
-    <div className="w-full md:max-w-5xl md:mx-auto space-y-6 px-4 md:px-0">
+    <div className="w-full space-y-6">
        <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[24px] shadow-sm overflow-hidden">
          <div className="flex justify-between items-center mb-6">
            <h2 className="flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">

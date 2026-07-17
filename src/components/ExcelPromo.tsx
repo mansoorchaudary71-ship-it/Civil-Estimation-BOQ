@@ -15,7 +15,7 @@ export default function ExcelPromo() {
     return (
       <div className="w-full md:max-w-[1400px] md:mx-auto px-4 lg:px-8 mb-20 animate-in fade-in duration-500">
         <div className="bg-gradient-to-br from-yellow-400 to-amber-500 rounded-[2rem] p-8 md:p-16 text-center text-slate-900 shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url("https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
           <div className="relative z-10 flex flex-col items-center">
             <div className="w-full w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl overflow-hidden">
               <Check className="w-12 h-12 text-green-500" />

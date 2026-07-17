@@ -265,36 +265,36 @@ export default function FormworkEstimator() {
   }, [results]);
   return (
     <div className="w-full h-full bg-transparent text-slate-900 font-sans p-6 md:p-8">
-      {" "}
+      
       <div className="w-full md:max-w-6xl md:mx-auto space-y-8 pb-24 px-4 md:px-0">
-        {" "}
-        {" "}
+        
+        
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {" "}
-          {/* Elements Config Section */}{" "}
+          
+          {/* Elements Config Section */}
           <section className="lg:col-span-8 space-y-6">
-            {" "}
+            
             <div className="w-full bg-white/90 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
-              {" "}
+              
               <div className="flex items-center justify-between mb-8">
-                {" "}
+                
                 <div className="flex items-center gap-3">
-                  {" "}
+                  
                   <div className="p-3 bg-amber-50 rounded-[24px] overflow-hidden">
-                    {" "}
-                    <Grid className="w-6 h-6 text-amber-600" />{" "}
-                  </div>{" "}
+                    
+                    <Grid className="w-6 h-6 text-amber-600" />
+                  </div>
                   <div>
-                    {" "}
+                    
                     <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
                       Shuttering Elements
-                    </h2>{" "}
+                    </h2>
                     <p className="text-base font-normal text-slate-600 leading-relaxed">
                       Add columns, beams, or slabs
-                    </p>{" "}
-                  </div>{" "}
-                </div>{" "}
-              </div>{" "}
+                    </p>
+                  </div>
+                </div>
+              </div>
               <ListInput
                 items={elements}
                 onChange={setElements}
@@ -303,7 +303,7 @@ export default function FormworkEstimator() {
                 addLabel="Add Item"
                 emptyMessage="No formwork elements added."
               />
-            </div>{" "}
+            </div>
             
             <div className="w-full bg-white/90 p-4 sm:p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
               <button
@@ -340,9 +340,9 @@ export default function FormworkEstimator() {
                   </div>
                 </div>
               )}
-            </div>{" "}
-          </section>{" "}
-          {/* Results Summary Interface */}{" "}
+            </div>
+          </section>
+          {/* Results Summary Interface */}
           <section className="lg:col-span-4 space-y-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
             <MaterialSummary
               title="Material Summary"
@@ -376,13 +376,13 @@ export default function FormworkEstimator() {
               <div className="mt-8 pt-6 border-t border-slate-200/50">
                   <div className="mb-4 text-sm sm:text-base font-medium tracking-tight text-slate-500 uppercase tracking-[0.15em]">
                     Area Breakdown
-                  </div>{" "}
+                  </div>
                   <div className="h-48 w-full relative">
-                    {" "}
+                    
                     <ResponsiveContainer width="100%" height="100%">
-                      {" "}
+                      
                       <PieChart>
-                        {" "}
+                        
                         <Pie
                           data={breakdownData}
                           innerRadius={50}
@@ -391,15 +391,15 @@ export default function FormworkEstimator() {
                           dataKey="value"
                           animationDuration={1000}
                         >
-                          {" "}
+                          
                           {breakdownData.map((entry, index) => (
                             <Cell
                               key={`cell-${index}`}
                               fill={entry.color}
                               stroke="transparent"
                             />
-                          ))}{" "}
-                        </Pie>{" "}
+                          ))}
+                        </Pie>
                         <Tooltip
                           formatter={(value: any) =>
                             `${value.toFixed(1)} ${areaUnitStr}`
@@ -411,30 +411,30 @@ export default function FormworkEstimator() {
                             borderRadius: "12px",
                           }}
                           itemStyle={{ color: "#f3f4f6" }}
-                        />{" "}
-                      </PieChart>{" "}
-                    </ResponsiveContainer>{" "}
-                  </div>{" "}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
                   <div className="flex justify-center gap-4 mt-2 text-base font-medium uppercase tracking-wider flex-wrap">
-                    {" "}
+                    
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />{" "}
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
                       Columns
-                    </span>{" "}
+                    </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />{" "}
+                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
                       Slabs
-                    </span>{" "}
+                    </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />{" "}
+                      <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
                       Beams
-                    </span>{" "}
+                    </span>
                   </div>
                 </div>
             </MaterialSummary>
-          </section>{" "}
-        </div>{" "}
-      </div>{" "}
+          </section>
+        </div>
+      </div>
       <CalculationHistory
         calculatorId="formwork_estimator_v1"
         estimationName="Formwork Calculation"

@@ -4,7 +4,7 @@ import { db, auth, handleFirestoreError, OperationType } from '../../lib/firebas
 import { onAuthStateChanged } from 'firebase/auth';
 import { motion } from 'framer-motion';
 import { Users, Link as LinkIcon, Share2, Copy, Check, Shield, Trash2, Crown } from 'lucide-react';
-import { TopNavbar } from '../TopNavbar';
+import TopNavbar from '../TopNavbar';
 
 export default function TeamCollaboration() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -54,7 +54,7 @@ export default function TeamCollaboration() {
       });
       // Refresh
       fetchProjects(user.uid);
-      setSelectedProject(prev => ({ ...prev, shareLinkEnabled: true, shareToken: token, shareRole: 'viewer' }));
+      setSelectedProject((prev: any) => ({ ...prev, shareLinkEnabled: true, shareToken: token, shareRole: 'viewer' }));
     } catch (err) {
       handleFirestoreError(err, OperationType.UPDATE, 'projects');
     }
@@ -68,7 +68,7 @@ export default function TeamCollaboration() {
         updatedAt: Date.now()
       });
       fetchProjects(user.uid);
-      setSelectedProject(prev => ({ ...prev, shareLinkEnabled: false, shareToken: '' }));
+      setSelectedProject((prev: any) => ({ ...prev, shareLinkEnabled: false, shareToken: '' }));
     } catch (err) {
       handleFirestoreError(err, OperationType.UPDATE, 'projects');
     }
@@ -81,14 +81,14 @@ export default function TeamCollaboration() {
         updatedAt: Date.now()
       });
       fetchProjects(user.uid);
-      setSelectedProject(prev => ({ ...prev, shareRole: newRole }));
+      setSelectedProject((prev: any) => ({ ...prev, shareRole: newRole }));
     } catch (err) {
       handleFirestoreError(err, OperationType.UPDATE, 'projects');
     }
   };
 
   const copyLink = (projectId: string, token: string) => {
-    const url = \`\${window.location.origin}/#/join/\${projectId}/\${token}\`;
+    const url = `${window.location.origin}/#/join/${projectId}/${token}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -130,7 +130,7 @@ export default function TeamCollaboration() {
                   <button
                     key={p.id}
                     onClick={() => setSelectedProject(p)}
-                    className={\`w-full text-left p-5 rounded-xl border transition-all \${selectedProject?.id === p.id ? 'bg-indigo-50 border-indigo-200 shadow-sm' : 'bg-white border-slate-200 hover:border-indigo-200 hover:shadow-sm'}\`}
+                    className={`w-full text-left p-5 rounded-xl border transition-all ${selectedProject?.id === p.id ? 'bg-indigo-50 border-indigo-200 shadow-sm' : 'bg-white border-slate-200 hover:border-indigo-200 hover:shadow-sm'}`}
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-semibold text-slate-900 truncate pr-2">{p.name || 'Untitled Project'}</h3>
@@ -187,7 +187,7 @@ export default function TeamCollaboration() {
                               <div className="flex items-center">
                                 <input 
                                   readOnly
-                                  value={\`\${window.location.origin}/#/join/\${selectedProject.id}/\${selectedProject.shareToken}\`}
+                                  value={`${window.location.origin}/#/join/${selectedProject.id}/${selectedProject.shareToken}`}
                                   className="w-full bg-white border border-slate-200 text-slate-600 text-sm px-3 py-2.5 rounded-l-lg outline-none"
                                 />
                                 <button 

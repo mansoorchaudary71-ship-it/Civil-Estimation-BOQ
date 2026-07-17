@@ -22,7 +22,7 @@ import {
   Sun,
   Triangle,
 } from "lucide-react";
-import { ModuleId } from "./Sidebar";
+export type ModuleId = string;
 import { motion, AnimatePresence } from "framer-motion";
 import { ALL_MODULES } from "./Dashboard";
 

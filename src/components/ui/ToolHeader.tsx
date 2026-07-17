@@ -67,8 +67,8 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
       summary += `Inputs:\n`;
       inputs.forEach(input => {
         const label = input.previousElementSibling?.textContent || input.getAttribute('aria-label') || input.id;
-        if (label && input.value) {
-          summary += `- ${label.trim()}: ${input.value}\n`;
+        if (label && (input as HTMLInputElement).value) {
+          summary += `- ${label.trim()}: ${(input as HTMLInputElement).value}\n`;
         }
       });
       summary += `\n`;
@@ -95,13 +95,13 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
   const generatePDFBlob = async () => {
     try {
       const html2pdf = (await import('html2pdf.js')).default;
-      const element = document.querySelector('.tool-card') || document.body;
+      const element = (document.querySelector('.tool-card') || document.body) as HTMLElement;
       const opt = {
         margin: 10,
         filename: `${title.replace(/\s+/g, '_')}_Estimate.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: "portrait" as const }
       };
       const pdf = await html2pdf().set(opt).from(element).outputPdf('blob');
       return pdf;
@@ -117,13 +117,13 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
     toast.loading('Generating PDF...', { id: 'pdf-toast', position: 'bottom-center' });
     try {
       const html2pdf = (await import('html2pdf.js')).default;
-      const element = document.querySelector('.tool-card') || document.body;
+      const element = (document.querySelector('.tool-card') || document.body) as HTMLElement;
       const opt = {
         margin: 10,
         filename: `${title.replace(/\s+/g, '_')}_Estimate.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: "portrait" as const }
       };
       await html2pdf().set(opt).from(element).save();
       toast.success('PDF saved successfully!', { id: 'pdf-toast', position: 'bottom-center' });
@@ -220,10 +220,17 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
 
   return (
     <div id="tool-header-top" className="relative -mx-2 sm:-mx-4 md:-mx-8 px-2 sm:px-4 md:px-8 bg-transparent pb-8 flex flex-col gap-6 pt-6">
-      <div className="md:max-w-7xl md:mx-auto w-full flex flex-col gap-8 px-4 md:px-0">
+      {/* PRINT-ONLY BRANDING HEADER */}
+      <div className="hidden print:flex flex-col w-full border-b-2 border-slate-800 pb-4 mb-4">
+         <h1 className="text-2xl font-bold text-slate-900 m-0 p-0 leading-tight">Civil Estimation Pro</h1>
+         <h2 className="text-lg font-semibold text-slate-700 m-0 mt-1 p-0 leading-tight">{title}</h2>
+         {subtitle && <p className="text-sm text-slate-500 m-0 mt-1 p-0 italic">{subtitle}</p>}
+      </div>
+
+      <div className="w-full flex flex-col gap-8">
         
         {/* Title Header */}
-        <div className="w-full flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-2">
+        <div className="w-full flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-2 print:hidden">
           <div className="flex items-start gap-4 relative z-10 w-full lg:w-auto">
             <div className="w-14 h-14 bg-white flex items-center justify-center shrink-0 text-indigo-700 rounded-[18px] border border-slate-200/60 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
               {Icon ? <Icon className="w-7 h-7" strokeWidth={1.5} /> : <ClipboardList className="w-7 h-7" strokeWidth={1.5} />}

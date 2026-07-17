@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db, auth, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { TopNavbar } from '../TopNavbar';
+import TopNavbar from '../TopNavbar';
 import { Users, CheckCircle, XCircle } from 'lucide-react';
 
 export default function JoinProject() {

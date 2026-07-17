@@ -124,11 +124,11 @@ export default function AreaSpaceCalculator() {
   }, [roofParams]);
 
   // --- Tab 5: Plaster & Paint Deductions ---
-  const [wallLen, setWallLen] = useConvertedState(5, "length");
-  const [wallHt, setWallHt] = useConvertedState(3, "length");
+  const [wallLen, setWallLen] = useConvertedState<number>(5, "length");
+  const [wallHt, setWallHt] = useConvertedState<number>(3, "length");
   const [bothFaces, setBothFaces] = useState(false);
-  const [jambDepth, setJambDepth] = useConvertedState(0.2, "length");
-  const [openings, setOpenings] = useConvertedState([{ w: 1, h: 2, count: 1 }], { w: "length", h: "length", count: "none" });
+  const [jambDepth, setJambDepth] = useConvertedState<number>(0.2, "length");
+  const [openings, setOpenings] = useConvertedState<any[]>([{ w: 1, h: 2, count: 1 }], "length");
 
   const plasterCalc = useMemo(() => {
     let grossArea = wallLen * wallHt;

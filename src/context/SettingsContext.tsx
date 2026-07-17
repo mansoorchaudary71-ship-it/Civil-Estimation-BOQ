@@ -279,7 +279,6 @@ export function useGlobalSettings() {
     currentTheme: context.settings.theme,
     setCurrentUnit: (unit: 'Metric' | 'Imperial') => context.updateSettings({ measurement: unit === 'Metric' ? 'SI' : 'FPS' }),
     setCurrentCurrency: (currency: Currency) => context.updateSettings({ currency }),
-    toggleTheme: context.toggleTheme,
     ...context
   };
 }

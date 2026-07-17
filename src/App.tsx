@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import TeamCollaboration from "./components/pages/TeamCollaboration";
 import JoinProject from "./components/pages/JoinProject";
 import Dashboard, { ALL_MODULES as ALL_TOOLS } from "./components/Dashboard";
-import Sidebar from "./components/Sidebar";
 import TopNavbar from "./components/TopNavbar";
 import RecentEstimates from "./components/RecentEstimates";
 import AboutUs from "./components/pages/AboutUs";
@@ -374,8 +373,7 @@ export default function App() {
   }, [activeModule]);
 
   const [previousModule, setPreviousModule] = useState<ModuleId | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(() => { const saved = localStorage.getItem("isSidebarOpen"); return saved !== null ? JSON.parse(saved) : false; }); useEffect(() => { localStorage.setItem("isSidebarOpen", JSON.stringify(isSidebarOpen)); }, [isSidebarOpen]);
-  const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
+    const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -525,8 +523,7 @@ export default function App() {
     setPreviousModule(activeModule);
     setActiveLayoutId(layoutId || `module-${id}`);
     setActiveModule(id);
-    setIsSidebarOpen(false);
-    
+        
     // Track tools that are calculators/modules (not home or pages)
     if (id !== "home" && id !== "about" && id !== "careers" && id !== "contact" && id !== "blog" && id !== "pricing" && id !== "privacy" && id !== "terms" && id !== "cookies") {
       addRecentTool(id);
@@ -556,15 +553,7 @@ export default function App() {
                   />
 
                   <div className="flex flex-1 min-h-0 relative w-full">
-                    <Sidebar
-                      activeModule={activeModule}
-                      onSelectModule={handleSelectModule}
-                      isOpen={isSidebarOpen}
-                      onClose={() => setIsSidebarOpen(false)}
-                      onOpenAuth={() => { setIsSidebarOpen(false); setIsAuthOpen(true); }}
-                      onOpenProfile={() => { setIsSidebarOpen(false); setIsProfileOpen(true); }}
-                    />
-
+                    
                     <main id="main-content" className="flex-1 flex flex-col bg-transparent relative w-full min-h-0 transition-all duration-300">
                       <div className="w-full h-full flex-1 flex flex-col min-h-0 relative transition-all duration-300">
                         <div className="flex-1 flex flex-col min-h-0 relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
@@ -581,7 +570,7 @@ export default function App() {
                               {["home", "my-estimates", "about", "careers", "contact", "blog", "privacy", "terms", "cookies"].includes(activeModule) ? (
                                 <div ref={scrollRef} className="flex-1 flex flex-col min-h-0 relative w-full overflow-x-hidden overflow-y-auto">
                                   <div className="flex flex-col relative w-full">
-                                    {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule} onOpenSidebar={() => setIsSidebarOpen(true)} onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}
+                                    {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule}  onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}
                                     {activeModule === "my-estimates" && <RecentEstimates onSelectModule={handleSelectModule} />}
                                     {activeModule === "pricing" && <PricingPage />}
                                     {activeModule === "about" && <div className="p-8 pt-12"><AboutUs /></div>}
@@ -595,8 +584,12 @@ export default function App() {
                                   </div>
                                 </div>
                               ) : (
-                                <div className="flex-1 flex flex-col min-h-0 relative w-full bg-transparent overflow-x-hidden overflow-y-auto">
-                                  {renderModule(activeModule, handleSelectModule)}
+                                <div className="flex-1 flex flex-col min-h-0 relative w-full h-full overflow-y-auto overflow-x-hidden bg-transparent">
+                                  <div className="max-w-7xl mx-auto w-full px-2 sm:px-4 md:px-8 flex-1 flex flex-col">
+                                    <div className="global-form-card-wrapper w-full flex-1">
+                                      {renderModule(activeModule, handleSelectModule)}
+                                    </div>
+                                  </div>
                                 </div>
                               )}
                             </motion.div>

@@ -72,6 +72,7 @@ export default function TopNavbar({
           </button>
 
           <button className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-b from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 border border-slate-200/80 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-all duration-300 active:scale-95 hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] shadow-sm group overflow-hidden"
+            onClick={() => window.dispatchEvent(new CustomEvent("open-global-search"))}
             aria-label="Search"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-100/0 via-slate-100/50 dark:via-slate-700/50 to-slate-100/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

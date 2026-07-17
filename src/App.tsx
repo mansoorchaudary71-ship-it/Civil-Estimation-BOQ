@@ -46,6 +46,8 @@ import DiscussionWidget from "./components/DiscussionWidget";
 import { GlobalFAQ } from "./components/ui/GlobalFAQ";
 import { FeedbackWidget } from "./components/ui/FeedbackWidget";
 import ToolPageFooter from "./components/ToolPageFooter";
+import PrintPreviewModal from "./components/ui/PrintPreviewModal";
+import GlobalSearchModal from "./components/ui/GlobalSearchModal";
 import AuthModal from "./components/auth/AuthModal";
 
 type ModuleId = string;
@@ -425,6 +427,31 @@ export default function App() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isPrintPreviewOpen, setIsPrintPreviewOpen] = useState(false);
+  const [isGlobalSearchOpen, setIsGlobalSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const handlePrintAction = () => {
+      setIsPrintPreviewOpen(true);
+    };
+    const handleGlobalSearchAction = () => {
+      setIsGlobalSearchOpen(true);
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsGlobalSearchOpen(true);
+      }
+    };
+    window.addEventListener("global-print-action", handlePrintAction);
+    window.addEventListener("open-global-search", handleGlobalSearchAction);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("global-print-action", handlePrintAction);
+      window.removeEventListener("open-global-search", handleGlobalSearchAction);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
   const [expandedCategory, setExpandedCategory] = useState<string | null>("Core Estimators");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -591,6 +618,8 @@ export default function App() {
                 <div className="flex flex-col h-[100dvh] w-full overflow-x-hidden bg-gradient-to-br from-slate-50 via-[#f8fafc] to-blue-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-500">
                   <Toaster position="bottom-right" />
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+                  <PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} />
+                  <GlobalSearchModal isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} onNavigate={handleSelectModule} />
                   <ProductTour />
                   
                   <TopNavbar

@@ -184,7 +184,7 @@ export default function QSWorkflow() {
          {currentStep === 1 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
                <h3 className="text-xl font-semibold text-slate-800 mb-6">1. Project Setup</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                  <div><label className="block text-base font-medium mb-2">Project Name</label><><label htmlFor="a11y-input-385" className="sr-only">Input</label>
 <input id="a11y-input-385" type="text" value={projectData.name} onChange={e=>setProjectData({...projectData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
                  <div><label className="block text-base font-medium mb-2">Location</label><><label htmlFor="a11y-input-386" className="sr-only">Input</label>
@@ -265,7 +265,7 @@ export default function QSWorkflow() {
                <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><Building className="w-6 h-6 text-blue-600" /> 4. Superstructure Quantities</h3>
                <p className="text-slate-500 mb-6 font-medium">Extract lengths and volumes for structural frame above plinth level.</p>
                
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 responsive-tool-grid">
                  <div>
                     <label className="block text-base font-medium mb-2">Columns RCC - m³</label>
                     <><label htmlFor="a11y-input-392" className="sr-only">Input</label>
@@ -296,7 +296,7 @@ export default function QSWorkflow() {
                <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><Paintbrush className="w-6 h-6 text-rose-500" /> 5. Masonry & Finishes</h3>
                <p className="text-slate-500 mb-6 font-medium">Blockwork, plastering, floor finishes, and painting.</p>
                
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                  <div>
                     <label className="block text-base font-medium mb-2">Brickwork/Blockwork - m³</label>
                     <><label htmlFor="a11y-input-396" className="sr-only">Input</label>
@@ -327,7 +327,7 @@ export default function QSWorkflow() {
                <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><ZapIcon className="w-6 h-6 text-sky-500" /> 6. MEP & Services</h3>
                <p className="text-slate-500 mb-6 font-medium">Plumbing, electrical, and special infrastructure calculations.</p>
                
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                  <div>
                     <label className="block text-base font-medium mb-2">Plumbing (No. of Output Points)</label>
                     <><label htmlFor="a11y-input-400" className="sr-only">Input</label>

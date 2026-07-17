@@ -43,7 +43,7 @@ export default function RoomAreaCalculator() {
   ];
 
   return (
-    <div className="w-full md:max-w-4xl md:mx-auto space-y-6 px-4 md:px-0">
+    <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 px-4 md:px-0">
       <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-3xl shadow-sm overflow-hidden">
         <h2 className="text-2xl font-bold flex items-center gap-2 mb-6">
           <Layout className="w-6 h-6 text-indigo-500" />

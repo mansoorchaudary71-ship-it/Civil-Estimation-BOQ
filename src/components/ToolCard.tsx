@@ -103,7 +103,7 @@ export default function ToolCard({
         opacity: { duration: 0.3 }
       }}
       className={cn(
-        "w-full flex flex-col font-sans cursor-pointer transition-all duration-300",
+        "w-full h-full flex flex-col font-sans cursor-pointer transition-all duration-300",
         "bg-white relative overflow-hidden rounded-[1.5rem] ring-1 ring-gray-900/5 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)]",
         hov ? "shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] -translate-y-1.5 scale-[1.02]" : ""
       )}
@@ -158,7 +158,7 @@ export default function ToolCard({
         </div>
 
         <div className="flex flex-col mt-2">
-          <h3 className="text-xl font-bold text-slate-900 leading-tight">
+          <h3 className="text-xl font-bold text-slate-900 leading-tight line-clamp-2 min-h-[3.5rem]">
             {mod.title}
           </h3>
           <p className="text-gray-500 text-sm mt-3 leading-relaxed line-clamp-2">

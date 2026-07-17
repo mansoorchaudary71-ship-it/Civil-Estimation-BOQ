@@ -257,7 +257,7 @@ export default function SolarRoofCalculator() {
             {activeTab === 1 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
                 <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2"><Home className="text-indigo-600"/> Site & Load Assessment</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <div className="flex flex-col">
                     <label className="text-sm text-slate-700 font-medium mb-1.5 min-w-[200px]">Location / City</label>
                     <select value={city} onChange={(e: any) => setCity(e.target.value)} className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
@@ -284,7 +284,7 @@ export default function SolarRoofCalculator() {
             {activeTab === 2 && (
               <div className="animate-in fade-in zoom-in-95 duration-300 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
                 <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2"><Sun className="text-indigo-600"/> Solar Potential & Sizing</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Peak Sun Hours (PSH)" value={psh} onChange={(e:any) => setPsh(Number(e.target.value))} step="0.1" unit="hrs/day" />
                   <InputField label="Available Roof Area" value={availableRoofArea} onChange={(e:any) => setAvailableRoofArea(Number(e.target.value))} unit="m²" />
                   <InputField label="System Losses" value={sysLosses} onChange={(e:any) => setSysLosses(Number(e.target.value))} unit="%" tooltip="Wiring, soiling, mismatch etc." />
@@ -378,7 +378,7 @@ export default function SolarRoofCalculator() {
             {activeTab === 3 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
                 <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2"><Battery className="text-indigo-600"/> Inverter & Battery Size</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Inverter Efficiency" value={inverterEfficiency} onChange={(e:any) => setInverterEfficiency(Number(e.target.value))} unit="%" />
                   {gridType !== "On-Grid" ? (
                     <>
@@ -405,7 +405,7 @@ export default function SolarRoofCalculator() {
             {activeTab === 4 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
                 <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2"><DollarSign className="text-indigo-600"/> Cost Estimations</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <div className="flex flex-col">
                     <label className="text-sm text-slate-700 font-medium mb-1.5 min-w-[200px]">Currency</label>
                     <select value={currency} onChange={(e: any) => setCurrency(e.target.value)} className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
@@ -427,7 +427,7 @@ export default function SolarRoofCalculator() {
             {activeTab === 5 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
                 <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2"><Zap className="text-indigo-600"/> Production & Savings</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Grid Tariff / Unit Rate" value={gridTariff} onChange={(e:any) => setGridTariff(Number(e.target.value))} unit={`${currency} / kWh`} />
                   {gridType !== "Off-Grid" && <InputField label="Net Metering Export Rate" value={exportRate} onChange={(e:any) => setExportRate(Number(e.target.value))} unit="% of Import Tariff" />}
                   <InputField label="Annual Panel Degradation" value={degradation} onChange={(e:any) => setDegradation(Number(e.target.value))} step="0.1" unit="% / year" />
@@ -457,7 +457,7 @@ export default function SolarRoofCalculator() {
             {activeTab === 6 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
                 <h2 className="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2"><BarChart3 className="text-indigo-600"/> Financial Analysis & ROI</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Maintenance Cost" value={maintenancePercent} onChange={(e:any) => setMaintenancePercent(Number(e.target.value))} step="0.1" unit="% of system / yr" />
                   <InputField label="Tariff Escalation Rate" value={tariffEscalation} onChange={(e:any) => setTariffEscalation(Number(e.target.value))} unit="% / yr" />
                   <InputField label="Project Lifespan" value={lifespan} onChange={(e:any) => setLifespan(Number(e.target.value))} unit="years" />

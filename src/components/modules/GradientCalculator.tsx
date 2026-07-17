@@ -87,7 +87,7 @@ export default function GradientCalculator() {
 
 
   return (
-    <div className="flex flex-col gap-8 w-full md:max-w-5xl md:mx-auto animate-in fade-in px-4 md:px-0">
+    <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
       <SEO 
         title="Gradient & Slope Interpolation | Civil Estimation Pro" 
         description="Dynamic slope calculator for road cambers, longitudinal gradients, and vertical curve profiles."

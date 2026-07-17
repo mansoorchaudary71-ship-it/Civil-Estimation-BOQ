@@ -268,7 +268,7 @@ export default function AdvancedBoqGenerator() {
         
         {step === 1 && (
           <div className="space-y-8 animate-in fade-in duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
               <div className="space-y-4">
                 <h3 className="text-purple-900 border-b border-purple-100 pb-2 text-lg font-medium text-slate-800 mb-4">Project Information</h3>
                 
@@ -499,7 +499,7 @@ export default function AdvancedBoqGenerator() {
             </div>
 
             <h3 className="border-b-2 border-purple-500 pb-2 mt-8 text-lg font-medium text-slate-800 mb-4">Markups & Adjustments</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
               <div className="grid grid-cols-1 gap-6">
                 <div className="bg-slate-50 p-4 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
                   <label className="block mb-2 text-sm font-medium text-slate-700 mb-1">Contingency (%)</label>
@@ -566,7 +566,7 @@ export default function AdvancedBoqGenerator() {
             </div>
 
             {/* Print Output View */}
-            <div className="bg-white text-slate-900 border border-slate-200 p-4 sm:p-12 rounded-[16px] shadow-[0_0_40px_rgba(15,23,42,0.05)] print:shadow-none print:border-none print:m-0 print:p-0 w-full md:max-w-5xl md:mx-auto font-sans overflow-hidden">
+            <div className="bg-white text-slate-900 border border-slate-200 p-4 sm:p-12 rounded-[16px] shadow-[0_0_40px_rgba(15,23,42,0.05)] print:shadow-none print:border-none print:m-0 print:p-0 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 font-sans overflow-hidden">
               
               <div className="border-b-4 border-purple-800 pb-6 mb-8 flex justify-between items-end">
                 <div>

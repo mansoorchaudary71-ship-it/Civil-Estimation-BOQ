@@ -75,7 +75,7 @@ export default function CountertopModule() {
         <h2 className="text-slate-900 dark:text-white text-xl font-semibold text-slate-900 tracking-tight mb-4">Countertop (Platform) Estimator</h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="space-y-6">
           <div>
             <label className="uppercase mb-2 block text-sm font-medium text-slate-700 mb-1">Layout Shape</label>

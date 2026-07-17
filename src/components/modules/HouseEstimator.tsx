@@ -980,7 +980,7 @@ export default function HouseEstimator() {
         <meta name="description" content="Calculate your exact house construction cost with real-time BOQ generation. Features NBC Pakistan standards, Marla/Sq.Ft inputs, and precise material estimates." />
       </Helmet>
       <ToolGuidedTour steps={HOUSE_TOUR_STEPS} tourId="house-estimator" />
-      <div className="w-full md:max-w-6xl md:mx-auto space-y-8 pb-24 px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-24 px-4 md:px-0">
         
 
         <div className="space-y-8 w-full">
@@ -2277,7 +2277,7 @@ export default function HouseEstimator() {
         </div>
       )}
 
-      <section className="w-full md:max-w-4xl md:mx-auto my-12 px-4 md:px-0" aria-label="Popular Estimates">
+      <section className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 my-12 px-4 md:px-0" aria-label="Popular Estimates">
         <h3 className="md: text-slate-900 dark:text-white text-center mb-6 text-lg font-medium text-slate-800 mb-4">
           Popular Construction Estimates
         </h3>

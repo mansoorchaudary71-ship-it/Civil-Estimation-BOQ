@@ -16,9 +16,9 @@ export default function HouseSpecs() {
   const { specs, updateSpecs } = useHouseSpecs();
   return (
     <div className="w-full h-full bg-transparent text-slate-900 font-sans p-6 md:p-8">
-      <div className="w-full md:max-w-6xl md:mx-auto space-y-8 pb-24 px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-24 px-4 md:px-0">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 responsive-tool-grid">
           {/* Brickwork Card */}
           <GlassCard
             title="Brickwork"

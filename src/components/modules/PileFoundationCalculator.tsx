@@ -4,7 +4,7 @@ import { CalculationHistory } from '../ui/CalculationHistory';
 
 export default function PileFoundationCalculator() {
   return (
-    <div className="flex flex-col gap-8 w-full md:max-w-4xl md:mx-auto px-4 md:px-0">
+    <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
       <div className="w-full bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
          <h2 className="text-xl font-semibold mb-6 text-slate-800 dark:text-slate-100 flex items-center gap-2">
             <Pickaxe className="text-pink-600" /> Pile Foundation (IS 2911)

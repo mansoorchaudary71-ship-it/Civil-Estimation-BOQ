@@ -70,7 +70,7 @@ export default function SlopeStability() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
         {/* Inputs */}
         <div className="w-full bg-white p-4 sm:p-6 rounded-[24px] shadow-sm border border-slate-200 overflow-hidden">
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-slate-800">

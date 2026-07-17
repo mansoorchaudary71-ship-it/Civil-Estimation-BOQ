@@ -222,7 +222,7 @@ export default function RigidPavementEstimator() {
                   Concrete Mix Design
                 </h2>{" "}
               </div>{" "}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                 {" "}
                 <div className="space-y-4">
                   {" "}
@@ -358,7 +358,7 @@ export default function RigidPavementEstimator() {
                   </h2>{" "}
                 </div>{" "}
               </div>{" "}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                 {" "}
                 {/* Dowel Bars */}{" "}
                 <div className="space-y-4">

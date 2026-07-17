@@ -160,7 +160,7 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="w-full md:max-w-5xl md:mx-auto bg-slate-50 dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] px-4 md:px-0"
+      className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] px-4 md:px-0"
     >
       <div className="bg-gradient-to-r from-[var(--accent-purple)] to-indigo-600 p-6 sm:p-8 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">

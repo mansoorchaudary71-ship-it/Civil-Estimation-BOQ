@@ -253,7 +253,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
               </div>
 
               {/* Data Layout */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                 
                 {/* Cost Distribution Chart */}
                 <div className="calc-input p-6 shadow-sm">

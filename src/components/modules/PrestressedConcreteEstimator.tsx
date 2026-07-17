@@ -95,7 +95,7 @@ export default function PrestressedConcreteEstimator() {
   const results = calculateLosses();
 
   return (
-    <div className="flex flex-col gap-8 w-full md:max-w-4xl md:mx-auto px-4 md:px-0">
+    <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
       <div className="w-full bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
          <h2 className="text-xl font-semibold mb-6 text-slate-800 dark:text-slate-100 flex items-center gap-2">
             <Layers className="text-pink-600" /> Pre-stressed Concrete Estimator
@@ -104,7 +104,7 @@ export default function PrestressedConcreteEstimator() {
             <p className="text-pink-800 dark:text-pink-200 font-medium">Evaluate tendon profiles, compute prestress losses (friction, anchorage slip, elastic shortening), and design sections per IS 1343:2012.</p>
          </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
            <div className="space-y-6">
              <div>
                <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Geometry</h3>

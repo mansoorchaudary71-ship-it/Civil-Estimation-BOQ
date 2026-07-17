@@ -49,7 +49,7 @@ export default function RainwaterHarvesting() {
 
   return (
     <div className="w-full h-full bg-transparent text-slate-900 dark:text-white p-6 md:p-8">
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           <GlobalSettingsToggle align="left" showCurrency={true} />

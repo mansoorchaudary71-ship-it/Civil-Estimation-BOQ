@@ -178,7 +178,7 @@ export default function LabourCalculator() {
 
   return (
     <div className="w-full h-full bg-transparent text-slate-900 dark:text-white p-6 md:p-8">
-      <div className="w-full md:max-w-6xl md:mx-auto space-y-6 px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 px-4 md:px-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           <div className="flex gap-4 items-center flex-wrap">
@@ -236,7 +236,7 @@ export default function LabourCalculator() {
                         </select>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 responsive-tool-grid">
                         <div className="space-y-2">
                           <label className="text-base font-medium uppercase tracking-wider flex items-center gap-1"><Hammer className="w-3 h-3"/> Quantity required</label>
                           <div className="flex gap-2">

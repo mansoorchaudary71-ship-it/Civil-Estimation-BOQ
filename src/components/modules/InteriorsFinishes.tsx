@@ -42,7 +42,7 @@ export default function InteriorsFinishesEstimator() {
 
   return (
     <div className="w-full pb-20 mt-4">
-      <div className="w-full md:max-w-4xl md:mx-auto space-y-8 px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 px-4 md:px-0">
         
 
         <div className="space-y-4">
@@ -502,7 +502,7 @@ function DoorsWindowsCalculator() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label={`Wall Length (${uLen})`}>

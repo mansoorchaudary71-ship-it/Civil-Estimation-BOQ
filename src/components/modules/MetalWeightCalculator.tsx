@@ -242,7 +242,7 @@ export default function MetalWeightCalculator() {
  "Total Weight": `${totalWeight.toFixed(2)} kg`,
  };
  return (
- <div className="w-full h-full bg-[#F5F5F7] text-slate-900 dark:text-white p-6 md:p-8"><div className="w-full md:max-w-4xl md:mx-auto px-4 md:px-0"><div className="w-full bg-white rounded-[32px] p-4 sm:p-6 shadow-sm border border-slate-200 mb-8 overflow-hidden"><div className="flex flex-col md:flex-row gap-6 mb-6"><div className="flex-1 min-w-[200px]">
+ <div className="w-full h-full bg-[#F5F5F7] text-slate-900 dark:text-white p-6 md:p-8"><div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0"><div className="w-full bg-white rounded-[32px] p-4 sm:p-6 shadow-sm border border-slate-200 mb-8 overflow-hidden"><div className="flex flex-col md:flex-row gap-6 mb-6"><div className="flex-1 min-w-[200px]">
  <label className="text-base font-medium uppercase block mb-1.5">
  Element Length (m)
  </label>

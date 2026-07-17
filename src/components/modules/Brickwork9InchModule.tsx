@@ -169,7 +169,7 @@ export default function Brickwork9InchModule({ hideHistory = false }: { hideHist
       )}
 
       <div className={hideHistory ? "pt-2" : "p-6 md:p-8"}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full items-start responsive-tool-grid">
           {/* Inputs Column */}
           <div className="space-y-8">
             {/* Wall Dimensions Section */}

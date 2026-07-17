@@ -132,7 +132,7 @@ export default function LintelDesignTool() {
   }, [clearSpan, wallThickness, wallHeightAbove, masonryDensity, floorLoad, lintelDepth, bearingLength, fck, fy, cover, barDia]);
 
   return (
-    <div className="flex flex-col gap-8 w-full md:max-w-5xl md:mx-auto animate-in fade-in px-4 md:px-0">
+    <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
       <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
          <h2 className="text-xl font-bold mb-6 text-slate-800 flex items-center gap-2">
             <Columns className="text-indigo-600" /> Lintel Scheduler & Design Tool

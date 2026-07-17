@@ -74,7 +74,7 @@ export default function ProjectManager() {
     .slice(0, 5);
 
   return (
-    <div className="w-full md:max-w-6xl md:mx-auto space-y-8 animate-in fade-in duration-500 px-4 md:px-0">
+    <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-in fade-in duration-500 px-4 md:px-0">
       <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/40 backdrop-blur-xl border border-white/60 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
 
         <div>
@@ -140,7 +140,7 @@ export default function ProjectManager() {
       )}
 
       {projects.length === 0 && !isCreating ? (
-        <div className="flex flex-col gap-8 w-full md:max-w-4xl md:mx-auto py-6 px-4 md:px-0">
+        <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 px-4 md:px-0">
           <div className="text-center space-y-4">
             {/* Animated Workflow Illustration */}
             <div className="flex justify-center mb-6">
@@ -198,7 +198,7 @@ export default function ProjectManager() {
           </div>
 
           {/* Setup Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-2 responsive-tool-grid">
              <div className="w-full bg-white border border-indigo-100 p-4 sm:p-8 rounded-[2rem] shadow-sm flex flex-col justify-center overflow-hidden">
                 <h4 className="mb-1 text-lg font-medium text-gray-800 mb-4">Quick Start Templates</h4>
                 <p className="mb-5 text-base font-normal text-gray-600 leading-relaxed">Begin with a predefined project framework.</p>
@@ -271,7 +271,7 @@ export default function ProjectManager() {
         <div className="space-y-8">
           <div className="w-full bg-white/40 backdrop-blur-xl border border-white/60 p-4 sm:p-6 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
             <h3 className="mb-6 text-lg font-medium text-gray-800 mb-4">Portfolio Overview</h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
               <div>
                 <h4 className="uppercase r mb-4 text-lg font-medium text-gray-800">Total Cost per Project</h4>
                 <div className="h-64">
@@ -302,7 +302,7 @@ export default function ProjectManager() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 responsive-tool-grid">
             {projects.map((proj, idx) => {
                const isCompare = compareIds[0] === proj.id || compareIds[1] === proj.id;
              return (
@@ -404,12 +404,12 @@ function ProjectCompare({ p1, p2, onBack }: { p1: Project, p2: Project, onBack: 
   const allMaterialKeys = Array.from(new Set([...Object.keys(t1.materials), ...Object.keys(t2.materials)])).sort();
 
   return (
-    <div className="w-full md:max-w-6xl md:mx-auto space-y-6 animate-in fade-in duration-500 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm px-4 md:px-0">
+    <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-in fade-in duration-500 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm px-4 md:px-0">
        <button onClick={onBack} className="flex items-center gap-2 text-gray-500 hover:text-indigo-600 transition text-base font-semibold rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
           <ChevronRight className="w-5 h-5 rotate-180" /> Back to Projects
        </button>
        
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start responsive-tool-grid">
          
           {[p1, p2].map((proj, i) => {
             const totals = i === 0 ? t1 : t2;
@@ -605,7 +605,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
   const chartColors = ['#6366f1', '#10b981', '#f59e0b'];
 
   return (
-    <div className="w-full md:max-w-6xl md:mx-auto space-y-6 animate-in fade-in duration-500 px-4 md:px-0">
+    <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-in fade-in duration-500 px-4 md:px-0">
        <button onClick={onBack} className="flex items-center gap-2 text-gray-500 hover:text-indigo-600 transition text-base font-semibold rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
           <ChevronRight className="w-5 h-5 rotate-180" /> Back to Projects
        </button>
@@ -686,7 +686,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                 )}
 
                 {project.estimates.length > 0 && (
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-200/50">
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-200/50 responsive-tool-grid">
                    <div>
                       <h3 className="mb-6 text-lg font-medium text-gray-800 mb-4">Cumulative Cost Trend</h3>
                       <div className="h-64">

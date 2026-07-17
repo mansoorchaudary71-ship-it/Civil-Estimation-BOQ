@@ -248,7 +248,7 @@ export default function AggregateBlendingCalculator() {
         <div className="xl:col-span-7 space-y-6">
           
           <div className="bg-bg-card/80 backdrop-blur-md rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-2">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-2 responsive-tool-grid">
               <div>
                 <label className="block mb-2 text-sm font-medium text-slate-700 mb-1">
                   Target Category

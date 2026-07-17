@@ -70,7 +70,7 @@ export default function GridEarthworkEstimator() {
           </h2>
           <GlobalSettingsToggle align="left" showCurrency={false} />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
           <section className="space-y-6">
             <div className="w-full bg-white px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden">
               <div className="flex items-center gap-3 mb-5 border-b border-gray-50 pb-4">

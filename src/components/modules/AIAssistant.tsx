@@ -122,7 +122,7 @@ export default function AIAssistant() {
             <div
               key={index}
               className={cn(
-                "flex gap-4 max-w-4xl mx-auto w-full",
+                "flex gap-4 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 w-full",
                 msg.role === "user" ? "justify-end" : "justify-start",
               )}
             >
@@ -154,7 +154,7 @@ export default function AIAssistant() {
             </div>
           ))}
           {isLoading && (
-            <div className="flex gap-4 max-w-4xl mx-auto w-full justify-start">
+            <div className="flex gap-4 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 w-full justify-start">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shrink-0 mt-1 shadow-md shadow-blue-600/20">
                 <Loader2 className="w-4 h-4 text-white animate-spin" />
               </div>
@@ -167,7 +167,7 @@ export default function AIAssistant() {
           )}
         </div>
         <div className="p-4 sm:p-6 bg-white/60 backdrop-blur-xl border-t border-slate-200/50 relative z-10">
-          <div className="max-w-4xl mx-auto relative group">
+          <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 relative group">
              <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 rounded-[28px] opacity-30 group-focus-within:opacity-100 blur-[4px] transition-all duration-500"></div>
              <div className="relative flex items-center bg-white/90 backdrop-blur-md rounded-[24px] pl-4 pr-2 py-2 border border-slate-200/50 shadow-inner overflow-hidden">
                 <textarea

@@ -58,7 +58,7 @@ export default function VentilationChecker() {
   }, [roomType, climate, floorArea, windowArea, openableFraction]);
 
   return (
-    <div className="flex flex-col gap-8 w-full md:max-w-5xl md:mx-auto animate-in fade-in px-4 md:px-0">
+    <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
       <div className="w-full bg-white dark:bg-slate-900 rounded-[24px] p-4 sm:p-4 sm:p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
          <h2 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200 flex items-center gap-2">
             <Wind className="text-cyan-600" /> Ventilation & Lighting Checker (NBC)
@@ -138,7 +138,7 @@ export default function VentilationChecker() {
                     </div>
                 </MaterialSummary>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                     {/* Lighting Check */}
                     <div className={`p-6 rounded-3xl border flex flex-col gap-4 ${results.lightSafe ? "bg-slate-50 border-slate-200" : "bg-rose-50 border-rose-200"}`}>
                        <div className="flex items-center gap-2">

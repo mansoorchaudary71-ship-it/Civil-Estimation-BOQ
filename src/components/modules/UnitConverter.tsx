@@ -305,7 +305,7 @@ export default function UnitConverter() {
   return (
     <div className="w-full h-full bg-transparent text-slate-900  p-6 md:p-8">
       {" "}
-      <div className="w-full md:max-w-6xl md:mx-auto px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
         <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
           <div className="flex-1 min-w-0">
         {" "}

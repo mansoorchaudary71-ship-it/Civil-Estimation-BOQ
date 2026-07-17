@@ -211,7 +211,7 @@ export default function BarBendingSchedule() {
         title="Bar Bending Schedule Generator | Civil Estimation Pro" 
         description="Generate precise Bar Bending Schedules (BBS) for reinforcement detailing with exact concrete cover and hook deductions."
       />
-      <div className="w-full md:max-w-6xl md:mx-auto space-y-6 px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 px-4 md:px-0">
         
         {/* Header - Hidden in Print */}
         <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-4 bg-white p-4 sm:p-6 rounded-[2rem] shadow-sm border border-slate-200 print:hidden overflow-hidden">

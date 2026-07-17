@@ -178,14 +178,14 @@ export default function BeamCalculator() {
   };
 
   return (
-    <div className="w-full md:max-w-4xl md:mx-auto pb-20 px-4 md:px-0">
+    <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 px-4 md:px-0">
       <SEO 
         title="Comprehensive Beam Calculator | EstiPro"
         description="Calculate concrete volume and longitudinal/stirrup steel weights for reinforced concrete beams."
       />
       
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="tool-card p-6 md:p-8">
           <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
             <div className="flex items-center gap-2">

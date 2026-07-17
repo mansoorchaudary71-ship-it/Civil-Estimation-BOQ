@@ -203,7 +203,7 @@ const ConstructionCostSummary: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
         {/* Left Column: Inputs */}
         <div className="space-y-8">
           

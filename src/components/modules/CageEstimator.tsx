@@ -86,7 +86,7 @@ export default function CageEstimator() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
         {/* Input Form */}
         <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
           <h3 className="mb-6 flex items-center gap-2 text-lg font-medium text-slate-800 mb-4">

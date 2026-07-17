@@ -186,7 +186,7 @@ export default function GeotechnicalCalculator() {
         />
 
         {/* Calculator Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative items-start responsive-tool-grid">
           
           {/* Inputs Section */}
           <div 

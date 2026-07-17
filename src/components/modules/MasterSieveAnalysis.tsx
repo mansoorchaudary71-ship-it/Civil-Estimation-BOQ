@@ -169,7 +169,7 @@ export default function MasterSieveAnalysis() {
   };
 
   return (
-    <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500 md:max-w-6xl md:mx-auto pb-20 px-4 md:px-0">
+    <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 px-4 md:px-0">
       
       {/* Header */}
       <div className="w-full bg-white [#151821] rounded-[24px] p-4 sm:p-6 md:p-4 sm:p-8 mb-6 shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 overflow-hidden">

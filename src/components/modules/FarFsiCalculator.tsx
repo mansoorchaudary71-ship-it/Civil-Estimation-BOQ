@@ -20,7 +20,7 @@ export default function FarFsiCalculator() {
   ];
 
   return (
-    <div className="w-full md:max-w-4xl md:mx-auto space-y-6 px-4 md:px-0">
+    <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 px-4 md:px-0">
       <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[24px] shadow-sm overflow-hidden">
         <h2 className="flex items-center gap-2 mb-6 text-xl font-semibold text-slate-900 tracking-tight mb-4">
           <ArrowUpRight className="w-6 h-6 text-amber-500" />

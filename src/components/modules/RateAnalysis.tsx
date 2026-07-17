@@ -77,7 +77,7 @@ export default function RateAnalysis() {
     }, [rates]);
   return (
     <div className="w-full h-full bg-transparent text-slate-900 font-sans p-6 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-8 pb-24">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-24">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Rate Inputs */}

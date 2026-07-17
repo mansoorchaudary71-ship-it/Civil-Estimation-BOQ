@@ -251,7 +251,7 @@ export default function SewerageEstimator() {
               className={`transition-all duration-500 ease-in-out ${openSection === "trench" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
             >
               <div className="px-6 pb-6 border-t border-gray-50 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                   <div className="grid grid-cols-2 gap-4 h-fit">
                     <div className="col-span-2">
                       <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
@@ -562,7 +562,7 @@ export default function SewerageEstimator() {
               className={`transition-all duration-500 ease-in-out ${openSection === "il" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
             >
               <div className="px-6 pb-6 border-t border-gray-50 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                   <div className="space-y-4">
                     <div>
                       <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
@@ -650,7 +650,7 @@ export default function SewerageEstimator() {
               className={`transition-all duration-500 ease-in-out ${openSection === "pipe" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
             >
               <div className="px-6 pb-6 border-t border-gray-50 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                   <div className="space-y-4 h-fit">
                     <div>
                       <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
@@ -722,7 +722,7 @@ export default function SewerageEstimator() {
               className={`transition-all duration-500 ease-in-out ${openSection === "bedding" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
             >
               <div className="px-6 pb-6 border-t border-gray-50 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                   <div className="space-y-4 h-fit">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
@@ -892,7 +892,7 @@ export default function SewerageEstimator() {
               className={`transition-all duration-500 ease-in-out ${openSection === "flow" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
             >
               <div className="px-6 pb-6 border-t border-gray-50 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                   <div className="space-y-4 h-fit">
                     <div>
                       <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
@@ -1016,7 +1016,7 @@ export default function SewerageEstimator() {
               className={`transition-all duration-500 ease-in-out ${openSection === "septic" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
             >
               <div className="px-6 pb-6 border-t border-gray-50 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                   <div className="space-y-4 h-fit">
                     <div>
                       <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">

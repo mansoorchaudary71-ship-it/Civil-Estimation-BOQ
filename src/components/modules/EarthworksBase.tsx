@@ -94,7 +94,7 @@ export default function StandardEarthworks() {
            </h2>
            <GlobalSettingsToggle align="left" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
           {/* Inputs Section */}
           <section className="space-y-6">
             <div className="w-full bg-white px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden">

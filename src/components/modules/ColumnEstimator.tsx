@@ -243,7 +243,7 @@ export default function ColumnEstimator() {
   }
   return (
     <div className="w-full h-full bg-transparent text-slate-900 dark:text-white p-6 md:p-8">
-      <div className="w-full md:max-w-4xl md:mx-auto space-y-6 px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 px-4 md:px-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           <GlobalSettingsToggle align="left" showCurrency={false} />
@@ -278,7 +278,7 @@ export default function ColumnEstimator() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm responsive-tool-grid">
               <div className="space-y-6">
                 {/* Dynamically Render Inputs */}
                 {shape === "circular" ? (
@@ -395,7 +395,7 @@ export default function ColumnEstimator() {
                 <CopySlash className="w-5 h-5 text-indigo-600" />
                 <h2 className="text-slate-900 dark:text-white text-xl font-semibold text-slate-900 tracking-tight mb-4">Reinforcement Details</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <InputGroup label={
@@ -566,7 +566,7 @@ export default function ColumnEstimator() {
                       <CopySlash className="w-5 h-5 text-[#6B46C1]" />
                       Steel Reinforcement Summary
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                       <div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div className="bg-slate-50 p-3 rounded-[16px] border border-slate-100">

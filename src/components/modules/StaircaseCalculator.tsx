@@ -390,7 +390,7 @@ export default function StaircaseCalculator() {
       {portalTarget && createPortal(dropdownElement, portalTarget)}
       <div className="w-full bg-slate-50/50 rounded-[32px] overflow-hidden">
         <div className="p-6 md:p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full items-start responsive-tool-grid">
             <div className="space-y-6">
               {stairShape === "Straight" ? (
                 <div className="grid grid-cols-2 gap-4">

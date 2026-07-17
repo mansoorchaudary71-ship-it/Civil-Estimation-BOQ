@@ -165,7 +165,7 @@ export default function AggregateTestsCalculator() {
           onTabChange={(id) => { setActiveTab(id as any); resetEstimate(); }} 
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative items-start responsive-tool-grid">
           <div 
             className="bg-bg-card p-6 md:p-8 rounded-[24px] shadow-md border border-slate-200 dark:border-slate-700 flex flex-col gap-6 overflow-hidden"
             onChange={(e) => {

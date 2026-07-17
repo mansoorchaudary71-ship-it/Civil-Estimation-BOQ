@@ -75,7 +75,7 @@ export default function TrenchExcavationEstimator() {
           <GlobalSettingsToggle align="left" showCurrency={false} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
           <section className="space-y-6">
             <div className="bg-white rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
               <button

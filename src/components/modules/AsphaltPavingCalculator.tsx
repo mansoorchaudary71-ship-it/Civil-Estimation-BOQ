@@ -96,7 +96,7 @@ function AsphaltCalculator() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="space-y-4">
           <div className="flex justify-end gap-2">
              <select
@@ -236,7 +236,7 @@ function PrimeCoatCalculator() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="space-y-6">
           <InputGroup label="Surface Area (sq meters)">
             <><label htmlFor="a11y-input-86" className="sr-only">e.g. 500</label>
@@ -332,7 +332,7 @@ function TackCoatCalculator() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="space-y-6">
           <InputGroup label="Surface Area (sq meters)">
             <><label htmlFor="a11y-input-88" className="sr-only">e.g. 500</label>

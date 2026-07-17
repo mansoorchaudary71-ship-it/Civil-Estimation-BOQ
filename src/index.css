@@ -400,3 +400,27 @@ html.high-contrast a {
     padding: 2px 4px !important;
   }
 }
+
+/* Global Responsive Tool Grid Pattern */
+@media (min-width: 1024px) {
+  .responsive-tool-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  }
+  .responsive-tool-grid > :nth-child(1) {
+    grid-column: span 5 / span 5 !important;
+    min-width: 0 !important;
+  }
+  .responsive-tool-grid > :nth-child(2) {
+    grid-column: span 7 / span 7 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+}
+  .responsive-tool-grid > :nth-child(2) * {
+    /* To prevent any deeply nested element from breaking the flex/grid container */
+    max-width: 100%;
+  }
+  .responsive-tool-grid > :nth-child(2) > div {
+    min-width: 0;
+    overflow-x: hidden;
+  }

@@ -58,7 +58,7 @@ export default function AntiTermiteCalculator() {
   }, [floorArea, perimeter, trenchDepth, selectedChemical, customRatio]);
 
   return (
-    <div className="flex flex-col gap-8 w-full md:max-w-5xl md:mx-auto animate-in fade-in px-4 md:px-0">
+    <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
       <SEO 
         title="Anti-Termite Treatment Estimator | Civil Estimation Pro" 
         description="Calculate exact chemical emulsion and water dilution rates for pre-construction treatment of foundations, floors, and perimeters."

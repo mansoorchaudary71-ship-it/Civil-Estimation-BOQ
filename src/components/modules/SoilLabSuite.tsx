@@ -264,7 +264,7 @@ function UnconfinedCompressionTest() {
   const cu = qu / 2;
 
   return (
-    <div className="w-full grid md:grid-cols-2 gap-8 md:max-w-4xl md:mx-auto p-4">
+    <div className="w-full grid md:grid-cols-2 gap-8 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 p-4">
       <div className="w-full bg-white p-4 sm:p-6 rounded-[24px] shadow-sm border border-slate-200 overflow-hidden">
         <h3 className="font-bold border-b pb-2 mb-4">UCT Input (at failure)</h3>
         <div className="space-y-4">

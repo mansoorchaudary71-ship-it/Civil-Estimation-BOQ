@@ -505,7 +505,7 @@ export default function VolumeEstimator() {
   };
   return (
     <div className="w-full h-full bg-transparent dark:bg-slate-950 text-slate-900 dark:text-white p-6 md:p-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         
         
         {/* Global Settings */}
@@ -922,7 +922,7 @@ export default function VolumeEstimator() {
               )}
               {activeShape === "Concentric Cylinder" && (
                 <div className="grid grid-cols-1 mt-2 mb-6 border border-slate-200 dark:border-slate-800 rounded-[24px] overflow-hidden bg-slate-50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-[24px] border border-slate-200 dark:dark:border-slate-700 shadow-sm text-slate-900 dark:text-white">
-                  <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 responsive-tool-grid">
                     <div className="flex flex-col gap-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>

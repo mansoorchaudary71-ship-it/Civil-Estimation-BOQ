@@ -19,7 +19,7 @@ export default function EnergyMepCalculator() {
   const results: any = {};
 
   return (
-    <div className="w-full md:max-w-4xl md:mx-auto pb-20 px-4 md:px-0">
+    <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 px-4 md:px-0">
       
 
       <div className="flex overflow-x-auto pb-4 gap-2 mb-8 p-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -94,7 +94,7 @@ function SolarCalculator() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="space-y-6">
           <NumberInput
             label="Daily Power Requirement"
@@ -179,7 +179,7 @@ function WaterHeaterCalculator() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="space-y-6">
           <NumberInput
             label="Number of People in Household"
@@ -250,7 +250,7 @@ function AcCalculator() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <NumberInput

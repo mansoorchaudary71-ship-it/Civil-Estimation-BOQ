@@ -1190,7 +1190,7 @@ export default function Dashboard({
  </h2>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
  {toolsInGroup.map((mod) => (
- <div key={mod.id} id={`module-card-${mod.id}`}>
+ <div key={mod.id} id={`module-card-${mod.id}`} className="flex flex-col h-full">
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-${groupName || 'group'}-${mod.id}`} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
  </div>
  ))}
@@ -1245,19 +1245,19 @@ export default function Dashboard({
  const m = ALL_MODULES.find(mod => mod.id === t.id);
  if (!m) return null;
  return (
- <div key={`recent-${t.id}`} className="relative group bg-[#F0F4F8] rounded-2xl p-4 hover:-translate-y-1.5 hover:scale-[1.02] transition-all flex flex-col gap-3 shadow-[4px_4px_10px_rgba(163,177,198,0.3),-4px_-4px_10px_rgba(255,255,255,0.9)] hover:shadow-[6px_6px_15px_rgba(163,177,198,0.4),-6px_-6px_15px_rgba(255,255,255,1)]">
+ <div key={`recent-${t.id}`} className="relative group bg-[#F0F4F8] rounded-2xl p-4 hover:-translate-y-1.5 hover:scale-[1.02] transition-all flex flex-col gap-3 h-full shadow-[4px_4px_10px_rgba(163,177,198,0.3),-4px_-4px_10px_rgba(255,255,255,0.9)] hover:shadow-[6px_6px_15px_rgba(163,177,198,0.4),-6px_-6px_15px_rgba(255,255,255,1)]">
  <div className="flex items-center gap-2">
  <div className="w-full w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-white shadow-sm border border-slate-100 text-indigo-600 overflow-hidden">
  {m.icon && <m.icon className="w-4 h-4" strokeWidth={1.5} />}
  </div>
  <div className="flex flex-col">
- <h3 className="line-clamp-2 group-hover:text-indigo-900 transition-colors text-lg font-medium text-slate-800 mb-4">{m.title}</h3>
+ <h3 className="line-clamp-2 min-h-[3rem] group-hover:text-indigo-900 transition-colors text-lg font-medium text-slate-800 mb-4">{m.title}</h3>
  <span className="text-sm font-normal text-slate-500">
  {formatTimeAgo(t.timestamp)}
  </span>
  </div>
  </div>
- <button onClick={() => handleSelect(t.id, t.lastInputs)} className="w-full mt-2 bg-white/70 backdrop-blur-md hover:bg-white text-slate-600 hover:text-blue-700 transition-colors py-1.5 rounded-full text-base font-medium border border-white/20 flex justify-center items-center gap-2 shadow-sm active:scale-95 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 overflow-hidden">
+ <button onClick={() => handleSelect(t.id, t.lastInputs)} className="w-full mt-auto bg-white/70 backdrop-blur-md hover:bg-white text-slate-600 hover:text-blue-700 transition-colors py-1.5 rounded-full text-base font-medium border border-white/20 flex justify-center items-center gap-2 shadow-sm active:scale-95 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 overflow-hidden">
  Resume
  </button>
  </div>
@@ -1283,7 +1283,7 @@ export default function Dashboard({
  const mod = ALL_MODULES.find(m => m.id === toolId);
  if (!mod) return null;
  return (
- <div key={`fav-${mod.id}`} id={`module-card-${mod.id}`}>
+ <div key={`fav-${mod.id}`} id={`module-card-${mod.id}`} className="flex flex-col h-full">
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-fav-${mod.id}`} categoryColor={'#f8fafc'} />
  </div>
  );
@@ -1341,7 +1341,7 @@ export default function Dashboard({
  </h2>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 tool-card-grid">
  {toolsInGroup.map((mod) => (
- <div key={mod.id} id={`module-card-${mod.id}`}>
+ <div key={mod.id} id={`module-card-${mod.id}`} className="flex flex-col h-full">
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-${groupName || 'group'}-${mod.id}`} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
  </div>
  ))}

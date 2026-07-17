@@ -206,7 +206,7 @@ export default function BeamDesignTool() {
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full md:max-w-5xl md:mx-auto animate-in fade-in px-4 md:px-0">
+    <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
       <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
             <Layers className="text-rose-600" /> Beam Design (Limit State - IS 456)
@@ -294,7 +294,7 @@ export default function BeamDesignTool() {
                     )}
                 </MaterialSummary>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                     {/* Deflection Check */}
                     <div className={`p-6 rounded-3xl border flex flex-col gap-4 ${results.deflectionSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
                        <div className="flex items-center gap-2">

@@ -280,7 +280,7 @@ export default function IsolatedFootingCalculator({
           : "w-full h-full bg-transparent text-slate-900 dark:text-white p-6 md:p-8"
       }
     >
-      <div className="w-full md:max-w-5xl md:mx-auto space-y-6 px-4 md:px-0">
+      <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 px-4 md:px-0">
         {!isEmbedded && (
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div className="flex flex-col items-end gap-2">
@@ -311,7 +311,7 @@ export default function IsolatedFootingCalculator({
 
         <div className="bg-bg-card rounded-[24px] shadow-md border border-slate-200 dark:border-slate-700 overflow-hidden">
           <div className="p-6 md:p-8 space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
               {/* Inputs */}
               <div className="space-y-6">
                 <Accordion title="Dimensions & Load" defaultOpen={true}>
@@ -1025,7 +1025,7 @@ export default function IsolatedFootingCalculator({
                   // Since React state instantly updates, we don't 'actually' need to do anything here for this tool
                 }}
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 responsive-tool-grid">
                   <div>
                     <h4 className="font-bold text-slate-800 flex items-center gap-2 mb-4">
                       <Spade className="w-5 h-5 text-amber-600" />

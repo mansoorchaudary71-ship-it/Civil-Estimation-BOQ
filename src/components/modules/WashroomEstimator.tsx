@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { X, Droplets, Ruler, Square, Grid2X2, Hammer, Zap, Badge } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function WashroomEstimator({ onClose }: { onClose?: () => void }) {
   const [unit, setUnit] = useState<"ft" | "m">("ft");
@@ -213,7 +214,7 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-base font-medium uppercase tracking-wider">Window (H x W)</label>
+                <label className="text-base font-medium uppercase tracking-wider"><span className="flex items-center gap-1">Window (H x W) <CodeTooltip standard="IS" code="875 (Part 3)" description="Basic wind speed map for structural design." /></span></label>
                 <div className="flex gap-2">
                   <><label htmlFor="a11y-input-571" className="sr-only">H</label>
 <input id="a11y-input-571" type="number" inputMode="decimal" value={winH} onChange={e=>setWinH(e.target.value)} className="w-full bg-white dark:bg-slate-800 border box-border border-slate-200 dark:dark:border-slate-700 rounded-full px-3 py-2.5 text-sm" placeholder="H" /></>

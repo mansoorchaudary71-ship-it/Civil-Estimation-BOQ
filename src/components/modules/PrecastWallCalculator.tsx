@@ -6,6 +6,7 @@ import { ProcessingSkeleton } from "../ui/ProcessingSkeleton";
 import { useGlobalSettings } from "../../context/SettingsContext";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { GlobalFAQ } from "../ui/GlobalFAQ";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function PrecastWallCalculator() {
   const { isProcessing, hasData, processEstimate } = useEstimateProcessing();
@@ -125,7 +126,7 @@ export default function PrecastWallCalculator() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="text-base font-medium uppercase tracking-wider block mb-2">Post Spacing c/c ({isMetric ? "m" : "ft"})</label>
+                  <label className="text-base font-medium uppercase tracking-wider block mb-2"><span className="flex items-center gap-1">Post Spacing c/c ({isMetric ? "m" : "ft"}) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span></label>
                   <><label htmlFor="a11y-input-371" className="sr-only">Input</label>
 <input id="a11y-input-371"
                     type="number" inputMode="decimal"

@@ -6,6 +6,7 @@ import { ProcessingSkeleton } from "../ui/ProcessingSkeleton";
 import { useGlobalSettings } from "../../context/SettingsContext";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { GlobalFAQ } from "../ui/GlobalFAQ";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function TopSoilFillCalculator() {
   const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
@@ -112,7 +113,7 @@ export default function TopSoilFillCalculator() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Area to Cover</label>
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-2"><span className="flex items-center gap-1">Area to Cover <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
                   <div className="relative">
                     <><label htmlFor="a11y-input-519" className="sr-only">Input</label>
 <input id="a11y-input-519"
@@ -144,7 +145,7 @@ export default function TopSoilFillCalculator() {
               </div>
 
               <div className="mb-4">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Soil Type (Bulking Factor)</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-2"><span className="flex items-center">Soil Type (Bulking Factor) <CodeTooltip standard="IS" code="1498:1970" description="Classification and identification of soils for general engineering purposes." /></span></label>
                 <select
                   value={selectedSoilIndex}
                   onChange={(e) => {

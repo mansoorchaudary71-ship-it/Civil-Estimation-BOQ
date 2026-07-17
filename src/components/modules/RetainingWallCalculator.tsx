@@ -18,6 +18,7 @@ import { MaterialSummary } from "../ui/MaterialSummary";
 import { FieldTooltip } from "../ui/FieldTooltip";
 
 import { ToolLayout, ToolLayoutInputs, ToolLayoutResults, ToolSection } from "../ui/ToolLayout";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 function InputGroup({ label, children, colSpan = 1 }: { label: React.ReactNode; children: React.ReactNode, colSpan?: number }) {
   return (
@@ -254,15 +255,15 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                 <><label htmlFor="a11y-input-428" className="sr-only">Input</label>
 <input id="a11y-input-428" type="number" inputMode="decimal" className="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm text-slate-800 dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={phiAngle} onChange={(e) => setPhiAngle(e.target.value)} /></>
               </InputGroup>
-              <InputGroup label="Base Friction (μ)">
+              <InputGroup label={<span className="flex items-center gap-1">Base Friction (μ) <CodeTooltip standard="IS" code="1904:1986" description="Coefficient of friction for sliding resistance of foundations." /></span>}>
                 <><label htmlFor="a11y-input-429" className="sr-only">Input</label>
 <input id="a11y-input-429" type="number" inputMode="decimal" className="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm text-slate-800 dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={frictionCoeff} onChange={(e) => setFrictionCoeff(e.target.value)} step="0.1" /></>
               </InputGroup>
-              <InputGroup label="Surcharge (kN/m²)">
+              <InputGroup label={<span className="flex items-center gap-1">Surcharge (kN/m²) <CodeTooltip standard="IS" code="875 (Part 2)" description="Imposed loads for residential and commercial buildings." /></span>}>
                 <><label htmlFor="a11y-input-430" className="sr-only">Input</label>
 <input id="a11y-input-430" type="number" inputMode="decimal" className="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm text-slate-800 dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} /></>
               </InputGroup>
-              <InputGroup label="Safe Bearing (kN/m²)">
+              <InputGroup label={<span className="flex items-center gap-1">Safe Bearing (kN/m²) <CodeTooltip standard="IS" code="1904:1986" description="Design and construction of foundations in soils: General requirements." /></span>}>
                 <><label htmlFor="a11y-input-431" className="sr-only">Input</label>
 <input id="a11y-input-431" type="number" inputMode="decimal" className="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm text-slate-800 dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={sbc} onChange={(e) => setSbc(e.target.value)} /></>
               </InputGroup>
@@ -272,7 +273,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
           {/* Materials Section */}
           <ToolSection title="Materials" number={3} color="violet">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputGroup label="Concrete Mix">
+              <InputGroup label={<span className="flex items-center gap-1">Concrete Mix <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span>}>
                 <select className="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm text-slate-800 dark:text-slate-200 rounded-[16px] px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-violet-500/50" value={mix} onChange={(e) => setMix(e.target.value)}>
                   {Object.keys(mixRatios).map((m) => <option key={m} value={m}>{m}</option>)}
                 </select>
@@ -377,7 +378,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                     </h4>
                     
                     <div className="grid grid-cols-2 gap-3 mb-3">
-                      <InputGroup label="V. Dia/Spc">
+                      <InputGroup label={<span className="flex items-center gap-1">V. Dia/Spc <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                         <div className="flex gap-1">
                            <><label htmlFor="a11y-input-432" className="sr-only">Input</label>
 <input id="a11y-input-432" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={vertDia} onChange={e => setVertDia(e.target.value)} /></>
@@ -385,7 +386,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
 <input id="a11y-input-433" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={vertSpace} onChange={e => setVertSpace(e.target.value)} /></>
                         </div>
                       </InputGroup>
-                      <InputGroup label="H. Dia/Spc">
+                      <InputGroup label={<span className="flex items-center gap-1">H. Dia/Spc <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                         <div className="flex gap-1">
                            <><label htmlFor="a11y-input-434" className="sr-only">Input</label>
 <input id="a11y-input-434" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={horizDia} onChange={e => setHorizDia(e.target.value)} /></>

@@ -8,6 +8,7 @@ import { GlobalFAQ } from "../ui/GlobalFAQ";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { DetailedCalculationDisplay } from "../ui/DetailedCalculationDisplay";
 import toast from 'react-hot-toast';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function AreaSpaceCalculator() {
   const { currentUnit } = useGlobalSettings();
@@ -328,7 +329,7 @@ export default function AreaSpaceCalculator() {
 <input id="a11y-input-65" type="number" inputMode="decimal" value={plotBounds.e} onChange={(e) => setPlotBounds({ ...plotBounds, e: +e.target.value })} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 focus:ring-emerald-500" /></></div>
                 <div><label className="block uppercase mb-2 text-sm font-medium text-slate-700 mb-1">West Side ({uLen})</label><><label htmlFor="a11y-input-66" className="sr-only">Input</label>
 <input id="a11y-input-66" type="number" inputMode="decimal" value={plotBounds.w} onChange={(e) => setPlotBounds({ ...plotBounds, w: +e.target.value })} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 focus:ring-emerald-500" /></></div>
-                <div className="col-span-2 md:col-span-1"><label className="block uppercase mb-2 text-indigo-500 text-sm font-medium text-slate-700 mb-1">Diagonal NW-SE ({uLen})</label><><label htmlFor="a11y-input-67" className="sr-only">Input</label>
+                <div className="col-span-2 md:col-span-1"><label className="block uppercase mb-2 text-indigo-500 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center gap-1">Diagonal NW-SE ({uLen}) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label><><label htmlFor="a11y-input-67" className="sr-only">Input</label>
 <input id="a11y-input-67" type="number" inputMode="decimal" value={plotBounds.d} onChange={(e) => setPlotBounds({ ...plotBounds, d: +e.target.value })} className="w-full px-4 py-2.5 bg-indigo-50 border border-indigo-200 rounded-full text-indigo-900 focus:ring-indigo-500" /></></div>
               </div>
             </div>

@@ -11,6 +11,7 @@ import {
   ArrowUpRight,
   Sliders,
 } from "lucide-react";import { CalculationHistory } from '../ui/CalculationHistory';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function HouseSpecs() {
   const { specs, updateSpecs } = useHouseSpecs();
@@ -52,7 +53,7 @@ export default function HouseSpecs() {
           >
             <div className="space-y-4">
               <SelectInput
-                label="Slab Mix Ratio"
+                label={<span className="flex items-center">Slab Mix Ratio <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions for ordinary concrete (Table 9)." /></span>}
                 value={specs.concrete.slabMix}
                 onChange={(v: string) => updateSpecs("concrete", "slabMix", v)}
                 options={[
@@ -61,7 +62,7 @@ export default function HouseSpecs() {
                 ]}
               />
               <SelectInput
-                label="Foundation Mix"
+                label={<span className="flex items-center gap-1">Foundation Mix <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span>}
                 value={specs.concrete.foundationMix}
                 onChange={(v: string) =>
                   updateSpecs("concrete", "foundationMix", v)

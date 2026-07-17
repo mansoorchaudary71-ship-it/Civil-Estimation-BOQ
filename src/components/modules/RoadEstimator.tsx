@@ -5,6 +5,7 @@ import { NumberInput } from "../ui/NumberInput";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { SEO } from "../SEO";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function RoadEstimator() {
   const { settings } = useSettings();
@@ -227,8 +228,8 @@ export default function RoadEstimator() {
                         </h3>
                         <div className="space-y-3">
                             <NumberInput label="Bituminous Concrete (BC)" unit="mm" value={bcT} onChange={setBcT} />
-                            <NumberInput label="Dense Bitumen Macadam (DBM)" unit="mm" value={dbmT} onChange={setDbmT} />
-                            <NumberInput label="Wet Mix Macadam (WMM)" unit="mm" value={wmmT} onChange={setWmmT} />
+                            <NumberInput label={<span className="flex items-center gap-1">Dense Bitumen Macadam (DBM) <CodeTooltip standard="IS" code="73:2013" description="Paving Bitumen - Specification (Viscosity Grading)." /></span>} unit="mm" value={dbmT} onChange={setDbmT} />
+                            <NumberInput label={<span className="flex items-center gap-1">Wet Mix Macadam (WMM) <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span>} unit="mm" value={wmmT} onChange={setWmmT} />
                             <NumberInput label="Granular Sub-Base (GSB)" unit="mm" value={gsbT} onChange={setGsbT} />
                             <NumberInput label="Compacted Sub-grade" unit="mm" value={sgT} onChange={setSgT} />
                         </div>

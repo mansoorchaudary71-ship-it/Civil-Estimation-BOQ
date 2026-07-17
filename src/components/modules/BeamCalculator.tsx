@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useAutoSave } from "../../hooks/useAutoSave";
 import { CopySlash, Settings2, Columns, ArrowUp, AlertTriangle } from "lucide-react";
 import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { FieldTooltip } from "../ui/FieldTooltip";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function BeamCalculator() {
   const [isPrecast, setIsPrecast] = useState(false);
@@ -53,6 +55,28 @@ export default function BeamCalculator() {
   const [stirrupDia, setStirrupDia] = useState("8"); // mm
   const [stirrupSpacing, setStirrupSpacing] = useState("150"); // mm
   const [stirrupLegs, setStirrupLegs] = useState("2"); // 2, 4
+
+  useAutoSave('beam-calculator', 
+    { isPrecast, concreteDensity, riggingRadius, beamWidth, beamDepth, beamSpan, clearCover, longitudinalBarsCount, longitudinalBarDia, tensionBarsCount, compressionBarsCount, tensionBarDia, compressionBarDia, stirrupDia, stirrupSpacing, stirrupLegs }, 
+    { 
+      isPrecast: setIsPrecast, 
+      concreteDensity: setConcreteDensity, 
+      riggingRadius: setRiggingRadius, 
+      beamWidth: setBeamWidth, 
+      beamDepth: setBeamDepth, 
+      beamSpan: setBeamSpan, 
+      clearCover: setClearCover, 
+      longitudinalBarsCount: setLongitudinalBarsCount, 
+      longitudinalBarDia: setLongitudinalBarDia, 
+      tensionBarsCount: setTensionBarsCount, 
+      compressionBarsCount: setCompressionBarsCount, 
+      tensionBarDia: setTensionBarDia, 
+      compressionBarDia: setCompressionBarDia, 
+      stirrupDia: setStirrupDia, 
+      stirrupSpacing: setStirrupSpacing, 
+      stirrupLegs: setStirrupLegs 
+    }
+  );
 
   const [results, setResults] = useState<{
     concreteVolumeDry: number;
@@ -293,7 +317,7 @@ export default function BeamCalculator() {
                 </InputGroup>
                 
                 {parseInt(longitudinalBarsCount) <= 4 && (
-                  <InputGroup label="Bar Diameter (mm)">
+                  <InputGroup label={<span className="flex items-center">Bar Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                     <select
                       value={longitudinalBarDia}
                       onChange={(e) => setLongitudinalBarDia(e.target.value)}
@@ -320,7 +344,7 @@ export default function BeamCalculator() {
                       className="w-full h-11 calc-input px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all rounded-full"
                     /></>
                   </InputGroup>
-                  <InputGroup label="Bottom Bar Dia (mm)">
+                  <InputGroup label={<span className="flex items-center gap-1">Bottom Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                     <select
                       value={tensionBarDia}
                       onChange={e => setTensionBarDia(e.target.value)}
@@ -342,7 +366,7 @@ export default function BeamCalculator() {
                       className="w-full h-11 calc-input px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all rounded-full"
                     /></>
                   </InputGroup>
-                  <InputGroup label="Top Bar Dia (mm)">
+                  <InputGroup label={<span className="flex items-center gap-1">Top Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                     <select
                       value={compressionBarDia}
                       onChange={e => setCompressionBarDia(e.target.value)}
@@ -372,7 +396,7 @@ export default function BeamCalculator() {
                 </InputGroup>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <InputGroup label="Diameter (mm)">
+                  <InputGroup label={<span className="flex items-center gap-1">Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                     <select
                       value={stirrupDia}
                       onChange={(e) => setStirrupDia(e.target.value)}
@@ -383,7 +407,7 @@ export default function BeamCalculator() {
                       ))}
                     </select>
                   </InputGroup>
-                  <InputGroup label="Spacing c/c (mm)">
+                  <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                     <><label htmlFor="a11y-input-121" className="sr-only">Input</label>
 <input id="a11y-input-121"
                       type="number" inputMode="decimal"

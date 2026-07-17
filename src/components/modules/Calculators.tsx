@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAutoSave } from "../../hooks/useAutoSave";
 import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
 import {
   Copy,
@@ -32,6 +33,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import Brickwork9InchModule from "./Brickwork9InchModule";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from "recharts";
 import { SEO } from "../SEO";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }: { forcedTab?: "master" | "concrete" | "bricks" | "blocks" | "plaster" | "bricks-blocks" | "steel"; hideHeader?: boolean } = {}) {
   const { formatCurrency, currentUnit, setCurrentUnit, currentCurrency } = useGlobalSettings();
@@ -154,6 +156,28 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
   /* m or ft */ const [sOverlap, setSOverlap] = useState("50");
   /* Water */ const [wCementKg, setWCementKg] = useState("50");
   const [wWcRatio, setWWcRatio] = useState("0.5");
+
+  useAutoSave('main-calculators', 
+    { 
+      showCost, rates, activeTab, concreteType, finishesType, isBatchMode, batchResults, cart, elementName, wastage,
+      cLength, cWidth, cDepth, cColDia, cColHeight, cStairSteps, cStairTread, cStairRiser, cStairWidth, cStairWaist, cMix, cWcRatio,
+      bWallL, bWallH, bWallT, openings, brickL, brickW, brickH, bJoint, bMix,
+      blockL, blockW, blockH, blockJoint, pArea, pThick, pMix, pLocation, paintArea, paintCoats, termiteArea,
+      sDia, sSpan, sSpace, sBarL, sOverlap, wCementKg, wWcRatio
+    }, 
+    { 
+      showCost: setShowCost, rates: setRates, activeTab: setActiveTab, concreteType: setConcreteType, finishesType: setFinishesType, 
+      isBatchMode: setIsBatchMode, batchResults: setBatchResults, cart: setCart, elementName: setElementName, wastage: setWastage,
+      cLength: setCLength, cWidth: setCWidth, cDepth: setCDepth, cColDia: setCColDia, cColHeight: setCColHeight, 
+      cStairSteps: setCStairSteps, cStairTread: setCStairTread, cStairRiser: setCStairRiser, cStairWidth: setCStairWidth, cStairWaist: setCStairWaist, 
+      cMix: setCMix, cWcRatio: setCWcRatio,
+      bWallL: setBWallL, bWallH: setBWallH, bWallT: setBWallT, openings: setOpenings, brickL: setBrickL, brickW: setBrickW, brickH: setBrickH, bJoint: setBJoint, bMix: setBMix,
+      blockL: setBlockL, blockW: setBlockW, blockH: setBlockH, blockJoint: setBlockJoint, 
+      pArea: setPArea, pThick: setPThick, pMix: setPMix, pLocation: setPLocation, paintArea: setPaintArea, paintCoats: setPaintCoats, termiteArea: setTermiteArea,
+      sDia: setSDia, sSpan: setSSpan, sSpace: setSSpace, sBarL: setSBarL, sOverlap: setSOverlap, wCementKg: setWCementKg, wWcRatio: setWWcRatio
+    }
+  );
+
   React.useEffect(() => {
     if (currentUnit === "Metric") {
       setCDepth("0.15");
@@ -465,9 +489,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <div className="flex justify-between items-center">
-              <label className="uppercase text-sm font-medium text-slate-700 mb-1 block">
+              <label className="uppercase text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center">
                 Mix Ratio
-              </label>
+               <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions for ordinary concrete (Table 9)." /></span></label>
               <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
                 Standard: {concreteType === 'slab' || concreteType === 'column' ? 'M20' : 'M15/M20'}
               </span>
@@ -821,9 +845,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               /></>
             </div>
             <div>
-              <label className="uppercase text-sm font-medium text-slate-700 mb-1 block">
+              <label className="uppercase text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">
                 Mortar Mix
-              </label>
+               <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span></label>
               <select
                 value={bMix}
                 onChange={(e) => setBMix(e.target.value)}
@@ -881,9 +905,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="uppercase text-sm font-medium text-slate-700 mb-1 block">
+            <label className="uppercase text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">
               Bar Dia (mm/in#)
-            </label>
+             <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
             <><label htmlFor="a11y-input-159" className="sr-only">Input</label>
 <input id="a11y-input-159"
               type="number" inputMode="decimal"
@@ -1141,9 +1165,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               /></>
             </div>
             <div>
-              <label className="uppercase text-sm font-medium text-slate-700 mb-1 block">
+              <label className="uppercase text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center">
                 Mix Ratio (Cement:Sand)
-              </label>
+               <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions for ordinary concrete (Table 9)." /></span></label>
               <select
                 value={pMix}
                 onChange={(e) => setPMix(e.target.value)}

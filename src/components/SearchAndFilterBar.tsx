@@ -26,6 +26,26 @@ export default function SearchAndFilterBar({
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent '/' if we are already in an input, textarea or contenteditable
+      if (
+        e.key === '/' && 
+        document.activeElement?.tagName !== 'INPUT' && 
+        document.activeElement?.tagName !== 'TEXTAREA' &&
+        !(document.activeElement as HTMLElement)?.isContentEditable
+      ) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const getSuggestions = () => {
     if (!searchTerm.trim() || !allTools.length) return [];
     const term = searchTerm.toLowerCase();
@@ -70,7 +90,7 @@ export default function SearchAndFilterBar({
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder="Search tools, materials, or calculations..."
-              className="relative w-full bg-white border border-slate-200 hover:border-slate-300 rounded-2xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 transition-all shadow-sm text-[15px] sm:text-base font-medium"
+              className="relative w-full bg-white border border-slate-200 hover:border-slate-300 rounded-2xl py-3.5 pl-12 pr-12 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 transition-all shadow-sm text-[15px] sm:text-base font-medium"
             /></>
 
             {/* Suggestions Dropdown */}

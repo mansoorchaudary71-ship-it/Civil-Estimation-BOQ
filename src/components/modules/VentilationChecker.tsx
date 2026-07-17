@@ -4,6 +4,7 @@ import { ResultCard } from '../ui/ResultCard';
 import { NumberInput } from '../ui/NumberInput';
 import { CalculationHistory } from '../ui/CalculationHistory';
 import { MaterialSummary } from '../ui/MaterialSummary';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 type RoomType = "Habitable" | "Kitchen" | "Bathroom";
 type ClimateZone = "Dry Hot" | "Intermediate" | "Wet Hot";
@@ -102,7 +103,7 @@ export default function VentilationChecker() {
                 <div>
                   <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Glazing & Openings</h3>
                   <div className="space-y-4">
-                    <NumberInput label="Total Window Area" unit="m²" value={windowArea} onChange={setWindowArea} />
+                    <NumberInput label={<span className="flex items-center gap-1">Total Window Area <CodeTooltip standard="IS" code="875 (Part 3)" description="Basic wind speed map for structural design." /></span>} unit="m²" value={windowArea} onChange={setWindowArea} />
                     <NumberInput label="Openable Fraction" unit="%" value={openableFraction} onChange={setOpenableFraction} />
                   </div>
                 </div>

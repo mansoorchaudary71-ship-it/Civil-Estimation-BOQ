@@ -167,6 +167,7 @@ export function ResultCard({
 
   const controls = useAnimation();
   const [hasMounted, setHasMounted] = useState(false);
+  const debouncedValue = useDebounce(value, 600);
 
   useEffect(() => {
     if (!hasMounted) {
@@ -186,7 +187,7 @@ export function ResultCard({
         transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] }
       });
     }
-  }, [value, controls, delay]);
+  }, [debouncedValue, controls, delay]);
 
   // Parsing & Animation
   const parsed = parseAndFormat(value, title, unit, isImperial);
@@ -221,10 +222,10 @@ export function ResultCard({
 
   const [expanded, setExpanded] = useState(false);
   const palette = [
-    "text-purple-600",
-    "text-sky-500",
-    "text-amber-500",
-    "text-teal-600",
+    "text-indigo-700 dark:text-indigo-400",
+    "text-emerald-700 dark:text-emerald-400",
+    "text-amber-700 dark:text-amber-400",
+    "text-rose-700 dark:text-rose-400",
   ];
   const getColor = (str: string) => {
     let hash = 0;
@@ -240,23 +241,22 @@ export function ResultCard({
       animate={controls}
       initial={{ opacity: 0, y: 15, scale: 0.98 }}
       exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-      className={`relative p-3 sm:p-4 md:p-5 lg:p-6 bg-white border border-slate-200 rounded-[24px] shadow-sm hover:shadow-md flex flex-col justify-between gap-2 transition-all duration-300 w-full h-full overflow-hidden ${className}`}
+      className={`relative p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[24px] sm:rounded-[32px] shadow-sm hover:shadow-md flex flex-col justify-between gap-4 transition-all duration-500 w-full h-full overflow-hidden group ${className}`}
     >
-      <div className="flex items-start justify-between gap-3 w-full relative z-10">
+      <div className="flex items-start justify-between gap-4 w-full relative z-10">
         <div className="flex flex-col max-w-[80%]">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {icon && (
-              <div className="p-1.5 rounded-[24px] bg-slate-50 flex-shrink-0 border border-slate-100 text-[#6B46C1] [#8b5cf6] overflow-hidden">
+              <div className="p-2 rounded-2xl bg-slate-50 dark:bg-slate-800/50 flex-shrink-0 border border-slate-100 dark:border-slate-700/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-300">
                 {icon}
               </div>
             )}
-            <h4 className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest truncate flex items-center gap-1">
+            <h4 className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] truncate flex items-center gap-2">
               {title}
               {explanation && (
                 <button
                   onClick={() => setExpanded(!expanded)}
-                  className="opacity-70 hover:opacity-100 transition-opacity p-0.5 text-slate-500"
-                  title="What does this mean?"
+                  className="opacity-60 hover:opacity-100 transition-opacity p-0.5 text-slate-400 dark:text-slate-500"
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
                 </button>
@@ -264,14 +264,15 @@ export function ResultCard({
             </h4>
           </div>
 
+
           {comparisonText && (
-            <div className="flex items-center gap-1.5 mt-2 text-slate-500">
+            <div className="flex items-center gap-1.5 mt-2 text-slate-600 dark:text-slate-400">
               <div className="flex items-end gap-[3px] h-3.5 opacity-70">
                 <div className="w-1 bg-current h-1/3 rounded-full" />
                 <div className="w-1 bg-current h-2/3 rounded-full" />
                 <div className="w-1 bg-current h-full rounded-full animate-pulse" />
               </div>
-              <span className="text-[10px] font-bold opacity-80 uppercase tracking-wider">
+              <span className="text-[10px] font-black opacity-80 uppercase tracking-wider">
                 {comparisonText}
               </span>
             </div>
@@ -280,13 +281,13 @@ export function ResultCard({
 
         <div className="flex flex-col items-end gap-2">
           {badge && (
-            <div className="flex-shrink-0 flex items-center bg-purple-50 border border-purple-200 text-[#6B46C1] text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            <div className="flex-shrink-0 flex items-center bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 text-indigo-700 dark:text-indigo-300 text-[10px] sm:text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
               {badge}
             </div>
           )}
           {statusDetails && StatusIcon && (
             <div
-              className={`flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${statusDetails.className}`}
+              className={`flex items-center gap-1 text-[10px] uppercase tracking-wider font-black px-2 py-0.5 rounded-full ${statusDetails.className}`}
             >
               <StatusIcon className="w-3 h-3" />
               {statusDetails.label}
@@ -313,7 +314,7 @@ export function ResultCard({
             {displayValue}
           </span>
           {activeUnit && (
-            <span className="text-[13px] sm:text-sm font-semibold ml-1 shrink-0 text-slate-500">
+            <span className="text-[13px] sm:text-sm font-bold ml-1 shrink-0 text-slate-600 dark:text-slate-400">
               {activeUnit}
             </span>
           )}

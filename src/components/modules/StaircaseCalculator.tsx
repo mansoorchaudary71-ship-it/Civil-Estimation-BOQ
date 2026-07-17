@@ -11,6 +11,7 @@ import { NumberInput } from "../ui/NumberInput";
 import { SEO } from "../SEO";
 import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
 import { parseNum } from "../../utils/mathHelpers";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 const StaircaseVisualizer = ({ rise, tread, numSteps, uLen }: { rise: number, tread: number, numSteps: number, uLen: string }) => {
   const r = rise > 0 ? rise : 0.15;
@@ -439,7 +440,7 @@ export default function StaircaseCalculator() {
               )}
               
               <div className="grid grid-cols-2 gap-4">
-                <InputGroup label="Mix Ratio">
+                <InputGroup label={<span className="flex items-center">Mix Ratio <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions for ordinary concrete (Table 9)." /></span>}>
                   <select value={concreteGrade} onChange={e => setConcreteGrade(e.target.value)} className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] px-5 py-3.5 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 hover:border-indigo-300 shadow-sm transition-all overflow-hidden">
                     <option value="M10 (1:3:6)">M10 (1:3:6)</option>
                     <option value="M15 (1:2:4)">M15 (1:2:4)</option>

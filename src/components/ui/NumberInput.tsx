@@ -70,34 +70,31 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       if (value === "") {
          if (localValue !== "") setLocalValue("");
       } else if (!isNaN(parsedProp)) {
-         // Because of floating point, converting back and forth can create minor diffs.
-         // We only update localValue if the diff is significant.
          const parsedLocal = parseFloat(localValue);
          let internalFromLocal = parsedLocal;
          if (applyConversion) internalFromLocal = parsedLocal / conversion.multiplyBy;
 
-         // Check if roughly equal
          if (Math.abs(internalFromLocal - parsedProp) > 0.0001) {
             setLocalValue(expectedDisplay);
          }
       }
-    }, [value, settings.measurement]); // depend on measurement so it updates when toggled
+    }, [value, settings.measurement]);
 
     const triggerChange = (newLocalValue: string, displayNumValue: number | typeof NaN) => {
       setLocalValue(newLocalValue);
       if (newLocalValue === "" || isNaN(displayNumValue)) {
         onChange("");
         if (requirePositive) {
-          setInternalError("A valid value is required");
+          setInternalError("Required");
         } else {
           setInternalError(null);
         }
       } else {
         const internalNumValue = applyConversion ? (displayNumValue / conversion.multiplyBy) : displayNumValue;
-        onChange(internalNumValue);
+        onChange(internalNumValue as any);
         
-        if (requirePositive && internalNumValue <= 0) {
-          setInternalError("Value must be greater than 0");
+        if (requirePositive && (internalNumValue as number) <= 0) {
+          setInternalError("> 0 required");
         } else {
           setInternalError(null);
         }
@@ -111,7 +108,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         return;
       }
       const numValue = parseFloat(rawValue);
-      if (isNaN(numValue) || numValue < 0) return;
+      if (isNaN(numValue)) return;
       triggerChange(rawValue, numValue);
     };
 
@@ -119,15 +116,14 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       const current = parseFloat(localValue) || 0;
       const stepVal = step === "any" ? 1 : Number(step);
       const next = current + (amount * stepVal);
-      if (next < 0) return;
+      if (requirePositive && next < 0) return;
       triggerChange(next.toString(), next);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (['-', 'e', 'E', '+'].includes(e.key)) {
+      if (['e', 'E', '+'].includes(e.key)) {
         e.preventDefault();
       }
-      // Handle keyboard up/down arrows manually since we disabled default spinner
       if (e.key === 'ArrowUp') {
         e.preventDefault();
         handleIncrement(1);
@@ -139,47 +135,30 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       e.target.select();
-      if (onFocus) {
-        onFocus(e);
-      }
+      if (onFocus) onFocus(e);
     };
 
     const displayError = error || internalError;
-
-    let displayLabel = label;
-    if (label && applyConversion && unit && displayUnit) {
-      displayLabel = label.replace(`(${unit})`, `(${displayUnit})`);
-      // Also try replacing without matching case just in case
-      if (displayLabel === label) {
-         displayLabel = label.replace(new RegExp(`\\(${unit}\\)`, 'i'), `(${displayUnit})`);
-      }
-    }
-
     const displayTooltip = tooltip || getGenericTooltip(label || "");
 
     return (
       <motion.div 
-        initial={{ opacity: 0, y: 15 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut", delay }}
-        className={`w-full relative group/tooltip ${containerClassName}`}
+        transition={{ duration: 0.3, delay }}
+        className={`w-full relative group/field ${containerClassName}`}
       >
-        {displayTooltip && (
-           <div className="absolute z-[100] invisible opacity-0 group-hover/tooltip:visible group-hover/tooltip:opacity-100 transition-all duration-200 bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-max max-w-[220px] bg-slate-800 text-white text-[11px] p-2 rounded-lg shadow-xl pointer-events-none whitespace-normal text-center font-medium after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-slate-800">
-             {displayTooltip}
-           </div>
-        )}
-        {displayLabel && (
-          <label htmlFor={inputId} className="block text-base font-medium dark:text-slate-300 uppercase tracking-wider mb-1.5 ml-1 flex items-center gap-1.5 cursor-help">
-            {displayLabel}
+        {label && (
+          <label htmlFor={inputId} className="block text-[10px] sm:text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-[0.2em] mb-2.5 ml-1 cursor-help flex items-center gap-1.5 group-hover/field:text-indigo-600 dark:group-hover/field:text-indigo-400 transition-colors">
+            {label}
           </label>
         )}
-        <div className="relative flex items-center">
+        
+        <div className="relative flex items-center group/input">
           <input
             id={inputId}
             ref={ref}
             type="number"
-            min="0"
             step={step}
             inputMode="decimal"
             value={localValue}
@@ -188,40 +167,43 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             onBlur={onBlur}
             onFocus={handleFocus}
             aria-invalid={!!displayError}
-            aria-errormessage={displayError ? `${inputId}-error` : undefined}
-            className={`w-full bg-slate-50/80 dark:bg-slate-800/80 border ${
+            className={`w-full bg-slate-50/80 dark:bg-slate-800/50 border ${
               displayError 
-                ? 'border-red-400 dark:border-red-500/50 focus:ring-red-500/50 focus:border-red-500' 
-                : 'border-slate-200 dark:border-slate-700/80 focus:ring-indigo-500/50 focus:border-indigo-500'
-            } text-slate-800 dark:text-slate-100 rounded-[16px] px-4 py-3 min-h-[44px] min-w-[44px] ${
-              displayUnit ? 'pr-[130px]' : 'pr-[100px]'
-            } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all placeholder:text-slate-700 dark:placeholder:text-slate-500 font-semibold text-base truncate ${className || ''}`}
+                ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' 
+                : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500 focus:ring-indigo-500/10'
+            } text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-2xl px-5 py-4 min-h-[56px] ${
+              displayUnit ? 'pr-28' : 'pr-16'
+            } focus:outline-none focus:ring-4 transition-all font-bold text-base shadow-sm group-hover/input:shadow-md ${className || ''}`}
             {...props}
           />
-          <div className={`absolute right-0 top-0 bottom-0 flex items-center pr-1`}>
+
+          <div className="absolute right-3 flex items-center gap-2">
             {displayUnit && (
-              <span className="text-slate-500 dark:text-slate-400 text-base font-medium select-none mr-2">{displayUnit}</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest select-none pr-3 border-r border-slate-200 dark:border-slate-700">
+                {displayUnit}
+              </span>
             )}
-            <div className="flex items-center border-l border-slate-200 dark:border-slate-700 pl-1 gap-0.5">
-              <button aria-label="Move Up" type="button" 
-                tabIndex={-1} 
-                className="text-slate-400 hover:text-indigo-500 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm min-h-[44px] min-w-[44px] flex items-center justify-center" 
+            <div className="flex flex-col -gap-1">
+              <button 
+                type="button" tabIndex={-1}
+                className="p-1 text-slate-400 hover:text-indigo-600 transition-colors active:scale-90"
                 onClick={() => handleIncrement(1)}
               >
-                <ChevronUp className="w-5 h-5" />
+                <ChevronUp className="w-4 h-4" />
               </button>
-              <button aria-label="Move Down" type="button" 
-                tabIndex={-1} 
-                className="text-slate-400 hover:text-indigo-500 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm min-h-[44px] min-w-[44px] flex items-center justify-center" 
+              <button 
+                type="button" tabIndex={-1}
+                className="p-1 text-slate-400 hover:text-indigo-600 transition-colors active:scale-90"
                 onClick={() => handleIncrement(-1)}
               >
-                <ChevronDown className="w-5 h-5" />
+                <ChevronDown className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
+
         {displayError && (
-          <span id={`${inputId}-error`} className="text-base font-medium text-red-500 mt-1.5 ml-1 block animate-in fade-in slide-in-from-top-1">
+          <span className="text-[10px] font-bold text-red-500 mt-1.5 ml-2 block uppercase tracking-wider animate-in fade-in slide-in-from-top-1">
             {displayError}
           </span>
         )}

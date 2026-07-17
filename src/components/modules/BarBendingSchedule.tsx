@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
+import { useAutoSave } from "../../hooks/useAutoSave";
 import { Printer, Plus, Trash2, LayoutList, GripHorizontal, FileSpreadsheet } from "lucide-react";
 import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 type ShapeType = "straight" | "u-hook" | "cranked" | "rect-stirrup" | "l-hook" | "u-stirrup" | "spiral";
 
@@ -51,6 +53,26 @@ export default function BarBendingSchedule() {
   const [spiralDia, setSpiralDia] = useState<string>("300"); // for spiral
   const [spiralPitch, setSpiralPitch] = useState<string>("150"); // for spiral
   const [spiralHeight, setSpiralHeight] = useState<string>("3000"); // for spiral
+
+  useAutoSave('bar-bending-schedule', 
+    { rows, member, shape, dia, noOfBars, cover, span, width, depth, slabThick, cranks, spiralDia, spiralPitch, spiralHeight }, 
+    { 
+      rows: setRows, 
+      member: setMember, 
+      shape: setShape, 
+      dia: setDia, 
+      noOfBars: setNoOfBars, 
+      cover: setCover, 
+      span: setSpan, 
+      width: setWidth, 
+      depth: setDepth, 
+      slabThick: setSlabThick, 
+      cranks: setCranks, 
+      spiralDia: setSpiralDia, 
+      spiralPitch: setSpiralPitch, 
+      spiralHeight: setSpiralHeight 
+    }
+  );
 
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -280,7 +302,7 @@ export default function BarBendingSchedule() {
                  
                  <div className="grid grid-cols-2 gap-4">
                    <div>
-                     <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Bar Dia (mm)</label>
+                     <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                      <select
                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-[24px] px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 outline-none transition-all text-base font-normal overflow-hidden"
                        value={dia}
@@ -308,7 +330,7 @@ export default function BarBendingSchedule() {
                  </div>
                  
                  <div>
-                   <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Cover (mm)</label>
+                   <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center gap-1">Cover (mm) <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
                    <><label htmlFor="a11y-input-104" className="sr-only">Input</label>
 <input id="a11y-input-104" type="number" inputMode="decimal"
                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 text-slate-800 rounded-full px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 outline-none transition-all min-h-[44px] text-base font-normal"
@@ -344,7 +366,7 @@ export default function BarBendingSchedule() {
                  {shape === "spiral" && (
                    <div className="grid grid-cols-2 gap-4 p-4 bg-blue-50 rounded-[24px] border border-blue-100 overflow-hidden">
                      <div className="col-span-2">
-                       <label className="block text-blue-800 uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Col Dia (mm)</label>
+                       <label className="block text-blue-800 uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center gap-1">Col Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                        <><label htmlFor="a11y-input-107" className="sr-only">Input</label>
 <input id="a11y-input-107" type="number" inputMode="decimal"
                          className="w-full bg-white dark:bg-slate-800 border border-blue-200 text-slate-800 rounded-full px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 outline-none transition-all min-h-[44px] text-base font-normal"

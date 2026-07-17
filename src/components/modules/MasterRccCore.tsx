@@ -3,6 +3,7 @@ import { Plus, Trash2, Calculator } from "lucide-react";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { NumberInput } from "../ui/NumberInput";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 interface RccElement {
   id: string;
@@ -316,12 +317,12 @@ export default function MasterRccCore() {
               ) : (
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="text-base font-medium mb-1 block">Bar Dia (mm)</label>
+                    <label className="text-base font-medium mb-1 block"><span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                     <><label htmlFor="a11y-input-335" className="sr-only">Input</label>
 <input id="a11y-input-335" value={el.mainDia} onChange={(e) => updateElement(el.id, 'mainDia', e.target.value)} type="number" inputMode="decimal" className="w-full h-10 px-3 bg-white border border-slate-200 rounded-full text-sm focus:outline-none" /></>
                   </div>
                   <div>
-                    <label className="text-base font-medium mb-1 block">Spacing / c/c (mm)</label>
+                    <label className="text-base font-medium mb-1 block"><span className="flex items-center gap-1">Spacing / c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span></label>
                     <><label htmlFor="a11y-input-336" className="sr-only">Input</label>
 <input id="a11y-input-336" value={el.mainSpacing} onChange={(e) => updateElement(el.id, 'mainSpacing', e.target.value)} type="number" inputMode="decimal" className="w-full h-10 px-3 bg-white border border-slate-200 rounded-full text-sm focus:outline-none" /></>
                   </div>

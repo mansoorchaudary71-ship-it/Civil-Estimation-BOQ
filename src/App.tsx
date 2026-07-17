@@ -126,7 +126,54 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
     themeType = 'sunset';
   }
 
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+Enter or Cmd+Enter to calculate results
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        const buttons = Array.from(document.querySelectorAll('button'));
+        const calcBtn = buttons.find(b => 
+          b.textContent?.toLowerCase().includes('calculate') || 
+          b.textContent?.toLowerCase().includes('recalculate')
+        );
+        if (calcBtn) {
+          calcBtn.click();
+        }
+      }
+
+      // Esc to close active modals or return to the dashboard
+      if (e.key === 'Escape') {
+        if (isAuthOpen) {
+          setIsAuthOpen(false);
+          return;
+        }
+        if (isProfileOpen) {
+          setIsProfileOpen(false);
+          return;
+        }
+        if (isSettingsOpen) {
+          setIsSettingsOpen(false);
+          return;
+        }
+        
+        // If there is any element with role="dialog" or class includes "modal", don't navigate home (let it close itself)
+        const activeModals = document.querySelectorAll('[role="dialog"], .modal-overlay, [data-modal]');
+        if (activeModals.length > 0) {
+          return;
+        }
+
+        if (activeModule !== 'home') {
+          handleSelectModule('home');
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [activeModule, isAuthOpen, isProfileOpen, isSettingsOpen]);
+
   return (
+
     <div className="flex-1 flex flex-col min-h-0 relative w-full h-full overflow-y-auto overflow-x-hidden bg-transparent">
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col">
         <ToolHeader id={id} title={actualTitle} themeType={themeType} subtitle={subtitle} icon={Icon} onNavigate={onNavigate} />
@@ -585,7 +632,7 @@ export default function App() {
                                 </div>
                               ) : (
                                 <div className="flex-1 flex flex-col min-h-0 relative w-full h-full overflow-y-auto overflow-x-hidden bg-transparent">
-                                  <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col">
+                                  <div className="w-full flex-1 flex flex-col">
                                     <div className="global-form-card-wrapper w-full flex-1">
                                       {renderModule(activeModule, handleSelectModule)}
                                     </div>

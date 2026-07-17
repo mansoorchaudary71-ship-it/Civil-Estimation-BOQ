@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Grid2X2 } from 'lucide-react';
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function RaftFoundationDesigner() {
   const [sbc, setSbc] = useState('150');
@@ -14,7 +15,7 @@ export default function RaftFoundationDesigner() {
          </h2>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
             <div>
-              <label className="block text-base font-medium mb-2">Soil Bearing Capacity (kN/m²)</label>
+              <label className="block text-base font-medium mb-2"><span className="flex items-center">Soil Bearing Capacity (kN/m²) <CodeTooltip standard="IS" code="1904:1986" description="Design and construction of foundations in soils: General requirements." /></span></label>
               <><label htmlFor="a11y-input-406" className="sr-only">Input</label>
 <input id="a11y-input-406" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 rounded-full px-4 py-3 min-h-[44px]" value={sbc} onChange={e => setSbc(e.target.value)} /></>
             </div>

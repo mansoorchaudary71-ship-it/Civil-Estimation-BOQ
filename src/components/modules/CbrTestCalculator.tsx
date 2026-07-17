@@ -9,6 +9,7 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 import { SoilReportHeader } from "../ui/SoilReportHeader";
 import { SoilReportDetails, generateGeotechReportPDF } from "../../utils/soilReports";
 import { GlobalFAQ } from "../ui/GlobalFAQ";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function CbrTestCalculator() {
   const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
@@ -251,9 +252,9 @@ export default function CbrTestCalculator() {
               </div>
 
               <div className="mt-4 pt-4 border-t border-slate-100">
-                 <label className="uppercase block mb-2 text-sm font-medium text-slate-700 mb-1">
+                 <label className="uppercase block mb-2 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center">
                     Minimum Required CBR (%) for Spec Pass
-                 </label>
+                  <CodeTooltip standard="IRC" code="37:2018" description="Guidelines for the design of flexible pavements." /></span></label>
                  <div className="relative">
                    <><label htmlFor="a11y-input-175" className="sr-only">Input</label>
 <input id="a11y-input-175"

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { Layers, FolderPlus, CheckCircle, ChevronDown, RefreshCw, Sparkles, ArrowRight } from 'lucide-react';
+import { Layers, FolderPlus, CheckCircle, ChevronDown, RefreshCw, Sparkles, ArrowRight, PieChart as PieChartIcon, BarChart2 as BarChartIcon } from 'lucide-react';
 import { useProjects } from '../../context/ProjectContext';
 import { useCountUp } from '../../hooks/useCountUp';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { ALL_MODULES } from '../Dashboard';
 
 export interface MaterialSummaryProps {
@@ -56,6 +56,7 @@ export function MaterialSummary({
   const editableProjects = projects.filter(p => canEditProject(p.id));
   const canEditActive = activeProj ? canEditProject(activeProj.id) : false;
   const [isRecalculating, setIsRecalculating] = useState(false);
+  const [chartType, setChartType] = useState<'donut' | 'bar'>('donut');
 
   const conversion = getImperialConversion(totalUnit);
   const applyConversion = isImperial && conversion;
@@ -171,7 +172,9 @@ export function MaterialSummary({
           <div className="p-2 bg-purple-50 dark:bg-purple-900/20 text-[#6B46C1] dark:text-[#8b5cf6] rounded-xl shadow-sm border border-purple-100 dark:border-purple-800/50">
             {icon || <Layers className="w-4 h-4 flex-shrink-0" />}
           </div>
-          <h3 className="uppercase st text-xs bg-gradient-to-r from-[#6B46C1] to-orange-500 bg-clip-text text-transparent drop-shadow-sm text-lg font-medium text-gray-800 mb-4">{title}</h3>
+          <h3 className="uppercase text-[11px] sm:text-xs font-black tracking-[0.2em] bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent drop-shadow-sm">
+            {title}
+          </h3>
         </div>
 
         {/* Global Save to Project Button */}
@@ -214,18 +217,18 @@ export function MaterialSummary({
         <div className="mb-10 relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             {totalLabel && (
-              <p className="dark: sm: mb-3 text-base font-normal text-gray-600 leading-relaxed">{totalLabel}</p>
+              <p className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">{totalLabel}</p>
             )}
             <div className="flex flex-row items-baseline flex-wrap gap-x-2 gap-y-1 max-w-full overflow-hidden">
-              <span className="text-[clamp(2.5rem,8vw,4.5rem)] leading-none font-black tracking-tighter bg-gradient-to-r from-[#6B46C1] to-orange-500 bg-clip-text text-transparent break-words max-w-full">
+              <span className="text-[clamp(2.5rem,8vw,4.5rem)] leading-none font-black tracking-tighter bg-gradient-to-br from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent break-words max-w-full">
                 {prefix}{animatedTotal.toLocaleString('en-US', { minimumFractionDigits: prefix === 'Rs ' ? 0 : 2, maximumFractionDigits: prefix === 'Rs ' ? 0 : 2 })}
               </span>
               <div className="flex flex-col text-left shrink-0">
                 {displayUnit && (
-                  <span className="text-xl sm:text-2xl font-bold text-gray-700 dark:text-slate-300">{displayUnit}</span>
+                  <span className="text-xl sm:text-2xl font-black text-slate-700 dark:text-slate-300">{displayUnit}</span>
                 )}
                 {subtitle && (
-                  <span className="text-sm font-medium text-slate-400 dark:text-gray-500">{subtitle}</span>
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{subtitle}</span>
                 )}
               </div>
             </div>
@@ -239,6 +242,7 @@ export function MaterialSummary({
             >
               <RefreshCw className={`w-5 h-5 ${isRecalculating ? 'animate-spin' : ''}`} />
               Recalculate Values
+              <span className="ml-1 text-[10px] font-medium opacity-70 bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded px-1.5 py-0.5 hidden sm:inline-block pointer-events-none">Ctrl+Enter</span>
             </button>
           )}
         </div>
@@ -253,41 +257,94 @@ export function MaterialSummary({
             <div className="flex flex-col gap-6">
               {chartData.length > 0 && (
                 <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-700 overflow-hidden">
-                  <h4 className="border-b border-slate-200 dark:border-slate-700 dark: uppercase st pb-3 mb-4 text-lg font-medium text-gray-800">
-                    Visual Breakdown
-                  </h4>
+                  
+                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4 mb-6">
+                    <h4 className="uppercase text-[11px] sm:text-xs font-black text-slate-500 dark:text-slate-400 tracking-[0.2em]">
+                      Visual Breakdown
+                    </h4>
+                    <div className="flex items-center bg-slate-200/50 dark:bg-slate-700/50 p-1 rounded-lg">
+                      <button
+                        onClick={() => setChartType('donut')}
+                        className={`p-1.5 rounded-md transition-all ${chartType === 'donut' ? 'bg-white dark:bg-slate-600 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        title="Donut Chart"
+                      >
+                        <PieChartIcon className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setChartType('bar')}
+                        className={`p-1.5 rounded-md transition-all ${chartType === 'bar' ? 'bg-white dark:bg-slate-600 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        title="Bar Chart"
+                      >
+                        <BarChartIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
                   <div className="h-[250px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={chartData}
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {chartData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
-                          ))}
-                        </Pie>
-                        <RechartsTooltip 
-                          formatter={(value: any) => value.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-                          contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
-                        />
-                        <Legend 
-                          layout="vertical"
-                          verticalAlign="bottom"
-                          wrapperStyle={{ fontSize: '11px', paddingTop: '20px' }}
-                        />
-                      </PieChart>
+                      {chartType === 'donut' ? (
+                        <PieChart>
+                          <Pie
+                            data={chartData}
+                            innerRadius={60}
+                            outerRadius={80}
+                            paddingAngle={5}
+                            dataKey="value"
+                          >
+                            {chartData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
+                            ))}
+                          </Pie>
+                          <RechartsTooltip 
+                            formatter={(value: any) => value.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
+                          />
+                          <Legend 
+                            layout="vertical"
+                            verticalAlign="bottom"
+                            wrapperStyle={{ fontSize: '11px', paddingTop: '20px' }}
+                          />
+                        </PieChart>
+                      ) : (
+                        <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis 
+                            dataKey="name" 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 11, fill: '#64748b' }}
+                            tickFormatter={(value) => value.length > 10 ? value.substring(0, 10) + '...' : value}
+                          />
+                          <YAxis 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 11, fill: '#64748b' }}
+                            tickFormatter={(value) => {
+                              if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+                              if (value >= 1000) return (value / 1000).toFixed(1) + 'k';
+                              return value;
+                            }}
+                          />
+                          <RechartsTooltip 
+                            formatter={(value: any) => value.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
+                            cursor={{ fill: '#f1f5f9' }}
+                          />
+                          <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                            {chartData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      )}
                     </ResponsiveContainer>
                   </div>
+
                 </div>
               )}
 
               {relatedModules.length > 0 && (
                 <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl p-4 sm:p-6 border border-indigo-100 dark:border-indigo-800/50 overflow-hidden">
-                  <h4 className="flex items-center gap-2 text-indigo-900 dark:text-indigo-100 uppercase st mb-4 text-lg font-medium text-gray-800">
+                  <h4 className="flex items-center gap-2 text-indigo-900 dark:text-indigo-100 uppercase mb-5 text-[11px] font-black tracking-[0.2em]">
                     <Sparkles className="w-4 h-4 text-indigo-500" />
                     Similar Tools
                   </h4>
@@ -296,18 +353,18 @@ export function MaterialSummary({
                       <button 
                         key={mod.id}
                         onClick={() => window.location.href = `/?tool=${mod.id}`}
-                        className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl border border-indigo-100 dark:border-indigo-800 transition-all text-left group"
+                        className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 rounded-xl border border-indigo-100 dark:border-indigo-800/50 transition-all text-left group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                            <mod.icon className="w-4 h-4" />
+                          <div className="w-9 h-9 rounded-full bg-indigo-50 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800/50">
+                            <mod.icon className="w-4.5 h-4.5" />
                           </div>
-                          <div>
-                            <p className="dark: group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors text-base font-normal text-gray-600 leading-relaxed">{mod.title}</p>
-                            <p className="dark: truncate max-w-[120px] text-base font-normal text-gray-600 leading-relaxed">{mod.desc}</p>
+                          <div className="flex flex-col">
+                            <p className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">{mod.title}</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate max-w-[140px] mt-0.5">{mod.desc}</p>
                           </div>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
                       </button>
                     ))}
                   </div>

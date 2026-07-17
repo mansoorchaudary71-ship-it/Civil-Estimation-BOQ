@@ -4,6 +4,7 @@ import { CalculationHistory } from '../ui/CalculationHistory';
 import { MaterialSummary } from '../ui/MaterialSummary';
 import { NumberInput } from '../ui/NumberInput';
 import { ResultCard } from '../ui/ResultCard';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function LintelDesignTool() {
   // Inputs
@@ -157,11 +158,11 @@ export default function LintelDesignTool() {
                   <h3 className="text-base font-medium mb-3 border-b border-slate-100 pb-2">Proposed Section</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Lintel Depth (D)" unit="mm" value={lintelDepth} onChange={setLintelDepth} />
-                    <NumberInput label="Bearing Provided" unit="mm" value={bearingLength} onChange={setBearingLength} />
+                    <NumberInput label={<span className="flex items-center gap-1">Bearing Provided <CodeTooltip standard="IS" code="1904:1986" description="Design and construction of foundations in soils: General requirements." /></span>} unit="mm" value={bearingLength} onChange={setBearingLength} />
                     <NumberInput label="Concrete (fck)" unit="MPa" value={fck} onChange={setFck} />
-                    <NumberInput label="Steel (fy)" unit="MPa" value={fy} onChange={setFy} />
-                    <NumberInput label="Main Bar Dia" unit="mm" value={barDia} onChange={setBarDia} />
-                    <NumberInput label="Cover" unit="mm" value={cover} onChange={setCover} />
+                    <NumberInput label={<span className="flex items-center gap-1">Steel (fy) <CodeTooltip standard="IS" code="1786:2008" description="High strength deformed steel bars and wires for concrete reinforcement." /></span>} unit="MPa" value={fy} onChange={setFy} />
+                    <NumberInput label={<span className="flex items-center gap-1">Main Bar Dia <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>} unit="mm" value={barDia} onChange={setBarDia} />
+                    <NumberInput label={<span className="flex items-center gap-1">Cover <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span>} unit="mm" value={cover} onChange={setCover} />
                   </div>
                 </div>
             </div>

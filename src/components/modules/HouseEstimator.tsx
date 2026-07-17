@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useReducer, useEffect } from "react";
+import { useAutoSave } from "../../hooks/useAutoSave";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
@@ -60,6 +61,7 @@ import { MaskedInput } from "../ui/MaskedInput";
 import { useSchema } from "../../hooks/useSchema";
 import { GlobalFAQ } from "../ui/GlobalFAQ";
 import { ToolGuidedTour, TourStep } from "../ui/ToolGuidedTour";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 const HOUSE_TOUR_STEPS: TourStep[] = [
   {
@@ -206,7 +208,8 @@ type GeometryAction =
       type: "SET_ROOM_AREA";
       payload: { room: keyof GeometryState["roomAreas"]; area: string };
     }
-  | { type: "SET_ROOM_AREA_UNIT"; payload: "sqft" | "sqm" | "sqyd" };
+  | { type: "SET_ROOM_AREA_UNIT"; payload: "sqft" | "sqm" | "sqyd" }
+  | { type: "RESTORE_ALL"; payload: GeometryState };
 const initialGeometry: GeometryState = {
   plotSizeUnit: "marla",
   plotSizeValue: "5",
@@ -265,6 +268,8 @@ function geometryReducer(
       };
     case "SET_ROOM_AREA_UNIT":
       return { ...state, roomAreaUnit: action.payload };
+    case "RESTORE_ALL":
+      return { ...action.payload };
     default:
       return state;
   }
@@ -476,6 +481,14 @@ export default function HouseEstimator() {
     livingRoom: { length: 16, width: 14, featureWall: "Yes", chandelierPoints: 1 },
     basement: { depth: 10, retainingWall: "RCC 9-Inch" }
   });
+
+  // Auto-save House Estimator States
+  useAutoSave('house-estimator-geo', geoState, (saved) => dispatch({ type: 'RESTORE_ALL', payload: saved }));
+  useAutoSave('house-estimator-details', projectDetails, setProjectDetails);
+  useAutoSave('house-estimator-specs', specs, setSpecs);
+  useAutoSave('house-estimator-quality', finishQuality, setFinishQuality);
+  useAutoSave('house-estimator-rooms', roomConfigs, setRoomConfigs);
+
   const [activeRoomTab, setActiveRoomTab] = useState<"bedroom"|"washroom"|"kitchen"|"living"|"basement">("bedroom");
   
   /* International Market Settings */
@@ -1236,7 +1249,7 @@ export default function HouseEstimator() {
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Seismic Zone</label>
+                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center">Seismic Zone <CodeTooltip standard="IS" code="1893:2016" description="Criteria for earthquake resistant design of structures." /></span></label>
                   <select
                      value={seismicZone}
                      onChange={(e) => setSeismicZone(e.target.value)}

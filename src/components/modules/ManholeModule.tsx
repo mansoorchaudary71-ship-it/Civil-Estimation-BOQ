@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
+import { CodeTooltip } from "../ui/CodeTooltip";
 export interface ManholeResults {
   excavationVol: number;
   wallVol: number;
@@ -265,9 +266,9 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
           </div>{" "}
           <div className="lg:col-span-2">
             {" "}
-            <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
+            <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1"><span className="flex items-center gap-1">
               Concrete Mix Grade
-            </label>{" "}
+             <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span></label>{" "}
             <select
               className="w-full bg-white border border-gray-200 text-slate-800 rounded-[24px] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm appearance-none overflow-hidden"
               value={concreteMix}

@@ -22,6 +22,7 @@ import { ResultCard } from "../ui/ResultCard";
 import { saveEstimate } from "../../lib/estimates";
 import { useAuth } from "../../contexts/AuthContext";
 import { CalculationHistory } from "../ui/CalculationHistory";
+import { CodeTooltip } from "../ui/CodeTooltip";
 type Profile =
  | "Round bar"
  | "Square bar"
@@ -275,9 +276,9 @@ export default function MetalWeightCalculator() {
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
  {activeProfile === "Round bar" && (
  <div>
- <label className="text-base font-medium uppercase">
+ <label className="text-base font-medium uppercase"><span className="flex items-center gap-1">
  Diameter (mm)
- </label>
+  <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
  <><label htmlFor="a11y-input-350" className="sr-only">e.g. 20</label>
 <input id="a11y-input-350"
  type="number" inputMode="decimal"
@@ -306,9 +307,9 @@ export default function MetalWeightCalculator() {
  {activeProfile === "Round pipe bar" && (
  <>
  <div>
- <label className="text-base font-medium uppercase">
+ <label className="text-base font-medium uppercase"><span className="flex items-center gap-1">
  Outer Diameter (mm)
- </label>
+  <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
  <><label htmlFor="a11y-input-352" className="sr-only">e.g. 100</label>
 <input id="a11y-input-352"
  type="number" inputMode="decimal"

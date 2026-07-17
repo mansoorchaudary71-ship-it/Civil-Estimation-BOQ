@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Calculator, Copy, RotateCw, RefreshCw } from "lucide-react";
 import { useGlobalSettings } from "../../context/SettingsContext";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function CageEstimator() {
   const { currentUnit } = useGlobalSettings();
@@ -120,7 +121,7 @@ export default function CageEstimator() {
 
             <div className="grid grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Pile/Col Diameter (mm)</label>
+                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Pile/Col Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                 <><label htmlFor="a11y-input-132" className="sr-only">Input</label>
 <input id="a11y-input-132"
                   type="number" inputMode="decimal"
@@ -143,7 +144,7 @@ export default function CageEstimator() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Clear Cover (mm)</label>
+                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center">Clear Cover (mm) <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
                 <><label htmlFor="a11y-input-134" className="sr-only">Input</label>
 <input id="a11y-input-134"
                   type="number" inputMode="decimal"
@@ -153,7 +154,7 @@ export default function CageEstimator() {
                 /></>
               </div>
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Bar Dia (mm)</label>
+                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                 <><label htmlFor="a11y-input-135" className="sr-only">Input</label>
 <input id="a11y-input-135"
                   type="number" inputMode="decimal"
@@ -166,7 +167,7 @@ export default function CageEstimator() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Pitch/Spacing (mm)</label>
+                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Pitch/Spacing (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span></label>
                 <><label htmlFor="a11y-input-136" className="sr-only">Input</label>
 <input id="a11y-input-136"
                   type="number" inputMode="decimal"
@@ -176,7 +177,7 @@ export default function CageEstimator() {
                 /></>
               </div>
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Lap Length (x Dia)</label>
+                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Lap Length (x Dia) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                 <><label htmlFor="a11y-input-137" className="sr-only">Input</label>
 <input id="a11y-input-137"
                   type="number" inputMode="decimal"

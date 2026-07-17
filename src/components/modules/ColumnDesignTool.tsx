@@ -6,6 +6,7 @@ import { MaterialSummary } from '../ui/MaterialSummary';
 import { NumberInput } from '../ui/NumberInput';
 import { ResultCard } from '../ui/ResultCard';
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Scatter, ResponsiveContainer, Legend } from 'recharts';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 type EndCondition = "fixed-fixed" | "fixed-pinned" | "pinned-pinned" | "fixed-free";
 
@@ -214,17 +215,17 @@ export default function ColumnDesignTool() {
                     <NumberInput label="Width (B)" unit="mm" value={width} onChange={setWidth} />
                     <NumberInput label="Depth (D)" unit="mm" value={depth} onChange={setDepth} />
                     <NumberInput label="Concrete (fck)" unit="MPa" value={fck} onChange={setFck} />
-                    <NumberInput label="Steel (fy)" unit="MPa" value={fy} onChange={setFy} />
+                    <NumberInput label={<span className="flex items-center gap-1">Steel (fy) <CodeTooltip standard="IS" code="1786:2008" description="High strength deformed steel bars and wires for concrete reinforcement." /></span>} unit="MPa" value={fy} onChange={setFy} />
                   </div>
                 </div>
 
                 <div>
                   <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-slate-800 mb-4">Reinforcement</h3>
                   <div className="grid grid-cols-2 gap-4">
-                    <NumberInput label="Bar Dia" unit="mm" value={rebarDia} onChange={setRebarDia} />
+                    <NumberInput label={<span className="flex items-center gap-1">Bar Dia <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>} unit="mm" value={rebarDia} onChange={setRebarDia} />
                     <NumberInput label="No. of Bars" value={rebarCount} onChange={setRebarCount} />
                     <div className="col-span-2">
-                        <NumberInput label="Clear Cover" unit="mm" value={cover} onChange={setCover} />
+                        <NumberInput label={<span className="flex items-center">Clear Cover <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span>} unit="mm" value={cover} onChange={setCover} />
                     </div>
                   </div>
                 </div>

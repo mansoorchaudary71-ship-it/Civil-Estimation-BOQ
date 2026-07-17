@@ -19,6 +19,7 @@ import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { FieldTooltip } from "../ui/FieldTooltip";
 import { NumberInput } from "../ui/NumberInput";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 const mixRatios: Record<string, { c: number; s: number; a: number }> = {
   "M10 (1:3:6)": { c: 1, s: 3, a: 6 },
@@ -496,7 +497,7 @@ export default function IsolatedFootingCalculator({
                         />
                       </div>
                     </InputGroup>
-                    <InputGroup label="Concrete Mix">
+                    <InputGroup label={<span className="flex items-center gap-1">Concrete Mix <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span>}>
                       <select
                         className="w-full bg-white rounded-[24px] border border-slate-200 text-slate-800 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-[#E55A2B]/50 outline-none transition-all appearance-none shadow-sm overflow-hidden"
                         value={mix}
@@ -563,7 +564,7 @@ export default function IsolatedFootingCalculator({
                         Bottom Mesh: X-Axis
                       </p>
                       <div className="space-y-4">
-                        <InputGroup label="Bar Dia (mm)">
+                        <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                           <select
                             className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
                             value={diaX}
@@ -576,7 +577,7 @@ export default function IsolatedFootingCalculator({
                             ))}
                           </select>
                         </InputGroup>
-                        <InputGroup label="Spacing c/c (mm)">
+                        <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                           <NumberInput
                             className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
                             value={spacingX}
@@ -590,7 +591,7 @@ export default function IsolatedFootingCalculator({
                         Bottom Mesh: Y-Axis
                       </p>
                       <div className="space-y-4">
-                        <InputGroup label="Bar Dia (mm)">
+                        <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                           <select
                             className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
                             value={diaY}
@@ -603,7 +604,7 @@ export default function IsolatedFootingCalculator({
                             ))}
                           </select>
                         </InputGroup>
-                        <InputGroup label="Spacing c/c (mm)">
+                        <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                           <NumberInput
                             className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
                             value={spacingY}
@@ -641,7 +642,7 @@ export default function IsolatedFootingCalculator({
                           Top Mesh: X-Axis
                         </p>
                         <div className="space-y-4">
-                          <InputGroup label="Bar Dia (mm)">
+                          <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                             <select
                               className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
                               value={diaXTop}
@@ -654,7 +655,7 @@ export default function IsolatedFootingCalculator({
                               ))}
                             </select>
                           </InputGroup>
-                          <InputGroup label="Spacing c/c (mm)">
+                          <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                             <NumberInput
                               className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
                               value={spacingXTop}
@@ -668,7 +669,7 @@ export default function IsolatedFootingCalculator({
                           Top Mesh: Y-Axis
                         </p>
                         <div className="space-y-4">
-                          <InputGroup label="Bar Dia (mm)">
+                          <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                             <select
                               className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
                               value={diaYTop}
@@ -681,7 +682,7 @@ export default function IsolatedFootingCalculator({
                               ))}
                             </select>
                           </InputGroup>
-                          <InputGroup label="Spacing c/c (mm)">
+                          <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                             <NumberInput
                               className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
                               value={spacingYTop}

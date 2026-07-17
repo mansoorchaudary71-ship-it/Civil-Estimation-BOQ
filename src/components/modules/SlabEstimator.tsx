@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAutoSave } from "../../hooks/useAutoSave";
 import { Grid2X2, Settings2, Replace, ArrowUp, AlertTriangle } from "lucide-react";
 import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
@@ -9,6 +10,7 @@ import { MaterialSummary } from "../ui/MaterialSummary";
 import { FieldTooltip } from "../ui/FieldTooltip";
 import { NumberInput } from "../ui/NumberInput";
 import { ToolGuidedTour, TourStep } from "../ui/ToolGuidedTour";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 const SLAB_TOUR_STEPS: TourStep[] = [
   {
@@ -46,6 +48,24 @@ export default function SlabEstimator() {
   const [distDia, setDistDia] = useState("10"); // mm (Long Span/Distribution)
   const [mainSpacing, setMainSpacing] = useState("150"); // mm
   const [distSpacing, setDistSpacing] = useState("150"); // mm
+
+  useAutoSave('slab-estimator', 
+    { slabType, isPrecast, concreteDensity, riggingRadius, ly, lx, thickness, clearCover, mainDia, distDia, mainSpacing, distSpacing }, 
+    { 
+      slabType: setSlabType, 
+      isPrecast: setIsPrecast, 
+      concreteDensity: setConcreteDensity, 
+      riggingRadius: setRiggingRadius, 
+      ly: setLy, 
+      lx: setLx, 
+      thickness: setThickness, 
+      clearCover: setClearCover, 
+      mainDia: setMainDia, 
+      distDia: setDistDia, 
+      mainSpacing: setMainSpacing, 
+      distSpacing: setDistSpacing 
+    }
+  );
 
   const [results, setResults] = useState<{
     type: "one-way" | "two-way";
@@ -333,7 +353,7 @@ export default function SlabEstimator() {
                 {slabType === "one-way" ? "Main Bars (Short Span)" : "Short Span Bars (Main)"}
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <InputGroup label="Diameter (mm)">
+                <InputGroup label={<span className="flex items-center gap-1">Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                   <select
                     value={mainDia}
                     onChange={(e) => setMainDia(e.target.value)}
@@ -344,7 +364,7 @@ export default function SlabEstimator() {
                     ))}
                   </select>
                 </InputGroup>
-                <InputGroup label="Spacing (c/c) (mm)">
+                <InputGroup label={<span className="flex items-center gap-1">Spacing (c/c) (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                   <NumberInput 
                     value={mainSpacing} 
                     onChange={(v) => setMainSpacing(v.toString())} 
@@ -360,7 +380,7 @@ export default function SlabEstimator() {
                 {slabType === "one-way" ? "Distribution Bars (Long Span)" : "Long Span Bars"}
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <InputGroup label="Diameter (mm)">
+                <InputGroup label={<span className="flex items-center gap-1">Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                   <select
                     value={distDia}
                     onChange={(e) => setDistDia(e.target.value)}
@@ -371,7 +391,7 @@ export default function SlabEstimator() {
                     ))}
                   </select>
                 </InputGroup>
-                <InputGroup label="Spacing (c/c) (mm)">
+                <InputGroup label={<span className="flex items-center gap-1">Spacing (c/c) (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                   <NumberInput 
                     value={distSpacing} 
                     onChange={(v) => setDistSpacing(v.toString())} 

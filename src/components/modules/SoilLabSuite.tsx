@@ -9,6 +9,7 @@ import PermeabilityCalculator from "./PermeabilityCalculator";
 import AggregateTestsCalculator from "./AggregateTestsCalculator";
 import MoistureGravityCalculator from "./MoistureGravityCalculator";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 type HubTab = "index" | "gradation" | "strength" | "aggregates";
 
@@ -268,7 +269,7 @@ function UnconfinedCompressionTest() {
       <div className="w-full bg-white p-4 sm:p-6 rounded-[24px] shadow-sm border border-slate-200 overflow-hidden">
         <h3 className="font-bold border-b pb-2 mb-4">UCT Input (at failure)</h3>
         <div className="space-y-4">
-          <div><label className="text-xs font-bold text-slate-500 uppercase">Sample Diameter (mm)</label><><label htmlFor="a11y-input-510" className="sr-only">Input</label>
+          <div><label className="text-xs font-bold text-slate-500 uppercase"><span className="flex items-center gap-1">Sample Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label><><label htmlFor="a11y-input-510" className="sr-only">Input</label>
 <input id="a11y-input-510" type="number" inputMode="decimal" value={dia} onChange={e => setDia(e.target.value)} className="w-full mt-1 bg-slate-50 border p-2 rounded-full" /></></div>
           <div><label className="text-xs font-bold text-slate-500 uppercase">Sample Height (mm)</label><><label htmlFor="a11y-input-511" className="sr-only">Input</label>
 <input id="a11y-input-511" type="number" inputMode="decimal" value={height} onChange={e => setHeight(e.target.value)} className="w-full mt-1 bg-slate-50 border p-2 rounded-full" /></></div>

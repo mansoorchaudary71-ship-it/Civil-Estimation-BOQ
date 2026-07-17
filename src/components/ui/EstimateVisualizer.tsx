@@ -26,10 +26,10 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
         <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-white/20 dark:border-slate-800 shadow-xl rounded-2xl p-3 transform transition-all overflow-hidden">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: data.fill }} />
-            <span className="font-bold text-slate-800 dark:text-slate-100 text-sm">{data.name}</span>
+            <span className="font-bold text-slate-900 dark:text-white text-sm">{data.name}</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-slate-600 dark:text-slate-300 text-sm font-medium">
+            <span className="text-slate-700 dark:text-slate-300 text-sm font-medium">
               {valueFormatter ? valueFormatter(data.value) : data.value}
             </span>
             {data.percentage !== undefined && (
@@ -141,8 +141,8 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
               onMouseLeave={() => setActiveIndex(null)}
             >
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.fill }} />
-              <span className="text-base font-medium dark:text-slate-200">{entry.name}</span>
-              <span className="text-[10px] font-black opacity-60 text-slate-500 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-md">
+              <span className="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">{entry.name}</span>
+              <span className="text-[10px] font-black opacity-60 text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">
                 {entry.percentage}%
               </span>
             </div>

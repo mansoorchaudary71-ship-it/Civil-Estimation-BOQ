@@ -9,6 +9,7 @@ import {
   FileImage,
 } from "lucide-react";
 import { MaterialSummary } from "../ui/MaterialSummary";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 type ElementType = "Beam" | "Column" | "Slab";
 
@@ -185,9 +186,9 @@ export default function ReinforcementVisualizer() {
                     /></>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-slate-700 mb-1"><span className="flex items-center">
                       Clear Cover (mm)
-                    </label>
+                     <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
                     <><label htmlFor="a11y-input-416" className="sr-only">Input</label>
 <input id="a11y-input-416"
                       type="number" inputMode="decimal"

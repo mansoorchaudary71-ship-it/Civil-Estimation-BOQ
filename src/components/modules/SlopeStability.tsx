@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ShieldAlert, Calculator, Layers, Search } from "lucide-react";
 import { ResultCard } from "../ui/ResultCard";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function SlopeStability() {
   const [cohesion, setCohesion] = useState("20");
@@ -89,7 +90,7 @@ export default function SlopeStability() {
                 /></>
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-500 uppercase">Friction Angle (φ) [°]</label>
+                <label className="text-xs font-bold text-slate-500 uppercase"><span className="flex items-center gap-1">Friction Angle (φ) [°] <CodeTooltip standard="IS" code="1904:1986" description="Coefficient of friction for sliding resistance of foundations." /></span></label>
                 <><label htmlFor="a11y-input-499" className="sr-only">Input</label>
 <input id="a11y-input-499"
                   type="number" inputMode="decimal"
@@ -101,7 +102,7 @@ export default function SlopeStability() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold text-slate-500 uppercase">Unit Weight (γ) [kN/m³]</label>
+                <label className="text-xs font-bold text-slate-500 uppercase"><span className="flex items-center gap-1">Unit Weight (γ) [kN/m³] <CodeTooltip standard="IS" code="875 (Part 1)" description="Unit weights of building materials and stored materials." /></span></label>
                 <><label htmlFor="a11y-input-500" className="sr-only">Input</label>
 <input id="a11y-input-500"
                   type="number" inputMode="decimal"

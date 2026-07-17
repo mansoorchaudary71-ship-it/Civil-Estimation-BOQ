@@ -21,7 +21,7 @@ export const MetricInput = React.forwardRef<HTMLInputElement, MetricInputProps>(
         className={`w-full ${containerClassName}`}
       >
         {label && (
-          <label htmlFor={inputId} className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
+          <label htmlFor={inputId} className="block text-[10px] sm:text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-[0.2em] mb-2 ml-1">
             {label}
           </label>
         )}
@@ -29,19 +29,19 @@ export const MetricInput = React.forwardRef<HTMLInputElement, MetricInputProps>(
           <input
             id={inputId}
             ref={ref}
-            className={`w-full bg-slate-50/80 dark:bg-slate-800/80 border ${
+            className={`w-full bg-slate-50 dark:bg-slate-800 border ${
               error 
-                ? 'border-red-300 dark:border-red-500/50 focus:ring-red-500/50' 
-                : 'border-slate-200 dark:border-slate-700/80 focus:ring-indigo-500/50 focus:border-indigo-500'
-            } text-slate-800 dark:text-slate-100 rounded-xl px-4 py-3 min-h-[44px] ${
+                ? 'border-red-300 dark:border-red-500/50 focus:ring-red-500/10' 
+                : 'border-slate-200 dark:border-slate-700 focus:ring-indigo-500/10 focus:border-indigo-500'
+            } text-slate-900 dark:text-white rounded-xl px-4 py-3 min-h-[48px] ${
               unit ? 'pr-12' : ''
-            } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all placeholder:text-slate-700 font-semibold text-sm ${className || ''}`}
+            } focus:outline-none focus:ring-4 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 font-bold text-sm ${className || ''}`}
             inputMode={props.type === 'number' ? 'decimal' : props.inputMode}
             {...props}
           />
           {unit && (
             <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-              <span className="text-slate-700 dark:text-slate-700 text-base font-medium select-none">{unit}</span>
+              <span className="text-slate-500 dark:text-slate-400 text-xs font-black uppercase tracking-wider select-none">{unit}</span>
             </div>
           )}
         </div>

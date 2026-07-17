@@ -4,6 +4,7 @@ import { CalculationHistory } from '../ui/CalculationHistory';
 import { NumberInput } from '../ui/NumberInput';
 import { ResultCard } from '../ui/ResultCard';
 import { MaterialSummary } from '../ui/MaterialSummary';
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function PrestressedConcreteEstimator() {
   const [spanL, setSpanL] = useState<number | "">(20); // m
@@ -149,7 +150,7 @@ export default function PrestressedConcreteEstimator() {
                  {type === "Post-tensioned" && (
                    <>
                      <NumberInput label="Anchorage Slip" unit="mm" value={slip} onChange={setSlip} />
-                     <NumberInput label="Friction Coeff (μ)" unit="/rad" value={mu} onChange={setMu} />
+                     <NumberInput label={<span className="flex items-center gap-1">Friction Coeff (μ) <CodeTooltip standard="IS" code="1904:1986" description="Coefficient of friction for sliding resistance of foundations." /></span>} unit="/rad" value={mu} onChange={setMu} />
                      <NumberInput label="Wobble (K)" unit="/m" value={k} onChange={setK} />
                    </>
                  )}

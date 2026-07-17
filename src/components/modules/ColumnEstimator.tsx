@@ -18,6 +18,7 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { FieldTooltip } from "../ui/FieldTooltip";
+import { CodeTooltip } from "../ui/CodeTooltip";
 
 const mixRatios: Record<string, { c: number; s: number; a: number }> = {
   "M10 (1:3:6)": { c: 1, s: 3, a: 6 },
@@ -49,9 +50,9 @@ function CircularColumnInputs({
 }) {
   return (
     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-      <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+      <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center gap-1">
         Diameter (m)
-      </label>
+       <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
       <><label htmlFor="a11y-input-184" className="sr-only">e.g. 0.4</label>
 <input id="a11y-input-184" type="number" inputMode="decimal"
         className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
@@ -426,7 +427,7 @@ export default function ColumnEstimator() {
                       </select>
                     </InputGroup>
                   </div>
-                  <InputGroup label="Main Bar Diameter (mm)">
+                  <InputGroup label={<span className="flex items-center">Main Bar Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                     <select
                       value={mainDia}
                       onChange={(e) => setMainDia(e.target.value)}
@@ -441,7 +442,7 @@ export default function ColumnEstimator() {
 
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <InputGroup label="Tie Diameter (mm)">
+                    <InputGroup label={<span className="flex items-center gap-1">Tie Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                       <select
                         value={tieDia}
                         onChange={(e) => setTieDia(e.target.value)}
@@ -452,7 +453,7 @@ export default function ColumnEstimator() {
                         ))}
                       </select>
                     </InputGroup>
-                    <InputGroup label="Tie Spacing c/c (mm)">
+                    <InputGroup label={<span className="flex items-center gap-1">Tie Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                       <><label htmlFor="a11y-input-192" className="sr-only">Input</label>
 <input id="a11y-input-192"
                         type="number" inputMode="decimal"

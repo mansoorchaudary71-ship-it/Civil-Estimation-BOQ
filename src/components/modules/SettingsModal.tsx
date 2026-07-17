@@ -20,6 +20,7 @@ import {
   Wand2,
   Clock,
   Eye,
+  Globe,
 } from "lucide-react";
 import {
   useSettings,
@@ -43,7 +44,7 @@ const RATE_LABELS: Record<keyof MarketRates, string> = {
   overheadMarkup: "Overhead Markup (%)",
 };
 
-type Tab = "account" | "measurements" | "appearance" | "rates";
+type Tab = "account" | "measurements" | "appearance" | "rates" | "currency";
 export default function SettingsModal({
   isOpen,
   onClose,
@@ -365,6 +366,7 @@ export default function SettingsModal({
     { id: "measurements", label: "Measurement Units", icon: Ruler },
     { id: "appearance", label: "Appearance", icon: Palette },
     { id: "rates", label: "Company Rates", icon: LineChart },
+    { id: "currency", label: "Currencies & Rates", icon: Globe },
   ];
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-50/50 backdrop-blur-sm p-4">
@@ -800,6 +802,71 @@ export default function SettingsModal({
                   )}
                 </div>
               )}
+
+              {activeTab === "currency" && (
+                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="bg-blue-50 border border-blue-100 rounded-[24px] p-5 mb-6 overflow-hidden">
+                    <p className="text-sm font-medium text-blue-700">
+                      Configure your preferred currency, symbol, and custom exchange rates. These will be applied globally across all estimation tools.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-base font-bold text-slate-900 dark:text-white">Base Currency</label>
+                      <select 
+                        value={settings.currency}
+                        onChange={(e) => updateSettings({ currency: e.target.value as Currency })}
+                        className="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                      >
+                        {['PKR', 'USD', 'INR', 'AED', 'SAR', 'GBP', 'BDT', 'LKR'].map(c => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <label className="text-base font-bold text-slate-900 dark:text-white">Custom Currency Symbol</label>
+                      <input 
+                        type="text" 
+                        value={settings.customCurrencySymbols?.[settings.currency] || ''}
+                        onChange={(e) => {
+                          const newSymbols = { ...settings.customCurrencySymbols, [settings.currency]: e.target.value };
+                          updateSettings({ customCurrencySymbols: newSymbols });
+                        }}
+                        placeholder={`Default: ${['PKR','LKR'].includes(settings.currency) ? 'Rs' : settings.currency === 'USD' ? '$' : settings.currency === 'GBP' ? '£' : ''}`}
+                        className="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <label className="text-base font-bold text-slate-900 dark:text-white">Custom Exchange Rate (relative to base)</label>
+                      <input 
+                        type="number" 
+                        step="any"
+                        value={settings.customExchangeRates?.[settings.currency] || ''}
+                        onChange={(e) => {
+                          const val = parseFloat(e.target.value);
+                          const newRates = { ...settings.customExchangeRates };
+                          if (isNaN(val) || val <= 0) {
+                             delete newRates[settings.currency];
+                          } else {
+                             newRates[settings.currency] = val;
+                          }
+                          updateSettings({ customExchangeRates: newRates });
+                        }}
+                        placeholder="e.g. 0.0035"
+                        className="w-full bg-slate-50 border border-slate-200 dark:bg-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                      />
+                      <p className="text-xs text-slate-500">Leave blank to use default rates. Current multiplier: {
+                        settings.customExchangeRates?.[settings.currency] || 
+                        (settings.currency === 'USD' ? 1/278 : settings.currency === 'INR' ? 1/3.33 : settings.currency === 'AED' ? 1/75 : settings.currency === 'SAR' ? 1/74 : settings.currency === 'GBP' ? 1/350 : settings.currency === 'BDT' ? 1/2.3 : settings.currency === 'LKR' ? 1/0.9 : 1)
+                      }</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
             <div className="w-full mt-12 md:max-w-xl md:mx-auto md:mx-0 flex justify-end px-4 md:px-0">
               <button onClick={onClose}

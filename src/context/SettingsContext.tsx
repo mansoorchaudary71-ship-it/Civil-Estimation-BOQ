@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 
-export type Currency = 'PKR' | 'USD' | 'INR' | 'AED' | 'SAR' | 'GBP' | 'BDT' | 'LKR';
+export type Currency = 'PKR' | 'USD' | 'INR' | 'AED' | 'SAR' | 'GBP' | 'BDT' | 'LKR' | 'EUR';
 export type MeasurementSystem = 'FPS' | 'SI';
 export type Theme = 'light' | 'dark' | 'system' | 'high-contrast';
 export type FontSize = 'small' | 'medium' | 'large';
@@ -34,6 +34,8 @@ interface SettingsState {
   theme: Theme;
   fontSize: FontSize;
   rates: MaterialRates;
+  customExchangeRates?: Record<string, number>;
+  customCurrencySymbols?: Record<string, string>;
   modulePreferences?: ModulePreferences;
   role?: UserRole;
   projectType?: ProjectType;
@@ -52,6 +54,8 @@ interface SettingsContextType {
   formatCurrency: (amount: number, applyExchangeRate?: boolean) => string;
   convertAmount: (amount: number) => number;
   convertAmountToRaw: (amount: number) => number;
+  getExchangeRate: (curr: Currency) => number;
+  getCurrencySymbol: (curr: Currency) => string;
   trackToolUse: (toolId: string) => void;
   toggleTheme: () => void;
 }
@@ -77,6 +81,8 @@ const defaultSettings: SettingsState = {
     sand: 60,       // per cft
     crush: 120,     // per cft
   },
+  customExchangeRates: {},
+  customCurrencySymbols: {},
   modulePreferences: {
     units: {
       finishing: 'm',
@@ -93,7 +99,7 @@ const defaultSettings: SettingsState = {
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
-const currencySymbols: Record<Currency, string> = {
+const defaultCurrencySymbols: Record<Currency, string> = {
   PKR: 'Rs',
   USD: '$',
   INR: '₹',
@@ -102,6 +108,19 @@ const currencySymbols: Record<Currency, string> = {
   GBP: '£',
   BDT: '৳',
   LKR: 'Rs',
+  EUR: '€',
+};
+
+const defaultExchangeRates: Record<Currency, number> = {
+  PKR: 1,
+  USD: 1 / 278,
+  INR: 1 / 3.33,
+  AED: 1 / 75,
+  SAR: 1 / 74,
+  GBP: 1 / 350,
+  BDT: 1 / 2.3,
+  LKR: 1 / 0.9,
+  EUR: 1 / 300,
 };
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -161,6 +180,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   }, [settings]);
 
   const prevMeasurementRef = useRef(settings.measurement);
+  const prevCurrencyRef = useRef(settings.currency);
 
   useEffect(() => {
     if (prevMeasurementRef.current !== settings.measurement) {
@@ -169,6 +189,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }
   }, [settings.measurement]);
 
+  useEffect(() => {
+    if (prevCurrencyRef.current !== settings.currency) {
+      prevCurrencyRef.current = settings.currency;
+      window.dispatchEvent(new CustomEvent('currency-changed', { detail: { currency: settings.currency } }));
+    }
+  }, [settings.currency]);
+
   const updateSettings = (newSettings: Partial<SettingsState>) => {
     setSettings((prev) => {
       return { ...prev, ...newSettings };
@@ -176,19 +203,21 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   };
 
   const getExchangeRate = (curr: Currency) => {
-    switch (curr) {
-      case 'USD': return 1 / 278;
-      case 'SAR': return 1 / 74;
-      case 'INR': return 1 / 3.33;
-      case 'AED': return 1 / 75;
-      case 'GBP': return 1 / 350;
-      case 'BDT': return 1 / 2.3;
-      default: return 1; // PKR
+    if (settings.customExchangeRates && settings.customExchangeRates[curr]) {
+      return settings.customExchangeRates[curr];
     }
+    return defaultExchangeRates[curr] || 1;
+  };
+
+  const getCurrencySymbol = (curr: Currency) => {
+    if (settings.customCurrencySymbols && settings.customCurrencySymbols[curr]) {
+      return settings.customCurrencySymbols[curr];
+    }
+    return defaultCurrencySymbols[curr] || 'Rs';
   };
 
   const formatCurrency = (amount: number, applyExchangeRate = true) => {
-    const symbol = currencySymbols[settings.currency];
+    const symbol = getCurrencySymbol(settings.currency);
     const rate = getExchangeRate(settings.currency);
     const finalAmount = applyExchangeRate ? amount * rate : amount;
     return `${symbol} ${finalAmount.toLocaleString('en-US', { minimumFractionDigits: settings.currency === 'PKR' ? 0 : 2, maximumFractionDigits: settings.currency === 'PKR' ? 0 : 2 })}`;
@@ -225,7 +254,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <SettingsContext.Provider value={{ settings, updateSettings, formatCurrency, convertAmount, convertAmountToRaw, trackToolUse, toggleTheme }}>
+    <SettingsContext.Provider value={{ settings, updateSettings, formatCurrency, convertAmount, convertAmountToRaw, getExchangeRate, getCurrencySymbol, trackToolUse, toggleTheme }}>
       {children}
     </SettingsContext.Provider>
   );
@@ -254,3 +283,4 @@ export function useGlobalSettings() {
     ...context
   };
 }
+

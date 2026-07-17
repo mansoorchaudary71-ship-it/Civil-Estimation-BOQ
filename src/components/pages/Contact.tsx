@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Mail, MessageSquare, PhoneCall, MapPin, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 export default function Contact() {
+  const { workspaceToken, signInWithGoogle } = useAuth();
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -34,30 +38,56 @@ export default function Contact() {
       return;
     }
 
+    if (!workspaceToken) {
+      try {
+        await signInWithGoogle();
+      } catch (err) {
+        return; // sign in failed or cancelled
+      }
+    }
+
+    const confirmed = window.confirm("Are you sure you want to send this message via your Gmail account?");
+    if (!confirmed) return;
+
     setStatus('loading');
 
     try {
-      const response = await fetch('/api/contact', {
+      // Use the workspaceToken from AuthContext to send the email via Gmail API
+      const token = workspaceToken; // Note: In a real app, you might need to ensure the token is still valid
+      
+      const emailContent = [
+        `To: sales@civilpro.com`,
+        `Subject: General Inquiry via Contact Form`,
+        `Content-Type: text/plain; charset=utf-8`,
+        ``,
+        `From: ${formData.firstName} ${formData.lastName} <${formData.email}>`,
+        `Message:`,
+        `${formData.message}`
+      ].join('\r\n');
+
+      const encodedMessage = btoa(unescape(encodeURIComponent(emailContent)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+
+      const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          subject: 'General Inquiry via Contact Form',
-          message: formData.message
+          raw: encodedMessage
         }),
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         setStatus('success');
         setFormData({ firstName: '', lastName: '', email: '', message: '' });
       } else {
+        const errorData = await response.json();
         setStatus('error');
-        setErrorMessage(data.error || 'Failed to send message.');
+        setErrorMessage(errorData.error?.message || 'Failed to send message via Gmail.');
       }
     } catch (error) {
       console.error('Submission error:', error);
@@ -134,8 +164,8 @@ export default function Contact() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-base font-medium dark:text-slate-300">First Name</label>
-                <><label htmlFor="a11y-input-573" className="sr-only">Jane</label>
-<input id="a11y-input-573" 
+                <label htmlFor="a11y-input-573" className="sr-only">Jane</label>
+                <input id="a11y-input-573" 
                   type="text" 
                   name="firstName"
                   value={formData.firstName}
@@ -143,12 +173,12 @@ export default function Contact() {
                   disabled={status === 'loading'}
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
                   placeholder="Jane" 
-                /></>
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-base font-medium dark:text-slate-300">Last Name</label>
-                <><label htmlFor="a11y-input-574" className="sr-only">Smith</label>
-<input id="a11y-input-574" 
+                <label htmlFor="a11y-input-574" className="sr-only">Smith</label>
+                <input id="a11y-input-574" 
                   type="text" 
                   name="lastName"
                   value={formData.lastName}
@@ -156,14 +186,14 @@ export default function Contact() {
                   disabled={status === 'loading'}
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
                   placeholder="Smith" 
-                /></>
+                />
               </div>
             </div>
             
             <div className="space-y-2">
               <label className="text-base font-medium dark:text-slate-300">Email Address</label>
-              <><label htmlFor="a11y-input-575" className="sr-only">jane@example.com</label>
-<input id="a11y-input-575" 
+              <label htmlFor="a11y-input-575" className="sr-only">jane@example.com</label>
+              <input id="a11y-input-575" 
                 type="email" 
                 name="email"
                 value={formData.email}
@@ -171,7 +201,7 @@ export default function Contact() {
                 disabled={status === 'loading'}
                 className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
                 placeholder="jane@example.com" 
-              /></>
+              />
             </div>
 
             <div className="space-y-2">
@@ -190,14 +220,14 @@ export default function Contact() {
             <button 
               type="submit" 
               disabled={status === 'loading'}
-              className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r   hover:from-blue-700 hover: disabled:opacity-75 text-white font-bold rounded-2xl shadow-[0_4px_24px_rgba(37,99,235,0.25)] transition-all overflow-hidden"
+              className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r hover:from-blue-700 disabled:opacity-75 text-white bg-blue-600 font-bold rounded-2xl shadow-[0_4px_24px_rgba(37,99,235,0.25)] transition-all overflow-hidden"
             >
               {status === 'loading' ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Sending...
+                  Sending via Gmail...
                 </>
-              ) : 'Send Message'}
+              ) : (workspaceToken ? 'Send Message via Gmail' : 'Sign in with Google to Send')}
             </button>
           </form>
         </div>

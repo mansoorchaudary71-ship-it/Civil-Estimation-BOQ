@@ -53,7 +53,7 @@ export default function TopNavbar({
             <span className="relative z-10 drop-shadow-md">CE</span>
           </div>
           <span className="font-extrabold text-[19px] sm:text-[24px] bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white tracking-tight truncate drop-shadow-sm transition-all duration-300">
-            Civil Estimation <span className="text-blue-600 dark:text-blue-400 font-black">Pro</span>
+            Civil Estimation <span className="text-indigo-700 dark:text-indigo-400 font-black">Pro</span>
           </span>
         </div>
 
@@ -65,9 +65,9 @@ export default function TopNavbar({
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-100/0 via-slate-100/50 dark:via-slate-700/50 to-slate-100/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             {settings.theme === "dark" || (settings.theme === "system" && window.matchMedia('(prefers-color-scheme: dark)').matches) ? (
-              <Sun className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:scale-110 group-hover:text-amber-500 transition-all duration-300" />
+              <Sun className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:scale-110 group-hover:text-[#D4A017] transition-all duration-300" />
             ) : (
-              <Moon className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:scale-110 group-hover:text-blue-600 transition-all duration-300" />
+              <Moon className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:scale-110 group-hover:text-indigo-700 transition-all duration-300" />
             )}
           </button>
 
@@ -75,7 +75,7 @@ export default function TopNavbar({
             aria-label="Search"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-100/0 via-slate-100/50 dark:via-slate-700/50 to-slate-100/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <Search className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:scale-110 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all duration-300" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:scale-110 text-indigo-700 transition-all duration-300" />
           </button>
           
           <button className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-b from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 border border-slate-200/80 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-all duration-300 active:scale-95 hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] shadow-sm group overflow-hidden"

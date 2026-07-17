@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { initAuth, googleSignIn, logoutGoogle } from "../lib/firebase";
 
 // Mimic the Firebase User shape minimally to satisfy existing components
 export interface User {
@@ -31,6 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [workspaceToken, setWorkspaceToken] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check traditional JWT
     const checkAuth = async () => {
       const token = localStorage.getItem('auth_token');
       if (token) {
@@ -58,11 +60,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     };
     checkAuth();
+
+    // Init Firebase Auth for Google Workspace
+    const unsubscribe = initAuth(
+      (fbUser, token) => {
+        setWorkspaceToken(token);
+        // If not already logged in via JWT, set user
+        setUser(prev => prev || {
+          uid: fbUser.uid,
+          email: fbUser.email || '',
+          displayName: fbUser.displayName || '',
+          photoURL: fbUser.photoURL || ''
+        });
+        setLoading(false);
+      },
+      () => {
+        setWorkspaceToken(null);
+      }
+    );
+    
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const signInWithGoogle = async () => {
-    toast.error("Google sign-in is not supported in this JWT implementation.");
-    throw new Error("Not implemented");
+    try {
+      const result = await googleSignIn();
+      if (result) {
+        setWorkspaceToken(result.accessToken);
+        setUser({
+          uid: result.user.uid,
+          email: result.user.email || '',
+          displayName: result.user.displayName || '',
+          photoURL: result.user.photoURL || ''
+        });
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to sign in with Google.");
+    }
   };
 
   const signInWithEmail = async (email: string, pass: string) => {
@@ -108,7 +144,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await fetch('/api/auth/logout', { method: 'POST' });
     } catch (e) {}
     localStorage.removeItem('auth_token');
+    await logoutGoogle();
     setUser(null);
+    setWorkspaceToken(null);
   };
 
   const updateUserDisplayName = async (name: string) => {

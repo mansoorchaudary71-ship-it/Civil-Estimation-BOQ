@@ -42,6 +42,7 @@ export default function ToolCard({
   mod,
   onSelect,
   categoryColor,
+  layoutId,
 }: {
   mod: any;
   onSelect: (id: string, layoutId?: string) => void;

@@ -1212,7 +1212,7 @@ export default function Dashboard({
  <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[100%] rounded-full bg-blue-600/5 blur-[80px] pointer-events-none"></div>
  <div className="w-full md:max-w-[1400px] md:mx-auto z-10 flex flex-col items-start gap-1 px-4 md:px-0">
  <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-slate-800 tracking-tight">Civil Estimation</h1>
- <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-blue-600 tracking-tight mb-2">Pro.</h1>
+ <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-indigo-700 tracking-tight mb-2">Pro.</h1>
  <p className="md: max-w-lg mb-2 text-base font-normal text-slate-600 leading-relaxed">Welcome back, {user.displayName?.split(' ')[0] || 'Engineer'}.</p>
  </div>
  </div>
@@ -1398,7 +1398,7 @@ export default function Dashboard({
  <h3 className="text-lg font-bold text-slate-800 tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
  AI Estimator
  </h3>
- <span className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider mt-0.5">Premium Copilot</span>
+ <span className="text-[11px] font-semibold text-indigo-700 uppercase tracking-wider mt-0.5">Premium Copilot</span>
  </div>
  </div>
  <button

@@ -181,15 +181,15 @@ export default function BottomNavBar({
             <button
               key={item.id}
               onClick={item.action}
-              className={`flex flex-col items-center justify-center flex-1 h-full gap-1 transition-all ${
-                isActive ? "bg-slate-50/5 " : "hover:bg-slate-50/5 "
+              className={`flex flex-col items-center justify-center flex-1 mx-1 my-1.5 h-[calc(100%-12px)] rounded-full gap-1 transition-all group ${
+                isActive ? "bg-indigo-700 shadow-sm" : "hover:bg-indigo-50/50"
               }`}
             >
               <item.icon 
-                className={`w-[22px] h-[22px] ${item.color} ${isActive ? "opacity-100 scale-110" : "opacity-80"}`} 
+                className={`w-[22px] h-[22px] ${isActive ? "text-white" : "text-slate-500 group-hover:text-indigo-700 transition-colors"} ${isActive ? "scale-110" : ""}`} 
                 strokeWidth={isActive ? 2.5 : 2} 
               />
-              <span className={`text-base font-medium tracking-tight ${isActive ? "text-slate-900 " : "text-slate-600 "}`}>
+              <span className={`text-[10px] font-semibold tracking-wide ${isActive ? "text-white " : "text-slate-500 group-hover:text-indigo-700 transition-colors"}`}>
                 {item.label}
               </span>
             </button>

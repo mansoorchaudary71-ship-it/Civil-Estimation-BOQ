@@ -85,7 +85,7 @@ export function HowItWorksSection() {
                 {idx + 1}
               </div>
 
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 text-blue-600 group-hover:bg-blue-100 transition-colors duration-300 mt-4 border border-blue-100/50 overflow-hidden">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 text-indigo-700 group-hover:bg-blue-100 transition-colors duration-300 mt-4 border border-blue-100/50 overflow-hidden">
                 <step.icon
                   className="w-7 h-7"
                   strokeWidth={1.5}
@@ -176,7 +176,7 @@ export function FeatureComparisonSection({
 
       <div className="w-full md:max-w-6xl md:mx-auto px-4 relative z-10">
         <div className="text-center md:mb-12 mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-600/10 text-blue-600 rounded-full text-base font-medium tracking-widest uppercase mb-3 border border-[#FF5F15]/20 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-600/10 text-indigo-700 rounded-full text-base font-medium tracking-widest uppercase mb-3 border border-[#FF5F15]/20 shadow-sm">
             Compare
           </div>
           <h2
@@ -192,13 +192,13 @@ export function FeatureComparisonSection({
 
           <div className="w-full flex flex-wrap items-center justify-center gap-4 md:gap-8 md:max-w-3xl md:mx-auto px-4">
             <div className="flex items-center gap-2 text-slate-900 text-base font-medium">
-              <CheckCircle2 className="w-4 h-4 text-blue-600" /> Auto-updates
+              <CheckCircle2 className="w-4 h-4 text-indigo-700" /> Auto-updates
             </div>
             <div className="flex items-center gap-2 text-slate-900 text-base font-medium">
-              <CheckCircle2 className="w-4 h-4 text-blue-600" /> Works Offline
+              <CheckCircle2 className="w-4 h-4 text-indigo-700" /> Works Offline
             </div>
             <div className="flex items-center gap-2 text-slate-900 text-base font-medium">
-              <CheckCircle2 className="w-4 h-4 text-blue-600" /> No Downloads
+              <CheckCircle2 className="w-4 h-4 text-indigo-700" /> No Downloads
             </div>
           </div>
         </div>
@@ -253,7 +253,7 @@ export function FeatureComparisonSection({
 
             <div className="text-lg md:text-xl font-bold text-slate-900 mb-6 border-b border-slate-100 pb-4 flex items-center gap-2 mt-2">
               <div className="w-7 h-7 rounded-xl bg-blue-600 text-slate-900 flex items-center justify-center font-black text-sm tracking-tighter shadow-md shrink-0">CE</div>
-              Civil Estimation <span className="text-blue-600 ml-1">Pro</span>
+              Civil Estimation <span className="text-indigo-700 ml-1">Pro</span>
             </div>
 
             <div className="flex flex-col gap-6 flex-1">
@@ -262,7 +262,7 @@ export function FeatureComparisonSection({
                   <div className="flex items-center gap-2 text-slate-900 font-semibold text-sm md:text-base">
                     {feature.name}
                     <div className="group/tooltip relative flex items-center justify-center cursor-help">
-                      <div className="w-4 h-4 text-slate-600 group-hover:text-blue-600 transition-colors flex items-center justify-center">
+                      <div className="w-4 h-4 text-slate-600 group-hover:text-indigo-700 transition-colors flex items-center justify-center">
                          <Info className="w-3.5 h-3.5" />
                       </div>
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-[#FFFFFF] text-slate-900 text-sm p-2.5 rounded-[12px] text-center shadow-xl z-50 pointer-events-none">
@@ -275,7 +275,7 @@ export function FeatureComparisonSection({
                     {typeof feature.app === "boolean" ? (
                       feature.app ? (
                         <div className="w-7 h-7 rounded-full bg-blue-600/10 flex items-center justify-center">
-                          <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                          <CheckCircle2 className="w-5 h-5 text-indigo-700" />
                         </div>
                       ) : (
                         <XCircle className="w-5 h-5 text-slate-700" />

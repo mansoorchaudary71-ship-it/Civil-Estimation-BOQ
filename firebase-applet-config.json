@@ -1,9 +1,11 @@
 {
-  "projectId": "remixed-project-id",
-  "appId": "remixed-app-id",
-  "apiKey": "remixed-api-key",
-  "authDomain": "remixed-auth-domain",
-  "storageBucket": "remixed-storage-bucket",
-  "messagingSenderId": "remixed-messaging-sender-id",
-  "measurementId": "remixed-measurement-id"
+  "projectId": "gentle-yarrow-4n50x",
+  "appId": "1:505528063221:web:6b298ae2e413fd160361bc",
+  "apiKey": "AIzaSyACctZcX73gm6QcUPkaDzci7cjCLHOae-o",
+  "authDomain": "gentle-yarrow-4n50x.firebaseapp.com",
+  "storageBucket": "gentle-yarrow-4n50x.firebasestorage.app",
+  "messagingSenderId": "505528063221",
+  "measurementId": "",
+  "oAuthClientId": "505528063221-prioh9smuifp0r4d96bel5v2brujd3rv.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
 }

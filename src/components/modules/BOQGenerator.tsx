@@ -398,7 +398,7 @@ export default function BOQGenerator() {
             </div>
 
             <div className="p-0 overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-[800px]">
+              <table className="boq-table-print-breaks w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-slate-100/50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 text-slate-500 text-sm uppercase tracking-wider font-bold overflow-hidden">
                     <th className="p-4 w-12 text-center">

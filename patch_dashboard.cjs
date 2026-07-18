@@ -2,42 +2,46 @@ const fs = require('fs');
 
 let content = fs.readFileSync('src/components/Dashboard.tsx', 'utf8');
 
-const oldHandleSelect = `  const handleSelect = (id: string, inputs?: any) => {
-    if (trackToolUse) trackToolUse(id);
-    addRecentTool(id, inputs);
-    onSelectModule(id);
-  };`;
+if (!content.includes('framer-motion')) {
+  content = 'import { motion } from "framer-motion";\n' + content;
+}
 
-const newHandleSelect = `  const handleSelect = (id: string, inputsOrLayoutId?: any, explicitLayoutId?: string) => {
-    let layoutId = explicitLayoutId;
-    let inputs = undefined;
-    if (typeof inputsOrLayoutId === 'string') {
-       layoutId = inputsOrLayoutId;
-    } else if (inputsOrLayoutId) {
-       inputs = inputsOrLayoutId;
-    }
+// Fix toolsInGroup map
+content = content.replace(/toolsInGroup\.map\(\(mod\)\s*=>/g, 'toolsInGroup.map((mod, modIdx) =>');
 
-    if (trackToolUse) trackToolUse(id);
-    addRecentTool(id, inputs);
-    onSelectModule(id, layoutId);
-  };`;
-
-content = content.replace(oldHandleSelect, newHandleSelect);
-
-// Replace ToolCard instances in Dashboard to pass unique layoutIds
-// We have three places where ToolCard is mapped. 
-// 1: <ToolCard mod={mod} onSelect={handleSelect} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
-// 2: <ToolCard mod={mod} onSelect={handleSelect} categoryColor={'#f8fafc'} />
-// 3: <ToolCard mod={mod} onSelect={handleSelect} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
-
+// Replace the div wrapping ToolCard
 content = content.replace(
-  /<ToolCard mod=\{mod\} onSelect=\{handleSelect\} categoryColor=\{index % 3 === 0 \? '#F4F1EA' : index % 3 === 1 \? '#F0F5FF' : '#D9E6DD'\} \/>/g,
-  "<ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-${groupName || 'group'}-${mod.id}`} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />"
+  /<div\s+key=\{mod\.id\}\s+id=\{`module-card-\$\{mod\.id\}`\}\s+className="flex flex-col h-full">/g,
+  `<motion.div
+    key={mod.id}
+    id={\`module-card-\${mod.id}\`}
+    className="flex flex-col h-full"
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.4, delay: modIdx * 0.05 }}
+  >`
 );
 
+// Replace fav-mod.id div wrapping ToolCard
 content = content.replace(
-  /<ToolCard mod=\{mod\} onSelect=\{handleSelect\} categoryColor=\{'#f8fafc'\} \/>/g,
-  "<ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-fav-${mod.id}`} categoryColor={'#f8fafc'} />"
+  /<div\s+key=\{`fav-\$\{mod\.id\}`\}\s+id=\{`module-card-\$\{mod\.id\}`\}\s+className="flex flex-col h-full">/g,
+  `<motion.div
+    key={\`fav-\${mod.id}\`}
+    id={\`module-card-\${mod.id}\`}
+    className="flex flex-col h-full"
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.4, delay: index * 0.05 }}
+  >`
+);
+
+// Now we need to replace the closing `</div>` for these specifically.
+// We can do this by regex on the ToolCard block.
+content = content.replace(
+  /(<ToolCard[^>]*\/>\s*)<\/div>/g,
+  '$1</motion.div>'
 );
 
 fs.writeFileSync('src/components/Dashboard.tsx', content);

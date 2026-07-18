@@ -1,85 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { MessageSquare, Code, Briefcase, MailPlus, ShieldCheck, Users, Mail } from 'lucide-react';
-import { ModuleId } from './Dashboard';
-import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
+const fs = require('fs');
 
-export default function Footer({ activeModule, onNavigate }: { activeModule?: ModuleId, onNavigate?: (id: ModuleId) => void }) {
-  const [email, setEmail] = useState("");
-  const [isSubscribing, setIsSubscribing] = useState(false);
-  const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
+const content = fs.readFileSync('src/components/Footer.tsx', 'utf8');
 
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        const res = await fetch('/api/updates/count');
-        if (!res.ok) {
-          return;
-        }
-        const text = await res.text();
-        if (!text) return;
-        const data = JSON.parse(text);
-        if (data.success && typeof data.count === 'number') {
-          setSubscriberCount(data.count);
-        }
-      } catch (err) {
-        // Silently ignore fetch errors in environments without the backend
-      }
-    };
-    fetchCount();
-  }, []);
+// Find the return statement
+const returnIndex = content.indexOf('return (');
 
-  const handleSubscribe = async () => {
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      toast.error('Please enter a valid email address');
-      return;
-    }
-    
-    setIsSubscribing(true);
-    try {
-      const response = await fetch('/api/updates/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      
-      const text = await response.text();
-      let data = {};
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch(e) {
-          console.error("Invalid JSON from newsletter subscribe", text);
-        }
-      }
-      
-      if (response.ok && (data as any).success) {
-        toast.success(`Subscribed successfully with ${email}`, {
-          style: {
-            borderRadius: '12px',
-            background: '#1e293b',
-            color: '#fff',
-            fontSize: '14px',
-            padding: '12px 16px',
-          },
-          iconTheme: {
-            primary: '#10b981',
-            secondary: '#fff',
-          },
-        });
-        setEmail("");
-        setSubscriberCount(prev => (prev !== null ? prev + 1 : 1));
-      } else {
-        throw new Error((data as any).error || 'Failed to subscribe');
-      }
-    } catch (error: any) {
-      toast.error(error.message || 'An error occurred. Please try again.');
-    } finally {
-      setIsSubscribing(false);
-    }
-  };
+const beforeReturn = content.substring(0, returnIndex);
 
-  
+const newReturn = `
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -254,3 +182,6 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
     </footer>
   );
 }
+`;
+
+fs.writeFileSync('src/components/Footer.tsx', beforeReturn + newReturn);

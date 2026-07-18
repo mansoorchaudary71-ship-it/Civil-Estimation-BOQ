@@ -44,16 +44,16 @@ export default function TopNavbar({
         
         {/* Logo Section */}
         <div 
-          className="flex items-center gap-3 sm:gap-4 cursor-pointer group" 
+          className="flex items-center gap-3 sm:gap-4 cursor-pointer group"
           onClick={() => onNavigate ? onNavigate("home") : navigate("/")}
         >
-          <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] sm:rounded-2xl flex items-center justify-center font-black text-[15px] sm:text-[17px] text-white bg-gradient-to-br from-slate-800 via-slate-900 to-black border border-slate-700 shadow-[0_8px_20px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[1.05] group-hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)] overflow-hidden">
+          <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] sm:rounded-2xl flex items-center justify-center font-bold text-[15px] sm:text-[17px] text-white bg-gradient-to-br from-slate-800 via-slate-900 to-black border border-slate-700 shadow-[0_8px_20px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[1.05] group-hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)] overflow-hidden">
             {/* Glossy reflection */}
             <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
             <span className="relative z-10 drop-shadow-md">CE</span>
           </div>
-          <span className="font-extrabold text-[19px] sm:text-[24px] bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white tracking-tight truncate drop-shadow-sm transition-all duration-300">
-            Civil Estimation <span className="text-indigo-700 dark:text-indigo-400 font-black">Pro</span>
+          <span className="font-bold text-[19px] sm:text-[24px] bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white tracking-tight truncate drop-shadow-sm transition-all duration-300">
+            Civil Estimation <span className="text-indigo-700 dark:text-indigo-400 font-bold">Pro</span>
           </span>
         </div>
 

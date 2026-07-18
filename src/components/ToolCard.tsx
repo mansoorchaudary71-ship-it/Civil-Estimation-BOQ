@@ -158,7 +158,7 @@ export default function ToolCard({
         </div>
 
         <div className="flex flex-col mt-2">
-          <h3 className="text-xl font-bold text-slate-900 leading-tight line-clamp-2 min-h-[3.5rem]">
+          <h3 className="text-xl font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[3.5rem]">
             {mod.title}
           </h3>
           <p className="text-gray-500 text-sm mt-3 leading-relaxed line-clamp-2">

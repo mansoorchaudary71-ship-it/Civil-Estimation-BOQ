@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Calculator,
@@ -1189,10 +1190,18 @@ export default function Dashboard({
  <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 shadow-sm">{toolsInGroup.length}</span>
  </h2>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
- {toolsInGroup.map((mod) => (
- <div key={mod.id} id={`module-card-${mod.id}`} className="flex flex-col h-full">
+ {toolsInGroup.map((mod, modIdx) => (
+ <motion.div
+    key={mod.id}
+    id={`module-card-${mod.id}`}
+    className="flex flex-col h-full"
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.4, delay: modIdx * 0.05 }}
+  >
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-${groupName || 'group'}-${mod.id}`} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
- </div>
+ </motion.div>
  ))}
  </div>
 </div>
@@ -1283,9 +1292,17 @@ export default function Dashboard({
  const mod = ALL_MODULES.find(m => m.id === toolId);
  if (!mod) return null;
  return (
- <div key={`fav-${mod.id}`} id={`module-card-${mod.id}`} className="flex flex-col h-full">
+ <motion.div
+    key={`fav-${mod.id}`}
+    id={`module-card-${mod.id}`}
+    className="flex flex-col h-full"
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.4, delay: index * 0.05 }}
+  >
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-fav-${mod.id}`} categoryColor={'#f8fafc'} />
- </div>
+ </motion.div>
  );
  })}
  </div>
@@ -1340,10 +1357,18 @@ export default function Dashboard({
  <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 shadow-sm">{toolsInGroup.length}</span>
  </h2>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 tool-card-grid">
- {toolsInGroup.map((mod) => (
- <div key={mod.id} id={`module-card-${mod.id}`} className="flex flex-col h-full">
+ {toolsInGroup.map((mod, modIdx) => (
+ <motion.div
+    key={mod.id}
+    id={`module-card-${mod.id}`}
+    className="flex flex-col h-full"
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.4, delay: modIdx * 0.05 }}
+  >
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-${groupName || 'group'}-${mod.id}`} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
- </div>
+ </motion.div>
  ))}
  </div>
 </div>

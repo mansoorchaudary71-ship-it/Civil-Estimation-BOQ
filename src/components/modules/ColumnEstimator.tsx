@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
@@ -54,7 +55,7 @@ function CircularColumnInputs({
         Diameter (m)
        <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
       <><label htmlFor="a11y-input-184" className="sr-only">e.g. 0.4</label>
-<input id="a11y-input-184" type="number" inputMode="decimal"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-184" type="number" inputMode="decimal"
         className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
         value={diameter}
         onChange={(e) => setDiameter(e.target.value)}
@@ -83,7 +84,7 @@ function RectangularColumnInputs({
           {isSquare ? "Side Length (m)" : "Length (m)"}
         </label>
         <><label htmlFor="a11y-input-185" className="sr-only">e.g. 0.3</label>
-<input id="a11y-input-185" type="number" inputMode="decimal"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-185" type="number" inputMode="decimal"
           className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
           value={length}
           onChange={(e) => {
@@ -99,7 +100,7 @@ function RectangularColumnInputs({
             Width (m)
           </label>
           <><label htmlFor="a11y-input-186" className="sr-only">e.g. 0.3</label>
-<input id="a11y-input-186" type="number" inputMode="decimal"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-186" type="number" inputMode="decimal"
             className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
             value={width}
             onChange={(e) => setWidth(e.target.value)}
@@ -302,7 +303,7 @@ export default function ColumnEstimator() {
                       Height (m)
                     </label>
                     <><label htmlFor="a11y-input-187" className="sr-only">Input</label>
-<input id="a11y-input-187" type="number" inputMode="decimal"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-187" type="number" inputMode="decimal"
                       className="w-full bg-transparent rounded-full border border-slate-200 shadow-sm text-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all min-h-[44px] text-base font-normal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
@@ -313,7 +314,7 @@ export default function ColumnEstimator() {
                       Number of Columns
                     </label>
                     <><label htmlFor="a11y-input-188" className="sr-only">Input</label>
-<input id="a11y-input-188" type="number" inputMode="decimal"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-188" type="number" inputMode="decimal"
                       className="w-full bg-transparent rounded-full border border-slate-200 shadow-sm text-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all min-h-[44px] text-base font-normal"
                       value={count}
                       onChange={(e) => setCount(e.target.value)}
@@ -324,7 +325,7 @@ export default function ColumnEstimator() {
                   <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
                     Concrete Mix
                   </label>
-                  <select
+                  <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                     className="w-full bg-transparent rounded-[24px] border border-slate-200 shadow-sm text-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all appearance-none text-base font-normal overflow-hidden"
                     value={mix}
                     onChange={(e) => setMix(e.target.value)}
@@ -334,18 +335,18 @@ export default function ColumnEstimator() {
                         {m}
                       </option>
                     ))}
-                  </select>
+                  </motion.select>
                 </div>
 
                 {isPrecast && (
                   <div className="animate-in fade-in slide-in-from-top-2 duration-300 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-indigo-50/50 p-4 rounded-[24px] border border-indigo-100 overflow-hidden">
                     <InputGroup label="Concrete Density" info="kg/m³">
                       <><label htmlFor="a11y-input-189" className="sr-only">Input</label>
-<input id="a11y-input-189" type="number" inputMode="decimal" value={concreteDensity} onChange={(e) => setConcreteDensity(e.target.value)} className="w-full h-11 bg-white rounded-full border border-slate-200 shadow-sm text-slate-800 border border-indigo-200 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-189" type="number" inputMode="decimal" value={concreteDensity} onChange={(e) => setConcreteDensity(e.target.value)} className="w-full h-11 bg-white rounded-full border border-slate-200 shadow-sm text-slate-800 border border-indigo-200 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
                     </InputGroup>
                     <InputGroup label="Lifting Radius" info="m">
                       <><label htmlFor="a11y-input-190" className="sr-only">Input</label>
-<input id="a11y-input-190" type="number" inputMode="decimal" value={riggingRadius} onChange={(e) => setRiggingRadius(e.target.value)} className="w-full h-11 bg-white rounded-full border border-slate-200 shadow-sm text-slate-800 border border-indigo-200 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-190" type="number" inputMode="decimal" value={riggingRadius} onChange={(e) => setRiggingRadius(e.target.value)} className="w-full h-11 bg-white rounded-full border border-slate-200 shadow-sm text-slate-800 border border-indigo-200 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
                     </InputGroup>
                   </div>
                 )}
@@ -406,7 +407,7 @@ export default function ColumnEstimator() {
                       </span>
                     }>
                       <><label htmlFor="a11y-input-191" className="sr-only">Input</label>
-<input id="a11y-input-191"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-191"
                         type="number" inputMode="decimal"
                         min="0"
                         value={clearCover}
@@ -415,7 +416,7 @@ export default function ColumnEstimator() {
                       /></>
                     </InputGroup>
                     <InputGroup label="Number of Main Bars">
-                      <select
+                      <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                         value={mainBarsCount}
                         onChange={(e) => setMainBarsCount(e.target.value)}
                         className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
@@ -424,11 +425,11 @@ export default function ColumnEstimator() {
                         <option value="6">6 Bars</option>
                         <option value="8">8 Bars</option>
                         <option value="10">10 Bars</option>
-                      </select>
+                      </motion.select>
                     </InputGroup>
                   </div>
                   <InputGroup label={<span className="flex items-center">Main Bar Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
-                    <select
+                    <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                       value={mainDia}
                       onChange={(e) => setMainDia(e.target.value)}
                       className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
@@ -436,14 +437,14 @@ export default function ColumnEstimator() {
                       {[12, 16, 20, 25, 32].map(d => (
                         <option key={d} value={d}>{d} mm</option>
                       ))}
-                    </select>
+                    </motion.select>
                   </InputGroup>
                 </div>
 
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <InputGroup label={<span className="flex items-center gap-1">Tie Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
-                      <select
+                      <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                         value={tieDia}
                         onChange={(e) => setTieDia(e.target.value)}
                         className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
@@ -451,11 +452,11 @@ export default function ColumnEstimator() {
                         {[8, 10, 12, 16].map(d => (
                           <option key={d} value={d}>{d} mm</option>
                         ))}
-                      </select>
+                      </motion.select>
                     </InputGroup>
                     <InputGroup label={<span className="flex items-center gap-1">Tie Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                       <><label htmlFor="a11y-input-192" className="sr-only">Input</label>
-<input id="a11y-input-192"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-192"
                         type="number" inputMode="decimal"
                         min="0"
                         value={tieSpacing}
@@ -468,7 +469,7 @@ export default function ColumnEstimator() {
                   {shape !== "circular" && mainBarsCount === "8" && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                       <InputGroup label="8-Bar Tie Variation">
-                        <select
+                        <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                           value={variation8}
                           onChange={(e) => setVariation8(e.target.value)}
                           className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
@@ -476,7 +477,7 @@ export default function ColumnEstimator() {
                           <option value="1">Outer Rect + Inner Diamond</option>
                           <option value="2">Outer Rect + Inner Rect (4x2 layout)</option>
                           <option value="3">Outer Rect + 2 Cross/Link Ties</option>
-                        </select>
+                        </motion.select>
                       </InputGroup>
                     </div>
                   )}
@@ -484,14 +485,14 @@ export default function ColumnEstimator() {
                   {shape !== "circular" && mainBarsCount === "10" && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                       <InputGroup label="10-Bar Tie Variation">
-                        <select
+                        <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                           value={variation10}
                           onChange={(e) => setVariation10(e.target.value)}
                           className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                         >
                           <option value="1">Outer Rect + 3 Link/Cross Ties</option>
                           <option value="2">Outer Rect + Inner Rect + 1 Link Tie</option>
-                        </select>
+                        </motion.select>
                       </InputGroup>
                     </div>
                   )}

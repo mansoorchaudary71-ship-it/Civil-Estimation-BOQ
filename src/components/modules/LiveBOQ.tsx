@@ -360,7 +360,7 @@ export default function LiveBOQ() {
         </div>
         {/* Table Content */}
         <div className="flex-1 overflow-auto p-4">
-          <table className="w-full text-left text-sm">
+          <table className="boq-table-print-breaks w-full text-left text-sm">
             <thead className="text-slate-700 border-b border-slate-200">
               <tr>
                 <th className="py-2 px-3 font-normal w-20">Item</th>

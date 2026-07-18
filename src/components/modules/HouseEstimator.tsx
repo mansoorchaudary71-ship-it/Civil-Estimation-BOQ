@@ -126,7 +126,7 @@ function AnimatedTableRow({
             <GripVertical className="w-4 h-4 text-slate-600 cursor-grab active:cursor-grabbing hover:text-slate-600" />
             {onSelect && (
               <><label htmlFor="a11y-input-261" className="sr-only">Input</label>
-<input id="a11y-input-261" 
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-261" 
                 type="checkbox" 
                 checked={selected}
                 onChange={() => onSelect(item.name)}
@@ -161,7 +161,7 @@ function AnimatedTableRow({
       </td>
       <td className="px-6 py-4 hidden md:table-cell">
         <><label htmlFor="a11y-input-262" className="sr-only">Add note...</label>
-<input id="a11y-input-262" 
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-262" 
           type="text"
           value={note || ""}
           onChange={(e) => onNoteChange?.(e.target.value)}
@@ -1022,7 +1022,7 @@ export default function HouseEstimator() {
                   City / Location
                 </label>
                 <><label htmlFor="a11y-input-263" className="sr-only">e.g. DHA Phase 6</label>
-<input id="a11y-input-263"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-263"
                   type="text"
                   value={projectDetails.siteLocation}
                   onChange={(e) =>
@@ -1138,7 +1138,7 @@ export default function HouseEstimator() {
                   </span>
                 </div>
                 <><label htmlFor="a11y-input-264" className="sr-only">Input</label>
-<input id="a11y-input-264"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-264"
                   type="range"
                   min="1"
                   max="3"
@@ -1172,7 +1172,7 @@ export default function HouseEstimator() {
               <div className="space-y-4">
                 <div>
                   <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Market Currency</label>
-                  <select
+                  <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                     value={currencyRate}
                     onChange={(e) => {
                       const market = e.target.value;
@@ -1203,12 +1203,12 @@ export default function HouseEstimator() {
                     className="calc-input px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/30 transition-all font-medium shadow-sm w-full"
                   >
                     {["PKR", "INR", "USD", "GBP", "AED", "SAR", "BDT", "LKR", "CUSTOM"].map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
+                  </motion.select>
                 </div>
 
                 <div>
                   <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Design Standard</label>
-                  <select
+                  <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={designStandard}
                      onChange={(e) => setDesignStandard(e.target.value)}
                      className="calc-input px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/30 transition-all font-medium shadow-sm w-full"
@@ -1219,12 +1219,12 @@ export default function HouseEstimator() {
                      <option>BS 8110</option>
                      <option>ACI 318</option>
                      <option>Dubai Municipality Stds</option>
-                  </select>
+                  </motion.select>
                 </div>
 
                 <div>
                   <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Foundation Type</label>
-                  <select
+                  <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={foundationType}
                      onChange={(e) => setFoundationType(e.target.value)}
                      className="calc-input px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/30 transition-all font-medium shadow-sm w-full"
@@ -1232,12 +1232,12 @@ export default function HouseEstimator() {
                      <option>Strip Foundation</option>
                      <option>Raft Foundation</option>
                      <option>Pile Foundation</option>
-                  </select>
+                  </motion.select>
                 </div>
 
                 <div>
                   <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Structural System</label>
-                  <select
+                  <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={structuralSystem}
                      onChange={(e) => setStructuralSystem(e.target.value)}
                      className="calc-input px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/30 transition-all font-medium shadow-sm w-full"
@@ -1245,12 +1245,12 @@ export default function HouseEstimator() {
                      <option>RCC Framed Structure</option>
                      <option>Load bearing masonry</option>
                      <option>Steel frame</option>
-                  </select>
+                  </motion.select>
                 </div>
 
                 <div>
                   <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center">Seismic Zone <CodeTooltip standard="IS" code="1893:2016" description="Criteria for earthquake resistant design of structures." /></span></label>
-                  <select
+                  <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={seismicZone}
                      onChange={(e) => setSeismicZone(e.target.value)}
                      className="calc-input px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/30 transition-all font-medium shadow-sm w-full"
@@ -1260,7 +1260,7 @@ export default function HouseEstimator() {
                      <option>Zone 2B</option>
                      <option>Zone 3</option>
                      <option>Zone 4</option>
-                  </select>
+                  </motion.select>
                 </div>
               </div>
             </div>
@@ -1376,7 +1376,7 @@ export default function HouseEstimator() {
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-slate-700 mb-1 block">
                         <><label htmlFor="a11y-input-265" className="sr-only">Input</label>
-<input id="a11y-input-265"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-265"
                           type="checkbox"
                           className="sr-only peer text-base font-normal"
                           checked={includeBoundaryWall}
@@ -1394,7 +1394,7 @@ export default function HouseEstimator() {
                             Length (ft)
                           </label>
                           <><label htmlFor="a11y-input-266" className="sr-only">Input</label>
-<input id="a11y-input-266"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-266"
                             type="number" inputMode="decimal"
                             value={bwLength || ""}
                             onChange={(e) => setBwLength(parseFloat(e.target.value))}
@@ -1406,7 +1406,7 @@ export default function HouseEstimator() {
                             Height (ft)
                           </label>
                           <><label htmlFor="a11y-input-267" className="sr-only">Input</label>
-<input id="a11y-input-267"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-267"
                             type="number" inputMode="decimal"
                             value={bwHeight || ""}
                             onChange={(e) => setBwHeight(parseFloat(e.target.value))}
@@ -1439,7 +1439,7 @@ export default function HouseEstimator() {
                </div>
                <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-slate-700 mb-1 block">
                  <><label htmlFor="a11y-input-268" className="sr-only">Input</label>
-<input id="a11y-input-268"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-268"
                    type="checkbox"
                    className="sr-only peer text-base font-normal"
                    checked={showResults}
@@ -1622,7 +1622,7 @@ export default function HouseEstimator() {
                         </div>
                       </div>
                       <div className="border border-slate-200 rounded-[24px] overflow-auto max-h-[400px] bg-white shadow-sm mb-8 relative custom-scrollbar overflow-hidden">
-                        <table className="w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
+                        <table className="boq-table-print-breaks w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
                           <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
                             <tr>
                               <th className="px-6 py-4 font-bold">
@@ -1835,7 +1835,7 @@ export default function HouseEstimator() {
                         </div>
                       </div>
                       <div className="border border-slate-200 rounded-[24px] overflow-auto max-h-[400px] bg-white shadow-sm mb-8 relative custom-scrollbar overflow-hidden">
-                        <table className="w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
+                        <table className="boq-table-print-breaks w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
                           <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
                             <tr>
                               <th className="px-6 py-4 font-bold">
@@ -1979,7 +1979,7 @@ export default function HouseEstimator() {
                         </div>
                       </div>
                       <div className="flex-1 overflow-auto border border-slate-200 rounded-[24px] mb-6">
-                        <table className="w-full text-sm text-left">
+                        <table className="boq-table-print-breaks w-full text-sm text-left">
                           <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10">
                             <tr>
                               <th className="px-6 py-4 font-bold">Material Item</th>
@@ -2017,7 +2017,7 @@ export default function HouseEstimator() {
                                       {settings.currency === "PKR" ? "Rs" : "$"}
                                     </span>
                                     <><label htmlFor="a11y-input-269" className="sr-only">Default</label>
-<input id="a11y-input-269"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-269"
                                       type="number" inputMode="decimal"
                                       min="0"
                                       step="any"
@@ -2137,22 +2137,22 @@ export default function HouseEstimator() {
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Typical Length (ft)</label>
                        <><label htmlFor="a11y-input-270" className="sr-only">Input</label>
-<input id="a11y-input-270" type="number" inputMode="decimal" value={roomConfigs.bedroom.length} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-270" type="number" inputMode="decimal" value={roomConfigs.bedroom.length} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Typical Width (ft)</label>
                        <><label htmlFor="a11y-input-271" className="sr-only">Input</label>
-<input id="a11y-input-271" type="number" inputMode="decimal" value={roomConfigs.bedroom.width} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-271" type="number" inputMode="decimal" value={roomConfigs.bedroom.width} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Ceiling Height (ft)</label>
                        <><label htmlFor="a11y-input-272" className="sr-only">Input</label>
-<input id="a11y-input-272" type="number" inputMode="decimal" value={roomConfigs.bedroom.height} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, height: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-272" type="number" inputMode="decimal" value={roomConfigs.bedroom.height} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, height: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Wardrobe Length (ft)</label>
                        <><label htmlFor="a11y-input-273" className="sr-only">Input</label>
-<input id="a11y-input-273" type="number" inputMode="decimal" value={roomConfigs.bedroom.wardrobeLength} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, wardrobeLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-273" type="number" inputMode="decimal" value={roomConfigs.bedroom.wardrobeLength} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, wardrobeLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                   </>
                 )}
@@ -2162,36 +2162,36 @@ export default function HouseEstimator() {
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Length (ft)</label>
                        <><label htmlFor="a11y-input-274" className="sr-only">Input</label>
-<input id="a11y-input-274" type="number" inputMode="decimal" value={roomConfigs.washroom.length} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-274" type="number" inputMode="decimal" value={roomConfigs.washroom.length} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Width (ft)</label>
                        <><label htmlFor="a11y-input-275" className="sr-only">Input</label>
-<input id="a11y-input-275" type="number" inputMode="decimal" value={roomConfigs.washroom.width} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-275" type="number" inputMode="decimal" value={roomConfigs.washroom.width} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Commode / WC Type</label>
-                       <select value={roomConfigs.washroom.wcType} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, wcType: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.wcType} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, wcType: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Floor Mounted (Asian)</option>
                          <option>Floor Mounted (Western)</option>
                          <option>Wall Hung (Concealed)</option>
-                       </select>
+                       </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Shower Setup</label>
-                       <select value={roomConfigs.washroom.showerSetup} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, showerSetup: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.showerSetup} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, showerSetup: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Standard Mixer</option>
                          <option>Glass Enclosure</option>
                          <option>Jacuzzi Tub</option>
-                       </select>
+                       </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Vanity / Basin</label>
-                       <select value={roomConfigs.washroom.vanity} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, vanity: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.vanity} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, vanity: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Standard Ceramic</option>
                          <option>Custom PVC Vanity</option>
                          <option>Corian Marble Top</option>
-                       </select>
+                       </motion.select>
                     </div>
                   </>
                 )}
@@ -2201,33 +2201,33 @@ export default function HouseEstimator() {
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Length (ft)</label>
                        <><label htmlFor="a11y-input-276" className="sr-only">Input</label>
-<input id="a11y-input-276" type="number" inputMode="decimal" value={roomConfigs.kitchen.length} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-276" type="number" inputMode="decimal" value={roomConfigs.kitchen.length} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Width (ft)</label>
                        <><label htmlFor="a11y-input-277" className="sr-only">Input</label>
-<input id="a11y-input-277" type="number" inputMode="decimal" value={roomConfigs.kitchen.width} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-277" type="number" inputMode="decimal" value={roomConfigs.kitchen.width} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Countertop (Length ft)</label>
                        <><label htmlFor="a11y-input-278" className="sr-only">Input</label>
-<input id="a11y-input-278" type="number" inputMode="decimal" value={roomConfigs.kitchen.counterLength} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, counterLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-278" type="number" inputMode="decimal" value={roomConfigs.kitchen.counterLength} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, counterLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Cabinets Material</label>
-                       <select value={roomConfigs.kitchen.cabinets} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, cabinets: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.kitchen.cabinets} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, cabinets: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Lasani Wood</option>
                          <option>UV/Acrylic</option>
                          <option>Solid Ash/Oak</option>
-                       </select>
+                       </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Backsplash</label>
-                       <select value={roomConfigs.kitchen.backsplash} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, backsplash: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.kitchen.backsplash} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, backsplash: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Ceramic Tiles</option>
                          <option>Glass/Mosaic</option>
                          <option>Corian Full Wall</option>
-                       </select>
+                       </motion.select>
                     </div>
                   </>
                 )}
@@ -2237,25 +2237,25 @@ export default function HouseEstimator() {
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Length (ft)</label>
                        <><label htmlFor="a11y-input-279" className="sr-only">Input</label>
-<input id="a11y-input-279" type="number" inputMode="decimal" value={roomConfigs.livingRoom.length} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-279" type="number" inputMode="decimal" value={roomConfigs.livingRoom.length} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Width (ft)</label>
                        <><label htmlFor="a11y-input-280" className="sr-only">Input</label>
-<input id="a11y-input-280" type="number" inputMode="decimal" value={roomConfigs.livingRoom.width} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-280" type="number" inputMode="decimal" value={roomConfigs.livingRoom.width} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Feature Wall Setup</label>
-                       <select value={roomConfigs.livingRoom.featureWall} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, featureWall: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.livingRoom.featureWall} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, featureWall: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>None</option>
                          <option>Yes (Wallpaper/Paint)</option>
                          <option>Yes (Wood Paneling / Marble)</option>
-                       </select>
+                       </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Chandelier Points</label>
                        <><label htmlFor="a11y-input-281" className="sr-only">Input</label>
-<input id="a11y-input-281" type="number" inputMode="decimal" value={roomConfigs.livingRoom.chandelierPoints} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, chandelierPoints: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-281" type="number" inputMode="decimal" value={roomConfigs.livingRoom.chandelierPoints} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, chandelierPoints: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                   </>
                 )}
@@ -2265,15 +2265,15 @@ export default function HouseEstimator() {
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Excavation Depth (ft)</label>
                        <><label htmlFor="a11y-input-282" className="sr-only">Input</label>
-<input id="a11y-input-282" type="number" inputMode="decimal" value={roomConfigs.basement.depth} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, depth: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-282" type="number" inputMode="decimal" value={roomConfigs.basement.depth} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, depth: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
                        <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Retaining Wall Spec</label>
-                       <select value={roomConfigs.basement.retainingWall} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, retainingWall: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.basement.retainingWall} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, retainingWall: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Standard Brick 13.5-inch</option>
                          <option>RCC 9-Inch</option>
                          <option>RCC 12-Inch Heavy</option>
-                       </select>
+                       </motion.select>
                     </div>
                   </>
                 )}

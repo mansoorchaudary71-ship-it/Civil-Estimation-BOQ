@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import { Calculator, ClipboardCopy, Building, Layers, Settings, ChevronRight } from "lucide-react";
 import { CalculationHistory } from '../ui/CalculationHistory';
@@ -159,7 +160,7 @@ const MaterialTakeoffSheet: React.FC = () => {
           </label>
           <div className="relative">
             <><label htmlFor="a11y-input-340" className="sr-only">Input</label>
-<input id="a11y-input-340"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-340"
               type="number" inputMode="decimal"
               value={area}
               onChange={(e) => setArea(parseFloat(e.target.value) || 0)}
@@ -175,7 +176,7 @@ const MaterialTakeoffSheet: React.FC = () => {
           <div className="relative">
             <Layers className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <><label htmlFor="a11y-input-341" className="sr-only">Input</label>
-<input id="a11y-input-341"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-341"
               type="number" inputMode="decimal"
               value={floors}
               onChange={(e) => setFloors(parseFloat(e.target.value) || 1)}
@@ -190,7 +191,7 @@ const MaterialTakeoffSheet: React.FC = () => {
           </label>
           <div className="relative">
             <Settings className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <select
+            <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
               value={quality}
               onChange={(e) => setQuality(e.target.value as QualityType)}
               className="w-full bg-white border border-slate-300 rounded-[24px] px-4 py-2.5 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 outline-none pl-10 appearance-none overflow-hidden"
@@ -198,7 +199,7 @@ const MaterialTakeoffSheet: React.FC = () => {
               <option value="standard">Standard (Economy)</option>
               <option value="premium">Premium (Mid-Range)</option>
               <option value="luxury">Luxury (High-End)</option>
-            </select>
+            </motion.select>
           </div>
         </div>
       </div>
@@ -225,7 +226,7 @@ const MaterialTakeoffSheet: React.FC = () => {
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">{/* currency symbol placeholder if needed */}</span>
                     <><label htmlFor="a11y-input-342" className="sr-only">Input</label>
-<input id="a11y-input-342"
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-342"
                       type="number" inputMode="decimal"
                       value={item.rate}
                       onChange={(e) => handleRateChange(item.id, e.target.value)}

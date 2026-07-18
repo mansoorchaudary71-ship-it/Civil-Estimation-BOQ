@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState, useMemo } from 'react';
 import { 
   CheckCircle, ArrowRight, ArrowLeft, Settings, Ruler, Box, Grid2X2, 
@@ -186,18 +187,18 @@ export default function QSWorkflow() {
                <h3 className="text-xl font-semibold text-slate-800 mb-6">1. Project Setup</h3>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                  <div><label className="block text-base font-medium mb-2">Project Name</label><><label htmlFor="a11y-input-385" className="sr-only">Input</label>
-<input id="a11y-input-385" type="text" value={projectData.name} onChange={e=>setProjectData({...projectData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-385" type="text" value={projectData.name} onChange={e=>setProjectData({...projectData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
                  <div><label className="block text-base font-medium mb-2">Location</label><><label htmlFor="a11y-input-386" className="sr-only">Input</label>
-<input id="a11y-input-386" type="text" value={projectData.location} onChange={e=>setProjectData({...projectData, location: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-386" type="text" value={projectData.location} onChange={e=>setProjectData({...projectData, location: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
                  <div><label className="block text-base font-medium mb-2">Client</label><><label htmlFor="a11y-input-387" className="sr-only">Input</label>
-<input id="a11y-input-387" type="text" value={projectData.client} onChange={e=>setProjectData({...projectData, client: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-387" type="text" value={projectData.client} onChange={e=>setProjectData({...projectData, client: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
                  <div>
                    <label className="block text-base font-medium mb-2">Structure Type</label>
-                   <select value={projectData.type} onChange={e=>setProjectData({...projectData, type: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-[24px] overflow-hidden">
+                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={projectData.type} onChange={e=>setProjectData({...projectData, type: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-[24px] overflow-hidden">
                      <option>Residential</option>
                      <option>Commercial</option>
                      <option>Industrial</option>
-                   </select>
+                   </motion.select>
                  </div>
                </div>
             </div>
@@ -228,7 +229,7 @@ export default function QSWorkflow() {
                <div>
                  <label className="block text-base font-medium mb-2">Estimated Total Plinth Area (sq.ft)</label>
                  <><label htmlFor="a11y-input-388" className="sr-only">Input</label>
-<input id="a11y-input-388" type="number" inputMode="decimal" value={totalPlinthArea} onChange={e=>setTotalPlinthArea(+e.target.value)} className="w-full md:w-1/2 px-4 py-3 bg-slate-50 border rounded-full" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-388" type="number" inputMode="decimal" value={totalPlinthArea} onChange={e=>setTotalPlinthArea(+e.target.value)} className="w-full md:w-1/2 px-4 py-3 bg-slate-50 border rounded-full" /></>
                </div>
             </div>
          )}
@@ -243,17 +244,17 @@ export default function QSWorkflow() {
                  <div className="bg-amber-50/50 p-5 rounded-[24px] border border-amber-100 overflow-hidden">
                     <label className="block text-base font-medium mb-2">Earthwork (Excavation) - m³</label>
                     <><label htmlFor="a11y-input-389" className="sr-only">Input</label>
-<input id="a11y-input-389" type="number" inputMode="decimal" value={substructure.excavation} onChange={e=>setSubstructure({...substructure, excavation: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-389" type="number" inputMode="decimal" value={substructure.excavation} onChange={e=>setSubstructure({...substructure, excavation: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
                  </div>
                  <div className="bg-amber-50/50 p-5 rounded-[24px] border border-amber-100 overflow-hidden">
                     <label className="block text-base font-medium mb-2">Footing PCC/RCC - m³</label>
                     <><label htmlFor="a11y-input-390" className="sr-only">Input</label>
-<input id="a11y-input-390" type="number" inputMode="decimal" value={substructure.footingConc} onChange={e=>setSubstructure({...substructure, footingConc: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-390" type="number" inputMode="decimal" value={substructure.footingConc} onChange={e=>setSubstructure({...substructure, footingConc: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
                  </div>
                  <div className="bg-amber-50/50 p-5 rounded-[24px] border border-amber-100 overflow-hidden">
                     <label className="block text-base font-medium mb-2">Plinth Beam RCC - m³</label>
                     <><label htmlFor="a11y-input-391" className="sr-only">Input</label>
-<input id="a11y-input-391" type="number" inputMode="decimal" value={substructure.plinthBeam} onChange={e=>setSubstructure({...substructure, plinthBeam: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-391" type="number" inputMode="decimal" value={substructure.plinthBeam} onChange={e=>setSubstructure({...substructure, plinthBeam: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
                  </div>
                </div>
             </div>
@@ -269,22 +270,22 @@ export default function QSWorkflow() {
                  <div>
                     <label className="block text-base font-medium mb-2">Columns RCC - m³</label>
                     <><label htmlFor="a11y-input-392" className="sr-only">Input</label>
-<input id="a11y-input-392" type="number" inputMode="decimal" value={superstructure.columns} onChange={e=>setSuperstructure({...superstructure, columns: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-392" type="number" inputMode="decimal" value={superstructure.columns} onChange={e=>setSuperstructure({...superstructure, columns: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Beams RCC - m³</label>
                     <><label htmlFor="a11y-input-393" className="sr-only">Input</label>
-<input id="a11y-input-393" type="number" inputMode="decimal" value={superstructure.beams} onChange={e=>setSuperstructure({...superstructure, beams: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-393" type="number" inputMode="decimal" value={superstructure.beams} onChange={e=>setSuperstructure({...superstructure, beams: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Slabs RCC - m³</label>
                     <><label htmlFor="a11y-input-394" className="sr-only">Input</label>
-<input id="a11y-input-394" type="number" inputMode="decimal" value={superstructure.slabs} onChange={e=>setSuperstructure({...superstructure, slabs: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-394" type="number" inputMode="decimal" value={superstructure.slabs} onChange={e=>setSuperstructure({...superstructure, slabs: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Staircase RCC - m³</label>
                     <><label htmlFor="a11y-input-395" className="sr-only">Input</label>
-<input id="a11y-input-395" type="number" inputMode="decimal" value={superstructure.staircase} onChange={e=>setSuperstructure({...superstructure, staircase: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-395" type="number" inputMode="decimal" value={superstructure.staircase} onChange={e=>setSuperstructure({...superstructure, staircase: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                </div>
             </div>
@@ -300,22 +301,22 @@ export default function QSWorkflow() {
                  <div>
                     <label className="block text-base font-medium mb-2">Brickwork/Blockwork - m³</label>
                     <><label htmlFor="a11y-input-396" className="sr-only">Input</label>
-<input id="a11y-input-396" type="number" inputMode="decimal" value={masonry.brickwork} onChange={e=>setMasonry({...masonry, brickwork: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-396" type="number" inputMode="decimal" value={masonry.brickwork} onChange={e=>setMasonry({...masonry, brickwork: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Plastering (Int & Ext) - m²</label>
                     <><label htmlFor="a11y-input-397" className="sr-only">Input</label>
-<input id="a11y-input-397" type="number" inputMode="decimal" value={masonry.plaster} onChange={e=>setMasonry({...masonry, plaster: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-397" type="number" inputMode="decimal" value={masonry.plaster} onChange={e=>setMasonry({...masonry, plaster: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Flooring/Tiling - m²</label>
                     <><label htmlFor="a11y-input-398" className="sr-only">Input</label>
-<input id="a11y-input-398" type="number" inputMode="decimal" value={masonry.flooring} onChange={e=>setMasonry({...masonry, flooring: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-398" type="number" inputMode="decimal" value={masonry.flooring} onChange={e=>setMasonry({...masonry, flooring: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Painting & Finishes - m²</label>
                     <><label htmlFor="a11y-input-399" className="sr-only">Input</label>
-<input id="a11y-input-399" type="number" inputMode="decimal" value={masonry.painting} onChange={e=>setMasonry({...masonry, painting: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-399" type="number" inputMode="decimal" value={masonry.painting} onChange={e=>setMasonry({...masonry, painting: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                </div>
             </div>
@@ -331,22 +332,22 @@ export default function QSWorkflow() {
                  <div>
                     <label className="block text-base font-medium mb-2">Plumbing (No. of Output Points)</label>
                     <><label htmlFor="a11y-input-400" className="sr-only">Input</label>
-<input id="a11y-input-400" type="number" inputMode="decimal" value={services.plumbingPoints} onChange={e=>setServices({...services, plumbingPoints: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-400" type="number" inputMode="decimal" value={services.plumbingPoints} onChange={e=>setServices({...services, plumbingPoints: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Electrical (No. of Output Points)</label>
                     <><label htmlFor="a11y-input-401" className="sr-only">Input</label>
-<input id="a11y-input-401" type="number" inputMode="decimal" value={services.electricalPoints} onChange={e=>setServices({...services, electricalPoints: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-401" type="number" inputMode="decimal" value={services.electricalPoints} onChange={e=>setServices({...services, electricalPoints: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Rainwater Harvesting Capacity (L)</label>
                     <><label htmlFor="a11y-input-402" className="sr-only">Input</label>
-<input id="a11y-input-402" type="number" inputMode="decimal" value={services.rainwaterCapacity} onChange={e=>setServices({...services, rainwaterCapacity: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-402" type="number" inputMode="decimal" value={services.rainwaterCapacity} onChange={e=>setServices({...services, rainwaterCapacity: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Solar Generation (kW)</label>
                     <><label htmlFor="a11y-input-403" className="sr-only">Input</label>
-<input id="a11y-input-403" type="number" inputMode="decimal" value={services.solarSize} onChange={e=>setServices({...services, solarSize: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-403" type="number" inputMode="decimal" value={services.solarSize} onChange={e=>setServices({...services, solarSize: +e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full font-bold" /></>
                  </div>
                </div>
             </div>

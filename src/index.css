@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Syne:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -334,6 +334,12 @@ html.high-contrast a {
   .page-break-inside-avoid {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+  
+  /* Force page break after every 20 rows in BOQ tables */
+  .boq-table-print-breaks tbody tr:nth-child(20n) {
+    page-break-after: always !important;
+    break-after: page !important;
   }
   
   /* Ensure text is dark for readability */

@@ -65,7 +65,7 @@ export default function GlobalSearchModal({
         {parts.map((part, i) => {
           const isMatch = queries.some(q => q.toLowerCase() === part.toLowerCase());
           return isMatch ? 
-            <span key={i} className="text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-500/20 px-0.5 rounded">{part}</span> : 
+            <span key={i} className="text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-500/20 px-1 rounded">{part}</span> : 
             part;
         })}
       </>
@@ -88,7 +88,7 @@ export default function GlobalSearchModal({
             placeholder="Search tools, materials..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none text-xl sm:text-2xl font-black text-slate-800 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:ring-0 tracking-tight"
+            className="flex-1 bg-transparent border-none outline-none text-xl sm:text-2xl font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-0 tracking-tight"
           />
           <button 
             onClick={onClose}
@@ -105,12 +105,12 @@ export default function GlobalSearchModal({
               <div className="w-20 h-20 rounded-[24px] bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-5 shadow-sm border border-slate-100 dark:border-slate-800">
                 <Search className="w-8 h-8 text-slate-300 dark:text-slate-600" strokeWidth={2} />
               </div>
-              <p className="text-slate-500 dark:text-slate-400 font-bold text-lg tracking-tight">Type anything to start searching...</p>
+              <p className="text-slate-500 dark:text-slate-400 font-medium text-lg tracking-tight">Type anything to start searching...</p>
             </div>
           ) : results.length > 0 ? (
             <div className="p-4 sm:p-6 flex flex-col gap-3">
               <div className="px-3 pb-2">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
                   {results.length} result{results.length !== 1 && "s"} found
                 </p>
               </div>
@@ -127,10 +127,10 @@ export default function GlobalSearchModal({
                     <mod.icon className="w-6 h-6" strokeWidth={1.5} />
                   </div>
                   <div className="flex-1 overflow-hidden pt-1">
-                    <h3 className="text-lg font-black text-slate-800 dark:text-slate-100 mb-1.5 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors tracking-tight">
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-1.5 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors tracking-tight">
                       {highlightMatch(mod.title, searchWords)}
                     </h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 font-medium">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 font-normal">
                       {highlightMatch(mod.desc, searchWords)}
                     </p>
                   </div>
@@ -145,8 +145,8 @@ export default function GlobalSearchModal({
                <div className="w-20 h-20 rounded-[24px] bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-5 shadow-sm border border-slate-100 dark:border-slate-800">
                 <Search className="w-8 h-8 text-slate-300 dark:text-slate-600 opacity-50" strokeWidth={2} />
               </div>
-              <p className="text-slate-600 dark:text-slate-300 font-bold text-lg tracking-tight">No results found for "{searchTerm}"</p>
-              <p className="text-slate-400 dark:text-slate-500 text-sm mt-2 font-medium">Try searching for materials like "concrete", "steel", or tools like "calculator".</p>
+              <p className="text-slate-600 dark:text-slate-300 font-semibold text-lg tracking-tight">No results found for "{searchTerm}"</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 font-normal">Try searching for materials like "concrete", "steel", or tools like "calculator".</p>
             </div>
           )}
         </div>

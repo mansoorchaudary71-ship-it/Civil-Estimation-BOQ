@@ -390,7 +390,7 @@ export default function AdvancedBoqGenerator() {
                 </div>
                 
                 <div className="p-4 overflow-x-auto">
-                  <table className="w-full text-left">
+                  <table className="boq-table-print-breaks w-full text-left">
                     <thead>
                       <tr className="text-sm text-slate-500">
                         <th className="pb-3 pr-4 font-semibold w-[35%]">Description</th>
@@ -472,7 +472,7 @@ export default function AdvancedBoqGenerator() {
                       {scope}
                     </div>
                     <div className="p-0">
-                      <table className="w-full text-sm">
+                      <table className="boq-table-print-breaks w-full text-sm">
                         <tbody>
                           {measurements[scope].map(row => (
                             <tr key={row.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 overflow-hidden">
@@ -625,7 +625,7 @@ export default function AdvancedBoqGenerator() {
                 </div>
               )}
 
-              <table className="w-full text-left text-sm mb-12 empty-cells-show">
+              <table className="boq-table-print-breaks w-full text-left text-sm mb-12 empty-cells-show">
                 <thead>
                   <tr className="bg-slate-100 text-slate-800 uppercase tracking-wider text-sm border-b-2 border-slate-200">
                     <th className="py-3 px-4 font-bold w-12 text-center">No.</th>

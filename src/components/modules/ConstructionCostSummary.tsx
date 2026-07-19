@@ -9,6 +9,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { CurrencySelector } from '../ui/CurrencySelector';
 
 import { CostTrendChart } from "./CostTrendChart";
+import { CostBreakdownChart } from "./CostBreakdownChart";
 
 interface CostItem {
   id: string;
@@ -347,43 +348,7 @@ const ConstructionCostSummary: React.FC = () => {
             <h3 className="text-center text-lg font-semibold text-slate-800 mb-1">Project Summary Dashboard</h3>
             <p className="text-center text-sm font-medium text-slate-500 mb-4">Material vs. Labor Distribution</p>
             <div className="flex-1 w-full pt-4 pb-2">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={chartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={80}
-                    outerRadius={120}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip 
-                    formatter={(value: any) => formatCurrency(value, false)}
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                  />
-                  <Legend 
-                    verticalAlign="bottom" 
-                    content={(props: any) => {
-                      const { payload } = props;
-                      return (
-                        <ul className="flex flex-wrap justify-center gap-4 mt-8 mb-2">
-                          {payload.map((entry: any, index: number) => (
-                            <li key={`item-${index}`} className="flex items-center gap-2">
-                              <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: entry.color }} />
-                              <span className="text-slate-800 font-medium text-sm">{entry.value}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      );
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <CostBreakdownChart data={chartData} formatCurrency={formatCurrency} />
             </div>
           </motion.div>
 

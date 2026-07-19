@@ -79,9 +79,9 @@ export default function RateAnalysis() {
     <div className="w-full h-full bg-transparent text-slate-900 font-sans p-6 md:p-8">
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-24">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Rate Inputs */}
-          <section className="lg:col-span-7 space-y-6">
+          <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             <div className="bg-[#FAFAF8] hover:bg-[#FDFCF9] transition-colors duration-500/80 p-4 sm:p-8 md:p-8 rounded-[2rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl">
               <div className="flex items-center gap-3 mb-8">
                 <div className="p-3 bg-emerald-50 text-emerald-600 rounded-[24px] shadow-sm border border-emerald-100 overflow-hidden">
@@ -231,7 +231,7 @@ export default function RateAnalysis() {
             </div>
           </section>
           {/* Composite Rate Analyzer */}
-          <section className="lg:col-span-5 space-y-6">
+          <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
             <div className="bg-gradient-to-b from-slate-800 to-slate-900 p-4 sm:p-8 md:p-8 rounded-[2rem] shadow-2xl relative overflow-hidden text-slate-900">
               <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/20 rounded-full blur-[80px]" />
               <div className="relative z-10">

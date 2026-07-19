@@ -133,7 +133,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
         </div>
         
         {/* Content (Paper simulation) */}
-        <div className="flex-1 bg-slate-100/50 dark:bg-slate-950/50 overflow-hidden relative p-4 sm:p-8 flex justify-center items-start overflow-y-auto custom-scrollbar">
+        <div className="flex-1 bg-slate-100/50 dark:bg-slate-950/50 overflow-hidden relative p-4 sm:p-8 flex justify-center items-start overflow-y-auto hide-scrollbar">
           <div className="w-full max-w-[210mm] min-h-[297mm] bg-white shadow-xl rounded-sm overflow-hidden shrink-0 transition-transform duration-300 mx-auto">
             <iframe
               ref={iframeRef}

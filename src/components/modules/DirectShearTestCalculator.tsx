@@ -236,7 +236,7 @@ export default function DirectShearTestCalculator() {
                   <div className="col-span-2 text-right">#</div>
                 </div>
                 
-                <div className="space-y-2 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-2 max-h-[350px] overflow-y-auto pr-2 hide-scrollbar">
                   {testData.map((row, idx) => (
                     <div key={idx} className="grid grid-cols-12 gap-2 items-center">
                       <div className="col-span-5 relative group">

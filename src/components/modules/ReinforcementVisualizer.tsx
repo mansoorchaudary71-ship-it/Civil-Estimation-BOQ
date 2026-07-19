@@ -136,9 +136,9 @@ export default function ReinforcementVisualizer() {
         icon={<LayoutTemplate className="w-5 h-5" />}
         totalValue="—"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Controls */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
             <div className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 p-4 sm:p-6 rounded-[24px] border border-slate-200 overflow-hidden">
               <h3 className="text-lg font-bold text-slate-800 mb-4">
                 Geometry Inputs
@@ -351,7 +351,7 @@ export default function ReinforcementVisualizer() {
           </div>
 
           {/* Visualization Viewer */}
-          <div className="lg:col-span-7 flex flex-col">
+          <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-slate-800 px-2">
                 Cross Section Preview

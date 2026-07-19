@@ -106,6 +106,7 @@ import FarFsiCalculator from "./components/modules/FarFsiCalculator";
 import StaircaseDesignReference from "./components/modules/StaircaseDesignReference";
 import DoorWindowSchedule from "./components/modules/DoorWindowSchedule";
 import VentilationChecker from "./components/modules/VentilationChecker";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 
 
@@ -160,11 +161,13 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
 
   return (
 
-    <div className="flex-1 flex flex-col min-h-0 relative w-full h-full overflow-y-auto overflow-x-hidden bg-transparent">
+    <div className="flex-1 flex flex-col relative w-full bg-transparent">
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col">
         <ToolHeader id={id} title={actualTitle} themeType={themeType} subtitle={subtitle} icon={Icon} onNavigate={onNavigate} />
         <div className="global-form-card-wrapper w-full flex-1">
-          {children}
+          <ErrorBoundary onNavigate={onNavigate} fallbackModuleId="home">
+            {children}
+          </ErrorBoundary>
         </div>
         
         <div className="mt-12 space-y-8 pb-16 print:hidden">
@@ -647,7 +650,7 @@ export default function App() {
           <MarketRatesProvider>
             <TakeoffProvider>
               <ProjectProvider>
-                <div className="flex flex-col h-[100dvh] w-full overflow-x-hidden bg-gradient-to-br from-slate-50 via-[#f8fafc] to-blue-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-500">
+                <div className="flex flex-col min-h-screen w-full bg-gradient-to-br from-slate-50 via-[#f8fafc] to-blue-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-500">
                   <Toaster position="bottom-right" />
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
                   <PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} />
@@ -660,11 +663,11 @@ export default function App() {
                     onNavigate={handleSelectModule}
                   />
 
-                  <div className="flex flex-1 min-h-0 relative w-full">
+                  <div className="flex flex-1 relative w-full">
                     
-                    <main id="main-content" className="flex-1 flex flex-col bg-transparent relative w-full min-h-0 transition-all duration-300">
-                      <div className="w-full h-full flex-1 flex flex-col min-h-0 relative transition-all duration-300">
-                        <div className="flex-1 flex flex-col min-h-0 relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
+                    <main id="main-content" className="flex-1 flex flex-col bg-transparent relative w-full transition-all duration-300">
+                      <div className="w-full flex-1 flex flex-col relative transition-all duration-300">
+                        <div className="flex-1 flex flex-col relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
                           <AnimatePresence>
                             <motion.div
                               key={activeModule}
@@ -673,10 +676,10 @@ export default function App() {
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -15 }}
                               transition={{ duration: 0.3, ease: "easeInOut" }}
-                              className="flex-1 flex flex-col min-h-0 relative w-full h-full"
+                              className="flex-1 flex flex-col relative w-full"
                             >
                               {["home", "my-estimates", "about", "careers", "contact", "blog", "privacy", "terms", "cookies"].includes(activeModule) ? (
-                                <div ref={scrollRef} className="flex-1 flex flex-col min-h-0 relative w-full overflow-x-hidden overflow-y-auto">
+                                <div ref={scrollRef} className="flex-1 flex flex-col relative w-full overflow-visible">
                                   <div className="flex flex-col relative w-full">
                                     {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule}  onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}
                                     {activeModule === "my-estimates" && <RecentEstimates onSelectModule={handleSelectModule} />}
@@ -692,7 +695,7 @@ export default function App() {
                                   </div>
                                 </div>
                               ) : (
-                                <div className="flex-1 flex flex-col min-h-0 relative w-full h-full overflow-y-auto overflow-x-hidden bg-transparent">
+                                <div className="flex-1 flex flex-col relative w-full bg-transparent">
                                   <div className="w-full flex-1 flex flex-col">
                                     <div className="global-form-card-wrapper w-full flex-1">
                                       {renderModule(activeModule, handleSelectModule)}

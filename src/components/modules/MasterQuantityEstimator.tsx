@@ -157,7 +157,7 @@ export default function MasterQuantityEstimator({
             />
           </div>
 
-          <div className="lg:h-[600px] lg:overflow-y-auto pr-1 space-y-3 custom-scrollbar">
+          <div className="lg:h-[600px] lg:overflow-y-auto pr-1 space-y-3 hide-scrollbar">
             {groups.map((group) => {
               const groupTools = calculatorsList.filter(
                 (c) => c.group === group && c.label.toLowerCase().includes(searchTerm.toLowerCase())

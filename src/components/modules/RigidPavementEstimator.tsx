@@ -139,10 +139,10 @@ export default function RigidPavementEstimator() {
       {" "}
       <div className="max-w-7xl mx-auto space-y-6">
         {" "}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {" "}
           {/* Inputs Section */}{" "}
-          <section className="lg:col-span-8 space-y-6">
+          <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             {" "}
             {/* Base Geometry */}{" "}
             <div className="bg-white px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
@@ -480,7 +480,7 @@ export default function RigidPavementEstimator() {
             </div>{" "}
           </section>{" "}
           {/* Results Sidebar */}
-          <section className="lg:col-span-4 space-y-6 flex flex-col items-stretch h-full">
+          <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6 flex flex-col items-stretch h-full">
             <MaterialSummary
                title="Concrete Volumes"
                totalLabel="Total Concrete"

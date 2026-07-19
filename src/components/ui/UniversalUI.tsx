@@ -9,7 +9,7 @@ export function Card({
   className?: string; 
 }) {
   return (
-    <div className={`bg-white dark:bg-[#151821] rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200/50 dark:border-slate-800/50 p-6 sm:p-8 overflow-hidden ${className}`}>
+    <div className={`bg-white/80 dark:bg-[#151821]/80 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-[0_4px_24px_-8px_rgba(15,23,42,0.06)] border-0 p-6 sm:p-8 w-full min-w-0 ${className}`}>
       {children}
     </div>
   );
@@ -183,17 +183,26 @@ export function ToolLayout({
   sidebar?: React.ReactNode; // Optional right sidebar for results/charts
 }) {
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 sm:gap-8 mt-6">
-      <div className={`col-span-1 ${sidebar ? 'xl:col-span-8 space-y-6 sm:space-y-8' : 'xl:col-span-12 space-y-6 sm:space-y-8'}`}>
+    <div className="flex flex-wrap gap-6 sm:gap-8 mt-6 w-full items-start justify-center">
+      <div className={`flex-1 min-w-[min(100%,380px)] w-full space-y-6 sm:space-y-8 flex flex-col`}>
         {children}
       </div>
       {sidebar && (
-        <div className="col-span-1 xl:col-span-4 space-y-6">
-          <div className="sticky top-24 space-y-6">
+        <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full space-y-6 sm:space-y-8 shrink-0">
+          <div className="lg:sticky top-24 space-y-6 flex flex-col w-full">
             {sidebar}
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Wrapper for the result cards inside the sidebar or main content
+export function ResultCardsWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(160px,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 sm:gap-5 w-full">
+      {children}
     </div>
   );
 }

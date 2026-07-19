@@ -495,7 +495,7 @@ export default function UnitConverter() {
               )}
               
               {isBatchMode ? (
-                <div className="w-full bg-white/50  border border-slate-300  rounded-[20px] p-4 text-center font-mono text-sm min-h-[120px] max-h-[200px] overflow-y-auto custom-scrollbar shadow-sm  z-10 flex flex-col gap-1 overflow-hidden">
+                <div className="w-full bg-white/50  border border-slate-300  rounded-[20px] p-4 text-center font-mono text-sm min-h-[120px] max-h-[200px] overflow-y-auto hide-scrollbar shadow-sm  z-10 flex flex-col gap-1 overflow-hidden">
                    {batchResults.length === 0 ? (
                      <div className="text-slate-500 italic my-auto">Results will appear here</div>
                    ) : (
@@ -508,7 +508,7 @@ export default function UnitConverter() {
                    )}
                 </div>
               ) : isCompareMode ? (
-                <div className="w-full bg-white/50 border border-slate-300 rounded-[20px] p-4 text-center font-mono text-sm min-h-[120px] max-h-[300px] overflow-y-auto custom-scrollbar shadow-sm z-10 flex flex-col gap-2 overflow-hidden">
+                <div className="w-full bg-white/50 border border-slate-300 rounded-[20px] p-4 text-center font-mono text-sm min-h-[120px] max-h-[300px] overflow-y-auto hide-scrollbar shadow-sm z-10 flex flex-col gap-2 overflow-hidden">
                    {currentUnits.filter(u => u.id !== fromUnit).map((u, i) => (
                      <div key={i} className="w-full flex justify-between items-center text-slate-700 bg-white/80 p-3 rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                        <span className="font-bold text-fuchsia-600 text-lg truncate mr-3">{convertValue(fromValue, fromUnit, u.id, activeCategory)}</span>

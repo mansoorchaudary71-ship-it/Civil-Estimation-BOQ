@@ -197,8 +197,8 @@ function TilesCalculator() {
   const results = calculateTiles();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div className="lg:col-span-4 space-y-6">
+    <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+      <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label={`Floor Area (${uArea})`}>
             <><label htmlFor="a11y-input-284" className="sr-only">Input</label>
@@ -238,7 +238,7 @@ function TilesCalculator() {
         </InputGroup>
       </div>
 
-      <div className="lg:col-span-8 flex flex-col h-full space-y-4">
+      <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col h-full space-y-4">
         {results ? (
           <>
             <MaterialSummary title="Estimate Results" totalLabel="Boxes Required" totalValue={results.boxesReq.toString()} totalUnit="boxes">
@@ -349,8 +349,8 @@ function PaintCalculator() {
   const results = calculatePaint();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div className="lg:col-span-4 space-y-6">
+    <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+      <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label={`Total Area (${uArea})`}>
             <><label htmlFor="a11y-input-291" className="sr-only">Input</label>
@@ -380,7 +380,7 @@ function PaintCalculator() {
 
       </div>
 
-      <div className="lg:col-span-8 flex flex-col h-full space-y-4">
+      <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col h-full space-y-4">
         {results ? (
             <>
               <MaterialSummary title="Estimate Results" totalLabel="Required Paint" totalValue={results.liters} totalUnit="Liters">
@@ -657,8 +657,8 @@ function WoodFramingCalculator() {
   const results = calculateWood();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div className="lg:col-span-4 space-y-6">
+    <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+      <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
         <InputGroup label={`Length per Member (${uLen})`}>
           <><label htmlFor="a11y-input-302" className="sr-only">Input</label>
 <input id="a11y-input-302" type="number" inputMode="decimal" min="0" value={frameLength} onChange={(e) => setFrameLength(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
@@ -681,7 +681,7 @@ function WoodFramingCalculator() {
         </InputGroup>
       </div>
 
-      <div className="lg:col-span-8 flex flex-col h-full space-y-4">
+      <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col h-full space-y-4">
         {results ? (
           <>
             <MaterialSummary title="Estimate Results" totalLabel="Req. Wood Volume" totalValue={results.volumeWastage} totalUnit={isSI ? "m³" : "cu.ft"}>
@@ -788,8 +788,8 @@ function TermiteTreatmentCalculator() {
   const results = calculateTermite();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div className="lg:col-span-4 space-y-6">
+    <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+      <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
         <div className="flex bg-slate-100 p-1 rounded-[16px]">
             <button
               onClick={() => setType("pre")}
@@ -822,7 +822,7 @@ function TermiteTreatmentCalculator() {
         </InputGroup>
       </div>
 
-      <div className="lg:col-span-8 flex flex-col h-full space-y-4">
+      <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col h-full space-y-4">
         {results ? (
           <>
             <MaterialSummary title="Estimate Results" totalLabel="Chemical Concentrate" totalValue={results.chemReserve} totalUnit="Liters">

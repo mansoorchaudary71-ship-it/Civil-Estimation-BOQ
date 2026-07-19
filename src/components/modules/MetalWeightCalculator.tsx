@@ -267,9 +267,9 @@ export default function MetalWeightCalculator() {
  onTabChange={(id) => setActiveProfile(id as Profile)}
  />
  </div>
- <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+ <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
  {/* Inputs Section */}
- <div className="w-full lg:col-span-7 bg-white p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2rem] border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+ <div className="w-full flex-1 min-w-[min(100%,380px)] w-full flex flex-col bg-white p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2rem] border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
  <h3 className="font-bold text-xl mb-6">
  {activeProfile} Dimensions
  </h3>
@@ -554,7 +554,7 @@ export default function MetalWeightCalculator() {
  </div>
  </div>
  {/* Results Section */}
- <div className="lg:col-span-5 flex flex-col items-stretch h-full">
+ <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 flex flex-col items-stretch h-full">
  <MaterialSummary
  title="Calculated Results"
  totalLabel="Total Element Weight"

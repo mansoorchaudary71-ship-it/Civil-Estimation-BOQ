@@ -451,3 +451,49 @@ html.high-contrast a {
     overflow-x: hidden;
   }
 
+
+/* Modern One UI 8.5 Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* slate-300 */
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569; /* slate-600 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* slate-400 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b; /* slate-500 */
+}
+
+/* For panels that scroll independently but should have hidden scrollbars */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Ensure html and body take full width and handle main scroll */
+html, body {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

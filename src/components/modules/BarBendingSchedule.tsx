@@ -262,10 +262,10 @@ export default function BarBendingSchedule() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 print:hidden">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           
           {/* Input Form */}
-          <section className="lg:col-span-4 space-y-6">
+          <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
             <div className="w-full bg-white px-6 py-6 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
                <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
                  <Plus className="w-5 h-5 text-blue-500" /> Add Bar
@@ -441,7 +441,7 @@ export default function BarBendingSchedule() {
           </section>
 
           {/* Schedule Summary (Screen only, mirrored below for print) */}
-          <section className="lg:col-span-8 space-y-6">
+          <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
              <div className="w-full bg-white px-6 py-6 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 min-h-[500px] overflow-hidden">
                 <div className="flex items-center justify-between mb-6">
                    <h2 className="flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">

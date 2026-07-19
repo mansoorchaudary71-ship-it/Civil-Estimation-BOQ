@@ -269,10 +269,10 @@ export default function FormworkEstimator() {
       <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-24 px-4 md:px-0">
         
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           
           {/* Elements Config Section */}
-          <section className="lg:col-span-8 space-y-6">
+          <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             
             <div className="w-full bg-white/90 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
               
@@ -343,7 +343,7 @@ export default function FormworkEstimator() {
             </div>
           </section>
           {/* Results Summary Interface */}
-          <section className="lg:col-span-4 space-y-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
             <MaterialSummary
               title="Material Summary"
               totalLabel="Total Formwork Area"

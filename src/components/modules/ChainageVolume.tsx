@@ -234,8 +234,8 @@ export default function ChainageVolumeEstimator() {
     <div className="w-full flex justify-center animate-in fade-in py-6">
       <div className="w-full max-w-6xl space-y-8">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <section className="lg:col-span-8 space-y-6">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+          <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             
             <div className="w-full bg-white px-6 py-5 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
               <div className="flex items-center gap-3 mb-5 border-b border-slate-100 pb-4">
@@ -435,7 +435,7 @@ export default function ChainageVolumeEstimator() {
 
           </section>
           
-          <section className="lg:col-span-4 space-y-6">
+          <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
             <div className="flex flex-col h-full sticky top-6 gap-6">
               
               <div className="w-full bg-white px-5 py-5 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">

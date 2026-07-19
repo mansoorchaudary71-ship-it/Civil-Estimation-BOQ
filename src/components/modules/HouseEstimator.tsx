@@ -997,9 +997,9 @@ export default function HouseEstimator() {
         
 
         <div className="space-y-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Main Controls Overlay */}
-          <section className="lg:col-span-7 space-y-6 flex flex-col">
+          <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6 flex flex-col">
             {/* Quick Estimate Base Controls */}
             <div className="tool-card p-6 space-y-6">
               <div className="flex items-center gap-3 mb-2">
@@ -1526,7 +1526,7 @@ export default function HouseEstimator() {
                         relatedToolIds={['brickwork', 'concrete-mix']}
                         onRecalculate={() => {}}
                       >
-                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 mt-6">
                            <ResultCard
                               title="Cement"
                               value={estimates.cementBags.toFixed(0)}
@@ -1621,7 +1621,7 @@ export default function HouseEstimator() {
                           </button>
                         </div>
                       </div>
-                      <div className="border border-slate-200 rounded-[24px] overflow-auto max-h-[400px] bg-white shadow-sm mb-8 relative custom-scrollbar overflow-hidden">
+                      <div className="border border-slate-200 rounded-[24px] overflow-y-auto max-h-[400px] bg-white shadow-sm mb-8 relative hide-scrollbar">
                         <table className="boq-table-print-breaks w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
                           <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
                             <tr>
@@ -1779,7 +1779,7 @@ export default function HouseEstimator() {
                         relatedToolIds={['interiors-finishes', 'master-quantity']}
                         onRecalculate={() => {}}
                       >
-                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                         <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4 mt-6">
                             {finishingCostData.map((item, idx) => (
                                <ResultCard
                                   key={idx}
@@ -1834,7 +1834,7 @@ export default function HouseEstimator() {
                           </button>
                         </div>
                       </div>
-                      <div className="border border-slate-200 rounded-[24px] overflow-auto max-h-[400px] bg-white shadow-sm mb-8 relative custom-scrollbar overflow-hidden">
+                      <div className="border border-slate-200 rounded-[24px] overflow-y-auto max-h-[400px] bg-white shadow-sm mb-8 relative hide-scrollbar">
                         <table className="boq-table-print-breaks w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
                           <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
                             <tr>
@@ -2063,7 +2063,7 @@ export default function HouseEstimator() {
           
           {/* Results Area */}
           {showResults && (
-            <section className="lg:col-span-5 relative hidden lg:block">
+            <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 relative hidden lg:block">
               <div className="sticky top-6 z-10 bg-[var(--bg-card)]/50 backdrop-blur-2xl border border-[var(--border-color)] rounded-[2.5rem] p-4 sm:p-6 lg:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col items-start gap-8">
               <div className="flex flex-col gap-4">
                 <div className="p-4 bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 border border-slate-100 rounded-[24px] overflow-hidden">

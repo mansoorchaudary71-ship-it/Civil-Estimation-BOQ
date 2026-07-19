@@ -118,10 +118,10 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
         
         {/* Input Panel */}
-        <div className="w-full lg:col-span-4 bg-white rounded-[24px] p-4 sm:p-6 border border-slate-200 shadow-sm space-y-6 overflow-hidden">
+        <div className="w-full flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 bg-white rounded-[24px] p-4 sm:p-6 border border-slate-200 shadow-sm space-y-6 overflow-hidden">
           <h3 className="text-lg font-bold border-b border-slate-100 pb-3 text-slate-800">
             Project Specs
           </h3>
@@ -212,7 +212,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
         </div>
 
         {/* Results Panel */}
-        <div className="lg:col-span-8 space-y-6">
+        <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
           {results ? (
             <>
               {/* Grand Total Highlight */}

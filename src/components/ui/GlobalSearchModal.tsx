@@ -159,7 +159,7 @@ export default function GlobalSearchModal({
         </div>
 
         {/* Results Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar max-h-[60vh]">
+        <div className="flex-1 overflow-y-auto hide-scrollbar max-h-[60vh]">
           {searchWords.length === 0 ? (
             <div className="p-12 text-center flex flex-col items-center justify-center">
               <div className="w-20 h-20 rounded-[24px] bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center mb-5 shadow-sm border border-slate-100 dark:border-slate-800">

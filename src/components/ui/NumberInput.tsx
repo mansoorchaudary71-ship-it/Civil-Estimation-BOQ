@@ -171,7 +171,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             className={`w-full bg-slate-50/80 dark:bg-slate-800/50 border ${
               displayError 
                 ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' 
-                : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500 focus:ring-indigo-500/10'
+                : 'border-slate-100 dark:border-slate-800/60 focus:border-indigo-500 focus:ring-indigo-500/10'
             } text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-2xl px-5 py-4 min-h-[56px] ${
               displayUnit ? 'pr-28' : 'pr-16'
             } focus:outline-none focus:ring-4 transition-all font-bold text-base shadow-sm group-hover/input:shadow-md ${className || ''}`}
@@ -180,7 +180,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
           <div className="absolute right-3 flex items-center gap-2">
             {displayUnit && (
-              <span className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest select-none pr-3 border-r border-slate-200 dark:border-slate-700">
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest select-none pr-3 border-r border-slate-100 dark:border-slate-800/60">
                 {displayUnit}
               </span>
             )}

@@ -537,9 +537,9 @@ export default function VolumeEstimator() {
             onTabChange={(id) => setActiveShape(id as Shape)}
           />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Inputs */}
-          <div className="lg:col-span-7 bg-bg-card p-4 sm:p-6 rounded-[2rem] border border-slate-200 dark:border-slate-700">
+          <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col bg-bg-card p-4 sm:p-6 rounded-[2rem] border border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-[24px] flex items-center justify-center text-indigo-600 overflow-hidden">
                 {(() => {
@@ -1047,7 +1047,7 @@ export default function VolumeEstimator() {
               )}
             </div>
           </div>
-          <div className="lg:col-span-5 flex flex-col items-stretch h-full">
+          <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 flex flex-col items-stretch h-full">
             <MaterialSummary
                title="Calculated Results"
                totalLabel="Total Volume"

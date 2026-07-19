@@ -70,8 +70,8 @@ export default function AntiTermiteCalculator() {
           Anti-Termite Treatment & Emulsion Engine
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-5 space-y-6">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+            <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
                   <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-slate-800 mb-4">Surface Dimensions</h3>
                   <div className="space-y-4">
@@ -110,7 +110,7 @@ export default function AntiTermiteCalculator() {
                 </div>
             </div>
 
-            <div className="lg:col-span-7 flex flex-col gap-6">
+            <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col gap-6">
                 <MaterialSummary 
                     title="Volume Analytics & Mixed Emulsion"
                     totalLabel="Required Emulsion (Mixed Solution)"

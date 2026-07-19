@@ -812,7 +812,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                     No calculation results saved to generate a timeline.
                  </div>
               ) : (
-                <div className="overflow-x-auto custom-scrollbar pb-4 relative">
+                <div className="overflow-x-auto hide-scrollbar pb-4 relative">
                    <div className="absolute top-[28px] left-0 w-full h-1 bg-slate-200/60 rounded-full z-0"></div>
                    <div className="min-w-[800px] flex gap-6 relative z-10 flex-wrap">
                      {project.estimates.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).map((est, idx) => (
@@ -905,7 +905,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
               className="w-full bg-white/40 backdrop-blur-xl border border-white/60 p-4 sm:p-6 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"
             >
                <h3 className="mb-4 text-lg font-medium text-gray-800">Workspace Members</h3>
-               <div className="space-y-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+               <div className="space-y-3 max-h-60 overflow-y-auto pr-2 hide-scrollbar">
                  {project.memberIds.map(memberUid => (
                    <div key={memberUid} className="flex justify-between items-center py-2 border-b border-slate-100/50 last:border-0">
                      <div className="flex flex-col">
@@ -946,7 +946,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
               className="w-full bg-white/40 backdrop-blur-xl border border-white/60 p-4 sm:p-6 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"
             >
                <h3 className="mb-4 text-lg font-medium text-gray-800">Aggregated Materials</h3>
-               <div className="space-y-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+               <div className="space-y-3 max-h-80 overflow-y-auto pr-2 hide-scrollbar">
                   {Object.entries(aggregatedMaterials).length === 0 ? (
                      <p className="text-base font-normal text-gray-600 leading-relaxed">No materials calculated.</p>
                   ) : (

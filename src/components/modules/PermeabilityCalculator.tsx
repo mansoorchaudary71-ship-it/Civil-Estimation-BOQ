@@ -98,8 +98,8 @@ export default function PermeabilityCalculator() {
                 Permeability Coefficient Engine
             </h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-5 space-y-6">
+            <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+                <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                     <div>
                         <div className="flex bg-slate-100 p-1 rounded-xl mb-6">
                             <button
@@ -155,7 +155,7 @@ export default function PermeabilityCalculator() {
                     </div>
                 </div>
 
-                <div className="lg:col-span-7 flex flex-col gap-6">
+                <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col gap-6">
                     <MaterialSummary 
                         title="Permeability Analysis (k)"
                         totalLabel="Standard Permeability (k₂₀)"

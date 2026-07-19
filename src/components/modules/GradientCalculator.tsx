@@ -119,8 +119,8 @@ export default function GradientCalculator() {
             </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
-            <div className="lg:col-span-5 space-y-6">
+        <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+            <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 
                 {activeTab === "longitudinal" && (
                     <div className="animate-in fade-in slide-in-from-bottom-4">
@@ -170,7 +170,7 @@ export default function GradientCalculator() {
                 )}
             </div>
 
-            <div className="lg:col-span-7 flex flex-col gap-6">
+            <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col gap-6">
                 
                 {activeTab === "longitudinal" && (
                     <MaterialSummary 

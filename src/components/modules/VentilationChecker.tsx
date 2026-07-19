@@ -65,8 +65,8 @@ export default function VentilationChecker() {
             <Wind className="text-cyan-600" /> Ventilation & Lighting Checker (NBC)
          </h2>
 
-         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-4 space-y-6">
+         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+            <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
                   <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Room Details</h3>
                   <div className="space-y-4">
@@ -109,7 +109,7 @@ export default function VentilationChecker() {
                 </div>
             </div>
 
-            <div className="lg:col-span-8 flex flex-col gap-6">
+            <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col gap-6">
                 <MaterialSummary 
                     title="Compliance Verification"
                     totalLabel="Required Window Area"

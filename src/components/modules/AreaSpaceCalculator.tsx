@@ -232,8 +232,8 @@ export default function AreaSpaceCalculator() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-8 space-y-6">
+      <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+        <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
           {/* TAB 1: SHAPES */}
           {activeTab === "shape" && (
             <div className="w-full bg-white/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 rounded-[24px] shadow-sm overflow-hidden">
@@ -422,7 +422,7 @@ export default function AreaSpaceCalculator() {
         </div>
 
         {/* RESULTS PANEL (RIGHT) */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
           <div className="w-full bg-white/90 backdrop-blur-xl border border-white/20 p-4 sm:p-8 rounded-[2rem] shadow-sm sticky top-6 overflow-hidden">
             <h3 className="tabular-nums mb-6 flex items-center gap-2 text-lg font-medium text-slate-800 mb-4">
               <Calculator className="w-5 h-5 text-indigo-600" /> Calculation Results

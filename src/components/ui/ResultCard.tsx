@@ -242,7 +242,7 @@ export function ResultCard({
       animate={controls}
       initial={{ opacity: 0, y: 15, scale: 0.98 }}
       exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-      className={`relative p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[24px] sm:rounded-[32px] shadow-sm hover:shadow-md flex flex-col justify-between gap-4 transition-all duration-500 w-full h-full overflow-hidden group ${className}`}
+      className={`relative p-6 sm:p-8 bg-white dark:bg-slate-900 border-0 rounded-[24px] sm:rounded-[32px] shadow-sm hover:shadow-md flex flex-col justify-between gap-4 transition-all duration-500 w-full h-full overflow-hidden group min-w-[min(100%,180px)] ${className}`}
     >
       <div className="flex items-start justify-between gap-4 w-full relative z-10">
         <div className="flex flex-col max-w-[80%]">
@@ -252,7 +252,7 @@ export function ResultCard({
                 {icon}
               </div>
             )}
-            <h4 className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] truncate flex items-center gap-2">
+            <h4 className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 min-w-0 flex-1 break-words">
               {title}
               {explanation && (
                 <button
@@ -298,7 +298,7 @@ export function ResultCard({
       </div>
 
       <div
-        className="flex flex-col w-full relative z-10 mt-1 overflow-hidden"
+        className="flex flex-col w-full relative z-10 mt-1 min-w-0 @container"
         role="alert"
         aria-live="polite"
       >
@@ -306,11 +306,11 @@ export function ResultCard({
           Calculation updated: {title} is {displayValue} {activeUnit}
         </span>
         <div
-          className="flex flex-wrap items-baseline gap-1.5 sm:gap-2 overflow-hidden"
+          className="flex flex-wrap items-baseline gap-1.5 sm:gap-2 min-w-0 w-full"
           aria-hidden="true"
         >
           <span
-            className={`text-[clamp(1.25rem,5vw,2.5rem)] leading-none font-black tracking-tighter break-words max-w-full ${valueColor}`}
+            className={`text-[clamp(1.25rem,4cqw,2.5rem)] sm:text-[clamp(1.5rem,3cqw,2.5rem)] leading-[1.1] font-black tracking-tighter max-w-full break-words [word-break:break-word] ${valueColor}`}
           >
             {displayValue}
           </span>

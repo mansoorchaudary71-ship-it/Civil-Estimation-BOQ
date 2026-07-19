@@ -44,7 +44,7 @@ export function MaterialTakeoffDashboard({ costs, rates }: MaterialTakeoffDashbo
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
         
         {/* Cement */}
         <MTOItem 

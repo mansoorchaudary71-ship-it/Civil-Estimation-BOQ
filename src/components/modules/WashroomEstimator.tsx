@@ -183,10 +183,10 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="flex-1 p-6 sm:p-8 flex flex-wrap gap-6 sm:gap-8 w-full items-start">
         
         {/* Input Form Column */}
-        <div className="lg:col-span-5 space-y-8">
+        <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-8">
           {/* Unit Toggle */}
           <div className="flex bg-slate-200/50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-[24px] border border-slate-200 dark:dark:border-slate-700 shadow-sm text-slate-900 dark:text-white p-1 rounded-[24px] w-fit overflow-hidden">
             <button onClick={()=>setUnit("ft")} className={`px-5 py-2 rounded-[24px] text-base font-medium transition-all ${unit === "ft" ? "bg-white dark:bg-slate-700 shadow-sm text-purple-600 dark:text-purple-400" : "text-slate-500 hover:text-slate-700"}`}>Feet</button>
@@ -274,7 +274,7 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
         </div>
 
         {/* Results Column */}
-        <div className="lg:col-span-7 h-full flex flex-col">
+        <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col h-full flex flex-col">
           <div className="w-full bg-white dark:bg-slate-800 rounded-[24px] p-4 sm:p-4 sm:p-4 sm:p-6 sm:p-4 sm:p-4 sm:p-4 sm:p-8 shadow-sm flex-1 border border-slate-200 dark:dark:border-slate-700 overflow-hidden flex flex-col">
             <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-900 dark:text-white mb-6">Bill of Quantities</h3>
             

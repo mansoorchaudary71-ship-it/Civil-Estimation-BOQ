@@ -207,8 +207,8 @@ export default function RoadEstimator() {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-4 space-y-6">
+            <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
+                <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                     <div>
                         <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Road Geometry</h3>
                         <div className="grid grid-cols-2 gap-4">
@@ -236,7 +236,7 @@ export default function RoadEstimator() {
                     </div>
                 </div>
 
-                <div className="lg:col-span-8 flex flex-col gap-6">
+                <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col gap-6">
                     <MaterialSummary 
                         title="Mass-Haul Estimations"
                         totalLabel="Total Hot Mix Asphalt (BC + DBM)"

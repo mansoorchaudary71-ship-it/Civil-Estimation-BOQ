@@ -335,7 +335,7 @@ export default function StaircaseCalculator() {
     };
   }, [stairShape, numSteps, flight1Steps, flight2Steps, rise, tread, stairWidth, waistThickness, landingLength, landingWidth, mainBarDia, mainBarSpacing, distBarDia, distBarSpacing, clearCover, concreteGrade, wastage, isSI, uLen]);
 
-  const InputGroup = ({ label, children }: { label: string, children: React.ReactNode }) => (
+  const InputGroup = ({ label, children }: { label: React.ReactNode, children: React.ReactNode }) => (
     <div>
       <label className="block text-base font-medium uppercase tracking-wider mb-2">
         {label}

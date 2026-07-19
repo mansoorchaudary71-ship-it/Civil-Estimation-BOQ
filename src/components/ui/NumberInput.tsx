@@ -4,7 +4,8 @@ import { useSettings } from '../../context/SettingsContext';
 import { getImperialConversion } from '../../utils/autoConverter';
 import { motion } from 'framer-motion';
 
-const getGenericTooltip = (label: string): string | null => {
+const getGenericTooltip = (label: string | React.ReactNode): string | null => {
+  if (typeof label !== "string") return "Enter required value.";
   if (!label) return null;
   const l = label.toLowerCase();
   
@@ -26,7 +27,7 @@ const getGenericTooltip = (label: string): string | null => {
 };
 
 export interface NumberInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
-  label?: string;
+  label?: React.ReactNode;
   unit?: string;
   value: number | string;
   onChange: (value: number | "") => void;
@@ -58,7 +59,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       return num.toString();
     };
 
-    const inputId = id || (label ? label.replace(/\s+/g, '-').toLowerCase() : undefined);
+    const inputId = id || (typeof label === "string" ? label.replace(/\s+/g, "-").toLowerCase() : undefined);
     
     const [localValue, setLocalValue] = useState<string>(getDisplayValue(value));
     const [internalError, setInternalError] = useState<string | null>(null);

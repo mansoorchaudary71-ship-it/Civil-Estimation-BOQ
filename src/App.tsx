@@ -144,36 +144,19 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
         }
       }
 
-      // Esc to close active modals or return to the dashboard
+      // Esc to return to the dashboard
       if (e.key === 'Escape') {
-        if (isAuthOpen) {
-          setIsAuthOpen(false);
-          return;
-        }
-        if (isProfileOpen) {
-          setIsProfileOpen(false);
-          return;
-        }
-        if (isSettingsOpen) {
-          setIsSettingsOpen(false);
-          return;
-        }
-        
-        // If there is any element with role="dialog" or class includes "modal", don't navigate home (let it close itself)
         const activeModals = document.querySelectorAll('[role="dialog"], .modal-overlay, [data-modal]');
         if (activeModals.length > 0) {
           return;
         }
-
-        if (activeModule !== 'home') {
-          handleSelectModule('home');
-        }
+        onNavigate('home');
       }
     };
     
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [activeModule, isAuthOpen, isProfileOpen, isSettingsOpen]);
+  }, [onNavigate]);
 
   return (
 
@@ -610,7 +593,7 @@ export default function App() {
           
           // Check if any search word is in the input's identifiers
           const words = term.split(/\s+/).filter(Boolean);
-          if (words.some(word => identifiers.includes(word))) {
+          if (words.some((word: string) => identifiers.includes(word))) {
             targetInput = el;
             break;
           }

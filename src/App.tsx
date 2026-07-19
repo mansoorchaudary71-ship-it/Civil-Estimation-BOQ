@@ -24,6 +24,7 @@ import { ToolHeader } from "./components/ui/ToolHeader";
 import { Toaster } from "react-hot-toast";
 import { ProductTour } from "./components/ui/ProductTour";
 
+import { ThemeProvider } from "./context/ThemeContext";
 import { SettingsProvider } from "./context/SettingsContext";
 import { HouseSpecsProvider } from "./context/HouseSpecsContext";
 import { MarketRatesProvider } from "./context/MarketRatesContext";
@@ -591,7 +592,54 @@ export default function App() {
     };
   }, []);
 
+  
+  useEffect(() => {
+    const handleToolSearchFocus = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const term = customEvent.detail?.term?.toLowerCase();
+      if (!term) return;
+
+      // Find the best input to focus
+      setTimeout(() => {
+        const inputs = Array.from(document.querySelectorAll('input, textarea, select'));
+        let targetInput = null;
+        
+        for (const input of inputs) {
+          const el = input as HTMLInputElement;
+          const identifiers = [el.name, el.id, el.placeholder, el.className].join(' ').toLowerCase();
+          
+          // Check if any search word is in the input's identifiers
+          const words = term.split(/\s+/).filter(Boolean);
+          if (words.some(word => identifiers.includes(word))) {
+            targetInput = el;
+            break;
+          }
+        }
+        
+        if (!targetInput && inputs.length > 0) {
+           // Fallback to first visible input
+           targetInput = inputs.find((el: any) => el.type !== 'hidden' && el.style.display !== 'none');
+        }
+
+        if (targetInput) {
+          (targetInput as HTMLElement).focus();
+          
+          // Optional: highlight it temporarily
+          const originalClass = targetInput.className;
+          targetInput.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2', 'transition-all');
+          setTimeout(() => {
+             targetInput?.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
+          }, 2000);
+        }
+      }, 500); // Wait for module render
+    };
+    
+    window.addEventListener('tool-search-focus', handleToolSearchFocus);
+    return () => window.removeEventListener('tool-search-focus', handleToolSearchFocus);
+  }, []);
+
   const [activeLayoutId, setActiveLayoutId] = useState<string | null>(null);
+
 
   const handleSelectModule = (id: ModuleId, layoutId?: string) => {
     setPreviousModule(activeModule);
@@ -610,6 +658,7 @@ export default function App() {
       <LoadingScreen />
       <CustomCursor />
       <ScrollToTop isHome={activeModule === "home"} />
+      <ThemeProvider>
       <SettingsProvider>
         <HouseSpecsProvider>
           <MarketRatesProvider>
@@ -680,6 +729,7 @@ export default function App() {
           </MarketRatesProvider>
         </HouseSpecsProvider>
       </SettingsProvider>
+      </ThemeProvider>
     </SmoothScroll>
   );
 }

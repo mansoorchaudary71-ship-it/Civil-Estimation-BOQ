@@ -43,13 +43,73 @@ export default function GlobalSearchModal({
 
   const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
   
+  
+  
+  const unsupportedModules = [
+    'boq-templates', 'cost-guide-pakistan', 'blog', 'is-codes-reference', 
+    'morth-irc-specs', 'pakistan-building-codes', 'uae-construction-standards', 
+    'quick-estimation', 'master-quantity'
+  ];
+
   const results = ALL_MODULES.filter((mod) => {
     if (searchWords.length === 0) return false;
+    if (unsupportedModules.includes(mod.id)) return false;
+    
+    // Deep metadata mapping for vast search
+
+    const metadataMap: Record<string, string> = {
+      "house": "bricks, cement, sand, aggregate, concrete, footing, slab, columns, layout, cost, residential, rate, total, estimate, area",
+      "qs-workflow": "boq, quantity surveyor, sequence, project setup, drawings, substructure, superstructure, masonry, services",
+      "takeoff": "area, linear, extraction, plan measure, blueprint, polygon, dimension, scale",
+      "rates": "live db, market price, rate analysis, cost, database",
+      "ai": "assistant, help, query, questions, generate, calculate, natural language",
+      "material-takeoff": "sheet, total, materials, excel, export, summary, brickwork, plaster, block",
+      "cost-summary": "summary, overall, final, cost, budget, chart, distribution",
+      "measurement-sheet": "lxbxh, dimensions, item, deduction, total, measurement, format",
+      "boq": "generator, bill of quantities, tender, document, itemized, rate, amount",
+      "interiors-finishes": "paint, tiles, flooring, ceiling, plaster, putty, doors, windows, woodwork, glass",
+      "area-space-calculator": "square, feet, meter, room, dimension, plot, land",
+      "volume-estimator": "cubic, concrete, excavation, soil, earth, water, tank, capacity",
+      "metal-weight": "steel, rebar, ms plate, angle, channel, section, kg, ton, density, d^2/162",
+      "unit-converter": "feet, meters, inches, mm, cm, gallons, liters, conversion",
+      "calculators": "formula, quick, math, structural, generic",
+      "bbs-generator": "bar bending schedule, stirrup, cutting length, bend deduction, weight, rebar",
+      "reinforcement": "visualizer, spacing, layout, rebar arrangement, grid, mesh",
+      "isolated-footing": "trapezoidal, stepped, pad, concrete volume, steel, depth, foundation",
+      "retaining-wall": "stem, base, heel, toe, concrete, stability, soil pressure, sliding",
+      "staircase-calculator": "tread, riser, flight, landing, waist slab, concrete volume, steps",
+      "aggregate-tests": "sieve analysis, f.m, fineness modulus, gradation, curve, coarse, fine",
+      "formwork": "shuttering, ply, scaffolding, area, contact, props, boards, timber",
+      "geotechnical": "soil, bearing capacity, water table, settlement, pressure",
+      "cbr-test": "california bearing ratio, penetration, load, dial gauge, subgrade",
+      "aggregate-blending": "mix proportion, trial, sieves, percentage, combine",
+      "direct-shear": "cohesion, friction angle, failure envelope, normal stress, shear stress",
+      "permeability-test": "constant head, falling head, coefficient, darcy, flow",
+      "mep-calculator": "electrical, plumbing, hvac, load, duct, pipe, wire, current, voltage",
+      "solar-roof": "panels, kw, inverter, battery, area, generation, efficiency, sunlight",
+      "rainwater-harvesting": "catchment, runoff, tank size, rainfall, filter, capacity",
+      "road-pavement": "asphalt, bitumen, base course, sub base, thickness, camber, volume",
+      "earthworks": "cut, fill, trapezoidal, grid, contour, level, volume, excavation",
+      "chainage": "profile, section, level, interval, earthwork volume",
+      "gradient-calculator": "slope, rise, run, ratio, percentage, angle",
+      "anti-termite": "chemical, spray, area, concentration, foundation treatment, soil",
+      "master-sieve": "sieve size, passing, retained, astm, bs, is code",
+      "beam-design": "flexure, shear, moment, ast, depth, neutral axis, width",
+      "column-design": "axial, biaxial, slenderness, tie, main bar, pu, mu",
+      "raft-foundation": "mat, bearing, uniform, thickness, punching shear",
+      "water-tank-design": "ugwt, ohwt, hoop tension, base slab, wall thickness, capacity",
+      "pile-foundation": "skin friction, end bearing, capacity, settlement, diameter, length",
+      "prestressed-concrete": "tendon, losses, stress, anchorage, pre-tension, post-tension"
+    };
+
+    const metadata = (metadataMap[mod.id] || "").toLowerCase();
+    
     return searchWords.every(
       (word) => 
         mod.title.toLowerCase().includes(word) || 
         mod.desc.toLowerCase().includes(word) || 
-        mod.category.toLowerCase().includes(word)
+        mod.category.toLowerCase().includes(word) ||
+        metadata.includes(word)
     );
   });
 
@@ -118,7 +178,23 @@ export default function GlobalSearchModal({
                 <button
                   key={mod.id}
                   onClick={() => {
+                    // Navigate to the target module
                     onNavigate(mod.id);
+                    
+                    // Dispatch context transfer event for inputs inside the new module
+                    setTimeout(() => {
+                      window.dispatchEvent(new CustomEvent('tool-search-focus', { 
+                        detail: { term: searchTerm, moduleId: mod.id } 
+                      }));
+                      
+                      // Fix blank page issue: Scroll main container to top
+                      const scrollableContainers = document.querySelectorAll('.overflow-y-auto, .overflow-y-scroll, main div');
+                      scrollableContainers.forEach(el => {
+                        el.scrollTo({ top: 0, behavior: "smooth" });
+                      });
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }, 100);
+                    
                     onClose();
                   }}
                   className="group flex items-start gap-5 p-4 sm:p-5 rounded-3xl bg-slate-50/50 hover:bg-indigo-50/50 dark:bg-slate-800/30 dark:hover:bg-indigo-900/20 border border-transparent hover:border-indigo-100 dark:hover:border-indigo-800/50 transition-all duration-300 text-left w-full hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/5"

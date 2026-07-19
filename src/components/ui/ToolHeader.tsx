@@ -232,14 +232,14 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
         {/* Title Header */}
         <div className="w-full flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-2 print:hidden">
           <div className="flex items-start gap-4 relative z-10 w-full lg:w-auto">
-            <div className="w-14 h-14 bg-white flex items-center justify-center shrink-0 text-indigo-700 rounded-[18px] border border-slate-200/60 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
+            <motion.div layoutId={`icon-${id}`} className="w-14 h-14 bg-white flex items-center justify-center shrink-0 text-indigo-700 rounded-[18px] border border-slate-200/60 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
               {Icon ? <Icon className="w-7 h-7" strokeWidth={1.5} /> : <ClipboardList className="w-7 h-7" strokeWidth={1.5} />}
-            </div>
+            </motion.div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <h1 className="text-[22px] md:text-2xl font-semibold text-slate-900 tracking-tight leading-none pt-1">
+                <motion.h1 layoutId={`title-${id}`} className="text-[22px] md:text-2xl font-semibold text-slate-900 tracking-tight leading-none pt-1">
                   {title}
-                </h1>
+                </motion.h1>
                 <div className="group relative flex items-center pt-1">
                   <button 
                     onClick={() => setIsFormulaModalOpen(true)}

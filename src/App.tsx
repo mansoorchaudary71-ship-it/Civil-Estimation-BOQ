@@ -20,6 +20,7 @@ import SkipToContent from "./components/ui/SkipToContent";
 import LoadingScreen from "./components/ui/LoadingScreen";
 import CustomCursor from "./components/ui/CustomCursor";
 import ScrollToTop from "./components/ui/ScrollToTop";
+import BackButton from "./components/ui/BackButton";
 import { ToolHeader } from "./components/ui/ToolHeader";
 import { Toaster } from "react-hot-toast";
 import { ProductTour } from "./components/ui/ProductTour";
@@ -191,17 +192,7 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
          <Footer activeModule={id} onNavigate={onNavigate} />
       </div>
 
-      {/* Floating Back to Dashboard Button */}
-      <button
-        onClick={() => onNavigate('home')}
-        aria-label="Back to dashboard"
-        title="Back to Dashboard"
-        className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 w-14 h-14 flex items-center justify-center rounded-full bg-indigo-700 text-white shadow-[0_8px_20px_-4px_rgba(67,56,202,0.5)] backdrop-blur-xl z-[85] transition-all duration-200 ease-out hover:scale-105 hover:bg-indigo-800 hover:shadow-[0_12px_25px_-4px_rgba(67,56,202,0.7)] active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 print:hidden overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 mix-blend-overlay rounded-full" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent translate-y-full group-hover:-translate-y-full transition-transform duration-500 ease-in-out" />
-        <ArrowLeft className="w-5 h-5 relative z-10 transition-transform duration-200 ease-out group-hover:-translate-x-1" strokeWidth={2.5} />
-      </button>
+
     </div>
   );
 };
@@ -661,6 +652,7 @@ export default function App() {
       <LoadingScreen />
       <CustomCursor />
       <ScrollToTop isHome={activeModule === "home"} />
+      <BackButton isVisible={activeModule !== "home"} onNavigate={() => handleSelectModule("home")} />
       <ThemeProvider>
       <SettingsProvider>
         <HouseSpecsProvider>
@@ -673,27 +665,12 @@ export default function App() {
                   <PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} />
                   <GlobalSearchModal isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} onNavigate={handleSelectModule} />
                   
-                  {/* Persistent, Universal "Back to Dashboard" Component */}
-                  <AnimatePresence>
-                    {activeModule !== "home" && (
-                      <motion.button
-                        initial={{ opacity: 0, scale: 0.8, x: -20 }}
-                        animate={{ opacity: 1, scale: 1, x: 0 }}
-                        exit={{ opacity: 0, scale: 0.8, x: -20 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                        onClick={() => handleSelectModule('home')}
-                        aria-label="Back to dashboard"
-                        title="Back to Dashboard"
-                        className="fixed top-20 left-4 sm:top-24 sm:left-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.1)] border border-slate-200/50 dark:border-slate-800/50 backdrop-blur-md transition-all duration-300 ease-out hover:scale-105 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 hover:shadow-[0_8px_25px_-4px_rgba(67,56,202,0.15)] active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 print:hidden"
-                      >
-                        <ArrowLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" strokeWidth={2.5} />
-                      </motion.button>
-                    )}
-                  </AnimatePresence>
+
                   
                   <ProductTour />
                   
                   <TopNavbar
+                    activeModule={activeModule}
                     onOpenAuth={() => setIsAuthOpen(true)}
                     onOpenProfile={() => setIsProfileOpen(true)}
                     onNavigate={handleSelectModule}

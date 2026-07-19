@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, Search, Moon, Sun } from "lucide-react";
+import { Menu, Search, Moon, Sun, ArrowLeft } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useSettings } from "../context/SettingsContext";
 import { useAuth } from "../contexts/AuthContext";
@@ -12,12 +12,14 @@ export default function TopNavbar({
   onOpenProfile,
   onOpenSettings,
   onOpenRecent,
+  activeModule,
 }: {
   onNavigate?: (id: string) => void;
   onOpenAuth?: () => void;
   onOpenProfile?: () => void;
   onOpenSettings?: () => void;
   onOpenRecent?: () => void;
+  activeModule?: string;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { settings, toggleTheme } = useSettings();

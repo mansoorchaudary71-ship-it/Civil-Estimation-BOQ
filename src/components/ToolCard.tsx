@@ -125,6 +125,7 @@ export default function ToolCard({
       <div className="relative z-10 flex flex-col h-full p-8 sm:p-10">
         <div className="flex items-start justify-between min-h-[40px]">
           <motion.div 
+            layoutId={`icon-${mod.id}`}
             animate={{ scale: hov ? 1.1 : 1, rotate: hov ? [0, -5, 5, 0] : 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="mb-4"
@@ -158,9 +159,9 @@ export default function ToolCard({
         </div>
 
         <div className="flex flex-col mt-2">
-          <h3 className="text-xl font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[3.5rem]">
+          <motion.h3 layoutId={`title-${mod.id}`} className="text-xl font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[3.5rem]">
             {mod.title}
-          </h3>
+          </motion.h3>
           <p className="text-gray-500 text-sm mt-3 leading-relaxed line-clamp-2">
             {mod.desc || "No description available."}
           </p>

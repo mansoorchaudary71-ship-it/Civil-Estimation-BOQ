@@ -863,7 +863,7 @@ export function CalculationHistory({
                   onChange={(e) => setSaveName(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-medium"
                   placeholder="e.g. Dream House Ground Floor"
-                  autoFocus
+                  
                 /></>
               </div>
 

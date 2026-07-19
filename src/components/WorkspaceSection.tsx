@@ -342,7 +342,7 @@ export default function WorkspaceSection({
                           onKeyDown={(e) =>
                             e.key === "Enter" && handleCreateProject()
                           }
-                          autoFocus
+                          
                         /></>
                         <button aria-label="Check" onClick={handleCreateProject}
                           disabled={!newProjectName.trim()}

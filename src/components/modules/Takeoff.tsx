@@ -1155,7 +1155,7 @@ export default function Takeoff() {
                                 setEditingMeasurementId(null);
                             }}
                             className="bg-white border border-blue-500 text-xs text-slate-800 rounded px-1.5 py-0.5 outline-none w-full min-w-0 rounded-full"
-                            autoFocus
+                            
                             onClick={(e) => e.stopPropagation()}
                           /></>
                         ) : (

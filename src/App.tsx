@@ -451,12 +451,29 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    // Force Scroll-to-Top on Load
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
     if (scrollRef.current) {
-      if (activeModule !== "home" || !previousModule || ["home", "my-estimates", "pricing", "about", "careers", "contact", "blog"].includes(previousModule)) {
-        scrollRef.current.scrollTo(0, 0);
-      }
+      scrollRef.current.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
-  }, [activeModule, previousModule]);
+    
+    // Safety fallback: sometimes nested scrollable containers keep their scroll
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      if (scrollRef.current) scrollRef.current.scrollTo(0, 0);
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) mainContent.scrollTo(0, 0);
+    }, 10);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.querySelectorAll('.overflow-y-auto, .overflow-y-scroll').forEach(el => {
+        el.scrollTop = 0;
+      });
+    }, 100);
+  }, [activeModule]);
 
   useEffect(() => {
     const handleGoHome = () => { setPreviousModule(activeModule); setActiveModule("home"); };
@@ -655,6 +672,25 @@ export default function App() {
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
                   <PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} />
                   <GlobalSearchModal isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} onNavigate={handleSelectModule} />
+                  
+                  {/* Persistent, Universal "Back to Dashboard" Component */}
+                  <AnimatePresence>
+                    {activeModule !== "home" && (
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.8, x: -20 }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.8, x: -20 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        onClick={() => handleSelectModule('home')}
+                        aria-label="Back to dashboard"
+                        title="Back to Dashboard"
+                        className="fixed top-20 left-4 sm:top-24 sm:left-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.1)] border border-slate-200/50 dark:border-slate-800/50 backdrop-blur-md transition-all duration-300 ease-out hover:scale-105 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 hover:shadow-[0_8px_25px_-4px_rgba(67,56,202,0.15)] active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 print:hidden"
+                      >
+                        <ArrowLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" strokeWidth={2.5} />
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
+                  
                   <ProductTour />
                   
                   <TopNavbar

@@ -12,6 +12,9 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
   const [showVersionStamp, setShowVersionStamp] = useState(false);
   const [revision, setRevision] = useState(() => localStorage.getItem('pdf_revision') || '1.0');
   const [author, setAuthor] = useState('');
+  const [includeCharts, setIncludeCharts] = useState(true);
+  const [includeBreakdowns, setIncludeBreakdowns] = useState(true);
+  const [includeLogo, setIncludeLogo] = useState(true);
 
   useEffect(() => {
     if (isOpen && iframeRef.current) {
@@ -138,7 +141,26 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
                   box-sizing: border-box;
                 }
                 
+                
+                /* Visibility Toggles */
+                ${!includeCharts ? `
+                .recharts-wrapper, .chart-container, [class*="recharts"], canvas, .echarts-for-react, svg.recharts-surface {
+                  display: none !important;
+                }
+                ` : ''}
+                ${!includeBreakdowns ? `
+                table, .boq-table-print-breaks, .itemized-breakdown {
+                  display: none !important;
+                }
+                ` : ''}
+                ${!includeLogo ? `
+                img[alt*="logo"], .company-logo {
+                  display: none !important;
+                }
+                ` : ''}
+                
                 ${themeStyles}
+  
               </style>
             </head>
             <body>
@@ -156,7 +178,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
         doc.close();
       }
     }
-  }, [isOpen, pdfTheme, orientation, watermark, showVersionStamp, revision, author]);
+  }, [isOpen, pdfTheme, orientation, watermark, showVersionStamp, revision, author, includeCharts, includeBreakdowns, includeLogo]);
 
   // Handle escape key to close modal
   useEffect(() => {
@@ -189,7 +211,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
       const title = titleElement ? (titleElement.textContent || '').trim().replace(/\s+/g, '_') : 'Project_Estimate';
       
       const opt = {
-        margin: [10, 10, 10, 10], // top, left, bottom, right
+        margin: [10, 10, 10, 10] as [number, number, number, number], // top, left, bottom, right
         filename: `${title}.pdf`,
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, logging: false },
@@ -327,7 +349,30 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
           </div>
         </div>
         
-        {/* Content (Paper simulation) */}
+        
+        <div className="flex-1 flex overflow-hidden">
+          {/* Settings Sidebar */}
+          <div className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-6 overflow-y-auto flex-shrink-0 flex flex-col gap-6 hidden md:flex">
+            <div>
+               <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4">Print Settings</h3>
+               <div className="space-y-4">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={includeCharts} onChange={e => setIncludeCharts(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <span className="text-sm text-slate-700 font-medium">Include Charts</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={includeBreakdowns} onChange={e => setIncludeBreakdowns(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <span className="text-sm text-slate-700 font-medium">Itemized Breakdowns</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={includeLogo} onChange={e => setIncludeLogo(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <span className="text-sm text-slate-700 font-medium">Company Logo</span>
+                  </label>
+               </div>
+            </div>
+          </div>
+  
+{/* Content (Paper simulation) */}
         <div className="flex-1 bg-slate-100/50 dark:bg-slate-950/50 overflow-hidden relative p-4 sm:p-8 flex justify-center items-start overflow-y-auto hide-scrollbar">
           <div className={`w-full bg-white shadow-xl rounded-sm overflow-hidden shrink-0 transition-all duration-300 mx-auto ${orientation === 'portrait' ? 'max-w-[210mm] min-h-[297mm]' : 'max-w-[297mm] min-h-[210mm]'}`}>
             <iframe
@@ -338,6 +383,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             />
           </div>
         </div>
+</div>
       </div>
     </div>,
     document.body

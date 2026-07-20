@@ -1,129 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { MessageSquare, Code, Briefcase, MailPlus, ShieldCheck, Users, Mail } from 'lucide-react';
-import { ModuleId } from './Dashboard';
-import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
+const fs = require('fs');
+const file = '/app/applet/src/components/Footer.tsx';
+let content = fs.readFileSync(file, 'utf8');
 
-
-const SOCIAL_LINKS = [
-  {
-    name: 'LinkedIn',
-    href: '#',
-    icon: (
-      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-      </svg>
-    )
-  },
-  {
-    name: 'Twitter',
-    href: '#',
-    icon: (
-      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-      </svg>
-    )
-  },
-  {
-    name: 'Contact',
-    href: 'mailto:support@civilestimation.pro',
-    icon: <MessageSquare className="w-4 h-4" />
-  }
-];
-
-export default function Footer({ activeModule, onNavigate }: { activeModule?: ModuleId, onNavigate?: (id: ModuleId) => void }) {
-  const [email, setEmail] = useState("");
-  const [isSubscribing, setIsSubscribing] = useState(false);
-  const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        const res = await fetch('/api/updates/count');
-        if (!res.ok) {
-          return;
-        }
-        const text = await res.text();
-        if (!text) return;
-        const data = JSON.parse(text);
-        if (data.success && typeof data.count === 'number') {
-          setSubscriberCount(data.count);
-        }
-      } catch (err) {
-        // Silently ignore fetch errors in environments without the backend
-      }
-    };
-    fetchCount();
-  }, []);
-
-  const handleSubscribe = async () => {
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      toast.error('Please enter a valid email address');
-      return;
-    }
-    
-    setIsSubscribing(true);
-    try {
-      const response = await fetch('/api/updates/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      
-      const text = await response.text();
-      let data = {};
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch(e) {
-          console.error("Invalid JSON from newsletter subscribe", text);
-        }
-      }
-      
-      if (response.ok && (data as any).success) {
-        toast.success(`Subscribed successfully with ${email}`, {
-          style: {
-            borderRadius: '12px',
-            background: '#1e293b',
-            color: '#fff',
-            fontSize: '14px',
-            padding: '12px 16px',
-          },
-          iconTheme: {
-            primary: '#10b981',
-            secondary: '#fff',
-          },
-        });
-        setEmail("");
-        setSubscriberCount(prev => (prev !== null ? prev + 1 : 1));
-      } else {
-        throw new Error((data as any).error || 'Failed to subscribe');
-      }
-    } catch (error: any) {
-      toast.error(error.message || 'An error occurred. Please try again.');
-    } finally {
-      setIsSubscribing(false);
-    }
-  };
-
-  
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
-  };
-
-
+// I will just replace the entire footer return with a new one that looks extremely premium.
+const newReturn = `
   return (
     <footer className="relative bg-[#051120] border-t border-blue-900/50 pt-24 pb-12 overflow-hidden font-sans">
       {/* Animated Background Lines */}
@@ -232,11 +112,10 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
                   <li key={id}>
                     <button 
                       onClick={() => onNavigate?.(id as ModuleId)}
-                      className={`relative pb-1 overflow-hidden text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-[#d4af37]' : 'text-blue-100/70 hover:text-white'}`}
+                      className={\`text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group \${activeModule === id ? 'text-[#d4af37]' : 'text-blue-100/70 hover:text-white'}\`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full bg-[#d4af37] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${activeModule === id ? 'opacity-100 translate-x-0' : ''}`}></span>
-                      <span className="relative z-10">{labels[id]}</span>
-                      <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-[#d4af37] to-[#b38f26] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out ${activeModule === id ? 'scale-x-100' : ''}`}></span>
+                      <span className={\`w-1.5 h-1.5 rounded-full bg-[#d4af37] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 \${activeModule === id ? 'opacity-100 translate-x-0' : ''}\`}></span>
+                      {labels[id]}
                     </button>
                   </li>
                 );
@@ -257,11 +136,10 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
                   <li key={id}>
                     <button 
                       onClick={() => onNavigate?.(id as ModuleId)}
-                      className={`relative pb-1 overflow-hidden text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-blue-400' : 'text-blue-100/70 hover:text-white'}`}
+                      className={\`text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group \${activeModule === id ? 'text-blue-400' : 'text-blue-100/70 hover:text-white'}\`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full bg-blue-400 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${activeModule === id ? 'opacity-100 translate-x-0' : ''}`}></span>
-                      <span className="relative z-10">{labels[id]}</span>
-                      <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-400 to-blue-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out ${activeModule === id ? 'scale-x-100' : ''}`}></span>
+                      <span className={\`w-1.5 h-1.5 rounded-full bg-blue-400 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 \${activeModule === id ? 'opacity-100 translate-x-0' : ''}\`}></span>
+                      {labels[id]}
                     </button>
                   </li>
                 );
@@ -290,16 +168,14 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
               ))}
             </div>
             
-            <div className="space-y-4 pt-4 border-t border-blue-400/10 flex flex-col items-start">
-              <a href="#" className="relative pb-1 overflow-hidden flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white transition-colors group">
-                <ShieldCheck className="w-4 h-4 group-hover:text-[#d4af37] transition-colors relative z-10" />
-                <span className="relative z-10">Privacy Policy & Terms</span>
-                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-[#d4af37] to-[#b38f26] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+            <div className="space-y-4 pt-4 border-t border-blue-400/10">
+              <a href="#" className="flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white transition-colors group">
+                <ShieldCheck className="w-4 h-4 group-hover:text-[#d4af37] transition-colors" />
+                Privacy Policy & Terms
               </a>
-              <a href="#" className="relative pb-1 overflow-hidden flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white transition-colors group">
-                <Code className="w-4 h-4 group-hover:text-blue-400 transition-colors relative z-10" />
-                <span className="relative z-10">API Documentation</span>
-                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-400 to-blue-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+              <a href="#" className="flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white transition-colors group">
+                <Code className="w-4 h-4 group-hover:text-blue-400 transition-colors" />
+                API Documentation
               </a>
             </div>
           </motion.div>
@@ -332,4 +208,14 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
       </div>
     </footer>
   );
+}
+`;
+
+const startIndex = content.indexOf('  return (');
+if (startIndex !== -1) {
+  content = content.slice(0, startIndex) + newReturn;
+  fs.writeFileSync(file, content);
+  console.log('Successfully updated Footer.tsx');
+} else {
+  console.log('Could not find return statement in Footer.tsx');
 }

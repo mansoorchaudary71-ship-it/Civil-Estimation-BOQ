@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { X, Printer, Download, Loader2, LayoutTemplate } from "lucide-react";
 import toast from "react-hot-toast";
 import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -245,11 +246,35 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
     }
   };
 
-  if (!isOpen) return null;
+  
+  // Render null if not in browser to avoid SSR issues
+  if (typeof window === 'undefined') return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 sm:p-8 animate-in fade-in duration-200">
-      <div className="bg-slate-100 dark:bg-slate-800 w-full max-w-5xl h-full max-h-[90vh] rounded-2xl sm:rounded-[32px] shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-700 animate-in zoom-in-95 duration-200">
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-4 sm:p-8"
+        >
+          <motion.div 
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            className="bg-slate-100 dark:bg-slate-800 w-full max-w-5xl h-full max-h-[90vh] rounded-2xl sm:rounded-[32px] shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-700 relative"
+          >
+            {/* Animated shimmer effect on modal load */}
+            <motion.div
+              initial={{ x: '-100%', opacity: 0 }}
+              animate={{ x: '100%', opacity: [0, 0.5, 0] }}
+              transition={{ duration: 1.5, ease: "easeInOut", delay: 0.3 }}
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none z-50"
+            />
+
         
         {/* Header */}
         <div className="px-6 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between z-10 shrink-0">
@@ -374,18 +399,25 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
   
 {/* Content (Paper simulation) */}
         <div className="flex-1 bg-slate-100/50 dark:bg-slate-950/50 overflow-hidden relative p-4 sm:p-8 flex justify-center items-start overflow-y-auto hide-scrollbar">
-          <div className={`w-full bg-white shadow-xl rounded-sm overflow-hidden shrink-0 transition-all duration-300 mx-auto ${orientation === 'portrait' ? 'max-w-[210mm] min-h-[297mm]' : 'max-w-[297mm] min-h-[210mm]'}`}>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
+            className={`w-full bg-white shadow-xl rounded-sm overflow-hidden shrink-0 transition-all duration-500 mx-auto ${orientation === 'portrait' ? 'max-w-[210mm] min-h-[297mm]' : 'max-w-[297mm] min-h-[210mm]'}`}
+          >
             <iframe
               ref={iframeRef}
               id="print-iframe"
               className={`w-full h-full border-none bg-white ${orientation === 'portrait' ? 'min-h-[297mm]' : 'min-h-[210mm]'}`}
               title="Print Preview PDF"
             />
-          </div>
+          </motion.div>
         </div>
-</div>
       </div>
-    </div>,
-    document.body
-  );
+    </motion.div>
+  </motion.div>
+  )}
+  </AnimatePresence>,
+  document.body
+);
 }

@@ -232,11 +232,11 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
                   <li key={id}>
                     <button 
                       onClick={() => onNavigate?.(id as ModuleId)}
-                      className={`relative pb-1 overflow-hidden text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-[#d4af37]' : 'text-blue-100/70 hover:text-white'}`}
+                      className={`text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-[#d4af37] underline decoration-2 underline-offset-4' : 'text-blue-100/70 hover:text-white hover:underline decoration-2 hover:underline-offset-4'}`}
                     >
                       <span className={`w-1.5 h-1.5 rounded-full bg-[#d4af37] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${activeModule === id ? 'opacity-100 translate-x-0' : ''}`}></span>
                       <span className="relative z-10">{labels[id]}</span>
-                      <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-[#d4af37] to-[#b38f26] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out ${activeModule === id ? 'scale-x-100' : ''}`}></span>
+                      
                     </button>
                   </li>
                 );
@@ -257,11 +257,11 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
                   <li key={id}>
                     <button 
                       onClick={() => onNavigate?.(id as ModuleId)}
-                      className={`relative pb-1 overflow-hidden text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-blue-400' : 'text-blue-100/70 hover:text-white'}`}
+                      className={`text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-blue-400 underline decoration-2 underline-offset-4' : 'text-blue-100/70 hover:text-white hover:underline decoration-2 hover:underline-offset-4'}`}
                     >
                       <span className={`w-1.5 h-1.5 rounded-full bg-blue-400 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${activeModule === id ? 'opacity-100 translate-x-0' : ''}`}></span>
                       <span className="relative z-10">{labels[id]}</span>
-                      <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-400 to-blue-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out ${activeModule === id ? 'scale-x-100' : ''}`}></span>
+                      
                     </button>
                   </li>
                 );
@@ -291,15 +291,15 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
             </div>
             
             <div className="space-y-4 pt-4 border-t border-blue-400/10 flex flex-col items-start">
-              <a href="#" className="relative pb-1 overflow-hidden flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white transition-colors group">
+              <a href="#" className="flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white hover:underline decoration-2 hover:underline-offset-4 transition-colors group">
                 <ShieldCheck className="w-4 h-4 group-hover:text-[#d4af37] transition-colors relative z-10" />
                 <span className="relative z-10">Privacy Policy & Terms</span>
-                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-[#d4af37] to-[#b38f26] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                
               </a>
-              <a href="#" className="relative pb-1 overflow-hidden flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white transition-colors group">
+              <a href="#" className="flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white hover:underline decoration-2 hover:underline-offset-4 transition-colors group">
                 <Code className="w-4 h-4 group-hover:text-blue-400 transition-colors relative z-10" />
                 <span className="relative z-10">API Documentation</span>
-                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-400 to-blue-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                
               </a>
             </div>
           </motion.div>

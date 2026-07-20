@@ -45,7 +45,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
   }, []);
 
   const handlePrint = () => {
-    window.print();
+    window.dispatchEvent(new Event('global-print-action'));
   };
 
   const handleSaveDraft = () => {

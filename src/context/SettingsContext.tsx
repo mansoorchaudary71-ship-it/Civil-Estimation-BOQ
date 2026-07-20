@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode, useEffect, useRe
 
 export type Currency = 'PKR' | 'USD' | 'INR' | 'AED' | 'SAR' | 'GBP' | 'BDT' | 'LKR' | 'EUR';
 export type MeasurementSystem = 'FPS' | 'SI';
-export type Theme = 'light' | 'dark' | 'system' | 'high-contrast';
+export type Theme = 'light' | 'dark' | 'system' | 'high-contrast' | 'modern' | 'engineering-blueprint';
 export type FontSize = 'small' | 'medium' | 'large';
 export type UserRole = 'Civil Engineer' | 'Quantity Surveyor' | 'Student' | 'Contractor' | 'Architect' | undefined;
 export type ProjectType = 'Residential' | 'Commercial' | 'Infrastructure' | 'Industrial' | undefined;
@@ -247,10 +247,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleTheme = () => {
-    setSettings(prev => ({
-      ...prev,
-      theme: prev.theme === 'dark' ? 'light' : 'dark'
-    }));
+    setSettings(prev => {
+      const themes: Theme[] = ['light', 'dark', 'system', 'high-contrast', 'modern', 'engineering-blueprint'];
+      const nextTheme = themes[(themes.indexOf(prev.theme) + 1) % themes.length];
+      return { ...prev, theme: nextTheme };
+    });
   };
 
   return (

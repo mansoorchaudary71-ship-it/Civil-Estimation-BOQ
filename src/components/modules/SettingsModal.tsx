@@ -573,6 +573,8 @@ export default function SettingsModal({
                         { id: "dark", label: "Dark", icon: Moon },
                         { id: "system", label: "System", icon: Laptop },
                         { id: "high-contrast", label: "High Contrast", icon: Eye },
+                        { id: "modern", label: "Modern", icon: Sun },
+                        { id: "engineering-blueprint", label: "Blueprint", icon: Laptop },
                       ].map((t) => {
                         const Icon = t.icon;
                         const isActive = settings.theme === t.id;

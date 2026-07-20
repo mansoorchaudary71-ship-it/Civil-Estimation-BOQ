@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, History, ChevronRight } from "lucide-react";
 import { ALL_MODULES } from "./Dashboard";
+import { useRecentTools } from "../hooks/useRecentTools";
 
 export default function RecentSidebar({
   isOpen,
@@ -10,25 +11,11 @@ export default function RecentSidebar({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onNavigate: (id: string) => void;
+  onNavigate: (id: string, inputs?: any) => void;
 }) {
-  const [recentTools, setRecentTools] = useState<string[]>([]);
+  const { recentTools } = useRecentTools();
 
-  useEffect(() => {
-    const fetchRecent = () => {
-      try {
-        const history = JSON.parse(localStorage.getItem("recent_calculators") || "[]");
-        setRecentTools(history);
-      } catch (e) {
-        setRecentTools([]);
-      }
-    };
-    if (isOpen) {
-      fetchRecent();
-    }
-    window.addEventListener("recent_calculators_updated", fetchRecent);
-    return () => window.removeEventListener("recent_calculators_updated", fetchRecent);
-  }, [isOpen]);
+
 
   useEffect(() => {
     if (isOpen) {
@@ -61,7 +48,7 @@ export default function RecentSidebar({
             <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100">
               <h2 className="flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
                 <History className="w-5 h-5 text-indigo-600" />
-                Recent Tools
+                Calculation History
               </h2>
               <button onClick={onClose}
                 className="p-2 -mr-2 text-slate-600 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
@@ -72,7 +59,8 @@ export default function RecentSidebar({
 
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {recentTools.length > 0 ? (
-                recentTools.map((id, index) => {
+                recentTools.map((tool, index) => {
+                  const id = tool.id;
                   const mod = ALL_MODULES.find((m) => m.id === id);
                   if (!mod) return null;
                   return (
@@ -82,7 +70,7 @@ export default function RecentSidebar({
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       onClick={() => {
-                        onNavigate(id);
+                        onNavigate(id, tool.lastInputs);
                         onClose();
                       }}
                       className="w-full text-left p-4 rounded-xl border border-slate-100 bg-white hover:border-indigo-200 hover:shadow-md transition-all group flex items-center gap-4 overflow-hidden flex-wrap"
@@ -107,7 +95,7 @@ export default function RecentSidebar({
                   <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
                     <History className="w-8 h-8 text-slate-600" />
                   </div>
-                  <h3 className="mb-1 text-lg font-medium text-slate-800 mb-4">No Recent Tools</h3>
+                  <h3 className="mb-1 text-lg font-medium text-slate-800 mb-4">No Calculation History</h3>
                   <p className="text-base font-normal text-slate-600 leading-relaxed">
                     Tools you use will appear here for quick access.
                   </p>

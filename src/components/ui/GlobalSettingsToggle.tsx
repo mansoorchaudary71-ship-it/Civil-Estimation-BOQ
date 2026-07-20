@@ -89,7 +89,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
             <div className="mb-3 text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
               <Moon className="w-3.5 h-3.5"/> Theme
             </div>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-1.5 mb-2">
               {[
                 { val: "light", icon: <Sun className="w-4 h-4 mx-auto mb-1" />, label: "Light" },
                 { val: "dark", icon: <Moon className="w-4 h-4 mx-auto mb-1" />, label: "Dark" },
@@ -104,6 +104,29 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
                       isActive 
                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20" 
                          : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                    }`}
+                  >
+                    {icon}
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="grid grid-cols-3 gap-1.5">
+              {[
+                { val: "modern", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-zinc-200 border border-zinc-400" />, label: "Modern" },
+                { val: "engineering-blueprint", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-blue-800 border border-blue-400" />, label: "Blueprint" },
+                { val: "high-contrast", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-black border border-yellow-400" />, label: "Contrast" }
+              ].map(({ val, icon, label }) => {
+                const isActive = settings.theme === val;
+                return (
+                  <button
+                    key={val}
+                    onClick={() => { updateSettings({ theme: val as Theme }); setIsOpen(false); }}
+                    className={`py-2 px-1 text-[10px] font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
+                      isActive
+                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20"
+                          : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                     }`}
                   >
                     {icon}

@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Calculator, MapPin, Building, Home, ArrowRight, AlertTriangle, Clock } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
 import { useSettings } from "../../context/SettingsContext";
+import { useRecentTools } from "../../hooks/useRecentTools";
 import { CalculationHistory } from '../ui/CalculationHistory';
 
 type ConstructionType = "grey" | "standard" | "premium";
@@ -9,6 +10,7 @@ type LocationType = "lahore" | "karachi" | "islamabad" | "other";
 
 export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id: string) => void }) {
   const { settings, formatCurrency } = useSettings();
+  const { addRecentTool } = useRecentTools();
   
   const [areaInput, setAreaInput] = useState<number>(5);
   const [areaUnit, setAreaUnit] = useState<"marla" | "sqft">("marla");
@@ -34,6 +36,30 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
       default: return 1.00;
     }
   }, [location]);
+
+  // Save to history on change
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      addRecentTool('quick-estimation', { areaInput, areaUnit, floors, constType, location });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [areaInput, areaUnit, floors, constType, location]);
+
+  // Restore from history
+  React.useEffect(() => {
+    const handleRestore = (e: any) => {
+      if (e.detail.id === 'quick-estimation' && e.detail.inputs) {
+        const { areaInput, areaUnit, floors, constType, location } = e.detail.inputs;
+        if (areaInput !== undefined) setAreaInput(areaInput);
+        if (areaUnit) setAreaUnit(areaUnit);
+        if (floors !== undefined) setFloors(floors);
+        if (constType) setConstType(constType);
+        if (location) setLocation(location);
+      }
+    };
+    window.addEventListener('restore-calculation-inputs', handleRestore);
+    return () => window.removeEventListener('restore-calculation-inputs', handleRestore);
+  }, []);
 
   const results = useMemo(() => {
     if (totalSqft <= 0) return null;

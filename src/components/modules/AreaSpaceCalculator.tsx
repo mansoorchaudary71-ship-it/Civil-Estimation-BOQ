@@ -8,9 +8,11 @@ import { GlobalFAQ } from "../ui/GlobalFAQ";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { DetailedCalculationDisplay } from "../ui/DetailedCalculationDisplay";
 import toast from 'react-hot-toast';
+import { useRecentTools } from "../../hooks/useRecentTools";
 import { CodeTooltip } from "../ui/CodeTooltip";
 
 export default function AreaSpaceCalculator() {
+  const { addRecentTool } = useRecentTools();
   const { currentUnit } = useGlobalSettings();
   
   useUnitChange((newUnit: MeasurementSystem) => {
@@ -18,6 +20,16 @@ export default function AreaSpaceCalculator() {
   });
 
   const isMetric = currentUnit === "Metric";
+  React.useEffect(() => {
+    const handleRestore = (e: any) => {
+      if (e.detail.id === 'area' && e.detail.inputs) {
+        if (e.detail.inputs.shapeType) setShapeType(e.detail.inputs.shapeType);
+        if (e.detail.inputs.shapeParams) setShapeParams(e.detail.inputs.shapeParams);
+      }
+    };
+    window.addEventListener('restore-calculation-inputs', handleRestore);
+    return () => window.removeEventListener('restore-calculation-inputs', handleRestore);
+  }, [setShapeParams]);
   const uLen = isMetric ? "m" : "ft";
   const uArea = isMetric ? "m²" : "sq.ft";
 
@@ -37,6 +49,7 @@ export default function AreaSpaceCalculator() {
 
   const calculateShape = () => {
     let area = 0, perimeter = 0;
+    addRecentTool('area', { shapeType, shapeParams });
     const p = shapeParams;
     switch (shapeType) {
       case "rectangle":

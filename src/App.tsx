@@ -643,7 +643,12 @@ export default function App() {
         
     // Track tools that are calculators/modules (not home or pages)
     if (id !== "home" && id !== "about" && id !== "careers" && id !== "contact" && id !== "blog" && id !== "pricing" && id !== "privacy" && id !== "terms" && id !== "cookies") {
-      addRecentTool(id);
+      const existing = JSON.parse(localStorage.getItem('cep_recent_tools') || '[]').find((t: any) => t.id === id);
+      if (existing) {
+        addRecentTool(id, existing.lastInputs);
+      } else {
+        addRecentTool(id);
+      }
     }
   };
 

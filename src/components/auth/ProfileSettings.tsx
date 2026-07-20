@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { X, User, Camera, Loader2, Moon, Sun, Eye } from 'lucide-react';
+import { X, User, Camera, Loader2, Moon, Sun, Eye, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '../../context/SettingsContext';
 
@@ -52,14 +52,16 @@ export default function ProfileSettings({ isOpen, onClose }: ProfileSettingsProp
   const isHighContrast = settings.theme === 'high-contrast';
 
   const toggleTheme = () => {
-    if (settings.theme === 'light') updateSettings({ theme: 'dark' });
-    else if (settings.theme === 'dark') updateSettings({ theme: 'high-contrast' });
-    else updateSettings({ theme: 'light' });
+    const themes: ('light' | 'dark' | 'system' | 'high-contrast' | 'modern' | 'engineering-blueprint')[] = ['light', 'dark', 'system', 'high-contrast', 'modern', 'engineering-blueprint'];
+    const nextTheme = themes[(themes.indexOf(settings.theme) + 1) % themes.length];
+    updateSettings({ theme: nextTheme });
   };
 
   const getThemeIcon = () => {
     if (settings.theme === 'high-contrast') return <Eye className="w-5 h-5 text-yellow-500" />;
     if (settings.theme === 'dark') return <Moon className="w-5 h-5 text-indigo-500" />;
+    if (settings.theme === 'modern') return <Sun className="w-5 h-5 text-zinc-500" />;
+    if (settings.theme === 'engineering-blueprint') return <Settings className="w-5 h-5 text-blue-500" />;
     return <Sun className="w-5 h-5 text-amber-500" />;
   };
 

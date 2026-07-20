@@ -59,6 +59,7 @@ import { useSettings } from "../context/SettingsContext";
 import ToolCard from "./ToolCard";
 import { ScrollReveal } from "./ui/ScrollReveal";
 import { useRecentTools } from "../hooks/useRecentTools";
+import RecentSidebar from "./RecentSidebar";
 import { History } from "lucide-react";
 
 import AIEstimatorBanner from "./AIEstimatorBanner";
@@ -1005,6 +1006,7 @@ export default function Dashboard({
  const [searchTerm, setSearchTerm] = useState("");
  const [activeCategory, setActiveCategory] = useState("All Tools");
  const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+ const [isRecentOpen, setIsRecentOpen] = useState(false);
  const [aiMessage, setAiMessage] = useState("");
  const [isComputing, setIsComputing] = useState(true);
 
@@ -1036,6 +1038,11 @@ export default function Dashboard({
     if (trackToolUse) trackToolUse(id);
     addRecentTool(id, inputs);
     onSelectModule(id, layoutId);
+    if (inputs) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('restore-calculation-inputs', { detail: { id, inputs } }));
+      }, 100);
+    }
   };
 
  useEffect(() => {
@@ -1121,7 +1128,22 @@ export default function Dashboard({
  ::-webkit-scrollbar-track { background: transparent; }
  ::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.15); border-radius: 10px; }
  `}</style>
- <div className="relative w-full flex flex-col font-sans bg-[#f8f9fa] text-slate-900 border-none">
+ 
+  <RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} />
+  
+  <button 
+    onClick={() => setIsRecentOpen(true)}
+    className="fixed right-6 bottom-6 z-50 flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-2xl hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 group"
+    title="Calculation History"
+  >
+    <History className="w-6 h-6 group-hover:-rotate-12 transition-transform" />
+    <span className="absolute -top-1 -right-1 flex h-4 w-4">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+      <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 border-2 border-white"></span>
+    </span>
+  </button>
+<div className="relative w-full flex flex-col font-sans bg-[#f8f9fa] text-slate-900 border-none">
+
   <div 
     className="relative w-full flex flex-col overflow-hidden bg-white"
   >

@@ -1,28 +1,32 @@
 import React from 'react';
-import { Sun, Moon, Eye } from 'lucide-react';
+import { Sun, Moon, Eye, Settings } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 
 export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
   const { settings, updateSettings } = useSettings();
 
   const toggleTheme = () => {
-    if (settings.theme === 'light') updateSettings({ theme: 'dark' });
-    else if (settings.theme === 'dark') updateSettings({ theme: 'high-contrast' });
-    else updateSettings({ theme: 'light' });
+    const themes: ('light' | 'dark' | 'system' | 'high-contrast' | 'modern' | 'engineering-blueprint')[] = ['light', 'dark', 'system', 'high-contrast', 'modern', 'engineering-blueprint'];
+    const nextTheme = themes[(themes.indexOf(settings.theme) + 1) % themes.length];
+    updateSettings({ theme: nextTheme });
   };
 
   const isDarkMode = settings.theme === 'dark' || (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   const isHighContrast = settings.theme === 'high-contrast';
 
   const getThemeIcon = () => {
-    if (isHighContrast) return <Eye className="w-5 h-5 text-yellow-500" />;
-    if (isDarkMode) return <Moon className="w-5 h-5 text-amber-500" />;
-    return <Sun className="w-5 h-5 text-blue-500" />;
+    if (settings.theme === 'high-contrast') return <Eye className="w-5 h-5 text-yellow-500" />;
+    if (settings.theme === 'dark') return <Moon className="w-5 h-5 text-indigo-500" />;
+    if (settings.theme === 'modern') return <Sun className="w-5 h-5 text-zinc-500" />;
+    if (settings.theme === 'engineering-blueprint') return <Settings className="w-5 h-5 text-blue-500" />;
+    return <Sun className="w-5 h-5 text-amber-500" />;
   };
 
   const getThemeLabel = () => {
-    if (isHighContrast) return 'High Contrast';
-    if (isDarkMode) return 'Dark Mode';
+    if (settings.theme === 'high-contrast') return 'High Contrast';
+    if (settings.theme === 'dark') return 'Dark Mode';
+    if (settings.theme === 'modern') return 'Modern';
+    if (settings.theme === 'engineering-blueprint') return 'Blueprint';
     return 'Light Mode';
   };
 
@@ -55,7 +59,7 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
       }`}
       title="Toggle Theme"
     >
-      {isHighContrast ? <Eye className="w-5 h-5" /> : isDarkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+      {getThemeIcon()}
     </button>
   );
 }

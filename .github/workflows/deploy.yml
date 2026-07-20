@@ -34,10 +34,9 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build Application
+        run: CI=false npm run build
         env:
-          CI: false
           NODE_OPTIONS: "--max_old_space_size=4096"
-        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

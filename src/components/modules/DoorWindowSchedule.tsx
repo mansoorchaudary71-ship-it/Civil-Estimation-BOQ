@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Columns, Save } from 'lucide-react';
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 interface Entry {
   id: string;
@@ -55,7 +56,9 @@ export default function DoorWindowSchedule() {
            </button>
          </div>
 
-         <div className="overflow-x-auto">
+         
+<div className="flex justify-end mb-4"><GenericExportButtons tableId="door-window-table" filename="Door_Window_Schedule" /></div>
+<div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 border-y border-slate-200 overflow-hidden">

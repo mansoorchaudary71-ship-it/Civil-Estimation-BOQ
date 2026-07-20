@@ -14,6 +14,7 @@ import { ToolGuidedTour, TourStep } from "../ui/ToolGuidedTour";
 import { useSettings } from "../../context/SettingsContext";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
 import { CalculationHistory } from "../ui/CalculationHistory";
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 const EARTHWORKS_TOUR_STEPS: TourStep[] = [
   {
@@ -400,8 +401,10 @@ export default function StandardEarthworks() {
               Earthwork Volume Data Table
             </h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          
+<div className="flex justify-end mb-4"><GenericExportButtons tableId="earthworks-table" filename="Earthworks_Base" /></div>
+<div className="overflow-x-auto">
+            <table id="earthworks-table"  className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50/50">
                   <th className="px-6 py-4 text-base font-medium uppercase tracking-wider border-b border-gray-100">

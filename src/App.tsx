@@ -22,6 +22,7 @@ import CustomCursor from "./components/ui/CustomCursor";
 import ScrollToTop from "./components/ui/ScrollToTop";
 import BackButton from "./components/ui/BackButton";
 import { ToolHeader } from "./components/ui/ToolHeader";
+import Breadcrumb from "./components/Breadcrumb";
 import { Toaster } from "react-hot-toast";
 import { ProductTour } from "./components/ui/ProductTour";
 

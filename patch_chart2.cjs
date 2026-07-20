@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+const fs = require('fs');
+
+const fullSource = `import React, { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from "recharts";
 import { Download, PieChart as PieChartIcon, DollarSign, Settings2, Home, List, LayoutGrid } from "lucide-react";
 import { motion } from "framer-motion";
@@ -9,7 +11,6 @@ import { useSettings } from '../../context/SettingsContext';
 import { CurrencySelector } from '../ui/CurrencySelector';
 import { CostTrendChart } from "./CostTrendChart";
 import { CostBreakdownChart } from "./CostBreakdownChart";
-import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 interface CostItem {
   id: string;
@@ -93,8 +94,8 @@ const ConstructionCostSummary: React.FC = () => {
     
     doc.setFontSize(12);
     doc.setTextColor(100);
-    doc.text(`Total Built-up Area: ${totalArea.toLocaleString()} sq ft`, 14, 32);
-    doc.text(`Cost per sq ft: ${costPerSqFt.toLocaleString(undefined, { maximumFractionDigits: 2 })}`, 14, 40);
+    doc.text(\`Total Built-up Area: \${totalArea.toLocaleString()} sq ft\`, 14, 32);
+    doc.text(\`Cost per sq ft: \${costPerSqFt.toLocaleString(undefined, { maximumFractionDigits: 2 })}\`, 14, 40);
 
     let currentY = 50;
 
@@ -138,13 +139,13 @@ const ConstructionCostSummary: React.FC = () => {
     
     doc.setFontSize(12);
     doc.setTextColor(30);
-    doc.text(`Base Subtotal: ${formatCurrency(subTotal, false)}`, 20, currentY + 22);
-    doc.text(`Overhead & Profit (${overheadProfitPct}%): ${formatCurrency(overheadProfitAmount, false)}`, 20, currentY + 30);
-    doc.text(`Contingency (${contingencyPct}%): ${formatCurrency(contingencyAmount, false)}`, 20, currentY + 38);
+    doc.text(\`Base Subtotal: \${formatCurrency(subTotal, false)}\`, 20, currentY + 22);
+    doc.text(\`Overhead & Profit (\${overheadProfitPct}%): \${formatCurrency(overheadProfitAmount, false)}\`, 20, currentY + 30);
+    doc.text(\`Contingency (\${contingencyPct}%): \${formatCurrency(contingencyAmount, false)}\`, 20, currentY + 38);
     
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text(`Grand Total: ${formatCurrency(grandTotal, false)}`, 20, currentY + 48);
+    doc.text(\`Grand Total: \${formatCurrency(grandTotal, false)}\`, 20, currentY + 48);
 
     doc.save("construction-cost-summary.pdf");
   };
@@ -274,10 +275,8 @@ const ConstructionCostSummary: React.FC = () => {
 
   const renderTableView = () => (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden">
-      
-<div className="flex justify-end mb-4"><GenericExportButtons tableId="cost-summary-table" filename="Cost_Summary" /></div>
-<div className="overflow-x-auto">
-        <table id="cost-summary-table"  className="w-full text-left border-collapse">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 text-sm border-b border-slate-200 dark:border-slate-700">
               <th className="py-4 px-6 font-semibold w-1/3">Category</th>
@@ -515,3 +514,6 @@ const ConstructionCostSummary: React.FC = () => {
 };
 
 export default ConstructionCostSummary;
+`
+fs.writeFileSync('src/components/modules/ConstructionCostSummary.tsx', fullSource);
+console.log("Written successfully");

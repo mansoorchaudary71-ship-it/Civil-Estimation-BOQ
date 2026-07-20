@@ -357,10 +357,13 @@ export default function LiveBOQ() {
           <button className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-slate-200 rounded text-sm hover:bg-slate-200 transition-colors text-slate-700 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
             <Filter className="w-[14px] h-[14px]" /> Filters
           </button>
+          <div className="ml-auto">
+            <GenericExportButtons tableId="live-boq-table" filename="Live_BOQ_Report" />
+          </div>
         </div>
         {/* Table Content */}
         <div className="flex-1 overflow-auto p-4">
-          <table className="boq-table-print-breaks w-full text-left text-sm">
+          <table id="live-boq-table" className="boq-table-print-breaks w-full text-left text-sm">
             <thead className="text-slate-700 border-b border-slate-200">
               <tr>
                 <th className="py-2 px-3 font-normal w-20">Item</th>

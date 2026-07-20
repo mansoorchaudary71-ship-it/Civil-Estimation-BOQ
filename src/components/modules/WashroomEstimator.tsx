@@ -3,6 +3,7 @@ import { X, Droplets, Ruler, Square, Grid2X2, Hammer, Zap, Badge } from "lucide-
 import { motion, AnimatePresence } from "framer-motion";
 import { CalculationHistory } from '../ui/CalculationHistory';
 import { CodeTooltip } from "../ui/CodeTooltip";
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 export default function WashroomEstimator({ onClose }: { onClose?: () => void }) {
   const [unit, setUnit] = useState<"ft" | "m">("ft");

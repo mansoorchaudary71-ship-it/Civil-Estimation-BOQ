@@ -3,6 +3,7 @@ import { Plus, Trash2, Download, Section } from "lucide-react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 // We use an extended jsPDF type to include autoTable
 interface jsPDFCustom extends jsPDF {

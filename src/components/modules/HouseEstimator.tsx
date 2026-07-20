@@ -62,6 +62,7 @@ import { useSchema } from "../../hooks/useSchema";
 import { GlobalFAQ } from "../ui/GlobalFAQ";
 import { ToolGuidedTour, TourStep } from "../ui/ToolGuidedTour";
 import { CodeTooltip } from "../ui/CodeTooltip";
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 const HOUSE_TOUR_STEPS: TourStep[] = [
   {

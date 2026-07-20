@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import { Calculator, ClipboardCopy, Building, Layers, Settings, ChevronRight } from "lucide-react";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 type QualityType = "standard" | "premium" | "luxury";
 

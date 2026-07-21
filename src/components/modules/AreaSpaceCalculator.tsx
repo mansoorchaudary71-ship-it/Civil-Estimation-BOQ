@@ -20,16 +20,6 @@ export default function AreaSpaceCalculator() {
   });
 
   const isMetric = currentUnit === "Metric";
-  React.useEffect(() => {
-    const handleRestore = (e: any) => {
-      if (e.detail.id === 'area' && e.detail.inputs) {
-        if (e.detail.inputs.shapeType) setShapeType(e.detail.inputs.shapeType);
-        if (e.detail.inputs.shapeParams) setShapeParams(e.detail.inputs.shapeParams);
-      }
-    };
-    window.addEventListener('restore-calculation-inputs', handleRestore);
-    return () => window.removeEventListener('restore-calculation-inputs', handleRestore);
-  }, [setShapeParams]);
   const uLen = isMetric ? "m" : "ft";
   const uArea = isMetric ? "m²" : "sq.ft";
 
@@ -41,6 +31,17 @@ export default function AreaSpaceCalculator() {
     length: 5, width: 4, radius: 3, base: 4, height: 3, sideA: 5, sideB: 7, sideC: 4,
     l1: 5, l2: 3, w1: 2, w2: 2, tTop: 6, tLegWidth: 2, tTotalHeight: 5, tTopThickness: 1,
   }, 'length');
+
+  React.useEffect(() => {
+    const handleRestore = (e: any) => {
+      if (e.detail.id === 'area' && e.detail.inputs) {
+        if (e.detail.inputs.shapeType) setShapeType(e.detail.inputs.shapeType);
+        if (e.detail.inputs.shapeParams) setShapeParams(e.detail.inputs.shapeParams);
+      }
+    };
+    window.addEventListener('restore-calculation-inputs', handleRestore);
+    return () => window.removeEventListener('restore-calculation-inputs', handleRestore);
+  }, [setShapeParams]);
   const [polygonCoords, setPolygonCoords] = useState<{ x: number; y: number }[]>([
     { x: 0, y: 0 }, { x: 5, y: 0 }, { x: 4, y: 4 }, { x: 1, y: 3 },
   ]);

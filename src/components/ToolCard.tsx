@@ -95,6 +95,8 @@ export default function ToolCard({
       }}
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.98 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ 
         type: "spring", 
@@ -105,7 +107,7 @@ export default function ToolCard({
       className={cn(
         "w-full h-full flex flex-col font-sans cursor-pointer transition-all duration-300",
         "bg-white relative overflow-hidden rounded-[1.5rem] ring-1 ring-gray-900/5 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)]",
-        hov ? "shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] -translate-y-1.5 scale-[1.02]" : ""
+        hov ? "shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)]" : ""
       )}
       style={{
         backgroundImage: `radial-gradient(circle at 0% 0%, ${colorToUse === '#F4F1EA' ? '#EAE0CC' : colorToUse === '#F0F5FF' ? '#E0E7FF' : colorToUse === '#D9E6DD' ? '#C4D6C9' : colorToUse} 0%, ${colorToUse} 25%, rgba(255,255,255,0) 75%)`

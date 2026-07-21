@@ -1,31 +1,18 @@
 const fs = require('fs');
-let css = fs.readFileSync('src/index.css', 'utf-8');
-const target = `  /* Add page breaks where needed */
-  .page-break-before {
-    page-break-before: always !important;
-    break-before: page !important;
-  }
-  .page-break-after {
-    page-break-after: always !important;
-    break-after: page !important;
-  }
-  .page-break-inside-avoid {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }`;
-
-const replacement = target + `
-  
-  /* Force page break after every 20 rows in BOQ tables */
-  .boq-table-print-breaks tbody tr:nth-child(20n) {
-    page-break-after: always !important;
-    break-after: page !important;
-  }`;
-
-if (css.includes(target)) {
-  css = css.replace(target, replacement);
-  fs.writeFileSync('src/index.css', css);
-  console.log("Patched successfully");
-} else {
-  console.log("Target not found");
-}
+const path = 'src/components/Dashboard.tsx';
+let code = fs.readFileSync(path, 'utf8');
+code = code.replace('id: "master-rcc",', `id: "universal-structural-geometry",
+        title: "Universal Structural Geometry Engine",
+        desc: "Combine Rectangular Columns, Round Columns, Concrete Tubes/Pipes, Staircases, Precast Compound Walls, and Roof Pitch into one interactive shape selector.",
+        category: "Structural & Concrete Geometry",
+        icon: Box,
+        styleStyle: "solid",
+        colorClass: "bg-indigo-600 text-white shadow-lg",
+        iconClass: "text-white opacity-90",
+        difficulty: "Advanced",
+        estimatedTime: "~15 mins",
+        isPopular: true,
+      },
+      {
+        id: "master-rcc",`);
+fs.writeFileSync(path, code);

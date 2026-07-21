@@ -1,9 +1,10 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Compass, BarChart3, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function PremiumToolCard() {
   return (
-    <div className="relative w-full md:max-w-3xl md:mx-auto p-6 md:p-8 rounded-[32px] bg-white/70 backdrop-blur-2xl border border-white/60 shadow-[0_24px_60px_rgba(15,23,42,0.08)] overflow-hidden">
+    <motion.div whileHover={{ scale: 1.01 }} className="relative w-full md:max-w-3xl md:mx-auto p-6 md:p-8 rounded-[32px] bg-white/70 backdrop-blur-2xl border border-white/60 shadow-[0_24px_60px_rgba(15,23,42,0.08)] overflow-hidden transition-shadow hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)] cursor-default">
       {/* Topographic Background Pattern Overlay - Simulated */}
       <div 
         className="absolute inset-0 opacity-[0.02] pointer-events-none" 
@@ -48,7 +49,7 @@ export default function PremiumToolCard() {
         {/* Left Column: Stats & Status Ring */}
         <div className="flex flex-col gap-6">
           {/* Status Ring Card */}
-          <div className="w-full p-6 md:p-8 rounded-[24px] bg-white/80 border border-slate-100 shadow-[0_8px_30px_rgba(15,23,42,0.04)] flex items-center gap-6 group hover:shadow-[0_12px_40px_rgba(15,23,42,0.06)] transition-all overflow-hidden">
+          <motion.div whileHover={{ scale: 1.02, y: -4 }} whileTap={{ scale: 0.98 }} className="w-full p-6 md:p-8 rounded-[24px] bg-white/80 border border-slate-100 shadow-[0_8px_30px_rgba(15,23,42,0.04)] flex items-center gap-6 group hover:shadow-[0_12px_40px_rgba(15,23,42,0.06)] transition-all overflow-hidden cursor-pointer">
             <div className="relative w-24 h-24 shrink-0">
               <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90 drop-shadow-sm">
                 <path
@@ -76,24 +77,24 @@ export default function PremiumToolCard() {
               <h3 className="text-xs font-bold text-slate-600 uppercase tracking-widest mb-1.5">Completion Rate</h3>
               <p className="text-3xl font-black text-slate-900 tracking-tighter">On Track</p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 sm:p-6 rounded-[24px] bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-100/50 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.95 }} className="p-4 sm:p-6 rounded-[24px] bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-100/50 shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer">
               <AlertCircle className="w-6 h-6 text-amber-500 mb-4" strokeWidth={2} />
               <p className="text-3xl font-black text-slate-900 mb-1 tracking-tight">2</p>
               <p className="text-xs font-bold text-amber-700/80 uppercase tracking-wider">Critical Alerts</p>
-            </div>
-            <div className="p-4 sm:p-6 rounded-[24px] bg-gradient-to-br from-emerald-50 to-teal-50/50 border border-emerald-100/50 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.95 }} className="p-4 sm:p-6 rounded-[24px] bg-gradient-to-br from-emerald-50 to-teal-50/50 border border-emerald-100/50 shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer">
               <CheckCircle2 className="w-6 h-6 text-emerald-500 mb-4" strokeWidth={2} />
               <p className="text-3xl font-black text-slate-900 mb-1 tracking-tight">14</p>
               <p className="text-xs font-bold text-emerald-700/80 uppercase tracking-wider">Cleared Tasks</p>
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Right Column: Bar Chart */}
-        <div className="w-full p-6 md:p-8 rounded-[24px] bg-white/80 border border-slate-100 shadow-[0_8px_30px_rgba(15,23,42,0.04)] flex flex-col drop-shadow-sm overflow-hidden">
+        <motion.div whileHover={{ scale: 1.02, y: -4 }} whileTap={{ scale: 0.98 }} className="w-full p-6 md:p-8 rounded-[24px] bg-white/80 border border-slate-100 shadow-[0_8px_30px_rgba(15,23,42,0.04)] flex flex-col drop-shadow-sm overflow-hidden cursor-pointer">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest">Budget Allocation</h3>
             <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
@@ -128,9 +129,9 @@ export default function PremiumToolCard() {
               <div key={i} className="text-[10px] font-bold text-slate-600 uppercase tracking-wider truncate max-w-[40px] text-center">{lbl}</div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }

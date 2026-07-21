@@ -27,6 +27,9 @@ import { Toaster } from "react-hot-toast";
 import { ProductTour } from "./components/ui/ProductTour";
 
 import { ThemeProvider } from "./context/ThemeContext";
+import { BOQProvider } from "./context/BOQContext";
+import MasterBOQDrawer from "./components/boq/MasterBOQDrawer";
+import { FileText } from "lucide-react";
 import { SettingsProvider } from "./context/SettingsContext";
 import { HouseSpecsProvider } from "./context/HouseSpecsContext";
 import { MarketRatesProvider } from "./context/MarketRatesContext";
@@ -64,7 +67,7 @@ import MeasurementSheetCalculator from "./components/modules/MeasurementSheetCal
 import BOQGenerator from "./components/modules/BOQGenerator";
 import Takeoff from "./components/modules/Takeoff";
 import RateAnalysis from "./components/modules/RateAnalysis";
-import InteriorsFinishes from "./components/modules/InteriorsFinishes";
+import FinishesEstimator from "./components/calculators/FinishesEstimator";
 import AreaSpaceCalculator from "./components/modules/AreaSpaceCalculator";
 import VolumeEstimator from "./components/modules/VolumeEstimator";
 import MetalWeightCalculator from "./components/modules/MetalWeightCalculator";
@@ -108,6 +111,9 @@ import FarFsiCalculator from "./components/modules/FarFsiCalculator";
 import StaircaseDesignReference from "./components/modules/StaircaseDesignReference";
 import DoorWindowSchedule from "./components/modules/DoorWindowSchedule";
 import VentilationChecker from "./components/modules/VentilationChecker";
+import UniversalStructuralGeometryEngine from "./components/modules/UniversalStructuralGeometryEngine";
+import MasterSoilMechanicsLabSuite from "./components/modules/MasterSoilMechanicsLabSuite";
+import MasterInfrastructureMEPEngine from "./components/modules/MasterInfrastructureMEPEngine";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 
 
@@ -233,7 +239,7 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="RateAnalysis"><RateAnalysis /></ModuleWrapper>;
 
     case "interiors-finishes":
-      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="InteriorsFinishes"><InteriorsFinishes /></ModuleWrapper>;
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="FinishesEstimator"><FinishesEstimator /></ModuleWrapper>;
 
     case "area-space-calculator":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="AreaSpaceCalculator"><AreaSpaceCalculator /></ModuleWrapper>;
@@ -357,6 +363,15 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
 
     case "staircase-design-reference":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="StaircaseDesignReference"><StaircaseDesignReference /></ModuleWrapper>;
+
+    case "infra-mep-engine":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="MasterInfrastructureMEPEngine"><MasterInfrastructureMEPEngine /></ModuleWrapper>;
+
+    case "soil-mechanics-lab":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="MasterSoilMechanicsLabSuite"><MasterSoilMechanicsLabSuite /></ModuleWrapper>;
+
+    case "universal-structural-geometry":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="UniversalStructuralGeometryEngine"><UniversalStructuralGeometryEngine /></ModuleWrapper>;
 
     case "door-window-schedule":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="DoorWindowSchedule"><DoorWindowSchedule /></ModuleWrapper>;
@@ -664,7 +679,8 @@ export default function App() {
         <HouseSpecsProvider>
           <MarketRatesProvider>
             <TakeoffProvider>
-              <ProjectProvider>
+              <BOQProvider>
+          <ProjectProvider>
                 <div className="flex flex-col min-h-screen w-full bg-gradient-to-br from-slate-50 via-[#f8fafc] to-blue-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-500">
                   <Toaster position="bottom-right" />
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
@@ -730,6 +746,9 @@ export default function App() {
                   </div>
                 </div>
               </ProjectProvider>
+          <MasterBOQDrawer isOpen={isBOQOpen} onClose={() => setIsBOQOpen(false)} />
+          <button onClick={() => setIsBOQOpen(true)} className="fixed bottom-6 right-6 p-4 bg-indigo-600 text-white rounded-full shadow-xl hover:bg-indigo-700 hover:scale-105 transition-all z-40 flex items-center justify-center"><FileText size={24}/></button>
+          </BOQProvider>
             </TakeoffProvider>
           </MarketRatesProvider>
         </HouseSpecsProvider>

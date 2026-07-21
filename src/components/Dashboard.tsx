@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { Beaker, motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Calculator,
@@ -82,7 +82,7 @@ export const ALL_MODULES = [
  id: "qs-workflow",
  title: "Guided QS Workflow",
  desc: "Walks users through a complete sequence: Project Setup, Drawings, Substructure, Superstructure, Masonry, Services, BOQ Compilation, and final Report.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Activity, BookOpen, FileText,
  styleStyle: "solid",
  colorClass: "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30",
@@ -96,7 +96,7 @@ export const ALL_MODULES = [
  id: "house",
  title: "House Estimator",
  desc: "Calculate complete residential construction costs from excavation to finishing. Contractors benefit by getting an accurate Civil Estimation Pro material breakdown instantly.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Home,
  premium: true,
  styleStyle: "glass",
@@ -110,7 +110,7 @@ export const ALL_MODULES = [
  id: "takeoff",
  title: "Plan Measure",
  desc: "Area & linear extraction.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Ruler,
  styleStyle: "solid",
  colorClass:
@@ -124,7 +124,7 @@ export const ALL_MODULES = [
  id: "rates",
  title: "Live DB Rates",
  desc: "Centralized database for local market prices.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: TrendingUp,
  styleStyle: "glass",
  colorClass:
@@ -137,7 +137,7 @@ export const ALL_MODULES = [
  id: "ai",
  title: "AI Assistant",
  desc: "Ask anything about construction",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Sparkles,
  premium: true,
  styleStyle: "solid",
@@ -153,7 +153,7 @@ export const ALL_MODULES = [
  id: "quick-estimation",
  title: "Quick Rough Estimation",
  desc: "Get a lightning-fast preliminary budget and timeline in under 5 seconds based on simple inputs.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Calculator,
  styleStyle: "solid",
  colorClass: "bg-indigo-600 text-white shadow-lg",
@@ -165,7 +165,7 @@ export const ALL_MODULES = [
  id: "master-quantity",
  title: "Master Quantity & Estimation",
  desc: "23 comprehensive calculators for specialized construction items.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
  colorClass:
@@ -178,7 +178,7 @@ export const ALL_MODULES = [
  id: "material-takeoff",
  title: "Material Takeoff Sheet",
  desc: "Auto-calculate cement, sand, aggregate, block, and finishing material quantities based on built-up area and floors.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Calculator,
  styleStyle: "solid",
  colorClass: "bg-blue-500 text-slate-900 shadow-lg",
@@ -190,7 +190,7 @@ export const ALL_MODULES = [
  id: "cost-summary",
  title: "Cost Summary Sheet",
  desc: "Consolidate structural, finishing, and labour costs into a master cost summary with overhead and contingency calculations.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
  colorClass: "bg-emerald-600 text-slate-900 shadow-lg",
@@ -202,7 +202,7 @@ export const ALL_MODULES = [
  id: "measurement-sheet",
  title: "Measurement Sheet Calculator",
  desc: "Interactive civil engineering measurement sheet with auto-calculating sections for excavation, PCC, RCC, and finishes.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
  colorClass: "bg-[#FFFFFF] text-slate-900 shadow-lg",
@@ -214,7 +214,7 @@ export const ALL_MODULES = [
  id: "boq",
  title: "Professional BOQ Generator",
  desc: "Calculate and format standardized Bills of Quantities for construction projects. Quantity surveyors rely on Civil Estimation Pro to export precise, itemized cost documents.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
  colorClass: "bg-blue-600 text-white shadow-lg",
@@ -226,7 +226,7 @@ export const ALL_MODULES = [
  id: "interiors-finishes",
  title: "Interiors & Finishes",
  desc: "Tiles, painting, doors, wood framing, and termite treatments.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Paintbrush,
  styleStyle: "glass",
  colorClass:
@@ -238,7 +238,7 @@ export const ALL_MODULES = [
  id: "area-space-calculator",
  title: "Plot Area Calculator",
  desc: "Calculate dimensional areas, RERA property spaces, plots, and roof material.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Scaling,
  styleStyle: "glass",
  colorClass:
@@ -250,7 +250,7 @@ export const ALL_MODULES = [
  id: "volume-estimator",
  title: "Volume & Tank Capacity",
  desc: "Calculate volumes, tank capacity & surface area.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Container,
  styleStyle: "glass",
  colorClass:
@@ -262,7 +262,7 @@ export const ALL_MODULES = [
  id: "metal-weight",
  title: "Metal Weight",
  desc: "Calculate section weights of steel profiles.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Anvil,
  styleStyle: "glass",
  colorClass:
@@ -274,7 +274,7 @@ export const ALL_MODULES = [
  id: "unit-converter",
  title: "Unit Converter",
  desc: "Convert units across 15 engineering categories.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Repeat,
  styleStyle: "glass",
  colorClass:
@@ -287,7 +287,7 @@ export const ALL_MODULES = [
  id: "projects",
  title: "Project Manager",
  desc: "Group calculations by project, view aggregated costs and timelines.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: FolderOpen,
  styleStyle: "solid",
  colorClass: "bg-indigo-600 text-white shadow-lg",
@@ -299,7 +299,7 @@ export const ALL_MODULES = [
  id: "tracker",
  title: "Site Progress Tracker",
  desc: "Track construction timelines, visual Gantt charts, budget burn, and photo updates.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: BarChart,
  styleStyle: "glass",
  colorClass:
@@ -312,7 +312,7 @@ export const ALL_MODULES = [
  id: "labour-calculator",
  title: "Labour & Workforce",
  desc: "Calculate labour cost, worker allocation, and daily burn rates for your project.",
- category: "Quantity Estimation",
+ category: "Quantity Takeoff & Costing",
  icon: Users,
  styleStyle: "glass",
  colorClass:
@@ -324,10 +324,23 @@ export const ALL_MODULES = [
 
  // 🏗️ CONCRETE TECH
  {
- id: "master-rcc",
+ id: "universal-structural-geometry",
+        title: "Universal Structural Geometry Engine",
+        desc: "Combine Rectangular Columns, Round Columns, Concrete Tubes/Pipes, Staircases, Precast Compound Walls, and Roof Pitch into one interactive shape selector.",
+        category: "Structural & Concrete Geometry",
+        icon: Box,
+        styleStyle: "solid",
+        colorClass: "bg-indigo-600 text-white shadow-lg",
+        iconClass: "text-white opacity-90",
+        difficulty: "Advanced",
+        estimatedTime: "~15 mins",
+        isPopular: true,
+      },
+      {
+        id: "master-rcc",
  title: "Master RCC Estimator",
  desc: "This Civil Estimation Pro tool calculates quantities for slabs, columns, beams, and staircases. Structural engineers benefit from instant concrete and steel volume outputs.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: Building2,
  styleStyle: "solid",
  colorClass:
@@ -341,7 +354,7 @@ export const ALL_MODULES = [
  id: "calculators",
  title: "Construction Material",
  desc: "Accurate estimations for concrete, bricks, steel, blocks, mortar.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: HardHat,
  styleStyle: "solid",
  colorClass:
@@ -356,7 +369,7 @@ export const ALL_MODULES = [
  id: "boq-templates",
  title: "BOQ Templates",
  desc: "Downloadable Bill of Quantities templates in Excel format.",
- category: "Resources",
+ category: "Quantity Takeoff & Costing",
  icon: FileText,
  styleStyle: "solid",
  colorClass: "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30",
@@ -369,7 +382,7 @@ export const ALL_MODULES = [
  id: "room-area-calculator",
  title: "Room Area Calculator",
  desc: "Calculate net vs gross area and check NBC/RERA minimum room size compliance.",
- category: "Architectural",
+ category: "Masonry, Surfaces & Finishes",
  icon: Square,
  styleStyle: "glass",
  colorClass:
@@ -382,7 +395,7 @@ export const ALL_MODULES = [
  id: "building-setback-calculator",
  title: "Building Setback Calculator",
  desc: "Auto-calculate front, rear setbacks, and side margins given plot size and zone.",
- category: "Architectural",
+ category: "Masonry, Surfaces & Finishes",
  icon: ArrowRightLeft,
  styleStyle: "glass",
  colorClass:
@@ -395,7 +408,7 @@ export const ALL_MODULES = [
  id: "far-fsi-calculator",
  title: "FAR/FSI Calculator",
  desc: "Determine maximum permissible built-up area and floors based on FAR/FSI allowance.",
- category: "Architectural",
+ category: "Masonry, Surfaces & Finishes",
  icon: Building,
  styleStyle: "glass",
  colorClass:
@@ -408,7 +421,7 @@ export const ALL_MODULES = [
  id: "staircase-design-reference",
  title: "Staircase Design Reference",
  desc: "Validate riser-going ergonomics, headroom clearance, and minimum stair widths.",
- category: "Architectural",
+ category: "Masonry, Surfaces & Finishes",
  icon: Triangle,
  styleStyle: "glass",
  colorClass:
@@ -421,7 +434,7 @@ export const ALL_MODULES = [
  id: "door-window-schedule",
  title: "Door & Window Schedule",
  desc: "Generate schedules and calculate required lintel sizes for building openings.",
- category: "Architectural",
+ category: "Masonry, Surfaces & Finishes",
  icon: Layout,
  styleStyle: "glass",
  colorClass:
@@ -434,7 +447,7 @@ export const ALL_MODULES = [
  id: "ventilation-checker",
  title: "Ventilation & Lighting Checker",
  desc: "Check if window and ventilation areas meet minimum NBC requirements based on floor area.",
- category: "Architectural",
+ category: "Masonry, Surfaces & Finishes",
  icon: Sun,
  styleStyle: "glass",
  colorClass:
@@ -447,7 +460,7 @@ export const ALL_MODULES = [
  id: "bbs-generator",
  title: "BBS Generator",
  desc: "Calculate core steel reinforcement cutting lengths and bend deductions. Civil engineers use this Civil Estimation Pro generator to output standardized bar schedules.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: FileSpreadsheet,
  styleStyle: "glass",
  colorClass:
@@ -459,7 +472,7 @@ export const ALL_MODULES = [
  id: "reinforcement",
  title: "Reinforcement Detailing Visualizer",
  desc: "Interactive 2D rebar detailing for beams, columns & slabs with IS 456 checks.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
  colorClass:
@@ -472,7 +485,7 @@ export const ALL_MODULES = [
  id: "isolated-footing",
  title: "Isolated Footing Calculator",
  desc: "Detailed estimations for concrete, steel mesh, excavation and working space.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: Box,
  styleStyle: "glass",
  colorClass:
@@ -485,7 +498,7 @@ export const ALL_MODULES = [
  id: "retaining-wall",
  title: "Retaining Wall Estimator",
  desc: "Calculate structural stability, concrete volume, and rebar for cantilever walls. Civil Estimation Pro helps engineers output safe material quantities for earth-retaining structures.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: ShieldCheck,
  styleStyle: "glass",
  colorClass:
@@ -498,7 +511,7 @@ export const ALL_MODULES = [
  id: "staircase-calculator",
  title: "Staircase Calculator",
  desc: "Calculate concrete and steel material for stairs.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
  colorClass:
@@ -510,7 +523,7 @@ export const ALL_MODULES = [
  id: "aggregate-tests",
  title: "Aggregate Tests",
  desc: "Calculate impact, crushing, abrasion values and water absorption.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: Box,
  styleStyle: "glass",
  colorClass:
@@ -522,7 +535,7 @@ export const ALL_MODULES = [
  id: "formwork",
  title: "Formwork & Scaffold",
  desc: "Shuttering and scaffolding material computations.",
- category: "Concrete",
+ category: "Structural & Concrete Geometry",
  icon: Hammer,
  styleStyle: "glass",
  colorClass:
@@ -536,7 +549,7 @@ export const ALL_MODULES = [
  id: "geotechnical",
  title: "Geotechnical & Soil Tests",
  desc: "Process lab data for water content, Specific Gravity, LL, and CBR.",
- category: "Geotechnical",
+ category: "Geotechnical & Soil Lab Suite",
  icon: Cone,
  styleStyle: "glass",
  colorClass:
@@ -548,7 +561,7 @@ export const ALL_MODULES = [
  id: "cbr-test",
  title: "CBR Test Calculator",
  desc: "Calculate CBR with smart interactive load-penetration curve plotting.",
- category: "Geotechnical",
+ category: "Geotechnical & Soil Lab Suite",
  icon: Activity, BookOpen, FileText,
  styleStyle: "glass",
  colorClass:
@@ -561,7 +574,7 @@ export const ALL_MODULES = [
  id: "aggregate-blending",
  title: "Aggregate Blending",
  desc: "Blend 2 to 4 stockpiles to meet target grading specifications.",
- category: "Geotechnical",
+ category: "Geotechnical & Soil Lab Suite",
  icon: Layers,
  styleStyle: "glass",
  colorClass:
@@ -573,7 +586,7 @@ export const ALL_MODULES = [
  id: "direct-shear",
  title: "Direct Shear Test",
  desc: "Calculate cohesion and friction angle using Mohr-Coulomb failure regression.",
- category: "Geotechnical",
+ category: "Geotechnical & Soil Lab Suite",
  icon: Layers,
  styleStyle: "glass",
  colorClass:
@@ -586,7 +599,7 @@ export const ALL_MODULES = [
  id: "permeability-test",
  title: "Permeability Calculator",
  desc: "Constant head and falling head permeability testing computation.",
- category: "Geotechnical",
+ category: "Geotechnical & Soil Lab Suite",
  icon: Droplet,
  styleStyle: "glass",
  colorClass:
@@ -601,7 +614,7 @@ export const ALL_MODULES = [
  id: "mep-calculator",
  title: "Energy & MEP Calculators",
  desc: "Estimate solar capacity, water heating, and AC sizing.",
- category: "MEP",
+ category: "MEP, Energy & Landscaping",
  icon: Zap,
  styleStyle: "glass",
  colorClass:
@@ -614,7 +627,7 @@ export const ALL_MODULES = [
  id: "solar-roof",
  title: "Solar Roof Calculator",
  desc: "Estimate required solar system size, panels, and ROI.",
- category: "MEP",
+ category: "MEP, Energy & Landscaping",
  icon: Sun,
  styleStyle: "glass",
  colorClass:
@@ -627,7 +640,7 @@ export const ALL_MODULES = [
  id: "rainwater-harvesting",
  title: "Rainwater Harvesting",
  desc: "Calculate collectible rainwater volume and recommend tank sizes.",
- category: "MEP",
+ category: "MEP, Energy & Landscaping",
  icon: Droplet,
  styleStyle: "glass",
  colorClass:
@@ -641,7 +654,7 @@ export const ALL_MODULES = [
  id: "cost-guide-pakistan",
  title: "Construction Cost Guide Pakistan 2025",
  desc: "Latest material and labor rates overview for 2025.",
- category: "Resources",
+ category: "Quantity Takeoff & Costing",
  icon: BookOpen,
  styleStyle: "glass",
  colorClass: "bg-white/80 backdrop-blur-md text-emerald-600",
@@ -653,7 +666,7 @@ export const ALL_MODULES = [
  id: "blog",
  title: "Civil Engineering Blog",
  desc: "Articles, tutorials, and case studies on modern construction.",
- category: "Resources",
+ category: "Quantity Takeoff & Costing",
  icon: FileText,
  styleStyle: "glass",
  colorClass: "bg-white/80 backdrop-blur-md text-slate-800",
@@ -665,7 +678,7 @@ export const ALL_MODULES = [
  id: "road-pavement",
  title: "Road & Pavement Estimator",
  desc: "Calculate material quantities for flexible and rigid pavement layers. Highway engineers use this Civil Estimation Pro tool to output exact asphalt volumes.",
- category: "Road Pavement",
+ category: "Infrastructure & Highway Engineering",
  icon: Route,
  styleStyle: "glass",
  colorClass:
@@ -677,7 +690,7 @@ export const ALL_MODULES = [
  id: "earthworks",
  title: "Earthworks & Excavation",
  desc: "Calculate precise cut, fill, and site preparation volumes for varied terrain. Surveyors use this Civil Estimation Pro tool to generate accurate excavation tonnage reports.",
- category: "Road Pavement",
+ category: "Infrastructure & Highway Engineering",
  icon: Shovel,
  styleStyle: "glass",
  colorClass:
@@ -689,7 +702,7 @@ export const ALL_MODULES = [
  id: "chainage",
  title: "Chainage Volume",
  desc: "Road highway chainage extraction calculations.",
- category: "Road Pavement",
+ category: "Infrastructure & Highway Engineering",
  icon: Map,
  styleStyle: "glass",
  colorClass:
@@ -701,7 +714,7 @@ export const ALL_MODULES = [
  id: "gradient-calculator",
  title: "Gradient & Slope",
  desc: "Dynamic bidirectional slope and elevation calculator.",
- category: "Road Pavement",
+ category: "Infrastructure & Highway Engineering",
  icon: Maximize2,
  styleStyle: "glass",
  colorClass:
@@ -713,7 +726,7 @@ export const ALL_MODULES = [
  id: "anti-termite",
  title: "Anti-Termite Calculator",
  desc: "Calculate pre-construction termite chemical emulsion and concentrate requirements.",
- category: "Road Pavement",
+ category: "Infrastructure & Highway Engineering",
  icon: Bug,
  styleStyle: "glass",
  colorClass:
@@ -727,7 +740,7 @@ export const ALL_MODULES = [
  id: "master-sieve",
  title: "Master Sieve Analysis",
  desc: "Dynamic gradation validator driven by specification databases.",
- category: "Road Pavement",
+ category: "Infrastructure & Highway Engineering",
  icon: LineChart,
  styleStyle: "glass",
  colorClass:
@@ -740,7 +753,7 @@ export const ALL_MODULES = [
  id: "is-codes-reference",
  title: "IS Codes Reference",
  desc: "Comprehensive database of Indian Standard codes for civil engineering.",
- category: "Standards",
+ category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
  colorClass: "bg-white/80 backdrop-blur-md text-slate-900",
@@ -751,7 +764,7 @@ export const ALL_MODULES = [
  id: "morth-irc-specs",
  title: "MORTH/IRC Specifications",
  desc: "Ministry of Road Transport and Highways & Indian Roads Congress specs.",
- category: "Standards",
+ category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
  colorClass: "bg-white/80 backdrop-blur-md text-slate-900",
@@ -762,7 +775,7 @@ export const ALL_MODULES = [
  id: "pakistan-building-codes",
  title: "Pakistan Building Codes",
  desc: "Building Code of Pakistan (BCP) requirements and guidelines.",
- category: "Standards",
+ category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
  colorClass: "bg-white/80 backdrop-blur-md text-emerald-600",
@@ -773,7 +786,7 @@ export const ALL_MODULES = [
  id: "uae-construction-standards",
  title: "UAE Construction Standards",
  desc: "Dubai Municipality and Abu Dhabi building codes and regulations.",
- category: "Standards",
+ category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
  colorClass: "bg-white/80 backdrop-blur-md text-emerald-600",
@@ -786,7 +799,7 @@ export const ALL_MODULES = [
  id: "beam-design",
  title: "Beam Design Tool",
  desc: "Limit State Method including deflection, shear design, and anchorage per IS 456:2000.",
- category: "Structural Design",
+ category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
  colorClass:
@@ -799,7 +812,7 @@ export const ALL_MODULES = [
  id: "column-design",
  title: "Column Design Tool",
  desc: "Short/slender check and axial + biaxial bending capacity per IS 456 & 13920.",
- category: "Structural Design",
+ category: "Structural & Concrete Geometry",
  icon: Building2,
  styleStyle: "glass",
  colorClass:
@@ -812,7 +825,7 @@ export const ALL_MODULES = [
  id: "raft-foundation",
  title: "Raft Foundation Designer",
  desc: "Design raft thickness, reinforcement, and check settlement per IS 2950.",
- category: "Structural Design",
+ category: "Structural & Concrete Geometry",
  icon: Grid2X2,
  styleStyle: "glass",
  colorClass:
@@ -825,7 +838,7 @@ export const ALL_MODULES = [
  id: "water-tank-design",
  title: "Water Tank Design",
  desc: "Crack width checks for overhead/underground tanks per IS 3370.",
- category: "Structural Design",
+ category: "Structural & Concrete Geometry",
  icon: Waves,
  styleStyle: "glass",
  colorClass:
@@ -838,7 +851,7 @@ export const ALL_MODULES = [
  id: "pile-foundation",
  title: "Pile Foundation Calculator",
  desc: "Friction & end bearing pile capacity, group efficiency per IS 2911.",
- category: "Structural Design",
+ category: "Structural & Concrete Geometry",
  icon: Pickaxe,
  styleStyle: "glass",
  colorClass:
@@ -851,7 +864,7 @@ export const ALL_MODULES = [
  id: "prestressed-concrete",
  title: "Pre-stressed Concrete Estimator",
  desc: "Tendon layout and prestress losses per IS 1343:2012.",
- category: "Structural Design",
+ category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
  colorClass:

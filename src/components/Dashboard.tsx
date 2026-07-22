@@ -1,4 +1,4 @@
-import { Beaker, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Calculator,
@@ -43,11 +43,12 @@ import { Calculator,
  Bookmark,
  X,
  ArrowUpRight,
-} from "lucide-react";
+ Beaker } from "lucide-react";
 import { SEO } from "./SEO";
 import SearchAndFilterBar from "./SearchAndFilterBar";
 import HeroSection from "./HeroSection";
 import SocialProofSection from "./SocialProofSection";
+import CategoryHub from "./CategoryHub";
 import WorkspaceSection from "./WorkspaceSection";
 import SummaryStatsWidget from "./SummaryStatsWidget";
 
@@ -77,6 +78,7 @@ function formatTimeAgo(timestamp: number) {
 
 export type ModuleId = string;
 export const ALL_MODULES = [
+  { id: "master-finishes", title: "Complete Finishes Workspace", desc: "Bricks, plaster, paint, flooring, countertops, woodwork, and carpet area in one seamless multi-tab interface.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-indigo-600 text-white shadow-lg", difficulty: "Intermediate", estimatedTime: "~4 mins" },
  // 🚀 Guided Workflows
  {
  id: "qs-workflow",
@@ -1213,38 +1215,8 @@ export default function Dashboard({
  onSelectModule={handleSelect}
                   />
                 </div>
- <div className="flex flex-col w-full">
- {isComputing ? <ToolsSkeleton /> : groupsToDisplay.map((groupName, index) => {
- const toolsInGroup = groupedModules[groupName];
- if (!toolsInGroup || toolsInGroup.length === 0) return null;
- return (
- <div key={groupName} className={`w-full flex flex-col py-12 md:py-20 ${index % 3 === 0 ? 'bg-[#F4F1EA]' : index % 3 === 1 ? 'bg-[#F0F5FF]' : 'bg-[#D9E6DD]'}`}>
-<div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex flex-col gap-5">
-<h2 className="px-2 flex items-center gap-2 text-xl font-semibold text-slate-800 tracking-tight mb-4">
- {groupName}
- <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 shadow-sm">{toolsInGroup.length}</span>
- </h2>
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
- {toolsInGroup.map((mod, modIdx) => (
- <motion.div
-    key={mod.id}
-    id={`module-card-${mod.id}`}
-    className="flex flex-col h-full"
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.4, delay: modIdx * 0.05 }}
-  >
- <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-${groupName || 'group'}-${mod.id}`} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
- </motion.div>
- ))}
- </div>
-</div>
-</div>
-            );
-          })}
- </div>
- <div className="w-full md:max-w-[1400px] md:mx-auto px-4 py-8"><AIEstimatorBanner onOpenChat={() => setIsAiChatOpen(true)} /></div>
+ <CategoryHub groupedModules={groupedModules} groupsToDisplay={groupsToDisplay} handleSelect={handleSelect} isComputing={isComputing} />
+                <div className="w-full md:max-w-[1400px] md:mx-auto px-4 py-8"><AIEstimatorBanner onOpenChat={() => setIsAiChatOpen(true)} /></div>
  </div>
  </div>
  </div>

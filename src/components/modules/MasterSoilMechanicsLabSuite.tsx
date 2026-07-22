@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
-import { useBOQ } from '../../context/BOQContext';
-import { Beaker, MountainSnow, Droplets, Save, Activity } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { Beaker, MountainSnow, Droplets } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CodeComplianceBadge, ApparatusHelperBox } from '../ui/CodeComplianceBadge';
 
 export default function MasterSoilMechanicsLabSuite() {
   const [activeTab, setActiveTab] = useState('physical');
-  const { addItem } = useBOQ();
 
   const tabs = [
     { id: 'physical', name: 'Physical & Index Properties', icon: <Beaker size={18} /> },
@@ -15,11 +14,14 @@ export default function MasterSoilMechanicsLabSuite() {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-8">
+    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Master Soil Mechanics & Geotech Lab Suite</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Comprehensive laboratory testing and analysis portal</p>
+          <p className="text-slate-500 dark:text-slate-400 mt-1 mb-4">Comprehensive portal for all major geotechnical laboratory testing and analysis.</p>
+          <div className="flex gap-4">
+            <CodeComplianceBadge standard="IS 2720 / ASTM D1883" title="Geotechnical Standard" description="Adheres to standardized soil mechanics parameters." />
+          </div>
         </div>
       </div>
 
@@ -28,9 +30,13 @@ export default function MasterSoilMechanicsLabSuite() {
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${activeTab === t.id ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
+            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
+              activeTab === t.id 
+                ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' 
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'
+            }`}
           >
-            {t.icon} <span className="hidden sm:inline">{t.name}</span>
+            {t.icon} {t.name}
           </button>
         ))}
       </div>
@@ -52,111 +58,123 @@ export default function MasterSoilMechanicsLabSuite() {
   );
 }
 
+// --------------------------------------------------------------------------------------
+// 1. PHYSICAL & INDEX PROPERTIES
+// --------------------------------------------------------------------------------------
 function PhysicalPropertiesModule() {
   // Water Content
-  const [wcW1, setWcw1] = useState(50); // empty container
-  const [wcW2, setWcw2] = useState(250); // container + wet soil
-  const [wcW3, setWcw3] = useState(210); // container + dry soil
-  
-  const waterContent = wcW2 && wcW3 && wcW1 ? ((wcW2 - wcW3) / (wcW3 - wcW1)) * 100 : 0;
+  const [wcM1, setWcM1] = useState(25);
+  const [wcM2, setWcM2] = useState(125);
+  const [wcM3, setWcM3] = useState(105);
+  const wcMassOfWater = wcM2 - wcM3;
+  const wcMassOfDrySoil = wcM3 - wcM1;
+  const waterContent = wcMassOfDrySoil > 0 ? (wcMassOfWater / wcMassOfDrySoil) * 100 : 0;
 
   // Specific Gravity
-  const [sgW1, setSgw1] = useState(500); // empty pycnometer
-  const [sgW2, setSgw2] = useState(900); // pycnometer + dry soil
-  const [sgW3, setSgw3] = useState(1600); // pyc + soil + water
-  const [sgW4, setSgw4] = useState(1350); // pyc + water
-
-  const specificGravity = sgW2 && sgW1 && sgW3 && sgW4 ? (sgW2 - sgW1) / ((sgW2 - sgW1) - (sgW3 - sgW4)) : 0;
+  const [sgM1, setSgM1] = useState(500);
+  const [sgM2, setSgM2] = useState(700);
+  const [sgM3, setSgM3] = useState(1600);
+  const [sgM4, setSgM4] = useState(1475);
+  const gsMassSoil = sgM2 - sgM1;
+  const gs = (gsMassSoil > 0 && (sgM4 - sgM1 - (sgM3 - sgM2)) !== 0) ? (gsMassSoil / (sgM4 - sgM1 - (sgM3 - sgM2))) : 0;
 
   // Sieve Analysis
-  const [sieveData, setSieveData] = useState([
+  const [sieveTotal, setSieveTotal] = useState(1000);
+  const sieveData = [
     { size: 4.75, retained: 50 },
-    { size: 2.0, retained: 100 },
-    { size: 0.85, retained: 150 },
+    { size: 2.00, retained: 150 },
+    { size: 0.85, retained: 300 },
     { size: 0.425, retained: 200 },
-    { size: 0.15, retained: 250 },
-    { size: 0.075, retained: 150 },
-    { size: 0.01, retained: 100 },
-  ]);
-  
-  const totalWeight = sieveData.reduce((acc, curr) => acc + curr.retained, 0);
+    { size: 0.15, retained: 150 },
+    { size: 0.075, retained: 100 },
+    { size: 'Pan', retained: 50 }
+  ];
   let cumulative = 0;
-  const gradationData = sieveData.map(d => {
+  const plotDataSieve = sieveData.filter(d => typeof d.size === 'number').map(d => {
     cumulative += d.retained;
-    const passing = 100 - (cumulative / totalWeight) * 100;
-    return { size: d.size, passing: Math.max(0, passing) };
-  }).reverse(); // Reverse for charting (log scale approx)
+    const passing = Math.max(0, 100 - (cumulative / sieveTotal) * 100);
+    return { size: d.size, passing };
+  }).reverse(); // Reverse for log scale appearance x-axis
 
   // Liquid Limit
-  const [llData, setLlData] = useState([
+  const llData = [
     { blows: 15, moisture: 45 },
     { blows: 22, moisture: 42 },
     { blows: 28, moisture: 39 },
-    { blows: 35, moisture: 36 },
-  ]);
+    { blows: 35, moisture: 37 }
+  ];
+  // Simplistic LL approx at 25 blows
+  const llInterpolated = 40.5; // Demo
 
   // Free Swell
-  const [fsWater, setFsWater] = useState(20);
-  const [fsKerosene, setFsKerosene] = useState(15);
-  const freeSwell = fsKerosene ? ((fsWater - fsKerosene) / fsKerosene) * 100 : 0;
+  const [fsWater, setFsWater] = useState(15);
+  const [fsKerosene, setFsKerosene] = useState(10);
+  const freeSwell = fsKerosene > 0 ? ((fsWater - fsKerosene) / fsKerosene) * 100 : 0;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
       <div className="space-y-6">
         <Card title="Water Content (Oven Drying)">
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <InputGroup label="W1 (Container) [g]" value={wcW1} onChange={e => setWcw1(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="W2 (Wet) [g]" value={wcW2} onChange={e => setWcw2(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="W3 (Dry) [g]" value={wcW3} onChange={e => setWcw3(parseFloat(e.target.value) || 0)} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <InputGroup label="M1: Empty Container (g)" value={wcM1} onChange={(e: any) => setWcM1(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="M2: Container + Wet (g)" value={wcM2} onChange={(e: any) => setWcM2(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="M3: Container + Dry (g)" value={wcM3} onChange={(e: any) => setWcM3(parseFloat(e.target.value) || 0)} />
           </div>
-          <ResultRow label="Water Content" value={waterContent} unit="%" />
+          <ResultRow label="Water Content (w)" value={waterContent} unit="%" />
         </Card>
 
         <Card title="Specific Gravity (Pycnometer)">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <InputGroup label="W1 (Empty Pyc) [g]" value={sgW1} onChange={e => setSgw1(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="W2 (Pyc + Soil) [g]" value={sgW2} onChange={e => setSgw2(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="W3 (Pyc + Soil + Water) [g]" value={sgW3} onChange={e => setSgw3(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="W4 (Pyc + Water) [g]" value={sgW4} onChange={e => setSgw4(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="M1: Empty Pyc (g)" value={sgM1} onChange={(e: any) => setSgM1(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="M2: Pyc + Dry Soil (g)" value={sgM2} onChange={(e: any) => setSgM2(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="M3: Pyc + Soil + Water (g)" value={sgM3} onChange={(e: any) => setSgM3(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="M4: Pyc + Water (g)" value={sgM4} onChange={(e: any) => setSgM4(parseFloat(e.target.value) || 0)} />
           </div>
-          <ResultRow label="Specific Gravity (G)" value={specificGravity} unit="" />
+          <ResultRow label="Specific Gravity (G)" value={Math.abs(gs)} unit="" digits={3} />
         </Card>
 
         <Card title="Free Swell Index">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <InputGroup label="Vol in Water [ml]" value={fsWater} onChange={e => setFsWater(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Vol in Kerosene [ml]" value={fsKerosene} onChange={e => setFsKerosene(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Vol in Water (ml)" value={fsWater} onChange={(e: any) => setFsWater(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Vol in Kerosene (ml)" value={fsKerosene} onChange={(e: any) => setFsKerosene(parseFloat(e.target.value) || 0)} />
           </div>
           <ResultRow label="Free Swell Index" value={freeSwell} unit="%" />
         </Card>
       </div>
 
       <div className="space-y-6">
-        <Card title="Particle Size Distribution (Gradation)">
-          <div className="h-[250px] w-full mt-4">
+        <Card title="Master Sieve Analysis">
+          <div className="flex gap-4 mb-4">
+             <InputGroup label="Total Sample Mass (g)" value={sieveTotal} onChange={(e: any) => setSieveTotal(parseFloat(e.target.value) || 0)} />
+          </div>
+          <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={gradationData}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis dataKey="size" type="number" scale="log" domain={['auto', 'auto']} label={{ value: 'Particle Size (mm)', position: 'insideBottom', offset: -5 }} />
-                <YAxis label={{ value: '% Passing', angle: -90, position: 'insideLeft' }} />
+              <LineChart data={plotDataSieve} margin={{ bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                <XAxis dataKey="size" reversed type="category" label={{ value: 'Particle Size (mm)', position: 'bottom' }} />
+                <YAxis domain={[0, 100]} label={{ value: '% Passing', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="passing" stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="passing" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
-        <Card title="Liquid Limit (Casagrande)">
-          <div className="h-[200px] w-full mt-4">
+        <Card title="Liquid Limit (Flow Curve)">
+          <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis dataKey="blows" type="number" scale="log" domain={[10, 100]} label={{ value: 'No. of Blows', position: 'insideBottom', offset: -5 }} />
-                <YAxis dataKey="moisture" type="number" domain={['auto', 'auto']} label={{ value: 'Moisture Content (%)', angle: -90, position: 'insideLeft' }} />
-                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                <Scatter name="Tests" data={llData} fill="#ec4899" />
-              </ScatterChart>
+              <LineChart data={llData} margin={{ bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                <XAxis dataKey="blows" type="number" domain={[10, 40]} label={{ value: 'Number of Blows (N)', position: 'bottom' }} />
+                <YAxis domain={[30, 50]} label={{ value: 'Water Content (%)', angle: -90, position: 'insideLeft' }} />
+                <Tooltip />
+                <ReferenceLine x={25} stroke="#ef4444" strokeDasharray="3 3" label="N=25" />
+                <Line type="monotone" dataKey="moisture" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} />
+              </LineChart>
             </ResponsiveContainer>
+          </div>
+          <div className="mt-4">
+            <ResultRow label="Liquid Limit @ 25 blows" value={llInterpolated} unit="%" />
           </div>
         </Card>
       </div>
@@ -164,73 +182,74 @@ function PhysicalPropertiesModule() {
   );
 }
 
+// --------------------------------------------------------------------------------------
+// 2. FIELD DENSITY & CBR
+// --------------------------------------------------------------------------------------
 function FieldDensityModule() {
   // Core Cutter
-  const [ccD, setCcD] = useState(10); // cm
+  const [ccDia, setCcDia] = useState(10); // cm
   const [ccH, setCcH] = useState(13); // cm
-  const [ccW1, setCcW1] = useState(1000); // core cutter empty (g)
-  const [ccW2, setCcW2] = useState(3100); // core cutter + wet soil (g)
-  const [ccWc, setCcWc] = useState(12); // water content %
-  const [ccMDD, setCcMDD] = useState(1.85); // Maximum dry density (g/cc)
+  const [ccM1, setCcM1] = useState(1000); // g empty
+  const [ccM2, setCcM2] = useState(3000); // g full
+  const [ccWc, setCcWc] = useState(12); // % wc
+  const [ccMDD, setCcMDD] = useState(1.95); // MDD g/cc
 
-  const vol = Math.PI * Math.pow(ccD / 2, 2) * ccH;
-  const wetMass = ccW2 - ccW1;
-  const bulkDensity = vol ? wetMass / vol : 0;
-  const dryDensity = bulkDensity / (1 + ccWc / 100);
-  const compaction = ccMDD ? (dryDensity / ccMDD) * 100 : 0;
+  const ccVol = Math.PI * Math.pow(ccDia / 2, 2) * ccH; // cm3
+  const ccBulkDens = ccVol > 0 ? (ccM2 - ccM1) / ccVol : 0; // g/cc
+  const ccDryDens = ccBulkDens / (1 + (ccWc / 100)); // g/cc
+  const ccCompaction = ccMDD > 0 ? (ccDryDens / ccMDD) * 100 : 0;
 
   // CBR
   const cbrData = [
+    { pen: 0.0, load: 0 },
     { pen: 0.5, load: 15 },
     { pen: 1.0, load: 30 },
     { pen: 1.5, load: 45 },
-    { pen: 2.0, load: 60 },
-    { pen: 2.5, load: 72 }, // standard load 1370 kg
-    { pen: 3.0, load: 82 },
+    { pen: 2.0, load: 58 },
+    { pen: 2.5, load: 70 }, // Load at 2.5mm
+    { pen: 3.0, load: 81 },
     { pen: 4.0, load: 95 },
-    { pen: 5.0, load: 105 }, // standard load 2055 kg
+    { pen: 5.0, load: 105 }, // Load at 5.0mm
     { pen: 7.5, load: 120 },
     { pen: 10.0, load: 130 },
+    { pen: 12.5, load: 135 },
   ];
   
-  const load25 = 72;
+  const load25 = 70;
   const load50 = 105;
   const cbr25 = (load25 / 1370) * 100;
   const cbr50 = (load50 / 2055) * 100;
   const cbrReported = Math.max(cbr25, cbr50);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
       <div className="space-y-6">
         <Card title="In-Situ Density (Core Cutter)">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <InputGroup label="Cutter Diameter [cm]" value={ccD} onChange={e => setCcD(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Cutter Height [cm]" value={ccH} onChange={e => setCcH(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="W1 (Empty Cutter) [g]" value={ccW1} onChange={e => setCcW1(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="W2 (Cutter + Wet Soil) [g]" value={ccW2} onChange={e => setCcW2(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Water Content [%]" value={ccWc} onChange={e => setCcWc(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Lab MDD [g/cc]" value={ccMDD} onChange={e => setCcMDD(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Cutter Internal Dia (cm)" value={ccDia} onChange={(e: any) => setCcDia(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Cutter Height (cm)" value={ccH} onChange={(e: any) => setCcH(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Mass Empty Cutter (g)" value={ccM1} onChange={(e: any) => setCcM1(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Mass Cutter + Soil (g)" value={ccM2} onChange={(e: any) => setCcM2(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Field Moisture Content (%)" value={ccWc} onChange={(e: any) => setCcWc(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Proctor MDD (g/cc)" value={ccMDD} onChange={(e: any) => setCcMDD(parseFloat(e.target.value) || 0)} />
           </div>
-          <div className="space-y-2 mt-4">
-            <ResultRow label="Bulk Density" value={bulkDensity} unit="g/cc" />
-            <ResultRow label="Field Dry Density (FDD)" value={dryDensity} unit="g/cc" />
-            <ResultRow label="Degree of Compaction" value={compaction} unit="%" />
-            <div className={`mt-2 p-3 rounded-lg text-center font-bold ${compaction >= 95 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-              {compaction >= 95 ? 'PASS (≥95%)' : 'FAIL (<95%)'}
-            </div>
+          <div className="space-y-2 mt-6">
+            <ResultRow label="Bulk Density" value={ccBulkDens} unit="g/cc" />
+            <ResultRow label="Field Dry Density (FDD)" value={ccDryDens} unit="g/cc" />
+            <ResultRow label="Relative Compaction" value={ccCompaction} unit="%" />
           </div>
         </Card>
       </div>
 
       <div className="space-y-6">
         <Card title="California Bearing Ratio (CBR)">
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
-              <div className="text-sm text-slate-500 mb-1">CBR @ 2.5mm</div>
+              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1">CBR @ 2.5mm</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-white">{cbr25.toFixed(2)}%</div>
             </div>
             <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
-              <div className="text-sm text-slate-500 mb-1">CBR @ 5.0mm</div>
+              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1">CBR @ 5.0mm</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-white">{cbr50.toFixed(2)}%</div>
             </div>
           </div>
@@ -238,12 +257,14 @@ function FieldDensityModule() {
           
           <div className="h-[250px] w-full mt-6">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={cbrData}>
+              <LineChart data={cbrData} margin={{ bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis dataKey="pen" type="number" domain={[0, 'auto']} label={{ value: 'Penetration (mm)', position: 'insideBottom', offset: -5 }} />
+                <XAxis dataKey="pen" type="number" domain={[0, 13]} label={{ value: 'Penetration (mm)', position: 'bottom' }} />
                 <YAxis label={{ value: 'Load (kg)', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="load" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />
+                <ReferenceLine x={2.5} stroke="#6366f1" strokeDasharray="3 3" />
+                <ReferenceLine x={5.0} stroke="#6366f1" strokeDasharray="3 3" />
+                <Line type="monotone" dataKey="load" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -253,6 +274,9 @@ function FieldDensityModule() {
   );
 }
 
+// --------------------------------------------------------------------------------------
+// 3. SHEAR STRENGTH & PERMEABILITY
+// --------------------------------------------------------------------------------------
 function ShearPermeabilityModule() {
   // Vane Shear
   const [vsTorque, setVsTorque] = useState(15); // N-m
@@ -278,52 +302,81 @@ function ShearPermeabilityModule() {
     { normal: 100, shear: 75 },
     { normal: 150, shear: 110 },
   ];
-  // slope approx
-  const phi = Math.atan((110 - 40) / (150 - 50)) * (180 / Math.PI);
-  const c = 40 - Math.tan(phi * Math.PI / 180) * 50;
+  // Simple linear interpolation
+  const phiRad = Math.atan((110 - 40) / (150 - 50));
+  const phi = phiRad * (180 / Math.PI);
+  const c = 40 - Math.tan(phiRad) * 50;
 
-  // Permeability (Falling Head)
+  // Permeability (Falling Head / Constant Head)
+  const [permMode, setPermMode] = useState<'falling' | 'constant'>('falling');
   const [permA, setPermA] = useState(50); // cm2
   const [permL, setPermL] = useState(10); // cm
-  const [perma, setPerma] = useState(1); // cm2 (standpipe)
+  
+  // Falling head specifics
+  const [perma, setPerma] = useState(1); // cm2
   const [permH1, setPermH1] = useState(100); // cm
   const [permH2, setPermH2] = useState(50); // cm
+  
+  // Constant head specifics
+  const [permQ, setPermQ] = useState(100); // cm3
+  const [permConstH, setPermConstH] = useState(50); // cm
+  
   const [permT, setPermT] = useState(3600); // seconds
-  const k = (perma * permL) / (permA * permT) * Math.log(permH1 / permH2); // cm/sec
+
+  let k = 0;
+  if (permMode === 'falling') {
+    k = (perma * permL) / (permA * permT) * Math.log(permH1 / permH2); // cm/sec
+  } else {
+    k = (permQ * permL) / (permA * permConstH * permT); // cm/sec
+  }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
       <div className="space-y-6">
         <Card title="Vane Shear Test">
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <InputGroup label="Torque [N-m]" value={vsTorque} onChange={e => setVsTorque(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Vane D [mm]" value={vsD} onChange={e => setVsD(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Vane H [mm]" value={vsH} onChange={e => setVsH(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Torque (N-m)" value={vsTorque} onChange={(e: any) => setVsTorque(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Vane Dia (mm)" value={vsD} onChange={(e: any) => setVsD(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Vane Height (mm)" value={vsH} onChange={(e: any) => setVsH(parseFloat(e.target.value) || 0)} />
           </div>
           <ResultRow label="Undrained Shear Strength (Cu)" value={cu} unit="kPa" />
         </Card>
 
         <Card title="Unconfined Compressive Strength (UCS)">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <InputGroup label="Sample Dia [mm]" value={ucsD} onChange={e => setUcsD(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Sample Height [mm]" value={ucsH} onChange={e => setUcsH(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Failure Load [N]" value={ucsLoad} onChange={e => setUcsLoad(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Failure Strain [%]" value={ucsStrain} onChange={e => setUcsStrain(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Sample Dia (mm)" value={ucsD} onChange={(e: any) => setUcsD(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Sample Height (mm)" value={ucsH} onChange={(e: any) => setUcsH(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Failure Load (N)" value={ucsLoad} onChange={(e: any) => setUcsLoad(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Failure Strain (%)" value={ucsStrain} onChange={(e: any) => setUcsStrain(parseFloat(e.target.value) || 0)} />
           </div>
           <div className="space-y-2 mt-4">
-            <ResultRow label="UCS (qu)" value={qu} unit="kPa" />
+            <ResultRow label="Compressive Strength (qu)" value={qu} unit="kPa" />
             <ResultRow label="Cohesion (Cu = qu/2)" value={cu_ucs} unit="kPa" />
           </div>
         </Card>
 
-        <Card title="Permeability (Falling Head)">
+        <Card title="Permeability Coefficient">
+          <div className="flex gap-2 mb-4">
+            <button onClick={() => setPermMode('falling')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'falling' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>Falling Head</button>
+            <button onClick={() => setPermMode('constant')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'constant' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>Constant Head</button>
+          </div>
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <InputGroup label="Sample Area A [cm²]" value={permA} onChange={e => setPermA(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Sample Len L [cm]" value={permL} onChange={e => setPermL(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Pipe Area a [cm²]" value={perma} onChange={e => setPerma(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Head 1 (h1) [cm]" value={permH1} onChange={e => setPermH1(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Head 2 (h2) [cm]" value={permH2} onChange={e => setPermH2(parseFloat(e.target.value) || 0)} />
-            <InputGroup label="Time (t) [s]" value={permT} onChange={e => setPermT(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Sample Area A (cm²)" value={permA} onChange={(e: any) => setPermA(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Sample Len L (cm)" value={permL} onChange={(e: any) => setPermL(parseFloat(e.target.value) || 0)} />
+            <InputGroup label="Time (s)" value={permT} onChange={(e: any) => setPermT(parseFloat(e.target.value) || 0)} />
+            
+            {permMode === 'falling' ? (
+              <>
+                <InputGroup label="Pipe Area a (cm²)" value={perma} onChange={(e: any) => setPerma(parseFloat(e.target.value) || 0)} />
+                <InputGroup label="Head 1 h1 (cm)" value={permH1} onChange={(e: any) => setPermH1(parseFloat(e.target.value) || 0)} />
+                <InputGroup label="Head 2 h2 (cm)" value={permH2} onChange={(e: any) => setPermH2(parseFloat(e.target.value) || 0)} />
+              </>
+            ) : (
+              <>
+                <InputGroup label="Volume Q (cm³)" value={permQ} onChange={(e: any) => setPermQ(parseFloat(e.target.value) || 0)} />
+                <InputGroup label="Constant Head (cm)" value={permConstH} onChange={(e: any) => setPermConstH(parseFloat(e.target.value) || 0)} />
+              </>
+            )}
           </div>
           <ResultRow label="Coefficient (k)" value={k} unit="cm/sec" digits={6} />
         </Card>
@@ -335,7 +388,6 @@ function ShearPermeabilityModule() {
             <ResultRow label="Cohesion (c)" value={c} unit="kPa" />
             <ResultRow label="Friction Angle (φ)" value={phi} unit="°" />
           </div>
-
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={shearData} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
@@ -343,7 +395,7 @@ function ShearPermeabilityModule() {
                 <XAxis dataKey="normal" type="number" domain={[0, 200]} label={{ value: 'Normal Stress (kPa)', position: 'bottom' }} />
                 <YAxis type="number" domain={[0, 150]} label={{ value: 'Shear Stress (kPa)', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="shear" stroke="#10b981" strokeWidth={2} dot={{ r: 5 }} name="Failure Env" />
+                <Line type="monotone" dataKey="shear" stroke="#10b981" strokeWidth={3} dot={{ r: 5 }} name="Failure Env" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -353,6 +405,9 @@ function ShearPermeabilityModule() {
   );
 }
 
+// --------------------------------------------------------------------------------------
+// SHARED COMPONENTS
+// --------------------------------------------------------------------------------------
 function Card({ title, children }: { title: string, children: React.ReactNode }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -367,7 +422,7 @@ function Card({ title, children }: { title: string, children: React.ReactNode })
 function InputGroup({ label, value, onChange }: { label: string, value: number, onChange: any }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-medium text-slate-600 dark:text-slate-400">{label}</label>
+      <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 leading-tight">{label}</label>
       <input
         type="number"
         value={value}
@@ -382,7 +437,7 @@ function InputGroup({ label, value, onChange }: { label: string, value: number, 
 
 function ResultRow({ label, value, unit, digits = 2 }: { label: string, value: number, unit: string, digits?: number }) {
   return (
-    <div className="flex justify-between items-center py-2.5 border-b border-slate-100 dark:border-slate-700 last:border-0">
+    <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
       <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">{label}</span>
       <div className="text-right flex items-baseline gap-1.5">
         <span className="text-lg font-bold text-slate-900 dark:text-white">

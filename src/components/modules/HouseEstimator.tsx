@@ -1,3 +1,5 @@
+import ThumbRuleDistributionEngine from "../ui/ThumbRuleDistributionEngine";
+import FormulaTransparencyCard from "../ui/FormulaTransparencyCard";
 import React, { useState, useMemo, useReducer, useEffect } from "react";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { UniversalTabs } from "../ui/UniversalTabs";
@@ -2314,6 +2316,13 @@ export default function HouseEstimator() {
         </div>
       </section>
 
+      <ThumbRuleDistributionEngine totalCost={estimates.totalCost} />
+      <FormulaTransparencyCard 
+        title="House Estimator Formula Logic"
+        formulas={[
+          { name: "Total Cost", formula: "Grey Structure + Finishing", variables: { Grey: formatCurrency(estimates.totalGrey), Finishing: formatCurrency(estimates.totalFinishing) }, result: formatCurrency(estimates.totalCost) }
+        ]}
+      />
       <CalculationHistory
         calculatorId="house_estimator_v1"
         estimationName="Complete House Estimator"

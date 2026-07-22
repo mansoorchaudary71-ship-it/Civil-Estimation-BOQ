@@ -1,3 +1,4 @@
+import AppDownloadBanner from "./components/ui/AppDownloadBanner";
 
 import { ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -58,6 +59,7 @@ import AuthModal from "./components/auth/AuthModal";
 
 type ModuleId = string;
 import QSWorkflow from "./components/modules/QSWorkflow";
+import MasterFinishesWorkspace from "./components/modules/MasterFinishesWorkspace";
 import QuickRoughEstimation from "./components/modules/QuickRoughEstimation";
 import MasterQuantityEstimator from "./components/modules/MasterQuantityEstimator";
 import HouseEstimator from "./components/modules/HouseEstimator";
@@ -115,6 +117,7 @@ import UniversalStructuralGeometryEngine from "./components/modules/UniversalStr
 import MasterSoilMechanicsLabSuite from "./components/modules/MasterSoilMechanicsLabSuite";
 import MasterInfrastructureMEPEngine from "./components/modules/MasterInfrastructureMEPEngine";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import SEOHead from "./components/SEOHead";
 
 
 
@@ -171,6 +174,7 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
 
     <div className="flex-1 flex flex-col relative w-full bg-transparent">
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col">
+        <SEOHead toolId={id} toolName={actualTitle} category={category} description={subtitle} />
         <ToolHeader id={id} title={actualTitle} themeType={themeType} subtitle={subtitle} icon={Icon} onNavigate={onNavigate} />
         <div className="global-form-card-wrapper w-full flex-1">
           <ErrorBoundary onNavigate={onNavigate} fallbackModuleId="home">
@@ -253,6 +257,8 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
     case "unit-converter":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="UnitConverter"><UnitConverter /></ModuleWrapper>;
 
+    case "master-finishes":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="MasterFinishesWorkspace"><MasterFinishesWorkspace /></ModuleWrapper>;
     case "ai":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="AIAssistant"><AIAssistant /></ModuleWrapper>;
 
@@ -388,6 +394,7 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
 export default function App() {
   const { addRecentTool } = useRecentTools();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isBOQOpen, setIsBOQOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -683,6 +690,7 @@ export default function App() {
           <ProjectProvider>
                 <div className="flex flex-col min-h-screen w-full bg-gradient-to-br from-slate-50 via-[#f8fafc] to-blue-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-500">
                   <Toaster position="bottom-right" />
+                  <AppDownloadBanner />
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
                   <PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} />
                   <GlobalSearchModal isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} onNavigate={handleSelectModule} />

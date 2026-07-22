@@ -12,6 +12,6 @@ export function ConcreteCalculator({ initialData }: { initialData: any }) {
         <strong>Cement Bags Required:</strong> {initialData.cement_bags_required} bags
       </div>
     </div>
-    </SEOHead>
+    
   );
 }

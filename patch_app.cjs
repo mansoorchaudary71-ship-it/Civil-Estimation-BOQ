@@ -1,18 +1,18 @@
 const fs = require('fs');
 let code = fs.readFileSync('src/App.tsx', 'utf8');
 
-if (!code.includes('import MasterSoilMechanicsLabSuite')) {
+if (!code.includes('MasterFinishesWorkspace')) {
+  // Add import
   code = code.replace(
-    'import UniversalStructuralGeometryEngine from "./components/modules/UniversalStructuralGeometryEngine";',
-    'import UniversalStructuralGeometryEngine from "./components/modules/UniversalStructuralGeometryEngine";\nimport MasterSoilMechanicsLabSuite from "./components/modules/MasterSoilMechanicsLabSuite";'
+    'import QSWorkflow from "./components/modules/QSWorkflow";',
+    'import QSWorkflow from "./components/modules/QSWorkflow";\nimport MasterFinishesWorkspace from "./components/modules/MasterFinishesWorkspace";'
   );
-}
 
-if (!code.includes('case "soil-mechanics-lab"')) {
+  // Add to routing
   code = code.replace(
-    '    case "universal-structural-geometry":',
-    '    case "soil-mechanics-lab":\n      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="MasterSoilMechanicsLabSuite"><MasterSoilMechanicsLabSuite /></ModuleWrapper>;\n\n    case "universal-structural-geometry":'
+    'case "ai":',
+    'case "master-finishes":\n      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="MasterFinishesWorkspace"><MasterFinishesWorkspace /></ModuleWrapper>;\n    case "ai":'
   );
-}
 
-fs.writeFileSync('src/App.tsx', code);
+  fs.writeFileSync('src/App.tsx', code);
+}

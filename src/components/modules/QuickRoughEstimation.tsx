@@ -4,6 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { useSettings } from "../../context/SettingsContext";
 import { useRecentTools } from "../../hooks/useRecentTools";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import ThumbRuleDistributionEngine from '../ui/ThumbRuleDistributionEngine';
+import FormulaTransparencyCard from '../ui/FormulaTransparencyCard';
 
 type ConstructionType = "grey" | "standard" | "premium";
 type LocationType = "lahore" | "karachi" | "islamabad" | "other";
@@ -311,15 +313,24 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                   <div className="space-y-4">
                     <div className="flex justify-between items-center p-3 rounded-[24px] bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-full w-3 h-3 rounded-full bg-white/70 backdrop-blur-md border border-white/20 shadow-sm overflow-hidden" /> <span className="font-semibold text-slate-700">Steel / Rebar</span></div>
-                      <div className="font-bold text-slate-900">{formatCurrency(results.steelCost)}</div>
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="font-bold text-slate-900">{formatCurrency(results.steelCost)}</div>
+                        <button onClick={() => onNavigate && onNavigate("steel_calculator")} className="text-xs text-indigo-600 hover:text-indigo-800 underline flex items-center gap-1">Calculate exact weight <ArrowRight size={10} /></button>
+                      </div>
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-[24px] bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-slate-400" /> <span className="font-semibold text-slate-700">Cement</span></div>
-                      <div className="font-bold text-slate-900">{formatCurrency(results.cementCost)}</div>
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="font-bold text-slate-900">{formatCurrency(results.cementCost)}</div>
+                        <button onClick={() => onNavigate && onNavigate("volume")} className="text-xs text-indigo-600 hover:text-indigo-800 underline flex items-center gap-1">Calculate exact bags <ArrowRight size={10} /></button>
+                      </div>
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-[24px] bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-blue-700" /> <span className="font-semibold text-slate-700">Bricks / Blocks</span></div>
-                      <div className="font-bold text-slate-900">{formatCurrency(results.bricksCost)}</div>
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="font-bold text-slate-900">{formatCurrency(results.bricksCost)}</div>
+                        <button onClick={() => onNavigate && onNavigate("wall_estimator")} className="text-xs text-indigo-600 hover:text-indigo-800 underline flex items-center gap-1">Calculate exact bricks <ArrowRight size={10} /></button>
+                      </div>
                     </div>
                     {constType !== "grey" && (
                       <div className="flex justify-between items-center p-3 rounded-[24px] bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 overflow-hidden">
@@ -342,6 +353,15 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                   </p>
                 </div>
               </div>
+              <ThumbRuleDistributionEngine totalCost={(results.minCost + results.maxCost) / 2} />
+              <FormulaTransparencyCard 
+                title="Thumb-Rule Calculation Logic"
+                formulas={[
+                  { name: "Total Built-Up Area", formula: "Area x Floors", variables: { Area: sqftArea, Floors: floors }, result: `${totalSqft} sq.ft` },
+                  { name: "Min Budget", formula: "Total Area x Min Rate / sq.ft", variables: { Area: totalSqft, Rate: results.costPerSqft - (results.costPerSqft * 0.05) }, result: formatCurrency(results.minCost) },
+                  { name: "Max Budget", formula: "Total Area x Max Rate / sq.ft", variables: { Area: totalSqft, Rate: results.costPerSqft + (results.costPerSqft * 0.05) }, result: formatCurrency(results.maxCost) }
+                ]}
+              />
             </>
           ) : (
             <div className="flex items-center justify-center h-full min-h-[400px] border-2 border-dashed border-slate-200 rounded-[24px]">

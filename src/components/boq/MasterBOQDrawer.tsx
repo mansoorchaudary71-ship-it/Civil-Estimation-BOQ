@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useBOQ } from '../../context/BOQContext';
-import { useSettings } from '../../context/SettingsContext';
+import { useSettings, useGlobalSettings } from '../../context/SettingsContext';
 import { X, FileText, Download, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -14,6 +14,29 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
   const taxableAmount = subtotal + contingencyAmount + overheadAmount;
   const taxAmount = (taxableAmount * tax) / 100;
   const grandTotal = taxableAmount + taxAmount;
+
+  const { currentCurrency, setCurrentCurrency } = useGlobalSettings();
+  const currencies = ['PKR', 'INR', 'USD', 'AED', 'GBP', 'EUR'];
+
+  const exportCSV = () => {
+    const headers = "Item Name,Category,Quantity,Unit,Rate,Amount\n";
+    const rows = items.map(item => `"${item.name}","${item.category}",${item.quantity},"${item.unit}",${item.rate},${item.amount}`).join("\n");
+    const summary = `\nSubtotal,,,,,${subtotal}\nContingency (${contingency}%),,,,,${contingencyAmount}\nOverhead/Profit (${overheadProfit}%),,,,,${overheadAmount}\nTax (${tax}%),,,,,${taxAmount}\nGrand Total,,,,,${grandTotal}`;
+    
+    const blob = new Blob([headers + rows + summary], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "Master_BOQ.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
+  const exportPDF = () => {
+    window.print();
+  };
+  
 
   return (
     <AnimatePresence>
@@ -40,6 +63,17 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
                 <X size={20} />
               </button>
             </div>
+    <div className="px-6 py-3 border-b border-slate-100 bg-white flex justify-between items-center">
+      <span className="text-sm font-semibold text-slate-600">Regional Rate Sync (Live):</span>
+      <select 
+        value={currentCurrency} 
+        onChange={(e) => setCurrentCurrency(e.target.value as any)}
+        className="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-slate-50 font-bold text-indigo-700 outline-none"
+      >
+        {currencies.map(c => <option key={c} value={c}>{c}</option>)}
+      </select>
+    </div>
+  
 
             <div className="flex-1 overflow-y-auto p-6">
               {items.length === 0 ? (
@@ -116,16 +150,24 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
               <div className="flex gap-3">
                 <button
                   className="flex-1 bg-white border border-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl hover:bg-slate-50 flex justify-center items-center gap-2 shadow-sm"
-                  onClick={() => alert('Exporting to PDF...')}
+                  onClick={exportPDF}
                 >
                   <Download size={18} /> PDF
                 </button>
                 <button
                   className="flex-1 bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 flex justify-center items-center gap-2 shadow-sm shadow-indigo-200"
-                  onClick={() => alert('Exporting to CSV...')}
+                  onClick={exportCSV}
                 >
                   <Download size={18} /> CSV
                 </button>
+
+    <button
+      className="flex-1 bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-emerald-700 flex justify-center items-center gap-2 shadow-sm shadow-emerald-200"
+      onClick={exportCSV}
+    >
+      <Download size={18} /> Excel
+    </button>
+  
               </div>
               <button onClick={clearBOQ} className="w-full mt-3 text-red-500 font-semibold py-2 hover:bg-red-50 rounded-lg">
                 Clear All

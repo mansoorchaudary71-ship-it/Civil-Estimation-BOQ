@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
-import { Sparkles, Send, Loader2, Bot } from "lucide-react";
+import { Sparkles, Send, Loader2, Bot , Mic, MicOff} from "lucide-react";
 import Markdown from "react-markdown";
 import { cn } from "../../lib/utils";
 import { processAIEstimate } from "../../lib/gemini";
@@ -49,6 +49,57 @@ export default function AIAssistant() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isListening, setIsListening] = useState(false);
+  const [recognitionInstance, setRecognitionInstance] = useState<any>(null);
+
+  useEffect(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.continuous = false;
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      recognition.onerror = (event: any) => {
+        console.error("Speech recognition error:", event.error);
+        setIsListening(false);
+      };
+
+      setRecognitionInstance(recognition);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (recognitionInstance) {
+      recognitionInstance.onresult = (event: any) => {
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
+        }
+        if (finalTranscript) {
+          setInput(prev => prev + (prev ? ' ' : '') + finalTranscript);
+        }
+      };
+    }
+  }, [recognitionInstance]);
+
+  const toggleListening = () => {
+    if (!recognitionInstance) {
+      alert("Speech recognition is not supported in this browser.");
+      return;
+    }
+    if (isListening) {
+      recognitionInstance.stop();
+    } else {
+      recognitionInstance.start();
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
     const userMessage = input.trim();
@@ -183,6 +234,19 @@ export default function AIAssistant() {
                   className="w-full bg-transparent border-none py-2 outline-none text-[15px] text-slate-800 placeholder:text-slate-400 resize-none min-h-[40px] max-h-[120px] shadow-none"
                   rows={1}
                 />
+                
+                <button
+                  onClick={toggleListening}
+                  className={cn(
+                    "p-3 rounded-xl transition-all ml-2 shrink-0 flex items-center justify-center border",
+                    isListening
+                      ? "bg-red-50 text-red-500 border-red-200 animate-pulse"
+                      : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-700"
+                  )}
+                  title={isListening ? "Stop dictation" : "Start dictation"}
+                >
+                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </button>
                 <button aria-label="Send" onClick={handleSend}
                   disabled={!input.trim() || isLoading}
                   className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/30 text-white rounded-xl transition-all disabled:opacity-50 hover:scale-105 active:scale-95 ml-2 shrink-0 flex items-center justify-center relative overflow-hidden group/send"

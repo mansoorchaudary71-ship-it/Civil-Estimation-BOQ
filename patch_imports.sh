@@ -1,0 +1,1 @@
+sed -i 's/import { CalculationHistory } from "..\/ui\/CalculationHistory";/import { CalculationHistory } from "..\/ui\/CalculationHistory";\nimport ThumbRuleDistributionEngine from "..\/ui\/ThumbRuleDistributionEngine";\nimport FormulaTransparencyCard from "..\/ui\/FormulaTransparencyCard";/g' src/components/modules/QuickRoughEstimation.tsx

@@ -191,6 +191,214 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  
+  app.post("/api/tools/plywood-calculator", (req, res) => {
+    try {
+      const { 
+        inputMode, // 'area' or 'dimensions'
+        totalArea, // gross surface area
+        length,
+        width,
+        sheetWidth,
+        sheetLength,
+        thickness,
+        wastagePercent,
+        costPerSheet
+      } = req.body;
+
+      // Calculate net area
+      let netArea = 0;
+      if (inputMode === 'dimensions') {
+        netArea = Number(length) * Number(width);
+      } else {
+        netArea = Number(totalArea);
+      }
+      
+      const sheetArea = Number(sheetWidth) * Number(sheetLength);
+      const grossAreaRequired = netArea * (1 + (Number(wastagePercent) / 100));
+      const totalSheets = Math.ceil(grossAreaRequired / sheetArea);
+      const wastageArea = grossAreaRequired - netArea;
+      const totalCost = totalSheets * Number(costPerSheet);
+      const sheetVolume = sheetArea * (Number(thickness) / 1000); // converting mm to m
+
+      res.json({
+        netArea,
+        grossAreaRequired,
+        sheetArea,
+        totalSheets,
+        wastageArea,
+        totalCost,
+        sheetVolume
+      });
+    } catch (err) {
+      res.status(500).json({ error: "Calculation failed" });
+    }
+  });
+
+  
+  app.post("/api/tools/solar-water-heater", (req, res) => {
+    try {
+      const { 
+        occupants,
+        usagePerPerson, // LPD
+        targetTemp, // C
+        inletTemp, // C
+        solarRadiation, // kWh/m2/day
+        efficiency, // %
+        energyCost // $ per kWh
+      } = req.body;
+
+      // Calculations
+      const totalDemand = Number(occupants) * Number(usagePerPerson);
+      
+      const deltaT = Number(targetTemp) - Number(inletTemp);
+      const energyRequiredKJ = totalDemand * 4.184 * deltaT;
+      const energyRequiredKWh = energyRequiredKJ / 3600;
+      
+      const effFactor = Number(efficiency) / 100;
+      const collectorArea = energyRequiredKWh / (Number(solarRadiation) * effFactor);
+      
+      const tankCapacity = totalDemand * 1.5;
+      
+      const dailySavings = energyRequiredKWh * Number(energyCost);
+      const annualSavings = dailySavings * 365;
+
+      res.json({
+        totalDemand,
+        collectorArea,
+        tankCapacity,
+        annualSavings
+      });
+    } catch (err) {
+      res.status(500).json({ error: "Calculation failed" });
+    }
+  });
+
+  
+  app.post("/api/tools/roof-calculator", (req, res) => {
+    try {
+      const { span, rise, overhang, length } = req.body;
+      const run = Number(span) / 2;
+      const angleRad = Math.atan(Number(rise) / run);
+      const angleDeg = angleRad * (180 / Math.PI);
+      const hypotenuse = Math.sqrt(Math.pow(Number(rise), 2) + Math.pow(run, 2));
+      const rafterLength = hypotenuse + Number(overhang);
+      const pitchPercentage = (Number(rise) / run) * 100;
+      const totalArea = 2 * (rafterLength * Number(length));
+
+      res.json({
+        run,
+        angleDeg,
+        rafterLength,
+        pitchPercentage,
+        totalArea,
+        hypotenuse
+      });
+    } catch (err) {
+      res.status(500).json({ error: "Calculation failed" });
+    }
+  });
+
+  
+  app.post("/api/tools/topsoil-calculator", (req, res) => {
+    try {
+      const { area, depth, density, compactionFactor } = req.body;
+      const volumeNet = Number(area) * Number(depth);
+      const volumeGross = volumeNet * (1 + (Number(compactionFactor) / 100));
+      const weightKg = volumeGross * Number(density);
+      const weightTons = weightKg / 1000;
+
+      res.json({
+        volumeNet,
+        volumeGross,
+        weightKg,
+        weightTons
+      });
+    } catch (err) {
+      res.status(500).json({ error: "Calculation failed" });
+    }
+  });
+
+  
+  app.post("/api/tools/wastewater-testing/bod", (req, res) => {
+    try {
+      const { initialDO, finalDO, sampleVolume, bottleVolume } = req.body;
+      const doDepletion = Number(initialDO) - Number(finalDO);
+      if (doDepletion < 0) {
+        return res.status(400).json({ error: "Final DO cannot be greater than Initial DO" });
+      }
+      if (Number(sampleVolume) <= 0 || Number(bottleVolume) <= 0) {
+        return res.status(400).json({ error: "Volumes must be greater than zero" });
+      }
+      
+      const p = Number(sampleVolume) / Number(bottleVolume);
+      const bod = doDepletion / p;
+      
+      res.json({ bod, doDepletion, p, success: true });
+    } catch (err) {
+      res.status(500).json({ error: "BOD Calculation failed" });
+    }
+  });
+
+  app.post("/api/tools/wastewater-testing/cod", (req, res) => {
+    try {
+      const { vBlank, vSample, normality, sampleVolume } = req.body;
+      const diff = Number(vBlank) - Number(vSample);
+      if (diff < 0) {
+        return res.status(400).json({ error: "Sample titrant volume cannot be greater than blank titrant volume" });
+      }
+      if (Number(sampleVolume) <= 0) {
+        return res.status(400).json({ error: "Sample volume must be greater than zero" });
+      }
+      
+      const cod = (diff * Number(normality) * 8000) / Number(sampleVolume);
+      
+      res.json({ cod, diff, success: true });
+    } catch (err) {
+      res.status(500).json({ error: "COD Calculation failed" });
+    }
+  });
+
+  
+  app.post("/api/tools/pavement-gradation", (req, res) => {
+    try {
+      const { propA, propB, propC, aggA, aggB, aggC, specs } = req.body;
+      
+      // Calculate blended passing for each sieve
+      const blended = aggA.map((valA, i) => {
+        const valB = aggB[i];
+        const valC = aggC[i];
+        const blendedVal = (Number(propA) * Number(valA)) + (Number(propB) * Number(valB)) + (Number(propC) * Number(valC));
+        
+        const spec = specs[i];
+        let status = 'pass';
+        if (spec) {
+          if (blendedVal < spec.min || blendedVal > spec.max) {
+            status = 'fail';
+          }
+        }
+        
+        return {
+          blendedValue: blendedVal,
+          status,
+          min: spec ? spec.min : null,
+          max: spec ? spec.max : null
+        };
+      });
+      
+      const allPass = blended.every(b => b.status === 'pass' || !b.min);
+
+      res.json({
+        blended,
+        allPass,
+        success: true
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Gradation Calculation failed" });
+    }
+  });
+
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });

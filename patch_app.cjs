@@ -1,18 +1,19 @@
 const fs = require('fs');
-let code = fs.readFileSync('src/App.tsx', 'utf8');
+let file = fs.readFileSync('src/App.tsx', 'utf-8');
 
-if (!code.includes('MasterFinishesWorkspace')) {
-  // Add import
-  code = code.replace(
-    'import QSWorkflow from "./components/modules/QSWorkflow";',
-    'import QSWorkflow from "./components/modules/QSWorkflow";\nimport MasterFinishesWorkspace from "./components/modules/MasterFinishesWorkspace";'
+if (!file.includes('PrecastWallEstimator')) {
+  file = file.replace(
+    'import SEOHead from "./components/SEOHead";',
+    'import SEOHead from "./components/SEOHead";\nimport { PrecastWallEstimator } from "./components/calculators/PrecastWallEstimator";'
   );
-
-  // Add to routing
-  code = code.replace(
-    'case "ai":',
-    'case "master-finishes":\n      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="MasterFinishesWorkspace"><MasterFinishesWorkspace /></ModuleWrapper>;\n    case "ai":'
+  
+  file = file.replace(
+    '    case "area-space-calculator":',
+    '    case "precast-wall":\n      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="PrecastWallEstimator"><PrecastWallEstimator /></ModuleWrapper>;\n    case "area-space-calculator":'
   );
-
-  fs.writeFileSync('src/App.tsx', code);
+  
+  fs.writeFileSync('src/App.tsx', file);
+  console.log("Patched App.tsx");
+} else {
+  console.log("App.tsx already patched");
 }

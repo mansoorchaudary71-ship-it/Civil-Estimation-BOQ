@@ -5,6 +5,7 @@ import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { StyledChart } from "../ui/EstimateVisualizer";
 import { ResultCard } from "../ui/ResultCard";
+import { SmartSuggestionBadge } from "../ui/SmartSuggestionBadge";
 import { MaterialSummary } from "../ui/MaterialSummary";
 
 import { FieldTooltip } from "../ui/FieldTooltip";
@@ -456,6 +457,7 @@ export default function SlabEstimator() {
                   value={results.totalSteelWeight.toFixed(2)}
                   unit="kg"
                   variant="primary"
+                  description={<div className="mt-2"><SmartSuggestionBadge label="Calculate Steel Weight" to="metal-weight" className="bg-indigo-100/50" /></div>}
                   badge={results.type === "one-way" ? "One-Way Slab" : "Two-Way Slab"}
                 />
                 <ResultCard

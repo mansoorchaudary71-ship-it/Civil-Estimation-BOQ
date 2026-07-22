@@ -1,52 +1,57 @@
 const fs = require('fs');
-let content = fs.readFileSync('server.ts', 'utf8');
+let file = fs.readFileSync('server.ts', 'utf-8');
 
-const mockEndpoints = `
-  app.get("/api/rates", (req, res) => {
-    res.json({
-      status: "ok",
-      data: {
-        cement: 1250,
-        steel: 260,
-        bricks: 14000,
-        sand: 60,
-        crush: 120,
-        laborGrey: 450,
-        laborFinish: 550,
-        last_updated: new Date().toISOString()
+if (!file.includes('/api/tools/plywood-calculator')) {
+  const route = `
+  app.post("/api/tools/plywood-calculator", (req, res) => {
+    try {
+      const { 
+        inputMode, // 'area' or 'dimensions'
+        totalArea, // gross surface area
+        length,
+        width,
+        sheetWidth,
+        sheetLength,
+        thickness,
+        wastagePercent,
+        costPerSheet
+      } = req.body;
+
+      // Calculate net area
+      let netArea = 0;
+      if (inputMode === 'dimensions') {
+        netArea = Number(length) * Number(width);
+      } else {
+        netArea = Number(totalArea);
       }
-    });
-  });
+      
+      const sheetArea = Number(sheetWidth) * Number(sheetLength);
+      const grossAreaRequired = netArea * (1 + (Number(wastagePercent) / 100));
+      const totalSheets = Math.ceil(grossAreaRequired / sheetArea);
+      const wastageArea = grossAreaRequired - netArea;
+      const totalCost = totalSheets * Number(costPerSheet);
+      const sheetVolume = sheetArea * (Number(thickness) / 1000); // converting mm to m
 
-  app.get("/api/updates/count", (req, res) => {
-    res.json({ success: true, count: 1250 });
-  });
-
-  app.post("/api/updates/subscribe", (req, res) => {
-    res.json({ success: true, message: "Subscribed successfully" });
-  });
-
-  app.post("/api/project/invite", (req, res) => {
-    res.json({ success: true, message: "Invited successfully" });
-  });
-
-  app.post("/api/workspace/gmail/send", (req, res) => {
-    res.json({ success: true, message: "Sent successfully" });
-  });
-
-  app.get("/api/blog/posts", (req, res) => {
-    res.json({ status: "ok", posts: [] });
-  });
-
-  app.get("/api/blog/posts/:slug", (req, res) => {
-    res.json({ status: "ok", post: null });
-  });
-
-  app.post("/api/contact", (req, res) => {
-    res.json({ success: true, message: "Contact request received" });
+      res.json({
+        netArea,
+        grossAreaRequired,
+        sheetArea,
+        totalSheets,
+        wastageArea,
+        totalCost,
+        sheetVolume
+      });
+    } catch (err) {
+      res.status(500).json({ error: "Calculation failed" });
+    }
   });
 `;
 
-content = content.replace('  // API routes FIRST\n  app.get("/api/health", (req, res) => {\n    res.json({ status: "ok" });\n  });', '  // API routes FIRST\n  app.get("/api/health", (req, res) => {\n    res.json({ status: "ok" });\n  });\n' + mockEndpoints);
-
-fs.writeFileSync('server.ts', content);
+  file = file.replace(
+    'app.get("/api/health", (req, res) => {',
+    route + '\n  app.get("/api/health", (req, res) => {'
+  );
+  
+  fs.writeFileSync('server.ts', file);
+  console.log("Patched server.ts");
+}

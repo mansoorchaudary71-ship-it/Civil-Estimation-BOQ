@@ -97,6 +97,11 @@ import DirectShearTestCalculator from "./components/modules/DirectShearTestCalcu
 import PermeabilityCalculator from "./components/modules/PermeabilityCalculator";
 import EnergyMepCalculator from "./components/modules/EnergyMepCalculator";
 import SolarRoofCalculator from "./components/modules/SolarRoofCalculator";
+import { SolarWaterHeaterCalculator } from "./components/calculators/SolarWaterHeaterCalculator";
+import { RoofPitchCalculator } from "./components/calculators/RoofPitchCalculator";
+import { TopsoilEstimator } from "./components/calculators/TopsoilEstimator";
+import { WastewaterCalculator } from "./components/calculators/WastewaterCalculator";
+import { PavementMixGradation } from "./components/calculators/PavementMixGradation";
 import RainwaterHarvesting from "./components/modules/RainwaterHarvesting";
 import ProjectManager from "./components/modules/ProjectManager";
 import SiteProgressTracker from "./components/modules/SiteProgressTracker";
@@ -118,6 +123,8 @@ import MasterSoilMechanicsLabSuite from "./components/modules/MasterSoilMechanic
 import MasterInfrastructureMEPEngine from "./components/modules/MasterInfrastructureMEPEngine";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import SEOHead from "./components/SEOHead";
+import { PrecastWallEstimator } from "./components/calculators/PrecastWallEstimator";
+import { PlywoodEstimator } from "./components/calculators/PlywoodEstimator";
 
 
 
@@ -245,6 +252,10 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
     case "interiors-finishes":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="FinishesEstimator"><FinishesEstimator /></ModuleWrapper>;
 
+    case "plywood-estimator":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="PlywoodEstimator"><PlywoodEstimator /></ModuleWrapper>;
+    case "precast-wall":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="PrecastWallEstimator"><PrecastWallEstimator /></ModuleWrapper>;
     case "area-space-calculator":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="AreaSpaceCalculator"><AreaSpaceCalculator /></ModuleWrapper>;
 
@@ -327,6 +338,17 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
 
     case "solar-roof":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="SolarRoofCalculator"><SolarRoofCalculator /></ModuleWrapper>;
+
+    case "pavement-mix":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="Pavement Mix Gradation"><PavementMixGradation /></ModuleWrapper>;
+    case "wastewater-calculator":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="WastewaterCalculator"><WastewaterCalculator /></ModuleWrapper>;
+    case "topsoil-estimator":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="TopsoilEstimator"><TopsoilEstimator /></ModuleWrapper>;
+    case "roof-calculator":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="RoofPitchCalculator"><RoofPitchCalculator /></ModuleWrapper>;
+    case "solar-water-heater":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="SolarWaterHeaterCalculator"><SolarWaterHeaterCalculator /></ModuleWrapper>;
 
     case "rainwater-harvesting":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="RainwaterHarvesting"><RainwaterHarvesting /></ModuleWrapper>;
@@ -492,9 +514,12 @@ export default function App() {
   useEffect(() => {
     const handleGoHome = () => { setPreviousModule(activeModule); setActiveModule("home"); };
     const handleOpenProfile = () => { setIsProfileOpen(true); };
+    const handleNavigateModule = (e: Event) => { const ce = e as CustomEvent; setPreviousModule(activeModule); setActiveModule(ce.detail); };
+    window.addEventListener("navigate-module", handleNavigateModule);
     window.addEventListener("go-home", handleGoHome);
     window.addEventListener("open-profile", handleOpenProfile);
     return () => {
+      window.removeEventListener("navigate-module", handleNavigateModule);
       window.removeEventListener("go-home", handleGoHome);
       window.removeEventListener("open-profile", handleOpenProfile);
     };

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Calculator,
+import { Calculator, Droplets,
  Sparkles,
  Route,
  Waves,
@@ -51,6 +51,7 @@ import SocialProofSection from "./SocialProofSection";
 import CategoryHub from "./CategoryHub";
 import WorkspaceSection from "./WorkspaceSection";
 import SummaryStatsWidget from "./SummaryStatsWidget";
+import { MaterialCostDonutChart } from "./ui/MaterialCostDonutChart";
 
 import { HowItWorksSection,
  FeatureComparisonSection,
@@ -625,8 +626,8 @@ export const ALL_MODULES = [
  estimatedTime: "~5 mins",
  isNew: true,
  },
- {
- id: "solar-roof",
+ { id: "solar-water-heater", title: "Solar Water Heater", desc: "Calculate recommended collector area and tank capacity.", category: "MEP, Energy & Landscaping", icon: Sun, styleStyle: "glass", colorClass: "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ", difficulty: "Beginner", estimatedTime: "~3 mins", isNew: true, },
+      { id: "solar-roof",
  title: "Solar Roof Calculator",
  desc: "Estimate required solar system size, panels, and ROI.",
  category: "MEP, Energy & Landscaping",
@@ -1246,6 +1247,10 @@ export default function Dashboard({
  <div className="w-full z-10 overflow-visible flex flex-col pt-4">
  <div className="mb-12 w-full md:max-w-[1400px] md:mx-auto px-4">
  <SummaryStatsWidget />
+            <div className="mt-8 mb-8 grid grid-cols-1 xl:grid-cols-2 gap-8">
+              
+              <MaterialCostDonutChart />
+            </div>
             <WorkspaceSection onSelect={handleSelect} />
  </div>
 

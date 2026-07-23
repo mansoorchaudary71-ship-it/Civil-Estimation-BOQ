@@ -125,7 +125,7 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
 
 
   return (
-    <footer className="relative bg-[#051120] border-t border-blue-900/50 pt-24 pb-12 overflow-hidden font-sans">
+    <footer className="relative bg-[#051120]/80 border-t border-blue-900/50 pt-24 pb-12 overflow-hidden font-sans">
       {/* Animated Background Lines */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div 
@@ -264,7 +264,7 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
                     whileTap={{ scale: 0.95 }}
                     href={link.href}
                     title={link.name}
-                    className="w-10 h-10 rounded-full bg-[#0A1A2F] border border-blue-400/20 flex items-center justify-center text-blue-300 hover:bg-[#d4af37] hover:text-[#051120] hover:border-transparent transition-all duration-300 hover:shadow-[0_0_15px_rgba(212,175,55,0.4)]"
+                    className="w-10 h-10 rounded-full bg-[#0A1A2F]/60 border border-blue-400/20 flex items-center justify-center text-blue-300 hover:bg-[#d4af37] hover:text-[#051120] hover:border-transparent transition-all duration-300 hover:shadow-[0_0_15px_rgba(212,175,55,0.4)]"
                   >
                     {link.icon}
                   </motion.a>
@@ -272,10 +272,13 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
               </div>
               
               <div className="relative group mt-2">
-                <label className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-200/50 mb-3 block pl-2">
+                <label className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-200/50 mb-1.5 block pl-2">
                   Professional Updates
                 </label>
-                <div className="relative flex items-center gap-3 bg-[#0A1A2F]/50 hover:bg-[#0A1A2F]/80 focus-within:bg-[#0A1A2F] border border-blue-400/10 focus-within:border-blue-400/30 rounded-full py-1.5 pl-4 pr-1.5 transition-all duration-400 shadow-inner">
+                <p className="text-[13px] text-blue-100/60 mb-4 pl-2 leading-relaxed">
+                  Receive updates on new estimation tools and industry insights.
+                </p>
+                <div className="relative flex items-center gap-3 bg-[#0A1A2F]/40 hover:bg-[#0A1A2F]/70 focus-within:bg-[#0A1A2F]/60 border border-blue-400/10 focus-within:border-blue-400/30 rounded-full py-1.5 pl-4 pr-1.5 transition-all duration-400 shadow-inner">
                   <div className="text-blue-200/40 group-focus-within:text-[#d4af37] transition-colors duration-300">
                     <Mail className="w-4 h-4" />
                   </div>
@@ -329,9 +332,14 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
             transition={{ duration: 3, ease: "easeInOut", repeat: Infinity, repeatDelay: 5 }}
           />
 
-          <p className="text-blue-100/50 text-[14px] font-medium">
-            © {new Date().getFullYear()} Civil Estimation Pro. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-3">
+            <p className="text-blue-100/50 text-[14px] font-medium text-center md:text-left">
+              © {new Date().getFullYear()} Civil Estimation Pro. All rights reserved.
+            </p>
+            <span className="px-2 py-0.5 rounded border border-blue-400/20 bg-blue-400/5 text-blue-300/80 text-[11px] font-mono font-semibold tracking-wider">
+              v1.0.0
+            </span>
+          </div>
           
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>

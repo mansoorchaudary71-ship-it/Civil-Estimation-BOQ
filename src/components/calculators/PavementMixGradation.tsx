@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layers, Activity, AlertTriangle, CheckCircle, SlidersHorizontal, Download, Printer } from 'lucide-react';
+import { Layers, Activity, AlertTriangle, CheckCircle, SlidersHorizontal, Download, Printer, Plus } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, ReferenceArea } from 'recharts';
 
 type MixPreset = 'gsb-i' | 'dbm-1' | 'sma';
@@ -60,6 +60,30 @@ export function PavementMixGradation() {
   // propC is implicitly 100 - (propA + propB)
   const propC = Math.max(0, 100 - (propA + propB));
   
+  const [dynamicSieves, setDynamicSieves] = useState<number[]>([...sieveSizes]);
+  const [dynamicSpecs, setDynamicSpecs] = useState<any>(JSON.parse(JSON.stringify(specifications)));
+  const [newSieve, setNewSieve] = useState<string>('');
+
+  const handleAddSieve = () => {
+    const val = parseFloat(newSieve);
+    if (!isNaN(val) && val > 0 && !dynamicSieves.includes(val)) {
+      setDynamicSieves([...dynamicSieves, val]);
+      
+      // Add default 100% passing for new sieve
+      setAggA([...aggA, 100]);
+      setAggB([...aggB, 100]);
+      setAggC([...aggC, 100]);
+      
+      // Add default null specs
+      const newSpecs = { ...dynamicSpecs };
+      Object.keys(newSpecs).forEach(p => {
+        newSpecs[p as MixPreset] = [...newSpecs[p as MixPreset], { sieve: val, min: null, max: null }];
+      });
+      setDynamicSpecs(newSpecs);
+      setNewSieve('');
+    }
+  };
+
   const [aggA, setAggA] = useState<number[]>([...initialAggregates.aggA]);
   const [aggB, setAggB] = useState<number[]>([...initialAggregates.aggB]);
   const [aggC, setAggC] = useState<number[]>([...initialAggregates.aggC]);
@@ -84,7 +108,7 @@ export function PavementMixGradation() {
   useEffect(() => {
     const fetchGradation = async () => {
       try {
-        const specs = specifications[preset];
+        const specs = dynamicSpecs[preset];
         const res = await fetch('/api/tools/pavement-gradation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -109,8 +133,8 @@ export function PavementMixGradation() {
   }, [preset, propA, propB, propC, aggA, aggB, aggC]);
 
   // Format data for Recharts
-  const chartData = sieveSizes.map((sieve, index) => {
-    const spec = specifications[preset][index];
+  const chartData = dynamicSieves.map((sieve, index) => {
+    const spec = dynamicSpecs[preset][index];
     const blended = result?.blended[index]?.blendedValue ?? 0;
     
     // For semi-log plotting, recharts handles scale='log' natively on XAxis
@@ -320,6 +344,9 @@ export function PavementMixGradation() {
                     strokeWidth={3} 
                     dot={{ r: 4, strokeWidth: 2, fill: '#fff' }}
                     activeDot={{ r: 6 }}
+                    isAnimationActive={true}
+                    animationDuration={500}
+                    animationEasing="ease-in-out"
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -333,8 +360,9 @@ export function PavementMixGradation() {
                 <thead>
                   <tr className="border-b border-white/10 text-slate-400">
                     <th className="pb-3 px-2 font-medium">Sieve (mm)</th>
-                    <th className="pb-3 px-2 font-medium">Spec Range</th>
-                    <th className="pb-3 px-2 font-medium">Blended %</th>
+                    <th className="pb-3 px-2 font-medium">Lower Bound</th>
+                    <th className="pb-3 px-2 font-medium">Combined Mix</th>
+                    <th className="pb-3 px-2 font-medium">Upper Bound</th>
                     <th className="pb-3 px-2 font-medium">Status</th>
                   </tr>
                 </thead>
@@ -343,11 +371,12 @@ export function PavementMixGradation() {
                     <tr key={i} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
                       <td className="py-3 px-2 font-medium text-slate-200">{row.sieve}</td>
                       <td className="py-3 px-2 text-slate-400">
-                        {row.min !== null || row.max !== null 
-                          ? `${row.min ?? 0} - ${row.max ?? 100}` 
-                          : '-'}
+                        {row.min !== null ? row.min : '-'}
                       </td>
                       <td className="py-3 px-2 font-bold text-purple-300">{row.blended.toFixed(1)}%</td>
+                      <td className="py-3 px-2 text-slate-400">
+                        {row.max !== null ? row.max : '-'}
+                      </td>
                       <td className="py-3 px-2">
                         {row.min === null ? (
                           <span className="text-slate-500">-</span>
@@ -365,6 +394,25 @@ export function PavementMixGradation() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            
+            <div className="mt-6 pt-6 border-t border-white/10 flex items-end gap-3 max-w-sm">
+               <div className="flex-1">
+                 <label className="block text-xs font-medium text-slate-400 mb-1">Add Custom Sieve (mm)</label>
+                 <input 
+                   type="number"
+                   value={newSieve}
+                   onChange={(e) => setNewSieve(e.target.value)}
+                   placeholder="e.g. 12.5"
+                   className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                 />
+               </div>
+               <button 
+                 onClick={handleAddSieve}
+                 className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors h-[38px]"
+               >
+                 <Plus size={16} /> Add Sieve
+               </button>
             </div>
           </div>
         </div>

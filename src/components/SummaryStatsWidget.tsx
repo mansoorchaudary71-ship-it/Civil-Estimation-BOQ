@@ -74,7 +74,7 @@ export default function SummaryStatsWidget() {
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(val) => `${val / 1000}k`} />
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  formatter={(value: number) => [`Rs ${value.toLocaleString()}`, 'Cost']}
+                  formatter={(value: any) => [`Rs ${value.toLocaleString()}`, 'Cost']}
                 />
                 <Area type="monotone" dataKey="cost" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorCost)" />
               </AreaChart>

@@ -61,7 +61,7 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
                   <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
                   <YAxis tickFormatter={(val) => `$${(val/1000)}k`} tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
                   <RechartsTooltip 
-                    formatter={(value: number, name: string, props: any) => [formatCurrency(value), `${props.payload.percentage}%`]}
+                    formatter={(value: any, name: any, props: any) => [formatCurrency(value), `${props.payload.percentage}%`]}
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
                   />
                   <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
@@ -96,7 +96,7 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
                       ))}
                     </Pie>
                     <RechartsTooltip 
-                      formatter={(value: number, name: string, props: any) => [formatCurrency(value), `${props.payload.percentage}%`]}
+                      formatter={(value: any, name: any, props: any) => [formatCurrency(value), `${props.payload.percentage}%`]}
                       contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                     />
                   </PieChart>

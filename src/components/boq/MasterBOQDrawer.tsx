@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { useBOQ } from '../../context/BOQContext';
 import { useSettings, useGlobalSettings } from '../../context/SettingsContext';
-import { X, FileText, Download, Trash2 } from 'lucide-react';
+import { X, FileText, Download, Trash2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [searchQuery, setSearchQuery] = useState('');
   const { items, removeItem, updateItem, clearBOQ, contingency, setContingency, overheadProfit, setOverheadProfit, tax, setTax } = useBOQ();
   const { settings, formatCurrency } = useSettings();
+
+  const filteredItems = items.filter(item => 
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (item.unit && item.unit.toLowerCase().includes(searchQuery.toLowerCase())) || 
+    item.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const subtotal = items.reduce((sum, item) => sum + item.amount, 0);
   const contingencyAmount = (subtotal * contingency) / 100;
@@ -63,15 +70,29 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
                 <X size={20} />
               </button>
             </div>
-    <div className="px-6 py-3 border-b border-slate-100 bg-white flex justify-between items-center">
-      <span className="text-sm font-semibold text-slate-600">Regional Rate Sync (Live):</span>
-      <select 
-        value={currentCurrency} 
-        onChange={(e) => setCurrentCurrency(e.target.value as any)}
-        className="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-slate-50 font-bold text-indigo-700 outline-none"
-      >
-        {currencies.map(c => <option key={c} value={c}>{c}</option>)}
-      </select>
+        <div className="px-6 py-3 border-b border-slate-100 bg-white flex flex-col gap-3">
+      <div className="flex justify-between items-center">
+        <span className="text-sm font-semibold text-slate-600">Regional Rate Sync (Live):</span>
+        <select 
+          value={currentCurrency} 
+          onChange={(e) => setCurrentCurrency(e.target.value as any)}
+          className="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-slate-50 font-bold text-indigo-700 outline-none"
+        >
+          {currencies.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+      </div>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search className="h-4 w-4 text-slate-400" />
+        </div>
+        <input
+          type="text"
+          placeholder="Search by description or unit..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all"
+        />
+      </div>
     </div>
   
 
@@ -82,7 +103,9 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {items.map((item) => (
+                  {filteredItems.length === 0 && searchQuery ? (
+                    <div className="text-center py-8 text-slate-500">No matching items found.</div>
+                  ) : filteredItems.map((item) => (
                     <div key={item.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                       <div className="flex justify-between items-start mb-2">
                         <div>

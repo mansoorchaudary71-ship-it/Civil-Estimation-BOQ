@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+const fs = require('fs');
+
+const newCode = `import React, { useState, useEffect } from "react";
 import { ChevronDown, Menu, Search, User, Building2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSettings } from "../context/SettingsContext";
@@ -163,3 +165,5 @@ export default function TopNavbar({
     </header>
   );
 }
+`;
+fs.writeFileSync('src/components/TopNavbar.tsx', newCode);

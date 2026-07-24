@@ -1,10 +1,9 @@
 const fs = require('fs');
 
-const code = `import React, { useState, useEffect } from 'react';
-import { MessageSquare, ArrowRight, Building2 } from 'lucide-react';
+const code = `import React from 'react';
+import { MessageSquare, Building2 } from 'lucide-react';
+import NewsletterSignupCard from './NewsletterSignupCard';
 import { ModuleId } from './Dashboard';
-import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
 
 const SOCIAL_LINKS = [
   {
@@ -33,120 +32,13 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Footer({ activeModule, onNavigate }: { activeModule?: ModuleId, onNavigate?: (id: ModuleId) => void }) {
-  const [email, setEmail] = useState("");
-  const [isSubscribing, setIsSubscribing] = useState(false);
-  const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        const res = await fetch('/api/updates/count');
-        if (!res.ok) {
-          return;
-        }
-        const text = await res.text();
-        if (!text) return;
-        const data = JSON.parse(text);
-        if (data.success && typeof data.count === "number") {
-          setSubscriberCount(data.count);
-        }
-      } catch (err) {
-        // Silently ignore
-      }
-    };
-    fetchCount();
-  }, []);
-
-  const handleSubscribe = async () => {
-    if (!email || !/^\\S+@\\S+\\.\\S+$/.test(email)) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-    
-    setIsSubscribing(true);
-    try {
-      const response = await fetch("/api/updates/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-      
-      const text = await response.text();
-      let data = {};
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch(e) {
-          console.error("Invalid JSON from newsletter subscribe", text);
-        }
-      }
-      
-      if (response.ok && (data as any).success) {
-        toast.success(\`Subscribed successfully with \${email}\`, {
-          style: {
-            borderRadius: "12px",
-            background: "#1e293b",
-            color: "#fff",
-            fontSize: "14px",
-            padding: "12px 16px",
-          },
-          iconTheme: {
-            primary: "#10b981",
-            secondary: "#fff",
-          },
-        });
-        setEmail("");
-        setSubscriberCount(prev => (prev !== null ? prev + 1 : 1));
-      } else {
-        throw new Error((data as any).error || "Failed to subscribe");
-      }
-    } catch (err: any) {
-      toast.error(err.message || "An error occurred. Please try again.");
-    } finally {
-      setIsSubscribing(false);
-    }
-  };
-
   return (
     <footer className="w-full bg-[#fcfcfc] dark:bg-[#0a0a0a] border-t border-gray-200/60 dark:border-white/5 pt-16 pb-8 md:pt-24 font-sans text-[#1a1a1a] dark:text-gray-100">
       <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
         
         {/* Newsletter Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between bg-white dark:bg-[#121212] p-8 md:p-12 rounded-[24px] md:rounded-[32px] border border-gray-100 dark:border-white/5 shadow-sm mb-16 md:mb-24 gap-8">
-          <div className="max-w-md">
-            <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-3">Stay updated</h3>
-            <p className="text-gray-500 dark:text-gray-400 text-[15px] leading-relaxed">
-              Get the latest updates on civil engineering standards, new tools, and platform features delivered directly to your inbox.
-            </p>
-            {subscriberCount !== null && (
-              <p className="text-sm text-[#ff5722] font-medium mt-4">
-                Join {subscriberCount.toLocaleString()}+ other professionals
-              </p>
-            )}
-          </div>
-          
-          <div className="w-full md:w-auto md:min-w-[380px]">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input 
-                type="email" 
-                placeholder="Enter your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full sm:flex-1 h-12 md:h-14 px-5 rounded-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff5722]/20 focus:border-[#ff5722] transition-all"
-              />
-              <button 
-                onClick={handleSubscribe}
-                disabled={isSubscribing}
-                className="h-12 md:h-14 px-8 rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white font-medium flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed whitespace-nowrap shadow-lg shadow-[#ff5722]/20"
-              >
-                {isSubscribing ? "Subscribing..." : "Subscribe"}
-                {!isSubscribing && <ArrowRight className="w-4 h-4" />}
-              </button>
-            </div>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 text-center sm:text-left px-2">
-              We care about your data in our <a href="#" className="underline hover:text-gray-600 dark:hover:text-gray-300">privacy policy</a>.
-            </p>
-          </div>
+        <div className="mb-16 md:mb-24">
+          <NewsletterSignupCard />
         </div>
 
         {/* Main Footer Links */}

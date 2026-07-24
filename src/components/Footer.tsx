@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { MessageSquare, Code, Briefcase, MailPlus, ShieldCheck, Users, Mail, ArrowRight } from 'lucide-react';
+import React from 'react';
+import { MessageSquare, Building2 } from 'lucide-react';
+import NewsletterSignupCard from './NewsletterSignupCard';
 import { ModuleId } from './Dashboard';
-import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
-
 
 const SOCIAL_LINKS = [
   {
@@ -32,320 +30,94 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Footer({ activeModule, onNavigate }: { activeModule?: ModuleId, onNavigate?: (id: ModuleId) => void }) {
-  const [email, setEmail] = useState("");
-  const [isSubscribing, setIsSubscribing] = useState(false);
-  const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        const res = await fetch('/api/updates/count');
-        if (!res.ok) {
-          return;
-        }
-        const text = await res.text();
-        if (!text) return;
-        const data = JSON.parse(text);
-        if (data.success && typeof data.count === 'number') {
-          setSubscriberCount(data.count);
-        }
-      } catch (err) {
-        // Silently ignore fetch errors in environments without the backend
-      }
-    };
-    fetchCount();
-  }, []);
-
-  const handleSubscribe = async () => {
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      toast.error('Please enter a valid email address');
-      return;
-    }
-    
-    setIsSubscribing(true);
-    try {
-      const response = await fetch('/api/updates/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      
-      const text = await response.text();
-      let data = {};
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch(e) {
-          console.error("Invalid JSON from newsletter subscribe", text);
-        }
-      }
-      
-      if (response.ok && (data as any).success) {
-        toast.success(`Subscribed successfully with ${email}`, {
-          style: {
-            borderRadius: '12px',
-            background: '#1e293b',
-            color: '#fff',
-            fontSize: '14px',
-            padding: '12px 16px',
-          },
-          iconTheme: {
-            primary: '#10b981',
-            secondary: '#fff',
-          },
-        });
-        setEmail("");
-        setSubscriberCount(prev => (prev !== null ? prev + 1 : 1));
-      } else {
-        throw new Error((data as any).error || 'Failed to subscribe');
-      }
-    } catch (error: any) {
-      toast.error(error.message || 'An error occurred. Please try again.');
-    } finally {
-      setIsSubscribing(false);
-    }
-  };
-
-  
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
-  };
-
-
   return (
-    <footer className="relative bg-[#051120]/80 border-t border-blue-900/50 pt-24 pb-12 overflow-hidden font-sans">
-      {/* Animated Background Lines */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div 
-          animate={{ x: [0, -1000], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-          className="absolute top-0 left-0 w-[200%] h-[1px] bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"
-        />
-        <motion.div 
-          animate={{ y: [0, 1000], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-          className="absolute top-0 left-1/3 w-[1px] h-[200%] bg-gradient-to-b from-transparent via-blue-400/20 to-transparent"
-        />
-         <motion.div 
-          animate={{ y: [-1000, 0], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-          className="absolute top-0 right-1/4 w-[1px] h-[200%] bg-gradient-to-b from-transparent via-[#d4af37]/20 to-transparent"
-        />
-      </div>
-      
-      {/* Glow Effects */}
-      <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+    <footer className="w-full bg-[#fcfcfc] dark:bg-[#0a0a0a] border-t border-gray-200/60 dark:border-white/5 pt-16 pb-8 md:pt-24 font-sans text-[#1a1a1a] dark:text-gray-100">
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
+        
+        {/* Newsletter Section */}
+        <div className="mb-16 md:mb-24">
+          <NewsletterSignupCard />
+        </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
-        <motion.div 
-          className="relative"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {/* Brand Row */}
-          <motion.div variants={itemVariants} className="mb-16">
-            <motion.div 
-              whileHover={{ scale: 1.01 }}
-              className="flex items-center gap-3 mb-6 cursor-pointer group w-fit"
-              onClick={() => onNavigate?.('house')}
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-[#d4af37] to-[#b38f26] rounded-2xl flex items-center justify-center shadow-lg shadow-[#d4af37]/20 group-hover:shadow-[#d4af37]/40 transition-shadow duration-500 relative overflow-hidden">
-                <div className="absolute inset-0 bg-white/20 w-full h-full -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
-                <Briefcase className="w-6 h-6 text-white relative z-10" />
-              </div>
-              <span className="text-2xl font-black tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-blue-200 transition-all duration-300">
-                Civil Estimation <span className="text-[#d4af37]">Pro</span>
-              </span>
-            </motion.div>
-            <p className="text-blue-100/80 text-[16px] leading-relaxed max-w-2xl font-medium">
-              The ultimate precision engineering and estimation ecosystem designed to accelerate structural and material workflows.
-            </p>
-          </motion.div>
-
-          {/* 4-Column Grid */}
-          <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 relative">
-            
-            {/* Column 1: Links */}
-            <div>
-              <h4 className="text-white font-bold mb-8 text-[15px] uppercase tracking-widest flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-gradient-to-r from-[#d4af37] to-transparent"></span>
-                Links
-              </h4>
-              <ul className="space-y-4">
-                {['house', 'boq', 'settings', 'rates'].map((id) => {
-                  const labels: any = { house: 'Dashboard', boq: 'BOQ Generator', settings: 'Settings', rates: 'Rate Analysis' };
-                  return (
-                    <li key={id}>
-                      <button 
-                        onClick={() => onNavigate?.(id as ModuleId)}
-                        className={`text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-[#d4af37] underline decoration-2 underline-offset-4' : 'text-blue-100/70 hover:text-white hover:underline decoration-2 hover:underline-offset-4'}`}
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full bg-[#d4af37] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${activeModule === id ? 'opacity-100 translate-x-0' : ''}`}></span>
-                        <span className="relative z-10">{labels[id]}</span>                    
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-
-            {/* Column 2: Resources */}
-            <div>
-              <h4 className="text-white font-bold mb-8 text-[15px] uppercase tracking-widest flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-gradient-to-r from-blue-400 to-transparent"></span>
-                Resources
-              </h4>
-              <ul className="space-y-4">
-                {['volume', 'beam', 'slab', 'steel'].map((id) => {
-                  const labels: any = { volume: 'Volume Check', beam: 'Beam Design', slab: 'Slab Tools', steel: 'Steel Weight' };
-                  return (
-                    <li key={id}>
-                      <button 
-                        onClick={() => onNavigate?.(id as ModuleId)}
-                        className={`text-[15px] font-medium transition-all duration-300 flex items-center gap-2 group ${activeModule === id ? 'text-blue-400 underline decoration-2 underline-offset-4' : 'text-blue-100/70 hover:text-white hover:underline decoration-2 hover:underline-offset-4'}`}
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full bg-blue-400 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${activeModule === id ? 'opacity-100 translate-x-0' : ''}`}></span>
-                        <span className="relative z-10">{labels[id]}</span>                    
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-
-            {/* Column 3: Legal */}
-            <div>
-              <h4 className="text-white font-bold mb-8 text-[15px] uppercase tracking-widest flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-gradient-to-r from-slate-400 to-transparent"></span>
-                Legal
-              </h4>
-              <div className="space-y-4 flex flex-col items-start">
-                <a href="#" className="flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white hover:underline decoration-2 hover:underline-offset-4 transition-colors group">
-                  <ShieldCheck className="w-4 h-4 group-hover:text-[#d4af37] transition-colors relative z-10" />
-                  <span className="relative z-10">Privacy Policy</span>                
-                </a>
-                <a href="#" className="flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white hover:underline decoration-2 hover:underline-offset-4 transition-colors group">
-                  <ShieldCheck className="w-4 h-4 group-hover:text-[#d4af37] transition-colors relative z-10" />
-                  <span className="relative z-10">Terms of Service</span>                
-                </a>
-                <a href="#" className="flex items-center gap-3 text-[14px] text-blue-100/60 hover:text-white hover:underline decoration-2 hover:underline-offset-4 transition-colors group">
-                  <Code className="w-4 h-4 group-hover:text-blue-400 transition-colors relative z-10" />
-                  <span className="relative z-10">API Documentation</span>                
-                </a>
-              </div>
-            </div>
-
-            {/* Column 4: Contact */}
-            <div>
-              <h4 className="text-white font-bold mb-8 text-[15px] uppercase tracking-widest flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-gradient-to-r from-emerald-400 to-transparent"></span>
-                Contact
-              </h4>
-              
-              <div className="flex gap-4 mb-8">
-                {SOCIAL_LINKS.map((link) => (
-                  <motion.a 
-                    key={link.name}
-                    whileHover={{ y: -5, scale: 1.15, rotate: link.name === 'LinkedIn' ? -5 : link.name === 'Twitter' ? 5 : 0 }}
-                    whileTap={{ scale: 0.95 }}
-                    href={link.href}
-                    title={link.name}
-                    className="w-10 h-10 rounded-full bg-[#0A1A2F]/60 border border-blue-400/20 flex items-center justify-center text-blue-300 hover:bg-[#d4af37] hover:text-[#051120] hover:border-transparent transition-all duration-300 hover:shadow-[0_0_15px_rgba(212,175,55,0.4)]"
-                  >
-                    {link.icon}
-                  </motion.a>
-                ))}
-              </div>
-              
-              <div className="relative group mt-2">
-                <label className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-200/50 mb-1.5 block pl-2">
-                  Professional Updates
-                </label>
-                <p className="text-[13px] text-blue-100/60 mb-4 pl-2 leading-relaxed">
-                  Receive updates on new estimation tools and industry insights.
-                </p>
-                <div className="relative flex items-center gap-3 bg-[#0A1A2F]/40 hover:bg-[#0A1A2F]/70 focus-within:bg-[#0A1A2F]/60 border border-blue-400/10 focus-within:border-blue-400/30 rounded-full py-1.5 pl-4 pr-1.5 transition-all duration-400 shadow-inner">
-                  <div className="text-blue-200/40 group-focus-within:text-[#d4af37] transition-colors duration-300">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-transparent border-none p-0 text-[14px] text-white placeholder-blue-200/30 focus:outline-none focus:ring-0 font-medium"
-                  />
-                  <motion.button 
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleSubscribe} 
-                    disabled={isSubscribing || !email}
-                    className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-300 hover:bg-[#d4af37] hover:text-[#051120] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shrink-0"
-                  >
-                    {isSubscribing ? (
-                      <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
-                    ) : (
-                      <ArrowRight className="w-4 h-4" />
-                    )}
-                  </motion.button>
-                </div>
-              </div>
-              {subscriberCount !== null && (
-                <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-[11px] text-blue-200/50 font-medium flex items-center gap-2 mt-3"
-                >
-                  <Users className="w-3 h-3" /> {subscriberCount.toLocaleString()} professionals joined
-                </motion.p>
-              )}
-            </div>
-            
-          </motion.div>
-        </motion.div>
-        {/* Bottom Bar */}
-        <motion.div 
-          variants={itemVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-20 pt-8 border-t border-blue-400/10 flex flex-col md:flex-row items-center justify-between gap-6 relative"
-        >
-          {/* Subtle animated line on top of border */}
-          <motion.div 
-            className="absolute top-0 left-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent w-1/2"
-            animate={{ opacity: [0, 1, 0], left: ['0%', '50%', '100%'] }}
-            transition={{ duration: 3, ease: "easeInOut", repeat: Infinity, repeatDelay: 5 }}
-          />
-
-          <div className="flex flex-col md:flex-row items-center gap-3">
-            <p className="text-blue-100/50 text-[14px] font-medium text-center md:text-left">
-              © {new Date().getFullYear()} Civil Estimation Pro. All rights reserved.
-            </p>
-            <span className="px-2 py-0.5 rounded border border-blue-400/20 bg-blue-400/5 text-blue-300/80 text-[11px] font-mono font-semibold tracking-wider">
-              v1.0.0
-            </span>
-          </div>
+        {/* Main Footer Links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 md:gap-8 mb-16">
           
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
-            <span className="text-blue-100/60 text-[13px] font-semibold tracking-wide">SYSTEMS OPERATIONAL</span>
+          {/* Brand Column */}
+          <div className="col-span-2 lg:col-span-2 flex flex-col pr-4 md:pr-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-[14px] bg-[#ff5722] flex items-center justify-center text-white shadow-md">
+                <Building2 size={20} />
+              </div>
+              <span className="font-bold text-xl text-gray-900 dark:text-white tracking-tight">
+                Civil Estimation <span className="text-[#ff5722]">Pro</span>
+              </span>
+            </div>
+            <p className="text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed mb-8 max-w-sm">
+              Professional-grade quantity surveying and civil engineering estimation tools built for modern construction teams.
+            </p>
+            
+            <div className="flex items-center gap-4">
+              {SOCIAL_LINKS.map((link) => (
+                <a 
+                  key={link.name} 
+                  href={link.href}
+                  target={link.href.startsWith("mailto") ? "_self" : "_blank"}
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-gray-50 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-all"
+                  aria-label={link.name}
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </div>
           </div>
-        </motion.div>
+
+          {/* Tools */}
+          <div className="flex flex-col">
+            <h4 className="font-semibold text-[15px] text-gray-900 dark:text-white mb-6">Calculators</h4>
+            <ul className="space-y-4 text-[14px] text-gray-500 dark:text-gray-400 font-medium">
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Concrete Volume</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Steel Reinforcement</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Earthwork Cut/Fill</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Masonry Blocks</a></li>
+              <li><a href="#" className="text-[#ff5722] hover:text-[#f4511e] transition-colors">View all tools &rarr;</a></li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div className="flex flex-col">
+            <h4 className="font-semibold text-[15px] text-gray-900 dark:text-white mb-6">Services</h4>
+            <ul className="space-y-4 text-[14px] text-gray-500 dark:text-gray-400 font-medium">
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Quantity Takeoff</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">BOQ Generation</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Cost Analysis</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Structural Design</a></li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div className="flex flex-col">
+            <h4 className="font-semibold text-[15px] text-gray-900 dark:text-white mb-6">Resources</h4>
+            <ul className="space-y-4 text-[14px] text-gray-500 dark:text-gray-400 font-medium">
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">API Reference</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Engineering Standards</a></li>
+              <li><a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Help Center</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="w-full pt-8 border-t border-gray-200/80 dark:border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[13px] text-gray-500 dark:text-gray-400 font-medium">
+          <p>© {new Date().getFullYear()} Civil Estimation Pro. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Cookie Policy</a>
+          </div>
+        </div>
+        
       </div>
     </footer>
   );

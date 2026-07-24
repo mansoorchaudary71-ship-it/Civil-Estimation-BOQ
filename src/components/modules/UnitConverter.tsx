@@ -540,10 +540,11 @@ export default function UnitConverter() {
                   <AnimatePresence mode="popLayout">
                     <motion.div
                       key={toValue || "0"}
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -20, opacity: 0 }}
-                      transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
+                      initial={{ rotateX: 90, opacity: 0 }}
+                      animate={{ rotateX: 0, opacity: 1 }}
+                      exit={{ rotateX: -90, opacity: 0 }}
+                      transition={{ duration: 0.4, type: "spring", stiffness: 200, damping: 20 }}
+                      style={{ transformOrigin: "center" }}
                     >
                       {toValue || "0"}
                     </motion.div>

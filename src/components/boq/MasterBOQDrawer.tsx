@@ -3,6 +3,7 @@ import { useBOQ } from '../../context/BOQContext';
 import { useSettings, useGlobalSettings } from '../../context/SettingsContext';
 import { X, FileText, Download, Trash2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import EmptyStateIllustration from '../ui/EmptyStateIllustration';
 
 export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -98,9 +99,11 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
 
             <div className="flex-1 overflow-y-auto p-6">
               {items.length === 0 ? (
-                <div className="text-center py-12 text-slate-400 font-medium">
-                  Your BOQ is empty. Add items from the calculators.
-                </div>
+                <EmptyStateIllustration
+                  icon={FileText}
+                  title="Your BOQ is empty"
+                  description="Start adding items from the calculators to build your master bill of quantities."
+                />
               ) : (
                 <div className="space-y-4">
                   {filteredItems.length === 0 && searchQuery ? (

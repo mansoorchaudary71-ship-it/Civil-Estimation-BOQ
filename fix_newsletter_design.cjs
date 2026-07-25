@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+const fs = require('fs');
+
+const code = `import React, { useState, useEffect } from 'react';
 import { Mail, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
@@ -13,7 +15,7 @@ export default function NewsletterSignupCard() {
 
   const validateEmail = (email: string) => {
     if (!email) return "Email is required";
-    if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email address";
+    if (!/^\\S+@\\S+\\.\\S+$/.test(email)) return "Please enter a valid email address";
     return "";
   };
 
@@ -50,7 +52,7 @@ export default function NewsletterSignupCard() {
     setIsSubscribing(true);
     // Simulate API call
     setTimeout(() => {
-      toast.success(`Subscribed successfully with ${email}`, {
+      toast.success(\`Subscribed successfully with \${email}\`, {
         style: {
           borderRadius: "12px",
           background: "#1e293b",
@@ -119,7 +121,7 @@ export default function NewsletterSignupCard() {
 
           <div className="relative w-full flex-1">
             <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none z-10">
-              <Mail className={`w-5 h-5 ${error ? 'text-red-400' : 'text-gray-400 dark:text-gray-500'}`} strokeWidth={2} />
+              <Mail className={\`w-5 h-5 \${error ? 'text-red-400' : 'text-gray-400 dark:text-gray-500'}\`} strokeWidth={2} />
             </div>
             <motion.input 
               animate={controls}
@@ -128,7 +130,7 @@ export default function NewsletterSignupCard() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={handleBlur}
-              className={`w-full h-14 md:h-14 pl-12 pr-5 rounded-full bg-gray-100 dark:bg-white/5 border-2 ${error ? 'border-red-500 focus:border-red-500 focus:bg-white' : 'border-transparent focus:border-gray-200 focus:bg-white dark:focus:bg-white/10 dark:focus:border-white/20'} text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none transition-all shadow-inner relative z-0`}
+              className={\`w-full h-14 md:h-14 pl-12 pr-5 rounded-full bg-gray-100 dark:bg-white/5 border-2 \${error ? 'border-red-500 focus:border-red-500 focus:bg-white' : 'border-transparent focus:border-gray-200 focus:bg-white dark:focus:bg-white/10 dark:focus:border-white/20'} text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none transition-all shadow-inner relative z-0\`}
             />
             <AnimatePresence>
               {error && (
@@ -157,3 +159,6 @@ export default function NewsletterSignupCard() {
     </motion.div>
   );
 }
+`;
+
+fs.writeFileSync('src/components/NewsletterSignupCard.tsx', code);

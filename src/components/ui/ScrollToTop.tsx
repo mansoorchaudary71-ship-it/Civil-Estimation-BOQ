@@ -9,40 +9,60 @@ export default function ScrollToTop({ isHome = true }: { isHome?: boolean }) {
     const handleScroll = (e: Event) => {
       const target = e.target;
       let scrollTop = 0;
-
-      if (target === document) {
+      if (target === document || target === window) {
         scrollTop = window.scrollY || document.documentElement.scrollTop;
       } else if (target instanceof HTMLElement) {
-        // Only track scroll for large containers (likely the main page content)
         if (target.clientHeight >= window.innerHeight * 0.5) {
           scrollTop = target.scrollTop;
         } else {
-          return; // Ignore small scrolling elements like sidebars or dropdowns
+          return;
         }
       }
-
-      if (scrollTop > 400) {
-        setIsVisible(true);
-      } else if (scrollTop < 100) {
-        setIsVisible(false);
+      
+      const mainContent = document.getElementById("main-content");
+      if (mainContent) {
+          // Calculate the distance from the top of the page to the top of the #main-content
+          const mainRect = mainContent.getBoundingClientRect();
+          // The scrolled amount within or past the main content
+          const scrolledPastMainTop = -mainRect.top;
+          
+          if (scrolledPastMainTop > 300) {
+              setIsVisible(true);
+          } else if (scrolledPastMainTop < 100) {
+              setIsVisible(false);
+          }
+      } else {
+          if (scrollTop > 400) {
+            setIsVisible(true);
+          } else if (scrollTop < 100) {
+            setIsVisible(false);
+          }
       }
     };
-
     // Use capture phase to catch scroll events from all elements
     window.addEventListener("scroll", handleScroll, true);
     
     // Safety check: hide button if the active container is scrolled to top (handles navigation)
     const interval = setInterval(() => {
-        let activeScrollTop = 0;
-        const scrollableContainers = document.querySelectorAll('.overflow-y-auto, .overflow-y-scroll, main div');
-        for (let i = 0; i < scrollableContainers.length; i++) {
-            const el = scrollableContainers[i] as HTMLElement;
-            if (el.clientHeight >= window.innerHeight * 0.5 && el.scrollTop > 0) {
-                activeScrollTop = Math.max(activeScrollTop, el.scrollTop);
+        const mainContent = document.getElementById("main-content");
+        if (mainContent) {
+            const mainRect = mainContent.getBoundingClientRect();
+            const scrolledPastMainTop = -mainRect.top;
+            if (scrolledPastMainTop < 100) {
+                setIsVisible(false);
             }
-        }
-        if (activeScrollTop < 100 && (window.scrollY || document.documentElement.scrollTop) < 100) {
-            setIsVisible(false);
+        } else {
+            let activeScrollTop = 0;
+            const scrollableContainers = document.querySelectorAll('.overflow-y-auto, .overflow-y-scroll, main div');
+            for (let i = 0; i < scrollableContainers.length; i++) {
+                const el = scrollableContainers[i] as HTMLElement;
+                if (el.clientHeight >= window.innerHeight * 0.5 && el.scrollTop > 0) {
+                    activeScrollTop = Math.max(activeScrollTop, el.scrollTop);
+                }
+            }
+            if (activeScrollTop < 100 && (window.scrollY || document.documentElement.scrollTop) < 100) {
+                setIsVisible(false);
+            }
         }
     }, 1000);
     
@@ -55,9 +75,7 @@ export default function ScrollToTop({ isHome = true }: { isHome?: boolean }) {
   const scrollToTop = () => {
     let activeContainer: HTMLElement | Window = window;
     let maxScroll = window.scrollY || document.documentElement.scrollTop;
-
-    // Find the container that is currently scrolled
-    const scrollableContainers = document.querySelectorAll('.overflow-y-auto, .overflow-y-scroll, main div');
+    const scrollableContainers = document.querySelectorAll('.overflow-y-auto, .overflow-y-scroll, main div, #main-content');
     for (let i = 0; i < scrollableContainers.length; i++) {
         const el = scrollableContainers[i] as HTMLElement;
         if (el.clientHeight >= window.innerHeight * 0.5 && el.scrollTop > maxScroll) {
@@ -66,28 +84,35 @@ export default function ScrollToTop({ isHome = true }: { isHome?: boolean }) {
         }
     }
 
+    const mainContent = document.getElementById("main-content");
     const toolHeader = document.getElementById("tool-header-top");
     const dashboardHero = document.getElementById("dashboard-hero") || document.querySelector('.hero-section');
     
     if (activeContainer instanceof HTMLElement) {
-      if (toolHeader && activeContainer.contains(toolHeader)) {
+      if (mainContent && activeContainer.contains(mainContent)) {
+        const y = mainContent.offsetTop;
+        activeContainer.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+      } else if (toolHeader && activeContainer.contains(toolHeader)) {
         const y = toolHeader.offsetTop - 80;
-        activeContainer.scrollTo({ top: Math.max(0, y), behavior: "auto" });
+        activeContainer.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       } else if (dashboardHero && activeContainer.contains(dashboardHero)) {
         const y = (dashboardHero as HTMLElement).offsetTop - 80;
-        activeContainer.scrollTo({ top: Math.max(0, y), behavior: "auto" });
+        activeContainer.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       } else {
-        activeContainer.scrollTo({ top: 0, behavior: "auto" });
+        activeContainer.scrollTo({ top: 0, behavior: "smooth" });
       }
     } else {
-      if (toolHeader) {
+      if (mainContent) {
+        const y = mainContent.getBoundingClientRect().top + window.scrollY - 80; // Added offset for header
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+      } else if (toolHeader) {
         const y = toolHeader.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: Math.max(0, y), behavior: "auto" });
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       } else if (dashboardHero) {
         const y = dashboardHero.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: Math.max(0, y), behavior: "auto" });
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       } else {
-        window.scrollTo({ top: 0, behavior: "auto" });
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
   };
@@ -101,7 +126,7 @@ export default function ScrollToTop({ isHome = true }: { isHome?: boolean }) {
           exit={{ opacity: 0, scale: 0.5, y: 16 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
           onClick={scrollToTop}
-          aria-label="Scroll to top"
+          aria-label="Scroll to top of section" title="Scroll to Top of Section"
           className={`group fixed ${isHome ? 'bottom-6 md:bottom-8' : 'bottom-[5.5rem] md:bottom-[6.5rem]'} right-6 md:right-8 w-14 h-14 flex items-center justify-center rounded-full bg-indigo-700 text-white shadow-[0_8px_20px_-4px_rgba(67,56,202,0.5)] backdrop-blur-xl z-[90] transition-all duration-200 ease-out hover:scale-105 hover:bg-indigo-800 hover:shadow-[0_12px_25px_-4px_rgba(67,56,202,0.7)] active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 overflow-hidden`}
         >
           <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 mix-blend-overlay rounded-full" />

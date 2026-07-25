@@ -127,7 +127,7 @@ export default function TopNavbar({
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 style={{ overflow: 'hidden', whiteSpace: 'nowrap', display: 'flex' }}
-                className="items-center gap-1.5 sm:gap-2"
+                className="items-center gap-1.5 sm:gap-2 md:hidden"
               >
                 <button 
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50/80 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border border-slate-200/50 dark:border-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all shrink-0"
@@ -136,7 +136,6 @@ export default function TopNavbar({
                 >
                   <Search className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
-
                 <button 
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50/80 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border border-slate-200/50 dark:border-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all shrink-0"
                   onClick={() => user ? (onOpenProfile ? onOpenProfile() : null) : (onOpenAuth ? onOpenAuth() : window.dispatchEvent(new CustomEvent("open-login-modal")))}
@@ -147,11 +146,29 @@ export default function TopNavbar({
               </motion.div>
             )}
           </AnimatePresence>
+          
+          {/* Old Desktop Buttons */}
+          <div className="hidden md:flex items-center gap-2 sm:gap-3 ml-2">
+             {user ? (
+               <button onClick={() => onOpenProfile ? onOpenProfile() : null} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold px-4 py-2 transition-colors">
+                 Profile
+               </button>
+             ) : (
+               <>
+                 <button onClick={() => onOpenAuth ? onOpenAuth() : window.dispatchEvent(new CustomEvent("open-login-modal"))} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold px-4 py-2 transition-colors">
+                   Log in
+                 </button>
+                 <button onClick={() => onOpenAuth ? onOpenAuth() : window.dispatchEvent(new CustomEvent("open-login-modal"))} className="bg-[#ff5722] hover:bg-[#e64a19] text-white px-6 py-2.5 rounded-full font-bold shadow-sm shadow-[#ff5722]/20 transition-all active:scale-95 hover:-translate-y-0.5">
+                   Sign up
+                 </button>
+               </>
+             )}
+          </div>
 
           {/* Last Button: Mobile Menu Toggle / Final button on far right */}
           <motion.button 
             layout
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50/80 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border border-slate-200/50 dark:border-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all shrink-0 ml-1"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50/80 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border border-slate-200/50 dark:border-white/5 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all shrink-0 ml-1 md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Menu"
           >

@@ -30,6 +30,7 @@ import { ProductTour } from "./components/ui/ProductTour";
 import { ThemeProvider } from "./context/ThemeContext";
 import { BOQProvider } from "./context/BOQContext";
 import MasterBOQDrawer from "./components/boq/MasterBOQDrawer";
+import FloatingBOQButton from "./components/ui/FloatingBOQButton";
 import { FileText } from "lucide-react";
 import { SettingsProvider } from "./context/SettingsContext";
 import { HouseSpecsProvider } from "./context/HouseSpecsContext";
@@ -731,24 +732,52 @@ export default function App() {
                     onNavigate={handleSelectModule}
                   />
 
-                  <div className="flex flex-1 relative w-full">
+                  <div className="flex flex-1 relative w-full pb-24 md:pb-0">
                     
-                    <main id="main-content" className="flex-1 flex flex-col bg-transparent relative w-full transition-all duration-300">
-                      <div className="w-full flex-1 flex flex-col relative transition-all duration-300">
-                        <div className="flex-1 flex flex-col relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
+                    <motion.main 
+                      id="main-content" 
+                      initial="hidden"
+                      animate="show"
+                      variants={{
+                        hidden: { opacity: 0 },
+                        show: {
+                          opacity: 1,
+                          transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+                        }
+                      }}
+                      className="flex-1 flex flex-col bg-transparent relative w-full transition-all duration-300"
+                    >
+                      <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }} className="w-full flex-1 flex flex-col relative transition-all duration-300">
+                        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }} className="flex-1 flex flex-col relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
                           <AnimatePresence>
                             <motion.div
                               key={activeModule}
                               layoutId={activeLayoutId || `module-${activeModule}`}
-                              initial={{ opacity: 0, y: 15 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -15 }}
-                              transition={{ duration: 0.3, ease: "easeInOut" }}
+                              initial="hidden"
+                              animate="show"
+                              exit="exit"
+                              variants={{
+                                hidden: { opacity: 0, y: 15 },
+                                show: { 
+                                  opacity: 1, 
+                                  y: 0, 
+                                  transition: { 
+                                    duration: 0.3, 
+                                    ease: "easeInOut",
+                                    staggerChildren: 0.15 
+                                  } 
+                                },
+                                exit: { 
+                                  opacity: 0, 
+                                  y: -15, 
+                                  transition: { duration: 0.3, ease: "easeInOut" } 
+                                }
+                              }}
                               className="flex-1 flex flex-col relative w-full"
                             >
                               {["home", "my-estimates", "about", "careers", "contact", "blog", "privacy", "terms", "cookies"].includes(activeModule) ? (
-                                <div ref={scrollRef} className="flex-1 flex flex-col relative w-full overflow-visible">
-                                  <div className="flex flex-col relative w-full">
+                                                                <motion.div ref={scrollRef} className="flex-1 flex flex-col relative w-full overflow-visible" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.15 } } }}>
+                                  <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }} className="flex flex-col relative w-full">
                                     {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule}  onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}
                                     {activeModule === "my-estimates" && <RecentEstimates onSelectModule={handleSelectModule} />}
                                     {activeModule === "pricing" && <PricingPage />}
@@ -759,28 +788,30 @@ export default function App() {
                                     {activeModule === "privacy" && <LegalPages page="privacy" onNavigate={handleSelectModule} />}
                                     {activeModule === "terms" && <LegalPages page="terms" onNavigate={handleSelectModule} />}
                                     {activeModule === "cookies" && <LegalPages page="cookies" onNavigate={handleSelectModule} />}
+                                  </motion.div>
+                                  <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}>
                                     <Footer activeModule={activeModule} onNavigate={handleSelectModule} />
-                                  </div>
-                                </div>
+                                  </motion.div>
+                                </motion.div>
                               ) : (
-                                <div className="flex-1 flex flex-col relative w-full bg-transparent">
+                                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }} className="flex-1 flex flex-col relative w-full bg-transparent">
                                   <div className="w-full flex-1 flex flex-col">
                                     <div className="global-form-card-wrapper w-full flex-1">
                                       {renderModule(activeModule, handleSelectModule)}
                                     </div>
                                   </div>
-                                </div>
+                                </motion.div>
                               )}
                             </motion.div>
                           </AnimatePresence>
-                        </div>
-                      </div>
-                    </main>
+                        </motion.div>
+                      </motion.div>
+                    </motion.main>
                   </div>
                 </div>
               </ProjectProvider>
           <MasterBOQDrawer isOpen={isBOQOpen} onClose={() => setIsBOQOpen(false)} />
-          <button onClick={() => setIsBOQOpen(true)} className="fixed bottom-6 right-6 p-4 bg-indigo-600 text-white rounded-full shadow-xl hover:bg-indigo-700 hover:scale-105 transition-all z-40 flex items-center justify-center"><FileText size={24}/></button>
+          <FloatingBOQButton onClick={() => setIsBOQOpen(true)} />
           </BOQProvider>
             </TakeoffProvider>
           </MarketRatesProvider>

@@ -33,7 +33,7 @@ export default function AppDownloadBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-          className="fixed top-4 left-4 right-4 z-[100] md:left-auto md:right-4 md:w-96 shadow-lg shadow-indigo-500/10 rounded-xl overflow-hidden bg-gradient-to-r from-indigo-900 to-slate-900 border border-indigo-500/30"
+          className="fixed top-24 left-4 right-4 z-[100] md:left-auto md:right-4 md:w-96 shadow-lg shadow-indigo-500/10 rounded-xl overflow-hidden bg-gradient-to-r from-indigo-900 to-slate-900 border border-indigo-500/30"
         >
           <div className="p-4 flex items-start gap-4">
             <div className="bg-indigo-500/20 p-2.5 rounded-lg shrink-0">

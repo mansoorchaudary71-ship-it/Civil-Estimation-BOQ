@@ -237,7 +237,7 @@ export default function PricingPage() {
         {/* ROI Calculator Widget */}
         <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden mb-24 flex flex-col md:flex-row">
           <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center bg-slate-50 dark:bg-slate-800/40">
-            <h3 className="text-xl font-semibold text-slate-800 dark:text-white mb-2">How much time will you save?</h3>
+            <h3 id="section-roi-calculator" className="text-xl font-semibold text-slate-800 dark:text-white mb-2">How much time will you save?</h3>
             <p className="text-slate-500 dark:text-slate-400 mb-8">Drag the slider to see how Civil AI pays for itself.</p>
             
             <label className="text-base font-medium dark:text-slate-300 block mb-4 flex justify-between">

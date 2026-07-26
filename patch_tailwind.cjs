@@ -1,12 +1,12 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: 'class',
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
+const fs = require('fs');
+
+const tailwindPath = 'tailwind.config.js';
+let config = fs.readFileSync(tailwindPath, 'utf8');
+
+// We want to add the fontSize scale to theme.extend or theme directly
+// If theme.extend.fontSize doesn't exist, we add it.
+
+const fontSizeScale = `
       fontSize: {
         'xs': ['var(--text-caption-size)', { lineHeight: 'var(--text-caption-lh)', letterSpacing: 'var(--text-caption-ls)' }],
         'sm': ['var(--text-body-sm-size)', { lineHeight: 'var(--text-body-sm-lh)', letterSpacing: 'var(--text-body-sm-ls)' }],
@@ -22,19 +22,13 @@ export default {
         '8xl': ['var(--text-display-xl-size)', { lineHeight: 'var(--text-display-xl-lh)', letterSpacing: 'var(--text-display-xl-ls)' }],
         '9xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.04em' }],
       },
+`;
 
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-      },
-      keyframes: {
-        shimmer: {
-          '100%': { transform: 'translateX(100%)' },
-        }
-      },
-      animation: {
-        shimmer: 'shimmer 1.5s infinite',
-      }
-    },
-  },
-  plugins: [],
+if (config.includes('fontSize:')) {
+    console.log("fontSize already exists in tailwind config.");
+} else {
+    config = config.replace('extend: {', 'extend: {' + fontSizeScale);
+    fs.writeFileSync(tailwindPath, config, 'utf8');
+    console.log("fontSize scale added successfully to tailwind config.");
 }
+

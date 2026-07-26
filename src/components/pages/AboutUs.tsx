@@ -29,7 +29,7 @@ export default function AboutUs() {
           <Building2 className="w-64 h-64 text-slate-900 dark:text-white" />
         </div>
         <div className="relative z-10 max-w-3xl">
-          <h2 className="text-2xl md:text-xl font-bold text-slate-900 dark:text-white mb-6">Our Story</h2>
+          <h2 id="section-our-story" className="text-2xl md:text-xl font-bold text-slate-900 dark:text-white mb-6">Our Story</h2>
           <div className="space-y-6 text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
             <p>
               It started with a simple observation: civil engineers, estimators, and contractors were spending entirely too much time on repetitive tasks, manual measurements, and complicated spreadsheets.

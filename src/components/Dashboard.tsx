@@ -1256,7 +1256,7 @@ export default function Dashboard({
 
  {/* Recently Used section */}
  <div className="mb-12 flex flex-col gap-5 w-full md:max-w-[1400px] md:mx-auto px-4">
- <h2 className="md: flex items-center gap-3 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+ <h2 id="section-recent-tools" className="md: flex items-center gap-3 text-xl font-semibold text-slate-900 tracking-tight mb-4">
  <History className="w-6 h-6 text-indigo-500" />
  Recent Tools
  </h2>
@@ -1295,8 +1295,8 @@ export default function Dashboard({
 
  {settings.favoriteTools && settings.favoriteTools.length > 0 && (
  <div className="mb-12 flex flex-col gap-5 w-full md:max-w-[1400px] md:mx-auto px-4">
- <h2 className="flex items-center gap-3 text-xl font-semibold text-slate-800 tracking-tight mb-4">
- <Bookmark className="w-6 h-6 text-indigo-500" fill="transparent" strokeWidth={2.5} />
+ <h2 id="section-personalized-shortcuts" className="flex items-center gap-3 text-xl font-semibold text-slate-800 tracking-tight mb-4">
+                                      <Bookmark className="w-6 h-6 text-indigo-500" fill="transparent" strokeWidth={2.5} />
  Personalized Shortcuts
  </h2>
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
@@ -1364,7 +1364,7 @@ export default function Dashboard({
  return (
  <div key={groupName} className={`w-full flex flex-col py-12 md:py-20 ${index % 3 === 0 ? 'bg-[#F4F1EA]' : index % 3 === 1 ? 'bg-[#F0F5FF]' : 'bg-[#D9E6DD]'}`}>
 <div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex flex-col gap-5">
-<h2 className="px-2 flex items-center gap-2 text-xl font-semibold text-slate-800 tracking-tight mb-4">
+<h2 id={`section-${groupName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="px-2 flex items-center gap-2 text-xl font-semibold text-slate-800 tracking-tight mb-4">
  {groupName}
  <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 shadow-sm">{toolsInGroup.length}</span>
  </h2>

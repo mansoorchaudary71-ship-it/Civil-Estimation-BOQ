@@ -21,8 +21,12 @@ import SkipToContent from "./components/ui/SkipToContent";
 import LoadingScreen from "./components/ui/LoadingScreen";
 import CustomCursor from "./components/ui/CustomCursor";
 import ScrollToTop from "./components/ui/ScrollToTop";
+import SectionNavigator from "./components/ui/SectionNavigator";
+import ScrollProgressBar from "./components/ui/ScrollProgressBar";
+import ReadingTimeIndicator from "./components/ui/ReadingTimeIndicator";
 import BackButton from "./components/ui/BackButton";
 import { ToolHeader } from "./components/ui/ToolHeader";
+import ModuleSummaryDashboard from "./components/ui/ModuleSummaryDashboard";
 import Breadcrumb from "./components/Breadcrumb";
 import { Toaster } from "react-hot-toast";
 import { ProductTour } from "./components/ui/ProductTour";
@@ -191,6 +195,7 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
         </div>
         
         <div className="mt-12 space-y-8 pb-16 print:hidden">
+          <ModuleSummaryDashboard moduleId={id} />
           <ProTipsWidget moduleId={id} />
           <ToolArticleWidget toolName={actualTitle} />
           <GlobalFAQ moduleId={id} />
@@ -706,6 +711,8 @@ export default function App() {
       <LoadingScreen />
       <CustomCursor />
       <ScrollToTop isHome={activeModule === "home"} />
+      <SectionNavigator />
+      <ScrollProgressBar />
       <BackButton isVisible={activeModule !== "home"} onNavigate={() => handleSelectModule("home")} />
       <ThemeProvider>
       <SettingsProvider>
@@ -747,6 +754,7 @@ export default function App() {
                       }}
                       className="flex-1 flex flex-col bg-transparent relative w-full transition-all duration-300"
                     >
+                      <ReadingTimeIndicator activeModule={activeModule} />
                       <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }} className="w-full flex-1 flex flex-col relative transition-all duration-300">
                         <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }} className="flex-1 flex flex-col relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
                           <AnimatePresence>

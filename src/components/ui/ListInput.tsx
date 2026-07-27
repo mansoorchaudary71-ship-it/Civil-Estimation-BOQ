@@ -1,5 +1,7 @@
+import { Button } from './/Button';
 import React, { memo, useCallback } from 'react';
 import { Plus } from 'lucide-react';
+
 
 export interface ListInputProps<T> {
   items: T[];
@@ -37,20 +39,20 @@ export function ListInput<T>({
       {items.map((item, index) => renderItem(item, index, updateItem, removeItem))}
 
       {items.length === 0 && (
-        <div className="text-center py-12 bg-transparent border-2 border-dashed border-gray-200 rounded-[2rem]">
-          <p className="text-base font-normal text-slate-600 leading-relaxed">
+        <div className="text-center py-12 bg-transparent border-2 border-dashed border-gray-200 rounded-2xl">
+          <p className="text-base font-normal text-txt-secondary leading-relaxed">
             {emptyMessage}
           </p>
         </div>
       )}
 
       <div className="pt-2 flex justify-center border-t border-slate-100 mt-4">
-        <button
+        <Button
           onClick={onAdd}
           className="flex items-center justify-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-900 px-6 py-3 rounded-full shadow-sm transition-all hover:scale-105 active:scale-95 text-base font-semibold hover:-translate-y-0.5 min-h-[44px] min-w-[44px]"
         >
           <Plus className="w-5 h-5" /> {addLabel}
-        </button>
+        </Button>
       </div>
     </div>
   );

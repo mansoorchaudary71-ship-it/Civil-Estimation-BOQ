@@ -1,6 +1,8 @@
+import { Button } from './ui/Button';
 import React from 'react';
 import { Download } from 'lucide-react';
 import { exportToCSV, exportTableToCSV } from '../utils/exportUtils';
+
 
 interface ExportButtonProps {
   filename: string;
@@ -22,12 +24,12 @@ export function ExportButton({ filename, data, tableId, className = '', label = 
   };
 
   return (
-    <button
+    <Button
       onClick={handleExport}
-      className={`flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors text-sm font-medium border border-slate-200 shadow-sm active:scale-95 ${className}`}
+      className={`flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-txt-secondary rounded-lg transition-colors text-sm font-medium border border-ui-borderSubtle shadow-sm active:scale-95 ${className}`}
     >
       <Download className="w-4 h-4" />
       {label}
-    </button>
+    </Button>
   );
 }

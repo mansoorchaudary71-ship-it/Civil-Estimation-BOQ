@@ -1,3 +1,4 @@
+import { Button } from './/Button';
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { Layers, FolderPlus, CheckCircle, ChevronDown, RefreshCw, Sparkles, ArrowRight, PieChart as PieChartIcon, BarChart2 as BarChartIcon } from 'lucide-react';
@@ -24,6 +25,7 @@ export interface MaterialSummaryProps {
 
 import { useSettings } from '../../context/SettingsContext';
 import { getImperialConversion } from '../../utils/autoConverter';
+
 
 const COLORS = ['#6B46C1', '#F97316', '#10B981', '#3B82F6', '#EC4899', '#F59E0B', '#8B5CF6'];
 
@@ -164,7 +166,7 @@ export function MaterialSummary({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-      className={`w-[calc(100%+1.5rem)] -ml-3 md:w-full md:ml-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-[4px] border-l-[#6B46C1] rounded-[24px] md:rounded-[32px] p-4 sm:p-6 md:p-8 overflow-visible relative shadow-sm ${className}`}
+      className={`w-[calc(100%+1.5rem)] -ml-3 md:w-full md:ml-0 bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 border-l-[4px] border-l-[#6B46C1] rounded-2xl md:rounded-2xl p-4 sm:p-6 md:p-8 overflow-visible relative shadow-sm ${className}`}
     >
       {/* Header section with Save button */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 relative z-20">
@@ -185,25 +187,25 @@ export function MaterialSummary({
                  <CheckCircle className="w-4 h-4" /> Saved to Project
               </span>
             ) : canEditActive && !showProjectSelect ? (
-              <div className="flex bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1 rounded-xl shadow-sm hover:shadow transition-shadow">
-                 <button onClick={() => handleSave(activeProj!.id)} className="flex items-center gap-2 text-[#6B46C1] dark:text-[#8b5cf6] font-bold text-xs sm:text-sm px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-colors">
+              <div className="flex bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-1 rounded-xl shadow-sm hover:shadow transition-shadow">
+                 <Button onClick={() => handleSave(activeProj!.id)} className="flex items-center gap-2 text-[#6B46C1] dark:text-[#8b5cf6] font-bold text-xs sm:text-sm px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-colors">
                     <FolderPlus className="w-4 h-4" /> Save to: {activeProj!.name}
-                 </button>
+                 </Button>
                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 my-auto mx-1"></div>
-                 <button aria-label="Move Down" onClick={() => setShowProjectSelect(true)} className="px-2 text-slate-400 hover:text-gray-600 dark:hover:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                 <Button aria-label="Move Down" onClick={() => setShowProjectSelect(true)} className="px-2 text-slate-400 hover:text-txt-secondary dark:hover:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                     <ChevronDown className="w-4 h-4" />
-                 </button>
+                 </Button>
               </div>
             ) : (
-               <div className="absolute right-0 top-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl w-64 p-2 z-50">
+               <div className="absolute right-0 top-0 bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 rounded-xl shadow-xl w-64 p-2 z-50">
                  <div className="flex justify-between items-center mb-2 px-2 pt-1">
-                   <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Select Project</span>
-                   <button aria-label="Move Down" onClick={() => setShowProjectSelect(false)} className="text-slate-400 hover:text-gray-600"><ChevronDown className="w-4 h-4 rotate-180" /></button>
+                   <span className="text-xs font-bold text-txt-tertiary uppercase tracking-widest">Select Project</span>
+                   <Button aria-label="Move Down" onClick={() => setShowProjectSelect(false)} className="text-slate-400 hover:text-txt-secondary"><ChevronDown className="w-4 h-4 rotate-180" /></Button>
                  </div>
                  {editableProjects.map(p => (
-                    <button key={p.id} onClick={() => handleSave(p.id)} className="w-full text-left px-3 py-2 text-sm font-semibold text-gray-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-[#6B46C1] dark:hover:text-[#8b5cf6] rounded-lg transition-colors mb-1 truncate">
+                    <Button key={p.id} onClick={() => handleSave(p.id)} className="w-full text-left px-3 py-2 text-sm font-semibold text-txt-secondary dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-[#6B46C1] dark:hover:text-[#8b5cf6] rounded-lg transition-colors mb-1 truncate">
                        {p.name}
-                    </button>
+                    </Button>
                  ))}
                </div>
             )}
@@ -217,7 +219,7 @@ export function MaterialSummary({
         <div className="mb-10 relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             {totalLabel && (
-              <p className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">{totalLabel}</p>
+              <p className="text-[10px] sm:text-xs font-black text-txt-tertiary dark:text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">{totalLabel}</p>
             )}
             <div className="flex flex-row items-baseline flex-wrap gap-x-2 gap-y-1 max-w-full overflow-hidden">
               <span className="text-[clamp(2.5rem,8vw,4.5rem)] leading-none font-black tracking-tighter bg-gradient-to-br from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent break-words max-w-full">
@@ -225,25 +227,25 @@ export function MaterialSummary({
               </span>
               <div className="flex flex-col text-left shrink-0">
                 {displayUnit && (
-                  <span className="text-xl sm:text-2xl font-black text-slate-700 dark:text-slate-300">{displayUnit}</span>
+                  <span className="text-xl sm:text-2xl font-black text-txt-secondary dark:text-slate-300">{displayUnit}</span>
                 )}
                 {subtitle && (
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{subtitle}</span>
+                  <span className="text-xs font-bold text-slate-400 dark:text-txt-tertiary uppercase tracking-widest">{subtitle}</span>
                 )}
               </div>
             </div>
           </div>
 
           {onRecalculate && (
-            <button 
+            <Button 
               onClick={handleRecalculate}
               disabled={isRecalculating}
               className="flex items-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-white dark:text-slate-300 rounded-xl transition-all disabled:opacity-50 text-base font-semibold"
             >
               <RefreshCw className={`w-5 h-5 ${isRecalculating ? 'animate-spin' : ''}`} />
               Recalculate Values
-              <span className="ml-1 text-[10px] font-medium opacity-70 bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded px-1.5 py-0.5 hidden sm:inline-block pointer-events-none">Ctrl+Enter</span>
-            </button>
+              <span className="ml-1 text-[10px] font-medium opacity-70 bg-surface-default/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded px-1.5 py-0.5 hidden sm:inline-block pointer-events-none">Ctrl+Enter</span>
+            </Button>
           )}
         </div>
 
@@ -256,27 +258,27 @@ export function MaterialSummary({
           {(chartData.length > 0 || relatedModules.length > 0) && (
             <div className="flex flex-col gap-6">
               {chartData.length > 0 && (
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 sm:p-6 border border-ui-borderSubtle dark:border-slate-700 overflow-hidden">
                   
-                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4 mb-6">
-                    <h4 className="uppercase text-[11px] sm:text-xs font-black text-slate-500 dark:text-slate-400 tracking-[0.2em]">
+                  <div className="flex items-center justify-between border-b border-ui-borderSubtle dark:border-slate-700 pb-4 mb-6">
+                    <h4 className="uppercase text-[11px] sm:text-xs font-black text-txt-tertiary dark:text-slate-400 tracking-[0.2em]">
                       Visual Breakdown
                     </h4>
                     <div className="flex items-center bg-slate-200/50 dark:bg-slate-700/50 p-1 rounded-lg">
-                      <button
+                      <Button
                         onClick={() => setChartType('donut')}
-                        className={`p-1.5 rounded-md transition-all ${chartType === 'donut' ? 'bg-white dark:bg-slate-600 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        className={`p-1.5 rounded-md transition-all ${chartType === 'donut' ? 'bg-surface-default dark:bg-slate-600 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-txt-tertiary hover:text-txt-secondary dark:text-slate-400 dark:hover:text-slate-200'}`}
                         title="Donut Chart"
                       >
                         <PieChartIcon className="w-4 h-4" />
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => setChartType('bar')}
-                        className={`p-1.5 rounded-md transition-all ${chartType === 'bar' ? 'bg-white dark:bg-slate-600 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        className={`p-1.5 rounded-md transition-all ${chartType === 'bar' ? 'bg-surface-default dark:bg-slate-600 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-txt-tertiary hover:text-txt-secondary dark:text-slate-400 dark:hover:text-slate-200'}`}
                         title="Bar Chart"
                       >
                         <BarChartIcon className="w-4 h-4" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                   <div className="h-[250px] w-full">
@@ -350,22 +352,22 @@ export function MaterialSummary({
                   </h4>
                   <div className="flex flex-col gap-3">
                     {relatedModules.map(mod => (
-                      <button 
+                      <Button 
                         key={mod.id}
                         onClick={() => window.location.href = `/?tool=${mod.id}`}
-                        className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 rounded-xl border border-indigo-100 dark:border-indigo-800/50 transition-all text-left group"
+                        className="flex items-center justify-between p-4 bg-surface-default dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 rounded-xl border border-indigo-100 dark:border-indigo-800/50 transition-all text-left group"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-indigo-50 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800/50">
                             <mod.icon className="w-4.5 h-4.5" />
                           </div>
                           <div className="flex flex-col">
-                            <p className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">{mod.title}</p>
-                            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate max-w-[140px] mt-0.5">{mod.desc}</p>
+                            <p className="text-sm font-bold text-txt-primary dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">{mod.title}</p>
+                            <p className="text-[10px] text-txt-tertiary dark:text-slate-400 font-medium truncate max-w-[140px] mt-0.5">{mod.desc}</p>
                           </div>
                         </div>
                         <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>

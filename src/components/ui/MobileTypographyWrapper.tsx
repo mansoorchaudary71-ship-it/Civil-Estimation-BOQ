@@ -1,4 +1,6 @@
+import { Button } from './/Button';
 import React, { ReactNode } from 'react';
+
 
 interface MobileTypographyWrapperProps {
   children: ReactNode;
@@ -19,14 +21,14 @@ export function MobileTypographyWrapper({ children, className = '' }: MobileTypo
   return (
     <div 
       className={`
-        font-sans antialiased text-gray-900 dark:text-gray-100
+        font-sans antialiased text-txt-primary dark:text-gray-100
         selection:bg-indigo-100 selection:text-indigo-900
         dark:selection:bg-indigo-900 dark:selection:text-indigo-100
         ${className}
       `}
     >
       {/* 
-        Elements like <h1>, <p>, and <button> inside here will automatically 
+        Elements like <h1>, <p>, and <Button> inside here will automatically 
         inherit the @layer base styles defined in your global CSS.
       */}
       {children}

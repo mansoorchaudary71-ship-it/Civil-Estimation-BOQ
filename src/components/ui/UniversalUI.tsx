@@ -9,7 +9,7 @@ export function Card({
   className?: string; 
 }) {
   return (
-    <div className={`bg-white/80 dark:bg-[#151821]/80 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-[0_4px_24px_-8px_rgba(15,23,42,0.06)] border-0 p-6 sm:p-8 w-full min-w-0 ${className}`}>
+    <div className={`bg-surface-default/80 dark:bg-[#151821]/80 backdrop-blur-md rounded-2xl sm:rounded-2xl shadow-[0_4px_24px_-8px_rgba(15,23,42,0.06)] border-0 p-6 sm:p-8 w-full min-w-0 ${className}`}>
       {children}
     </div>
   );
@@ -39,15 +39,15 @@ export function MetricCard({
   };
   
   return (
-    <div className="bg-white dark:bg-[#151821] rounded-xl sm:rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800/60 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-md overflow-hidden">
-      <div className="text-xs text-slate-500 dark:text-slate-400 font-semibold tracking-wide uppercase mb-4">
+    <div className="bg-surface-default dark:bg-[#151821] rounded-xl sm:rounded-2xl shadow-sm border border-ui-borderSubtle/60 dark:border-slate-800/60 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-md overflow-hidden">
+      <div className="text-xs text-txt-tertiary dark:text-slate-400 font-semibold tracking-wide uppercase mb-4">
         {label}
       </div>
       <div className="flex items-baseline gap-1.5 flex-wrap">
         <span className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${colorMap[colorTheme] || colorMap.blue}`}>
           {value}
         </span>
-        {unit && <span className="text-sm font-semibold text-slate-400 dark:text-slate-500">{unit}</span>}
+        {unit && <span className="text-sm font-semibold text-slate-400 dark:text-txt-tertiary">{unit}</span>}
       </div>
     </div>
   );
@@ -107,7 +107,7 @@ export function StatusBanner({
         {theme.icon}
         <div>
            <div className={`font-bold text-[15px] leading-tight ${theme.text}`}>{title}</div>
-           {desc && <div className="text-[13px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{desc}</div>}
+           {desc && <div className="text-[13px] text-txt-tertiary dark:text-slate-400 mt-1 leading-relaxed">{desc}</div>}
         </div>
      </div>
   );
@@ -138,11 +138,11 @@ export function RangeSlider({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-end">
-        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <label className="text-sm font-semibold text-txt-secondary dark:text-slate-300">
           {label}
         </label>
         <div className="text-sm font-bold text-white dark:text-slate-100 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-lg">
-          {value} {unit && <span className="text-slate-500 font-medium">{unit}</span>}
+          {value} {unit && <span className="text-txt-tertiary font-medium">{unit}</span>}
         </div>
       </div>
       
@@ -165,7 +165,7 @@ export function RangeSlider({
         /></>
         {/* Custom Handle Visual */}
         <div 
-          className="absolute top-1/2 -mt-2.5 -ml-2.5 w-5 h-5 bg-white border-2 border-slate-300 dark:border-slate-600 rounded-full shadow-sm pointer-events-none transition-transform duration-100 shadow-slate-900/10"
+          className="absolute top-1/2 -mt-2.5 -ml-2.5 w-5 h-5 bg-surface-default border-2 border-ui-borderDefault dark:border-slate-600 rounded-full shadow-sm pointer-events-none transition-transform duration-100 shadow-slate-900/10"
           style={{ left: `${percentage}%` }}
         />
       </div>

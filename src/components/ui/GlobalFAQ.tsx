@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { ALL_MODULES } from '../Dashboard';
+
 
 export interface FAQItem {
   question: string;
@@ -129,8 +131,8 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
   const displayedFaqs = showAll ? combinedFaqs : combinedFaqs.slice(0, 2);
 
   return (
-    <section className="w-full bg-white rounded-[32px] p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-slate-100 shadow-sm overflow-hidden" aria-label="Frequently Asked Questions">
-      <h2 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight mb-6">
+    <section className="w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-slate-100 shadow-sm overflow-hidden" aria-label="Frequently Asked Questions">
+      <h2 className="text-xl md:text-2xl font-bold text-txt-primary tracking-tight mb-6">
         Frequently Asked Questions
       </h2>
       <div className="space-y-4">
@@ -139,27 +141,27 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
           return (
             <div 
               key={index}
-              className="w-full border border-slate-200 rounded-[24px] bg-white/80 backdrop-blur-xl overflow-hidden shadow-sm hover:shadow transition-shadow"
+              className="w-full border border-ui-borderSubtle rounded-2xl bg-surface-default/80 backdrop-blur-xl overflow-hidden shadow-sm hover:shadow transition-shadow"
             >
-              <button className="w-full text-left px-6 py-4 md:py-5 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/20 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              <Button className="w-full text-left px-6 py-4 md:py-5 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/20 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${index}`}
               >
-                <span className="font-semibold text-slate-800 text-lg pr-8">
+                <span className="font-semibold text-txt-primary text-lg pr-8">
                   {faq.question}
                 </span>
                 <ChevronDown 
                   className={`w-5 h-5 text-slate-400 transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-indigo-500' : ''}`}
                 />
-              </button>
+              </Button>
               
               <div 
                 id={`faq-answer-${index}`}
                 className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100 pb-5' : 'max-h-0 opacity-0 overflow-hidden'}`}
                 aria-hidden={!isOpen}
               >
-                <div className="px-6 text-slate-600 leading-relaxed">
+                <div className="px-6 text-txt-secondary leading-relaxed">
                   {faq.answer}
                 </div>
               </div>
@@ -169,12 +171,12 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
       </div>
       {combinedFaqs.length > 2 && (
         <div className="text-center mt-8">
-          <button
+          <Button
             onClick={() => setShowAll(!showAll)}
             className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-full transition-colors shadow-sm active:scale-95 hover:-translate-y-0.5"
           >
             {showAll ? 'Show Less' : `Show all ${combinedFaqs.length} questions`}
-          </button>
+          </Button>
         </div>
       )}
     </section>

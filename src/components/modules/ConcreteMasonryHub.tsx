@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { Building2, Grid2X2, Columns, Droplet, PaintBucket, Layers, Square, Boxes, BookOpen } from "lucide-react";
@@ -12,6 +13,7 @@ import RetainingWallCalculator from "./RetainingWallCalculator";
 import ConstructionMaterialEstimator from "./Calculators"; // to be wrapped
 import MasterRccStructure from "./MasterRccStructure";
 import { CalculationHistory } from '../ui/CalculationHistory';
+
 
 type HubTab = "slab" | "column" | "beam" | "staircase" | "foundation" | "retaining-wall" | "general-concrete" | "bricks-blocks" | "plaster-finishes";
 
@@ -67,27 +69,27 @@ export default function ConcreteMasonryHub({ isEmbedded = false, onNavigate }: C
           {activeTab === "general-concrete" && <ConstructionMaterialEstimator forcedTab="concrete" hideHeader />}
           {activeTab === "bricks-blocks" && (
             <div className="space-y-4">
-              <div className="flex bg-slate-100 p-1 rounded-[24px] w-fit overflow-hidden">
-                <button
+              <div className="flex bg-slate-100 p-1 rounded-2xl w-fit overflow-hidden">
+                <Button
                   onClick={() => setBrickBlockTab("bricks")}
-                  className={`px-6 py-2 rounded-[24px] text-base font-medium transition-all ${
+                  className={`px-6 py-2 rounded-2xl text-base font-medium transition-all ${
                     brickBlockTab === "bricks"
-                      ? "bg-white  text-indigo-600 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
+                      ? "bg-surface-default  text-indigo-600 shadow-sm"
+                      : "text-txt-tertiary hover:text-txt-secondary"
                   }`}
                 >
                   Brickwork
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => setBrickBlockTab("blocks")}
-                  className={`px-6 py-2 rounded-[24px] text-base font-medium transition-all ${
+                  className={`px-6 py-2 rounded-2xl text-base font-medium transition-all ${
                     brickBlockTab === "blocks"
-                      ? "bg-white  text-indigo-600 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
+                      ? "bg-surface-default  text-indigo-600 shadow-sm"
+                      : "text-txt-tertiary hover:text-txt-secondary"
                   }`}
                 >
                   Blockwork
-                </button>
+                </Button>
               </div>
               <ConstructionMaterialEstimator forcedTab={brickBlockTab} hideHeader key={brickBlockTab} />
             </div>

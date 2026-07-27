@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useMemo } from "react";
 import { useConvertedState } from "../../hooks/useUnitChange";
 import { UniversalTabs } from "../ui/UniversalTabs";
@@ -43,6 +44,7 @@ type Shape =
   | "Commercial Tank";
 type System = "Metric" | "Imperial";
 import { useGlobalSettings } from "../../context/SettingsContext";
+
 export default function VolumeEstimator() {
   const { user } = useAuth();
   const { currentUnit, setCurrentUnit } = useGlobalSettings();
@@ -156,7 +158,7 @@ export default function VolumeEstimator() {
       id: "Concentric Cylinder",
       label: "Tube / Pipe",
       icon: Cylinder,
-      color: "text-slate-600 bg-slate-100 dark:bg-slate-500/20",
+      color: "text-txt-secondary bg-slate-100 dark:bg-slate-500/20",
     },
     {
       id: "Commercial Tank",
@@ -504,29 +506,29 @@ export default function VolumeEstimator() {
     "Liquid Capacity": `${liquidCapacity.toFixed(2)} ${capacityUnit}`,
   };
   return (
-    <div className="w-full h-full bg-transparent dark:bg-slate-950 text-slate-900 dark:text-white p-6 md:p-8">
+    <div className="w-full h-full bg-transparent dark:bg-slate-950 text-txt-primary dark:text-white p-6 md:p-8">
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         
         
         {/* Global Settings */}
-        <div className="flex flex-wrap gap-4 mb-8 items-center bg-bg-card px-4 py-3 rounded-[24px] border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="flex flex-wrap gap-4 mb-8 items-center bg-bg-card px-4 py-3 rounded-2xl border border-ui-borderSubtle dark:border-slate-700 overflow-hidden">
           <div>
             <label className="text-base font-medium dark:text-gray-400 uppercase block mb-1">
               Measurement System
             </label>
-            <div className="flex bg-white dark:bg-slate-800 rounded-[16px] p-1 w-fit">
-              <button
+            <div className="flex bg-surface-default dark:bg-slate-800 rounded-2xl p-1 w-fit">
+              <Button
                 onClick={() => setCurrentUnit("Metric")}
-                className={`px-4 py-1.5 rounded-md text-base font-medium transition-all ${system === "Metric" ? "bg-white dark:bg-slate-700 shadow-sm text-indigo-600" : "text-slate-700 dark:text-slate-300"}`}
+                className={`px-4 py-1.5 rounded-md text-base font-medium transition-all ${system === "Metric" ? "bg-surface-default dark:bg-slate-700 shadow-sm text-indigo-600" : "text-txt-secondary dark:text-slate-300"}`}
               >
                 Metric (m)
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setCurrentUnit("Imperial")}
-                className={`px-4 py-1.5 rounded-md text-base font-medium transition-all ${system === "Imperial" ? "bg-white dark:bg-slate-700 shadow-sm text-indigo-600" : "text-slate-700 dark:text-slate-300"}`}
+                className={`px-4 py-1.5 rounded-md text-base font-medium transition-all ${system === "Imperial" ? "bg-surface-default dark:bg-slate-700 shadow-sm text-indigo-600" : "text-txt-secondary dark:text-slate-300"}`}
               >
                 Imperial (ft)
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -539,9 +541,9 @@ export default function VolumeEstimator() {
         </div>
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Inputs */}
-          <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col bg-bg-card p-4 sm:p-6 rounded-[2rem] border border-slate-200 dark:border-slate-700">
+          <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col bg-bg-card p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle dark:border-slate-700">
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-[24px] flex items-center justify-center text-indigo-600 overflow-hidden">
+              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-indigo-600 overflow-hidden">
                 {(() => {
                   const ShapeIcon =
                     shapes.find((s) => s.id === activeShape)?.icon || Box;
@@ -562,7 +564,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={length}
                       onChange={(e) => setLength(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -574,7 +576,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={width}
                       onChange={(e) => setWidth(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -586,7 +588,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                 </div>
@@ -601,7 +603,7 @@ export default function VolumeEstimator() {
                     type="number" inputMode="decimal"
                     value={side}
                     onChange={(e) => setSide(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                    className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                   /></>
                 </div>
               )}
@@ -616,7 +618,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={radius}
                       onChange={(e) => setRadius(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -628,7 +630,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                 </div>
@@ -643,7 +645,7 @@ export default function VolumeEstimator() {
                     type="number" inputMode="decimal"
                     value={radius}
                     onChange={(e) => setRadius(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                    className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                   /></>
                 </div>
               )}
@@ -658,7 +660,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={topRadius}
                       onChange={(e) => setTopRadius(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -670,7 +672,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={bottomRadius}
                       onChange={(e) => setBottomRadius(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -682,7 +684,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                 </div>
@@ -698,7 +700,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={base}
                       onChange={(e) => setBase(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -711,7 +713,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -723,7 +725,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={length}
                       onChange={(e) => setLength(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                 </div>
@@ -740,7 +742,7 @@ export default function VolumeEstimator() {
                         type="number" inputMode="decimal"
                         value={topWidth}
                         onChange={(e) => setTopWidth(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                        className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                       /></>
                     </div>
                     <div>
@@ -752,7 +754,7 @@ export default function VolumeEstimator() {
                         type="number" inputMode="decimal"
                         value={bottomWidth}
                         onChange={(e) => setBottomWidth(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                        className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                       /></>
                     </div>
                   </div>
@@ -766,7 +768,7 @@ export default function VolumeEstimator() {
                         type="number" inputMode="decimal"
                         value={depth}
                         onChange={(e) => setDepth(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                        className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                       /></>
                     </div>
                     <div>
@@ -778,101 +780,101 @@ export default function VolumeEstimator() {
                         type="number" inputMode="decimal"
                         value={length}
                         onChange={(e) => setLength(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                        className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                       /></>
                     </div>
                   </div>
                 </div>
               )}
               {activeShape === "Commercial Tank" && (
-                <div className="grid grid-cols-1 gap-6 bg-slate-50 dark:bg-slate-800/50 p-4 border border-slate-200 dark:border-slate-700 rounded-[24px] overflow-hidden">
-                  <div className="flex bg-white dark:bg-slate-900 p-1 rounded-[16px] w-fit shadow-sm border border-slate-200 dark:border-slate-700">
-                    <button
+                <div className="grid grid-cols-1 gap-6 bg-slate-50 dark:bg-slate-800/50 p-4 border border-ui-borderSubtle dark:border-slate-700 rounded-2xl overflow-hidden">
+                  <div className="flex bg-surface-default dark:bg-slate-900 p-1 rounded-2xl w-fit shadow-sm border border-ui-borderSubtle dark:border-slate-700">
+                    <Button
                       onClick={() => setTankBaseShape("Rectangular")}
-                      className={`px-4 py-1.5 rounded-[12px] text-base font-medium transition-all ${tankBaseShape === "Rectangular" ? "bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700"}`}
+                      className={`px-4 py-1.5 rounded-2xl text-base font-medium transition-all ${tankBaseShape === "Rectangular" ? "bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400" : "text-txt-tertiary hover:text-txt-secondary"}`}
                     >
                       Rectangular Tank
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => setTankBaseShape("Cylindrical")}
-                      className={`px-4 py-1.5 rounded-[12px] text-base font-medium transition-all ${tankBaseShape === "Cylindrical" ? "bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400" : "text-slate-500 hover:text-slate-700"}`}
+                      className={`px-4 py-1.5 rounded-2xl text-base font-medium transition-all ${tankBaseShape === "Cylindrical" ? "bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400" : "text-txt-tertiary hover:text-txt-secondary"}`}
                     >
                       Cylindrical Tank
-                    </button>
+                    </Button>
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {tankBaseShape === "Rectangular" ? (
                       <>
                         <div>
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Length ({system === "Metric" ? "m" : "ft"})</label>
+                          <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Length ({system === "Metric" ? "m" : "ft"})</label>
                           <><label htmlFor="a11y-input-547" className="sr-only">Input</label>
-<input id="a11y-input-547" type="number" inputMode="decimal" value={length} onChange={(e) => setLength(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-547" type="number" inputMode="decimal" value={length} onChange={(e) => setLength(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                         </div>
                         <div>
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Width ({system === "Metric" ? "m" : "ft"})</label>
+                          <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Width ({system === "Metric" ? "m" : "ft"})</label>
                           <><label htmlFor="a11y-input-548" className="sr-only">Input</label>
-<input id="a11y-input-548" type="number" inputMode="decimal" value={width} onChange={(e) => setWidth(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-548" type="number" inputMode="decimal" value={width} onChange={(e) => setWidth(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                         </div>
                       </>
                     ) : (
                       <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Radius ({system === "Metric" ? "m" : "ft"})</label>
+                        <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Radius ({system === "Metric" ? "m" : "ft"})</label>
                         <><label htmlFor="a11y-input-549" className="sr-only">Input</label>
-<input id="a11y-input-549" type="number" inputMode="decimal" value={radius} onChange={(e) => setRadius(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-549" type="number" inputMode="decimal" value={radius} onChange={(e) => setRadius(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                       </div>
                     )}
                     <div>
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Main Height ({system === "Metric" ? "m" : "ft"})</label>
+                      <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Main Height ({system === "Metric" ? "m" : "ft"})</label>
                       <><label htmlFor="a11y-input-550" className="sr-only">Input</label>
-<input id="a11y-input-550" type="number" inputMode="decimal" value={height} onChange={(e) => setHeight(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-550" type="number" inputMode="decimal" value={height} onChange={(e) => setHeight(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-ui-borderSubtle dark:border-slate-700">
                     <div>
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Freeboard (%)</label>
+                      <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Freeboard (%)</label>
                       <><label htmlFor="a11y-input-551" className="sr-only">Input</label>
-<input id="a11y-input-551" type="number" inputMode="decimal" value={freeboardPercent} onChange={(e) => setFreeboardPercent(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-551" type="number" inputMode="decimal" value={freeboardPercent} onChange={(e) => setFreeboardPercent(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                     </div>
                     <div>
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Dead Storage Depth ({system === "Metric" ? "m" : "ft"})</label>
+                      <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Dead Storage Depth ({system === "Metric" ? "m" : "ft"})</label>
                       <><label htmlFor="a11y-input-552" className="sr-only">Input</label>
-<input id="a11y-input-552" type="number" inputMode="decimal" value={deadStorageDepth} onChange={(e) => setDeadStorageDepth(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-552" type="number" inputMode="decimal" value={deadStorageDepth} onChange={(e) => setDeadStorageDepth(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                     </div>
                   </div>
                   
-                  <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+                  <div className="pt-4 border-t border-ui-borderSubtle dark:border-slate-700">
                     <label className="flex items-center gap-2 text-base font-medium dark:text-slate-300 mb-4 cursor-pointer">
                       <><label htmlFor="a11y-input-553" className="sr-only">Input</label>
-<input id="a11y-input-553" type="checkbox" checked={hasSlopedBase} onChange={(e) => setHasSlopedBase(e.target.checked)} className="rounded text-indigo-500 focus:ring-indigo-500 bg-white" /></>
+<input id="a11y-input-553" type="checkbox" checked={hasSlopedBase} onChange={(e) => setHasSlopedBase(e.target.checked)} className="rounded text-indigo-500 focus:ring-indigo-500 bg-surface-default" /></>
                       Include Sloped / Hopper Base
                     </label>
                     {hasSlopedBase && (
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Hopper Depth ({system === "Metric" ? "m" : "ft"})</label>
+                          <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Hopper Depth ({system === "Metric" ? "m" : "ft"})</label>
                           <><label htmlFor="a11y-input-554" className="sr-only">Input</label>
-<input id="a11y-input-554" type="number" inputMode="decimal" value={slopedHeight} onChange={(e) => setSlopedHeight(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-554" type="number" inputMode="decimal" value={slopedHeight} onChange={(e) => setSlopedHeight(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                         </div>
                         {tankBaseShape === "Rectangular" ? (
                           <>
                             <div>
-                              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Outlet Length</label>
+                              <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Outlet Length</label>
                               <><label htmlFor="a11y-input-555" className="sr-only">Input</label>
-<input id="a11y-input-555" type="number" inputMode="decimal" value={outletLength} onChange={(e) => setOutletLength(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-555" type="number" inputMode="decimal" value={outletLength} onChange={(e) => setOutletLength(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                             </div>
                             <div>
-                              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Outlet Width</label>
+                              <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Outlet Width</label>
                               <><label htmlFor="a11y-input-556" className="sr-only">Input</label>
-<input id="a11y-input-556" type="number" inputMode="decimal" value={outletWidth} onChange={(e) => setOutletWidth(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-556" type="number" inputMode="decimal" value={outletWidth} onChange={(e) => setOutletWidth(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                             </div>
                           </>
                         ) : (
                           <div>
-                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Outlet Radius</label>
+                            <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Outlet Radius</label>
                             <><label htmlFor="a11y-input-557" className="sr-only">Input</label>
-<input id="a11y-input-557" type="number" inputMode="decimal" value={outletLength} onChange={(e) => setOutletLength(e.target.value)} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-[16px] mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
+<input id="a11y-input-557" type="number" inputMode="decimal" value={outletLength} onChange={(e) => setOutletLength(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                           </div>
                         )}
                       </div>
@@ -891,7 +893,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={length}
                       onChange={(e) => setLength(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -903,7 +905,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={width}
                       onChange={(e) => setWidth(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -915,13 +917,13 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                 </div>
               )}
               {activeShape === "Concentric Cylinder" && (
-                <div className="grid grid-cols-1 mt-2 mb-6 border border-slate-200 dark:border-slate-800 rounded-[24px] overflow-hidden bg-slate-50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-[24px] border border-slate-200 dark:dark:border-slate-700 shadow-sm text-slate-900 dark:text-white">
+                <div className="grid grid-cols-1 mt-2 mb-6 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-slate-700 shadow-sm text-txt-primary dark:text-white">
                   <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 responsive-tool-grid">
                     <div className="flex flex-col gap-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -934,7 +936,7 @@ export default function VolumeEstimator() {
                             type="number" inputMode="decimal"
                             value={outerDiameter}
                             onChange={(e) => setOuterDiameter(e.target.value)}
-                            className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-slate-500 overflow-hidden"
+                            className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-txt-tertiary overflow-hidden"
                           /></>
                         </div>
                         <div>
@@ -946,7 +948,7 @@ export default function VolumeEstimator() {
                             type="number" inputMode="decimal"
                             value={innerDiameter}
                             onChange={(e) => setInnerDiameter(e.target.value)}
-                            className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-slate-500 overflow-hidden"
+                            className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-txt-tertiary overflow-hidden"
                           /></>
                         </div>
                       </div>
@@ -960,7 +962,7 @@ export default function VolumeEstimator() {
                             type="number" inputMode="decimal"
                             value={length}
                             onChange={(e) => setLength(e.target.value)}
-                            className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-slate-500 overflow-hidden"
+                            className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-txt-tertiary overflow-hidden"
                           /></>
                         </div>
                         <div>
@@ -972,13 +974,13 @@ export default function VolumeEstimator() {
                             type="number" inputMode="decimal"
                             value={density}
                             onChange={(e) => setDensity(e.target.value)}
-                            className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-slate-500 overflow-hidden"
+                            className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-all placeholder:text-txt-tertiary overflow-hidden"
                           /></>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-[24px] border border-slate-200 dark:dark:border-slate-700 shadow-sm relative">
+                    <div className="flex items-center justify-center p-4 bg-surface-default dark:bg-slate-800 rounded-2xl border border-ui-borderSubtle dark:dark:border-slate-700 shadow-sm relative">
                       <div className="absolute top-2 left-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cross-Section Schematic</div>
                       <svg viewBox="0 0 200 200" className="w-[180px] h-[180px] opacity-90 drop-shadow-sm">
                         {/* Outer circle */}
@@ -1016,7 +1018,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={baseArea}
                       onChange={(e) => setBaseArea(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -1028,7 +1030,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={basePerimeter}
                       onChange={(e) => setBasePerimeter(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                   <div>
@@ -1040,7 +1042,7 @@ export default function VolumeEstimator() {
                       type="number" inputMode="decimal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-3 rounded-[24px] mt-1 font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-700 dark:text-slate-300 overflow-hidden"
+                      className="w-full bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/50 p-3 rounded-2xl mt-1 font-medium text-txt-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-txt-secondary dark:text-slate-300 overflow-hidden"
                     /></>
                   </div>
                 </div>

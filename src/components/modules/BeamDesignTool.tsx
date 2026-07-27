@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useMemo } from 'react';
 import { Layers, Activity, ShieldCheck, AlertTriangle, CheckCircle2, Sparkles } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
@@ -6,6 +7,7 @@ import { MaterialSummary } from '../ui/MaterialSummary';
 import { NumberInput } from '../ui/NumberInput';
 import { ResultCard } from '../ui/ResultCard';
 import { CodeTooltip } from "../ui/CodeTooltip";
+
 
 type SupportCondition = "simply-supported" | "continuous" | "cantilever";
 
@@ -208,15 +210,15 @@ export default function BeamDesignTool() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
-         <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+         <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
             <Layers className="text-rose-600" /> Beam Design (Limit State - IS 456)
          </h2>
          
          <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
             <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-slate-800 mb-4">Geometry & Loading</h3>
+                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Geometry & Loading</h3>
                   <div className="space-y-4">
                     <NumberInput label="Effective Span (L)" unit="m" value={span} onChange={setSpan} />
                     <NumberInput label="Working Load (w)" unit="kN/m" value={workingLoad} onChange={setWorkingLoad} />
@@ -224,22 +226,22 @@ export default function BeamDesignTool() {
                       <div className="flex-1">
                         <NumberInput label="Safety Factor (γf)" value={safetyFactor} onChange={setSafetyFactor} />
                       </div>
-                      <button onClick={handleAiSafetyFactor}
+                      <Button onClick={handleAiSafetyFactor}
                         className="h-11 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center transition-colors shadow-sm text-base font-semibold active:scale-95 hover:-translate-y-0.5"
                         title="AI-Suggested Safety Factor based on Project Settings"
                       >
                         <Sparkles className="w-4 h-4 mr-1.5" /> AI Suggest
-                      </button>
+                      </Button>
                     </div>
                     <NumberInput label="Width (b)" unit="mm" value={width} onChange={setWidth} />
                     <NumberInput label="Overall Depth (D)" unit="mm" value={depth} onChange={setDepth} />
                     
                     <div>
-                        <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Support Condition</label>
+                        <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">Support Condition</label>
                         <select 
                             value={supportCondition}
                             onChange={(e) => setSupportCondition(e.target.value as SupportCondition)}
-                            className="w-full h-11 bg-slate-50 border border-slate-200 rounded-[16px] px-4 text-sm font-medium focus:outline-none"
+                            className="w-full h-11 bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
                         >
                             {Object.entries(SUPPORT_CONDITIONS).map(([key, val]) => (
                                 <option key={key} value={key}>{val.label}</option>
@@ -250,7 +252,7 @@ export default function BeamDesignTool() {
                 </div>
 
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-slate-800 mb-4">Materials & Reinforcement</h3>
+                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Materials & Reinforcement</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Concrete (fck)" unit="MPa" value={fck} onChange={setFck} />
                     <NumberInput label={<span className="flex items-center gap-1">Steel (fy) <CodeTooltip standard="IS" code="1786:2008" description="High strength deformed steel bars and wires for concrete reinforcement." /></span>} unit="MPa" value={fy} onChange={setFy} />
@@ -288,8 +290,8 @@ export default function BeamDesignTool() {
                       <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-2xl flex items-start gap-3 overflow-hidden">
                         <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
                         <div>
-                          <p className="text-orange-900 mb-1 text-base font-normal text-slate-600 leading-relaxed">Doubly Reinforced Section</p>
-                          <p className="text-blue-700 text-base font-normal text-slate-600 leading-relaxed">Moment exceeds limiting moment capacity. Compression steel (Asc) required: <strong className="font-mono">{results.Asc.toFixed(0)} mm²</strong>.</p>
+                          <p className="text-orange-900 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Doubly Reinforced Section</p>
+                          <p className="text-blue-700 text-base font-normal text-txt-secondary leading-relaxed">Moment exceeds limiting moment capacity. Compression steel (Asc) required: <strong className="font-mono">{results.Asc.toFixed(0)} mm²</strong>.</p>
                         </div>
                       </div>
                     )}
@@ -297,7 +299,7 @@ export default function BeamDesignTool() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                     {/* Deflection Check */}
-                    <div className={`p-6 rounded-3xl border flex flex-col gap-4 ${results.deflectionSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
+                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.deflectionSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
                        <div className="flex items-center gap-2">
                           {results.deflectionSafe ? <CheckCircle2 className="text-teal-600 w-5 h-5" /> : <AlertTriangle className="text-rose-600 w-5 h-5" />}
                           <h3 className={`font-bold ${results.deflectionSafe ? "text-teal-900" : "text-rose-900"}`}>Deflection Control</h3>
@@ -318,27 +320,27 @@ export default function BeamDesignTool() {
                     </div>
 
                     {/* Shear & Dev Length */}
-                    <div className={`p-6 rounded-3xl border flex flex-col gap-4 ${results.shearSafe ? "bg-slate-50 border-slate-200" : "bg-rose-50 border-rose-200"}`}>
+                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.shearSafe ? "bg-slate-50 border-ui-borderSubtle" : "bg-rose-50 border-rose-200"}`}>
                        <div className="flex items-center gap-2">
-                          {results.shearSafe ? <ShieldCheck className="text-slate-600 w-5 h-5" /> : <AlertTriangle className="text-rose-600 w-5 h-5" />}
-                          <h3 className={`font-bold ${results.shearSafe ? "text-slate-900" : "text-rose-900"}`}>Shear & Anchorage</h3>
+                          {results.shearSafe ? <ShieldCheck className="text-txt-secondary w-5 h-5" /> : <AlertTriangle className="text-rose-600 w-5 h-5" />}
+                          <h3 className={`font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-900"}`}>Shear & Anchorage</h3>
                        </div>
                        <div className="space-y-3 flex-1">
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.shearSafe ? "text-slate-600" : "text-rose-700"}>Nominal Shear (τv)</span>
-                            <span className={`font-mono font-bold ${results.shearSafe ? "text-slate-900" : "text-rose-900"}`}>{results.tau_v.toFixed(2)} MPa</span>
+                            <span className={results.shearSafe ? "text-txt-secondary" : "text-rose-700"}>Nominal Shear (τv)</span>
+                            <span className={`font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-900"}`}>{results.tau_v.toFixed(2)} MPa</span>
                           </div>
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.shearSafe ? "text-slate-600" : "text-rose-700"}>Concrete Capacity (τc)</span>
-                            <span className={`font-mono font-bold ${results.shearSafe ? "text-slate-900" : "text-rose-900"}`}>{results.tau_c.toFixed(2)} MPa</span>
+                            <span className={results.shearSafe ? "text-txt-secondary" : "text-rose-700"}>Concrete Capacity (τc)</span>
+                            <span className={`font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-900"}`}>{results.tau_c.toFixed(2)} MPa</span>
                           </div>
-                          <div className="flex justify-between items-center text-sm pt-2 border-t border-slate-200">
-                            <span className={results.shearSafe ? "text-slate-800 font-medium" : "text-rose-800 font-medium"}>Stirrup Spacing</span>
-                            <span className={`text-sm font-mono font-bold px-2 py-1 rounded bg-white border ${results.shearSafe ? "border-slate-200 text-slate-800" : "border-rose-200 text-rose-800"}`}>{results.providedSvStr}</span>
+                          <div className="flex justify-between items-center text-sm pt-2 border-t border-ui-borderSubtle">
+                            <span className={results.shearSafe ? "text-txt-primary font-medium" : "text-rose-800 font-medium"}>Stirrup Spacing</span>
+                            <span className={`text-sm font-mono font-bold px-2 py-1 rounded bg-surface-default border ${results.shearSafe ? "border-ui-borderSubtle text-txt-primary" : "border-rose-200 text-rose-800"}`}>{results.providedSvStr}</span>
                           </div>
-                           <div className="flex justify-between items-center text-sm pt-2 border-t border-slate-200 mt-2">
-                            <span className={results.shearSafe ? "text-slate-800 font-medium" : "text-rose-800 font-medium"}>Dev. Length (Ld)</span>
-                            <span className={`text-sm font-mono font-bold ${results.shearSafe ? "text-slate-800" : "text-rose-800"}`}>{Math.ceil(results.Ld)} mm</span>
+                           <div className="flex justify-between items-center text-sm pt-2 border-t border-ui-borderSubtle mt-2">
+                            <span className={results.shearSafe ? "text-txt-primary font-medium" : "text-rose-800 font-medium"}>Dev. Length (Ld)</span>
+                            <span className={`text-sm font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-800"}`}>{Math.ceil(results.Ld)} mm</span>
                           </div>
                        </div>
                     </div>

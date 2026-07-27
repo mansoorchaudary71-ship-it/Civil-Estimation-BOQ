@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React, { useState, useEffect } from 'react';
 import { Smartphone, Download, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
 
 export default function AppDownloadBanner() {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,23 +47,23 @@ export default function AppDownloadBanner() {
                 Get the offline Android APK or install the web app for field calculations on the go.
               </p>
               <div className="flex gap-3 mt-3">
-                <button 
+                <Button 
                   onClick={handleInstall}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500 hover:bg-indigo-400 text-white text-xs font-bold rounded flex-1 justify-center transition-colors"
                 >
                   <Download size={14} /> Install Now
-                </button>
-                <button 
+                </Button>
+                <Button 
                   onClick={handleDismiss}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded flex-1 justify-center transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-default/10 hover:bg-surface-default/20 text-white text-xs font-bold rounded flex-1 justify-center transition-colors"
                 >
                   Not Now
-                </button>
+                </Button>
               </div>
             </div>
-            <button onClick={handleDismiss} className="text-slate-400 hover:text-white shrink-0 p-1">
+            <Button onClick={handleDismiss} className="text-slate-400 hover:text-white shrink-0 p-1">
               <X size={16} />
-            </button>
+            </Button>
           </div>
         </motion.div>
       )}

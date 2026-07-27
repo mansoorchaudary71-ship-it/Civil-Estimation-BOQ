@@ -1,7 +1,9 @@
+import { Button } from './/Button';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Bookmark, CircleCheck, Compass, Clock, MapPin } from 'lucide-react';
 import { cn } from "../../lib/utils";
+
 
 // Types
 export type PaginationStyle = 'classic' | 'counter' | 'dots';
@@ -151,25 +153,25 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
         </div>
 
         {/* Pagination Style Toggle */}
-        <div className="flex items-center bg-slate-100/80 p-1 rounded-full backdrop-blur-md border border-slate-200/50 shadow-inner">
-          <button
+        <div className="flex items-center bg-slate-100/80 p-1 rounded-full backdrop-blur-md border border-ui-borderSubtle/50 shadow-inner">
+          <Button
             onClick={() => setPaginationStyle('classic')}
-            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'classic' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'classic' ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary")}
           >
             Classic
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setPaginationStyle('counter')}
-            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'counter' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'counter' ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary")}
           >
             Counter
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setPaginationStyle('dots')}
-            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'dots' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'dots' ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary")}
           >
             Dots
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -187,7 +189,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
             <motion.div
               key={project.id}
               className={cn(
-                "carousel-card shrink-0 snap-center w-[300px] md:w-[350px] flex flex-col rounded-[2.5rem] bg-white border border-slate-100 shadow-xl overflow-hidden transition-all duration-500 ease-out",
+                "carousel-card shrink-0 snap-center w-[300px] md:w-[350px] flex flex-col rounded-[2.5rem] bg-surface-default border border-slate-100 shadow-xl overflow-hidden transition-all duration-500 ease-out",
                 isActive ? "opacity-100 scale-100 shadow-2xl" : "opacity-60 scale-95 hover:opacity-80"
               )}
             >
@@ -211,9 +213,9 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                   </span>
                 </div>
                 <div className="absolute top-4 right-4 z-20">
-                  <button aria-label="Bookmark" className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors">
+                  <Button aria-label="Bookmark" className="w-8 h-8 rounded-full bg-surface-default/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-surface-default hover:text-txt-primary transition-colors">
                     <Bookmark className="w-4 h-4 fill-current" />
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -225,10 +227,10 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                     {project.category}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2 leading-tight">
+                <h3 className="text-xl font-bold text-txt-primary mb-2 leading-tight">
                   {project.title}
                 </h3>
-                <p className="text-sm font-medium text-slate-500 mb-6">
+                <p className="text-sm font-medium text-txt-tertiary mb-6">
                   {project.metrics}
                 </p>
 
@@ -237,7 +239,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                   <div className="flex items-center gap-3">
                     <img src={project.inspectorAvatar} alt="Inspector" className="w-8 h-8 rounded-full shadow-sm ring-2 ring-white" />
                     <div className="flex flex-col">
-                      <span className="text-xs font-bold text-slate-900">{project.inspectorName}</span>
+                      <span className="text-xs font-bold text-txt-primary">{project.inspectorName}</span>
                       <span className="text-[10px] font-medium text-slate-400">Inspector</span>
                     </div>
                   </div>
@@ -256,13 +258,13 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
       <div className="flex flex-col items-center mt-2 relative w-full h-24">
         <div className="flex items-center justify-center gap-6 h-12">
           {/* We only show Arrows next to Counter and Classic, or keep them anyway */}
-          <button aria-label="ChevronLeft" 
+          <Button aria-label="ChevronLeft" 
             onClick={handlePrev}
             disabled={activeIndex === 0}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-30 transition-all z-20"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-txt-primary hover:bg-slate-100 disabled:opacity-30 transition-all z-20"
           >
             <ChevronLeft className="w-5 h-5" />
-          </button>
+          </Button>
 
           <div className="relative flex items-center justify-center min-w-[120px]">
             <AnimatePresence mode="wait">
@@ -272,7 +274,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="flex items-center gap-2 text-sm font-bold text-slate-700"
+                  className="flex items-center gap-2 text-sm font-bold text-txt-secondary"
                 >
                   <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg">
                     {activeIndex + 1}
@@ -308,7 +310,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                   className="flex items-center gap-2"
                 >
                   {PROJECT_DATA.map((_, idx) => (
-                    <button
+                    <Button
                       key={idx}
                       onClick={() => setActiveIndex(idx)}
                       className={cn(
@@ -322,13 +324,13 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
             </AnimatePresence>
           </div>
 
-          <button aria-label="ChevronRight" 
+          <Button aria-label="ChevronRight" 
             onClick={handleNext}
             disabled={activeIndex === PROJECT_DATA.length - 1}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-30 transition-all z-20"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-txt-primary hover:bg-slate-100 disabled:opacity-30 transition-all z-20"
           >
             <ChevronRight className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         <p className="mt-4 text-[11px] font-semibold text-slate-400 tracking-wider">

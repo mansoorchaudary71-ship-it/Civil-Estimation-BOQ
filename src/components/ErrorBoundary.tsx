@@ -1,5 +1,7 @@
+import { Button } from './ui/Button';
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, Home, RefreshCw } from "lucide-react";
+
 
 interface Props {
   children?: ReactNode;
@@ -35,14 +37,14 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="flex-1 flex flex-col items-center justify-center min-h-[50vh] p-8 text-center bg-slate-50 dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm mx-auto max-w-2xl mt-12 animate-in fade-in zoom-in duration-300">
+        <div className="flex-1 flex flex-col items-center justify-center min-h-[50vh] p-8 text-center bg-slate-50 dark:bg-slate-900 rounded-2xl border border-ui-borderSubtle dark:border-slate-800 shadow-sm mx-auto max-w-2xl mt-12 animate-in fade-in zoom-in duration-300">
           <div className="w-20 h-20 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-6 shadow-inner">
             <AlertTriangle className="w-10 h-10" strokeWidth={2} />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3 tracking-tight">
+          <h2 className="text-2xl font-bold text-txt-primary dark:text-slate-100 mb-3 tracking-tight">
             Component Rendering Error
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-md leading-relaxed">
+          <p className="text-txt-secondary dark:text-slate-400 mb-8 max-w-md leading-relaxed">
             We encountered an unexpected issue while loading this view. The application has safely recovered to prevent a complete crash.
           </p>
           
@@ -56,7 +58,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
           <div className="flex items-center gap-4">
             {this.props.onNavigate && (
-              <button
+              <Button
                 onClick={() => {
                   this.setState({ hasError: false, error: null, errorInfo: null });
                   this.props.onNavigate?.(this.props.fallbackModuleId || "home");
@@ -65,17 +67,17 @@ export class ErrorBoundary extends Component<Props, State> {
               >
                 <Home className="w-5 h-5" />
                 Return Home
-              </button>
+              </Button>
             )}
-            <button
+            <Button
               onClick={() => {
                 this.setState({ hasError: false, error: null, errorInfo: null });
               }}
-              className="flex items-center gap-2 px-6 py-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl font-semibold transition-colors shadow-sm hover:shadow"
+              className="flex items-center gap-2 px-6 py-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-txt-primary dark:text-slate-200 rounded-xl font-semibold transition-colors shadow-sm hover:shadow"
             >
               <RefreshCw className="w-5 h-5" />
               Try Again
-            </button>
+            </Button>
           </div>
         </div>
       );

@@ -987,11 +987,11 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
   }
 
   .card p, [class*="card"] p {
-    color: #64748b; /* slate-500 */
+    color: var(--color-text-secondary); /* slate-500 */
     line-height: 1.5;
   }
   .dark .card p, .dark [class*="card"] p {
-    color: #94a3b8; /* slate-400 */
+    color: var(--color-text-tertiary); /* slate-400 */
   }
   
   /* Footer Typography */
@@ -1000,26 +1000,26 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     letter-spacing: 0.02em !important;
     text-transform: uppercase;
     font-size: 0.875rem !important; /* text-sm */
-    color: #0f172a; /* slate-900 */
+    color: var(--color-text-primary); /* slate-900 */
     margin-bottom: 1rem;
   }
   .dark footer h3, .dark footer h4, .dark [class*="footer"] h3, .dark [class*="footer"] h4 {
-    color: #f8fafc; /* slate-50 */
+    color: var(--color-text-inverse); /* slate-50 */
   }
 
   footer a, [class*="footer"] a {
-    color: #64748b; /* slate-500 */
+    color: var(--color-text-secondary); /* slate-500 */
     font-size: 0.875rem !important; /* text-sm */
     transition: color 0.2s ease;
   }
   .dark footer a, .dark [class*="footer"] a {
-    color: #94a3b8; /* slate-400 */
+    color: var(--color-text-tertiary); /* slate-400 */
   }
   footer a:hover, [class*="footer"] a:hover {
-    color: #0f172a; /* slate-900 */
+    color: var(--color-text-primary); /* slate-900 */
   }
   .dark footer a:hover, .dark [class*="footer"] a:hover {
-    color: #f8fafc; /* slate-50 */
+    color: var(--color-text-inverse); /* slate-50 */
   }
 
   /* Navigation Typography */
@@ -1034,11 +1034,11 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
 
   /* Navigation Hover & Active */
   nav a:hover, [class*="nav"] a:hover, header a:hover {
-    color: #0f172a; /* slate-900 */
+    color: var(--color-text-primary); /* slate-900 */
     opacity: 1 !important;
   }
   .dark nav a:hover, .dark [class*="nav"] a:hover, .dark header a:hover {
-    color: #f8fafc; /* slate-50 */
+    color: var(--color-text-inverse); /* slate-50 */
   }
   
   /* Inputs */
@@ -1046,3 +1046,12 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Focus ring */
     outline: none;
   }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

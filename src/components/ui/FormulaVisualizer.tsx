@@ -66,13 +66,13 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
   }, [type, sliderValue]);
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 mt-4 overflow-hidden">
+    <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-5 mt-4 overflow-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
         <div>
-          <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+          <h4 className="text-sm font-semibold text-txt-primary dark:text-slate-200 uppercase tracking-wider">
             Interactive Relationship
           </h4>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-txt-tertiary mt-1">
             Visualizing {type.toLowerCase()} growth pattern. Use slider to apply
             multiplier.
           </p>

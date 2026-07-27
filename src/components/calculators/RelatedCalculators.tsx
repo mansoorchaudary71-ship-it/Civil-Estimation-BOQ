@@ -112,16 +112,16 @@ export function RelatedCalculators({ category, currentSlug }: RelatedCalculators
   });
 
   return (
-    <section className="mt-16 bg-[#f8fafc] rounded-[24px] p-8 sm:p-10 border border-slate-200 shadow-sm overflow-hidden">
+    <section className="mt-16 bg-[#f8fafc] rounded-2xl p-8 sm:p-10 border border-ui-borderSubtle shadow-sm overflow-hidden">
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">Silo Link Grid: Continue Exploring</h2>
-        <p className="mt-2 text-base font-normal text-slate-600 leading-relaxed">Discover sequential tools, categorical hubs, and related structural estimators.</p>
+        <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">Silo Link Grid: Continue Exploring</h2>
+        <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">Discover sequential tools, categorical hubs, and related structural estimators.</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {/* Render sequential links (exact 4) */}
         {sequentialLinks.map((link, idx) => (
-          <a key={`seq-${idx}`} href={link.url} className="w-full group p-5 bg-white rounded-[24px] border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 hover:shadow-md transition-all flex flex-col overflow-hidden">
+          <a key={`seq-${idx}`} href={link.url} className="w-full group p-5 bg-surface-default rounded-2xl border border-ui-borderSubtle hover:border-indigo-400 hover:bg-indigo-50 hover:shadow-md transition-all flex flex-col overflow-hidden">
             <span className="text-base font-medium text-indigo-500 uppercase tracking-wider mb-2">{link.label}</span>
             <span className="text-sm sm:text-base font-medium group-hover:text-indigo-700 capitalize leading-snug">{link.title}</span>
           </a>
@@ -129,7 +129,7 @@ export function RelatedCalculators({ category, currentSlug }: RelatedCalculators
         
         {/* Render Cross Pollination links (exact 2) */}
         {crossLinks.map((link, idx) => (
-          <a key={`cross-${idx}`} href={link.url} className="w-full group p-5 bg-white rounded-[24px] border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 hover:shadow-md transition-all flex flex-col overflow-hidden">
+          <a key={`cross-${idx}`} href={link.url} className="w-full group p-5 bg-surface-default rounded-2xl border border-ui-borderSubtle hover:border-emerald-400 hover:bg-emerald-50 hover:shadow-md transition-all flex flex-col overflow-hidden">
             <span className="text-base font-medium text-emerald-500 uppercase tracking-wider mb-2">{link.label}</span>
             <span className="text-sm sm:text-base font-medium group-hover:text-emerald-700 capitalize leading-snug">{link.title}</span>
           </a>
@@ -137,7 +137,7 @@ export function RelatedCalculators({ category, currentSlug }: RelatedCalculators
 
         {/* Render Category Hubs (exact 2) */}
         {categoryHubLinks.map((link, idx) => (
-          <a key={`hub-${idx}`} href={link.url} className="group px-4 py-3 bg-indigo-600 rounded-[24px] border border-indigo-500 hover:bg-indigo-700 shadow-lg shadow-indigo-600/30 transition-all flex flex-col justify-center items-start overflow-hidden">
+          <a key={`hub-${idx}`} href={link.url} className="group px-4 py-3 bg-indigo-600 rounded-2xl border border-indigo-500 hover:bg-indigo-700 shadow-lg shadow-indigo-600/30 transition-all flex flex-col justify-center items-start overflow-hidden">
             <span className="text-base font-medium text-white/80 uppercase tracking-wider mb-2">{link.label}</span>
             <span className="text-base font-medium text-white capitalize leading-snug">{link.title}</span>
           </a>

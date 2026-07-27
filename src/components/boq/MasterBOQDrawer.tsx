@@ -1,9 +1,11 @@
+import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { useBOQ } from '../../context/BOQContext';
 import { useSettings, useGlobalSettings } from '../../context/SettingsContext';
 import { X, FileText, Download, Trash2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EmptyStateIllustration from '../ui/EmptyStateIllustration';
+
 
 export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,23 +64,23 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            className="w-full max-w-lg bg-white h-full shadow-2xl relative z-10 flex flex-col"
+            className="w-full max-w-lg bg-surface-default h-full shadow-2xl relative z-10 flex flex-col"
           >
             <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-              <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-txt-primary flex items-center gap-2">
                 <FileText className="text-indigo-600" /> Master BOQ
               </h2>
-              <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 bg-white rounded-full shadow-sm">
+              <Button onClick={onClose} className="p-2 text-slate-400 hover:text-txt-secondary bg-surface-default rounded-full shadow-sm">
                 <X size={20} />
-              </button>
+              </Button>
             </div>
-        <div className="px-6 py-3 border-b border-slate-100 bg-white flex flex-col gap-3">
+        <div className="px-6 py-3 border-b border-slate-100 bg-surface-default flex flex-col gap-3">
       <div className="flex justify-between items-center">
-        <span className="text-sm font-semibold text-slate-600">Regional Rate Sync (Live):</span>
+        <span className="text-sm font-semibold text-txt-secondary">Regional Rate Sync (Live):</span>
         <select 
           value={currentCurrency} 
           onChange={(e) => setCurrentCurrency(e.target.value as any)}
-          className="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-slate-50 font-bold text-indigo-700 outline-none"
+          className="text-sm border border-ui-borderSubtle rounded-lg px-2 py-1 bg-slate-50 font-bold text-indigo-700 outline-none"
         >
           {currencies.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
@@ -92,7 +94,7 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
           placeholder="Search by description or unit..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all"
+          className="block w-full pl-10 pr-3 py-2 border border-ui-borderSubtle rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-surface-default focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all"
         />
       </div>
     </div>
@@ -108,26 +110,26 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
               ) : (
                 <div className="space-y-4">
                   {filteredItems.length === 0 && searchQuery ? (
-                    <div className="text-center py-8 text-slate-500">No matching items found.</div>
+                    <div className="text-center py-8 text-txt-tertiary">No matching items found.</div>
                   ) : filteredItems.map((item) => (
                     <div key={item.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-slate-100 transition-colors shadow-sm hover:shadow" onClick={() => setEditingItem({...item})}>
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="font-bold text-slate-900">{item.name}</h4>
+                          <h4 className="font-bold text-txt-primary">{item.name}</h4>
                           <p className="text-xs font-semibold text-indigo-600 uppercase">{item.category}</p>
                         </div>
-                        <button onClick={(e) => { e.stopPropagation(); removeItem(item.id); }} className="text-red-400 hover:text-red-600 p-1 bg-white rounded-full shadow-sm">
+                        <Button onClick={(e) => { e.stopPropagation(); removeItem(item.id); }} className="text-red-400 hover:text-red-600 p-1 bg-surface-default rounded-full shadow-sm">
                           <Trash2 size={16} />
-                        </button>
+                        </Button>
                       </div>
                       <div className="flex items-center gap-4 text-sm mt-4">
                         <div className="flex-1">
                           <span className="text-xs font-bold text-slate-400 uppercase">Qty</span>
-                          <p className="font-semibold text-slate-800 mt-1">{item.quantity} {item.unit || ''}</p>
+                          <p className="font-semibold text-txt-primary mt-1">{item.quantity} {item.unit || ''}</p>
                         </div>
                         <div className="flex-1">
                           <span className="text-xs font-bold text-slate-400 uppercase">Rate</span>
-                          <p className="font-semibold text-slate-800 mt-1">{formatCurrency(item.rate)}</p>
+                          <p className="font-semibold text-txt-primary mt-1">{formatCurrency(item.rate)}</p>
                         </div>
                         <div className="flex-1 text-right">
                           <span className="text-xs font-bold text-slate-400 uppercase">Amount</span>
@@ -141,10 +143,10 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
             </div>
 
             <div className="p-6 border-t border-slate-100 bg-slate-50">
-              <div className="space-y-3 text-sm font-medium text-slate-600 mb-6">
+              <div className="space-y-3 text-sm font-medium text-txt-secondary mb-6">
                 <div className="flex justify-between items-center">
                   <span>Subtotal</span>
-                  <span className="font-bold text-slate-900">{formatCurrency(subtotal)}</span>
+                  <span className="font-bold text-txt-primary">{formatCurrency(subtotal)}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="flex items-center gap-2">Contingency <input type="number" value={contingency} onChange={(e) => setContingency(parseFloat(e.target.value) || 0)} className="w-16 px-2 py-1 border rounded" />%</span>
@@ -158,37 +160,37 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
                   <span className="flex items-center gap-2">Tax <input type="number" value={tax} onChange={(e) => setTax(parseFloat(e.target.value) || 0)} className="w-16 px-2 py-1 border rounded" />%</span>
                   <span>{formatCurrency(taxAmount)}</span>
                 </div>
-                <div className="flex justify-between items-center pt-4 border-t border-slate-200">
-                  <span className="text-lg font-bold text-slate-900">Grand Total</span>
+                <div className="flex justify-between items-center pt-4 border-t border-ui-borderSubtle">
+                  <span className="text-lg font-bold text-txt-primary">Grand Total</span>
                   <span className="text-xl font-black text-indigo-600">{formatCurrency(grandTotal)}</span>
                 </div>
               </div>
 
               <div className="flex gap-3">
-                <button
-                  className="flex-1 bg-white border border-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl hover:bg-slate-50 flex justify-center items-center gap-2 shadow-sm"
+                <Button
+                  className="flex-1 bg-surface-default border border-ui-borderSubtle text-txt-secondary font-bold py-3 px-4 rounded-xl hover:bg-slate-50 flex justify-center items-center gap-2 shadow-sm"
                   onClick={exportPDF}
                 >
                   <Download size={18} /> PDF
-                </button>
-                <button
+                </Button>
+                <Button
                   className="flex-1 bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 flex justify-center items-center gap-2 shadow-sm shadow-indigo-200"
                   onClick={exportCSV}
                 >
                   <Download size={18} /> CSV
-                </button>
+                </Button>
 
-    <button
+    <Button
       className="flex-1 bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-emerald-700 flex justify-center items-center gap-2 shadow-sm shadow-emerald-200"
       onClick={exportCSV}
     >
       <Download size={18} /> Excel
-    </button>
+    </Button>
   
               </div>
-              <button onClick={clearBOQ} className="w-full mt-3 text-red-500 font-semibold py-2 hover:bg-red-50 rounded-lg">
+              <Button onClick={clearBOQ} className="w-full mt-3 text-red-500 font-semibold py-2 hover:bg-red-50 rounded-lg">
                 Clear All
-              </button>
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -207,45 +209,45 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-sm relative z-10 overflow-hidden flex flex-col"
+            className="bg-surface-default rounded-2xl shadow-2xl w-full max-w-sm relative z-10 overflow-hidden flex flex-col"
           >
             <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-              <h3 className="font-bold text-lg text-slate-900">Edit BOQ Item</h3>
-              <button onClick={() => setEditingItem(null)} className="p-2 text-slate-400 hover:text-slate-600 bg-white rounded-full shadow-sm">
+              <h3 className="font-bold text-lg text-txt-primary">Edit BOQ Item</h3>
+              <Button onClick={() => setEditingItem(null)} className="p-2 text-slate-400 hover:text-txt-secondary bg-surface-default rounded-full shadow-sm">
                 <X size={20} />
-              </button>
+              </Button>
             </div>
             <div className="p-5 space-y-5">
               <div>
-                <h4 className="font-bold text-slate-900 text-lg">{editingItem.name}</h4>
+                <h4 className="font-bold text-txt-primary text-lg">{editingItem.name}</h4>
                 <p className="text-xs font-semibold text-indigo-600 uppercase mt-1">{editingItem.category}</p>
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Quantity {editingItem.unit ? `(${editingItem.unit})` : ''}</label>
+                  <label className="block text-sm font-bold text-txt-secondary mb-1.5">Quantity {editingItem.unit ? `(${editingItem.unit})` : ''}</label>
                   <input
                     type="number"
                     value={editingItem.quantity}
                     onChange={(e) => setEditingItem({ ...editingItem, quantity: parseFloat(e.target.value) || 0, amount: (parseFloat(e.target.value) || 0) * editingItem.rate })}
-                    className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow text-slate-900"
+                    className="w-full border border-ui-borderSubtle rounded-xl px-4 py-3 bg-slate-50 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow text-txt-primary"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Unit Rate</label>
+                  <label className="block text-sm font-bold text-txt-secondary mb-1.5">Unit Rate</label>
                   <input
                     type="number"
                     value={editingItem.rate}
                     onChange={(e) => setEditingItem({ ...editingItem, rate: parseFloat(e.target.value) || 0, amount: editingItem.quantity * (parseFloat(e.target.value) || 0) })}
-                    className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow text-slate-900"
+                    className="w-full border border-ui-borderSubtle rounded-xl px-4 py-3 bg-slate-50 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow text-txt-primary"
                   />
                 </div>
               </div>
             </div>
             <div className="p-5 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
-              <button onClick={() => setEditingItem(null)} className="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors">
+              <Button onClick={() => setEditingItem(null)} className="px-5 py-2.5 rounded-xl font-bold text-txt-secondary bg-surface-default border border-ui-borderSubtle hover:bg-slate-50 transition-colors">
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   updateItem(editingItem.id, { quantity: editingItem.quantity, rate: editingItem.rate });
                   setEditingItem(null);
@@ -253,7 +255,7 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
                 className="px-5 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition-colors"
               >
                 Save
-              </button>
+              </Button>
             </div>
           </motion.div>
         </div>

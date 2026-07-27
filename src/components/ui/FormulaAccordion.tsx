@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Calculator } from 'lucide-react';
+
 
 export interface FormulaStep {
   id?: string | number;
@@ -31,8 +33,8 @@ export function FormulaAccordion({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-6">
-      <button
+    <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden mt-6">
+      <Button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between p-4 sm:p-5 bg-slate-50 hover:bg-slate-100 transition-colors text-left focus:outline-none"
       >
@@ -40,16 +42,16 @@ export function FormulaAccordion({
           <div className="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
             <Calculator size={20} />
           </div>
-          <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
+          <h3 className="text-lg font-semibold text-txt-primary">{title}</h3>
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="text-slate-500"
+          className="text-txt-tertiary"
         >
           <ChevronDown size={24} />
         </motion.div>
-      </button>
+      </Button>
 
       <AnimatePresence initial={false}>
         {isExpanded && (
@@ -59,21 +61,21 @@ export function FormulaAccordion({
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <div className="p-4 sm:p-6 border-t border-slate-200 space-y-6">
+            <div className="p-4 sm:p-6 border-t border-ui-borderSubtle space-y-6">
               {steps.map((step, index) => (
                 <div key={step.id || index} className="space-y-3">
                   {step.label && (
-                    <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
+                    <h4 className="text-sm font-bold text-txt-secondary uppercase tracking-wider">
                       {step.label}
                     </h4>
                   )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Theoretical Formula */}
                     <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 relative">
-                      <span className="absolute top-0 right-0 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
+                      <span className="absolute top-0 right-0 bg-slate-200 text-txt-secondary text-[10px] font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
                         Theoretical Formula
                       </span>
-                      <div className="mt-2 font-mono text-sm text-slate-700 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                      <div className="mt-2 font-mono text-sm text-txt-secondary overflow-x-auto whitespace-pre-wrap leading-relaxed">
                         {renderMath(step.theoretical)}
                       </div>
                     </div>

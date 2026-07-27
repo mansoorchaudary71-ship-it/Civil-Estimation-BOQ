@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+
 
 export interface TourStep {
   targetSelector: string;
@@ -158,37 +160,37 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           style={popupStyle}
-          className="w-full max-w-[300px] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden font-sans"
+          className="w-full max-w-[300px] bg-surface-default rounded-2xl shadow-2xl border border-ui-borderSubtle overflow-hidden font-sans"
         >
           <div className="p-5 relative">
-            <button 
+            <Button 
               onClick={handleClose} 
-              className="absolute top-3 right-3 text-slate-400 hover:text-slate-600"
+              className="absolute top-3 right-3 text-slate-400 hover:text-txt-secondary"
             >
               <X className="w-4 h-4" />
-            </button>
+            </Button>
             <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-2">
               Guided Tour • Step {currentStep + 1} of {steps.length}
             </div>
-            <h4 className="text-lg font-bold text-slate-900 mb-1">{steps[currentStep].title}</h4>
-            <p className="text-sm text-slate-500">{steps[currentStep].content}</p>
+            <h4 className="text-lg font-bold text-txt-primary mb-1">{steps[currentStep].title}</h4>
+            <p className="text-sm text-txt-tertiary">{steps[currentStep].content}</p>
           </div>
           <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-            <button
+            <Button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="text-slate-400 disabled:opacity-0 hover:text-slate-700 flex items-center text-sm font-medium transition-colors outline-none"
+              className="text-slate-400 disabled:opacity-0 hover:text-txt-secondary flex items-center text-sm font-medium transition-colors outline-none"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
               Back
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleNext}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition-colors shadow-sm outline-none"
             >
               {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
               {currentStep < steps.length - 1 && <ChevronRight className="w-4 h-4 ml-1" />}
-            </button>
+            </Button>
           </div>
         </motion.div>
       </AnimatePresence>

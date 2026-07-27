@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React from 'react';
 import { Sun, Moon, Eye, Settings } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
+
 
 export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
   const { settings, updateSettings } = useSettings();
@@ -32,7 +34,7 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
 
   if (isMobile) {
     return (
-      <button
+      <Button
         onClick={toggleTheme}
         className="flex items-center justify-between text-left text-[18px] font-bold text-[#111111] dark:text-white group"
       >
@@ -41,25 +43,25 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
           {getThemeLabel()}
         </div>
         <div className="w-10 h-6 rounded-full bg-slate-200 dark:bg-slate-700 relative transition-colors duration-300">
-           <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all duration-300 ${isDarkMode || isHighContrast ? 'left-5' : 'left-1'}`}></div>
+           <div className={`absolute top-1 w-4 h-4 rounded-full bg-surface-default transition-all duration-300 ${isDarkMode || isHighContrast ? 'left-5' : 'left-1'}`}></div>
         </div>
-      </button>
+      </Button>
     );
   }
 
   return (
-    <button
+    <Button
       onClick={toggleTheme}
       className={`w-10 h-10 rounded-full shadow-sm flex items-center justify-center transition-all duration-300 ${
         isHighContrast
           ? 'bg-black border border-yellow-500 text-yellow-500 hover:bg-gray-900 hover:shadow-md hover:-translate-y-0.5'
           : isDarkMode 
           ? 'bg-slate-800 border border-slate-700 text-amber-400 hover:bg-slate-700 hover:shadow-md hover:-translate-y-0.5' 
-          : 'bg-white border border-slate-200 text-amber-500 hover:bg-slate-50 hover:shadow-md hover:-translate-y-0.5'
+          : 'bg-surface-default border border-ui-borderSubtle text-amber-500 hover:bg-slate-50 hover:shadow-md hover:-translate-y-0.5'
       }`}
       title="Toggle Theme"
     >
       {getThemeIcon()}
-    </button>
+    </Button>
   );
 }

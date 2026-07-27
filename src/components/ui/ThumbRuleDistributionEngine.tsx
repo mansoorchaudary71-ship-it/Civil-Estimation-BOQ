@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Cell } from 'recharts';
 import { PieChart, Pie, Cell as PieCell } from 'recharts';
+
 
 interface ThumbRuleDistributionEngineProps {
   totalCost: number;
@@ -32,27 +34,27 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm mt-8">
-      <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
-        <button
+    <div className="bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-xl overflow-hidden shadow-sm mt-8">
+      <div className="flex border-b border-ui-borderSubtle dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+        <Button
           onClick={() => setActiveTab('cashflow')}
-          className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeTab === 'cashflow' ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
+          className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeTab === 'cashflow' ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400' : 'text-txt-secondary dark:text-slate-400 hover:text-txt-primary dark:hover:text-slate-200'}`}
         >
           6-Month Cashflow Timeline
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveTab('material')}
-          className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeTab === 'material' ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
+          className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeTab === 'material' ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400' : 'text-txt-secondary dark:text-slate-400 hover:text-txt-primary dark:hover:text-slate-200'}`}
         >
           Material Cost Breakdown
-        </button>
+        </Button>
       </div>
 
       <div className="p-6">
         {activeTab === 'cashflow' ? (
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Estimated 6-Month Expenditure Timeline</h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Standard thumb-rule cashflow allocation for a typical 6-month residential project.</p>
+            <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-2">Estimated 6-Month Expenditure Timeline</h3>
+            <p className="text-sm text-txt-tertiary dark:text-slate-400 mb-6">Standard thumb-rule cashflow allocation for a typical 6-month residential project.</p>
             
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -76,8 +78,8 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Thumb-Rule Material Distribution</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Standard percentage allocation for materials and fittings.</p>
+              <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-2">Thumb-Rule Material Distribution</h3>
+              <p className="text-sm text-txt-tertiary dark:text-slate-400 mb-6">Standard percentage allocation for materials and fittings.</p>
               
               <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -110,11 +112,11 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
                     <div>
-                      <div className="font-semibold text-sm text-slate-900 dark:text-white">{item.name} <span className="text-slate-500 font-normal">({item.percentage}%)</span></div>
-                      {item.details && <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{item.details}</div>}
+                      <div className="font-semibold text-sm text-txt-primary dark:text-white">{item.name} <span className="text-txt-tertiary font-normal">({item.percentage}%)</span></div>
+                      {item.details && <div className="text-xs text-txt-tertiary dark:text-slate-400 mt-0.5">{item.details}</div>}
                     </div>
                   </div>
-                  <div className="font-bold text-sm text-slate-900 dark:text-white">
+                  <div className="font-bold text-sm text-txt-primary dark:text-white">
                     {formatCurrency(item.amount)}
                   </div>
                 </div>

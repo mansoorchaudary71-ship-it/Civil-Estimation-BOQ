@@ -1,7 +1,9 @@
+import { Button } from './/Button';
 import React, { useState, useRef, useEffect } from "react";
 import { Settings, ChevronDown, Ruler, DollarSign, Moon, Sun, Monitor } from "lucide-react";
 import { useSettings, MeasurementSystem, Currency, Theme } from "../../context/SettingsContext";
 import SegmentedToggle from "./SegmentedToggle";
+
 
 export function GlobalSettingsToggle({ align = "right", showCurrency = true, activeToolName }: { align?: "left" | "right", showCurrency?: boolean, activeToolName?: string }) {
   const { settings, updateSettings } = useSettings();
@@ -22,9 +24,9 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
 
   return (
     <div className="relative z-50" ref={menuRef}>
-      <button
+      <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-2 rounded-full text-[13px] sm:text-sm font-bold text-slate-600  hover:text-amber-700  hover:bg-amber-100/50  transition-all duration-300 whitespace-nowrap"
+        className="flex items-center gap-1.5 px-3 py-2 rounded-full text-[13px] sm:text-sm font-bold text-txt-secondary  hover:text-amber-700  hover:bg-amber-100/50  transition-all duration-300 whitespace-nowrap"
         title={showCurrency ? "Regional & Unit Settings" : "Unit Settings"}
       >
         <span className="hidden sm:inline-block tracking-wide">
@@ -33,13 +35,13 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
         <span className="sm:hidden tracking-wide flex items-center gap-1">
           {settings.measurement === "SI" ? "SI" : "FPS"} {showCurrency && `• ${settings.currency}`}
         </span>
-        <Settings className="w-4 h-4 ml-0.5 text-slate-700" />
-      </button>
+        <Settings className="w-4 h-4 ml-0.5 text-txt-secondary" />
+      </Button>
 
       {isOpen && (
-        <div className={`absolute top-full mt-2 w-72 ${alignClass} bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-700/80 rounded-[24px] shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 ring-1 ring-slate-900/5 dark:ring-white/5`}>
+        <div className={`absolute top-full mt-2 w-72 ${alignClass} bg-surface-default/90 dark:bg-slate-900/90 backdrop-blur-xl border border-ui-borderSubtle/80 dark:border-slate-700/80 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 ring-1 ring-slate-900/5 dark:ring-white/5`}>
           <div className="p-4">
-            <div className="mb-3 text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+            <div className="mb-3 text-[11px] font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
               <Ruler className="w-3.5 h-3.5"/> Unit System
             </div>
             <div className={`mb-6`}>
@@ -62,7 +64,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
 
             {showCurrency && (
               <>
-                <div className="mb-3 text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+                <div className="mb-3 text-[11px] font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
                   <DollarSign className="w-3.5 h-3.5"/> Currency
                 </div>
                 <div className="mb-6">
@@ -86,7 +88,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
               </>
             )}
 
-            <div className="mb-3 text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+            <div className="mb-3 text-[11px] font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
               <Moon className="w-3.5 h-3.5"/> Theme
             </div>
             <div className="grid grid-cols-3 gap-1.5 mb-2">
@@ -97,18 +99,18 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
               ].map(({ val, icon, label }) => {
                 const isActive = settings.theme === val;
                 return (
-                  <button
+                  <Button
                     key={val}
                     onClick={() => { updateSettings({ theme: val as Theme }); setIsOpen(false); }}
                     className={`py-2 px-1 text-[10px] font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
                       isActive 
                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20" 
-                         : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                         : "text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                     }`}
                   >
                     {icon}
                     {label}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -120,18 +122,18 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
               ].map(({ val, icon, label }) => {
                 const isActive = settings.theme === val;
                 return (
-                  <button
+                  <Button
                     key={val}
                     onClick={() => { updateSettings({ theme: val as Theme }); setIsOpen(false); }}
                     className={`py-2 px-1 text-[10px] font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
                       isActive
                           ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20"
-                          : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                          : "text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                     }`}
                   >
                     {icon}
                     {label}
-                  </button>
+                  </Button>
                 );
               })}
             </div>

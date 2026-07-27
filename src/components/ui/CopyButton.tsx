@@ -1,4 +1,6 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
+
 
 interface CopyButtonProps {
   textToCopy: string;
@@ -20,14 +22,14 @@ export function CopyButton({ textToCopy }: CopyButtonProps) {
   };
 
   return (
-    <div className="flex items-center gap-2.5 bg-white p-3.5 rounded-lg shadow-sm w-full max-w-md border border-slate-200">
+    <div className="flex items-center gap-2.5 bg-surface-default p-3.5 rounded-lg shadow-sm w-full max-w-md border border-ui-borderSubtle">
       <div 
-        className="font-mono bg-slate-100 p-2.5 rounded border border-slate-300 text-slate-800 flex-1 truncate text-sm"
+        className="font-mono bg-slate-100 p-2.5 rounded border border-ui-borderDefault text-txt-primary flex-1 truncate text-sm"
         title={textToCopy}
       >
         {textToCopy}
       </div>
-      <button 
+      <Button 
         onClick={handleCopy}
         className={`relative px-4 py-2.5 rounded font-bold text-white transition-all transform active:scale-95 text-sm ${
           copied ? 'bg-blue-700' : 'bg-blue-600 hover:bg-blue-700'
@@ -44,7 +46,7 @@ export function CopyButton({ textToCopy }: CopyButtonProps) {
           {/* Tooltip Arrow */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-t-slate-800"></div>
         </div>
-      </button>
+      </Button>
     </div>
   );
 }

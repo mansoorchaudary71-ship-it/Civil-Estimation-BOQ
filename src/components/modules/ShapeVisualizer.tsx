@@ -240,7 +240,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
   if (!svgContent) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-white/5 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 rounded-[24px] border border-slate-200 dark:border-slate-700 w-full mb-6 overflow-hidden">
+    <div className="flex flex-col items-center justify-center p-4 bg-surface-default/5 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl border border-ui-borderSubtle dark:border-slate-700 w-full mb-6 overflow-hidden">
       <h4 className="text-base font-medium uppercase tracking-wider mb-2">Dynamic Preview</h4>
       <svg width="100%" height={containerSize} viewBox={`0 0 ${containerSize} ${containerSize}`}>
         {svgContent}

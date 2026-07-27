@@ -1,7 +1,23 @@
 const fs = require('fs');
-let fileStr = fs.readFileSync('src/components/RecentEstimates.tsx', 'utf8');
 
-fileStr = fileStr.replace(/onDragStart=\{\(e\) => handleDragStart\(e, est.id\)\}/g, 'onDragStart={(e) => handleDragStart(e as unknown as React.DragEvent, est.id)}');
-fileStr = fileStr.replace(/onDragOver=\{\(e\) => handleDragOver\(e, est.id\)\}/g, 'onDragOver={(e) => handleDragOver(e as unknown as React.DragEvent, est.id)}');
+let content = fs.readFileSync('src/components/RecentEstimates.tsx', 'utf8');
 
-fs.writeFileSync('src/components/RecentEstimates.tsx', fileStr);
+content = content.replace(
+  /bg-bg-card/g,
+  `bg-surface-default`
+);
+
+content = content.replace(
+  /shadow-sm hover:shadow-xl/g,
+  `shadow-sm hover:shadow-lg border-ui-borderSubtle hover:border-ui-borderDefault`
+);
+
+content = content.replace(/text-slate-900/g, 'text-txt-primary');
+content = content.replace(/text-slate-800/g, 'text-txt-primary');
+content = content.replace(/text-slate-700/g, 'text-txt-secondary');
+content = content.replace(/text-slate-600/g, 'text-txt-secondary');
+content = content.replace(/text-slate-500/g, 'text-txt-tertiary');
+content = content.replace(/text-slate-400/g, 'text-txt-tertiary');
+
+fs.writeFileSync('src/components/RecentEstimates.tsx', content);
+

@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useMemo, useCallback, memo } from "react";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
 import { useSettings } from "../../context/SettingsContext";
@@ -16,6 +17,7 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { ResultCard } from "../ui/ResultCard";
 import { ListInput } from "../ui/ListInput";
+
 
 interface FormworkElement {
   id: string;
@@ -41,16 +43,16 @@ const MemoizedFormworkRow = memo(({
   unitStr: string 
 }) => {
   return (
-    <div className="w-full group bg-gray-50/50 hover:bg-white border border-gray-100 hover:border-amber-200 p-5 rounded-[2rem] transition-all shadow-sm hover:shadow-md relative overflow-hidden flex flex-col md:flex-row gap-4 md:items-center">
+    <div className="w-full group bg-gray-50/50 hover:bg-surface-default border border-gray-100 hover:border-amber-200 p-5 rounded-2xl transition-all shadow-sm hover:shadow-md relative overflow-hidden flex flex-col md:flex-row gap-4 md:items-center">
       <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-300 group-hover:bg-amber-400 transition-colors" />
       <div className="flex-1 grid grid-cols-2 md:grid-cols-6 gap-4 items-end pl-0 md:pl-2">
         <div className="col-span-2 md:col-span-2 space-y-1">
-          <label className="uppercase tracking-widest block text-sm font-medium text-slate-700 mb-1 truncate">
+          <label className="uppercase tracking-widest block text-sm font-medium text-txt-secondary mb-1 truncate">
             Type & Name
           </label>
           <div className="flex gap-2">
             <select
-              className="bg-gray-100 border border-slate-200 rounded-[24px] px-3 py-2.5 text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal overflow-hidden truncate"
+              className="bg-gray-100 border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-secondary outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal overflow-hidden truncate"
               value={el.type}
               onChange={(e) => updateElement(index, { type: e.target.value as any })}
             >
@@ -60,64 +62,64 @@ const MemoizedFormworkRow = memo(({
             </select>
             <><label htmlFor="a11y-input-231" className="sr-only">Input</label>
 <input id="a11y-input-231" type="text"
-              className="bg-white border border-gray-200 rounded-full px-3 py-2.5 text-slate-800 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+              className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 text-txt-primary w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
               value={el.name}
               onChange={(e) => updateElement(index, { name: e.target.value })}
             /></>
           </div>
         </div>
         <div className="col-span-1 md:col-span-1 space-y-1">
-          <label className="uppercase tracking-widest block text-sm font-medium text-slate-700 mb-1 truncate">
+          <label className="uppercase tracking-widest block text-sm font-medium text-txt-secondary mb-1 truncate">
             L ({unitStr})
           </label>
           <><label htmlFor="a11y-input-232" className="sr-only">Input</label>
 <input id="a11y-input-232" type="number" inputMode="decimal" min="0" step="0.1"
-            className="bg-white border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.length}
             onChange={(e) => updateElement(index, { length: e.target.value })}
           /></>
         </div>
         <div className="col-span-1 md:col-span-1 space-y-1">
-          <label className="uppercase tracking-widest block text-sm font-medium text-slate-700 mb-1 truncate">
+          <label className="uppercase tracking-widest block text-sm font-medium text-txt-secondary mb-1 truncate">
             W ({unitStr})
           </label>
           <><label htmlFor="a11y-input-233" className="sr-only">Input</label>
 <input id="a11y-input-233" type="number" inputMode="decimal" min="0" step="0.1"
-            className="bg-white border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.width}
             onChange={(e) => updateElement(index, { width: e.target.value })}
           /></>
         </div>
         <div className="col-span-1 md:col-span-1 space-y-1">
-          <label className="uppercase tracking-widest block text-sm font-medium text-slate-700 mb-1 truncate">
+          <label className="uppercase tracking-widest block text-sm font-medium text-txt-secondary mb-1 truncate">
             H/D ({unitStr})
           </label>
           <><label htmlFor="a11y-input-234" className="sr-only">Input</label>
 <input id="a11y-input-234" type="number" inputMode="decimal" min="0" step="0.1"
-            className="bg-white border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.height}
             onChange={(e) => updateElement(index, { height: e.target.value })}
           /></>
         </div>
         <div className="col-span-1 md:col-span-1 space-y-1">
-          <label className="uppercase tracking-widest block text-sm font-medium text-slate-700 mb-1 truncate">
+          <label className="uppercase tracking-widest block text-sm font-medium text-txt-secondary mb-1 truncate">
             Qty
           </label>
           <><label htmlFor="a11y-input-235" className="sr-only">Input</label>
 <input id="a11y-input-235" type="number" inputMode="decimal" min="0"
-            className="bg-white border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.count}
             onChange={(e) => updateElement(index, { count: e.target.value })}
           /></>
         </div>
       </div>
-      <button
+      <Button
         aria-label="Delete"
         onClick={() => removeElement(index)}
         className="w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white rounded-full transition-colors ml-auto md:ml-0 self-end md:self-center active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-500"
       >
         <Trash2 className="w-5 h-5" />
-      </button>
+      </Button>
     </div>
   );
 });
@@ -264,7 +266,7 @@ export default function FormworkEstimator() {
     ].filter((d: any) => d.value > 0);
   }, [results]);
   return (
-    <div className="w-full h-full bg-transparent text-slate-900 font-sans p-6 md:p-8">
+    <div className="w-full h-full bg-transparent text-txt-primary font-sans p-6 md:p-8">
       
       <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-24 px-4 md:px-0">
         
@@ -274,22 +276,22 @@ export default function FormworkEstimator() {
           {/* Elements Config Section */}
           <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             
-            <div className="w-full bg-white/90 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
+            <div className="w-full bg-surface-default/90 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
               
               <div className="flex items-center justify-between mb-8">
                 
                 <div className="flex items-center gap-3">
                   
-                  <div className="p-3 bg-amber-50 rounded-[24px] overflow-hidden">
+                  <div className="p-3 bg-amber-50 rounded-2xl overflow-hidden">
                     
                     <Grid className="w-6 h-6 text-amber-600" />
                   </div>
                   <div>
                     
-                    <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                    <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                       Shuttering Elements
                     </h2>
-                    <p className="text-base font-normal text-slate-600 leading-relaxed">
+                    <p className="text-base font-normal text-txt-secondary leading-relaxed">
                       Add columns, beams, or slabs
                     </p>
                   </div>
@@ -305,37 +307,37 @@ export default function FormworkEstimator() {
               />
             </div>
             
-            <div className="w-full bg-white/90 p-4 sm:p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
-              <button
+            <div className="w-full bg-surface-default/90 p-4 sm:p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
+              <Button
                 onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                 className="w-full flex items-center justify-between gap-3 relative z-10 text-left focus:outline-none min-h-[44px]"
               >
                 <div className="flex items-center gap-3">
                   <RefreshCw className="w-5 h-5 text-indigo-600" />
-                  <h3 className="text-lg font-medium text-slate-800">
+                  <h3 className="text-lg font-medium text-txt-primary">
                     Settings & Repetition
                   </h3>
                 </div>
                 <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
-              </button>
+              </Button>
               
               {isSettingsOpen && (
                 <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-6 sm:items-center animate-in slide-in-from-top-4 fade-in duration-300">
                   <div className="flex-1">
-                    <p className="text-base font-normal text-slate-600 leading-relaxed">
+                    <p className="text-base font-normal text-txt-secondary leading-relaxed">
                       How many times will the shuttering be reused? This drastically
                       reduces material required.
                     </p>
                   </div>
                   <div className="flex gap-2">
                     {[1, 2, 4, 6].map((factor) => (
-                      <button
+                      <Button
                         key={factor}
                         onClick={() => setRepetitionFactor(factor)}
-                        className={`w-12 h-12 min-h-[44px] min-w-[44px] rounded-[24px] font-semibold tabular-nums tracking-tight transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 ${repetitionFactor === factor ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-110" : "bg-gray-100 text-slate-700 hover:bg-gray-200"}`}
+                        className={`w-12 h-12 min-h-[44px] min-w-[44px] rounded-2xl font-semibold tabular-nums tracking-tight transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 ${repetitionFactor === factor ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-110" : "bg-gray-100 text-txt-secondary hover:bg-gray-200"}`}
                       >
                         x{factor}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>
@@ -373,8 +375,8 @@ export default function FormworkEstimator() {
                 />
               </div>
 
-              <div className="mt-8 pt-6 border-t border-slate-200/50">
-                  <div className="mb-4 text-sm sm:text-base font-medium tracking-tight text-slate-500 uppercase tracking-[0.15em]">
+              <div className="mt-8 pt-6 border-t border-ui-borderSubtle/50">
+                  <div className="mb-4 text-sm sm:text-base font-medium tracking-tight text-txt-tertiary uppercase tracking-[0.15em]">
                     Area Breakdown
                   </div>
                   <div className="h-48 w-full relative">

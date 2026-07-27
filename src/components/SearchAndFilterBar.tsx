@@ -1,5 +1,7 @@
+import { Button } from './ui/Button';
 import React, { useEffect, useRef, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
+
 
 export interface SearchAndFilterBarProps {
   categories: { name: string; count: number }[];
@@ -70,7 +72,7 @@ export default function SearchAndFilterBar({
   }, [activeCategory]);
 
   return (
-    <div id="tools" className="sticky top-[60px] z-40 bg-[#f8f9fa]/95 backdrop-blur-xl border-b border-slate-200/60 py-3 sm:py-4 w-full shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+    <div id="tools" className="sticky top-[60px] z-40 bg-[#f8f9fa]/95 backdrop-blur-xl border-b border-ui-borderSubtle/60 py-3 sm:py-4 w-full shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
       <div className="md:max-w-7xl md:mx-auto px-4 w-full flex flex-col gap-3 sm:gap-4">
         
         {/* Search Bar */}
@@ -90,14 +92,14 @@ export default function SearchAndFilterBar({
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder="Search tools, materials, or calculations..."
-              className="relative w-full bg-white border border-slate-200 hover:border-slate-300 rounded-2xl py-3.5 pl-12 pr-12 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 transition-all shadow-sm text-[15px] sm:text-base font-medium"
+              className="relative w-full bg-surface-default border border-ui-borderSubtle hover:border-ui-borderDefault rounded-2xl py-3.5 pl-12 pr-12 text-txt-primary placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 transition-all shadow-sm text-[15px] sm:text-base font-medium"
             /></>
 
             {/* Suggestions Dropdown */}
             {showSuggestions && suggestions.length > 0 && (
-              <div className="w-full absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="w-full absolute top-full left-0 right-0 mt-2 bg-surface-default rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                 {suggestions.map((tool) => (
-                  <button
+                  <Button
                     key={tool.id}
                     onClick={() => {
                       if (onSelectModule) {
@@ -111,9 +113,9 @@ export default function SearchAndFilterBar({
                     }}
                     className="w-full text-left px-5 py-3.5 hover:bg-slate-50 border-b border-slate-50 last:border-0 flex items-center justify-between transition-colors group/item"
                   >
-                    <span className="text-[15px] font-medium text-slate-700 group-hover/item:text-blue-600 transition-colors">{tool.name}</span>
-                    <span className="text-[11px] font-bold tracking-wider uppercase text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">{tool.category}</span>
-                  </button>
+                    <span className="text-[15px] font-medium text-txt-secondary group-hover/item:text-blue-600 transition-colors">{tool.name}</span>
+                    <span className="text-[11px] font-bold tracking-wider uppercase text-txt-tertiary bg-slate-100 px-2.5 py-1 rounded-full">{tool.category}</span>
+                  </Button>
                 ))}
               </div>
             )}
@@ -121,17 +123,17 @@ export default function SearchAndFilterBar({
              
           {/* Popular Chips (hidden mobile, visible md+) */}
           <div className="hidden md:flex items-center gap-2 mt-3 pl-1">
-            <span className="text-sm font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+            <span className="text-sm font-semibold uppercase tracking-wider text-txt-tertiary flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-blue-500" /> Popular:
             </span>
             {popularSearches.map((chip, idx) => (
-              <button
+              <Button
                 key={idx}
                 onClick={() => setSearchTerm(chip)}
-                className="text-[13px] font-medium text-slate-600 bg-white hover:bg-blue-50 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors border border-slate-200 shadow-sm"
+                className="text-[13px] font-medium text-txt-secondary bg-surface-default hover:bg-blue-50 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors border border-ui-borderSubtle shadow-sm"
               >
                 {chip}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -146,7 +148,7 @@ export default function SearchAndFilterBar({
             {categories.map((cat) => {
               const isActive = activeCategory === cat.name;
               return (
-                 <button
+                 <Button
                   key={cat.name}
                   ref={(el) => { tabRefs.current[cat.name] = el; }}
                   onClick={() => setActiveCategory(cat.name)}
@@ -154,27 +156,27 @@ export default function SearchAndFilterBar({
                     relative flex items-center justify-center flex-shrink-0 gap-2.5 px-5 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 snap-start
                     ${isActive 
                       ? "bg-slate-900 text-white shadow-md border border-slate-800" 
-                      : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 shadow-sm"}
+                      : "bg-surface-default text-txt-secondary hover:text-txt-primary hover:bg-slate-50 border border-ui-borderSubtle shadow-sm"}
                   `}
                 >
                   <span className={`text-[14px] sm:text-[15px] ${isActive ? 'font-semibold' : 'font-medium'} transition-all duration-300`}>{cat.name}</span>
                   <span 
                     className={`
                       flex items-center justify-center px-2 py-0.5 text-[12px] font-bold rounded-full transition-colors duration-300
-                      ${isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"}
+                      ${isActive ? "bg-surface-default/20 text-white" : "bg-slate-100 text-txt-tertiary"}
                     `}
                   >
                     {cat.count}
                   </span>
-                </button>
+                </Button>
               );
             })}
           </div>
         </div>
 
         {/* Results Count Line */}
-        <div className="text-[13px] sm:text-sm font-medium text-slate-500 pl-1 pb-2">
-          Showing <span className="text-slate-900 font-bold">{totalFilteredCount}</span> tools in <span className="text-blue-600 font-bold">{activeCategory}</span>
+        <div className="text-[13px] sm:text-sm font-medium text-txt-tertiary pl-1 pb-2">
+          Showing <span className="text-txt-primary font-bold">{totalFilteredCount}</span> tools in <span className="text-blue-600 font-bold">{activeCategory}</span>
         </div>
 
       </div>

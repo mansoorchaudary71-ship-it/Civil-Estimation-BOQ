@@ -80,13 +80,13 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
     if (active && payload && payload.length) {
       const pData = payload[0].payload;
       return (
-        <div className="bg-white/90 backdrop-blur-md border border-slate-200/60 p-3 rounded-xl shadow-lg">
-          <p className="font-semibold text-slate-800 mb-1">{pData.name}</p>
+        <div className="bg-surface-default/90 backdrop-blur-md border border-ui-borderSubtle/60 p-3 rounded-xl shadow-lg">
+          <p className="font-semibold text-txt-primary mb-1">{pData.name}</p>
           <div className="flex flex-col gap-1">
-            <span className="text-sm text-slate-600">
-              Cost: <span className="font-medium text-slate-900">Rs {pData.value.toLocaleString()}</span>
+            <span className="text-sm text-txt-secondary">
+              Cost: <span className="font-medium text-txt-primary">Rs {pData.value.toLocaleString()}</span>
             </span>
-            <span className="text-sm text-slate-600">
+            <span className="text-sm text-txt-secondary">
               Share: <span className="font-medium text-blue-600">{pData.percentage.toFixed(1)}%</span>
             </span>
           </div>
@@ -97,11 +97,11 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/40 shadow-sm p-6 lg:p-8 flex flex-col md:flex-row items-center gap-8 w-full">
+    <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-white/40 shadow-sm p-6 lg:p-8 flex flex-col md:flex-row items-center gap-8 w-full">
       <div className="relative w-full md:w-1/2 h-64 md:h-80 flex justify-center items-center">
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
-           <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Total Cost</span>
-           <span className="text-2xl lg:text-3xl font-bold text-slate-900">
+           <span className="text-sm font-medium text-txt-tertiary uppercase tracking-wider mb-1">Total Cost</span>
+           <span className="text-2xl lg:text-3xl font-bold text-txt-primary">
              Rs {totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
            </span>
         </div>
@@ -138,7 +138,7 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
       </div>
 
       <div className="w-full md:w-1/2 flex flex-col gap-3">
-        <h3 className="text-lg font-semibold text-slate-900 mb-2">Material Breakdown</h3>
+        <h3 className="text-lg font-semibold text-txt-primary mb-2">Material Breakdown</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {data.map((item, index) => {
             const color = CIVIL_COLORS[index % CIVIL_COLORS.length];
@@ -149,7 +149,7 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
                 key={item.name}
                 className={`flex items-center gap-3 p-3 rounded-xl border transition-all duration-300 cursor-pointer ${
                   isActive 
-                    ? 'bg-slate-50/80 border-slate-200 shadow-sm' 
+                    ? 'bg-slate-50/80 border-ui-borderSubtle shadow-sm' 
                     : 'bg-transparent border-transparent hover:bg-slate-50/50'
                 }`}
                 onMouseEnter={() => setActiveIndex(index)}
@@ -160,8 +160,8 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
                   style={{ backgroundColor: color }}
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-800 truncate">{item.name}</p>
-                  <p className="text-xs text-slate-500">{item.percentage.toFixed(1)}%</p>
+                  <p className="text-sm font-medium text-txt-primary truncate">{item.name}</p>
+                  <p className="text-xs text-txt-tertiary">{item.percentage.toFixed(1)}%</p>
                 </div>
               </div>
             );

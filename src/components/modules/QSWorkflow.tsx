@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import { motion } from "framer-motion";
 import React, { useState, useMemo } from 'react';
 import { 
@@ -7,6 +8,7 @@ import {
 } from 'lucide-react';
 import { ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { CalculationHistory } from '../ui/CalculationHistory';
+
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -129,22 +131,22 @@ export default function QSWorkflow() {
     <div className="w-full md:max-w-7xl md:mx-auto pb-24 animate-in fade-in duration-500 px-4 md:px-0">
       
       {/* HEADER SECTION */}
-      <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2rem] shadow-sm mb-6 flex justify-between items-center no-print overflow-hidden">
+      <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-sm mb-6 flex justify-between items-center no-print overflow-hidden">
          <div>
-           <h2 className="text-xl font-semibold tabular-nums tracking-tight text-slate-800 tracking-tight flex items-center gap-3">
-             <div className="p-3 bg-blue-50 text-blue-600 rounded-[24px] overflow-hidden">
+           <h2 className="text-xl font-semibold tabular-nums tracking-tight text-txt-primary tracking-tight flex items-center gap-3">
+             <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl overflow-hidden">
                <Activity className="w-8 h-8" />
              </div>
              Guided QS Workflow
            </h2>
-           <p className="text-slate-500 mt-2 font-medium">
+           <p className="text-txt-tertiary mt-2 font-medium">
              Complete end-to-end quantity take-off following IS 1200 sequences.
            </p>
          </div>
          {currentStep === 8 && (
-           <button onClick={() => window.dispatchEvent(new CustomEvent('global-print-action'))} className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-full flex items-center gap-2 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+           <Button onClick={() => window.dispatchEvent(new CustomEvent('global-print-action'))} className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-full flex items-center gap-2 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
               <Printer className="w-4 h-4" /> Export PDF
-           </button>
+           </Button>
          )}
       </div>
 
@@ -165,7 +167,7 @@ export default function QSWorkflow() {
                    }`}>
                      {isCompleted ? <CheckCircle className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
                    </div>
-                   <span className={`text-base font-medium mt-2 whitespace-nowrap \${isActive ? 'text-blue-600 ' : 'text-slate-500'}`}>
+                   <span className={`text-base font-medium mt-2 whitespace-nowrap \${isActive ? 'text-blue-600 ' : 'text-txt-tertiary'}`}>
                      Step {num}: {step.title}
                    </span>
                 </div>
@@ -179,12 +181,12 @@ export default function QSWorkflow() {
       </div>
 
       {/* WIZARD CONTENT BOX */}
-      <div className="w-full bg-white border border-slate-200 rounded-[2rem] shadow-sm p-4 sm:p-6 md:p-4 sm:p-10 no-print overflow-hidden">
+      <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-sm p-4 sm:p-6 md:p-4 sm:p-10 no-print overflow-hidden">
          
          {/* -- STEP 1 -- */}
          {currentStep === 1 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
-               <h3 className="text-xl font-semibold text-slate-800 mb-6">1. Project Setup</h3>
+               <h3 className="text-xl font-semibold text-txt-primary mb-6">1. Project Setup</h3>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                  <div><label className="block text-base font-medium mb-2">Project Name</label><><label htmlFor="a11y-input-385" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-385" type="text" value={projectData.name} onChange={e=>setProjectData({...projectData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
@@ -194,7 +196,7 @@ export default function QSWorkflow() {
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-387" type="text" value={projectData.client} onChange={e=>setProjectData({...projectData, client: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-full" /></></div>
                  <div>
                    <label className="block text-base font-medium mb-2">Structure Type</label>
-                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={projectData.type} onChange={e=>setProjectData({...projectData, type: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-[24px] overflow-hidden">
+                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={projectData.type} onChange={e=>setProjectData({...projectData, type: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border rounded-2xl overflow-hidden">
                      <option>Residential</option>
                      <option>Commercial</option>
                      <option>Industrial</option>
@@ -207,21 +209,21 @@ export default function QSWorkflow() {
          {/* -- STEP 2 -- */}
          {currentStep === 2 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
-               <h3 className="text-xl font-semibold text-slate-800 mb-6">2. Drawings & Plan Measure</h3>
-               <div className={`p-10 border-2 border-dashed rounded-[24px] text-center mb-6 \${drawingsLoaded ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-300'}`}>
+               <h3 className="text-xl font-semibold text-txt-primary mb-6">2. Drawings & Plan Measure</h3>
+               <div className={`p-10 border-2 border-dashed rounded-2xl text-center mb-6 \${drawingsLoaded ? 'border-emerald-500 bg-emerald-50/50' : 'border-ui-borderDefault'}`}>
                   {drawingsLoaded ? (
                      <div className="flex flex-col items-center">
                         <CheckCircle className="w-12 h-12 text-emerald-500 mb-3" />
                         <h4 className="font-bold text-lg text-emerald-700">Drawings parsed successfully</h4>
                         <p className="text-emerald-600 text-sm">Elements marked for sequential measurement.</p>
-                        <button onClick={() => setDrawingsLoaded(false)} className="mt-4 text-base font-medium underline text-slate-500 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Remove</button>
+                        <Button onClick={() => setDrawingsLoaded(false)} className="mt-4 text-base font-medium underline text-txt-tertiary rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Remove</Button>
                      </div>
                   ) : (
                      <div className="flex flex-col items-center">
                         <Map className="w-12 h-12 text-slate-400 mb-3" />
                         <h4 className="font-bold text-lg">Upload Architectural / Structural Drawings</h4>
-                        <p className="text-slate-500 text-sm mb-4">PDF, DWG or Image formats</p>
-                        <button onClick={() => setDrawingsLoaded(true)} className="w-full px-6 py-2 bg-white text-slate-900 rounded-full font-bold border border-slate-200 shadow-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5 overflow-hidden">Simulate Upload</button>
+                        <p className="text-txt-tertiary text-sm mb-4">PDF, DWG or Image formats</p>
+                        <Button onClick={() => setDrawingsLoaded(true)} className="w-full px-6 py-2 bg-surface-default text-txt-primary rounded-full font-bold border border-ui-borderSubtle shadow-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5 overflow-hidden">Simulate Upload</Button>
                      </div>
                   )}
                </div>
@@ -237,24 +239,24 @@ export default function QSWorkflow() {
          {/* -- STEP 3 -- */}
          {currentStep === 3 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
-               <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><Shovel className="w-6 h-6 text-amber-600" /> 3. Substructure Quantities</h3>
-               <p className="text-slate-500 mb-6 font-medium">Extract quantities for below-ground works as per IS 1200 Part 1 & 2.</p>
+               <h3 className="text-xl font-semibold text-txt-primary mb-4 flex items-center gap-2"><Shovel className="w-6 h-6 text-amber-600" /> 3. Substructure Quantities</h3>
+               <p className="text-txt-tertiary mb-6 font-medium">Extract quantities for below-ground works as per IS 1200 Part 1 & 2.</p>
                
                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                 <div className="bg-amber-50/50 p-5 rounded-[24px] border border-amber-100 overflow-hidden">
+                 <div className="bg-amber-50/50 p-5 rounded-2xl border border-amber-100 overflow-hidden">
                     <label className="block text-base font-medium mb-2">Earthwork (Excavation) - m³</label>
                     <><label htmlFor="a11y-input-389" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-389" type="number" inputMode="decimal" value={substructure.excavation} onChange={e=>setSubstructure({...substructure, excavation: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-389" type="number" inputMode="decimal" value={substructure.excavation} onChange={e=>setSubstructure({...substructure, excavation: +e.target.value})} className="w-full px-4 py-3 bg-surface-default border-amber-200 rounded-full font-bold" /></>
                  </div>
-                 <div className="bg-amber-50/50 p-5 rounded-[24px] border border-amber-100 overflow-hidden">
+                 <div className="bg-amber-50/50 p-5 rounded-2xl border border-amber-100 overflow-hidden">
                     <label className="block text-base font-medium mb-2">Footing PCC/RCC - m³</label>
                     <><label htmlFor="a11y-input-390" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-390" type="number" inputMode="decimal" value={substructure.footingConc} onChange={e=>setSubstructure({...substructure, footingConc: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-390" type="number" inputMode="decimal" value={substructure.footingConc} onChange={e=>setSubstructure({...substructure, footingConc: +e.target.value})} className="w-full px-4 py-3 bg-surface-default border-amber-200 rounded-full font-bold" /></>
                  </div>
-                 <div className="bg-amber-50/50 p-5 rounded-[24px] border border-amber-100 overflow-hidden">
+                 <div className="bg-amber-50/50 p-5 rounded-2xl border border-amber-100 overflow-hidden">
                     <label className="block text-base font-medium mb-2">Plinth Beam RCC - m³</label>
                     <><label htmlFor="a11y-input-391" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-391" type="number" inputMode="decimal" value={substructure.plinthBeam} onChange={e=>setSubstructure({...substructure, plinthBeam: +e.target.value})} className="w-full px-4 py-3 bg-white border-amber-200 rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-391" type="number" inputMode="decimal" value={substructure.plinthBeam} onChange={e=>setSubstructure({...substructure, plinthBeam: +e.target.value})} className="w-full px-4 py-3 bg-surface-default border-amber-200 rounded-full font-bold" /></>
                  </div>
                </div>
             </div>
@@ -263,8 +265,8 @@ export default function QSWorkflow() {
          {/* -- STEP 4 -- */}
          {currentStep === 4 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
-               <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><Building className="w-6 h-6 text-blue-600" /> 4. Superstructure Quantities</h3>
-               <p className="text-slate-500 mb-6 font-medium">Extract lengths and volumes for structural frame above plinth level.</p>
+               <h3 className="text-xl font-semibold text-txt-primary mb-4 flex items-center gap-2"><Building className="w-6 h-6 text-blue-600" /> 4. Superstructure Quantities</h3>
+               <p className="text-txt-tertiary mb-6 font-medium">Extract lengths and volumes for structural frame above plinth level.</p>
                
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 responsive-tool-grid">
                  <div>
@@ -294,8 +296,8 @@ export default function QSWorkflow() {
          {/* -- STEP 5 -- */}
          {currentStep === 5 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
-               <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><Paintbrush className="w-6 h-6 text-rose-500" /> 5. Masonry & Finishes</h3>
-               <p className="text-slate-500 mb-6 font-medium">Blockwork, plastering, floor finishes, and painting.</p>
+               <h3 className="text-xl font-semibold text-txt-primary mb-4 flex items-center gap-2"><Paintbrush className="w-6 h-6 text-rose-500" /> 5. Masonry & Finishes</h3>
+               <p className="text-txt-tertiary mb-6 font-medium">Blockwork, plastering, floor finishes, and painting.</p>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                  <div>
@@ -325,8 +327,8 @@ export default function QSWorkflow() {
          {/* -- STEP 6 -- */}
          {currentStep === 6 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
-               <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><ZapIcon className="w-6 h-6 text-sky-500" /> 6. MEP & Services</h3>
-               <p className="text-slate-500 mb-6 font-medium">Plumbing, electrical, and special infrastructure calculations.</p>
+               <h3 className="text-xl font-semibold text-txt-primary mb-4 flex items-center gap-2"><ZapIcon className="w-6 h-6 text-sky-500" /> 6. MEP & Services</h3>
+               <p className="text-txt-tertiary mb-6 font-medium">Plumbing, electrical, and special infrastructure calculations.</p>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                  <div>
@@ -357,14 +359,14 @@ export default function QSWorkflow() {
          {currentStep === 7 && (
             <div className="animate-in slide-in-from-right-4 duration-300">
                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold text-slate-800 flex items-center gap-2"><ClipboardList className="w-6 h-6 text-emerald-600" /> 7. Expected BOQ Compiler</h3>
+                  <h3 className="text-xl font-semibold text-txt-primary flex items-center gap-2"><ClipboardList className="w-6 h-6 text-emerald-600" /> 7. Expected BOQ Compiler</h3>
                   <p className="font-medium text-emerald-600 bg-emerald-50 px-4 py-1.5 rounded-full">Rates populated from Live DB</p>
                </div>
-               <p className="text-slate-500 mb-6 font-medium">Verify standard item descriptions and auto-calculated final quantities.</p>
+               <p className="text-txt-tertiary mb-6 font-medium">Verify standard item descriptions and auto-calculated final quantities.</p>
                
-               <div className="overflow-x-auto rounded-[24px] border border-slate-200">
+               <div className="overflow-x-auto rounded-2xl border border-ui-borderSubtle">
                   <table className="w-full text-sm text-left">
-                     <thead className="bg-slate-100 text-slate-700">
+                     <thead className="bg-slate-100 text-txt-secondary">
                        <tr>
                           <th className="p-4 font-bold">Category</th>
                           <th className="p-4 font-bold">CPWD Standard Item Description</th>
@@ -375,8 +377,8 @@ export default function QSWorkflow() {
                      </thead>
                      <tbody className="divide-y divide-slate-200">
                        {boqItems.map((item, idx) => (
-                          <tr key={idx} className="hover:bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 overflow-hidden">
-                             <td className="p-4 text-slate-500">{item.section}</td>
+                          <tr key={idx} className="hover:bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-hidden">
+                             <td className="p-4 text-txt-tertiary">{item.section}</td>
                              <td className="p-4 font-semibold">{item.item}</td>
                              <td className="p-4 text-right">{item.qty} {item.unit}</td>
                              <td className="p-4 text-right">₹{item.rate.toLocaleString()}</td>
@@ -385,7 +387,7 @@ export default function QSWorkflow() {
                        ))}
                      </tbody>
                      <tfoot>
-                        <tr className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 overflow-hidden">
+                        <tr className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-hidden">
                            <td colSpan={4} className="p-4 text-right font-semibold tabular-nums tracking-tight uppercase tracking-wider">Estimated Project Total</td>
                            <td className="p-4 text-right font-semibold tabular-nums tracking-tight text-xl text-emerald-600">₹{totalCost.toLocaleString()}</td>
                         </tr>
@@ -398,19 +400,19 @@ export default function QSWorkflow() {
 
          {/* SUB NAVIGATION BUTTONS */}
          {currentStep < 8 && (
-           <div className="mt-8 pt-6 border-t border-slate-200 flex justify-between">
-              <button 
+           <div className="mt-8 pt-6 border-t border-ui-borderSubtle flex justify-between">
+              <Button 
                 onClick={handlePrev}
                 disabled={currentStep === 1}
-                className={`px-6 py-3 rounded-[24px] font-bold flex items-center gap-2 \${currentStep === 1 ? 'opacity-0' : 'bg-slate-100 hover:bg-slate-200'}`}
+                className={`px-6 py-3 rounded-2xl font-bold flex items-center gap-2 \${currentStep === 1 ? 'opacity-0' : 'bg-slate-100 hover:bg-slate-200'}`}
               >
                  <ArrowLeft className="w-4 h-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" /> Previous
-              </button>
-              <button onClick={handleNext}
+              </Button>
+              <Button onClick={handleNext}
                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold flex items-center gap-2 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
               >
                  {currentStep === 7 ? 'Generate Report' : 'Next Step'} <ArrowRight className="w-4 h-4" />
-              </button>
+              </Button>
            </div>
          )}
       </div>
@@ -418,7 +420,7 @@ export default function QSWorkflow() {
       {/* -- STEP 8 (FINAL REPORT) -- */}
       {currentStep === 8 && (
          <div className="mt-6 print-container animate-in slide-in-from-bottom-4 duration-500">
-            <div className="w-full bg-white text-slate-900 p-4 sm:p-10 shadow-xl border rounded-[2rem] border-slate-200 min-h-[1056px] relative overflow-hidden">
+            <div className="w-full bg-surface-default text-txt-primary p-4 sm:p-10 shadow-xl border rounded-2xl border-ui-borderSubtle min-h-[1056px] relative overflow-hidden">
                
                <div className="absolute top-0 left-0 w-full h-4 bg-indigo-600 rounded-t-[2rem]"></div>
 
@@ -426,23 +428,23 @@ export default function QSWorkflow() {
                <div className="flex justify-between items-start pt-6 border-b-2 border-slate-800 pb-6 mb-8">
                   
                   <div className="text-right">
-                    <p className="font-bold text-slate-500 text-sm">CLIENT</p>
+                    <p className="font-bold text-txt-tertiary text-sm">CLIENT</p>
                     <p className="font-bold text-lg">{projectData.client}</p>
-                    <p className="mt-2 text-sm text-slate-500">Report Generated: {new Date().toLocaleDateString()}</p>
+                    <p className="mt-2 text-sm text-txt-tertiary">Report Generated: {new Date().toLocaleDateString()}</p>
                   </div>
                </div>
 
                {/* Summary Cards */}
                <div className="grid grid-cols-3 gap-6 mb-10">
-                  <div className="p-4 sm:p-6 bg-slate-50 border border-slate-200 rounded-[24px] overflow-hidden">
+                  <div className="p-4 sm:p-6 bg-slate-50 border border-ui-borderSubtle rounded-2xl overflow-hidden">
                      <p className="text-base font-medium mb-2 uppercase tracking-widest">Total Estimated Cost</p>
                      <p className="text-xl font-semibold tabular-nums tracking-tight text-indigo-700">₹{totalCost.toLocaleString()}</p>
                   </div>
-                  <div className="p-4 sm:p-6 bg-slate-50 border border-slate-200 rounded-[24px] overflow-hidden">
+                  <div className="p-4 sm:p-6 bg-slate-50 border border-ui-borderSubtle rounded-2xl overflow-hidden">
                      <p className="text-base font-medium mb-2 uppercase tracking-widest">Plinth Area</p>
-                     <p className="text-xl font-semibold tabular-nums tracking-tight">{totalPlinthArea.toLocaleString()} <span className="text-lg text-slate-500">sq.ft</span></p>
+                     <p className="text-xl font-semibold tabular-nums tracking-tight">{totalPlinthArea.toLocaleString()} <span className="text-lg text-txt-tertiary">sq.ft</span></p>
                   </div>
-                  <div className="p-4 sm:p-6 bg-slate-50 border border-slate-200 rounded-[24px] overflow-hidden">
+                  <div className="p-4 sm:p-6 bg-slate-50 border border-ui-borderSubtle rounded-2xl overflow-hidden">
                      <p className="text-base font-medium mb-2 uppercase tracking-widest">Cost Per Sq.Ft</p>
                      <p className="text-xl font-semibold tabular-nums tracking-tight">₹{Math.round(totalCost / totalPlinthArea).toLocaleString()}</p>
                   </div>
@@ -453,7 +455,7 @@ export default function QSWorkflow() {
                   
                   {/* Pie Chart */}
                   <div>
-                    <h3 className="font-bold text-xl uppercase tracking-widest border-b border-slate-300 pb-2 mb-4">Cost Distribution</h3>
+                    <h3 className="font-bold text-xl uppercase tracking-widest border-b border-ui-borderDefault pb-2 mb-4">Cost Distribution</h3>
                     <div className="h-64 no-print-chart">
                       <ResponsiveContainer width="100%" height="100%">
                          <RechartsPieChart>
@@ -487,7 +489,7 @@ export default function QSWorkflow() {
 
                   {/* Specification Notes */}
                   <div>
-                     <h3 className="font-bold text-xl uppercase tracking-widest border-b border-slate-300 pb-2 mb-4">Design Specifications</h3>
+                     <h3 className="font-bold text-xl uppercase tracking-widest border-b border-ui-borderDefault pb-2 mb-4">Design Specifications</h3>
                      <ul className="space-y-3">
                         <li className="flex gap-2">
                            <CheckCircle className="w-5 h-5 text-indigo-600 shrink-0" />
@@ -525,9 +527,9 @@ export default function QSWorkflow() {
             </div>
 
             <div className="flex justify-center mt-6 no-print">
-               <button onClick={() => setCurrentStep(7)} className="font-bold text-slate-500 hover:text-slate-800 underline rounded-full">
+               <Button onClick={() => setCurrentStep(7)} className="font-bold text-txt-tertiary hover:text-txt-primary underline rounded-full">
                  &larr; Back to Editor
-               </button>
+               </Button>
             </div>
          </div>
       )}

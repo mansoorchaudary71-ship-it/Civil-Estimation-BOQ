@@ -1,7 +1,9 @@
+import { Button } from './/Button';
 import React from 'react';
 import { FileSpreadsheet, FileText } from 'lucide-react';
 import { exportToCSV, exportTableToCSV } from '../../utils/exportUtils';
 import * as XLSX from 'xlsx';
+
 
 interface GenericExportButtonsProps {
   filename?: string;
@@ -46,18 +48,18 @@ export function GenericExportButtons({ filename = "Export", tableId, data }: Gen
 
   return (
     <div className="flex items-center gap-2">
-      <button 
+      <Button 
         onClick={handleCSV}
-        className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 active:scale-95"
+        className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-txt-secondary text-sm font-semibold rounded-lg transition-colors border border-ui-borderSubtle active:scale-95"
       >
         <FileText className="w-4 h-4" /> CSV
-      </button>
-      <button 
+      </Button>
+      <Button 
         onClick={handleExcel}
         className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-semibold rounded-lg transition-colors border border-emerald-200 active:scale-95"
       >
         <FileSpreadsheet className="w-4 h-4" /> Excel
-      </button>
+      </Button>
     </div>
   );
 }

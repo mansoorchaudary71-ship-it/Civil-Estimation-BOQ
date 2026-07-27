@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { MaterialSummary } from '../ui/MaterialSummary';
@@ -31,6 +32,7 @@ const DEFAULT_PHASES: Phase[] = [
 ];
 
 import html2canvas from 'html2canvas';
+
 
 export default function SiteProgressTracker() {
   const [phases, setPhases] = useState<Phase[]>([]);
@@ -282,34 +284,34 @@ export default function SiteProgressTracker() {
 
   return (
     <div className="w-full md:max-w-7xl md:mx-auto space-y-6 animate-in fade-in duration-500 pb-[120px] px-4 md:px-0">
-       <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white border border-slate-200 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2rem] shadow-sm overflow-hidden">
+       <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-sm overflow-hidden">
          <div>
-           <h2 className="tabular-nums flex items-center gap-3 text-xl font-semibold text-gray-900 tracking-tight mb-4">
-              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-[24px] overflow-hidden">
+           <h2 className="tabular-nums flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
+              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl overflow-hidden">
                 <BarChartIcon className="w-8 h-8" />
               </div>
               Site Progress Tracker
            </h2>
-           <p className="mt-2 text-base font-normal text-gray-600 leading-relaxed">Track timelines, budgets, and visual progress.</p>
+           <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">Track timelines, budgets, and visual progress.</p>
          </div>
          <div className="flex flex-wrap gap-2">
-            <button onClick={() => exportToCSV(phases)} className="w-full bg-white hover:bg-slate-50 text-gray-700 border border-slate-200 px-4 py-2.5 rounded-full font-bold transition flex items-center gap-2 text-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
+            <Button onClick={() => exportToCSV(phases)} className="w-full bg-surface-default hover:bg-slate-50 text-txt-secondary border border-ui-borderSubtle px-4 py-2.5 rounded-full font-bold transition flex items-center gap-2 text-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
                <Download className="w-4 h-4" /> CSV
-            </button>
-            <button onClick={() => exportToMSProject(phases)} className="w-full bg-white hover:bg-slate-50 text-gray-700 border border-slate-200 px-4 py-2.5 rounded-full font-bold transition flex items-center gap-2 text-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
+            </Button>
+            <Button onClick={() => exportToMSProject(phases)} className="w-full bg-surface-default hover:bg-slate-50 text-txt-secondary border border-ui-borderSubtle px-4 py-2.5 rounded-full font-bold transition flex items-center gap-2 text-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
                <DownloadCloud className="w-4 h-4" /> XML
-            </button>
-            <button onClick={handleShare} className="w-full bg-white hover:bg-slate-50 text-gray-700 border border-slate-200 px-4 py-2.5 rounded-full transition flex items-center gap-2 text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
+            </Button>
+            <Button onClick={handleShare} className="w-full bg-surface-default hover:bg-slate-50 text-txt-secondary border border-ui-borderSubtle px-4 py-2.5 rounded-full transition flex items-center gap-2 text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
                <Share2 className="w-4 h-4" /> Share
-            </button>
-            <button onClick={handleExportPDF} className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-full transition flex items-center gap-2 text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+            </Button>
+            <Button onClick={handleExportPDF} className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-full transition flex items-center gap-2 text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
                <FileOutput className="w-4 h-4" /> Report
-            </button>
+            </Button>
          </div>
        </div>
 
        {isClientDemo && (
-          <div className="bg-indigo-600 text-white p-3 text-center rounded-[24px] font-bold text-sm mb-4 animate-pulse overflow-hidden">
+          <div className="bg-indigo-600 text-white p-3 text-center rounded-2xl font-bold text-sm mb-4 animate-pulse overflow-hidden">
              Client View Active - Read Only Mode
           </div>
        )}
@@ -319,23 +321,23 @@ export default function SiteProgressTracker() {
           <div className="lg:col-span-3 space-y-6">
              {/* Scorecards */}
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-center">
+                <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-center">
                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full blur-[30px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-                   <p className="uppercase tracking-wider mb-2 relative z-10 text-base font-normal text-gray-600 leading-relaxed">Overall Progress</p>
+                   <p className="uppercase tracking-wider mb-2 relative z-10 text-base font-normal text-txt-secondary leading-relaxed">Overall Progress</p>
                    <div className="flex items-end gap-2 relative z-10">
-                     <h3 className="md:text-[clamp(1.75rem,5vw,2.5rem)] break-all tabular-nums leading-none text-lg font-medium text-gray-800 mb-4">{metrics.overallProgress.toFixed(1)}<span className="text-2xl text-slate-400">%</span></h3>
+                     <h3 className="md:text-[clamp(1.75rem,5vw,2.5rem)] break-all tabular-nums leading-none text-lg font-medium text-txt-primary mb-4">{metrics.overallProgress.toFixed(1)}<span className="text-2xl text-slate-400">%</span></h3>
                    </div>
-                   <div className="w-full h-2 bg-slate-100 rounded-full mt-4 overflow-hidden relative z-10 border border-slate-200">
+                   <div className="w-full h-2 bg-slate-100 rounded-full mt-4 overflow-hidden relative z-10 border border-ui-borderSubtle">
                       <div className="h-full bg-emerald-500 rounded-full transition-all duration-1000" style={{ width: `${metrics.overallProgress}%` }}></div>
                    </div>
                 </div>
 
-                <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-center">
-                   <p className="uppercase tracking-wider mb-2 relative z-10 text-base font-normal text-gray-600 leading-relaxed">Cost & Burn <span className="text-indigo-500 ml-1 font-bold">(CPI: {metrics.CPI.toFixed(2)})</span></p>
+                <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-center">
+                   <p className="uppercase tracking-wider mb-2 relative z-10 text-base font-normal text-txt-secondary leading-relaxed">Cost & Burn <span className="text-indigo-500 ml-1 font-bold">(CPI: {metrics.CPI.toFixed(2)})</span></p>
                    <div className="flex items-end gap-2 relative z-10 w-full justify-between">
                      <div className="flex items-end gap-2">
-                       <h3 className="tabular-nums leading-none text-lg font-medium text-gray-800 mb-4">${(metrics.totalCost / 1000).toFixed(1)}k</h3>
-                       <span className="text-sm font-bold text-gray-500 mb-1">Earned: ${( (metrics.EV || 0) / 1000).toFixed(1)}k</span>
+                       <h3 className="tabular-nums leading-none text-lg font-medium text-txt-primary mb-4">${(metrics.totalCost / 1000).toFixed(1)}k</h3>
+                       <span className="text-sm font-bold text-txt-tertiary mb-1">Earned: ${( (metrics.EV || 0) / 1000).toFixed(1)}k</span>
                      </div>
                    </div>
                    <div className="w-full mt-3 relative z-10 flex items-center justify-between">
@@ -345,15 +347,15 @@ export default function SiteProgressTracker() {
                    </div>
                 </div>
 
-                <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[24px] shadow-sm relative overflow-hidden flex flex-col justify-center">
-                   <p className="uppercase tracking-wider mb-2 relative z-10 text-base font-normal text-gray-600 leading-relaxed">Schedule Status <span className="text-indigo-500 ml-1 font-bold">(SPI: {metrics.SPI.toFixed(2)})</span></p>
+                <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-center">
+                   <p className="uppercase tracking-wider mb-2 relative z-10 text-base font-normal text-txt-secondary leading-relaxed">Schedule Status <span className="text-indigo-500 ml-1 font-bold">(SPI: {metrics.SPI.toFixed(2)})</span></p>
                    <div className="flex justify-between items-end">
                       {metrics.daysAheadBehind > 0 ? (
-                         <h3 className="tabular-nums text-emerald-500 leading-none text-lg font-medium text-gray-800 mb-4">{metrics.daysAheadBehind} <span className="text-lg text-emerald-600/50">Days Ahead</span></h3>
+                         <h3 className="tabular-nums text-emerald-500 leading-none text-lg font-medium text-txt-primary mb-4">{metrics.daysAheadBehind} <span className="text-lg text-emerald-600/50">Days Ahead</span></h3>
                       ) : metrics.daysAheadBehind < 0 ? (
                          <h3 className={`text-3xl font-bold tabular-nums tracking-tight ${Math.abs(metrics.daysAheadBehind) <= 7 ? 'text-amber-500' : 'text-rose-500'} leading-none`}>{Math.abs(metrics.daysAheadBehind)} <span className="text-lg opacity-50">Days Behind</span></h3>
                       ) : (
-                         <h3 className="tabular-nums leading-none text-lg font-medium text-gray-800 mb-4">On Track</h3>
+                         <h3 className="tabular-nums leading-none text-lg font-medium text-txt-primary mb-4">On Track</h3>
                       )}
                    </div>
                    <p className={`text-xs font-bold mt-3 relative z-10 ${(metrics.SV || 0) >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
@@ -372,19 +374,19 @@ export default function SiteProgressTracker() {
                          <span className="mt-1.5 block w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span> {n}
                       </div>
                    ))}
-                   <button onClick={handleSendEmailAlert} 
+                   <Button onClick={handleSendEmailAlert} 
                      disabled={isSendingEmail}
                      className="mt-3 bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-2 rounded-full transition self-start flex items-center gap-2 disabled:opacity-50 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
                       <Mail className="w-4 h-4" />
                       {isSendingEmail ? 'Sending...' : 'Send Email Alert to PM'}
-                   </button>
+                   </Button>
                 </div>
              )}
 
              {/* S-Curve & Histograms Grid */}
              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                <div className="w-full bg-white border border-slate-200 rounded-[2rem] shadow-sm p-4 sm:p-6 overflow-hidden">
-                   <h3 className="mb-6 text-lg font-medium text-gray-800 mb-4">S-Curve (Planned vs Actual Value)</h3>
+                <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-sm p-4 sm:p-6 overflow-hidden">
+                   <h3 className="mb-6 text-lg font-medium text-txt-primary mb-4">S-Curve (Planned vs Actual Value)</h3>
                    <div className="h-64 w-full" id="s-curve-chart">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -417,8 +419,8 @@ export default function SiteProgressTracker() {
                    </div>
                 </div>
 
-                <div className="w-full bg-white border border-slate-200 rounded-[2rem] shadow-sm p-4 sm:p-6 overflow-hidden">
-                   <h3 className="mb-6 text-lg font-medium text-gray-800 mb-4">Resource Allocation</h3>
+                <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-sm p-4 sm:p-6 overflow-hidden">
+                   <h3 className="mb-6 text-lg font-medium text-txt-primary mb-4">Resource Allocation</h3>
                    <div className="h-64 w-full" id="resource-histogram">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -436,14 +438,14 @@ export default function SiteProgressTracker() {
              </div>
 
              {/* Dynamic CSS Gantt Chart */}
-             <div className="w-full bg-white border border-slate-200 rounded-[2rem] shadow-sm overflow-hidden p-4 sm:p-6">
-                <h3 className="mb-6 text-lg font-medium text-gray-800 mb-4">Execution Timeline</h3>
+             <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-sm overflow-hidden p-4 sm:p-6">
+                <h3 className="mb-6 text-lg font-medium text-txt-primary mb-4">Execution Timeline</h3>
                 
                 <div className="relative">
                    {/* Grid lines */}
                    <div className="absolute inset-0 flex justify-between px-32 ml-4">
                       {Array.from({length: 6}).map((_, i) => (
-                         <div key={i} className="w-px h-full bg-slate-100 rounded-[24px] border border-slate-200 shadow-sm text-gray-800 overflow-hidden"></div>
+                         <div key={i} className="w-px h-full bg-slate-100 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-hidden"></div>
                       ))}
                    </div>
 
@@ -459,12 +461,12 @@ export default function SiteProgressTracker() {
 
                          return (
                             <div key={phase.id} className="flex items-center gap-4 group cursor-pointer flex-wrap" onClick={() => setSelectedPhase(phase.id)}>
-                               <div className={`w-32 truncate text-sm font-bold text-right transition-colors ${isSelected ? 'text-emerald-600 ' : 'text-gray-600  group-hover:text-gray-900 '}`}>
+                               <div className={`w-32 truncate text-sm font-bold text-right transition-colors ${isSelected ? 'text-emerald-600 ' : 'text-txt-secondary  group-hover:text-txt-primary '}`}>
                                   {phase.name}
                                </div>
-                               <div className="flex-1 h-10 relative bg-slate-50/50 rounded-[24px] border border-slate-200 shadow-sm text-gray-800 rounded-[24px] border border-transparent group-hover:border-slate-200 : transition">
+                               <div className="flex-1 h-10 relative bg-slate-50/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl border border-transparent group-hover:border-ui-borderSubtle : transition">
                                   <div 
-                                     className={`absolute h-6 top-2 rounded-[24px] shadow-sm overflow-hidden border border-slate-300/5 transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-emerald-500 ring-offset-white ' : ''}`}
+                                     className={`absolute h-6 top-2 rounded-2xl shadow-sm overflow-hidden border border-ui-borderDefault/5 transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-emerald-500 ring-offset-white ' : ''}`}
                                      style={{ left: `${leftPct}%`, width: `${widthPct}%`, backgroundColor: '#e2e8f0' }}
                                   >
                                      <div 
@@ -473,7 +475,7 @@ export default function SiteProgressTracker() {
                                      ></div>
                                   </div>
                                </div>
-                               <div className="w-12 text-sm font-bold text-gray-500 text-right">
+                               <div className="w-12 text-sm font-bold text-txt-tertiary text-right">
                                   {phase.progress}%
                                </div>
                             </div>
@@ -487,15 +489,15 @@ export default function SiteProgressTracker() {
           <div className="lg:col-span-1 space-y-6">
              {/* Detail Panel */}
              {activePhase ? (
-                <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[2rem] shadow-sm sticky top-6 overflow-hidden">
+                <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm sticky top-6 overflow-hidden">
                    <div className="flex justify-between items-center mb-6">
-                      <h3 className="text-lg font-medium text-gray-800 mb-4">{activePhase.name}</h3>
-                      <button aria-label="Next" onClick={() => setSelectedPhase(null)} className="text-slate-400 hover:text-gray-600 rounded-full"><ChevronRight className="w-5 h-5 rotate-180" /></button>
+                      <h3 className="text-lg font-medium text-txt-primary mb-4">{activePhase.name}</h3>
+                      <Button aria-label="Next" onClick={() => setSelectedPhase(null)} className="text-slate-400 hover:text-txt-secondary rounded-full"><ChevronRight className="w-5 h-5 rotate-180" /></Button>
                    </div>
                    
                    <div className="space-y-5">
                       <div>
-                         <label className="block uppercase tracking-widest mb-2 text-sm font-medium text-gray-700 mb-1">Progress (%)</label>
+                         <label className="block uppercase tracking-widest mb-2 text-sm font-medium text-txt-secondary mb-1">Progress (%)</label>
                          <><label htmlFor="a11y-input-490" className="sr-only">Input</label>
 <input id="a11y-input-490" 
                             type="range" 
@@ -510,24 +512,24 @@ export default function SiteProgressTracker() {
 
                       <div className="grid grid-cols-2 gap-3">
                          <div>
-                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">Start Date</label>
                             <><label htmlFor="a11y-input-491" className="sr-only">Input</label>
 <input id="a11y-input-491" 
                                type="date" 
                                value={activePhase.startDate} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'startDate', e.target.value)}
-                               className="w-full px-2 py-2 bg-slate-50 border border-slate-200 rounded-full text-sm font-semibold outline-none"
+                               className="w-full px-2 py-2 bg-slate-50 border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
                                disabled={isClientDemo}
                             /></>
                          </div>
                          <div>
-                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-gray-700 mb-1">End Date</label>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">End Date</label>
                             <><label htmlFor="a11y-input-492" className="sr-only">Input</label>
 <input id="a11y-input-492" 
                                type="date" 
                                value={activePhase.endDate} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'endDate', e.target.value)}
-                               className="w-full px-2 py-2 bg-slate-50 border border-slate-200 rounded-full text-sm font-semibold outline-none"
+                               className="w-full px-2 py-2 bg-slate-50 border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
                                disabled={isClientDemo}
                             /></>
                          </div>
@@ -535,29 +537,29 @@ export default function SiteProgressTracker() {
 
                       <div className="grid grid-cols-2 gap-3">
                          <div>
-                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-gray-700 mb-1">Budget</label>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">Budget</label>
                             <div className="flex items-center">
-                               <span className="bg-slate-100 px-2 py-2 border border-r-0 border-slate-200 rounded-l-lg text-sm text-gray-500">$</span>
+                               <span className="bg-slate-100 px-2 py-2 border border-r-0 border-ui-borderSubtle rounded-l-lg text-sm text-txt-tertiary">$</span>
                                <><label htmlFor="a11y-input-493" className="sr-only">Input</label>
 <input id="a11y-input-493" 
                                   type="number" inputMode="decimal" 
                                   value={activePhase.budget} 
                                   onChange={(e) => handleUpdatePhase(activePhase.id, 'budget', parseFloat(e.target.value)||0)}
-                                  className="w-full px-2 py-2 bg-slate-50 border border-slate-200 rounded-r-lg text-sm font-semibold outline-none"
+                                  className="w-full px-2 py-2 bg-slate-50 border border-ui-borderSubtle rounded-r-lg text-sm font-semibold outline-none"
                                   disabled={isClientDemo}
                                /></>
                             </div>
                          </div>
                          <div>
-                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-gray-700 mb-1">Actual Cost</label>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">Actual Cost</label>
                             <div className="flex items-center">
-                               <span className="bg-slate-100 px-2 py-2 border border-r-0 border-slate-200 rounded-l-lg text-sm text-gray-500">$</span>
+                               <span className="bg-slate-100 px-2 py-2 border border-r-0 border-ui-borderSubtle rounded-l-lg text-sm text-txt-tertiary">$</span>
                                <><label htmlFor="a11y-input-494" className="sr-only">Input</label>
 <input id="a11y-input-494" 
                                   type="number" inputMode="decimal" 
                                   value={activePhase.actualCost} 
                                   onChange={(e) => handleUpdatePhase(activePhase.id, 'actualCost', parseFloat(e.target.value)||0)}
-                                  className={`w-full px-2 py-2 bg-slate-50  border border-slate-200 rounded-r-lg text-sm font-bold outline-none ${activePhase.actualCost > activePhase.budget ? 'text-rose-600' : 'text-emerald-600'}`}
+                                  className={`w-full px-2 py-2 bg-slate-50  border border-ui-borderSubtle rounded-r-lg text-sm font-bold outline-none ${activePhase.actualCost > activePhase.budget ? 'text-rose-600' : 'text-emerald-600'}`}
                                   disabled={isClientDemo}
                                /></>
                             </div>
@@ -566,24 +568,24 @@ export default function SiteProgressTracker() {
 
                       <div className="grid grid-cols-2 gap-3 rounded-full">
                          <div>
-                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-gray-700 mb-1">Planned Workers</label>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">Planned Workers</label>
                             <><label htmlFor="a11y-input-495" className="sr-only">Input</label>
 <input id="a11y-input-495" 
                                type="number" inputMode="decimal" 
                                value={activePhase.workersPlanned || 0} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'workersPlanned', parseInt(e.target.value)||0)}
-                               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-full text-sm font-semibold outline-none"
+                               className="w-full px-3 py-2 bg-slate-50 border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
                                disabled={isClientDemo}
                             /></>
                          </div>
                          <div>
-                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-gray-700 mb-1">Actual Workers</label>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">Actual Workers</label>
                             <><label htmlFor="a11y-input-496" className="sr-only">Input</label>
 <input id="a11y-input-496" 
                                type="number" inputMode="decimal" 
                                value={activePhase.workersActual || 0} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'workersActual', parseInt(e.target.value)||0)}
-                               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-full text-sm font-semibold outline-none"
+                               className="w-full px-3 py-2 bg-slate-50 border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
                                disabled={isClientDemo}
                             /></>
                          </div>
@@ -591,24 +593,24 @@ export default function SiteProgressTracker() {
 
                       <div className="pt-4 border-t border-slate-100">
                          <div className="flex justify-between items-center mb-3">
-                            <label className="block uppercase tracking-widest text-sm font-medium text-gray-700 mb-1">Site Photos ({activePhase.photos.length})</label>
-                            <button onClick={() => fileInputRef.current?.click()} className="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-700 rounded-full">
+                            <label className="block uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1">Site Photos ({activePhase.photos.length})</label>
+                            <Button onClick={() => fileInputRef.current?.click()} className="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-700 rounded-full">
                                <Upload className="w-3 h-3" /> Upload
-                            </button>
+                            </Button>
                             <><label htmlFor="a11y-input-497" className="sr-only">Input</label>
 <input id="a11y-input-497" type="file" accept="image/*" className="hidden text-base font-normal rounded-full" ref={fileInputRef} onChange={handlePhotoUpload} /></>
                          </div>
                          
                          {activePhase.photos.length === 0 ? (
-                            <div className="h-24 border-2 border-dashed border-slate-200 rounded-[24px] flex items-center justify-center text-slate-400">
+                            <div className="h-24 border-2 border-dashed border-ui-borderSubtle rounded-2xl flex items-center justify-center text-slate-400">
                                <ImageIcon className="w-6 h-6 opacity-50" />
                             </div>
                          ) : (
                             <div className="grid grid-cols-2 gap-2">
                                {activePhase.photos.map((p, idx) => (
-                                  <div key={idx} className="aspect-square rounded-[24px] bg-slate-100 overflow-hidden relative group">
+                                  <div key={idx} className="aspect-square rounded-2xl bg-slate-100 overflow-hidden relative group">
                                      <img src={p} alt={`Site Progress Photo ${idx}`} title={`Progress Photo ${idx}`} loading="lazy" className="w-full h-full object-cover" />
-                                     <button aria-label="Delete" 
+                                     <Button aria-label="Delete" 
                                         onClick={() => {
                                            const newPhotos = [...activePhase.photos];
                                            newPhotos.splice(idx, 1);
@@ -617,7 +619,7 @@ export default function SiteProgressTracker() {
                                         className="absolute top-2 right-2 p-1.5 bg-slate-900/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                                      >
                                         <Trash2 className="w-3 h-3" />
-                                     </button>
+                                     </Button>
                                   </div>
                                ))}
                             </div>
@@ -626,10 +628,10 @@ export default function SiteProgressTracker() {
                    </div>
                 </div>
              ) : (
-                <div className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-gray-800 border-2 border-dashed border-slate-200 p-4 sm:p-8 md:p-8 rounded-[2rem] text-center flex flex-col items-center justify-center min-h-[400px] overflow-hidden">
+                <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border-2 border-dashed border-ui-borderSubtle p-4 sm:p-8 md:p-8 rounded-2xl text-center flex flex-col items-center justify-center min-h-[400px] overflow-hidden">
                    <Calendar className="w-12 h-12 text-slate-300 mb-4" />
-                   <h3 className="mb-1 text-lg font-medium text-gray-800 mb-4">Select a Phase</h3>
-                   <p className="text-base font-normal text-gray-600 leading-relaxed">Click on any phase in the timeline to edit progress, budgets, and upload photos.</p>
+                   <h3 className="mb-1 text-lg font-medium text-txt-primary mb-4">Select a Phase</h3>
+                   <p className="text-base font-normal text-txt-secondary leading-relaxed">Click on any phase in the timeline to edit progress, budgets, and upload photos.</p>
                 </div>
              )}
           </div>

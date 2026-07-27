@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { Paintbrush, Hammer, LayoutGrid, Bug, AppWindow, PaintBucket, ChevronDown, ChevronUp, Trees } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -7,6 +8,7 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { ResultCard } from "../ui/ResultCard";
 import { DetailedCalculationDisplay } from "../ui/DetailedCalculationDisplay";
+
 
 export default function InteriorsFinishesEstimator() {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -22,22 +24,22 @@ export default function InteriorsFinishesEstimator() {
   };
 
   const AccordionHeader = ({ id, title, icon: Icon }: { id: string; title: string; icon: any }) => (
-    <button
+    <Button
       onClick={() => toggleSection(id)}
       className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-50/80 transition-colors focus:outline-none rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
     >
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-amber-50 text-amber-600 rounded-[16px]">
+        <div className="p-2 bg-amber-50 text-amber-600 rounded-2xl">
           <Icon className="w-5 h-5" />
         </div>
-        <h3 className="text-[16px] font-bold text-slate-800">{title}</h3>
+        <h3 className="text-[16px] font-bold text-txt-primary">{title}</h3>
       </div>
       {openSections[id] ? (
-        <ChevronUp className="w-5 h-5 text-slate-600" />
+        <ChevronUp className="w-5 h-5 text-txt-secondary" />
       ) : (
-        <ChevronDown className="w-5 h-5 text-slate-600" />
+        <ChevronDown className="w-5 h-5 text-txt-secondary" />
       )}
-    </button>
+    </Button>
   );
 
   return (
@@ -46,7 +48,7 @@ export default function InteriorsFinishesEstimator() {
         
 
         <div className="space-y-4">
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-slate-200 overflow-hidden transition-all">
+          <div className="w-full bg-surface-default rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-ui-borderSubtle overflow-hidden transition-all">
             <AccordionHeader id="tiles" title="Tiles & Flooring Calculator" icon={LayoutGrid} />
             {openSections["tiles"] && (
                <div className="p-6 md:p-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -55,7 +57,7 @@ export default function InteriorsFinishesEstimator() {
             )}
           </div>
           
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-slate-200 overflow-hidden transition-all">
+          <div className="w-full bg-surface-default rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-ui-borderSubtle overflow-hidden transition-all">
             <AccordionHeader id="paint" title="Paint Calculator" icon={Paintbrush} />
             {openSections["paint"] && (
                <div className="p-6 md:p-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -64,7 +66,7 @@ export default function InteriorsFinishesEstimator() {
             )}
           </div>
 
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-slate-200 overflow-hidden transition-all">
+          <div className="w-full bg-surface-default rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-ui-borderSubtle overflow-hidden transition-all">
             <AccordionHeader id="doorsWindows" title="Doors & Windows Deductions" icon={AppWindow} />
             {openSections["doorsWindows"] && (
                <div className="p-6 md:p-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -73,7 +75,7 @@ export default function InteriorsFinishesEstimator() {
             )}
           </div>
 
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-slate-200 overflow-hidden transition-all">
+          <div className="w-full bg-surface-default rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-ui-borderSubtle overflow-hidden transition-all">
             <AccordionHeader id="wood" title="Wood Framing & Carpentry" icon={Trees} />
             {openSections["wood"] && (
                <div className="p-6 md:p-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -82,7 +84,7 @@ export default function InteriorsFinishesEstimator() {
             )}
           </div>
 
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-slate-200 overflow-hidden transition-all">
+          <div className="w-full bg-surface-default rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.02)] border border-ui-borderSubtle overflow-hidden transition-all">
             <AccordionHeader id="termite" title="Termite Treatment Estimator" icon={Bug} />
             {openSections["termite"] && (
                <div className="p-6 md:p-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -202,39 +204,39 @@ function TilesCalculator() {
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label={`Floor Area (${uArea})`}>
             <><label htmlFor="a11y-input-284" className="sr-only">Input</label>
-<input id="a11y-input-284" type="number" inputMode="decimal" min="0" value={area} onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-284" type="number" inputMode="decimal" min="0" value={area} onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
           <InputGroup label={`Perimeter (${uLen})`}>
             <><label htmlFor="a11y-input-285" className="sr-only">Input</label>
-<input id="a11y-input-285" type="number" inputMode="decimal" min="0" value={perimeter} onChange={(e) => setPerimeter(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-285" type="number" inputMode="decimal" min="0" value={perimeter} onChange={(e) => setPerimeter(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label={`Skirting Ht (${isSI ? 'mm' : 'in'})`}>
             <><label htmlFor="a11y-input-286" className="sr-only">Input</label>
-<input id="a11y-input-286" type="number" inputMode="decimal" min="0" value={skirtingHeight} onChange={(e) => setSkirtingHeight(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-286" type="number" inputMode="decimal" min="0" value={skirtingHeight} onChange={(e) => setSkirtingHeight(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
           <InputGroup label={`Doors Qty`}>
             <><label htmlFor="a11y-input-287" className="sr-only">Input</label>
-<input id="a11y-input-287" type="number" inputMode="decimal" min="0" value={doorOpenings} onChange={(e) => setDoorOpenings(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-287" type="number" inputMode="decimal" min="0" value={doorOpenings} onChange={(e) => setDoorOpenings(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
         </div>
 
         <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
           <InputGroup label={`Tile Width (${isSI ? 'mm' : 'in'})`}>
             <><label htmlFor="a11y-input-288" className="sr-only">Input</label>
-<input id="a11y-input-288" type="number" inputMode="decimal" min="1" value={tileWidth} onChange={(e) => setTileWidth(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-288" type="number" inputMode="decimal" min="1" value={tileWidth} onChange={(e) => setTileWidth(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
           <InputGroup label={`Tile Length (${isSI ? 'mm' : 'in'})`}>
             <><label htmlFor="a11y-input-289" className="sr-only">Input</label>
-<input id="a11y-input-289" type="number" inputMode="decimal" min="1" value={tileLength} onChange={(e) => setTileLength(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-289" type="number" inputMode="decimal" min="1" value={tileLength} onChange={(e) => setTileLength(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
         </div>
 
         <InputGroup label="Tiles per Box">
             <><label htmlFor="a11y-input-290" className="sr-only">Input</label>
-<input id="a11y-input-290" type="number" inputMode="decimal" min="1" value={tilesPerBox} onChange={(e) => setTilesPerBox(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-290" type="number" inputMode="decimal" min="1" value={tilesPerBox} onChange={(e) => setTilesPerBox(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
         </InputGroup>
       </div>
 
@@ -252,9 +254,9 @@ function TilesCalculator() {
             </div>
           </>
         ) : (
-          <div className="relative p-5 sm:p-6 rounded-[24px] bg-white/80 [#252834]/90 backdrop-blur-md border border-slate-200/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
+          <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 [#252834]/90 backdrop-blur-md border border-ui-borderSubtle/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
             <h3 className="font-bold text-sm uppercase tracking-wider mb-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-rose-400 bg-clip-text text-transparent">Estimate Results</h3>
-            <div className="text-center text-slate-500 py-8">Enter area and tile size to calculate.</div>
+            <div className="text-center text-txt-tertiary py-8">Enter area and tile size to calculate.</div>
           </div>
         )}
       </div>
@@ -354,28 +356,28 @@ function PaintCalculator() {
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label={`Total Area (${uArea})`}>
             <><label htmlFor="a11y-input-291" className="sr-only">Input</label>
-<input id="a11y-input-291" type="number" inputMode="decimal" min="0" value={area} onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-291" type="number" inputMode="decimal" min="0" value={area} onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
           <InputGroup label="Number of Coats">
             <><label htmlFor="a11y-input-292" className="sr-only">Input</label>
-<input id="a11y-input-292" type="number" inputMode="decimal" min="1" value={coats} onChange={(e) => setCoats(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-292" type="number" inputMode="decimal" min="1" value={coats} onChange={(e) => setCoats(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label="Volume Solids (%)">
             <><label htmlFor="a11y-input-293" className="sr-only">Input</label>
-<input id="a11y-input-293" type="number" inputMode="decimal" min="1" max="100" value={volumeSolids} onChange={(e) => setVolumeSolids(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-293" type="number" inputMode="decimal" min="1" max="100" value={volumeSolids} onChange={(e) => setVolumeSolids(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
            <InputGroup label="Target DFT (µm/coat)">
             <><label htmlFor="a11y-input-294" className="sr-only">Input</label>
-<input id="a11y-input-294" type="number" inputMode="decimal" min="1" value={dft} onChange={(e) => setDft(e.target.value !== "" ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-294" type="number" inputMode="decimal" min="1" value={dft} onChange={(e) => setDft(e.target.value !== "" ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
         </div>
         
          <InputGroup label="Wastage (%)">
             <><label htmlFor="a11y-input-295" className="sr-only">Input</label>
-<input id="a11y-input-295" type="number" inputMode="decimal" min="0" value={wastage} onChange={(e) => setWastage(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-295" type="number" inputMode="decimal" min="0" value={wastage} onChange={(e) => setWastage(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
 
       </div>
@@ -394,9 +396,9 @@ function PaintCalculator() {
               </div>
             </>
         ) : (
-          <div className="relative p-5 sm:p-6 rounded-[24px] bg-white/80 [#252834]/90 backdrop-blur-md border border-slate-200/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
+          <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 [#252834]/90 backdrop-blur-md border border-ui-borderSubtle/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
             <h3 className="font-bold text-sm uppercase tracking-wider mb-6 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">Estimate Results</h3>
-            <div className="text-center text-slate-500 py-8">Enter wall/ceiling area and coats to calculate.</div>
+            <div className="text-center text-txt-tertiary py-8">Enter wall/ceiling area and coats to calculate.</div>
           </div>
         )}
       </div>
@@ -440,16 +442,16 @@ function DoorsWindowsCalculator() {
     let currentX = 0; // Simple auto-layout from left to right
 
     return (
-      <div className="mt-8 p-5 bg-slate-50/50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 border border-slate-200 rounded-[24px] overflow-hidden">
+      <div className="mt-8 p-5 bg-slate-50/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-base font-medium">Proportional Preview</h4>
-          <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider bg-bg-card shadow-sm px-2 py-1 rounded-[16px]">
+          <span className="text-[10px] text-txt-tertiary font-bold uppercase tracking-wider bg-bg-card shadow-sm px-2 py-1 rounded-2xl">
             {wl}{uLen} × {wh}{uLen}
           </span>
         </div>
         
         <div 
-          className="relative w-full mx-auto bg-white [#1A1C24] border-2 border-indigo-200 overflow-hidden rounded-[16px] shadow-sm" 
+          className="relative w-full mx-auto bg-surface-default [#1A1C24] border-2 border-indigo-200 overflow-hidden rounded-2xl shadow-sm" 
           style={{ aspectRatio: displayRatio }}
         >
           {/* Wall Grid Texture */}
@@ -487,7 +489,7 @@ function DoorsWindowsCalculator() {
                      bottom: isDoor ? '0' : `calc(50% - ${pctH / 2}%)`,
                    }}
                  >
-                   <div className="w-full bg-white/90 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 rounded px-1.5 py-0.5 overflow-hidden">
+                   <div className="w-full bg-surface-default/90 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded px-1.5 py-0.5 overflow-hidden">
                      <span className="text-[9px] sm:text-[10px] font-bold text-rose-600 truncate whitespace-nowrap">
                        {op.name}
                      </span>
@@ -512,7 +514,7 @@ function DoorsWindowsCalculator() {
               min="0"
               value={wallLength}
               onChange={(e) => setWallLength(e.target.value ? Number(e.target.value) : "")}
-              className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+              className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
               placeholder="e.g. 5"
             /></>
           </InputGroup>
@@ -523,17 +525,17 @@ function DoorsWindowsCalculator() {
               min="0"
               value={wallHeight}
               onChange={(e) => setWallHeight(e.target.value ? Number(e.target.value) : "")}
-              className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+              className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
               placeholder="e.g. 3"
             /></>
           </InputGroup>
         </div>
 
-        <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <div className="space-y-3 pt-4 border-t border-ui-borderSubtle dark:border-slate-700">
           <label className="text-base font-medium">Openings / Deductions</label>
           <div className="space-y-2">
             {deductions.map((item, index) => (
-              <div key={index} className="flex gap-2 items-center bg-white border border-slate-200 dark:border-slate-700 p-2 rounded-[24px] overflow-hidden">
+              <div key={index} className="flex gap-2 items-center bg-surface-default border border-ui-borderSubtle dark:border-slate-700 p-2 rounded-2xl overflow-hidden">
                 <><label htmlFor="a11y-input-298" className="sr-only">Input</label>
 <input id="a11y-input-298" 
                   type="text" 
@@ -543,19 +545,19 @@ function DoorsWindowsCalculator() {
                     newItems[index].name = e.target.value;
                     setDeductions(newItems);
                   }}
-                  className="w-24 px-2 py-1.5 text-sm bg-bg-card border border-slate-200 rounded outline-none font-medium text-slate-700 rounded-full" 
+                  className="w-24 px-2 py-1.5 text-sm bg-bg-card border border-ui-borderSubtle rounded outline-none font-medium text-txt-secondary rounded-full" 
                 /></>
                 <><label htmlFor="a11y-input-299" className="sr-only">W</label>
-<input id="a11y-input-299" type="number" inputMode="decimal" placeholder="W" value={item.w || ""} onChange={(e) => updateItem(index, 'w', e.target.value)} className="w-16 px-2 py-1.5 text-sm bg-bg-card border border-slate-200 rounded outline-none font-medium text-slate-700 rounded-full" /></>
+<input id="a11y-input-299" type="number" inputMode="decimal" placeholder="W" value={item.w || ""} onChange={(e) => updateItem(index, 'w', e.target.value)} className="w-16 px-2 py-1.5 text-sm bg-bg-card border border-ui-borderSubtle rounded outline-none font-medium text-txt-secondary rounded-full" /></>
                 <><label htmlFor="a11y-input-300" className="sr-only">H</label>
-<input id="a11y-input-300" type="number" inputMode="decimal" placeholder="H" value={item.h || ""} onChange={(e) => updateItem(index, 'h', e.target.value)} className="w-16 px-2 py-1.5 text-sm bg-bg-card border border-slate-200 rounded outline-none font-medium text-slate-700 rounded-full" /></>
+<input id="a11y-input-300" type="number" inputMode="decimal" placeholder="H" value={item.h || ""} onChange={(e) => updateItem(index, 'h', e.target.value)} className="w-16 px-2 py-1.5 text-sm bg-bg-card border border-ui-borderSubtle rounded outline-none font-medium text-txt-secondary rounded-full" /></>
                 <><label htmlFor="a11y-input-301" className="sr-only">Qty</label>
-<input id="a11y-input-301" type="number" inputMode="decimal" placeholder="Qty" value={item.qty || ""} onChange={(e) => updateItem(index, 'qty', e.target.value)} className="w-16 px-2 py-1.5 text-sm bg-bg-card border border-slate-200 rounded outline-none font-medium text-slate-700 rounded-full" /></>
-                <button onClick={() => removeItem(index)} className="p-1.5 px-2.5 text-rose-500 hover:bg-rose-50 rounded transition-colors ml-auto mr-1 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"><span className="font-bold">X</span></button>
+<input id="a11y-input-301" type="number" inputMode="decimal" placeholder="Qty" value={item.qty || ""} onChange={(e) => updateItem(index, 'qty', e.target.value)} className="w-16 px-2 py-1.5 text-sm bg-bg-card border border-ui-borderSubtle rounded outline-none font-medium text-txt-secondary rounded-full" /></>
+                <Button onClick={() => removeItem(index)} className="p-1.5 px-2.5 text-rose-500 hover:bg-rose-50 rounded transition-colors ml-auto mr-1 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"><span className="font-bold">X</span></Button>
               </div>
             ))}
           </div>
-          <button onClick={addItem} className="text-base font-medium text-amber-600 hover:text-amber-700 mt-2 inline-flex items-center gap-1 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">+ Add Opening</button>
+          <Button onClick={addItem} className="text-base font-medium text-amber-600 hover:text-amber-700 mt-2 inline-flex items-center gap-1 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">+ Add Opening</Button>
         </div>
       </div>
 
@@ -578,9 +580,9 @@ function DoorsWindowsCalculator() {
              {renderPreview()}
           </>
         ) : (
-          <div className="relative p-5 sm:p-6 rounded-[24px] bg-white/80 [#252834]/90 backdrop-blur-md border border-slate-200/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group h-full justify-center">
+          <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 [#252834]/90 backdrop-blur-md border border-ui-borderSubtle/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group h-full justify-center">
             <h3 className="font-bold text-sm uppercase tracking-wider mb-2 text-center bg-gradient-to-r from-blue-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent">Estimate Results</h3>
-            <div className="text-center text-slate-500 py-8">
+            <div className="text-center text-txt-tertiary py-8">
               Enter wall dimensions to calculate net area and see the proportional preview.
             </div>
           </div>
@@ -661,23 +663,23 @@ function WoodFramingCalculator() {
       <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
         <InputGroup label={`Length per Member (${uLen})`}>
           <><label htmlFor="a11y-input-302" className="sr-only">Input</label>
-<input id="a11y-input-302" type="number" inputMode="decimal" min="0" value={frameLength} onChange={(e) => setFrameLength(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-302" type="number" inputMode="decimal" min="0" value={frameLength} onChange={(e) => setFrameLength(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
         </InputGroup>
         
         <div className="grid grid-cols-2 gap-4">
           <InputGroup label={`Width (${isSI ? 'mm' : 'in'})`}>
             <><label htmlFor="a11y-input-303" className="sr-only">Input</label>
-<input id="a11y-input-303" type="number" inputMode="decimal" min="0" value={frameWidth} onChange={(e) => setFrameWidth(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-303" type="number" inputMode="decimal" min="0" value={frameWidth} onChange={(e) => setFrameWidth(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
           <InputGroup label={`Thickness (${isSI ? 'mm' : 'in'})`}>
             <><label htmlFor="a11y-input-304" className="sr-only">Input</label>
-<input id="a11y-input-304" type="number" inputMode="decimal" min="0" value={frameThick} onChange={(e) => setFrameThick(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-304" type="number" inputMode="decimal" min="0" value={frameThick} onChange={(e) => setFrameThick(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
         </div>
 
         <InputGroup label="Quantity (Pieces)">
           <><label htmlFor="a11y-input-305" className="sr-only">Input</label>
-<input id="a11y-input-305" type="number" inputMode="decimal" min="1" value={quantity} onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-305" type="number" inputMode="decimal" min="1" value={quantity} onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
         </InputGroup>
       </div>
 
@@ -694,9 +696,9 @@ function WoodFramingCalculator() {
             </div>
           </>
         ) : (
-          <div className="relative p-5 sm:p-6 rounded-[24px] bg-white/80 [#252834]/90 backdrop-blur-md border border-slate-200/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
+          <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 [#252834]/90 backdrop-blur-md border border-ui-borderSubtle/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
             <h3 className="font-bold text-sm uppercase tracking-wider mb-6 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">Estimate Results</h3>
-            <div className="text-center text-slate-500 py-8">Enter member dimensions and quantity to calculate wood volume.</div>
+            <div className="text-center text-txt-tertiary py-8">Enter member dimensions and quantity to calculate wood volume.</div>
           </div>
         )}
       </div>
@@ -790,35 +792,35 @@ function TermiteTreatmentCalculator() {
   return (
     <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
       <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
-        <div className="flex bg-slate-100 p-1 rounded-[16px]">
-            <button
+        <div className="flex bg-slate-100 p-1 rounded-2xl">
+            <Button
               onClick={() => setType("pre")}
-              className={`flex-1 py-1.5 text-base font-medium rounded-[12px] transition-colors ${type === "pre" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+              className={`flex-1 py-1.5 text-base font-medium rounded-2xl transition-colors ${type === "pre" ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary"}`}
             >
               Pre-Construction
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setType("post")}
-              className={`flex-1 py-1.5 text-base font-medium rounded-[12px] transition-colors ${type === "post" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+              className={`flex-1 py-1.5 text-base font-medium rounded-2xl transition-colors ${type === "post" ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary"}`}
             >
               Post-Construction
-            </button>
+            </Button>
           </div>
           
         <div className="grid grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
           <InputGroup label={`Plinth Area (${uArea})`}>
             <><label htmlFor="a11y-input-306" className="sr-only">Input</label>
-<input id="a11y-input-306" type="number" inputMode="decimal" min="0" value={area} onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-306" type="number" inputMode="decimal" min="0" value={area} onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
           <InputGroup label={`Perimeter (${uLen})`}>
             <><label htmlFor="a11y-input-307" className="sr-only">Input</label>
-<input id="a11y-input-307" type="number" inputMode="decimal" min="0" value={perimeter} onChange={(e) => setPerimeter(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
+<input id="a11y-input-307" type="number" inputMode="decimal" min="0" value={perimeter} onChange={(e) => setPerimeter(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" /></>
           </InputGroup>
         </div>
 
         <InputGroup label="Dilution Ratio (Parts Water to 1 Part Chem)">
           <><label htmlFor="a11y-input-308" className="sr-only">e.g. 49</label>
-<input id="a11y-input-308" type="number" inputMode="decimal" min="1" value={concentrationRatio} onChange={(e) => setConcentrationRatio(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" placeholder="e.g. 49" /></>
+<input id="a11y-input-308" type="number" inputMode="decimal" min="1" value={concentrationRatio} onChange={(e) => setConcentrationRatio(e.target.value ? Number(e.target.value) : "")} className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 outline-none transition-all" placeholder="e.g. 49" /></>
         </InputGroup>
       </div>
 
@@ -835,9 +837,9 @@ function TermiteTreatmentCalculator() {
             </div>
           </>
         ) : (
-          <div className="relative p-5 sm:p-6 rounded-[24px] bg-white/80 [#252834]/90 backdrop-blur-md border border-slate-200/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
+          <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 [#252834]/90 backdrop-blur-md border border-ui-borderSubtle/60 shadow-sm [0_4px_20px_rgba(15,23,42,0.15)] flex flex-col gap-3 transition-all duration-300 w-full overflow-hidden group">
             <h3 className="font-bold text-sm uppercase tracking-wider mb-6 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">Estimate Results</h3>
-            <div className="text-center text-slate-500 py-8">Enter area and perimeter to verify chemical requirements.</div>
+            <div className="text-center text-txt-tertiary py-8">Enter area and perimeter to verify chemical requirements.</div>
           </div>
         )}
       </div>
@@ -848,7 +850,7 @@ function TermiteTreatmentCalculator() {
 function InputGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-[13px] font-bold text-slate-700">{label}</label>
+      <label className="text-[13px] font-bold text-txt-secondary">{label}</label>
       {children}
     </div>
   );

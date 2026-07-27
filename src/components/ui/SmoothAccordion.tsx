@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+
 
 interface SmoothAccordionProps {
   title: React.ReactNode | string;
@@ -12,24 +14,24 @@ export function SmoothAccordion({ title, children, defaultExpanded = false }: Sm
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
-      <button
+    <div className="bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+      <Button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
         aria-expanded={isExpanded}
         aria-controls="accordion-content"
       >
-        <div className="font-semibold text-slate-800 dark:text-slate-200 text-left">
+        <div className="font-semibold text-txt-primary dark:text-slate-200 text-left">
           {title}
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="text-slate-400 p-1"
         >
           <ChevronDown className="w-5 h-5" />
         </motion.div>
-      </button>
+      </Button>
 
       <AnimatePresence initial={false}>
         {isExpanded && (
@@ -39,8 +41,8 @@ export function SmoothAccordion({ title, children, defaultExpanded = false }: Sm
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{
-              height: { duration: 0.3, ease: 'easeInOut' },
-              opacity: { duration: 0.25, ease: 'easeInOut' }
+              height: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+              opacity: { duration: 0.25, ease: [0.16, 1, 0.3, 1] }
             }}
             className="overflow-hidden"
           >

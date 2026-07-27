@@ -1,3 +1,4 @@
+import { Button } from './ui/Button';
 import React, { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence } from "framer-motion";
@@ -5,6 +6,7 @@ import { Bookmark, BookmarkCheck, ArrowRight, Box, Target, Clock, Zap, X } from 
 import { useSettings } from "../context/SettingsContext";
 import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
+
 
 const CAT_COLORS: Record<string, { c: string, glow: string }> = {
   "ROAD PAVEMENT":       { c: "#EA580C", glow: "rgba(249,115,22,0.15)" }, // Vibrant orange
@@ -106,8 +108,8 @@ export default function ToolCard({
       }}
       className={cn(
         "w-full h-full flex flex-col font-sans cursor-pointer transition-all duration-300",
-        "bg-white relative overflow-hidden rounded-[1.5rem] ring-1 ring-gray-900/5 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)]",
-        hov ? "shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)]" : ""
+        "bg-surface-default relative overflow-hidden rounded-2xl border border-ui-borderSubtle shadow-sm",
+        hov ? "shadow-lg border-ui-borderDefault -translate-y-1" : ""
       )}
       style={{
         backgroundImage: `radial-gradient(circle at 0% 0%, ${colorToUse === '#F4F1EA' ? '#EAE0CC' : colorToUse === '#F0F5FF' ? '#E0E7FF' : colorToUse === '#D9E6DD' ? '#C4D6C9' : colorToUse} 0%, ${colorToUse} 25%, rgba(255,255,255,0) 75%)`
@@ -132,7 +134,7 @@ export default function ToolCard({
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="mb-4"
           >
-            <IconComponent size={40} className="text-slate-800" strokeWidth={2.5} />
+            <IconComponent size={40} className="text-txt-primary" strokeWidth={2.5} />
           </motion.div>
           
           <div className="flex items-center gap-3">
@@ -149,22 +151,22 @@ export default function ToolCard({
                 NEW
               </span>
             )}
-            <button onClick={toggleFavorite}
+            <Button onClick={toggleFavorite}
               className="flex items-center justify-center rounded-full hover:bg-gray-50 transition-colors active:scale-95"
               aria-label={saved ? "Remove from favorites" : "Add to favorites"}
             >
               <motion.div whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }} className="p-1">
-                {saved ? <BookmarkCheck size={20} color={cfg.c} /> : <Bookmark size={20} className="text-gray-400" strokeWidth={1.5} />}
+                {saved ? <BookmarkCheck size={20} color={cfg.c} /> : <Bookmark size={20} className="text-txt-tertiary" strokeWidth={1.5} />}
               </motion.div>
-            </button>
+            </Button>
           </div>
         </div>
 
         <div className="flex flex-col mt-2">
-          <motion.h3 layoutId={`title-${mod.id}`} className="text-xl font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[3.5rem]">
+          <motion.h3 layoutId={`title-${mod.id}`} className="text-xl font-semibold text-txt-primary leading-tight line-clamp-2 min-h-[3.5rem]">
             {mod.title}
           </motion.h3>
-          <p className="text-gray-500 text-sm mt-3 leading-relaxed line-clamp-2">
+          <p className="text-txt-secondary text-sm mt-3 leading-relaxed line-clamp-2">
             {mod.desc || "No description available."}
           </p>
         </div>
@@ -172,13 +174,13 @@ export default function ToolCard({
         <div className="mt-auto pt-6 flex items-end justify-between">
           <div className="flex flex-col items-start gap-1">
             <Dots level={level} color={cfg.c} />
-            <span className="text-[10px] tracking-widest font-semibold text-gray-400 mt-1 uppercase">
+            <span className="text-[10px] tracking-widest font-semibold text-txt-tertiary mt-1 uppercase">
               {LEVEL_MAP[level] || "Moderate"}
             </span>
           </div>
-          <button 
+          <Button 
             className={cn(
-              "text-slate-800 rounded-full px-6 py-2.5 text-xs font-bold tracking-wider uppercase transition-all duration-300 active:scale-95",
+              "text-txt-primary rounded-full px-6 py-2.5 text-xs font-bold tracking-wider uppercase transition-all duration-300 active:scale-95",
               colorToUse === '#F4F1EA' ? "bg-[#E5DFD3] hover:bg-[#D5CDBF]" :
               colorToUse === '#F0F5FF' ? "bg-[#D9DDF0] hover:bg-[#C4C9E6]" :
               colorToUse === '#D9E6DD' ? "bg-[#D9E6DD] hover:bg-[#C4D6C9]" :
@@ -186,7 +188,7 @@ export default function ToolCard({
             )}
           >
             OPEN
-          </button>
+          </Button>
         </div>
       </div>
       <AnimatePresence>
@@ -208,7 +210,7 @@ export default function ToolCard({
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: "spring", damping: 25, stiffness: 400 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200"
+              className="relative w-full max-w-lg bg-surface-default rounded-2xl shadow-xl overflow-hidden border border-ui-borderSubtle"
             >
               <div 
                 className="h-32 p-6 flex justify-between items-start"
@@ -217,34 +219,34 @@ export default function ToolCard({
                   backgroundColor: '#f8fafc'
                 }}
               >
-                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
-                  <IconComponent size={32} className="text-slate-800" />
+                <div className="w-16 h-16 rounded-2xl bg-surface-default shadow-sm border border-slate-100 flex items-center justify-center">
+                  <IconComponent size={32} className="text-txt-primary" />
                 </div>
-                <button 
+                <Button 
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowQuickView(false);
                   }}
-                  className="p-2 bg-white/50 hover:bg-white rounded-full transition-colors"
+                  className="p-2 bg-surface-default/50 hover:bg-surface-default rounded-full transition-colors"
                 >
-                  <X size={20} className="text-slate-500" />
-                </button>
+                  <X size={20} className="text-txt-tertiary" />
+                </Button>
               </div>
 
-              <div className="p-6 -mt-4 relative bg-white rounded-t-3xl">
+              <div className="p-6 -mt-4 relative bg-surface-default rounded-t-3xl">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold tracking-wider uppercase" style={{ color: cfg.c }}>
                     {mod.category}
                   </span>
                   <div className="flex items-center gap-1.5">
                     <Dots level={level} color={cfg.c} />
-                    <span className="text-[10px] font-semibold text-slate-400 uppercase">
+                    <span className="text-[10px] font-semibold text-txt-tertiary uppercase">
                       {LEVEL_MAP[level]}
                     </span>
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-3">{mod.title}</h2>
-                <p className="text-slate-600 text-sm leading-relaxed mb-6">
+                <h2 className="text-2xl font-bold text-txt-primary mb-3">{mod.title}</h2>
+                <p className="text-txt-secondary text-sm leading-relaxed mb-6">
                   {mod.desc || "No description available for this tool."}
                 </p>
 
@@ -254,8 +256,8 @@ export default function ToolCard({
                       <Target size={16} />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Accuracy</p>
-                      <p className="text-sm font-bold text-slate-700">98.5%</p>
+                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Accuracy</p>
+                      <p className="text-sm font-bold text-txt-secondary">98.5%</p>
                     </div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
@@ -263,8 +265,8 @@ export default function ToolCard({
                       <Clock size={16} />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Time Saved</p>
-                      <p className="text-sm font-bold text-slate-700">~15 mins</p>
+                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Time Saved</p>
+                      <p className="text-sm font-bold text-txt-secondary">~15 mins</p>
                     </div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
@@ -272,8 +274,8 @@ export default function ToolCard({
                       <Zap size={16} />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Usage</p>
-                      <p className="text-sm font-bold text-slate-700">High</p>
+                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Usage</p>
+                      <p className="text-sm font-bold text-txt-secondary">High</p>
                     </div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
@@ -281,14 +283,14 @@ export default function ToolCard({
                       <Bookmark size={16} />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Saves</p>
-                      <p className="text-sm font-bold text-slate-700">1.2k+</p>
+                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Saves</p>
+                      <p className="text-sm font-bold text-txt-secondary">1.2k+</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
-                  <button 
+                  <Button 
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowQuickView(false);
@@ -297,16 +299,16 @@ export default function ToolCard({
                     className="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors"
                   >
                     Open Tool <ArrowRight size={16} />
-                  </button>
-                  <button 
+                  </Button>
+                  <Button 
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleFavorite(e);
                     }}
-                    className="p-3 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors flex items-center justify-center text-slate-600"
+                    className="p-3 rounded-xl border border-ui-borderSubtle hover:bg-slate-50 transition-colors flex items-center justify-center text-txt-secondary"
                   >
                     {saved ? <BookmarkCheck size={20} color={cfg.c} /> : <Bookmark size={20} />}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </motion.div>

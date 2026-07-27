@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
@@ -20,6 +21,7 @@ import toast from "react-hot-toast";
 import { GlobalReportEngine } from '../../utils/GlobalReportEngine';
 import { formatTitleCase, formatCapitalize, filterValidParameters } from '../../utils/pdfGenerator';
 import { CopyButton } from '../ui/CopyButton';
+
 
 export interface ShareMenuProps {
   activeTab: string;
@@ -384,14 +386,14 @@ export default function ShareButtonWithPopup({
 
   return (
     <div className={containerClassName || "relative inline-flex items-center gap-3 z-[100] font-sans"} ref={menuRef}>
-      <button
+      <Button
         type="button"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
           setIsOpen((prev) => !prev);
         }}
-        className={triggerClassName || "bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-900  px-5 py-2.5 rounded-full font-bold transition-all hover:scale-105 active:scale-95 group focus:outline-none focus:ring-4 focus:ring-teal-500/30 shadow-md flex items-center justify-center gap-2 text-sm"}
+        className={triggerClassName || "bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-txt-primary  px-5 py-2.5 rounded-full font-bold transition-all hover:scale-105 active:scale-95 group focus:outline-none focus:ring-4 focus:ring-teal-500/30 shadow-md flex items-center justify-center gap-2 text-sm"}
         title="Share Results"
       >
         {triggerContent || (
@@ -400,7 +402,7 @@ export default function ShareButtonWithPopup({
             <span>Share Results</span>
           </>
         )}
-      </button>
+      </Button>
 
       {isOpen && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center p-4 font-sans pointer-events-auto px-4 sm:px-6">
@@ -410,65 +412,65 @@ export default function ShareButtonWithPopup({
             />
             
             <div
-              className="relative w-full max-w-[340px] bg-white/95 backdrop-blur-3xl rounded-[32px] shadow-[0_20px_60px_rgba(15,23,42,0.2)] z-10 overflow-hidden font-sans border border-white/50"
+              className="relative w-full max-w-[340px] bg-surface-default/95 backdrop-blur-3xl rounded-2xl shadow-[0_20px_60px_rgba(15,23,42,0.2)] z-10 overflow-hidden font-sans border border-white/50"
               style={{ animation: "modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
             >
               <style>{` @keyframes modalPop { 0% { opacity: 0; transform: scale(0.92) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } } `}</style>
               
               <div className="pt-7 pb-5 px-7 flex flex-col items-center text-center relative">
-                <button 
+                <Button 
                   onClick={() => setIsOpen(false)} 
-                  className="absolute right-5 top-5 p-2 bg-slate-100/80 hover:bg-slate-200 rounded-full transition-colors text-slate-500 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="absolute right-5 top-5 p-2 bg-slate-100/80 hover:bg-slate-200 rounded-full transition-colors text-txt-tertiary active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                 >
                   <X className="w-4 h-4"/>
-                </button>
+                </Button>
                 <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mb-3">
                   <Share2 className="w-6 h-6 text-indigo-600" />
                 </div>
-                <h3 className="text-[19px] font-bold text-slate-900 tracking-tight">Export & Share</h3>
-                <p className="text-[13px] text-slate-500 font-medium mt-1">Select a format to save or send</p>
+                <h3 className="text-[19px] font-bold text-txt-primary tracking-tight">Export & Share</h3>
+                <p className="text-[13px] text-txt-tertiary font-medium mt-1">Select a format to save or send</p>
               </div>
 
               <div className="px-6 pb-7 max-h-[70vh] overflow-y-auto hide-scrollbar">
                 <div className="grid grid-cols-2 gap-3 mb-3">
-                  <button onClick={handleWhatsAppHTML}
+                  <Button onClick={handleWhatsAppHTML}
                     className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-[#F0FDF4] hover:shadow-[0_8px_20px_rgba(22,101,52,0.08)] border border-transparent hover:border-[#BBF7D0] active:scale-95 hover:-translate-y-0.5"
                   >
                     <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <MessageCircle className="w-[20px] h-[20px]" strokeWidth={2} />
                     </div>
-                    <span className="text-[12px] font-semibold text-slate-700 group-hover:text-emerald-700">WhatsApp</span>
-                  </button>
+                    <span className="text-[12px] font-semibold text-txt-secondary group-hover:text-emerald-700">WhatsApp</span>
+                  </Button>
 
-                  <button onClick={handleEmailHTML}
+                  <Button onClick={handleEmailHTML}
                     className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-[#EFF6FF] hover:shadow-[0_8px_20px_rgba(30,64,175,0.08)] border border-transparent hover:border-[#BFDBFE] active:scale-95 hover:-translate-y-0.5"
                   >
                     <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <Mail className="w-[20px] h-[20px]" strokeWidth={2.5} />
                     </div>
-                    <span className="text-[12px] font-semibold text-slate-700 group-hover:text-blue-700">Email</span>
-                  </button>
+                    <span className="text-[12px] font-semibold text-txt-secondary group-hover:text-blue-700">Email</span>
+                  </Button>
 
-                  <button
+                  <Button
                     onClick={() => generatePDF("pdf")}
                     className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-[#FEF2F2] hover:shadow-[0_8px_20px_rgba(153,27,27,0.08)] border border-transparent hover:border-[#FECACA] active:scale-95 hover:-translate-y-0.5"
                   >
                     <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <FileText className="w-[20px] h-[20px]" strokeWidth={2.5} />
                     </div>
-                    <span className="text-[12px] font-semibold text-slate-700 group-hover:text-rose-700 whitespace-nowrap">PDF Report</span>
-                  </button>
+                    <span className="text-[12px] font-semibold text-txt-secondary group-hover:text-rose-700 whitespace-nowrap">PDF Report</span>
+                  </Button>
                   
-                  <button onClick={generateExcel}
+                  <Button onClick={generateExcel}
                     className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-[#ECFCCB] hover:shadow-[0_8px_20px_rgba(63,98,18,0.08)] border border-transparent hover:border-[#D9F99D] active:scale-95 hover:-translate-y-0.5"
                   >
                     <div className="w-10 h-10 rounded-full bg-lime-100 text-lime-700 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <FileSpreadsheet className="w-[20px] h-[20px]" strokeWidth={2.5} />
                     </div>
-                    <span className="text-[12px] font-semibold text-slate-700 group-hover:text-lime-700 whitespace-nowrap">Excel BOQ</span>
-                  </button>
+                    <span className="text-[12px] font-semibold text-txt-secondary group-hover:text-lime-700 whitespace-nowrap">Excel BOQ</span>
+                  </Button>
                   
-                  <button
+                  <Button
                     onClick={() => {
                       const url = encodeURIComponent(window.location.href);
                       window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, "_blank");
@@ -480,20 +482,20 @@ export default function ShareButtonWithPopup({
                     <div className="w-10 h-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <Share2 className="w-[20px] h-[20px]" strokeWidth={2.5} />
                     </div>
-                    <span className="text-[12px] font-semibold text-slate-700 group-hover:text-sky-700">LinkedIn</span>
-                  </button>
+                    <span className="text-[12px] font-semibold text-txt-secondary group-hover:text-sky-700">LinkedIn</span>
+                  </Button>
 
-                  <button onClick={handleDownloadText}
-                    className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-slate-100 hover:shadow-[0_8px_20px_rgba(15,23,42,0.05)] border border-transparent hover:border-slate-200 active:scale-95 hover:-translate-y-0.5"
+                  <Button onClick={handleDownloadText}
+                    className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-slate-100 hover:shadow-[0_8px_20px_rgba(15,23,42,0.05)] border border-transparent hover:border-ui-borderSubtle active:scale-95 hover:-translate-y-0.5"
                   >
-                    <div className="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-10 h-10 rounded-full bg-slate-200 text-txt-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <Download className="w-[20px] h-[20px]" strokeWidth={2.5} />
                     </div>
-                    <span className="text-[12px] font-semibold text-slate-700">Text File</span>
-                  </button>
+                    <span className="text-[12px] font-semibold text-txt-secondary">Text File</span>
+                  </Button>
                 </div>
                 
-                <div className="bg-slate-50 p-2 rounded-[20px] border border-slate-200/60">
+                <div className="bg-slate-50 p-2 rounded-2xl border border-ui-borderSubtle/60">
                   <CopyButton textToCopy={typeof window !== 'undefined' ? window.location.href : 'https://civilestimationpro.com'} />
                 </div>
               </div>

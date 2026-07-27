@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useRef } from "react";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import {
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { CodeTooltip } from "../ui/CodeTooltip";
+
 
 type ElementType = "Beam" | "Column" | "Slab";
 
@@ -139,20 +141,20 @@ export default function ReinforcementVisualizer() {
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Controls */}
           <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
-            <div className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 p-4 sm:p-6 rounded-[24px] border border-slate-200 overflow-hidden">
-              <h3 className="text-lg font-bold text-slate-800 mb-4">
+            <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle overflow-hidden">
+              <h3 className="text-lg font-bold text-txt-primary mb-4">
                 Geometry Inputs
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">
+                  <label className="block text-sm font-bold text-txt-secondary mb-1">
                     Element Type
                   </label>
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value as ElementType)}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[16px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
+                    className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-2xl focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
                   >
                     <option value="Beam">Beam</option>
                     <option value="Column">Column</option>
@@ -162,7 +164,7 @@ export default function ReinforcementVisualizer() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-txt-secondary mb-1">
                       Width (mm)
                     </label>
                     <><label htmlFor="a11y-input-414" className="sr-only">Input</label>
@@ -170,11 +172,11 @@ export default function ReinforcementVisualizer() {
                       type="number" inputMode="decimal"
                       value={width}
                       onChange={(e) => setWidth(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-full outline-none"
+                      className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-full outline-none"
                     /></>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-txt-secondary mb-1">
                       Depth (mm)
                     </label>
                     <><label htmlFor="a11y-input-415" className="sr-only">Input</label>
@@ -182,11 +184,11 @@ export default function ReinforcementVisualizer() {
                       type="number" inputMode="decimal"
                       value={depth}
                       onChange={(e) => setDepth(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-full outline-none"
+                      className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-full outline-none"
                     /></>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1"><span className="flex items-center">
+                    <label className="block text-xs font-bold text-txt-secondary mb-1"><span className="flex items-center">
                       Clear Cover (mm)
                      <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
                     <><label htmlFor="a11y-input-416" className="sr-only">Input</label>
@@ -194,22 +196,22 @@ export default function ReinforcementVisualizer() {
                       type="number" inputMode="decimal"
                       value={cover}
                       onChange={(e) => setCover(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-full outline-none"
+                      className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-full outline-none"
                     /></>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 p-4 sm:p-6 rounded-[24px] border border-slate-200 overflow-hidden">
-              <h3 className="text-lg font-bold text-slate-800 mb-4">
+            <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle overflow-hidden">
+              <h3 className="text-lg font-bold text-txt-primary mb-4">
                 Reinforcement
               </h3>
               <div className="space-y-4">
                 {type !== "Slab" && (
-                  <div className="grid grid-cols-2 gap-3 pb-3 border-b border-slate-200">
+                  <div className="grid grid-cols-2 gap-3 pb-3 border-b border-ui-borderSubtle">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-xs font-bold text-txt-secondary mb-1">
                         Top Bars Count
                       </label>
                       <><label htmlFor="a11y-input-417" className="sr-only">Input</label>
@@ -219,18 +221,18 @@ export default function ReinforcementVisualizer() {
                         onChange={(e) =>
                           setTopBarsCount(Number(e.target.value))
                         }
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-full outline-none"
+                        className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-full outline-none"
                         min={2}
                       /></>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-xs font-bold text-txt-secondary mb-1">
                         Top Bar Dia (mm)
                       </label>
                       <select
                         value={topBarsDia}
                         onChange={(e) => setTopBarsDia(Number(e.target.value))}
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[16px] outline-none"
+                        className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-2xl outline-none"
                       >
                         {[8, 10, 12, 16, 20, 25, 32].map((d) => (
                           <option key={d} value={d}>
@@ -242,9 +244,9 @@ export default function ReinforcementVisualizer() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-3 pb-3 border-b border-slate-200">
+                <div className="grid grid-cols-2 gap-3 pb-3 border-b border-ui-borderSubtle">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-txt-secondary mb-1">
                       {type === "Slab" ? "Main Bars" : "Bottom Bars"} Count
                     </label>
                     <><label htmlFor="a11y-input-418" className="sr-only">Input</label>
@@ -254,18 +256,18 @@ export default function ReinforcementVisualizer() {
                       onChange={(e) =>
                         setBottomBarsCount(Number(e.target.value))
                       }
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-full outline-none"
+                      className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-full outline-none"
                       min={2}
                     /></>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-txt-secondary mb-1">
                       Bottom Bar Dia
                     </label>
                     <select
                       value={bottomBarsDia}
                       onChange={(e) => setBottomBarsDia(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[16px] outline-none"
+                      className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-2xl outline-none"
                     >
                       {[8, 10, 12, 16, 20, 25, 32].map((d) => (
                         <option key={d} value={d}>
@@ -279,13 +281,13 @@ export default function ReinforcementVisualizer() {
                 {type !== "Slab" && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-xs font-bold text-txt-secondary mb-1">
                         Stirrup Dia (mm)
                       </label>
                       <select
                         value={stirrupDia}
                         onChange={(e) => setStirrupDia(Number(e.target.value))}
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[16px] outline-none"
+                        className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-2xl outline-none"
                       >
                         {[8, 10, 12].map((d) => (
                           <option key={d} value={d}>
@@ -295,7 +297,7 @@ export default function ReinforcementVisualizer() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-xs font-bold text-txt-secondary mb-1">
                         Spacing (c/c)
                       </label>
                       <><label htmlFor="a11y-input-419" className="sr-only">Input</label>
@@ -305,7 +307,7 @@ export default function ReinforcementVisualizer() {
                         onChange={(e) =>
                           setStirrupSpacing(Number(e.target.value))
                         }
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-full outline-none"
+                        className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-full outline-none"
                       /></>
                     </div>
                   </div>
@@ -315,7 +317,7 @@ export default function ReinforcementVisualizer() {
 
             <div className="space-y-3">
               <div
-                className={`p-4 rounded-[24px] border flex items-start gap-3 ${coverCheck.pass ? "bg-emerald-50 border-emerald-200 text-emerald-800   " : "bg-rose-50 border-rose-200 text-rose-800   "}`}
+                className={`p-4 rounded-2xl border flex items-start gap-3 ${coverCheck.pass ? "bg-emerald-50 border-emerald-200 text-emerald-800   " : "bg-rose-50 border-rose-200 text-rose-800   "}`}
               >
                 {coverCheck.pass ? (
                   <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -332,7 +334,7 @@ export default function ReinforcementVisualizer() {
 
               {type !== "Slab" && (
                 <div
-                  className={`p-4 rounded-[24px] border flex items-start gap-3 ${spacingCheck.pass ? "bg-emerald-50 border-emerald-200 text-emerald-800   " : "bg-rose-50 border-rose-200 text-rose-800   "}`}
+                  className={`p-4 rounded-2xl border flex items-start gap-3 ${spacingCheck.pass ? "bg-emerald-50 border-emerald-200 text-emerald-800   " : "bg-rose-50 border-rose-200 text-rose-800   "}`}
                 >
                   {spacingCheck.pass ? (
                     <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -353,24 +355,24 @@ export default function ReinforcementVisualizer() {
           {/* Visualization Viewer */}
           <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-slate-800 px-2">
+              <h3 className="text-lg font-bold text-txt-primary px-2">
                 Cross Section Preview
               </h3>
               <div className="flex gap-2">
-                <button onClick={downloadSvg}
-                  className="px-3 py-1.5 bg-white text-indigo-600 text-sm font-bold border border-slate-200 rounded-full hover:bg-slate-50 transition flex items-center gap-2 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                <Button onClick={downloadSvg}
+                  className="px-3 py-1.5 bg-surface-default text-indigo-600 text-sm font-bold border border-ui-borderSubtle rounded-full hover:bg-slate-50 transition flex items-center gap-2 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                 >
                   <FileImage className="w-4 h-4" /> SVG
-                </button>
-                <button onClick={handleDownloadPng}
+                </Button>
+                <Button onClick={handleDownloadPng}
                   className="px-3 py-1.5 bg-indigo-600 text-white text-sm font-bold rounded-full hover:bg-indigo-700 transition flex items-center gap-2 shadow-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
                 >
                   <Download className="w-4 h-4" /> PNG
-                </button>
+                </Button>
               </div>
             </div>
 
-            <div className="flex-1 bg-white [#1e293b] border border-slate-200 rounded-[24px] overflow-hidden relative min-h-[400px] flex items-center justify-center p-4">
+            <div className="flex-1 bg-surface-default [#1e293b] border border-ui-borderSubtle rounded-2xl overflow-hidden relative min-h-[400px] flex items-center justify-center p-4">
               <div
                 className="absolute inset-0 pattern-grid-lg text-slate-100 pointer-events-none"
                 style={{

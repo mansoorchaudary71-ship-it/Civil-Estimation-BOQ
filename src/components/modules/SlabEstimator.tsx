@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { Grid2X2, Settings2, Replace, ArrowUp, AlertTriangle } from "lucide-react";
@@ -12,6 +13,7 @@ import { FieldTooltip } from "../ui/FieldTooltip";
 import { NumberInput } from "../ui/NumberInput";
 import { ToolGuidedTour, TourStep } from "../ui/ToolGuidedTour";
 import { CodeTooltip } from "../ui/CodeTooltip";
+
 
 const SLAB_TOUR_STEPS: TourStep[] = [
   {
@@ -227,52 +229,52 @@ export default function SlabEstimator() {
         
         <div className="flex gap-2">
           {results && (
-            <button onClick={sendToBOQ} className="text-xs font-bold px-3 py-2 bg-emerald-50 text-emerald-600 rounded-full hover:bg-emerald-100 transition-colors border border-emerald-200 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+            <Button onClick={sendToBOQ} className="text-xs font-bold px-3 py-2 bg-emerald-50 text-emerald-600 rounded-full hover:bg-emerald-100 transition-colors border border-emerald-200 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
               Send to BOQ
-            </button>
+            </Button>
           )}
-          <button onClick={loadExample} className="text-xs font-bold px-3 py-2 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <Button onClick={loadExample} className="text-xs font-bold px-3 py-2 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
             Load Example
-          </button>
-          <button onClick={resetDefault} className="text-xs font-bold px-3 py-2 bg-slate-100 text-slate-500 rounded-full hover:bg-slate-200 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          </Button>
+          <Button onClick={resetDefault} className="text-xs font-bold px-3 py-2 bg-slate-100 text-txt-tertiary rounded-full hover:bg-slate-200 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
             Reset
-          </button>
+          </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
-        <div className="w-full bg-white rounded-[24px] shadow-sm border border-slate-200 p-4 sm:p-6 md:p-4 sm:p-8 overflow-hidden">
+        <div className="w-full bg-surface-default rounded-2xl shadow-sm border border-ui-borderSubtle p-4 sm:p-6 md:p-4 sm:p-8 overflow-hidden">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div id="tour-slab-type" className="p-1 bg-slate-100 rounded-[24px] flex gap-1 w-full sm:w-auto flex-1 overflow-hidden">
-              <button
+            <div id="tour-slab-type" className="p-1 bg-slate-100 rounded-2xl flex gap-1 w-full sm:w-auto flex-1 overflow-hidden">
+              <Button
                 onClick={() => setSlabType("one-way")}
-                className={`flex-1 py-2 px-4 rounded-[24px] text-sm font-bold transition-all whitespace-nowrap ${slabType === "one-way" ? "bg-white shadow-sm text-indigo-600" : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"}`}
+                className={`flex-1 py-2 px-4 rounded-2xl text-sm font-bold transition-all whitespace-nowrap ${slabType === "one-way" ? "bg-surface-default shadow-sm text-indigo-600" : "text-txt-tertiary hover:text-txt-secondary hover:bg-slate-200/50"}`}
               >
                 One-Way Slab
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setSlabType("two-way")}
-                className={`flex-1 py-2 px-4 rounded-[24px] text-sm font-bold transition-all whitespace-nowrap ${slabType === "two-way" ? "bg-white shadow-sm text-indigo-600" : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"}`}
+                className={`flex-1 py-2 px-4 rounded-2xl text-sm font-bold transition-all whitespace-nowrap ${slabType === "two-way" ? "bg-surface-default shadow-sm text-indigo-600" : "text-txt-tertiary hover:text-txt-secondary hover:bg-slate-200/50"}`}
               >
                 Two-Way Slab
-              </button>
+              </Button>
             </div>
             
-            <div className="flex items-center gap-3 bg-slate-50 rounded-full border border-slate-200 shadow-sm text-slate-800 p-2 rounded-full border border-slate-200 w-full sm:w-auto min-w-max transition-all duration-300 active:scale-95 hover:-translate-y-0.5">
-               <span className="text-sm font-bold text-slate-700">Precast Mode</span>
-               <button 
+            <div className="flex items-center gap-3 bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary p-2 rounded-full border border-ui-borderSubtle w-full sm:w-auto min-w-max transition-all duration-300 active:scale-95 hover:-translate-y-0.5">
+               <span className="text-sm font-bold text-txt-secondary">Precast Mode</span>
+               <Button 
                 onClick={() => setIsPrecast(!isPrecast)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${isPrecast ? 'bg-indigo-600' : 'bg-slate-300 '}`}
                >
-                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isPrecast ? 'translate-x-6' : 'translate-x-1'}`} />
-               </button>
+                 <span className={`inline-block h-4 w-4 transform rounded-full bg-surface-default transition-transform ${isPrecast ? 'translate-x-6' : 'translate-x-1'}`} />
+               </Button>
             </div>
           </div>
 
           <div className="flex items-center gap-2 mb-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
             <Settings2 className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-lg font-bold text-slate-800">Slab Dimensions</h2>
+            <h2 className="text-lg font-bold text-txt-primary">Slab Dimensions</h2>
           </div>
 
           <div className="space-y-4">
@@ -282,7 +284,7 @@ export default function SlabEstimator() {
                   value={ly} 
                   onChange={(v) => setLy(v.toString())} 
                   unit="m" 
-                  className="w-full bg-slate-50 border border-slate-200 rounded-[24px] shadow-sm transition-all text-slate-800 overflow-hidden" 
+                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl shadow-sm transition-all text-txt-primary overflow-hidden" 
                 />
               </InputGroup>
               <InputGroup label="Short Span (lx) (m)">
@@ -290,7 +292,7 @@ export default function SlabEstimator() {
                   value={lx} 
                   onChange={(v) => setLx(v.toString())} 
                   unit="m" 
-                  className="w-full bg-slate-50 border border-slate-200 rounded-[24px] shadow-sm transition-all text-slate-800 overflow-hidden" 
+                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl shadow-sm transition-all text-txt-primary overflow-hidden" 
                 />
               </InputGroup>
             </div>
@@ -302,7 +304,7 @@ export default function SlabEstimator() {
                     value={thickness} 
                     onChange={(v) => setThickness(v.toString())} 
                     unit="mm" 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-[24px] shadow-sm transition-all text-slate-800 overflow-hidden" 
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl shadow-sm transition-all text-txt-primary overflow-hidden" 
                   />
                 </div>
               </InputGroup>
@@ -316,19 +318,19 @@ export default function SlabEstimator() {
                   value={clearCover} 
                   onChange={(v) => setClearCover(v.toString())} 
                   unit="mm" 
-                  className="w-full bg-slate-50 border border-slate-200 rounded-[24px] shadow-sm transition-all text-slate-800 overflow-hidden" 
+                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl shadow-sm transition-all text-txt-primary overflow-hidden" 
                 />
               </InputGroup>
             </div>
 
             {isPrecast && (
-              <div className="animate-in fade-in slide-in-from-top-2 duration-300 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-[24px] border border-teal-100 mt-4 overflow-hidden">
+              <div className="animate-in fade-in slide-in-from-top-2 duration-300 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-2xl border border-teal-100 mt-4 overflow-hidden">
                 <InputGroup label="Concrete Density (kg/m³)">
                   <NumberInput 
                     value={concreteDensity} 
                     onChange={(v) => setConcreteDensity(v.toString())} 
                     unit="kg/m³"
-                    className="w-full bg-white rounded-[24px] border shadow-sm text-slate-800 border-teal-200 overflow-hidden" 
+                    className="w-full bg-surface-default rounded-2xl border shadow-sm text-txt-primary border-teal-200 overflow-hidden" 
                   />
                 </InputGroup>
                 <InputGroup label="Lifting Radius (m)">
@@ -336,7 +338,7 @@ export default function SlabEstimator() {
                     value={riggingRadius} 
                     onChange={(v) => setRiggingRadius(v.toString())} 
                     unit="m"
-                    className="w-full bg-white rounded-[24px] border shadow-sm text-slate-800 border-teal-200 overflow-hidden" 
+                    className="w-full bg-surface-default rounded-2xl border shadow-sm text-txt-primary border-teal-200 overflow-hidden" 
                   />
                 </InputGroup>
               </div>
@@ -345,12 +347,12 @@ export default function SlabEstimator() {
 
           <div className="flex items-center gap-2 mb-6 mt-8">
             <Grid2X2 className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-lg font-bold text-slate-800">Reinforcement Details</h2>
+            <h2 className="text-lg font-bold text-txt-primary">Reinforcement Details</h2>
           </div>
 
           <div className="space-y-4">
-            <div className="p-4 bg-slate-50 rounded-[24px] border border-slate-100 overflow-hidden">
-              <h3 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-3">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden">
+              <h3 className="text-sm font-bold text-txt-secondary uppercase tracking-wider mb-3">
                 {slabType === "one-way" ? "Main Bars (Short Span)" : "Short Span Bars (Main)"}
               </h3>
               <div className="grid grid-cols-2 gap-4">
@@ -358,7 +360,7 @@ export default function SlabEstimator() {
                   <select
                     value={mainDia}
                     onChange={(e) => setMainDia(e.target.value)}
-                    className="w-full h-11 bg-white border border-slate-200 rounded-[24px] px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all overflow-hidden"
+                    className="w-full h-11 bg-surface-default border border-ui-borderSubtle rounded-2xl px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all overflow-hidden"
                   >
                     {[8, 10, 12, 16, 20, 25].map(d => (
                       <option key={d} value={d}>{d} mm</option>
@@ -370,14 +372,14 @@ export default function SlabEstimator() {
                     value={mainSpacing} 
                     onChange={(v) => setMainSpacing(v.toString())} 
                     unit="mm" 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-[24px] shadow-sm transition-all text-slate-800 overflow-hidden" 
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl shadow-sm transition-all text-txt-primary overflow-hidden" 
                   />
                 </InputGroup>
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 rounded-[24px] border border-slate-100 overflow-hidden">
-              <h3 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-3">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden">
+              <h3 className="text-sm font-bold text-txt-secondary uppercase tracking-wider mb-3">
                 {slabType === "one-way" ? "Distribution Bars (Long Span)" : "Long Span Bars"}
               </h3>
               <div className="grid grid-cols-2 gap-4">
@@ -385,7 +387,7 @@ export default function SlabEstimator() {
                   <select
                     value={distDia}
                     onChange={(e) => setDistDia(e.target.value)}
-                    className="w-full h-11 bg-white border border-slate-200 rounded-[24px] px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all overflow-hidden"
+                    className="w-full h-11 bg-surface-default border border-ui-borderSubtle rounded-2xl px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all overflow-hidden"
                   >
                     {[8, 10, 12, 16, 20, 25].map(d => (
                       <option key={d} value={d}>{d} mm</option>
@@ -397,25 +399,25 @@ export default function SlabEstimator() {
                     value={distSpacing} 
                     onChange={(v) => setDistSpacing(v.toString())} 
                     unit="mm" 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-[24px] shadow-sm transition-all text-slate-800 overflow-hidden" 
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl shadow-sm transition-all text-txt-primary overflow-hidden" 
                   />
                 </InputGroup>
               </div>
             </div>
           </div>
 
-          <button onClick={calculateSlab}
+          <Button onClick={calculateSlab}
             className="w-full mt-6 bg-indigo-600 hover:bg-blue-700 text-white font-bold py-4 rounded-full transition-colors mt-8 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
           >
             Calculate Slab Quantities
-          </button>
+          </Button>
         </div>
 
         <div className="flex-1 flex flex-col">
           {results ? (
             <div className="flex flex-col h-full w-full">
               {isPrecast && (
-                <div className="mb-6 p-4 md:p-6 rounded-[24px] bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 shadow-sm relative overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
+                <div className="mb-6 p-4 md:p-6 rounded-2xl bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 shadow-sm relative overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
                   <div className="absolute top-0 right-0 p-4 opacity-10 transform translate-x-4 -translate-y-4">
                     <ArrowUp className="w-32 h-32 text-teal-900" />
                   </div>
@@ -424,17 +426,17 @@ export default function SlabEstimator() {
                       <h4 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-1 flex items-center gap-2">
                         <AlertTriangle className="w-4 h-4" /> Precast Safety & Lifting
                       </h4>
-                      <p className="text-slate-600 text-sm mb-4 leading-relaxed">
+                      <p className="text-txt-secondary text-sm mb-4 leading-relaxed">
                         Based on {riggingRadius}m rig radius and 1.5x dynamic multi.
                       </p>
                       
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white/60 p-4 rounded-[24px] border border-teal-100 overflow-hidden">
-                          <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Single Element Wt</span>
-                          <span className="text-xl md:text-2xl font-bold tabular-nums tracking-tight text-slate-800">{(results.elementWeightKg / 1000).toFixed(2)}<span className="text-sm font-medium ml-1 text-slate-500">Tons</span></span>
+                        <div className="bg-surface-default/60 p-4 rounded-2xl border border-teal-100 overflow-hidden">
+                          <span className="text-[10px] sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Single Element Wt</span>
+                          <span className="text-xl md:text-2xl font-bold tabular-nums tracking-tight text-txt-primary">{(results.elementWeightKg / 1000).toFixed(2)}<span className="text-sm font-medium ml-1 text-txt-tertiary">Tons</span></span>
                         </div>
-                        <div className="w-full bg-white/80 p-4 rounded-[24px] border border-teal-200 shadow-sm overflow-hidden">
-                          <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Min. Crane Capacity</span>
+                        <div className="w-full bg-surface-default/80 p-4 rounded-2xl border border-teal-200 shadow-sm overflow-hidden">
+                          <span className="text-[10px] sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Min. Crane Capacity</span>
                           <span className="text-xl md:text-2xl font-bold tabular-nums tracking-tight text-teal-700">{results.craneCapacityTonnes.toFixed(2)}<span className="text-sm font-medium ml-1 text-teal-600/80">Tons</span></span>
                         </div>
                       </div>
@@ -476,11 +478,11 @@ export default function SlabEstimator() {
                 />
               </div>
 
-              <div className="mt-8 pt-6 border-t border-slate-200/50">
-                <div className="mb-4 text-[10px] sm:text-xs font-bold tracking-tight text-slate-500 uppercase tracking-[0.15em]">
+              <div className="mt-8 pt-6 border-t border-ui-borderSubtle/50">
+                <div className="mb-4 text-[10px] sm:text-xs font-bold tracking-tight text-txt-tertiary uppercase tracking-[0.15em]">
                   Rebar Breakdown
                 </div>
-                <div className="w-full bg-white/50 rounded-[24px] p-4 shadow-sm text-slate-900 border border-slate-200/50 backdrop-blur-md overflow-hidden">
+                <div className="w-full bg-surface-default/50 rounded-2xl p-4 shadow-sm text-txt-primary border border-ui-borderSubtle/50 backdrop-blur-md overflow-hidden">
                   <StyledChart 
                     data={[
                       { name: results.type === "one-way" ? "Main Bars" : "Short Span", value: Math.round(results.shortBarsTotalLength), fill: '#6366f1' },
@@ -493,10 +495,10 @@ export default function SlabEstimator() {
                 </div>
               </div>
 
-              <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-[24px] overflow-hidden">
+              <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl overflow-hidden">
                  <p className="text-xs flex gap-2">
                     <span className="text-amber-600 font-bold">ℹ</span>
-                    <span className="text-slate-600 leading-relaxed">
+                    <span className="text-txt-secondary leading-relaxed">
                       {results.type === "two-way" 
                         ? "Includes an assumption for alternate bent-up (cranked) bars contributing an additional average of 0.42d extra length per bar."
                         : "Main bars span across the shorter dimension (lx). Distribution bars span across the longer dimension (ly)."}
@@ -506,8 +508,8 @@ export default function SlabEstimator() {
             </MaterialSummary>
             </div>
           ) : (
-            <div className="bg-slate-50 border border-slate-200 border-dashed rounded-[32px] p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-sm overflow-hidden">
-              <span className="text-slate-500 font-medium tracking-wide">Enter dimensions to calculate</span>
+            <div className="bg-slate-50 border border-ui-borderSubtle border-dashed rounded-2xl p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-sm overflow-hidden">
+              <span className="text-txt-tertiary font-medium tracking-wide">Enter dimensions to calculate</span>
             </div>
           )}
         </div>
@@ -540,7 +542,7 @@ export default function SlabEstimator() {
 function InputGroup({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-bold text-slate-700">{label}</label>
+      <label className="text-sm font-bold text-txt-secondary">{label}</label>
       {children}
     </div>
   );

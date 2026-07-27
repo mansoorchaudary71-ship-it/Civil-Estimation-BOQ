@@ -1,3 +1,4 @@
+import { Button } from './ui/Button';
 import React, { useState } from "react";
 import {
   Search,
@@ -25,6 +26,7 @@ import {
 export type ModuleId = string;
 import { motion, AnimatePresence } from "framer-motion";
 import { ALL_MODULES } from "./Dashboard";
+
 
 export const ALL_TOOLS = [
   {
@@ -245,7 +247,7 @@ export default function MobileToolsSheet({
                 onClose();
               }
             }}
-            className="w-full fixed bottom-0 left-0 right-0 z-[70] md:hidden flex flex-col bg-white/90 backdrop-blur-2xl border-t border-slate-200 dark:border-slate-700/50 shadow-[0_-8px_30px_rgba(15,23,42,0.12)] rounded-t-[32px] will-change-transform overflow-hidden"
+            className="w-full fixed bottom-0 left-0 right-0 z-[70] md:hidden flex flex-col bg-surface-default/90 backdrop-blur-2xl border-t border-ui-borderSubtle dark:border-slate-700/50 shadow-[0_-8px_30px_rgba(15,23,42,0.12)] rounded-t-[32px] will-change-transform overflow-hidden"
             style={{ maxHeight: "85vh", height: "85vh" }}
           >
             <div className="flex justify-center pt-3 pb-2 w-full touch-none cursor-grab active:cursor-grabbing">
@@ -253,27 +255,27 @@ export default function MobileToolsSheet({
             </div>
 
             <div className="px-6 pb-2 pt-1 flex items-center justify-between shrink-0">
-              <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+              <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                 Tools Directory
               </h2>
-              <button className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              <Button className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-txt-secondary hover:bg-slate-200 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                 onClick={onClose}
               >
                 <X className="w-5 h-5" />
-              </button>
+              </Button>
             </div>
 
             <div className="px-6 pb-2 pt-2 shrink-0">
               <div className="flex items-center gap-2">
-                <div className="w-full relative flex flex-1 items-center h-[46px] bg-white rounded-[50px] border border-slate-200 shadow-sm transition-all overflow-hidden focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100">
-                  <Search className="w-4 h-4 text-slate-600 ml-4 absolute" />
+                <div className="w-full relative flex flex-1 items-center h-[46px] bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-sm transition-all overflow-hidden focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100">
+                  <Search className="w-4 h-4 text-txt-secondary ml-4 absolute" />
                   <><label htmlFor="a11y-input-7" className="sr-only">Search tools & calculations...</label>
 <input id="a11y-input-7"
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search tools & calculations..."
-                    className="w-full h-full bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-slate-700 placeholder:text-slate-600 pl-10 pr-3 rounded-full"
+                    className="w-full h-full bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-txt-secondary placeholder:text-txt-secondary pl-10 pr-3 rounded-full"
                   /></>
                 </div>
               </div>
@@ -282,17 +284,17 @@ export default function MobileToolsSheet({
             <div className="w-full overflow-x-auto hide-scrollbar px-6 py-2 shrink-0 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 {categories.map((cat, idx) => (
-                  <button
+                  <Button
                     key={cat}
                     onClick={() => setActiveTab(idx)}
                     className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                       activeTab === idx
-                        ? "bg-white text-slate-900 shadow-md"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        ? "bg-surface-default text-txt-primary shadow-md"
+                        : "bg-slate-100 text-txt-secondary hover:bg-slate-200"
                     }`}
                   >
                     {cat}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -322,9 +324,9 @@ export default function MobileToolsSheet({
                           onSelectModule(tool.id as ModuleId);
                           onClose();
                         }}
-                        className="group relative flex items-center gap-4 w-full p-3.5 bg-bg-card/80 rounded-[24px] border border-transparent shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200 text-left active:scale-95 flex-wrap"
+                        className="group relative flex items-center gap-4 w-full p-3.5 bg-bg-card/80 rounded-2xl border border-transparent shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200 text-left active:scale-95 flex-wrap"
                       >
-                        <div className="w-full flex-shrink-0 w-12 h-12 rounded-[14px] bg-white border border-slate-100 flex items-center justify-center text-slate-700 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors shadow-sm relative z-10 overflow-hidden">
+                        <div className="w-full flex-shrink-0 w-12 h-12 rounded-2xl bg-surface-default border border-slate-100 flex items-center justify-center text-txt-secondary group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors shadow-sm relative z-10 overflow-hidden">
                           {typeof tool.icon === "function"
                             ? (() => {
                                 const Icon = tool.icon as any;
@@ -337,10 +339,10 @@ export default function MobileToolsSheet({
                               )}
                         </div>
                         <div className="flex-1 min-w-0 relative z-10">
-                          <h4 className="leading-snug truncate group-hover:text-indigo-600 transition-colors text-lg font-medium text-slate-800 mb-4">
+                          <h4 className="leading-snug truncate group-hover:text-indigo-600 transition-colors text-lg font-medium text-txt-primary mb-4">
                             {tool.title}
                           </h4>
-                          <p className="truncate mt-0.5 text-base font-normal text-slate-600 leading-relaxed">
+                          <p className="truncate mt-0.5 text-base font-normal text-txt-secondary leading-relaxed">
                             {ALL_MODULES.find((m) => m.id === tool.id)
                               ?.category || "Tool"}
                           </p>
@@ -352,10 +354,10 @@ export default function MobileToolsSheet({
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-center py-10 text-slate-500 font-medium"
+                      className="text-center py-10 text-txt-tertiary font-medium"
                     >
                       <div className="bg-slate-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <Search className="w-5 h-5 text-slate-600" />
+                        <Search className="w-5 h-5 text-txt-secondary" />
                       </div>
                       No tools found in {activeCategory}
                     </motion.div>

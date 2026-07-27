@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useMemo } from "react";
 import { useSettings } from "../../context/SettingsContext";
 import { Route, Layers, Droplets, Calculator, MoveRight, Send } from "lucide-react";
@@ -6,6 +7,7 @@ import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { SEO } from "../SEO";
 import { CodeTooltip } from "../ui/CodeTooltip";
+
 
 export default function RoadEstimator() {
   const { settings } = useSettings();
@@ -196,21 +198,21 @@ export default function RoadEstimator() {
 
   return (
     <div className="w-full flex flex-col gap-8 animate-in fade-in">
-        <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-[24px] shadow-sm overflow-hidden">
+        <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                <h2 className="text-xl font-bold flex items-center gap-2 text-txt-primary dark:text-slate-200">
                     <Route className="w-6 h-6 text-emerald-600" />
                     Flexible Pavement Design Engine
                 </h2>
-                <button onClick={sendToBOQ} className="flex items-center gap-2 text-sm font-bold px-4 py-2 bg-slate-800 text-white rounded-full hover:bg-slate-700 transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+                <Button onClick={sendToBOQ} className="flex items-center gap-2 text-sm font-bold px-4 py-2 bg-slate-800 text-white rounded-full hover:bg-slate-700 transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
                     <Send className="w-4 h-4" /> Send to BOQ
-                </button>
+                </Button>
             </div>
 
             <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
                 <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                     <div>
-                        <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Road Geometry</h3>
+                        <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-slate-100 pb-2">Road Geometry</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <NumberInput label="Total Length" unit="m" value={length} onChange={setLength} />
                             <NumberInput label="Carriageway W" unit="m" value={width} onChange={setWidth} />
@@ -222,9 +224,9 @@ export default function RoadEstimator() {
                     </div>
 
                     <div>
-                        <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2 bg-slate-50 p-2 rounded flex justify-between">
+                        <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-slate-100 pb-2 bg-slate-50 p-2 rounded flex justify-between">
                             <span>Layer Thicknesses</span>
-                            <span className="text-slate-500 font-normal">mm</span>
+                            <span className="text-txt-tertiary font-normal">mm</span>
                         </h3>
                         <div className="space-y-3">
                             <NumberInput label="Bituminous Concrete (BC)" unit="mm" value={bcT} onChange={setBcT} />
@@ -246,8 +248,8 @@ export default function RoadEstimator() {
                         className="mb-0"
                     >
                         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center justify-between">
+                            <div className="bg-slate-50 p-4 rounded-xl border border-ui-borderSubtle">
+                                <h4 className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-3 flex items-center justify-between">
                                     <span>Pavement Structure Volumes</span>
                                 </h4>
                                 <div className="space-y-2 text-sm font-mono">
@@ -255,7 +257,7 @@ export default function RoadEstimator() {
                                     <div className="flex justify-between"><span>DBM Volume:</span> <span className="font-bold">{results.volDBM.toFixed(1)} m³</span></div>
                                     <div className="flex justify-between"><span>WMM Volume:</span> <span className="font-bold">{results.volWMM.toFixed(1)} m³</span></div>
                                     <div className="flex justify-between"><span>GSB Volume:</span> <span className="font-bold">{results.volGSB.toFixed(1)} m³</span></div>
-                                    <div className="flex justify-between text-slate-500 pt-2 border-t border-slate-200 mt-2"><span>Subgrade Fill:</span> <span>{results.volSG.toFixed(1)} m³</span></div>
+                                    <div className="flex justify-between text-txt-tertiary pt-2 border-t border-ui-borderSubtle mt-2"><span>Subgrade Fill:</span> <span>{results.volSG.toFixed(1)} m³</span></div>
                                 </div>
                             </div>
                             
@@ -293,31 +295,31 @@ export default function RoadEstimator() {
                     </MaterialSummary>
 
                     {/* Compacted Densities Config */}
-                    <div className="p-5 border border-slate-200 rounded-3xl bg-slate-50 overflow-hidden">
-                        <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            <Layers className="w-4 h-4 text-slate-500" />
+                    <div className="p-5 border border-ui-borderSubtle rounded-2xl bg-slate-50 overflow-hidden">
+                        <h3 className="text-sm font-bold text-txt-primary mb-4 flex items-center gap-2">
+                            <Layers className="w-4 h-4 text-txt-tertiary" />
                             Compacted Densities (t/m³)
                         </h3>
                         <div className="flex flex-wrap gap-3">
                             <div className="flex-1 min-w-[100px]">
-                                <label className="block text-[10px] uppercase font-bold text-slate-500 mb-1">BC</label>
+                                <label className="block text-[10px] uppercase font-bold text-txt-tertiary mb-1">BC</label>
                                 <><label htmlFor="a11y-input-456" className="sr-only">Input</label>
-<input id="a11y-input-456" type="number" inputMode="decimal" step="0.05" value={bcD} onChange={(e) => setBcD(e.target.value as any)} className="w-full bg-white border border-slate-200 rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
+<input id="a11y-input-456" type="number" inputMode="decimal" step="0.05" value={bcD} onChange={(e) => setBcD(e.target.value as any)} className="w-full bg-surface-default border border-ui-borderSubtle rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
                             </div>
                             <div className="flex-1 min-w-[100px]">
-                                <label className="block text-[10px] uppercase font-bold text-slate-500 mb-1">DBM</label>
+                                <label className="block text-[10px] uppercase font-bold text-txt-tertiary mb-1">DBM</label>
                                 <><label htmlFor="a11y-input-457" className="sr-only">Input</label>
-<input id="a11y-input-457" type="number" inputMode="decimal" step="0.05" value={dbmD} onChange={(e) => setDbmD(e.target.value as any)} className="w-full bg-white border border-slate-200 rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
+<input id="a11y-input-457" type="number" inputMode="decimal" step="0.05" value={dbmD} onChange={(e) => setDbmD(e.target.value as any)} className="w-full bg-surface-default border border-ui-borderSubtle rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
                             </div>
                             <div className="flex-1 min-w-[100px]">
-                                <label className="block text-[10px] uppercase font-bold text-slate-500 mb-1">WMM</label>
+                                <label className="block text-[10px] uppercase font-bold text-txt-tertiary mb-1">WMM</label>
                                 <><label htmlFor="a11y-input-458" className="sr-only">Input</label>
-<input id="a11y-input-458" type="number" inputMode="decimal" step="0.05" value={wmmD} onChange={(e) => setWmmD(e.target.value as any)} className="w-full bg-white border border-slate-200 rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
+<input id="a11y-input-458" type="number" inputMode="decimal" step="0.05" value={wmmD} onChange={(e) => setWmmD(e.target.value as any)} className="w-full bg-surface-default border border-ui-borderSubtle rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
                             </div>
                             <div className="flex-1 min-w-[100px]">
-                                <label className="block text-[10px] uppercase font-bold text-slate-500 mb-1">GSB</label>
+                                <label className="block text-[10px] uppercase font-bold text-txt-tertiary mb-1">GSB</label>
                                 <><label htmlFor="a11y-input-459" className="sr-only">Input</label>
-<input id="a11y-input-459" type="number" inputMode="decimal" step="0.05" value={gsbD} onChange={(e) => setGsbD(e.target.value as any)} className="w-full bg-white border border-slate-200 rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
+<input id="a11y-input-459" type="number" inputMode="decimal" step="0.05" value={gsbD} onChange={(e) => setGsbD(e.target.value as any)} className="w-full bg-surface-default border border-ui-borderSubtle rounded-full px-3 py-2 text-sm font-semibold focus:outline-none" /></>
                             </div>
                         </div>
                     </div>

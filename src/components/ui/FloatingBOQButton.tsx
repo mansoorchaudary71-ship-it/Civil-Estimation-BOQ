@@ -1,6 +1,8 @@
+import { Button } from './/Button';
 import React, { useEffect, useState } from 'react';
 import { FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
 
 export default function FloatingBOQButton({ onClick }: { onClick: () => void }) {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -115,7 +117,7 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
         </svg>
         
         {/* Inner Button */}
-        <button
+        <Button
           onClick={onClick}
           className="relative w-[56px] h-[56px] rounded-full backdrop-blur-xl bg-gradient-to-br from-indigo-500/95 via-violet-600/95 to-fuchsia-500/95 border border-white/20 text-white flex items-center justify-center focus:outline-none overflow-hidden"
           style={{ 
@@ -134,7 +136,7 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
             className={`transition-transform duration-300 ease-out ${isHovered ? '-translate-y-0.5 rotate-[-8deg]' : 'translate-y-0 rotate-0'}`} 
             strokeWidth={2.5}
           />
-        </button>
+        </Button>
       </div>
     </div>
   );

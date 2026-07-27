@@ -1,8 +1,10 @@
+import { Button } from './/Button';
 import React, { useState, useEffect } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 import { getImperialConversion } from '../../utils/autoConverter';
 import { motion } from 'framer-motion';
+
 
 const getGenericTooltip = (label: string | React.ReactNode): string | null => {
   if (typeof label !== "string") return "Enter required value.";
@@ -150,7 +152,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         className={`w-full relative group/field ${containerClassName}`}
       >
         {label && (
-          <label htmlFor={inputId} className="block text-[10px] sm:text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-[0.2em] mb-2.5 ml-1 cursor-help flex items-center gap-1.5 group-hover/field:text-indigo-600 dark:group-hover/field:text-indigo-400 transition-colors">
+          <label htmlFor={inputId} className="block text-[10px] sm:text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-[0.2em] mb-2.5 ml-1 cursor-help flex items-center gap-1.5 group-hover/field:text-indigo-600 dark:group-hover/field:text-indigo-400 transition-colors">
             {label}
           </label>
         )}
@@ -172,7 +174,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               displayError 
                 ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' 
                 : 'border-slate-100 dark:border-slate-800/60 focus:border-indigo-500 focus:ring-indigo-500/10'
-            } text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-2xl px-5 py-4 min-h-[56px] ${
+            } text-txt-primary dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-2xl px-5 py-4 min-h-[56px] ${
               displayUnit ? 'pr-28' : 'pr-16'
             } focus:outline-none focus:ring-4 transition-all font-bold text-base shadow-sm group-hover/input:shadow-md ${className || ''}`}
             {...props}
@@ -180,25 +182,25 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
           <div className="absolute right-3 flex items-center gap-2">
             {displayUnit && (
-              <span className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest select-none pr-3 border-r border-slate-100 dark:border-slate-800/60">
+              <span className="text-txt-tertiary dark:text-slate-400 text-[10px] font-black uppercase tracking-widest select-none pr-3 border-r border-slate-100 dark:border-slate-800/60">
                 {displayUnit}
               </span>
             )}
             <div className="flex flex-col -gap-1">
-              <button 
+              <Button 
                 type="button" tabIndex={-1}
                 className="p-1 text-slate-400 hover:text-indigo-600 transition-colors active:scale-90"
                 onClick={() => handleIncrement(1)}
               >
                 <ChevronUp className="w-4 h-4" />
-              </button>
-              <button 
+              </Button>
+              <Button 
                 type="button" tabIndex={-1}
                 className="p-1 text-slate-400 hover:text-indigo-600 transition-colors active:scale-90"
                 onClick={() => handleIncrement(-1)}
               >
                 <ChevronDown className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           </div>
         </div>

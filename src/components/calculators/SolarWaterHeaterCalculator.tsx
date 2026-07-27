@@ -1,7 +1,9 @@
+import { Button } from '../ui/Button';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sun, Users, Thermometer, Droplets, Battery, Zap, DollarSign, Calculator, Settings, AlertCircle, Info } from 'lucide-react';
 import { FormulaAccordion, FormulaStep } from '../ui/FormulaAccordion';
+
 
 type UnitSystem = 'metric' | 'imperial';
 
@@ -73,29 +75,29 @@ export function SolarWaterHeaterCalculator() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm">
+      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 md:p-8 shadow-sm">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orange-100 text-orange-600 mb-4">
               <Sun size={24} />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Solar Water Heater Sizing</h1>
-            <p className="text-slate-600">Calculate recommended collector area and tank capacity based on hot water demand.</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-txt-primary mb-2">Solar Water Heater Sizing</h1>
+            <p className="text-txt-secondary">Calculate recommended collector area and tank capacity based on hot water demand.</p>
           </div>
           
           <div className="flex bg-slate-100 p-1 rounded-xl">
-            <button
+            <Button
               onClick={() => setUnitSystem('metric')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
             >
               Metric
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setUnitSystem('imperial')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
             >
               Imperial
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -103,8 +105,8 @@ export function SolarWaterHeaterCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Input Parameters */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+            <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2">
               <Settings size={20} className="text-blue-500" />
               Basic Parameters
             </h2>
@@ -112,7 +114,7 @@ export function SolarWaterHeaterCalculator() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Occupants */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
                   <Users size={16} className="text-slate-400" />
                   Number of Occupants
                 </label>
@@ -122,14 +124,14 @@ export function SolarWaterHeaterCalculator() {
                     min="1"
                     value={occupants}
                     onChange={(e) => setOccupants(Math.max(1, Number(e.target.value)))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                   />
                 </div>
               </div>
 
               {/* Usage per person */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
                   <Droplets size={16} className="text-slate-400" />
                   Usage per Person (Liters/day)
                 </label>
@@ -139,25 +141,25 @@ export function SolarWaterHeaterCalculator() {
                     min="10"
                     value={usagePerPerson}
                     onChange={(e) => setUsagePerPerson(Math.max(10, Number(e.target.value)))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                   />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-500 text-sm">
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-txt-tertiary text-sm">
                     LPD
                   </div>
                 </div>
-                <p className="text-xs text-slate-500">Typical: 30-50 LPD per person</p>
+                <p className="text-xs text-txt-tertiary">Typical: 30-50 LPD per person</p>
               </div>
 
               {/* Solar Radiation */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
                   <Sun size={16} className="text-slate-400" />
                   Solar Radiation (kWh/m²/day)
                 </label>
                 <select
                   value={solarRadiation}
                   onChange={(e) => setSolarRadiation(Number(e.target.value))}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none appearance-none"
+                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none appearance-none"
                 >
                   <option value={3.5}>Low Exposure (3.5 kWh/m²/day)</option>
                   <option value={5.0}>Medium Exposure (5.0 kWh/m²/day)</option>
@@ -167,7 +169,7 @@ export function SolarWaterHeaterCalculator() {
 
               {/* Target Temp */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
                   <Thermometer size={16} className="text-slate-400" />
                   Target Water Temp (°C)
                 </label>
@@ -178,9 +180,9 @@ export function SolarWaterHeaterCalculator() {
                     max="90"
                     value={targetTemp}
                     onChange={(e) => setTargetTemp(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                   />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-500 text-sm">
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-txt-tertiary text-sm">
                     °C
                   </div>
                 </div>
@@ -189,8 +191,8 @@ export function SolarWaterHeaterCalculator() {
           </div>
 
           {/* Advanced Parameters */}
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+            <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2">
               <Zap size={20} className="text-amber-500" />
               Advanced & Economics
             </h2>
@@ -198,20 +200,20 @@ export function SolarWaterHeaterCalculator() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Inlet Temp */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Cold Inlet Temp (°C)</label>
+                <label className="text-sm font-medium text-txt-secondary">Cold Inlet Temp (°C)</label>
                 <div className="relative">
                   <input
                     type="number"
                     value={inletTemp}
                     onChange={(e) => setInletTemp(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none"
                   />
                 </div>
               </div>
 
               {/* Efficiency */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">System Efficiency (%)</label>
+                <label className="text-sm font-medium text-txt-secondary">System Efficiency (%)</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -219,14 +221,14 @@ export function SolarWaterHeaterCalculator() {
                     max="100"
                     value={efficiency}
                     onChange={(e) => setEfficiency(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none"
                   />
                 </div>
               </div>
 
               {/* Energy Cost */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Energy Cost ($/kWh)</label>
+                <label className="text-sm font-medium text-txt-secondary">Energy Cost ($/kWh)</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -234,7 +236,7 @@ export function SolarWaterHeaterCalculator() {
                     min="0"
                     value={energyCost}
                     onChange={(e) => setEnergyCost(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none"
                   />
                 </div>
               </div>
@@ -244,14 +246,14 @@ export function SolarWaterHeaterCalculator() {
 
         {/* Results Panel */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-6 shadow-lg text-white space-y-6">
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 shadow-lg text-white space-y-6">
             <h2 className="text-xl font-bold flex items-center gap-2">
               <Calculator size={24} className="text-blue-200" />
               Sizing Results
             </h2>
 
             <div className="space-y-4">
-              <div className="bg-white/10 rounded-2xl p-4 border border-white/20">
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/20">
                 <div className="flex items-center gap-3 mb-1">
                   <Droplets size={18} className="text-blue-200" />
                   <span className="text-blue-100 font-medium">Daily Hot Water Demand</span>
@@ -262,7 +264,7 @@ export function SolarWaterHeaterCalculator() {
                 </div>
               </div>
 
-              <div className="bg-white/10 rounded-2xl p-4 border border-white/20">
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/20">
                 <div className="flex items-center gap-3 mb-1">
                   <Sun size={18} className="text-orange-200" />
                   <span className="text-blue-100 font-medium">Req. Collector Area</span>
@@ -272,7 +274,7 @@ export function SolarWaterHeaterCalculator() {
                 </div>
               </div>
 
-              <div className="bg-white/10 rounded-2xl p-4 border border-white/20">
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/20">
                 <div className="flex items-center gap-3 mb-1">
                   <Battery size={18} className="text-indigo-200" />
                   <span className="text-blue-100 font-medium">Recommended Tank</span>
@@ -285,7 +287,7 @@ export function SolarWaterHeaterCalculator() {
           </div>
 
           {/* Economics Card */}
-          <div className="bg-emerald-50 rounded-3xl border border-emerald-200 p-6 shadow-sm">
+          <div className="bg-emerald-50 rounded-2xl border border-emerald-200 p-6 shadow-sm">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
                 <DollarSign size={24} />
@@ -331,7 +333,7 @@ export function SolarWaterHeaterCalculator() {
             ]} 
           />
 
-          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 flex gap-3 text-sm text-slate-600">
+          <div className="bg-slate-50 rounded-2xl p-4 border border-ui-borderSubtle flex gap-3 text-sm text-txt-secondary">
             <Info size={20} className="text-slate-400 flex-shrink-0" />
             <p>
               Calculations assume a standard specific heat of water (4.184 kJ/kg°C) and generic flat-plate/evacuated tube solar collector efficiencies. Actual sizing may vary based on specific manufacturer specs and local climate nuances.

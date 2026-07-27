@@ -1,8 +1,10 @@
+import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { Beaker, MountainSnow, Droplets } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CodeComplianceBadge, ApparatusHelperBox } from '../ui/CodeComplianceBadge';
+
 
 export default function MasterSoilMechanicsLabSuite() {
   const [activeTab, setActiveTab] = useState('physical');
@@ -17,27 +19,27 @@ export default function MasterSoilMechanicsLabSuite() {
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Master Soil Mechanics & Geotech Lab Suite</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 mb-4">Comprehensive portal for all major geotechnical laboratory testing and analysis.</p>
+          <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Master Soil Mechanics & Geotech Lab Suite</h1>
+          <p className="text-txt-tertiary dark:text-slate-400 mt-1 mb-4">Comprehensive portal for all major geotechnical laboratory testing and analysis.</p>
           <div className="flex gap-4">
             <CodeComplianceBadge standard="IS 2720 / ASTM D1883" title="Geotechnical Standard" description="Adheres to standardized soil mechanics parameters." />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-8 bg-white dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="flex flex-wrap gap-2 mb-8 bg-surface-default dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-ui-borderSubtle dark:border-slate-700">
         {tabs.map(t => (
-          <button
+          <Button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
               activeTab === t.id 
                 ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' 
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'
+                : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'
             }`}
           >
             {t.icon} {t.name}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -244,13 +246,13 @@ function FieldDensityModule() {
       <div className="space-y-6">
         <Card title="California Bearing Ratio (CBR)">
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
-              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1">CBR @ 2.5mm</div>
-              <div className="text-2xl font-bold text-slate-900 dark:text-white">{cbr25.toFixed(2)}%</div>
+            <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-ui-borderSubtle dark:border-slate-700">
+              <div className="text-sm text-txt-tertiary dark:text-slate-400 mb-1">CBR @ 2.5mm</div>
+              <div className="text-2xl font-bold text-txt-primary dark:text-white">{cbr25.toFixed(2)}%</div>
             </div>
-            <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
-              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1">CBR @ 5.0mm</div>
-              <div className="text-2xl font-bold text-slate-900 dark:text-white">{cbr50.toFixed(2)}%</div>
+            <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-ui-borderSubtle dark:border-slate-700">
+              <div className="text-sm text-txt-tertiary dark:text-slate-400 mb-1">CBR @ 5.0mm</div>
+              <div className="text-2xl font-bold text-txt-primary dark:text-white">{cbr50.toFixed(2)}%</div>
             </div>
           </div>
           <ResultRow label="Reported CBR Value" value={cbrReported} unit="%" />
@@ -357,8 +359,8 @@ function ShearPermeabilityModule() {
 
         <Card title="Permeability Coefficient">
           <div className="flex gap-2 mb-4">
-            <button onClick={() => setPermMode('falling')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'falling' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>Falling Head</button>
-            <button onClick={() => setPermMode('constant')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'constant' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>Constant Head</button>
+            <Button onClick={() => setPermMode('falling')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'falling' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-txt-secondary dark:text-slate-300'}`}>Falling Head</Button>
+            <Button onClick={() => setPermMode('constant')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'constant' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-txt-secondary dark:text-slate-300'}`}>Constant Head</Button>
           </div>
           <div className="grid grid-cols-3 gap-4 mb-4">
             <InputGroup label="Sample Area A (cm²)" value={permA} onChange={(e: any) => setPermA(parseFloat(e.target.value) || 0)} />
@@ -410,8 +412,8 @@ function ShearPermeabilityModule() {
 // --------------------------------------------------------------------------------------
 function Card({ title, children }: { title: string, children: React.ReactNode }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-      <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-700 pb-3 mb-4">
+    <div className="bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6">
+      <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b border-slate-100 dark:border-slate-700 pb-3 mb-4">
         {title}
       </h3>
       {children}
@@ -422,14 +424,14 @@ function Card({ title, children }: { title: string, children: React.ReactNode })
 function InputGroup({ label, value, onChange }: { label: string, value: number, onChange: any }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 leading-tight">{label}</label>
+      <label className="text-xs font-semibold text-txt-secondary dark:text-slate-400 leading-tight">{label}</label>
       <input
         type="number"
         value={value}
         onChange={onChange}
         min={0}
         step="any"
-        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900 dark:text-white font-mono"
+        className="w-full bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-txt-primary dark:text-white font-mono"
       />
     </div>
   );
@@ -438,9 +440,9 @@ function InputGroup({ label, value, onChange }: { label: string, value: number, 
 function ResultRow({ label, value, unit, digits = 2 }: { label: string, value: number, unit: string, digits?: number }) {
   return (
     <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
-      <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">{label}</span>
+      <span className="text-txt-secondary dark:text-slate-400 text-sm font-medium">{label}</span>
       <div className="text-right flex items-baseline gap-1.5">
-        <span className="text-lg font-bold text-slate-900 dark:text-white">
+        <span className="text-lg font-bold text-txt-primary dark:text-white">
           {isNaN(value) || !isFinite(value) ? "0.00" : value.toFixed(digits)}
         </span>
         <span className="text-indigo-500 dark:text-indigo-400 text-xs font-semibold">{unit}</span>

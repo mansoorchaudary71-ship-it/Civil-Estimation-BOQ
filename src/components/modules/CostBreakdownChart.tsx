@@ -51,7 +51,7 @@ export const CostBreakdownChart: React.FC<CostBreakdownChartProps> = ({ data, fo
                 {payload?.map((entry, index) => (
                   <li key={`item-${index}`} className="flex items-center gap-2">
                     <div className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: entry.color }} />
-                    <span className="text-slate-800 dark:text-slate-200 font-medium text-sm">{entry.value}</span>
+                    <span className="text-txt-primary dark:text-slate-200 font-medium text-sm">{entry.value}</span>
                   </li>
                 ))}
               </ul>

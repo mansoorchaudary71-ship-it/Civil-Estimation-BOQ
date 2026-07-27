@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface AccordionProps {
   title: React.ReactNode;
@@ -12,28 +12,32 @@ export const Accordion: React.FC<AccordionProps> = ({ title, children, defaultOp
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="mb-4 border border-slate-200 dark:border-slate-700 rounded-[24px] overflow-hidden bg-white dark:bg-slate-800 shadow-sm">
+    <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden shadow-sm">
       <button
-        className="w-full flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        type="button"
+        className="w-full flex items-center justify-between p-4 sm:p-5 text-left bg-surface-default hover:bg-slate-50 transition-colors focus:outline-none"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h3 className="font-bold text-lg text-slate-800 dark:text-white">{title}</h3>
+        <div className="font-semibold text-txt-primary flex-1">{title}</div>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="text-txt-tertiary ml-4"
         >
-          <ChevronDown className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+          <ChevronDown size={20} />
         </motion.div>
       </button>
+      
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
           >
-            <div className="p-4 border-t border-slate-100 dark:border-slate-700">
+            <div className="p-4 sm:p-5 pt-0 border-t border-slate-100">
               {children}
             </div>
           </motion.div>

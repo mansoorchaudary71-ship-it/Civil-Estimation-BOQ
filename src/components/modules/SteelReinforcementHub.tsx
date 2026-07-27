@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import BarBendingSchedule from "./BarBendingSchedule";
 import MetalWeightCalculator from "./MetalWeightCalculator";
@@ -7,6 +8,7 @@ import FormworkEstimator from "./FormworkEstimator";
 import { Grid2X2, Package, Search, BarChart2, Layers, RotateCw, PenTool, LayoutDashboard } from "lucide-react";
 import CageEstimator from "./CageEstimator"; // We will create this
 import { CalculationHistory } from '../ui/CalculationHistory';
+
 
 type HubTab = "bbs" | "section-weight" | "bar-estimation" | "cage-estimator" | "detailing" | "formwork";
 
@@ -27,17 +29,17 @@ export default function SteelReinforcementHub() {
   return (
     <div className="w-full h-full flex flex-col md:flex-row bg-slate-50 overflow-hidden">
       {/* Sidebar for Sub-Navigation */}
-      <div className="w-full md:w-64 flex-shrink-0 bg-white border-r border-slate-200 flex flex-col pt-6 px-4 gap-2">
-        <h2 className="text-xl font-bold tabular-nums tracking-tight text-slate-800 px-2 mb-4">
+      <div className="w-full md:w-64 flex-shrink-0 bg-surface-default border-r border-ui-borderSubtle flex flex-col pt-6 px-4 gap-2">
+        <h2 className="text-xl font-bold tabular-nums tracking-tight text-txt-primary px-2 mb-4">
           Steel Hub
         </h2>
         
         <div className="px-2 mb-4">
-          <label className="text-xs font-bold text-slate-500 uppercase">Design Standard</label>
+          <label className="text-xs font-bold text-txt-tertiary uppercase">Design Standard</label>
           <select 
             value={designStandard}
             onChange={(e) => setDesignStandard(e.target.value)}
-            className="w-full mt-1 bg-slate-100 border-none p-2 rounded-[16px] text-xs font-semibold text-slate-700 outline-none"
+            className="w-full mt-1 bg-slate-100 border-none p-2 rounded-2xl text-xs font-semibold text-txt-secondary outline-none"
           >
             <option value="IS 1786:2008 (Deformed Steel)">IS 1786:2008 (Deformed Steel)</option>
             <option value="SP 34:1987 (Reinforcement Detailing)">SP 34:1987 (Reinforcement Detailing)</option>
@@ -46,18 +48,18 @@ export default function SteelReinforcementHub() {
         </div>
 
         {tabs.map((tab) => (
-          <button
+          <Button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-[24px] font-bold transition-all text-sm ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold transition-all text-sm ${
               activeTab === tab.id
                 ? "bg-indigo-600 text-white    shadow-md translate-x-1"
-                : "text-slate-600  hover:bg-slate-100 hover:text-slate-900 "
+                : "text-txt-secondary  hover:bg-slate-100 hover:text-txt-primary "
             }`}
           >
             <tab.icon className="w-5 h-5" />
             {tab.label}
-          </button>
+          </Button>
         ))}
       </div>
 

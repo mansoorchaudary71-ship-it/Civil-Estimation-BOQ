@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useMemo } from 'react';
 import { Columns, CheckCircle2, AlertTriangle, Sparkles } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
@@ -7,6 +8,7 @@ import { NumberInput } from '../ui/NumberInput';
 import { ResultCard } from '../ui/ResultCard';
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Scatter, ResponsiveContainer, Legend } from 'recharts';
 import { CodeTooltip } from "../ui/CodeTooltip";
+
 
 type EndCondition = "fixed-fixed" | "fixed-pinned" | "pinned-pinned" | "fixed-free";
 
@@ -169,15 +171,15 @@ export default function ColumnDesignTool() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
-         <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+         <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
             <Columns className="text-rose-600" /> Column Design & P-M Interaction
          </h2>
 
          <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
             <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-slate-800 mb-4">Loads & Boundary</h3>
+                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Loads & Boundary</h3>
                   <div className="space-y-4">
                     <NumberInput label="Working Load (P)" unit="kN" value={workingLoad} onChange={setWorkingLoad} />
                     <NumberInput label="Working Moment (M)" unit="kNm" value={workingMoment} onChange={setWorkingMoment} />
@@ -185,21 +187,21 @@ export default function ColumnDesignTool() {
                       <div className="flex-1">
                         <NumberInput label="Safety Factor (γf)" value={safetyFactor} onChange={setSafetyFactor} />
                       </div>
-                      <button onClick={handleAiSafetyFactor}
+                      <Button onClick={handleAiSafetyFactor}
                         className="h-11 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center transition-colors shadow-sm text-base font-semibold active:scale-95 hover:-translate-y-0.5"
                         title="AI-Suggested Safety Factor based on Project Settings"
                       >
                         <Sparkles className="w-4 h-4 mr-1.5" /> AI Suggest
-                      </button>
+                      </Button>
                     </div>
                     <NumberInput label="Unsupported Length (L)" unit="m" value={length} onChange={setLength} />
                     
                     <div>
-                        <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">End Condition</label>
+                        <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">End Condition</label>
                         <select 
                             value={endCondition}
                             onChange={(e) => setEndCondition(e.target.value as EndCondition)}
-                            className="w-full h-11 bg-slate-50 border border-slate-200 rounded-[16px] px-4 text-sm font-medium focus:outline-none"
+                            className="w-full h-11 bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
                         >
                             {Object.entries(END_CONDITIONS).map(([key, val]) => (
                                 <option key={key} value={key}>{val.label}</option>
@@ -210,7 +212,7 @@ export default function ColumnDesignTool() {
                 </div>
 
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-slate-800 mb-4">Section & Materials</h3>
+                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Section & Materials</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Width (B)" unit="mm" value={width} onChange={setWidth} />
                     <NumberInput label="Depth (D)" unit="mm" value={depth} onChange={setDepth} />
@@ -220,7 +222,7 @@ export default function ColumnDesignTool() {
                 </div>
 
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-slate-800 mb-4">Reinforcement</h3>
+                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Reinforcement</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label={<span className="flex items-center gap-1">Bar Dia <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>} unit="mm" value={rebarDia} onChange={setRebarDia} />
                     <NumberInput label="No. of Bars" value={rebarCount} onChange={setRebarCount} />
@@ -261,8 +263,8 @@ export default function ColumnDesignTool() {
                     </div>
                 </MaterialSummary>
 
-                <div className="bg-slate-50 border border-slate-100 rounded-3xl p-4 sm:p-6 flex-1 min-h-[400px] overflow-hidden">
-                    <h3 className="mb-4 text-lg font-medium text-slate-800">P-M Interaction Diagram (IS 456)</h3>
+                <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 sm:p-6 flex-1 min-h-[400px] overflow-hidden">
+                    <h3 className="mb-4 text-lg font-medium text-txt-primary">P-M Interaction Diagram (IS 456)</h3>
                     <ResponsiveContainer width="100%" height={350}>
                         <ComposedChart margin={{ top: 10, right: 20, left: 10, bottom: 20 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />

@@ -1,7 +1,9 @@
+import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { Columns, Save } from 'lucide-react';
 import { CalculationHistory } from '../ui/CalculationHistory';
 import { GenericExportButtons } from "../ui/GenericExportButtons";
+
 
 interface Entry {
   id: string;
@@ -45,15 +47,15 @@ export default function DoorWindowSchedule() {
 
   return (
     <div className="w-full space-y-6">
-       <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[24px] shadow-sm overflow-hidden">
+       <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
          <div className="flex justify-between items-center mb-6">
-           <h2 className="flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+           <h2 className="flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
              <Columns className="w-6 h-6 text-teal-500" />
              Door & Window Schedule Generator
            </h2>
-           <button onClick={downloadCSV} className="bg-emerald-600 hover:bg-emerald-700 text-slate-900 px-4 py-2 rounded-full transition flex items-center gap-2 text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+           <Button onClick={downloadCSV} className="bg-emerald-600 hover:bg-emerald-700 text-txt-primary px-4 py-2 rounded-full transition flex items-center gap-2 text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
              <Save className="w-4 h-4"/> Export CSV
-           </button>
+           </Button>
          </div>
 
          
@@ -61,7 +63,7 @@ export default function DoorWindowSchedule() {
 <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 border-y border-slate-200 overflow-hidden">
+                <tr className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border-y border-ui-borderSubtle overflow-hidden">
                    <th className="p-3 text-base font-medium">Mark</th>
                    <th className="p-3 text-base font-medium">Width (m)</th>
                    <th className="p-3 text-base font-medium">Height (m)</th>
@@ -77,32 +79,32 @@ export default function DoorWindowSchedule() {
                    <tr key={e.id}>
                      <td className="p-2">
                         <><label htmlFor="a11y-input-212" className="sr-only">Input</label>
-<input id="a11y-input-212" type="text" value={e.type} onChange={(ev)=>updateEntry(e.id, 'type', ev.target.value)} className="w-[120px] bg-slate-50 border border-slate-200 px-3 py-2 rounded-full text-sm" /></>
+<input id="a11y-input-212" type="text" value={e.type} onChange={(ev)=>updateEntry(e.id, 'type', ev.target.value)} className="w-[120px] bg-slate-50 border border-ui-borderSubtle px-3 py-2 rounded-full text-sm" /></>
                      </td>
                      <td className="p-2">
                         <><label htmlFor="a11y-input-213" className="sr-only">Input</label>
-<input id="a11y-input-213" type="number" inputMode="decimal" step="0.1" value={e.w} onChange={(ev)=>updateEntry(e.id, 'w', parseFloat(ev.target.value)||0)} className="w-[80px] bg-slate-50 border border-slate-200 px-3 py-2 rounded-full text-sm" /></>
+<input id="a11y-input-213" type="number" inputMode="decimal" step="0.1" value={e.w} onChange={(ev)=>updateEntry(e.id, 'w', parseFloat(ev.target.value)||0)} className="w-[80px] bg-slate-50 border border-ui-borderSubtle px-3 py-2 rounded-full text-sm" /></>
                      </td>
                      <td className="p-2">
                         <><label htmlFor="a11y-input-214" className="sr-only">Input</label>
-<input id="a11y-input-214" type="number" inputMode="decimal" step="0.1" value={e.h} onChange={(ev)=>updateEntry(e.id, 'h', parseFloat(ev.target.value)||0)} className="w-[80px] bg-slate-50 border border-slate-200 px-3 py-2 rounded-full text-sm" /></>
+<input id="a11y-input-214" type="number" inputMode="decimal" step="0.1" value={e.h} onChange={(ev)=>updateEntry(e.id, 'h', parseFloat(ev.target.value)||0)} className="w-[80px] bg-slate-50 border border-ui-borderSubtle px-3 py-2 rounded-full text-sm" /></>
                      </td>
                      <td className="p-2">
                         <><label htmlFor="a11y-input-215" className="sr-only">Input</label>
-<input id="a11y-input-215" type="number" inputMode="decimal" value={e.qty} onChange={(ev)=>updateEntry(e.id, 'qty', parseInt(ev.target.value)||0)} className="w-[60px] bg-slate-50 border border-slate-200 px-3 py-2 rounded-full text-sm" /></>
+<input id="a11y-input-215" type="number" inputMode="decimal" value={e.qty} onChange={(ev)=>updateEntry(e.id, 'qty', parseInt(ev.target.value)||0)} className="w-[60px] bg-slate-50 border border-ui-borderSubtle px-3 py-2 rounded-full text-sm" /></>
                      </td>
                      <td className="p-2 text-base font-medium">
                         {((e.w * e.h) * e.qty).toFixed(2)}
                      </td>
-                     <td className="p-2 text-sm font-mono text-slate-500">
+                     <td className="p-2 text-sm font-mono text-txt-tertiary">
                         {(e.w + 0.3).toFixed(2)}
                      </td>
                      <td className="p-2">
                         <><label htmlFor="a11y-input-216" className="sr-only">Input</label>
-<input id="a11y-input-216" type="text" value={e.notes} onChange={(ev)=>updateEntry(e.id, 'notes', ev.target.value)} className="w-full bg-slate-50 border border-slate-200 px-3 py-2 rounded-full text-sm" /></>
+<input id="a11y-input-216" type="text" value={e.notes} onChange={(ev)=>updateEntry(e.id, 'notes', ev.target.value)} className="w-full bg-slate-50 border border-ui-borderSubtle px-3 py-2 rounded-full text-sm" /></>
                      </td>
                      <td className="p-2">
-                        <button onClick={()=>setEntries(entries.filter(x=>x.id!==e.id))} className="text-rose-500 hover:bg-rose-50 p-2 rounded-full transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">✕</button>
+                        <Button onClick={()=>setEntries(entries.filter(x=>x.id!==e.id))} className="text-rose-500 hover:bg-rose-50 p-2 rounded-full transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">✕</Button>
                      </td>
                    </tr>
                 ))}
@@ -110,9 +112,9 @@ export default function DoorWindowSchedule() {
             </table>
          </div>
          <div className="mt-4">
-            <button onClick={addEntry} className="text-teal-600 bg-teal-50 px-4 py-2 rounded-full hover:bg-teal-100 transition text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+            <Button onClick={addEntry} className="text-teal-600 bg-teal-50 px-4 py-2 rounded-full hover:bg-teal-100 transition text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
               + Add Item
-            </button>
+            </Button>
          </div>
        </div>
     

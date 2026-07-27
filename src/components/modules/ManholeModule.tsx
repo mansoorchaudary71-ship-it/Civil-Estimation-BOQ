@@ -194,7 +194,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             </label>{" "}
             <><label htmlFor="a11y-input-323" className="sr-only">Input</label>
 <input id="a11y-input-323" type="number" inputMode="decimal"
-              className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
               value={mhDepth}
               onChange={(e) => setMhDepth(e.target.value)}
             /></>{" "}
@@ -206,7 +206,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             </label>{" "}
             <><label htmlFor="a11y-input-324" className="sr-only">Input</label>
 <input id="a11y-input-324" type="number" inputMode="decimal"
-              className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
               value={mhInnerLen}
               onChange={(e) => setMhInnerLen(e.target.value)}
             /></>{" "}
@@ -219,7 +219,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
               </label>{" "}
               <><label htmlFor="a11y-input-325" className="sr-only">Input</label>
 <input id="a11y-input-325" type="number" inputMode="decimal"
-                className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+                className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
                 value={mhInnerWid}
                 onChange={(e) => setMhInnerWid(e.target.value)}
               /></>{" "}
@@ -233,7 +233,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             <><label htmlFor="a11y-input-326" className="sr-only">Input</label>
 <input id="a11y-input-326" type="number" inputMode="decimal"
               step="0.01"
-              className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
               value={mhWallThick}
               onChange={(e) => setMhWallThick(e.target.value)}
             /></>{" "}
@@ -246,7 +246,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             <><label htmlFor="a11y-input-327" className="sr-only">Input</label>
 <input id="a11y-input-327" type="number" inputMode="decimal"
               step="0.01"
-              className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
               value={mhBaseThick}
               onChange={(e) => setMhBaseThick(e.target.value)}
             /></>{" "}
@@ -259,7 +259,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             <><label htmlFor="a11y-input-328" className="sr-only">Input</label>
 <input id="a11y-input-328" type="number" inputMode="decimal"
               step="0.01"
-              className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
               value={mhTopThick}
               onChange={(e) => setMhTopThick(e.target.value)}
             /></>{" "}
@@ -270,7 +270,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
               Concrete Mix Grade
              <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span></label>{" "}
             <select
-              className="w-full bg-white border border-gray-200 text-slate-800 rounded-[24px] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm appearance-none overflow-hidden"
+              className="w-full bg-surface-default border border-gray-200 text-txt-primary rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm appearance-none overflow-hidden"
               value={concreteMix}
               onChange={(e) => setConcreteMix(e.target.value)}
             >
@@ -288,7 +288,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
         {" "}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {" "}
-          <div className="lg:col-span-1 flex flex-col items-center justify-center p-4 sm:p-6 bg-transparent border border-slate-100 rounded-[24px] overflow-hidden">
+          <div className="lg:col-span-1 flex flex-col items-center justify-center p-4 sm:p-6 bg-transparent border border-slate-100 rounded-2xl overflow-hidden">
             {" "}
             {/* Visual Icon representation based on shape */}{" "}
             <div
@@ -306,10 +306,10 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             </div>{" "}
             <div className="text-center">
               {" "}
-              <h4 className="font-bold text-slate-800 mb-1">
+              <h4 className="font-bold text-txt-primary mb-1">
                 {mhType === "circular" ? "Circular" : "Rectangular"} Manhole
               </h4>{" "}
-              <p className="text-sm text-slate-700 font-medium">
+              <p className="text-sm text-txt-secondary font-medium">
                 Depth: {depth}m
               </p>{" "}
             </div>{" "}
@@ -327,13 +327,13 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
                   title="Wet Concrete Volume"
                   value={totalWetConcrete.toFixed(2)}
                   unit="m³"
-                  icon={<Droplets className="w-4 h-4 text-slate-900" />}
+                  icon={<Droplets className="w-4 h-4 text-txt-primary" />}
                   description="Base + Wall + Slab"
                   variant="primary"
                 />
                 
                 <h4 className="text-base font-medium mb-2 mt-4 flex items-center gap-2">
-                  <Construction className="w-4 h-4 text-slate-600" /> Material Breakdown ({concreteMix})
+                  <Construction className="w-4 h-4 text-txt-secondary" /> Material Breakdown ({concreteMix})
                 </h4>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

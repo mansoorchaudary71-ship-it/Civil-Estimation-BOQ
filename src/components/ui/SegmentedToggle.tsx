@@ -1,5 +1,7 @@
+import { Button } from './/Button';
 import React, { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
+
 
 // Exact color mappings tailored to match the background hues of your tool cards
 const themeStyles = {
@@ -118,20 +120,20 @@ const SegmentedToggle = ({
         const isSelected = selectedValue === option.value;
         
         return (
-          <button
+          <Button
             key={option.value}
             onClick={() => onChange(option.value)}
             className={`
               flex flex-1 items-center justify-center gap-2 ${sizeClasses[size]} font-medium transition-colors duration-200
               ${isSelected 
                 ? `${currentTheme.selectedBg} ${currentTheme.selectedText}` 
-                : 'bg-transparent text-gray-600 hover:bg-gray-50/50'
+                : 'bg-transparent text-txt-secondary hover:bg-gray-50/50'
               }
             `}
           >
             {isSelected && <Check className="h-4 w-4 stroke-[2.5]" />}
             {option.label}
-          </button>
+          </Button>
         );
       })}
     </div>

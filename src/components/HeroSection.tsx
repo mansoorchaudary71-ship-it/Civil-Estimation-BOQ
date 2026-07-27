@@ -1,6 +1,8 @@
+import { Button } from './ui/Button';
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, Play, Star, BarChart3, ShieldCheck, Zap, Calculator, LayoutDashboard } from 'lucide-react';
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion';
+
 
 export default function HeroSection({ onStart }: { onStart: () => void }) {
   const { scrollY } = useScroll();
@@ -24,12 +26,12 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 shadow-sm mb-8 hover:shadow-md transition-all cursor-pointer group"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-default/60 dark:bg-slate-800/60 backdrop-blur-md border border-ui-borderSubtle/50 dark:border-slate-700/50 shadow-sm mb-8 hover:shadow-md transition-all cursor-pointer group"
         >
           <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#fa5c5c] to-[#f58145] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1">
             <Zap className="w-3 h-3" /> New
           </span>
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300 pr-2 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+          <span className="text-sm font-medium text-txt-secondary dark:text-slate-300 pr-2 group-hover:text-txt-primary dark:group-hover:text-white transition-colors">
             AI-Powered Smart Estimations 2.0
           </span>
           <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#f58145] group-hover:translate-x-0.5 transition-all" />
@@ -40,7 +42,7 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1] md:leading-[1.15] max-w-4xl mx-auto mb-6"
+          className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-txt-primary dark:text-white tracking-tight leading-[1.1] md:leading-[1.15] max-w-4xl mx-auto mb-6"
         >
           Generate Accurate BOQs in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fa5c5c] to-[#f58145]">Seconds, Not Days</span>
         </motion.h1>
@@ -50,7 +52,7 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10 font-medium"
+          className="text-lg md:text-xl text-txt-secondary dark:text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10 font-medium"
         >
           The intelligent estimation engine for modern civil engineers. Instantly calculate quantities, automate pricing, and win more bids with zero manual errors.
         </motion.p>
@@ -62,18 +64,18 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
           transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
           className="flex flex-col sm:flex-row items-center gap-4 mb-12 w-full sm:w-auto"
         >
-          <button
+          <Button
             onClick={onStart}
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.1)] flex items-center justify-center gap-2 group"
+            className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-900 dark:bg-surface-default text-white dark:text-txt-primary font-semibold text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.1)] flex items-center justify-center gap-2 group"
           >
             Start Estimating Free
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Button>
           
-          <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center gap-2 group shadow-sm hover:shadow-md">
+          <Button className="w-full sm:w-auto px-8 py-4 rounded-full bg-surface-default dark:bg-slate-800 text-txt-secondary dark:text-slate-300 font-semibold text-lg border border-ui-borderSubtle dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-txt-primary dark:hover:text-white transition-all flex items-center justify-center gap-2 group shadow-sm hover:shadow-md">
             <Play className="w-5 h-5 fill-slate-400 group-hover:fill-[#f58145] text-slate-400 group-hover:text-[#f58145] transition-colors" />
             See How It Works
-          </button>
+          </Button>
         </motion.div>
 
         {/* Trust Indicators */}
@@ -86,7 +88,7 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
           <div className="flex -space-x-3">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 overflow-hidden shadow-sm">
-                <img src={`https://i.pravatar.cc/100?img=${i + 15}`} alt="User Avatar" className="w-full h-full object-cover" />
+                <img src={`https://i.pravatar.cc/100?img=${i + 15}`} alt="User Avatar" className="w-full h-full object-cover animate-fade-in" />
               </div>
             ))}
           </div>
@@ -96,8 +98,8 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
                 <Star key={i} className="w-4 h-4 fill-[#f58145] text-[#f58145]" />
               ))}
             </div>
-            <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">
-              Trusted by <span className="text-slate-900 dark:text-white font-bold">10,000+</span> professionals
+            <p className="text-sm font-semibold text-txt-secondary dark:text-slate-400">
+              Trusted by <span className="text-txt-primary dark:text-white font-bold">10,000+</span> professionals
             </p>
           </div>
         </motion.div>
@@ -112,33 +114,33 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
           {/* Floating Element Left */}
           <motion.div 
             style={{ y: y1 }}
-            className="hidden lg:flex absolute -left-12 top-24 z-20 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 p-4 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-black/50 items-center gap-4"
+            className="hidden lg:flex absolute -left-12 top-24 z-20 bg-surface-default/90 dark:bg-slate-800/90 backdrop-blur-xl border border-ui-borderSubtle/50 dark:border-slate-700/50 p-4 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-black/50 items-center gap-4"
           >
             <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-sm font-bold text-slate-900 dark:text-white">99.9% Accuracy</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Verified by engineers</p>
+              <p className="text-sm font-bold text-txt-primary dark:text-white">99.9% Accuracy</p>
+              <p className="text-xs text-txt-tertiary dark:text-slate-400">Verified by engineers</p>
             </div>
           </motion.div>
 
           {/* Floating Element Right */}
           <motion.div 
             style={{ y: y2 }}
-            className="hidden lg:flex absolute -right-8 bottom-32 z-20 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 p-4 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-black/50 items-center gap-4"
+            className="hidden lg:flex absolute -right-8 bottom-32 z-20 bg-surface-default/90 dark:bg-slate-800/90 backdrop-blur-xl border border-ui-borderSubtle/50 dark:border-slate-700/50 p-4 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-black/50 items-center gap-4"
           >
             <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <Calculator className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-sm font-bold text-slate-900 dark:text-white">15+ Hours Saved</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Per project average</p>
+              <p className="text-sm font-bold text-txt-primary dark:text-white">15+ Hours Saved</p>
+              <p className="text-xs text-txt-tertiary dark:text-slate-400">Per project average</p>
             </div>
           </motion.div>
 
-          <div className="relative rounded-2xl md:rounded-[2rem] border border-slate-200/50 dark:border-slate-700/50 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm p-2 md:p-4 shadow-2xl shadow-slate-200/50 dark:shadow-black/50 transform-gpu rotate-x-[12deg] hover:rotate-x-[0deg] transition-all duration-700 ease-out origin-bottom">
-            <div className="rounded-xl md:rounded-[1.5rem] overflow-hidden bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 shadow-inner">
+          <div className="relative rounded-2xl md:rounded-2xl border border-ui-borderSubtle/50 dark:border-slate-700/50 bg-surface-default/40 dark:bg-slate-900/40 backdrop-blur-sm p-2 md:p-4 shadow-2xl shadow-slate-200/50 dark:shadow-black/50 transform-gpu rotate-x-[12deg] hover:rotate-x-[0deg] transition-all duration-700 ease-out origin-bottom">
+            <div className="rounded-xl md:rounded-[1.5rem] overflow-hidden bg-surface-default dark:bg-slate-950 border border-slate-100 dark:border-slate-800 shadow-inner">
               
               {/* Dashboard Header Mockup */}
               <div className="h-12 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center px-4 md:px-6 gap-2">
@@ -147,7 +149,7 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
                   <div className="w-3 h-3 rounded-full bg-amber-400/80"></div>
                   <div className="w-3 h-3 rounded-full bg-green-400/80"></div>
                 </div>
-                <div className="mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md h-6 w-1/3 md:w-1/4 flex items-center justify-center opacity-70">
+                <div className="mx-auto bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 rounded-md h-6 w-1/3 md:w-1/4 flex items-center justify-center opacity-70">
                   <div className="w-1/2 h-1.5 bg-slate-200 dark:bg-slate-600 rounded-full"></div>
                 </div>
               </div>
@@ -219,11 +221,11 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
           style={{ opacity }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Scroll</span>
+          <span className="text-xs font-semibold text-slate-400 dark:text-txt-tertiary uppercase tracking-widest">Scroll</span>
           <motion.div 
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-5 h-8 rounded-full border-2 border-slate-300 dark:border-slate-600 flex justify-center p-1"
+            className="w-5 h-8 rounded-full border-2 border-ui-borderDefault dark:border-slate-600 flex justify-center p-1"
           >
             <div className="w-1 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full"></div>
           </motion.div>

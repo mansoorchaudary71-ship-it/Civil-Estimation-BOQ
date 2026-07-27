@@ -1,7 +1,9 @@
+import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { Mail, MessageSquare, PhoneCall, MapPin, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
+
 
 export default function Contact() {
   const { workspaceToken, signInWithGoogle } = useAuth();
@@ -99,53 +101,53 @@ export default function Contact() {
   return (
     <div className="max-w-5xl mx-auto space-y-12 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-4">
-        <h1 className="text-2xl md:text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
+        <h1 className="text-2xl md:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">
           Get in Touch
         </h1>
-        <p className="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+        <p className="text-lg text-txt-tertiary dark:text-slate-400 max-w-2xl mx-auto">
           Have questions about our tools, pricing, or need technical support? Our team is ready to help.
         </p>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-bg-card rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
+          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
                <MessageSquare className="w-6 h-6 text-indigo-600 dark:text-blue-400" />
              </div>
              <div>
-               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Chat to Sales</h3>
-               <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">Speak to our friendly team.</p>
+               <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Chat to Sales</h3>
+               <p className="text-sm text-txt-secondary dark:text-slate-300 mb-3">Speak to our friendly team.</p>
                <a href="mailto:sales@civilpro.com" className="text-base font-medium text-indigo-600 dark:text-blue-400 hover:underline">sales@civilpro.com</a>
              </div>
           </div>
 
-          <div className="bg-bg-card rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
+          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
              <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
                <MapPin className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
              </div>
              <div>
-               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Visit Us</h3>
-               <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">Visit our office HQ.</p>
+               <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Visit Us</h3>
+               <p className="text-sm text-txt-secondary dark:text-slate-300 mb-3">Visit our office HQ.</p>
                <address className="text-base font-medium dark:text-slate-300 not-italic">
                  100 Civil Way<br/>San Francisco, CA 94107
                </address>
              </div>
           </div>
 
-          <div className="bg-bg-card rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
+          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
              <div className="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
                <PhoneCall className="w-6 h-6 text-purple-600 dark:text-purple-400" />
              </div>
              <div>
-               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Call Us</h3>
-               <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">Mon-Fri from 8am to 5pm.</p>
+               <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Call Us</h3>
+               <p className="text-sm text-txt-secondary dark:text-slate-300 mb-3">Mon-Fri from 8am to 5pm.</p>
                <a href="tel:+15550000000" className="text-base font-medium text-indigo-600 dark:text-blue-400 hover:underline">+1 (555) 000-0000</a>
              </div>
           </div>
         </div>
 
-        <div className="lg:col-span-2 bg-bg-card rounded-[2.5rem] p-8 md:p-10 border border-slate-200 dark:border-slate-700 shadow-sm">
+        <div className="lg:col-span-2 bg-bg-card rounded-[2.5rem] p-8 md:p-10 border border-ui-borderSubtle dark:border-slate-700 shadow-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {status === 'success' && (
               <div className="bg-green-50 border border-green-200 text-green-800 rounded-2xl p-4 flex items-center gap-3 overflow-hidden">
@@ -171,7 +173,7 @@ export default function Contact() {
                   value={formData.firstName}
                   onChange={handleInputChange}
                   disabled={status === 'loading'}
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
+                  className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
                   placeholder="Jane" 
                 />
               </div>
@@ -184,7 +186,7 @@ export default function Contact() {
                   value={formData.lastName}
                   onChange={handleInputChange}
                   disabled={status === 'loading'}
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
+                  className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
                   placeholder="Smith" 
                 />
               </div>
@@ -199,7 +201,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleInputChange}
                 disabled={status === 'loading'}
-                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
+                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
                 placeholder="jane@example.com" 
               />
             </div>
@@ -212,12 +214,12 @@ export default function Contact() {
                 value={formData.message}
                 onChange={handleInputChange}
                 disabled={status === 'loading'}
-                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium resize-none disabled:opacity-50 overflow-hidden" 
+                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium resize-none disabled:opacity-50 overflow-hidden" 
                 placeholder="How can we help?" 
               />
             </div>
 
-            <button 
+            <Button 
               type="submit" 
               disabled={status === 'loading'}
               className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r hover:from-blue-700 disabled:opacity-75 text-white bg-blue-600 font-bold rounded-2xl shadow-[0_4px_24px_rgba(37,99,235,0.25)] transition-all overflow-hidden"
@@ -228,7 +230,7 @@ export default function Contact() {
                   Sending via Gmail...
                 </>
               ) : (workspaceToken ? 'Send Message via Gmail' : 'Sign in with Google to Send')}
-            </button>
+            </Button>
           </form>
         </div>
       </div>

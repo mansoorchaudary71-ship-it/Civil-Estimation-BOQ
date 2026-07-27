@@ -83,12 +83,12 @@ export default function SEOHead({ title, description, canonicalUrl, divisionName
       
       {/* Breadcrumbs */}
       {(divisionName && toolName) && (
-        <nav className="text-sm font-medium text-slate-500 mb-6 flex items-center gap-2 px-4 max-w-7xl mx-auto pt-4">
-          <span className="hover:text-slate-900 cursor-pointer">Home</span>
+        <nav className="text-sm font-medium text-txt-tertiary mb-6 flex items-center gap-2 px-4 max-w-7xl mx-auto pt-4">
+          <span className="hover:text-txt-primary cursor-pointer">Home</span>
           <span>/</span>
-          <span className="hover:text-slate-900 cursor-pointer">{divisionName}</span>
+          <span className="hover:text-txt-primary cursor-pointer">{divisionName}</span>
           <span>/</span>
-          <span className="text-slate-900">{toolName}</span>
+          <span className="text-txt-primary">{toolName}</span>
         </nav>
       )}
 

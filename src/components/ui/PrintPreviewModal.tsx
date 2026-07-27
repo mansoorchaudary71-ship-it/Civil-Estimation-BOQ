@@ -1,8 +1,10 @@
+import { Button } from './/Button';
 import React, { useEffect, useRef, useState } from "react";
 import { X, Printer, Download, Loader2, LayoutTemplate } from "lucide-react";
 import toast from "react-hot-toast";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+
 
 export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -44,12 +46,12 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             body { font-family: 'Inter', sans-serif !important; color: #333 !important; }
             * { border-color: #ddd !important; border-radius: 0 !important; box-shadow: none !important; background-color: transparent !important; }
             h1, h2, h3, h4, h5, h6 { color: #111 !important; font-weight: 400 !important; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px; }
-            .bg-slate-50, .bg-white, .bg-indigo-50, .bg-blue-50 { background-color: transparent !important; }
+            .bg-slate-50, .bg-surface-default, .bg-indigo-50, .bg-blue-50 { background-color: transparent !important; }
             .shadow-sm, .shadow-md, .shadow-lg { shadow: none !important; }
             .text-indigo-600, .text-blue-600, .text-emerald-600, .text-amber-500, .text-rose-600 { color: #333 !important; }
             table { width: 100%; border-collapse: collapse; }
             th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-            .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full { border-radius: 0 !important; }
+            .rounded-xl, .rounded-2xl, .rounded-2xl, .rounded-full { border-radius: 0 !important; }
           `;
         } else if (pdfTheme === 'detailed') {
           themeStyles = `
@@ -63,7 +65,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             .text-xl, .text-2xl, .text-3xl, .text-4xl, .text-[clamp(1.25rem,4cqw,2.5rem)] { font-size: 16px !important; }
             .text-sm { font-size: 10px !important; }
             .text-xs { font-size: 9px !important; }
-            .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full { border-radius: 0 !important; border: 1px solid #ccc !important; }
+            .rounded-xl, .rounded-2xl, .rounded-2xl, .rounded-full { border-radius: 0 !important; border: 1px solid #ccc !important; }
           `;
         } else {
           // modern
@@ -265,7 +267,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="bg-slate-100 dark:bg-slate-800 w-full max-w-5xl h-full max-h-[90vh] rounded-2xl sm:rounded-[32px] shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-700 relative"
+            className="bg-slate-100 dark:bg-slate-800 w-full max-w-5xl h-full max-h-[90vh] rounded-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-ui-borderSubtle dark:border-slate-700 relative"
           >
             {/* Animated shimmer effect on modal load */}
             <motion.div
@@ -277,21 +279,21 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
 
         
         {/* Header */}
-        <div className="px-6 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between z-10 shrink-0">
-          <h2 className="text-lg sm:text-xl font-black text-slate-800 dark:text-white flex items-center gap-2 tracking-tight">
+        <div className="px-6 py-4 bg-surface-default dark:bg-slate-900 border-b border-ui-borderSubtle dark:border-slate-700 flex items-center justify-between z-10 shrink-0">
+          <h2 className="text-lg sm:text-xl font-black text-txt-primary dark:text-white flex items-center gap-2 tracking-tight">
             <Printer className="w-5 h-5 text-indigo-500" />
             Print Preview
           </h2>
           <div className="flex items-center gap-3">
-            <div className="relative flex items-center group hidden xl:flex gap-2 mr-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
-              <label className="flex items-center gap-2 text-xs text-slate-600 font-medium cursor-pointer whitespace-nowrap">
-                <input type="checkbox" checked={showVersionStamp} onChange={e => setShowVersionStamp(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+            <div className="relative flex items-center group hidden xl:flex gap-2 mr-2 bg-slate-50 p-2 rounded-xl border border-ui-borderSubtle">
+              <label className="flex items-center gap-2 text-xs text-txt-secondary font-medium cursor-pointer whitespace-nowrap">
+                <input type="checkbox" checked={showVersionStamp} onChange={e => setShowVersionStamp(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500" />
                 Stamp
               </label>
               {showVersionStamp && (
                 <>
-                  <input type="text" value={revision} onChange={e => setRevision(e.target.value)} placeholder="Rev" className="w-12 px-2 py-1 text-xs border rounded bg-white border-slate-200" title="Revision Number" />
-                  <input type="text" value={author} onChange={e => setAuthor(e.target.value)} placeholder="Author" className="w-20 px-2 py-1 text-xs border rounded bg-white border-slate-200" title="Author Name" />
+                  <input type="text" value={revision} onChange={e => setRevision(e.target.value)} placeholder="Rev" className="w-12 px-2 py-1 text-xs border rounded bg-surface-default border-ui-borderSubtle" title="Revision Number" />
+                  <input type="text" value={author} onChange={e => setAuthor(e.target.value)} placeholder="Author" className="w-20 px-2 py-1 text-xs border rounded bg-surface-default border-ui-borderSubtle" title="Author Name" />
                 </>
               )}
             </div>
@@ -299,13 +301,13 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
               <select
                 value={watermark}
                 onChange={(e) => setWatermark(e.target.value as any)}
-                className="block w-full pl-4 pr-8 py-2.5 text-sm border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition-colors appearance-none cursor-pointer"
+                className="block w-full pl-4 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
               >
                 <option value="none">No Watermark</option>
                 <option value="draft">DRAFT</option>
                 <option value="confidential">CONFIDENTIAL</option>
               </select>
-              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-slate-500">
+              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-txt-tertiary">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
               </div>
             </div>
@@ -313,12 +315,12 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
               <select
                 value={orientation}
                 onChange={(e) => setOrientation(e.target.value as any)}
-                className="block w-full pl-4 pr-8 py-2.5 text-sm border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition-colors appearance-none cursor-pointer"
+                className="block w-full pl-4 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
               >
                 <option value="portrait">Portrait</option>
                 <option value="landscape">Landscape</option>
               </select>
-              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-slate-500">
+              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-txt-tertiary">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
               </div>
             </div>
@@ -329,27 +331,27 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
               <select
                 value={pdfTheme}
                 onChange={(e) => setPdfTheme(e.target.value as any)}
-                className="block w-full pl-9 pr-8 py-2.5 text-sm border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition-colors appearance-none cursor-pointer"
+                className="block w-full pl-9 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
               >
                 <option value="modern">Modern Theme</option>
                 <option value="minimalist">Minimalist</option>
                 <option value="detailed">Detailed (Tech)</option>
               </select>
-              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-slate-500">
+              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-txt-tertiary">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
               </div>
             </div>
-             <button
+             <Button
                onClick={handleDownloadPDF}
                disabled={isGenerating}
-               className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-white hover:bg-slate-50 text-indigo-700 border border-indigo-200 hover:border-indigo-300 font-bold rounded-xl transition-all shadow-sm active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
+               className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-surface-default hover:bg-slate-50 text-indigo-700 border border-indigo-200 hover:border-indigo-300 font-bold rounded-xl transition-all shadow-sm active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
              >
                {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                <span className="hidden sm:inline">{isGenerating ? 'Generating...' : 'Download PDF'}</span>
                <span className="sm:hidden">PDF</span>
-             </button>
+             </Button>
              
-             <button
+             <Button
                onClick={() => {
                   const iframe = iframeRef.current;
                   if (iframe && iframe.contentWindow) {
@@ -364,34 +366,34 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
                <Printer className="w-4 h-4" />
                <span className="hidden sm:inline">Print Report</span>
                <span className="sm:hidden">Print</span>
-             </button>
-            <button
+             </Button>
+            <Button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+              className="p-2 text-slate-400 hover:text-txt-secondary dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
             >
               <X className="w-5 h-5" />
-            </button>
+            </Button>
           </div>
         </div>
         
         
         <div className="flex-1 flex overflow-hidden">
           {/* Settings Sidebar */}
-          <div className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-6 overflow-y-auto flex-shrink-0 flex flex-col gap-6 hidden md:flex">
+          <div className="w-64 bg-surface-default dark:bg-slate-900 border-r border-ui-borderSubtle dark:border-slate-700 p-6 overflow-y-auto flex-shrink-0 flex flex-col gap-6 hidden md:flex">
             <div>
-               <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4">Print Settings</h3>
+               <h3 className="text-sm font-bold text-txt-primary dark:text-white mb-4">Print Settings</h3>
                <div className="space-y-4">
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={includeCharts} onChange={e => setIncludeCharts(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
-                    <span className="text-sm text-slate-700 font-medium">Include Charts</span>
+                    <input type="checkbox" checked={includeCharts} onChange={e => setIncludeCharts(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <span className="text-sm text-txt-secondary font-medium">Include Charts</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={includeBreakdowns} onChange={e => setIncludeBreakdowns(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
-                    <span className="text-sm text-slate-700 font-medium">Itemized Breakdowns</span>
+                    <input type="checkbox" checked={includeBreakdowns} onChange={e => setIncludeBreakdowns(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <span className="text-sm text-txt-secondary font-medium">Itemized Breakdowns</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={includeLogo} onChange={e => setIncludeLogo(e.target.checked)} className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
-                    <span className="text-sm text-slate-700 font-medium">Company Logo</span>
+                    <input type="checkbox" checked={includeLogo} onChange={e => setIncludeLogo(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <span className="text-sm text-txt-secondary font-medium">Company Logo</span>
                   </label>
                </div>
             </div>
@@ -403,12 +405,12 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
-            className={`w-full bg-white shadow-xl rounded-sm overflow-hidden shrink-0 transition-all duration-500 mx-auto ${orientation === 'portrait' ? 'max-w-[210mm] min-h-[297mm]' : 'max-w-[297mm] min-h-[210mm]'}`}
+            className={`w-full bg-surface-default shadow-xl rounded-sm overflow-hidden shrink-0 transition-all duration-500 mx-auto ${orientation === 'portrait' ? 'max-w-[210mm] min-h-[297mm]' : 'max-w-[297mm] min-h-[210mm]'}`}
           >
             <iframe
               ref={iframeRef}
               id="print-iframe"
-              className={`w-full h-full border-none bg-white ${orientation === 'portrait' ? 'min-h-[297mm]' : 'min-h-[210mm]'}`}
+              className={`w-full h-full border-none bg-surface-default ${orientation === 'portrait' ? 'min-h-[297mm]' : 'min-h-[210mm]'}`}
               title="Print Preview PDF"
             />
           </motion.div>

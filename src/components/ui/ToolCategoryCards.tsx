@@ -11,7 +11,7 @@ interface CategoryCardProps {
 
 function CategoryCard({ title, subtitle, rating, icon }: CategoryCardProps) {
   return (
-    <motion.div whileHover={{ scale: 1.02, y: -4 }} whileTap={{ scale: 0.98 }} className="w-full group relative flex flex-col justify-between w-56 h-56 bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-800 transition-all duration-300 cursor-pointer shrink-0 overflow-hidden hover:shadow-md">
+    <motion.div whileHover={{ scale: 1.02, y: -4 }} whileTap={{ scale: 0.98 }} className="w-full group relative flex flex-col justify-between w-56 h-56 bg-surface-default dark:bg-slate-900 rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-800 transition-all duration-300 cursor-pointer shrink-0 overflow-hidden hover:shadow-md">
       
       {/* Top-Right Badge: Pill format, absolute positioning */}
       <div className="absolute top-6 right-6">
@@ -21,16 +21,16 @@ function CategoryCard({ title, subtitle, rating, icon }: CategoryCardProps) {
       </div>
 
       {/* Middle Section: Iconography, vertically centered */}
-      <div className="flex-1 flex flex-col justify-center mt-4 text-slate-800 dark:text-slate-200">
+      <div className="flex-1 flex flex-col justify-center mt-4 text-txt-primary dark:text-slate-200">
         {icon}
       </div>
 
       {/* Bottom Section: Title & Subtitle */}
       <div className="flex flex-col gap-1 mt-auto">
-        <h3 className="text-slate-900 dark:text-white font-bold text-lg leading-tight">
+        <h3 className="text-txt-primary dark:text-white font-bold text-lg leading-tight">
           {title}
         </h3>
-        <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">
+        <p className="text-slate-400 dark:text-txt-tertiary text-sm font-medium">
           {subtitle}
         </p>
       </div>

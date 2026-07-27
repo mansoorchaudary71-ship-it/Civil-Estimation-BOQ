@@ -1,7 +1,9 @@
+import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { useBOQ } from '../../context/BOQContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Square, Circle, CircleDashed, AlignJustify, Baseline, Triangle, Save , AlertTriangle} from 'lucide-react';
+
 
 export default function UniversalStructuralGeometryEngine() {
   const { addItem } = useBOQ();
@@ -176,33 +178,33 @@ export default function UniversalStructuralGeometryEngine() {
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Universal Structural Geometry</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Unified engine for complex shapes, formwork, steel, and concrete volumes.</p>
+          <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Universal Structural Geometry</h1>
+          <p className="text-txt-tertiary dark:text-slate-400 mt-1">Unified engine for complex shapes, formwork, steel, and concrete volumes.</p>
         </div>
-        <button 
+        <Button 
           onClick={syncToBOQ}
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 font-bold shadow-lg shadow-indigo-600/30 transition-all shrink-0"
         >
           <Save size={18} /> Sync to BOQ
-        </button>
+        </Button>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-6 bg-white dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="flex flex-wrap gap-2 mb-6 bg-surface-default dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-ui-borderSubtle dark:border-slate-700">
         {tabs.map(t => (
-          <button
+          <Button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === t.id ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
+            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === t.id ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
           >
             {t.icon} <span className="hidden sm:inline">{t.name}</span>
-          </button>
+          </Button>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
         {/* Input Panel */}
-        <div className="lg:col-span-7 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-          <h2 className="text-xl font-bold mb-6 text-slate-800 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-4">
+        <div className="lg:col-span-7 bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6">
+          <h2 className="text-xl font-bold mb-6 text-txt-primary dark:text-white border-b border-ui-borderSubtle dark:border-slate-700 pb-4">
             Geometry Parameters
           </h2>
           
@@ -366,9 +368,9 @@ export default function UniversalStructuralGeometryEngine() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col items-center justify-center">
-            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 w-full text-left">Cross Section</h3>
-            <div className="w-full max-w-[200px] aspect-square flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+          <div className="bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6 flex flex-col items-center justify-center">
+            <h3 className="text-sm font-semibold text-txt-tertiary uppercase tracking-wider mb-4 w-full text-left">Cross Section</h3>
+            <div className="w-full max-w-[200px] aspect-square flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl border border-ui-borderSubtle dark:border-slate-700 p-6">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -397,7 +399,7 @@ export default function UniversalStructuralGeometryEngine() {
 function InputGroup({ label, name, value, onChange }: { label: string, name: string, value: number, onChange: any }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}</label>
+      <label className="text-sm font-medium text-txt-secondary dark:text-slate-300">{label}</label>
       <input
         type="number"
         name={name}
@@ -405,7 +407,7 @@ function InputGroup({ label, name, value, onChange }: { label: string, name: str
         onChange={onChange}
         min={0}
         step={0.01}
-        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900 dark:text-white font-mono"
+        className="w-full bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-txt-primary dark:text-white font-mono"
       />
     </div>
   );

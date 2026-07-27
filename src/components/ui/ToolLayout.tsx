@@ -10,7 +10,7 @@ export function ToolLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full py-4 sm:py-8">
       {/* <!-- Main Tool Workspace Wrapper --> */}
-      <div className="w-full bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[32px] shadow-sm border border-slate-100 dark:border-slate-800/50 overflow-hidden transition-all duration-500">
+      <div className="w-full bg-surface-default dark:bg-slate-900 rounded-2xl sm:rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800/50 overflow-hidden transition-all duration-500">
         <div className="p-6 sm:p-8 lg:p-10 flex flex-col lg:grid lg:grid-cols-12 gap-8 xl:gap-12">
           {children}
         </div>
@@ -61,15 +61,15 @@ export function ToolSection({
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="bg-slate-50/50 dark:bg-slate-800/10 p-6 sm:p-7 rounded-[20px] sm:rounded-[24px] border border-slate-100 dark:border-slate-800/60 overflow-hidden hover:bg-white dark:hover:bg-slate-800/20 transition-all duration-300 group"
+      className="bg-slate-50/50 dark:bg-slate-800/10 p-6 sm:p-7 rounded-2xl sm:rounded-2xl border border-slate-100 dark:border-slate-800/60 overflow-hidden hover:bg-surface-default dark:hover:bg-slate-800/20 transition-all duration-300 group"
     >
-      <h3 className="font-bold text-base sm:text-lg mb-6 text-slate-900 dark:text-white flex items-center gap-3">
+      <h3 className="font-bold text-base sm:text-lg mb-6 text-txt-primary dark:text-white flex items-center gap-3">
         {number && (
           <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black border ${colorMap[color]} group-hover:scale-110 transition-transform`}>
             {number}
           </div>
         )}
-        <span className="uppercase text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 font-black tracking-[0.2em]">
+        <span className="uppercase text-[11px] sm:text-xs text-txt-secondary dark:text-slate-300 font-black tracking-[0.2em]">
           {title}
         </span>
       </h3>

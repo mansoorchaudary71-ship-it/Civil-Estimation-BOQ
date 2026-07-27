@@ -13,7 +13,7 @@ const bgColors = ['bg-[#F4F1EA]', 'bg-[#F0F5FF]', 'bg-[#D9E6DD]', 'bg-[#FFF0F0]'
 
 export default function CategoryHub({ groupedModules, groupsToDisplay, handleSelect, isComputing }: CategoryHubProps) {
   if (isComputing) {
-    return <div className="p-12 text-center text-slate-500">Loading modules...</div>;
+    return <div className="p-12 text-center text-txt-tertiary">Loading modules...</div>;
   }
 
   return (
@@ -27,9 +27,9 @@ export default function CategoryHub({ groupedModules, groupsToDisplay, handleSel
         return (
           <div key={groupName} className={`w-full flex flex-col py-12 md:py-20 ${bgColor}`}>
             <div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex flex-col gap-5">
-              <h2 className="px-2 flex items-center gap-2 text-2xl font-bold text-slate-800 tracking-tight mb-4">
+              <h2 className="px-2 flex items-center gap-2 text-2xl font-bold text-txt-primary tracking-tight mb-4">
                 {groupName}
-                <span className="text-sm font-normal px-3 py-1 rounded-full bg-white/50 border border-slate-200 text-slate-600 shadow-sm">
+                <span className="text-sm font-normal px-3 py-1 rounded-full bg-surface-default/50 border border-ui-borderSubtle text-txt-secondary shadow-sm">
                   {toolsInGroup.length} Tools
                 </span>
               </h2>

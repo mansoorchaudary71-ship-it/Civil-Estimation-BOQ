@@ -20,7 +20,7 @@ export function ProcessingSkeleton({ count = 4 }: ProcessingSkeletonProps) {
         {Array.from({ length: count }).map((_, index) => (
           <div 
             key={index} 
-            className="p-5 rounded-[2rem] border border-slate-200/70 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 flex flex-col h-full overflow-hidden animate-[pulse_2s_ease-in-out_infinite] min-h-[140px] shadow-sm transform transition-all duration-500"
+            className="p-5 rounded-2xl border border-ui-borderSubtle/70 dark:border-slate-800 bg-surface-default/40 dark:bg-slate-900/40 flex flex-col h-full overflow-hidden animate-[pulse_2s_ease-in-out_infinite] min-h-[140px] shadow-sm transform transition-all duration-500"
             style={{ animationDelay: `${index * 150}ms` }}
           >
             <div className="flex items-start justify-between gap-3 mb-6">

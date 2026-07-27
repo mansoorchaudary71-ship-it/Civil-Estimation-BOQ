@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import { useState, useEffect } from "react";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
 import { Sparkles, Send, Loader2, Bot , Mic, MicOff} from "lucide-react";
@@ -5,6 +6,7 @@ import Markdown from "react-markdown";
 import { cn } from "../../lib/utils";
 import { processAIEstimate } from "../../lib/gemini";
 import { CalculationHistory } from "../ui/CalculationHistory";
+
 
 interface Message {
   role: "user" | "model";
@@ -142,20 +144,20 @@ export default function AIAssistant() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 text-slate-900 p-0 sm:p-4 md:p-6 overflow-hidden relative">
+    <div className="flex flex-col h-full bg-slate-50 text-txt-primary p-0 sm:p-4 md:p-6 overflow-hidden relative">
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-40">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-400/20 rounded-full blur-[100px] animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/20 rounded-full blur-[80px] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]"></div>
       </div>
       
-      <div className="flex-1 w-full max-w-[1200px] mx-auto bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[32px] flex flex-col overflow-hidden relative z-10">
-        <div className="px-8 py-5 border-b border-slate-200/50 bg-white/50 backdrop-blur-md flex items-center justify-between z-10">
+      <div className="flex-1 w-full max-w-[1200px] mx-auto bg-surface-default/70 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl flex flex-col overflow-hidden relative z-10">
+        <div className="px-8 py-5 border-b border-ui-borderSubtle/50 bg-surface-default/50 backdrop-blur-md flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/20">
               <Sparkles className="w-5 h-5 text-white" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
-              <h2 className="text-lg font-bold text-slate-800 tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
+              <h2 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
                 AI Estimator
               </h2>
               <span className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider mt-0.5">Premium Copilot</span>
@@ -184,14 +186,14 @@ export default function AIAssistant() {
               )}
               <div
                 className={cn(
-                  "rounded-[24px] px-5 py-3.5 max-w-[85%] text-[15px] shadow-sm backdrop-blur-md transition-all font-medium",
+                  "rounded-2xl px-5 py-3.5 max-w-[85%] text-[15px] shadow-sm backdrop-blur-md transition-all font-medium",
                   msg.role === "user"
                     ? "bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-tr-[8px] shadow-slate-900/10"
-                    : "bg-white/90 text-slate-700 border border-slate-200/60 rounded-tl-[8px] shadow-slate-200/50 leading-relaxed",
+                    : "bg-surface-default/90 text-txt-secondary border border-ui-borderSubtle/60 rounded-tl-[8px] shadow-slate-200/50 leading-relaxed",
                 )}
               >
                 {msg.role === "model" ? (
-                  <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:text-slate-800 prose-a:text-indigo-600 prose-th:bg-slate-100 prose-td:border-slate-200">
+                  <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:text-txt-primary prose-a:text-indigo-600 prose-th:bg-slate-100 prose-td:border-ui-borderSubtle">
                     <StreamingMessage 
                       content={msg.content} 
                       isStreaming={msg.isStreaming} 
@@ -209,7 +211,7 @@ export default function AIAssistant() {
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shrink-0 mt-1 shadow-md shadow-blue-600/20">
                 <Loader2 className="w-4 h-4 text-white animate-spin" />
               </div>
-              <div className="rounded-[24px] rounded-tl-[8px] px-5 py-4 bg-white/90 border border-slate-200/60 flex items-center gap-2 shadow-sm">
+              <div className="rounded-2xl rounded-tl-[8px] px-5 py-4 bg-surface-default/90 border border-ui-borderSubtle/60 flex items-center gap-2 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce"></span>
                 <span className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce delay-75"></span>
                 <span className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce delay-150"></span>
@@ -217,10 +219,10 @@ export default function AIAssistant() {
             </div>
           )}
         </div>
-        <div className="p-4 sm:p-6 bg-white/60 backdrop-blur-xl border-t border-slate-200/50 relative z-10">
+        <div className="p-4 sm:p-6 bg-surface-default/60 backdrop-blur-xl border-t border-ui-borderSubtle/50 relative z-10">
           <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 relative group">
-             <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 rounded-[28px] opacity-30 group-focus-within:opacity-100 blur-[4px] transition-all duration-500"></div>
-             <div className="relative flex items-center bg-white/90 backdrop-blur-md rounded-[24px] pl-4 pr-2 py-2 border border-slate-200/50 shadow-inner overflow-hidden">
+             <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 rounded-2xl opacity-30 group-focus-within:opacity-100 blur-[4px] transition-all duration-500"></div>
+             <div className="relative flex items-center bg-surface-default/90 backdrop-blur-md rounded-2xl pl-4 pr-2 py-2 border border-ui-borderSubtle/50 shadow-inner overflow-hidden">
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -231,29 +233,29 @@ export default function AIAssistant() {
                     }
                   }}
                   placeholder="Ask about cost optimization or estimation..."
-                  className="w-full bg-transparent border-none py-2 outline-none text-[15px] text-slate-800 placeholder:text-slate-400 resize-none min-h-[40px] max-h-[120px] shadow-none"
+                  className="w-full bg-transparent border-none py-2 outline-none text-[15px] text-txt-primary placeholder:text-slate-400 resize-none min-h-[40px] max-h-[120px] shadow-none"
                   rows={1}
                 />
                 
-                <button
+                <Button
                   onClick={toggleListening}
                   className={cn(
                     "p-3 rounded-xl transition-all ml-2 shrink-0 flex items-center justify-center border",
                     isListening
                       ? "bg-red-50 text-red-500 border-red-200 animate-pulse"
-                      : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-700"
+                      : "bg-slate-50 text-txt-tertiary border-ui-borderSubtle hover:bg-slate-100 hover:text-txt-secondary"
                   )}
                   title={isListening ? "Stop dictation" : "Start dictation"}
                 >
                   {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                </button>
-                <button aria-label="Send" onClick={handleSend}
+                </Button>
+                <Button aria-label="Send" onClick={handleSend}
                   disabled={!input.trim() || isLoading}
                   className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/30 text-white rounded-xl transition-all disabled:opacity-50 hover:scale-105 active:scale-95 ml-2 shrink-0 flex items-center justify-center relative overflow-hidden group/send"
                 >
-                  <div className="absolute inset-0 bg-white/20 -translate-x-[150%] skew-x-12 group-hover/send:animate-[shimmer_1.5s_infinite]"></div>
+                  <div className="absolute inset-0 bg-surface-default/20 -translate-x-[150%] skew-x-12 group-hover/send:animate-[shimmer_1.5s_infinite]"></div>
                   <Send className="w-4 h-4 relative z-10" />
-                </button>
+                </Button>
              </div>
           </div>
           <div className="text-center mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">

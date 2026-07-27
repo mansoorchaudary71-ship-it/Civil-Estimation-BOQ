@@ -1,7 +1,9 @@
+import { Button } from './ui/Button';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
 import { getSuggestedUnitByLocale } from '../utils/localeDetector';
+
 
 export default function LocaleUnitDetector() {
   const { settings, updateSettings } = useSettings();
@@ -18,10 +20,10 @@ export default function LocaleUnitDetector() {
         if (settings.measurement !== suggestedUnit) {
           toast((t) => (
             <div className="flex flex-col gap-2 p-1">
-              <div className="font-bold text-slate-800 text-base">Locale Detected</div>
-              <div className="text-sm text-slate-600">Based on your region, we suggest using {suggestedName} units for calculations.</div>
+              <div className="font-bold text-txt-primary text-base">Locale Detected</div>
+              <div className="text-sm text-txt-secondary">Based on your region, we suggest using {suggestedName} units for calculations.</div>
               <div className="flex gap-2 mt-3">
-                <button 
+                <Button 
                   onClick={() => {
                     updateSettings({ measurement: suggestedUnit });
                     toast.dismiss(t.id);
@@ -30,13 +32,13 @@ export default function LocaleUnitDetector() {
                   className="flex-1 px-3 py-2 bg-indigo-600 outline-none text-white text-base font-medium rounded-full hover:bg-indigo-700 transition duration-150 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                 >
                   Switch to {suggestedName}
-                </button>
-                <button 
+                </Button>
+                <Button 
                   onClick={() => toast.dismiss(t.id)}
-                  className="flex-1 px-3 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 outline-none text-base font-medium rounded-full transition duration-150 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="flex-1 px-3 py-2 bg-slate-100 text-txt-secondary hover:bg-slate-200 outline-none text-base font-medium rounded-full transition duration-150 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                 >
                   Keep {settings.measurement === 'SI' ? 'Metric' : 'Imperial'}
-                </button>
+                </Button>
               </div>
             </div>
           ), { duration: 10000, position: 'top-center' }); // longer duration to let user read

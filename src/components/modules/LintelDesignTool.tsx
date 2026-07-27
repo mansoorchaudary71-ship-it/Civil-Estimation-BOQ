@@ -134,8 +134,8 @@ export default function LintelDesignTool() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
-         <h2 className="text-xl font-bold mb-6 text-slate-800 flex items-center gap-2">
+      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+         <h2 className="text-xl font-bold mb-6 text-txt-primary flex items-center gap-2">
             <Columns className="text-indigo-600" /> Lintel Scheduler & Design Tool
          </h2>
          
@@ -199,7 +199,7 @@ export default function LintelDesignTool() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Bearing Constraint */}
-                    <div className={`p-6 rounded-3xl border flex flex-col gap-4 ${results.bearingSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
+                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.bearingSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
                        <div className="flex items-center gap-2">
                           {results.bearingSafe ? <CheckCircle2 className="text-teal-600 w-5 h-5" /> : <AlertTriangle className="text-rose-600 w-5 h-5" />}
                           <h3 className={`font-bold ${results.bearingSafe ? "text-teal-900" : "text-rose-900"}`}>Bearing Check</h3>
@@ -217,31 +217,31 @@ export default function LintelDesignTool() {
                     </div>
                     
                     {/* Rebar Suggestion */}
-                    <div className="p-4 sm:p-6 rounded-3xl border bg-slate-50 border-slate-200 flex flex-col gap-4 overflow-hidden">
+                    <div className="p-4 sm:p-6 rounded-2xl border bg-slate-50 border-ui-borderSubtle flex flex-col gap-4 overflow-hidden">
                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="text-slate-600 w-5 h-5" />
-                          <h3 className="font-bold text-slate-900">Provision Summary</h3>
+                          <CheckCircle2 className="text-txt-secondary w-5 h-5" />
+                          <h3 className="font-bold text-txt-primary">Provision Summary</h3>
                        </div>
                        <div className="space-y-3 flex-1">
                           <div className="flex justify-between items-center text-sm">
-                            <span className="text-slate-600">Suggested Reinforcement</span>
-                            <span className="font-mono font-bold text-slate-800">{results.noOfBars} - {Number(barDia)}mm Ø</span>
+                            <span className="text-txt-secondary">Suggested Reinforcement</span>
+                            <span className="font-mono font-bold text-txt-primary">{results.noOfBars} - {Number(barDia)}mm Ø</span>
                           </div>
                           <div className="flex justify-between items-center text-sm">
-                            <span className="text-slate-600">Provided Area (Ast)</span>
-                            <span className="font-mono font-bold text-slate-800">{results.Ast_provided.toFixed(0)} mm²</span>
+                            <span className="text-txt-secondary">Provided Area (Ast)</span>
+                            <span className="font-mono font-bold text-txt-primary">{results.Ast_provided.toFixed(0)} mm²</span>
                           </div>
-                          <div className="flex justify-between items-center text-sm pt-2 border-t border-slate-200">
-                             <span className="text-slate-600">Factored Shear (Vu)</span>
-                             <span className="font-mono font-bold text-slate-800">{results.Vu.toFixed(1)} kN</span>
+                          <div className="flex justify-between items-center text-sm pt-2 border-t border-ui-borderSubtle">
+                             <span className="text-txt-secondary">Factored Shear (Vu)</span>
+                             <span className="font-mono font-bold text-txt-primary">{results.Vu.toFixed(1)} kN</span>
                           </div>
                        </div>
                     </div>
                 </div>
 
                 {/* Diagram visual guide */}
-                <div className="bg-slate-50 border border-slate-100 rounded-3xl p-4 sm:p-6 relative overflow-hidden h-40 flex items-end justify-center mt-2 group">
-                   <div className="absolute inset-x-0 bottom-0 border-b-8 border-slate-300 w-3/4 mx-auto rounded"></div>
+                <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 sm:p-6 relative overflow-hidden h-40 flex items-end justify-center mt-2 group">
+                   <div className="absolute inset-x-0 bottom-0 border-b-8 border-ui-borderDefault w-3/4 mx-auto rounded"></div>
                    <div className="absolute bottom-2 inset-x-0 flex justify-between px-10 text-base font-medium">
                       <span>Support ({Number(bearingLength)}mm)</span>
                       <span>Span ({Number(clearSpan)}m)</span>

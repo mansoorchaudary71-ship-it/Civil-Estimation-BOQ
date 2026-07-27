@@ -19,7 +19,7 @@ export default function ToolPageFooter({
   category,
 }: ToolPageFooterProps) {
   return (
-    <div className="w-full bg-[#0a0a0a] rounded-[24px] p-6 sm:p-8 space-y-6 overflow-hidden text-white font-sans border border-white/5">
+    <div className="w-full bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 space-y-6 overflow-hidden text-white font-sans border border-white/5">
       
       {/* Methodology & Standards Section */}
       <div className="bg-[#141414] rounded-2xl p-6 sm:p-8">
@@ -37,7 +37,7 @@ export default function ToolPageFooter({
             standards.map((standard, index) => (
               <div
                 key={index}
-                className="flex items-center gap-1.5 bg-white/5 text-gray-200 px-4 py-2 rounded-full text-sm font-medium border border-white/5"
+                className="flex items-center gap-1.5 bg-surface-default/5 text-gray-200 px-4 py-2 rounded-full text-sm font-medium border border-white/5"
               >
                 <ShieldCheck className="w-4 h-4 text-indigo-400" />
                 {standard}
@@ -69,7 +69,7 @@ export default function ToolPageFooter({
         <div className="bg-[#141414] rounded-2xl p-6 flex items-start gap-4">
           <Calendar className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Last Reviewed</p>
+            <p className="text-xs font-semibold text-txt-tertiary uppercase tracking-widest mb-1.5">Last Reviewed</p>
             <p className="text-base font-semibold text-gray-100">{lastUpdated}</p>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function ToolPageFooter({
         <div className="bg-[#141414] rounded-2xl p-6 flex items-start gap-4">
           <ShieldCheck className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Complexity</p>
+            <p className="text-xs font-semibold text-txt-tertiary uppercase tracking-widest mb-1.5">Complexity</p>
             <p className="text-base font-semibold text-gray-100">{difficulty}</p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export default function ToolPageFooter({
         <div className="bg-[#141414] rounded-2xl p-6 flex items-start gap-4">
           <Globe className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Platform Category</p>
+            <p className="text-xs font-semibold text-txt-tertiary uppercase tracking-widest mb-1.5">Platform Category</p>
             <p className="text-base font-semibold text-gray-100">{category}</p>
           </div>
         </div>
@@ -102,12 +102,12 @@ export default function ToolPageFooter({
                 href={`https://www.google.com/search?q=${encodeURIComponent(standard + " code civil engineering pdf")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between bg-white/[0.02] hover:bg-white/[0.04] p-4 rounded-xl transition-all duration-200 border border-transparent hover:border-white/5"
+                className="group flex items-center justify-between bg-surface-default/[0.02] hover:bg-surface-default/[0.04] p-4 rounded-xl transition-all duration-200 border border-transparent hover:border-white/5"
               >
                 <span className="text-[15px] font-medium text-gray-300 group-hover:text-white transition-colors">
                   Reference Documentation for {standard}
                 </span>
-                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-indigo-400 transition-colors" />
+                <ArrowRight className="w-4 h-4 text-txt-tertiary group-hover:text-indigo-400 transition-colors" />
               </a>
             ))}
           </div>

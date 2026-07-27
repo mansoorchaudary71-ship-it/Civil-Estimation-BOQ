@@ -1,7 +1,9 @@
+import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
 import { Sliders, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 import { CalculationHistory } from '../ui/CalculationHistory';
+
 export type SpecsState = {
   // 1. Foundation & Substructure
   foundationDepth: string;
@@ -120,13 +122,13 @@ export default function AdvancedSpecs({
   ) => (
     <div className="space-y-2 col-span-2 relative">
       <div className="flex justify-between items-center">
-        <label className="uppercase tracking-widest flex items-center gap-1 text-sm font-medium text-slate-700 mb-1 block">
+        <label className="uppercase tracking-widest flex items-center gap-1 text-sm font-medium text-txt-secondary mb-1 block">
           {label}
         </label>
         {tooltip && (
           <div className="relative group/tooltip flex items-center">
-            <HelpCircle className="w-3.5 h-3.5 text-slate-600 cursor-help" />
-            <div className="absolute z-[100] invisible opacity-0 group-hover/tooltip:visible group-hover/tooltip:opacity-100 transition-all duration-200 bottom-[calc(100%+8px)] right-0 w-max max-w-[220px] bg-white text-slate-900 text-sm p-2 rounded-lg shadow-xl pointer-events-none whitespace-normal text-center font-medium after:content-[''] after:absolute after:top-full after:right-2 after:border-4 after:border-transparent after:border-t-slate-800">
+            <HelpCircle className="w-3.5 h-3.5 text-txt-secondary cursor-help" />
+            <div className="absolute z-[100] invisible opacity-0 group-hover/tooltip:visible group-hover/tooltip:opacity-100 transition-all duration-200 bottom-[calc(100%+8px)] right-0 w-max max-w-[220px] bg-surface-default text-txt-primary text-sm p-2 rounded-lg shadow-xl pointer-events-none whitespace-normal text-center font-medium after:content-[''] after:absolute after:top-full after:right-2 after:border-4 after:border-transparent after:border-t-slate-800">
               {tooltip}
             </div>
           </div>
@@ -136,7 +138,7 @@ export default function AdvancedSpecs({
         <select
           value={specs[specKey] as string}
           onChange={(e) => updateSpec(specKey, e.target.value)}
-          className="w-full bg-transparent border border-slate-200 text-slate-800 rounded-[24px] px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium appearance-none text-sm cursor-pointer hover:bg-slate-50 transition-colors overflow-hidden"
+          className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium appearance-none text-sm cursor-pointer hover:bg-slate-50 transition-colors overflow-hidden"
         >
           {options.map((opt) => (
             <option key={opt} value={opt}>
@@ -144,7 +146,7 @@ export default function AdvancedSpecs({
             </option>
           ))}
         </select>
-        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary pointer-events-none" />
       </div>
     </div>
   );
@@ -154,7 +156,7 @@ export default function AdvancedSpecs({
     placeholder?: string,
   ) => (
     <div className="space-y-2 col-span-2 sm:col-span-1">
-      <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">
+      <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">
         {label}
       </label>
       <><label htmlFor="a11y-input-32" className="sr-only">Input</label>
@@ -163,14 +165,14 @@ export default function AdvancedSpecs({
         value={specs[specKey] as string}
         onChange={(e) => updateSpec(specKey, e.target.value)}
         placeholder={placeholder}
-        className="w-full bg-transparent border border-slate-200 text-slate-800 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm"
+        className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm"
       /></>
     </div>
   );
   const renderToggle = (label: string, specKey: keyof SpecsState) => (
-    <div className="flex items-center justify-between col-span-2 bg-transparent border border-slate-200 rounded-[24px] px-4 py-2.5 overflow-hidden">
+    <div className="flex items-center justify-between col-span-2 bg-transparent border border-ui-borderSubtle rounded-2xl px-4 py-2.5 overflow-hidden">
       <span className="text-base font-medium">{label}</span>
-      <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-slate-700 mb-1 block">
+      <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-txt-secondary mb-1 block">
         <><label htmlFor="a11y-input-33" className="sr-only">Input</label>
 <input id="a11y-input-33"
           type="checkbox"
@@ -178,7 +180,7 @@ export default function AdvancedSpecs({
           onChange={(e) => updateSpec(specKey, e.target.checked)}
           className="sr-only peer"
         /></>
-        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-default after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
       </label>
     </div>
   );
@@ -189,14 +191,14 @@ export default function AdvancedSpecs({
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-teal-50 text-teal-600 rounded-[24px] overflow-hidden">
+          <div className="p-3 bg-teal-50 text-teal-600 rounded-2xl overflow-hidden">
             <Sliders className="w-6 h-6" />
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+          <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
             Advanced Specifications
           </h2>
         </div>
-        <div className="p-2 bg-transparent text-slate-700 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+        <div className="p-2 bg-transparent text-txt-secondary hover:text-txt-secondary hover:bg-slate-100 rounded-full transition-colors">
           {isOpen ? (
             <ChevronUp className="w-5 h-5" />
           ) : (
@@ -205,27 +207,27 @@ export default function AdvancedSpecs({
         </div>
       </div>
       {!isOpen && (
-        <p className="text-base font-normal text-slate-600 leading-relaxed">
+        <p className="text-base font-normal text-txt-secondary leading-relaxed">
           Using standard smart defaults for accurate initial estimates.
         </p>
       )}
       {isOpen && (
         <div className="mt-6 space-y-3 animate-in fade-in zoom-in-95">
           {/* 1. Foundation & Substructure */}
-          <div className="rounded-[24px] border border-slate-200 overflow-hidden bg-white">
-            <button
+          <div className="rounded-2xl border border-ui-borderSubtle overflow-hidden bg-surface-default">
+            <Button
               onClick={() => toggleCategory(0)}
               className="w-full flex items-center justify-between p-4 bg-transparent/50 hover:bg-transparent text-left transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
             >
-              <span className="font-bold text-sm text-slate-800">
+              <span className="font-bold text-sm text-txt-primary">
                 1. Foundation & Substructure
               </span>
               {openCategory === 0 ? (
-                <ChevronUp className="w-4 h-4 text-slate-700" />
+                <ChevronUp className="w-4 h-4 text-txt-secondary" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-slate-700" />
+                <ChevronDown className="w-4 h-4 text-txt-secondary" />
               )}
-            </button>
+            </Button>
             {openCategory === 0 && (
               <div className="p-4 grid grid-cols-2 gap-4 border-t border-slate-100">
                 {renderNumber("Foundation Depth (ft)", "foundationDepth")}
@@ -253,20 +255,20 @@ export default function AdvancedSpecs({
             )}
           </div>
           {/* 2. Superstructure (Grey Structure) */}
-          <div className="rounded-[24px] border border-slate-200 overflow-hidden bg-white">
-            <button
+          <div className="rounded-2xl border border-ui-borderSubtle overflow-hidden bg-surface-default">
+            <Button
               onClick={() => toggleCategory(1)}
               className="w-full flex items-center justify-between p-4 bg-transparent/50 hover:bg-transparent text-left transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
             >
-              <span className="font-bold text-sm text-slate-800">
+              <span className="font-bold text-sm text-txt-primary">
                 2. Above-Ground Work (Walls & Roof)
               </span>
               {openCategory === 1 ? (
-                <ChevronUp className="w-4 h-4 text-slate-700" />
+                <ChevronUp className="w-4 h-4 text-txt-secondary" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-slate-700" />
+                <ChevronDown className="w-4 h-4 text-txt-secondary" />
               )}
-            </button>
+            </Button>
             {openCategory === 1 && (
               <div className="p-4 grid grid-cols-2 gap-4 border-t border-slate-100">
                 {renderDropdown("Brick Quality", "brickQuality", [
@@ -304,20 +306,20 @@ export default function AdvancedSpecs({
             )}
           </div>
           {/* 3. Finishing & Surfaces */}
-          <div className="rounded-[24px] border border-slate-200 overflow-hidden bg-white">
-            <button
+          <div className="rounded-2xl border border-ui-borderSubtle overflow-hidden bg-surface-default">
+            <Button
               onClick={() => toggleCategory(2)}
               className="w-full flex items-center justify-between p-4 bg-transparent/50 hover:bg-transparent text-left transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
             >
-              <span className="font-bold text-sm text-slate-800">
+              <span className="font-bold text-sm text-txt-primary">
                 3. Finishing & Surfaces
               </span>
               {openCategory === 2 ? (
-                <ChevronUp className="w-4 h-4 text-slate-700" />
+                <ChevronUp className="w-4 h-4 text-txt-secondary" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-slate-700" />
+                <ChevronDown className="w-4 h-4 text-txt-secondary" />
               )}
-            </button>
+            </Button>
             {openCategory === 2 && (
               <div className="p-4 grid grid-cols-2 gap-4 border-t border-slate-100">
                 {renderDropdown("Flooring Type", "flooringType", [
@@ -358,20 +360,20 @@ export default function AdvancedSpecs({
             )}
           </div>
           {/* 4. Woodwork & Openings (Doors/Windows) */}
-          <div className="rounded-[24px] border border-slate-200 overflow-hidden bg-white">
-            <button
+          <div className="rounded-2xl border border-ui-borderSubtle overflow-hidden bg-surface-default">
+            <Button
               onClick={() => toggleCategory(3)}
               className="w-full flex items-center justify-between p-4 bg-transparent/50 hover:bg-transparent text-left transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
             >
-              <span className="font-bold text-sm text-slate-800">
+              <span className="font-bold text-sm text-txt-primary">
                 4. Woodwork & Openings
               </span>
               {openCategory === 3 ? (
-                <ChevronUp className="w-4 h-4 text-slate-700" />
+                <ChevronUp className="w-4 h-4 text-txt-secondary" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-slate-700" />
+                <ChevronDown className="w-4 h-4 text-txt-secondary" />
               )}
-            </button>
+            </Button>
             {openCategory === 3 && (
               <div className="p-4 grid grid-cols-2 gap-4 border-t border-slate-100">
                 {renderDropdown("Main Gate", "mainGate", [
@@ -416,20 +418,20 @@ export default function AdvancedSpecs({
             )}
           </div>
           {/* 5. MEP (Mechanical, Electrical, Plumbing) */}
-          <div className="rounded-[24px] border border-slate-200 overflow-hidden bg-white">
-            <button
+          <div className="rounded-2xl border border-ui-borderSubtle overflow-hidden bg-surface-default">
+            <Button
               onClick={() => toggleCategory(4)}
               className="w-full flex items-center justify-between p-4 bg-transparent/50 hover:bg-transparent text-left transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
             >
-              <span className="font-bold text-sm text-slate-800">
+              <span className="font-bold text-sm text-txt-primary">
                 5. MEP Services
               </span>
               {openCategory === 4 ? (
-                <ChevronUp className="w-4 h-4 text-slate-700" />
+                <ChevronUp className="w-4 h-4 text-txt-secondary" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-slate-700" />
+                <ChevronDown className="w-4 h-4 text-txt-secondary" />
               )}
-            </button>
+            </Button>
             {openCategory === 4 && (
               <div className="p-4 grid grid-cols-2 gap-4 border-t border-slate-100">
                 {renderDropdown("Electrical Wiring", "electricalWiring", [

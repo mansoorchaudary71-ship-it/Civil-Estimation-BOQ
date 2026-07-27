@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { UniversalTabs } from "../ui/UniversalTabs";
@@ -47,6 +48,7 @@ import { Category, unitsData, convertValue } from "../../utils/unitConverter";
 import { useSettings } from "../../context/SettingsContext";
 import { useUnitChange } from "../../hooks/useUnitChange";
 import { GenericExportButtons } from "../ui/GenericExportButtons";
+
 
 const categories: { id: Category; label: string; icon: any; color: string }[] = [
   { id: "Length", label: "Length", icon: Ruler, color: "text-emerald-500 bg-emerald-100/50 " },
@@ -304,7 +306,7 @@ export default function UnitConverter() {
   const chartData = generateChartData();
 
   return (
-    <div className="w-full h-full bg-transparent text-slate-900  p-6 md:p-8">
+    <div className="w-full h-full bg-transparent text-txt-primary  p-6 md:p-8">
       {" "}
       <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
         <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
@@ -314,38 +316,38 @@ export default function UnitConverter() {
         {" "}
         {/* Categories Tabs */}
         <div className="mb-10">
-          <div className="w-full bg-white/70 backdrop-blur-3xl rounded-none p-4 sm:p-4 sm:p-4 sm:p-6 mb-8 border-y border-slate-200/50 shadow-sm overflow-hidden relative">
+          <div className="w-full bg-surface-default/70 backdrop-blur-3xl rounded-none p-4 sm:p-4 sm:p-4 sm:p-6 mb-8 border-y border-ui-borderSubtle/50 shadow-sm overflow-hidden relative">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-txt-primary flex items-center gap-2">
                   <Ruler className="w-5 h-5 text-fuchsia-500" />
                   Global Measurement System
                 </h3>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-sm text-txt-tertiary mt-1">
                   Automatically scale input fields across all calculators based on your preference.
                 </p>
               </div>
-              <div className="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-md border border-slate-200/50 relative z-10 w-full md:w-auto">
-                <button
+              <div className="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-md border border-ui-borderSubtle/50 relative z-10 w-full md:w-auto">
+                <Button
                   onClick={() => updateSettings({ measurement: "SI" })}
                   className={`flex-1 md:flex-none px-6 py-2.5 rounded text-sm font-bold transition-all ${
                     settings.measurement === "SI"
                       ? "bg-fuchsia-500 text-white shadow-md shadow-fuchsia-500/20"
-                      : "text-slate-600 hover:text-slate-900"
+                      : "text-txt-secondary hover:text-txt-primary"
                   }`}
                 >
                   Metric (m, kg)
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => updateSettings({ measurement: "FPS" })}
                   className={`flex-1 md:flex-none px-6 py-2.5 rounded text-sm font-bold transition-all ${
                     settings.measurement === "FPS"
                       ? "bg-fuchsia-500 text-white shadow-lg shadow-fuchsia-500/20"
-                      : "text-slate-600 hover:text-slate-900"
+                      : "text-txt-secondary hover:text-txt-primary"
                   }`}
                 >
                   Imperial (ft, lb)
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -357,44 +359,44 @@ export default function UnitConverter() {
           />
         </div>
         {/* Conversion UI */}{" "}
-        <div className="w-full bg-white/70  backdrop-blur-3xl rounded-[2.5rem] p-4 sm:p-4 sm:p-4 sm:p-8 md:p-5 sm:p-5 sm:p-5 sm:p-12 border border-slate-200/50  shadow-sm  overflow-hidden relative">
+        <div className="w-full bg-surface-default/70  backdrop-blur-3xl rounded-[2.5rem] p-4 sm:p-4 sm:p-4 sm:p-8 md:p-5 sm:p-5 sm:p-5 sm:p-12 border border-ui-borderSubtle/50  shadow-sm  overflow-hidden relative">
           {" "}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
-            <h2 className="text-xl font-bold text-center sm:text-left text-slate-900  uppercase tracking-widest">
+            <h2 className="text-xl font-bold text-center sm:text-left text-txt-primary  uppercase tracking-widest">
               {activeCategory} Conversion
             </h2>
-            <div className="flex items-center justify-center gap-1 bg-slate-100/80 p-1.5 rounded-full border border-slate-200 shadow-inner">
-               <button 
+            <div className="flex items-center justify-center gap-1 bg-slate-100/80 p-1.5 rounded-full border border-ui-borderSubtle shadow-inner">
+               <Button 
                  onClick={() => setViewMode("standard")}
-                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === "standard" ? 'bg-fuchsia-500 text-white shadow-md' : 'text-slate-600 hover:text-slate-900'}`}
+                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === "standard" ? 'bg-fuchsia-500 text-white shadow-md' : 'text-txt-secondary hover:text-txt-primary'}`}
                >
                  Standard
-               </button>
-               <button 
+               </Button>
+               <Button 
                  onClick={() => setViewMode("batch")}
-                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === "batch" ? 'bg-fuchsia-500 text-white shadow-md' : 'text-slate-600 hover:text-slate-900'}`}
+                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === "batch" ? 'bg-fuchsia-500 text-white shadow-md' : 'text-txt-secondary hover:text-txt-primary'}`}
                >
                  Batch
-               </button>
-               <button 
+               </Button>
+               <Button 
                  onClick={() => setViewMode("compare")}
-                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === "compare" ? 'bg-fuchsia-500 text-white shadow-md' : 'text-slate-600 hover:text-slate-900'}`}
+                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${viewMode === "compare" ? 'bg-fuchsia-500 text-white shadow-md' : 'text-txt-secondary hover:text-txt-primary'}`}
                >
                  Compare
-               </button>
+               </Button>
             </div>
           </div>
 
           {/* Quick Pair Toggle */}
           {QUICK_PAIRS[activeCategory] && QUICK_PAIRS[activeCategory]!.length > 0 && !isBatchMode && !isCompareMode && (
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-8 animate-in fade-in slide-in-from-top-2 duration-300 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
-              <span className="text-sm font-semibold text-slate-500 uppercase tracking-widest mr-2 hidden sm:block">
+              <span className="text-sm font-semibold text-txt-tertiary uppercase tracking-widest mr-2 hidden sm:block">
                 Quick Pairs
               </span>
               {QUICK_PAIRS[activeCategory]!.map((pair, idx) => {
                 const isActive = (fromUnit === pair.from && toUnit === pair.to) || (fromUnit === pair.to && toUnit === pair.from);
                 return (
-                  <button
+                  <Button
                     key={idx}
                     onClick={() => {
                       if (fromUnit === pair.from && toUnit === pair.to) {
@@ -408,14 +410,14 @@ export default function UnitConverter() {
                         setToUnit(pair.to);
                       }
                     }}
-                    className={`px-4 py-2 rounded-[16px] text-xs sm:text-sm font-bold transition-all border shadow-sm active:scale-95 ${
+                    className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all border shadow-sm active:scale-95 ${
                       isActive
                         ? "bg-fuchsia-500 text-white border-fuchsia-600"
-                        : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900"
+                        : "bg-surface-default text-txt-secondary border-ui-borderSubtle hover:bg-slate-50 hover:text-txt-primary"
                     }`}
                   >
                     {pair.label}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -424,7 +426,7 @@ export default function UnitConverter() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
             {" "}
             {/* FROM PANE */}{" "}
-            <div className={`w-full bg-slate-100/50  backdrop-blur-xl rounded-[2rem] border border-slate-200  shadow-inner p-6 md:p-8 transition-all hover:border-fuchsia-500/50 hover:bg-slate-100/80  flex flex-col items-center justify-center relative ${isBatchMode ? 'flex-none md:w-[45%]' : 'flex-1'}`}>
+            <div className={`w-full bg-slate-100/50  backdrop-blur-xl rounded-2xl border border-ui-borderSubtle  shadow-inner p-6 md:p-8 transition-all hover:border-fuchsia-500/50 hover:bg-slate-100/80  flex flex-col items-center justify-center relative ${isBatchMode ? 'flex-none md:w-[45%]' : 'flex-1'}`}>
               {" "}
               <label className="block text-xs font-bold text-fuchsia-600  uppercase tracking-widest mb-4 drop-shadow-sm  z-10">
                 From
@@ -432,7 +434,7 @@ export default function UnitConverter() {
               <select
                 value={fromUnit}
                 onChange={(e) => handleFromUnitChange(e.target.value)}
-                className="w-full bg-white/70  border border-slate-300  text-slate-800  px-4 py-3 rounded-[24px] font-bold text-sm mb-6 focus:ring-4 focus:ring-fuchsia-500/30 focus:border-fuchsia-500 transition-all outline-none shadow-sm  z-10 overflow-hidden"
+                className="w-full bg-surface-default/70  border border-ui-borderDefault  text-txt-primary  px-4 py-3 rounded-2xl font-bold text-sm mb-6 focus:ring-4 focus:ring-fuchsia-500/30 focus:border-fuchsia-500 transition-all outline-none shadow-sm  z-10 overflow-hidden"
               >
                 {" "}
                 {currentUnits.map((u) => (
@@ -446,7 +448,7 @@ export default function UnitConverter() {
                   value={batchInput}
                   onChange={(e) => setBatchInput(e.target.value)}
                   placeholder="Paste comma-separated values (e.g., 5, 10, 15)"
-                  className="w-full bg-white/50  border border-slate-300  text-slate-900  rounded-[20px] p-4 text-center font-mono text-sm min-h-[120px] focus:outline-none focus:border-fuchsia-500 transition-colors z-10 resize-none shadow-sm  overflow-hidden"
+                  className="w-full bg-surface-default/50  border border-ui-borderDefault  text-txt-primary  rounded-2xl p-4 text-center font-mono text-sm min-h-[120px] focus:outline-none focus:border-fuchsia-500 transition-colors z-10 resize-none shadow-sm  overflow-hidden"
                 />
               ) : (
                 <><label htmlFor="a11y-input-529" className="sr-only">0</label>
@@ -454,7 +456,7 @@ export default function UnitConverter() {
                   type="text"
                   value={fromValue}
                   onChange={(e) => handleFromValueChange(e.target.value)}
-                  className="w-full bg-transparent border-0 text-[clamp(1.75rem,5vw,2.5rem)] font-bold tabular-nums tracking-tight text-slate-900  placeholder-slate-500  focus:ring-0 focus:outline-none p-0 text-center drop-shadow-sm  z-10 rounded-full"
+                  className="w-full bg-transparent border-0 text-[clamp(1.75rem,5vw,2.5rem)] font-bold tabular-nums tracking-tight text-txt-primary  placeholder-slate-500  focus:ring-0 focus:outline-none p-0 text-center drop-shadow-sm  z-10 rounded-full"
                   placeholder="0"
                   autoComplete="off"
                 /></>
@@ -462,20 +464,20 @@ export default function UnitConverter() {
             </div>{" "}
             {/* SWAP BUTTON */}{" "}
             {!isCompareMode ? (
-              <button onClick={handleSwap}
-                className="p-5 rounded-full bg-fuchsia-100 text-fuchsia-600 hover:bg-fuchsia-600 hover:text-slate-900 transition-all shadow-lg hover:rotate-180 duration-500 flex-shrink-0 active:scale-95 hover:-translate-y-0.5"
+              <Button onClick={handleSwap}
+                className="p-5 rounded-full bg-fuchsia-100 text-fuchsia-600 hover:bg-fuchsia-600 hover:text-txt-primary transition-all shadow-lg hover:rotate-180 duration-500 flex-shrink-0 active:scale-95 hover:-translate-y-0.5"
                 title="Swap Units"
               >
                 {" "}
                 <ArrowRightLeft className="w-6 h-6" strokeWidth={2.5} />{" "}
-              </button>
+              </Button>
             ) : (
               <div className="hidden md:flex p-5 rounded-full bg-fuchsia-50 text-fuchsia-300 shadow-sm flex-shrink-0">
                 <ArrowRightLeft className="w-6 h-6 opacity-50" strokeWidth={2.5} />
               </div>
             )}{" "}
             {/* TO PANE */}{" "}
-            <div className={`w-full bg-slate-100/50  backdrop-blur-xl rounded-[2rem] border border-slate-200  shadow-inner p-6 md:p-8 transition-all hover:border-fuchsia-500/50 hover:bg-slate-100/80  flex flex-col items-center justify-center relative ${isBatchMode || isCompareMode ? 'flex-none md:w-[45%]' : 'flex-1'}`}>
+            <div className={`w-full bg-slate-100/50  backdrop-blur-xl rounded-2xl border border-ui-borderSubtle  shadow-inner p-6 md:p-8 transition-all hover:border-fuchsia-500/50 hover:bg-slate-100/80  flex flex-col items-center justify-center relative ${isBatchMode || isCompareMode ? 'flex-none md:w-[45%]' : 'flex-1'}`}>
               {" "}
               <label className="block text-xs font-bold text-fuchsia-600  uppercase tracking-widest mb-4 drop-shadow-sm  z-10">
                 To {isCompareMode && "(Comparison)"}
@@ -484,7 +486,7 @@ export default function UnitConverter() {
               <select
                 value={toUnit}
                 onChange={(e) => handleToUnitChange(e.target.value)}
-                className="w-full bg-white/70  border border-slate-300  text-slate-800  px-4 py-3 rounded-[24px] font-bold text-sm mb-6 focus:ring-4 focus:ring-fuchsia-500/30 focus:border-fuchsia-500 transition-all outline-none shadow-sm  z-10 overflow-hidden"
+                className="w-full bg-surface-default/70  border border-ui-borderDefault  text-txt-primary  px-4 py-3 rounded-2xl font-bold text-sm mb-6 focus:ring-4 focus:ring-fuchsia-500/30 focus:border-fuchsia-500 transition-all outline-none shadow-sm  z-10 overflow-hidden"
               >
                 {" "}
                 {currentUnits.map((u) => (
@@ -496,17 +498,17 @@ export default function UnitConverter() {
               )}
               
               {isBatchMode ? (
-                <div className="w-full bg-white/50 border border-slate-300 rounded-[20px] p-4 font-mono text-sm min-h-[120px] max-h-[300px] overflow-y-auto hide-scrollbar shadow-sm z-10 flex flex-col gap-2 overflow-hidden relative group">
+                <div className="w-full bg-surface-default/50 border border-ui-borderDefault rounded-2xl p-4 font-mono text-sm min-h-[120px] max-h-[300px] overflow-y-auto hide-scrollbar shadow-sm z-10 flex flex-col gap-2 overflow-hidden relative group">
                    {batchResults.length === 0 ? (
-                     <div className="text-slate-500 italic my-auto text-center">Results will appear here</div>
+                     <div className="text-txt-tertiary italic my-auto text-center">Results will appear here</div>
                    ) : (
                      <>
-                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-1 rounded-lg shadow-sm border border-slate-200 z-20">
+                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-default/90 p-1 rounded-lg shadow-sm border border-ui-borderSubtle z-20">
                           <GenericExportButtons tableId="batch-conversion-table" filename="Batch_Conversions" />
                        </div>
                        <table id="batch-conversion-table" className="w-full text-left border-collapse text-xs sm:text-sm">
                          <thead>
-                           <tr className="border-b border-slate-200 text-slate-500">
+                           <tr className="border-b border-ui-borderSubtle text-txt-tertiary">
                              <th className="py-2 px-1 font-semibold">Input ({fromUnit})</th>
                              <th className="py-2 px-1 font-semibold text-right">Result ({toUnit})</th>
                            </tr>
@@ -514,7 +516,7 @@ export default function UnitConverter() {
                          <tbody>
                            {batchResults.map((res, i) => (
                              <tr key={i} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50">
-                               <td className="py-2 px-1 text-slate-600">{res.in}</td>
+                               <td className="py-2 px-1 text-txt-secondary">{res.in}</td>
                                <td className="py-2 px-1 font-bold text-fuchsia-600 text-right">{res.out}</td>
                              </tr>
                            ))}
@@ -524,17 +526,17 @@ export default function UnitConverter() {
                    )}
                 </div>
               ) : isCompareMode ? (
-                <div className="w-full bg-white/50 border border-slate-300 rounded-[20px] p-4 text-center font-mono text-sm min-h-[120px] max-h-[300px] overflow-y-auto hide-scrollbar shadow-sm z-10 flex flex-col gap-2 overflow-hidden">
+                <div className="w-full bg-surface-default/50 border border-ui-borderDefault rounded-2xl p-4 text-center font-mono text-sm min-h-[120px] max-h-[300px] overflow-y-auto hide-scrollbar shadow-sm z-10 flex flex-col gap-2 overflow-hidden">
                    {currentUnits.filter(u => u.id !== fromUnit).map((u, i) => (
-                     <div key={i} className="w-full flex justify-between items-center text-slate-700 bg-white/80 p-3 rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                     <div key={i} className="w-full flex justify-between items-center text-txt-secondary bg-surface-default/80 p-3 rounded-xl border border-ui-borderSubtle shadow-sm overflow-hidden">
                        <span className="font-bold text-fuchsia-600 text-lg truncate mr-3">{convertValue(fromValue, fromUnit, u.id, activeCategory)}</span>
-                       <span className="text-xs uppercase font-bold text-slate-600 text-right shrink-0">{u.id} <br/><span className="font-normal opacity-70 text-[10px]">{u.label.split(' (')[0]}</span></span>
+                       <span className="text-xs uppercase font-bold text-txt-secondary text-right shrink-0">{u.id} <br/><span className="font-normal opacity-70 text-[10px]">{u.label.split(' (')[0]}</span></span>
                      </div>
                    ))}
                 </div>
               ) : (
                 <div
-                  className="w-full overflow-hidden text-center text-[clamp(1.75rem,5vw,2.5rem)] font-bold tabular-nums tracking-tight text-slate-900  py-2 drop-shadow-sm  z-10 flex items-center justify-center"
+                  className="w-full overflow-hidden text-center text-[clamp(1.75rem,5vw,2.5rem)] font-bold tabular-nums tracking-tight text-txt-primary  py-2 drop-shadow-sm  z-10 flex items-center justify-center"
                   style={{ minHeight: "60px" }}
                 >
                   <AnimatePresence mode="popLayout">
@@ -557,22 +559,22 @@ export default function UnitConverter() {
           {/* Industry Standard Presets */}
           {presets[activeCategory] && presets[activeCategory]!.length > 0 && !isBatchMode && (
             <div className="mt-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-3 text-center sm:text-left">
+              <p className="text-sm font-semibold text-txt-tertiary uppercase tracking-widest mb-3 text-center sm:text-left">
                 Industry Standard Presets
               </p>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                 {presets[activeCategory]!.map((preset, idx) => (
-                  <button
+                  <Button
                     key={idx}
                     onClick={() => {
                       setFromUnit(preset.unit);
                       setFromValue(preset.value);
                       setToValue(convertValue(preset.value, preset.unit, toUnit, activeCategory));
                     }}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-full transition-colors border border-slate-200 hover:border-slate-300 shadow-sm active:scale-95 hover:-translate-y-0.5"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-txt-secondary text-sm font-medium rounded-full transition-colors border border-ui-borderSubtle hover:border-ui-borderDefault shadow-sm active:scale-95 hover:-translate-y-0.5"
                   >
                     {preset.label}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -580,8 +582,8 @@ export default function UnitConverter() {
           
           {/* Conversion specific feedback */}
           {conversionRate !== "" && !isBatchMode && !isCompareMode && (
-             <div className="mt-8 pt-6 border-t border-slate-200  flex flex-col items-center justify-center text-center animate-in fade-in slide-in-from-bottom-2 duration-500 w-full">
-                <p className="text-sm font-semibold text-slate-500  uppercase tracking-widest mb-3">
+             <div className="mt-8 pt-6 border-t border-ui-borderSubtle  flex flex-col items-center justify-center text-center animate-in fade-in slide-in-from-bottom-2 duration-500 w-full">
+                <p className="text-sm font-semibold text-txt-tertiary  uppercase tracking-widest mb-3">
                   Conversion Rate & Reference
                 </p>
                 <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-fuchsia-50  rounded-full border border-fuchsia-200  text-fuchsia-700  font-medium sm:text-lg text-sm flex-wrap justify-center mb-8">
@@ -634,18 +636,18 @@ export default function UnitConverter() {
           </div>
           {/* Sidebar */}
           <div className="w-full lg:w-80 shrink-0">
-            <div className="bg-white/80 backdrop-blur-xl border border-slate-200/50 rounded-2xl shadow-sm p-6 sticky top-6">
+            <div className="bg-surface-default/80 backdrop-blur-xl border border-ui-borderSubtle/50 rounded-2xl shadow-sm p-6 sticky top-6">
               <div className="flex items-center gap-2 mb-4">
                 <History className="w-5 h-5 text-fuchsia-500" />
-                <h3 className="text-lg font-bold text-slate-900">Recent Conversions</h3>
+                <h3 className="text-lg font-bold text-txt-primary">Recent Conversions</h3>
               </div>
               
               <div className="space-y-3">
                 {recentConversions.length === 0 ? (
-                  <p className="text-sm text-slate-500 italic text-center py-6">No recent conversions.</p>
+                  <p className="text-sm text-txt-tertiary italic text-center py-6">No recent conversions.</p>
                 ) : (
                   recentConversions.map((conv, i) => (
-                    <button
+                    <Button
                       key={conv.id}
                       onClick={() => {
                         setActiveCategory(conv.category);
@@ -653,18 +655,18 @@ export default function UnitConverter() {
                         setToUnit(conv.toUnit);
                         setFromValue(conv.fromValue);
                       }}
-                      className="w-full text-left bg-white hover:bg-fuchsia-50/50 border border-slate-100 hover:border-fuchsia-100 p-3 rounded-xl transition-all duration-200 group"
+                      className="w-full text-left bg-surface-default hover:bg-fuchsia-50/50 border border-slate-100 hover:border-fuchsia-100 p-3 rounded-xl transition-all duration-200 group"
                     >
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-semibold text-slate-500 uppercase">{conv.category}</span>
+                        <span className="text-xs font-semibold text-txt-tertiary uppercase">{conv.category}</span>
                         <span className="text-[10px] text-slate-400">
                           {new Date(conv.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
                       <div className="flex items-center justify-between gap-2">
                         <div className="min-w-0">
-                          <p className="font-medium text-slate-900 truncate">
-                            {conv.fromValue} <span className="text-xs text-slate-500">{conv.fromUnit}</span>
+                          <p className="font-medium text-txt-primary truncate">
+                            {conv.fromValue} <span className="text-xs text-txt-tertiary">{conv.fromUnit}</span>
                           </p>
                         </div>
                         <ArrowRightLeft className="w-3 h-3 text-slate-300 group-hover:text-fuchsia-400 shrink-0" />
@@ -674,7 +676,7 @@ export default function UnitConverter() {
                           </p>
                         </div>
                       </div>
-                    </button>
+                    </Button>
                   ))
                 )}
               </div>

@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
@@ -21,6 +22,7 @@ import { MaterialSummary } from "../ui/MaterialSummary";
 import { FieldTooltip } from "../ui/FieldTooltip";
 import { CodeTooltip } from "../ui/CodeTooltip";
 
+
 const mixRatios: Record<string, { c: number; s: number; a: number }> = {
   "M10 (1:3:6)": { c: 1, s: 3, a: 6 },
   "M15 (1:2:4)": { c: 1, s: 2, a: 4 },
@@ -31,10 +33,10 @@ const mixRatios: Record<string, { c: number; s: number; a: number }> = {
 function InputGroup({ label, children, info }: { label: React.ReactNode; children: React.ReactNode; info?: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2 relative group">
-      <label className="flex items-center justify-between text-sm font-medium text-slate-700 mb-1 block">
+      <label className="flex items-center justify-between text-sm font-medium text-txt-secondary mb-1 block">
         {label}
         {info && (
-          <span className="text-sm text-slate-600 font-normal uppercase tracking-wider">{info}</span>
+          <span className="text-sm text-txt-secondary font-normal uppercase tracking-wider">{info}</span>
         )}
       </label>
       {children}
@@ -51,12 +53,12 @@ function CircularColumnInputs({
 }) {
   return (
     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-      <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center gap-1">
+      <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1"><span className="flex items-center gap-1">
         Diameter (m)
        <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
       <><label htmlFor="a11y-input-184" className="sr-only">e.g. 0.4</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-184" type="number" inputMode="decimal"
-        className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
+        className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
         value={diameter}
         onChange={(e) => setDiameter(e.target.value)}
         placeholder="e.g. 0.4"
@@ -80,12 +82,12 @@ function RectangularColumnInputs({
   return (
     <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
       <div>
-        <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+        <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">
           {isSquare ? "Side Length (m)" : "Length (m)"}
         </label>
         <><label htmlFor="a11y-input-185" className="sr-only">e.g. 0.3</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-185" type="number" inputMode="decimal"
-          className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
+          className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
           value={length}
           onChange={(e) => {
             setLength(e.target.value);
@@ -96,12 +98,12 @@ function RectangularColumnInputs({
       </div>
       {!isSquare && (
         <div>
-          <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+          <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">
             Width (m)
           </label>
           <><label htmlFor="a11y-input-186" className="sr-only">e.g. 0.3</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-186" type="number" inputMode="decimal"
-            className="w-full bg-white dark:bg-slate-800 border border-gray-200 text-slate-800 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
+            className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all shadow-sm min-h-[44px] text-base font-normal overflow-hidden"
             value={width}
             onChange={(e) => setWidth(e.target.value)}
             placeholder="e.g. 0.3"
@@ -244,17 +246,17 @@ export default function ColumnEstimator() {
     totalSteelWeight = mainSteelWeight + totalTieWeight;
   }
   return (
-    <div className="w-full h-full bg-transparent text-slate-900 dark:text-white p-6 md:p-8">
+    <div className="w-full h-full bg-transparent text-txt-primary dark:text-white p-6 md:p-8">
       <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 px-4 md:px-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           <GlobalSettingsToggle align="left" showCurrency={false} />
         </div>
-                <div className="bg-bg-card rounded-[24px] shadow-md border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div className="bg-bg-card rounded-2xl shadow-md border border-ui-borderSubtle dark:border-slate-700 overflow-hidden">
           <div className="p-6 md:p-8 space-y-8">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
               <div>
-                <label className="block mb-3 text-sm font-medium text-slate-700 mb-1">
+                <label className="block mb-3 text-sm font-medium text-txt-secondary mb-1">
                   Column Shape
                 </label>
                 <div className="mb-6">
@@ -269,14 +271,14 @@ export default function ColumnEstimator() {
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-3 bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 p-2 rounded-[24px] border border-slate-200 overflow-hidden">
+              <div className="flex items-center gap-3 bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-2 rounded-2xl border border-ui-borderSubtle overflow-hidden">
                  <span className="text-base font-medium">Precast Mode</span>
-                 <button 
+                 <Button 
                   onClick={() => setIsPrecast(!isPrecast)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${isPrecast ? 'bg-indigo-600' : 'bg-slate-300 '}`}
                  >
-                   <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isPrecast ? 'translate-x-6' : 'translate-x-1'}`} />
-                 </button>
+                   <span className={`inline-block h-4 w-4 transform rounded-full bg-surface-default transition-transform ${isPrecast ? 'translate-x-6' : 'translate-x-1'}`} />
+                 </Button>
               </div>
             </div>
 
@@ -299,34 +301,34 @@ export default function ColumnEstimator() {
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+                    <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">
                       Height (m)
                     </label>
                     <><label htmlFor="a11y-input-187" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-187" type="number" inputMode="decimal"
-                      className="w-full bg-transparent rounded-full border border-slate-200 shadow-sm text-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all min-h-[44px] text-base font-normal"
+                      className="w-full bg-transparent rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all min-h-[44px] text-base font-normal"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
                     /></>
                   </div>
                   <div>
-                    <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+                    <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">
                       Number of Columns
                     </label>
                     <><label htmlFor="a11y-input-188" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-188" type="number" inputMode="decimal"
-                      className="w-full bg-transparent rounded-full border border-slate-200 shadow-sm text-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all min-h-[44px] text-base font-normal"
+                      className="w-full bg-transparent rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all min-h-[44px] text-base font-normal"
                       value={count}
                       onChange={(e) => setCount(e.target.value)}
                     /></>
                   </div>
                 </div>
                 <div>
-                  <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+                  <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">
                     Concrete Mix
                   </label>
                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
-                    className="w-full bg-transparent rounded-[24px] border border-slate-200 shadow-sm text-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all appearance-none text-base font-normal overflow-hidden"
+                    className="w-full bg-transparent rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 transition-all appearance-none text-base font-normal overflow-hidden"
                     value={mix}
                     onChange={(e) => setMix(e.target.value)}
                   >
@@ -339,20 +341,20 @@ export default function ColumnEstimator() {
                 </div>
 
                 {isPrecast && (
-                  <div className="animate-in fade-in slide-in-from-top-2 duration-300 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-indigo-50/50 p-4 rounded-[24px] border border-indigo-100 overflow-hidden">
+                  <div className="animate-in fade-in slide-in-from-top-2 duration-300 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 overflow-hidden">
                     <InputGroup label="Concrete Density" info="kg/m³">
                       <><label htmlFor="a11y-input-189" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-189" type="number" inputMode="decimal" value={concreteDensity} onChange={(e) => setConcreteDensity(e.target.value)} className="w-full h-11 bg-white rounded-full border border-slate-200 shadow-sm text-slate-800 border border-indigo-200 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-189" type="number" inputMode="decimal" value={concreteDensity} onChange={(e) => setConcreteDensity(e.target.value)} className="w-full h-11 bg-surface-default rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-indigo-200 rounded-full px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
                     </InputGroup>
                     <InputGroup label="Lifting Radius" info="m">
                       <><label htmlFor="a11y-input-190" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-190" type="number" inputMode="decimal" value={riggingRadius} onChange={(e) => setRiggingRadius(e.target.value)} className="w-full h-11 bg-white rounded-full border border-slate-200 shadow-sm text-slate-800 border border-indigo-200 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-190" type="number" inputMode="decimal" value={riggingRadius} onChange={(e) => setRiggingRadius(e.target.value)} className="w-full h-11 bg-surface-default rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-indigo-200 rounded-full px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none transition-all shadow-sm overflow-hidden" /></>
                     </InputGroup>
                   </div>
                 )}
               </div>
               {/* Visual Aid */}
-              <div className="bg-transparent rounded-[24px] flex flex-col items-center justify-center px-4 py-3 border border-slate-200 dark:border-slate-700/50 min-h-[300px] overflow-hidden">
+              <div className="bg-transparent rounded-2xl flex flex-col items-center justify-center px-4 py-3 border border-ui-borderSubtle dark:border-slate-700/50 min-h-[300px] overflow-hidden">
                 <div
                   className="w-40 h-40 relative flex items-center justify-center text-blue-200 border-[8px] mb-6 shadow-inner transition-all duration-500 ease-in-out"
                   style={{
@@ -376,10 +378,10 @@ export default function ColumnEstimator() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <h4 className="text-slate-900 dark:text-white capitalize text-lg font-medium text-slate-800 mb-4">
+                  <h4 className="text-txt-primary dark:text-white capitalize text-lg font-medium text-txt-primary mb-4">
                     {shape} Column Cross-Section
                   </h4>
-                  <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">
+                  <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">
                     {shape === "circular"
                       ? `Ø ${d}m`
                       : shape === "square"
@@ -392,10 +394,10 @@ export default function ColumnEstimator() {
             </div>
             
             {/* Reinforcement Configuration */}
-            <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
+            <div className="pt-6 border-t border-ui-borderSubtle dark:border-slate-700">
               <div className="flex items-center gap-2 mb-6">
                 <CopySlash className="w-5 h-5 text-indigo-600" />
-                <h2 className="text-slate-900 dark:text-white text-xl font-semibold text-slate-900 tracking-tight mb-4">Reinforcement Details</h2>
+                <h2 className="text-txt-primary dark:text-white text-xl font-semibold text-txt-primary tracking-tight mb-4">Reinforcement Details</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
                 <div className="space-y-4">
@@ -412,14 +414,14 @@ export default function ColumnEstimator() {
                         min="0"
                         value={clearCover}
                         onChange={(e) => setClearCover(e.target.value)}
-                        className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
+                        className="w-full h-11 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                       /></>
                     </InputGroup>
                     <InputGroup label="Number of Main Bars">
                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                         value={mainBarsCount}
                         onChange={(e) => setMainBarsCount(e.target.value)}
-                        className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
+                        className="w-full h-11 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-2xl px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                       >
                         <option value="4">4 Bars</option>
                         <option value="6">6 Bars</option>
@@ -432,7 +434,7 @@ export default function ColumnEstimator() {
                     <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                       value={mainDia}
                       onChange={(e) => setMainDia(e.target.value)}
-                      className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
+                      className="w-full h-11 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-2xl px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                     >
                       {[12, 16, 20, 25, 32].map(d => (
                         <option key={d} value={d}>{d} mm</option>
@@ -447,7 +449,7 @@ export default function ColumnEstimator() {
                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                         value={tieDia}
                         onChange={(e) => setTieDia(e.target.value)}
-                        className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
+                        className="w-full h-11 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-2xl px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                       >
                         {[8, 10, 12, 16].map(d => (
                           <option key={d} value={d}>{d} mm</option>
@@ -461,7 +463,7 @@ export default function ColumnEstimator() {
                         min="0"
                         value={tieSpacing}
                         onChange={(e) => setTieSpacing(e.target.value)}
-                        className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-full px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
+                        className="w-full h-11 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                       /></>
                     </InputGroup>
                   </div>
@@ -472,7 +474,7 @@ export default function ColumnEstimator() {
                         <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                           value={variation8}
                           onChange={(e) => setVariation8(e.target.value)}
-                          className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
+                          className="w-full h-11 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-2xl px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                         >
                           <option value="1">Outer Rect + Inner Diamond</option>
                           <option value="2">Outer Rect + Inner Rect (4x2 layout)</option>
@@ -488,7 +490,7 @@ export default function ColumnEstimator() {
                         <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                           value={variation10}
                           onChange={(e) => setVariation10(e.target.value)}
-                          className="w-full h-11 bg-white border border-slate-200 dark:border-slate-700 rounded-[24px] px-4 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
+                          className="w-full h-11 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-2xl px-4 text-txt-primary dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none transition-all shadow-sm overflow-hidden"
                         >
                           <option value="1">Outer Rect + 3 Link/Cross Ties</option>
                           <option value="2">Outer Rect + Inner Rect + 1 Link Tie</option>
@@ -501,29 +503,29 @@ export default function ColumnEstimator() {
             </div>
 
             {/* Results Grid */}
-            <div className="flex flex-col h-full pt-6 border-t border-slate-200 dark:border-slate-700 w-full mt-4">
+            <div className="flex flex-col h-full pt-6 border-t border-ui-borderSubtle dark:border-slate-700 w-full mt-4">
               {isPrecast && (
-                <div className="mb-6 p-4 md:p-6 rounded-[24px] bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 shadow-sm relative overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
+                <div className="mb-6 p-4 md:p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 shadow-sm relative overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
                   <div className="absolute top-0 right-0 p-4 opacity-10 transform translate-x-4 -translate-y-4">
                     <ArrowUp className="w-32 h-32 text-amber-900" />
                   </div>
                   <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
                     <div className="flex-1">
-                      <h4 className="uppercase st text-amber-600 mb-1 flex items-center gap-2 text-lg font-medium text-slate-800 mb-4">
+                      <h4 className="uppercase st text-amber-600 mb-1 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
                         <AlertTriangle className="w-4 h-4" /> Precast Safety & Lifting
                       </h4>
-                      <p className="mb-4 text-base font-normal text-slate-600 leading-relaxed">
+                      <p className="mb-4 text-base font-normal text-txt-secondary leading-relaxed">
                         Based on {radius}m rig radius and 1.5x dynamic multi.
                       </p>
                       
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white/60 p-4 rounded-[24px] border border-amber-100 overflow-hidden">
+                        <div className="bg-surface-default/60 p-4 rounded-2xl border border-amber-100 overflow-hidden">
                           <span className="text-sm sm:text-base font-medium uppercase tracking-wider block mb-1">Single Element Wt</span>
-                          <span className="text-xl md:text-xl font-semibold text-slate-800 tabular-nums tracking-tight text-slate-800">{(elementWeightKg / 1000).toFixed(2)}<span className="text-sm font-medium ml-1 text-slate-500">Tons</span></span>
+                          <span className="text-xl md:text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-txt-primary">{(elementWeightKg / 1000).toFixed(2)}<span className="text-sm font-medium ml-1 text-txt-tertiary">Tons</span></span>
                         </div>
-                        <div className="w-full bg-white/80 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 p-4 rounded-[24px] border border-amber-200 shadow-sm overflow-hidden">
+                        <div className="w-full bg-surface-default/80 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 rounded-2xl border border-amber-200 shadow-sm overflow-hidden">
                           <span className="text-sm sm:text-base font-medium uppercase tracking-wider block mb-1">Min. Crane Capacity</span>
-                          <span className="text-xl md:text-xl font-semibold text-slate-800 tabular-nums tracking-tight text-amber-700">{craneCapacityTonnes.toFixed(2)}<span className="text-sm font-medium ml-1 text-amber-600/80">Tons</span></span>
+                          <span className="text-xl md:text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-amber-700">{craneCapacityTonnes.toFixed(2)}<span className="text-sm font-medium ml-1 text-amber-600/80">Tons</span></span>
                         </div>
                       </div>
                     </div>
@@ -553,8 +555,8 @@ export default function ColumnEstimator() {
                     />
                   </div>
                   
-                  <h4 className="text-slate-900 dark:text-white mb-2 flex items-center gap-2 text-lg font-medium text-slate-800 mb-4">
-                    <Layers className="w-5 h-5 text-slate-700" />
+                  <h4 className="text-txt-primary dark:text-white mb-2 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
+                    <Layers className="w-5 h-5 text-txt-secondary" />
                     Material Breakdown ({mix})
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
@@ -563,35 +565,35 @@ export default function ColumnEstimator() {
                     <ResultCard title="Aggregate" value={aggCft.toFixed(1)} unit="cft" variant="neutral" />
                   </div>
                   
-                  <div className="w-full bg-white border border-slate-200 border-l-[4px] border-l-[#6B46C1] rounded-[24px] p-4 sm:p-6 shadow-sm mt-4 overflow-hidden">
-                    <h4 className="mb-4 flex items-center gap-2 text-lg font-medium text-slate-800">
+                  <div className="w-full bg-surface-default border border-ui-borderSubtle border-l-[4px] border-l-[#6B46C1] rounded-2xl p-4 sm:p-6 shadow-sm mt-4 overflow-hidden">
+                    <h4 className="mb-4 flex items-center gap-2 text-lg font-medium text-txt-primary">
                       <CopySlash className="w-5 h-5 text-[#6B46C1]" />
                       Steel Reinforcement Summary
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                       <div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="bg-slate-50 p-3 rounded-[16px] border border-slate-100">
-                            <span className="text-slate-500 text-sm uppercase tracking-wider block mb-0.5">Main ({numBars} Bars)</span>
-                            <span className="font-semibold text-lg text-slate-800">{mainSteelWeight.toFixed(2)} kg</span>
+                          <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                            <span className="text-txt-tertiary text-sm uppercase tracking-wider block mb-0.5">Main ({numBars} Bars)</span>
+                            <span className="font-semibold text-lg text-txt-primary">{mainSteelWeight.toFixed(2)} kg</span>
                           </div>
-                          <div className="bg-slate-50 p-3 rounded-[16px] border border-slate-100">
-                            <span className="text-slate-500 text-sm uppercase tracking-wider block mb-0.5">Ties</span>
-                            <span className="font-semibold text-lg text-slate-800">{totalTieWeight.toFixed(2)} kg</span>
+                          <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                            <span className="text-txt-tertiary text-sm uppercase tracking-wider block mb-0.5">Ties</span>
+                            <span className="font-semibold text-lg text-txt-primary">{totalTieWeight.toFixed(2)} kg</span>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 rounded-[24px] p-4 border border-slate-200 overflow-hidden">
-                        <p className="uppercase tracking-wider mb-3 text-base font-normal text-slate-600 leading-relaxed">Tie Cut Length Breakdown ({tieSetsCount} sets per col)</p>
+                      <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl p-4 border border-ui-borderSubtle overflow-hidden">
+                        <p className="uppercase tracking-wider mb-3 text-base font-normal text-txt-secondary leading-relaxed">Tie Cut Length Breakdown ({tieSetsCount} sets per col)</p>
                         <ul className="space-y-2">
                           {tieTypes.map((tie, idx) => (
-                            <li key={idx} className="w-full flex justify-between items-center bg-white border border-slate-100 px-3 py-2 rounded-[16px] text-sm shadow-sm overflow-hidden">
+                            <li key={idx} className="w-full flex justify-between items-center bg-surface-default border border-slate-100 px-3 py-2 rounded-2xl text-sm shadow-sm overflow-hidden">
                               <div>
-                                <p className="text-base font-normal text-slate-600 leading-relaxed">{tie.name}</p>
-                                <p className="text-base font-normal text-slate-600 leading-relaxed">{tie.countPerSet} per set</p>
+                                <p className="text-base font-normal text-txt-secondary leading-relaxed">{tie.name}</p>
+                                <p className="text-base font-normal text-txt-secondary leading-relaxed">{tie.countPerSet} per set</p>
                               </div>
-                              <p className="text-base font-normal text-slate-600 leading-relaxed">{tie.length.toFixed(0)} mm</p>
+                              <p className="text-base font-normal text-txt-secondary leading-relaxed">{tie.length.toFixed(0)} mm</p>
                             </li>
                           ))}
                         </ul>

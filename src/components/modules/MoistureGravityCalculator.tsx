@@ -83,8 +83,8 @@ export default function MoistureGravityCalculator() {
             description="Process raw pycnometer and oven-dry weights to calculate natural moisture content, specific gravity, dry density, void ratio, and degree of saturation."
         />
 
-        <div className="w-full bg-white border border-slate-200 p-4 sm:p-6 rounded-[24px] shadow-sm overflow-hidden">
-            <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-slate-800">
+        <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
+            <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-txt-primary">
                 <FlaskConical className="w-6 h-6 text-blue-600" />
                 Moisture & Gravity Data Flow
             </h2>
@@ -131,23 +131,23 @@ export default function MoistureGravityCalculator() {
                     >
                         <div className="mt-6 flex flex-col gap-4">
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                 <div className="bg-white border border-slate-200 p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Natural Moisture Content (w)</span>
+                                 <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
+                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Natural Moisture Content (w)</span>
                                      <span className="text-xl font-mono font-bold text-blue-600">{results.mcPercent.toFixed(2)} %</span>
                                  </div>
-                                 <div className="bg-white border border-slate-200 p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Dry Density (\u03b3_d)</span>
+                                 <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
+                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Dry Density (\u03b3_d)</span>
                                      <span className="text-xl font-mono font-bold text-amber-600">{results.dryDensity > 0 ? results.dryDensity.toFixed(3) : "0.000"} <span className="text-sm">g/cm³</span></span>
                                  </div>
                              </div>
                              
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                 <div className="bg-white border border-slate-200 p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Void Ratio (e)</span>
-                                     <span className="text-xl font-mono font-bold text-slate-800">{results.voidRatio > 0 ? results.voidRatio.toFixed(3) : "0.000"}</span>
+                                 <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
+                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Void Ratio (e)</span>
+                                     <span className="text-xl font-mono font-bold text-txt-primary">{results.voidRatio > 0 ? results.voidRatio.toFixed(3) : "0.000"}</span>
                                  </div>
-                                 <div className="bg-white border border-slate-200 p-4 rounded-2xl relative overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1 relative z-10">Degree of Saturation (S)</span>
+                                 <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl relative overflow-hidden">
+                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1 relative z-10">Degree of Saturation (S)</span>
                                      <span className="text-xl font-mono font-bold text-emerald-600 relative z-10">{results.SPercent > 0 ? Math.min(100, results.SPercent).toFixed(1) : "0.0"} %</span>
                                      
                                      {/* Simple saturation visualizer */}
@@ -168,17 +168,17 @@ export default function MoistureGravityCalculator() {
                              <h4 className="text-base font-medium flex items-center gap-2 mb-4">
                                  <Calculator className="w-4 h-4" /> Math Logic & Linkages
                              </h4>
-                             <div className="text-[11px] font-medium text-slate-600 space-y-3">
+                             <div className="text-[11px] font-medium text-txt-secondary space-y-3">
                                   <div>
-                                    <span className="font-bold text-slate-700 block mb-1">Specific Gravity (Gs):</span>
+                                    <span className="font-bold text-txt-secondary block mb-1">Specific Gravity (Gs):</span>
                                     <div className="font-mono bg-slate-50 border border-slate-100 p-2 rounded block">G_s = (W2 - W1) / ((W2 - W1) - (W3 - W4))</div>
                                   </div>
                                   <div>
-                                    <span className="font-bold text-slate-700 block mb-1">Moisture Content (w) & Dry Density (\u03b3_d):</span>
+                                    <span className="font-bold text-txt-secondary block mb-1">Moisture Content (w) & Dry Density (\u03b3_d):</span>
                                     <div className="font-mono bg-slate-50 border border-slate-100 p-2 rounded block">w = (M_wet - M_dry) / M_dry | \u03b3_d = \u03b3_bulk / (1 + w)</div>
                                   </div>
                                   <div>
-                                    <span className="font-bold text-slate-700 block mb-1">Phase Linkages:</span>
+                                    <span className="font-bold text-txt-secondary block mb-1">Phase Linkages:</span>
                                     <div className="font-mono bg-slate-50 border border-slate-100 p-2 rounded block">e = (G_s * \u03b3_w / \u03b3_d) - 1   |   S = (w * G_s) / e</div>
                                   </div>
                              </div>

@@ -27,7 +27,7 @@ export function CalcInput({
       transition={{ duration: 0.4, ease: "easeOut", delay }}
       className={`flex flex-col gap-1.5 ${className}`}
     >
-      <label className="text-slate-700 dark:text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] mb-1">
+      <label className="text-txt-secondary dark:text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] mb-1">
         {label}
       </label>
       <div className="relative flex items-center">
@@ -36,7 +36,7 @@ export function CalcInput({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 min-h-[48px] text-slate-900 dark:text-white font-bold text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all ${
+          className={`w-full bg-slate-50/80 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 px-4 min-h-[48px] text-txt-primary dark:text-white font-bold text-sm placeholder:text-slate-400 dark:placeholder:text-txt-tertiary focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all ${
             unit ? 'pr-16' : ''
           }`}
           inputMode={props.type === 'number' ? 'decimal' : props.inputMode}

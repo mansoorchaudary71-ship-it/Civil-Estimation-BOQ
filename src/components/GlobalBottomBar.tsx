@@ -1,5 +1,7 @@
+import { Button } from './ui/Button';
 import React from "react";
 import { Home, FolderOpen, User, LayoutGrid } from "lucide-react";
+
 
 export default function GlobalBottomBar({
   activeModule,
@@ -21,14 +23,14 @@ export default function GlobalBottomBar({
 
   return (
     <div
-      className="w-full fixed z-[9998] md:hidden flex justify-around items-center h-[54px] left-6 right-6 rounded-[32px] overflow-hidden bg-white/70 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(15,23,42,0.12)]"
+      className="w-full fixed z-[9998] md:hidden flex justify-around items-center h-[54px] left-6 right-6 rounded-2xl overflow-hidden bg-surface-default/70 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(15,23,42,0.12)]"
       style={{ bottom: "calc(1rem + env(safe-area-inset-bottom))" }}
     >
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeModule === item.id;
         return (
-          <button
+          <Button
             key={item.id}
             type="button"
             onClick={() => item.action ? item.action() : onNavigate(item.id)}
@@ -37,13 +39,13 @@ export default function GlobalBottomBar({
             }`}
           >
             <Icon 
-              className={`w-[20px] h-[20px] ${isActive ? "text-white scale-110" : "text-slate-500 group-hover:text-indigo-700 transition-colors"}`} 
+              className={`w-[20px] h-[20px] ${isActive ? "text-white scale-110" : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`} 
               strokeWidth={isActive ? 2.5 : 2}
             />
-            <span className={`text-[10px] font-semibold tracking-wide ${isActive ? "text-white" : "text-slate-500 group-hover:text-indigo-700 transition-colors"}`}>
+            <span className={`text-[10px] font-semibold tracking-wide ${isActive ? "text-white" : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`}>
               {item.label}
             </span>
-          </button>
+          </Button>
         );
       })}
     </div>

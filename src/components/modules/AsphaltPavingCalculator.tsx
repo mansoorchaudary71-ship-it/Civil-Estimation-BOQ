@@ -12,7 +12,7 @@ export default function AsphaltPavingCalculator() {
   const [activeTab, setActiveTab] = useState<Tab>("asphalt");
 
   return (
-    <div className="w-full text-slate-900 font-sans md:p-4">
+    <div className="w-full text-txt-primary font-sans md:p-4">
       <div className="w-full md:max-w-7xl md:mx-auto pb-4 px-4 md:px-0">
       <div className="flex overflow-x-auto pb-4 gap-2 mb-8 p-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <UniversalTabs tabs={[{id: "asphalt", label: "Asphalt", icon: <Layers className="w-5 h-5" />}]} activeTab={activeTab === "asphalt" ? "asphalt" : ""} onTabChange={() => setActiveTab("asphalt")} />
@@ -102,7 +102,7 @@ function AsphaltCalculator() {
              <select
                 value={lengthUnit}
                 onChange={(e) => setLengthUnit(e.target.value as any)}
-                className="h-10 bg-slate-100 border border-slate-200 rounded-[16px] px-3 text-sm text-slate-700 font-bold outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400"
+                className="h-10 bg-slate-100 border border-ui-borderSubtle rounded-2xl px-3 text-sm text-txt-secondary font-bold outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400"
               >
                 <option value="m">Meters (m)</option>
                 <option value="ft">Feet (ft)</option>
@@ -117,7 +117,7 @@ function AsphaltCalculator() {
                 min="0"
                 value={length}
                 onChange={(e) => setLength(e.target.value ? Number(e.target.value) : "")}
-                className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
+                className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
               /></>
             </InputGroup>
             <InputGroup label={`Width (${lengthUnit})`}>
@@ -127,7 +127,7 @@ function AsphaltCalculator() {
                 min="0"
                 value={width}
                 onChange={(e) => setWidth(e.target.value ? Number(e.target.value) : "")}
-                className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
+                className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
               /></>
             </InputGroup>
           </div>
@@ -139,12 +139,12 @@ function AsphaltCalculator() {
                 min="0"
                 value={thickness}
                 onChange={(e) => setThickness(e.target.value ? Number(e.target.value) : "")}
-                className="flex-1 h-12 bg-slate-50 border border-slate-200 border-r-0 rounded-l-xl px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
+                className="flex-1 h-12 bg-slate-50 border border-ui-borderSubtle border-r-0 rounded-l-xl px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
               /></>
               <select
                 value={thicknessUnit}
                 onChange={(e) => setThicknessUnit(e.target.value as any)}
-                className="h-12 bg-slate-100 border border-slate-200 rounded-r-xl px-4 text-slate-700 font-bold outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400"
+                className="h-12 bg-slate-100 border border-ui-borderSubtle rounded-r-xl px-4 text-txt-secondary font-bold outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400"
               >
                 <option value="mm">mm</option>
                 <option value="inch">Inch</option>
@@ -177,8 +177,8 @@ function AsphaltCalculator() {
               </div>
             </MaterialSummary>
           ) : (
-            <div className="bg-slate-50/80 [#1A1C24]/80 backdrop-blur-3xl border border-slate-200/50 rounded-[32px] p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-[0_8px_30px_rgba(15,23,42,0.04)] [0_8px_30px_rgba(15,23,42,0.2)] overflow-hidden">
-              <span className="text-slate-600 font-medium tracking-wide">Enter length, width, and thickness to calculate asphalt tonnage.</span>
+            <div className="bg-slate-50/80 [#1A1C24]/80 backdrop-blur-3xl border border-ui-borderSubtle/50 rounded-2xl p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-[0_8px_30px_rgba(15,23,42,0.04)] [0_8px_30px_rgba(15,23,42,0.2)] overflow-hidden">
+              <span className="text-txt-secondary font-medium tracking-wide">Enter length, width, and thickness to calculate asphalt tonnage.</span>
             </div>
           )}
         </div>
@@ -245,7 +245,7 @@ function PrimeCoatCalculator() {
               min="0"
               value={area}
               onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")}
-              className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
+              className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
               placeholder="e.g. 500"
             /></>
           </InputGroup>
@@ -258,10 +258,10 @@ function PrimeCoatCalculator() {
               step="0.1"
               value={rate}
               onChange={(e) => setRate(e.target.value ? Number(e.target.value) : "")}
-              className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
+              className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
               placeholder="Standard: 0.8 - 1.2"
             /></>
-            <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">Default is ~1.0 L/m² for WBM/WMM surfaces.</p>
+            <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">Default is ~1.0 L/m² for WBM/WMM surfaces.</p>
           </InputGroup>
         </div>
 
@@ -276,8 +276,8 @@ function PrimeCoatCalculator() {
              >
              </MaterialSummary>
           ) : (
-            <div className="bg-slate-50/80 [#1A1C24]/80 backdrop-blur-3xl border border-slate-200/50 rounded-[32px] p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-[0_8px_30px_rgba(15,23,42,0.04)] [0_8px_30px_rgba(15,23,42,0.2)] overflow-hidden">
-              <span className="text-slate-600 font-medium tracking-wide">Enter area and application rate to calculate prime coat.</span>
+            <div className="bg-slate-50/80 [#1A1C24]/80 backdrop-blur-3xl border border-ui-borderSubtle/50 rounded-2xl p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-[0_8px_30px_rgba(15,23,42,0.04)] [0_8px_30px_rgba(15,23,42,0.2)] overflow-hidden">
+              <span className="text-txt-secondary font-medium tracking-wide">Enter area and application rate to calculate prime coat.</span>
             </div>
           )}
         </div>
@@ -341,7 +341,7 @@ function TackCoatCalculator() {
               min="0"
               value={area}
               onChange={(e) => setArea(e.target.value ? Number(e.target.value) : "")}
-              className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
+              className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
               placeholder="e.g. 500"
             /></>
           </InputGroup>
@@ -354,10 +354,10 @@ function TackCoatCalculator() {
               step="0.05"
               value={rate}
               onChange={(e) => setRate(e.target.value ? Number(e.target.value) : "")}
-              className="w-full h-12 bg-slate-50 border border-slate-200 rounded-full px-4 text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
+              className="w-full h-12 bg-slate-50 border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:border-slate-400 outline-none transition-all"
               placeholder="Standard: 0.2 - 0.3"
             /></>
-            <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">Default is ~0.25 L/m² for bituminous surfaces.</p>
+            <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">Default is ~0.25 L/m² for bituminous surfaces.</p>
           </InputGroup>
         </div>
 
@@ -372,8 +372,8 @@ function TackCoatCalculator() {
              >
              </MaterialSummary>
           ) : (
-            <div className="bg-slate-50/80 [#1A1C24]/80 backdrop-blur-3xl border border-slate-200/50 rounded-[32px] p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-[0_8px_30px_rgba(15,23,42,0.04)] [0_8px_30px_rgba(15,23,42,0.2)] overflow-hidden">
-              <span className="text-slate-600 font-medium tracking-wide">Enter area and application rate to calculate tack coat.</span>
+            <div className="bg-slate-50/80 [#1A1C24]/80 backdrop-blur-3xl border border-ui-borderSubtle/50 rounded-2xl p-4 sm:p-6 lg:p-12 text-center flex items-center justify-center h-full shadow-[0_8px_30px_rgba(15,23,42,0.04)] [0_8px_30px_rgba(15,23,42,0.2)] overflow-hidden">
+              <span className="text-txt-secondary font-medium tracking-wide">Enter area and application rate to calculate tack coat.</span>
             </div>
           )}
         </div>
@@ -393,7 +393,7 @@ function TackCoatCalculator() {
 function InputGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-slate-700 mb-1 block">{label}</label>
+      <label className="text-sm font-medium text-txt-secondary mb-1 block">{label}</label>
       {children}
     </div>
   );

@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import ThumbRuleDistributionEngine from "../ui/ThumbRuleDistributionEngine";
 import FormulaTransparencyCard from "../ui/FormulaTransparencyCard";
 import React, { useState, useMemo, useReducer, useEffect } from "react";
@@ -66,6 +67,7 @@ import { ToolGuidedTour, TourStep } from "../ui/ToolGuidedTour";
 import { CodeTooltip } from "../ui/CodeTooltip";
 import { GenericExportButtons } from "../ui/GenericExportButtons";
 
+
 const HOUSE_TOUR_STEPS: TourStep[] = [
   {
     targetSelector: '#tour-house-area',
@@ -123,43 +125,43 @@ function AnimatedTableRow({
       animate={controls}
       className={`transition-colors border-b border-transparent hover:bg-slate-50/50 group ${selected ? 'bg-indigo-50/40' : ''}`}
     >
-      <td className="px-6 py-4 font-semibold text-slate-700 group">
+      <td className="px-6 py-4 font-semibold text-txt-secondary group">
         <div className="flex items-center justify-between">
-          <label className="flex items-center gap-3 cursor-pointer select-none text-sm font-medium text-slate-700 mb-1 block">
-            <GripVertical className="w-4 h-4 text-slate-600 cursor-grab active:cursor-grabbing hover:text-slate-600" />
+          <label className="flex items-center gap-3 cursor-pointer select-none text-sm font-medium text-txt-secondary mb-1 block">
+            <GripVertical className="w-4 h-4 text-txt-secondary cursor-grab active:cursor-grabbing hover:text-txt-secondary" />
             {onSelect && (
               <><label htmlFor="a11y-input-261" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-261" 
                 type="checkbox" 
                 checked={selected}
                 onChange={() => onSelect(item.name)}
-                className="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer"
+                className="w-4 h-4 text-indigo-600 bg-surface-default border-ui-borderDefault rounded focus:ring-indigo-500 cursor-pointer"
               /></>
             )}
             <span>{item.name}</span>
           </label>
           {onDuplicate && (
-            <button 
+            <Button 
               onClick={() => onDuplicate(item)}
-              className="opacity-0 group-hover:opacity-100 p-1 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded transition-all rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              className="opacity-0 group-hover:opacity-100 p-1 text-txt-secondary hover:text-indigo-600 hover:bg-indigo-50 rounded transition-all rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
               title="Duplicate Item"
             >
               <Copy className="w-4 h-4" />
-            </button>
+            </Button>
           )}
         </div>
       </td>
-      <td className="px-6 py-4 text-center font-bold text-slate-600">
+      <td className="px-6 py-4 text-center font-bold text-txt-secondary">
         {typeof item.quantity === "number"
           ? (roundQuantity ? Math.round(item.quantity).toLocaleString('en-US') : item.quantity.toLocaleString('en-US', { maximumFractionDigits: 1 }))
           : item.quantity}
         {item.rate && (
-          <div className="text-sm font-normal text-slate-700 mt-0.5 font-mono">
+          <div className="text-sm font-normal text-txt-secondary mt-0.5 font-mono">
             @ {formatCurrency(item.rate)}/{item.unit}
           </div>
         )}
       </td>
-      <td className="px-6 py-4 text-center font-medium text-slate-700">
+      <td className="px-6 py-4 text-center font-medium text-txt-secondary">
         {item.unit}
       </td>
       <td className="px-6 py-4 hidden md:table-cell">
@@ -169,10 +171,10 @@ function AnimatedTableRow({
           value={note || ""}
           onChange={(e) => onNoteChange?.(e.target.value)}
           placeholder="Add note..."
-          className="w-full min-w-[120px] bg-transparent border-0 border-b border-transparent hover:border-slate-300 focus:border-indigo-500 focus:ring-0 text-sm text-slate-600 transition-colors px-0 py-1 placeholder:text-slate-700 focus:outline-none rounded-full"
+          className="w-full min-w-[120px] bg-transparent border-0 border-b border-transparent hover:border-ui-borderDefault focus:border-indigo-500 focus:ring-0 text-sm text-txt-secondary transition-colors px-0 py-1 placeholder:text-txt-secondary focus:outline-none rounded-full"
         /></>
       </td>
-      <td className="px-6 py-4 text-right font-bold text-slate-800">
+      <td className="px-6 py-4 text-right font-bold text-txt-primary">
         {formatCurrency(item.value)}
       </td>
     </Reorder.Item>
@@ -990,7 +992,7 @@ export default function HouseEstimator() {
   }, [greyCostData, finishingCostData, geoState, finishQuality, projectDetails, builtUpArea, estimates]);
 
   return (
-    <div className="w-full h-full bg-transparent text-slate-900 font-sans p-6 md:p-8">
+    <div className="w-full h-full bg-transparent text-txt-primary font-sans p-6 md:p-8">
       <Helmet>
         <title>House Construction Cost Estimator | Civil Estimation Pro</title>
         <meta name="description" content="Calculate your exact house construction cost with real-time BOQ generation. Features NBC Pakistan standards, Marla/Sq.Ft inputs, and precise material estimates." />
@@ -1006,14 +1008,14 @@ export default function HouseEstimator() {
             {/* Quick Estimate Base Controls */}
             <div className="tool-card p-6 space-y-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-blue-50 text-indigo-600 rounded-[24px] overflow-hidden">
+                <div className="p-3 bg-blue-50 text-indigo-600 rounded-2xl overflow-hidden">
                   <Home className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                  <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                     Quick Estimate
                   </h2>
-                  <p className="tracking-wide text-base font-normal text-slate-600 leading-relaxed">
+                  <p className="tracking-wide text-base font-normal text-txt-secondary leading-relaxed">
                     Basic Configuration
                   </p>
                 </div>
@@ -1021,7 +1023,7 @@ export default function HouseEstimator() {
 
               {/* City Location */}
               <div>
-                <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+                <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">
                   City / Location
                 </label>
                 <><label htmlFor="a11y-input-263" className="sr-only">e.g. DHA Phase 6</label>
@@ -1041,11 +1043,11 @@ export default function HouseEstimator() {
 
               {/* Plot Size */}
               <div>
-                <label className="block uppercase tracking-widest mb-1.5 ml-1 group flex items-center gap-1 w-fit cursor-help text-sm font-medium text-slate-700 mb-1">
+                <label className="block uppercase tracking-widest mb-1.5 ml-1 group flex items-center gap-1 w-fit cursor-help text-sm font-medium text-txt-secondary mb-1">
                   Plot Size 
                   <span className="relative">
-                    <AlertCircle className="w-3.5 h-3.5 text-slate-600" />
-                    <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max px-3 py-1.5 bg-white text-slate-900 dark:text-white text-sm rounded-[16px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-slate-200 shadow-sm overflow-hidden">
+                    <AlertCircle className="w-3.5 h-3.5 text-txt-secondary" />
+                    <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max px-3 py-1.5 bg-surface-default text-txt-primary dark:text-white text-sm rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-ui-borderSubtle shadow-sm overflow-hidden">
                       Total land area limits the maximum covered area
                     </span>
                   </span>
@@ -1085,35 +1087,35 @@ export default function HouseEstimator() {
               {/* Stories & Rooms Config */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block uppercase tracking-wider mb-2 text-sm font-medium text-slate-700 mb-1">
+                  <label className="block uppercase tracking-wider mb-2 text-sm font-medium text-txt-secondary mb-1">
                     Stories
                   </label>
                   <div className="flex items-center gap-2">
-                    <button
+                    <Button
                       onClick={() =>
                         dispatch({
                           type: "SET_STORIES",
                           payload: Math.max(1, geoState.stories - 1),
                         })
                       }
-                      className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 flex items-center justify-center transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
+                      className="w-10 h-10 rounded-full bg-slate-100 text-txt-secondary font-bold hover:bg-slate-200 flex items-center justify-center transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
                     >
                       -
-                    </button>
+                    </Button>
                     <span className="font-bold text-lg w-6 text-center">
                       {geoState.stories}
                     </span>
-                    <button
+                    <Button
                       onClick={() =>
                         dispatch({
                           type: "SET_STORIES",
                           payload: geoState.stories + 1,
                         })
                       }
-                      className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 flex items-center justify-center transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
+                      className="w-10 h-10 rounded-full bg-slate-100 text-txt-secondary font-bold hover:bg-slate-200 flex items-center justify-center transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
                     >
                       +
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -1121,10 +1123,10 @@ export default function HouseEstimator() {
               {/* Finish Quality */}
               <div className="pt-4 border-t border-slate-100 space-y-4">
                 <div className="flex items-center gap-2 mb-2">
-                   <div className="p-2 bg-violet-50 text-violet-600 rounded-[24px] overflow-hidden">
+                   <div className="p-2 bg-violet-50 text-violet-600 rounded-2xl overflow-hidden">
                      <Sliders className="w-4 h-4" />
                    </div>
-                   <h3 className="text-lg font-medium text-slate-800 mb-4">Finish Quality</h3>
+                   <h3 className="text-lg font-medium text-txt-primary mb-4">Finish Quality</h3>
                 </div>
                 <div className="flex justify-between items-end mb-2">
                   <span className="text-xl font-semibold tabular-nums tracking-tight text-violet-600 tracking-tighter whitespace-nowrap">
@@ -1150,7 +1152,7 @@ export default function HouseEstimator() {
                   onChange={(e) => setFinishQuality(parseInt(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-violet-600"
                 /></>
-                <div className="flex justify-between text-sm uppercase tracking-widest text-slate-500 font-bold mt-2">
+                <div className="flex justify-between text-sm uppercase tracking-widest text-txt-tertiary font-bold mt-2">
                   <span>Std</span> <span>Prem</span> <span>Lux</span>
                 </div>
               </div>
@@ -1159,14 +1161,14 @@ export default function HouseEstimator() {
             {/* International & Structural Setup */}
             <div className="tool-card p-6 space-y-5">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-teal-50 text-teal-600 rounded-[24px] overflow-hidden">
+                <div className="p-3 bg-teal-50 text-teal-600 rounded-2xl overflow-hidden">
                   <Database className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                  <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                     International & Structural Defaults
                   </h2>
-                  <p className="tracking-wide text-base font-normal text-slate-600 leading-relaxed">
+                  <p className="tracking-wide text-base font-normal text-txt-secondary leading-relaxed">
                     Market, Foundation, System
                   </p>
                 </div>
@@ -1174,7 +1176,7 @@ export default function HouseEstimator() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Market Currency</label>
+                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">Market Currency</label>
                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                     value={currencyRate}
                     onChange={(e) => {
@@ -1210,7 +1212,7 @@ export default function HouseEstimator() {
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Design Standard</label>
+                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">Design Standard</label>
                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={designStandard}
                      onChange={(e) => setDesignStandard(e.target.value)}
@@ -1226,7 +1228,7 @@ export default function HouseEstimator() {
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Foundation Type</label>
+                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">Foundation Type</label>
                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={foundationType}
                      onChange={(e) => setFoundationType(e.target.value)}
@@ -1239,7 +1241,7 @@ export default function HouseEstimator() {
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">Structural System</label>
+                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">Structural System</label>
                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={structuralSystem}
                      onChange={(e) => setStructuralSystem(e.target.value)}
@@ -1252,7 +1254,7 @@ export default function HouseEstimator() {
                 </div>
 
                 <div>
-                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1"><span className="flex items-center">Seismic Zone <CodeTooltip standard="IS" code="1893:2016" description="Criteria for earthquake resistant design of structures." /></span></label>
+                  <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1"><span className="flex items-center">Seismic Zone <CodeTooltip standard="IS" code="1893:2016" description="Criteria for earthquake resistant design of structures." /></span></label>
                   <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                      value={seismicZone}
                      onChange={(e) => setSeismicZone(e.target.value)}
@@ -1275,14 +1277,14 @@ export default function HouseEstimator() {
                 onClick={() => setIsAccordionOpen(!isAccordionOpen)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-slate-50 text-slate-600 rounded-[24px] overflow-hidden">
+                  <div className="p-3 bg-slate-50 text-txt-secondary rounded-2xl overflow-hidden">
                     <Settings className="w-6 h-6" />
                   </div>
-                  <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                  <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                     Advanced Customization
                   </h2>
                 </div>
-                <div className="p-2 bg-transparent text-slate-500 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+                <div className="p-2 bg-transparent text-txt-tertiary hover:text-txt-secondary hover:bg-slate-100 rounded-full transition-colors">
                   {isAccordionOpen ? (
                     <ChevronUp className="w-5 h-5" />
                   ) : (
@@ -1294,26 +1296,26 @@ export default function HouseEstimator() {
               {isAccordionOpen && (
                 <div className="mt-6 pt-6 border-t border-slate-100 space-y-6 animate-in slide-in-from-top-4 fade-in duration-300">
                   {/* Room Setup Button Trigger */}
-                  <div className="flex justify-between items-center bg-indigo-50 p-4 rounded-[24px] border border-indigo-100 overflow-hidden">
+                  <div className="flex justify-between items-center bg-indigo-50 p-4 rounded-2xl border border-indigo-100 overflow-hidden">
                     <div>
-                      <h3 className="text-indigo-900 text-lg font-medium text-slate-800 mb-4">Room Configuration</h3>
-                      <p className="text-indigo-600 uppercase tracking-wide text-base font-normal text-slate-600 leading-relaxed">Customize layout specifics</p>
+                      <h3 className="text-indigo-900 text-lg font-medium text-txt-primary mb-4">Room Configuration</h3>
+                      <p className="text-indigo-600 uppercase tracking-wide text-base font-normal text-txt-secondary leading-relaxed">Customize layout specifics</p>
                     </div>
-                    <button 
+                    <Button 
                       onClick={() => setIsRoomModalOpen(true)} 
                       className="text-base font-medium bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-full transition-all shadow-sm active:scale-95 flex items-center gap-1 hover:-translate-y-0.5"
                     >
                       Open Rooms <ChevronRight className="w-3 h-3" />
-                    </button>
+                    </Button>
                   </div>
 
                   {/* Covered Area */}
                   <div>
-                    <label className="block uppercase tracking-widest mb-1.5 ml-1 flex items-center gap-1 cursor-help group w-fit text-sm font-medium text-slate-700 mb-1">
+                    <label className="block uppercase tracking-widest mb-1.5 ml-1 flex items-center gap-1 cursor-help group w-fit text-sm font-medium text-txt-secondary mb-1">
                       Covered Area (Per Floor)
                       <span className="relative">
-                        <AlertCircle className="w-3.5 h-3.5 text-slate-600" />
-                        <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max max-w-[200px] whitespace-normal px-3 py-1.5 bg-white text-slate-900 dark:text-white text-sm rounded-[16px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 text-center border border-slate-200 shadow-sm overflow-hidden">
+                        <AlertCircle className="w-3.5 h-3.5 text-txt-secondary" />
+                        <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max max-w-[200px] whitespace-normal px-3 py-1.5 bg-surface-default text-txt-primary dark:text-white text-sm rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 text-center border border-ui-borderSubtle shadow-sm overflow-hidden">
                           Total floor area constructed for a single story. Must be less than plot size.
                         </span>
                       </span>
@@ -1340,7 +1342,7 @@ export default function HouseEstimator() {
                   </div>
 
                   <div>
-                    <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-slate-700 mb-1">
+                    <label className="block uppercase tracking-widest mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">
                       Room Height (ft)
                     </label>
                     <label htmlFor="tour-room-height" className="sr-only">Input</label>
@@ -1370,14 +1372,14 @@ export default function HouseEstimator() {
                   <div className="pt-4 border-t border-slate-100">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                        <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                           Boundary Wall
                         </h2>
-                        <span className="text-sm font-medium text-slate-500">
+                        <span className="text-sm font-medium text-txt-tertiary">
                           Include exterior boundary wall
                         </span>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-slate-700 mb-1 block">
+                      <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-txt-secondary mb-1 block">
                         <><label htmlFor="a11y-input-265" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-265"
                           type="checkbox"
@@ -1387,13 +1389,13 @@ export default function HouseEstimator() {
                             setIncludeBoundaryWall(!includeBoundaryWall)
                           }
                         /></>
-                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 focus:ring-blue-500 focus:outline-none peer-focus:ring-indigo-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 focus:ring-blue-500 focus:outline-none peer-focus:ring-indigo-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-default after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                       </label>
                     </div>
                     {includeBoundaryWall && (
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 pt-4 mt-4 border-t border-slate-100 animate-in fade-in slide-in-from-top-4 duration-300">
                         <div>
-                          <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-slate-700 mb-1">
+                          <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">
                             Length (ft)
                           </label>
                           <><label htmlFor="a11y-input-266" className="sr-only">Input</label>
@@ -1401,11 +1403,11 @@ export default function HouseEstimator() {
                             type="number" inputMode="decimal"
                             value={bwLength || ""}
                             onChange={(e) => setBwLength(parseFloat(e.target.value))}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-full px-3 py-2 text-slate-700 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:outline-none"
+                            className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-3 py-2 text-txt-secondary text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:outline-none"
                           /></>
                         </div>
                         <div>
-                          <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-slate-700 mb-1">
+                          <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">
                             Height (ft)
                           </label>
                           <><label htmlFor="a11y-input-267" className="sr-only">Input</label>
@@ -1413,7 +1415,7 @@ export default function HouseEstimator() {
                             type="number" inputMode="decimal"
                             value={bwHeight || ""}
                             onChange={(e) => setBwHeight(parseFloat(e.target.value))}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-full px-3 py-2 text-slate-700 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:outline-none"
+                            className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-3 py-2 text-txt-secondary text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:outline-none"
                           /></>
                         </div>
                       </div>
@@ -1426,21 +1428,21 @@ export default function HouseEstimator() {
             
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
               {!showResults && (
-                <button
+                <Button
                    onClick={() => setShowResults(true)}
-                   className="w-full sm:flex-1 flex flex-row items-center justify-center gap-2 bg-white text-slate-900 dark:text-white border border-slate-200 outline-none font-bold px-8 py-4 rounded-full hover:bg-slate-50 transition-all active:scale-95 shadow-sm hover:-translate-y-0.5 overflow-hidden"
+                   className="w-full sm:flex-1 flex flex-row items-center justify-center gap-2 bg-surface-default text-txt-primary dark:text-white border border-ui-borderSubtle outline-none font-bold px-8 py-4 rounded-full hover:bg-slate-50 transition-all active:scale-95 shadow-sm hover:-translate-y-0.5 overflow-hidden"
                 >
                    Compute Total Cost
-                </button>
+                </Button>
               )}
             </div>
             
-            <div className="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 rounded-[16px] mt-4">
+            <div className="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 rounded-2xl mt-4">
                <div>
-                  <h4 className="text-indigo-900 text-lg font-medium text-slate-800 mb-4">Live BOQ</h4>
-                  <p className="text-indigo-600/80 text-base font-normal text-slate-600 leading-relaxed">Real-time table view as you adjust parameters</p>
+                  <h4 className="text-indigo-900 text-lg font-medium text-txt-primary mb-4">Live BOQ</h4>
+                  <p className="text-indigo-600/80 text-base font-normal text-txt-secondary leading-relaxed">Real-time table view as you adjust parameters</p>
                </div>
-               <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-slate-700 mb-1 block">
+               <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-txt-secondary mb-1 block">
                  <><label htmlFor="a11y-input-268" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-268"
                    type="checkbox"
@@ -1448,7 +1450,7 @@ export default function HouseEstimator() {
                    checked={showResults}
                    onChange={(e) => setShowResults(e.target.checked)}
                  /></>
-                 <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 shadow-inner"></div>
+                 <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-default after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 shadow-inner"></div>
                </label>
             </div>
           
@@ -1456,7 +1458,7 @@ export default function HouseEstimator() {
               <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8 border-t border-[var(--border-color)]">
                 {/* Visual Summary */}
             <div className="tool-card p-6 sm:p-8 mb-2">
-              <h3 className="mb-6 text-lg font-medium text-slate-800 mb-4">
+              <h3 className="mb-6 text-lg font-medium text-txt-primary mb-4">
                 Cost Breakdown Visuals
               </h3>
               <div className="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -1489,15 +1491,15 @@ export default function HouseEstimator() {
                 onClick={() => setIsMathOpen(!isMathOpen)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-slate-50 text-slate-600 rounded-[24px] overflow-hidden">
+                  <div className="p-3 bg-slate-50 text-txt-secondary rounded-2xl overflow-hidden">
                     <Calculator className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium text-slate-800 mb-4">View Detailed Mathematical Breakdown</h3>
-                    <p className="text-base font-normal text-slate-600 leading-relaxed">Access raw math derivations and master rate sheets</p>
+                    <h3 className="text-lg font-medium text-txt-primary mb-4">View Detailed Mathematical Breakdown</h3>
+                    <p className="text-base font-normal text-txt-secondary leading-relaxed">Access raw math derivations and master rate sheets</p>
                   </div>
                 </div>
-                <div className="p-2 bg-transparent text-slate-500 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors shrink-0">
+                <div className="p-2 bg-transparent text-txt-tertiary hover:text-txt-secondary hover:bg-slate-100 rounded-full transition-colors shrink-0">
                   {isMathOpen ? (
                     <ChevronUp className="w-5 h-5" />
                   ) : (
@@ -1582,7 +1584,7 @@ export default function HouseEstimator() {
                         </div>
                       </MaterialSummary>
 
-                      <div className="w-full h-[320px] mt-8 mb-4 border border-slate-100 rounded-[24px] bg-slate-50/30 p-2 sm:p-4 overflow-hidden">
+                      <div className="w-full h-[320px] mt-8 mb-4 border border-slate-100 rounded-2xl bg-slate-50/30 p-2 sm:p-4 overflow-hidden">
                         <StyledChart 
                           data={greyCostData.map(d => ({ ...d, fill: d.color }))}
                           type="pie"
@@ -1592,41 +1594,41 @@ export default function HouseEstimator() {
                       </div>
 
                       <div className="flex items-center justify-between mt-8 mb-4">
-                        <h3 className="text-lg font-medium text-slate-800 mb-4">
+                        <h3 className="text-lg font-medium text-txt-primary mb-4">
                           Detailed Exact BOQ
                         </h3>
                         <div className="flex items-center gap-3 relative">
                           <div className="relative group/template">
-                            <button className="flex items-center gap-2 bg-slate-50 text-slate-700 px-3 py-1.5 rounded-full hover:bg-slate-100 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+                            <Button className="flex items-center gap-2 bg-slate-50 text-txt-secondary px-3 py-1.5 rounded-full hover:bg-slate-100 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
                               <FolderPlus className="w-4 h-4" />
                               Load Template
                               <ChevronDown className="w-4 h-4" />
-                            </button>
-                            <div className="w-full absolute right-0 top-full mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-lg opacity-0 invisible group-hover/template:opacity-100 group-hover/template:visible transition-all z-20 overflow-hidden">
-                              <button onClick={() => handleLoadTemplate("grey", "residential")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-sm font-medium transition-colors border-b border-slate-100 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Residential House</button>
-                              <button onClick={() => handleLoadTemplate("grey", "commercial")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-sm font-medium transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Commercial Office</button>
+                            </Button>
+                            <div className="w-full absolute right-0 top-full mt-1 w-48 bg-surface-default border border-ui-borderSubtle rounded-xl shadow-lg opacity-0 invisible group-hover/template:opacity-100 group-hover/template:visible transition-all z-20 overflow-hidden">
+                              <Button onClick={() => handleLoadTemplate("grey", "residential")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-txt-secondary hover:text-indigo-700 text-sm font-medium transition-colors border-b border-slate-100 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Residential House</Button>
+                              <Button onClick={() => handleLoadTemplate("grey", "commercial")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-txt-secondary hover:text-indigo-700 text-sm font-medium transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Commercial Office</Button>
                             </div>
                           </div>
                           {selectedItems.size > 0 && (
-                            <button onClick={handleDeleteSelected}
+                            <Button onClick={handleDeleteSelected}
                               className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1.5 rounded-full hover:bg-red-100 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                             >
                               <Trash2 className="w-4 h-4" />
                               Delete Selected ({selectedItems.size})
-                            </button>
+                            </Button>
                           )}
-                          <button
+                          <Button
                             onClick={() => handleExportCSV("grey")}
                             className="flex items-center gap-2 text-sm bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full font-semibold hover:bg-indigo-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                           >
                             <Download className="w-4 h-4" />
                             Export CSV
-                          </button>
+                          </Button>
                         </div>
                       </div>
-                      <div className="border border-slate-200 rounded-[24px] overflow-y-auto max-h-[400px] bg-white shadow-sm mb-8 relative hide-scrollbar">
+                      <div className="border border-ui-borderSubtle rounded-2xl overflow-y-auto max-h-[400px] bg-surface-default shadow-sm mb-8 relative hide-scrollbar">
                         <table className="boq-table-print-breaks w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
-                          <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
+                          <thead className="bg-slate-100 text-txt-secondary border-b border-ui-borderSubtle uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
                             <tr>
                               <th className="px-6 py-4 font-bold">
                                 Material / Item
@@ -1645,11 +1647,11 @@ export default function HouseEstimator() {
                               </th>
                             </tr>
                           </thead>
-                          <Reorder.Group as="tbody" values={sortedFoundationData.map(i => i.name)} onReorder={setFoundationOrder} className="text-slate-800 divide-y divide-slate-100">
+                          <Reorder.Group as="tbody" values={sortedFoundationData.map(i => i.name)} onReorder={setFoundationOrder} className="text-txt-primary divide-y divide-slate-100">
                             <tr className="bg-transparent/50">
                               <td
                                 colSpan={5}
-                                className="px-6 py-2.5 text-base font-medium uppercase tracking-wider text-slate-700"
+                                className="px-6 py-2.5 text-base font-medium uppercase tracking-wider text-txt-secondary"
                               >
                                 Foundation Work
                               </td>
@@ -1667,11 +1669,11 @@ export default function HouseEstimator() {
                               />
                             ))}
                           </Reorder.Group>
-                          <Reorder.Group as="tbody" values={sortedSuperstructureData.map(i => i.name)} onReorder={setSuperstructureOrder} className="text-slate-800 divide-y divide-slate-100">
+                          <Reorder.Group as="tbody" values={sortedSuperstructureData.map(i => i.name)} onReorder={setSuperstructureOrder} className="text-txt-primary divide-y divide-slate-100">
                             <tr className="bg-transparent/50">
                               <td
                                 colSpan={5}
-                                className="px-6 py-2.5 text-base font-medium uppercase tracking-wider text-slate-700"
+                                className="px-6 py-2.5 text-base font-medium uppercase tracking-wider text-txt-secondary"
                               >
                                 Above-Ground Work (Walls & Roof)
                               </td>
@@ -1689,18 +1691,18 @@ export default function HouseEstimator() {
                               />
                             ))}
                           </Reorder.Group>
-                          <tfoot className="sticky bottom-0 bg-slate-100 border-t-2 border-slate-300 shadow-[0_-4px_6px_-1px_rgba(15,23,42,0.05)]">
+                          <tfoot className="sticky bottom-0 bg-slate-100 border-t-2 border-ui-borderDefault shadow-[0_-4px_6px_-1px_rgba(15,23,42,0.05)]">
                             <tr>
-                              <td className="px-6 py-4 font-extrabold text-slate-800 uppercase tracking-widest text-sm">
+                              <td className="px-6 py-4 font-extrabold text-txt-primary uppercase tracking-widest text-sm">
                                 Total Grey Structure
                               </td>
-                              <td className="px-6 py-4 text-center font-bold text-slate-600">
+                              <td className="px-6 py-4 text-center font-bold text-txt-secondary">
                                 -
                               </td>
-                              <td className="px-6 py-4 text-center font-medium text-slate-700">
+                              <td className="px-6 py-4 text-center font-medium text-txt-secondary">
                                 -
                               </td>
-                              <td className="px-6 py-4 text-left font-medium text-slate-700 hidden md:table-cell">
+                              <td className="px-6 py-4 text-left font-medium text-txt-secondary hidden md:table-cell">
                                 -
                               </td>
                               <td className="px-6 py-4 text-right font-extrabold text-indigo-700 text-lg shadow-inner">
@@ -1795,7 +1797,7 @@ export default function HouseEstimator() {
                          </div>
                       </MaterialSummary>
 
-                      <div className="w-full h-[320px] mt-8 mb-4 border border-slate-100 rounded-[24px] bg-slate-50/30 p-2 sm:p-4 overflow-hidden">
+                      <div className="w-full h-[320px] mt-8 mb-4 border border-slate-100 rounded-2xl bg-slate-50/30 p-2 sm:p-4 overflow-hidden">
                         <StyledChart 
                           data={finishingCostData.map(d => ({ ...d, fill: d.color }))}
                           type="pie"
@@ -1805,41 +1807,41 @@ export default function HouseEstimator() {
                       </div>
 
                       <div className="flex items-center justify-between mt-8 mb-4">
-                        <h3 className="text-lg font-medium text-slate-800 mb-4">
+                        <h3 className="text-lg font-medium text-txt-primary mb-4">
                           Detailed Exact BOQ
                         </h3>
                         <div className="flex items-center gap-3 relative">
                           <div className="relative group/template">
-                            <button className="flex items-center gap-2 bg-slate-50 text-slate-700 px-3 py-1.5 rounded-full hover:bg-slate-100 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+                            <Button className="flex items-center gap-2 bg-slate-50 text-txt-secondary px-3 py-1.5 rounded-full hover:bg-slate-100 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
                               <FolderPlus className="w-4 h-4" />
                               Load Template
                               <ChevronDown className="w-4 h-4" />
-                            </button>
-                            <div className="w-full absolute right-0 top-full mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-lg opacity-0 invisible group-hover/template:opacity-100 group-hover/template:visible transition-all z-20 overflow-hidden">
-                              <button onClick={() => handleLoadTemplate("finishing", "residential")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-sm font-medium transition-colors border-b border-slate-100 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Residential House</button>
-                              <button onClick={() => handleLoadTemplate("finishing", "commercial")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-sm font-medium transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Commercial Office</button>
+                            </Button>
+                            <div className="w-full absolute right-0 top-full mt-1 w-48 bg-surface-default border border-ui-borderSubtle rounded-xl shadow-lg opacity-0 invisible group-hover/template:opacity-100 group-hover/template:visible transition-all z-20 overflow-hidden">
+                              <Button onClick={() => handleLoadTemplate("finishing", "residential")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-txt-secondary hover:text-indigo-700 text-sm font-medium transition-colors border-b border-slate-100 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Residential House</Button>
+                              <Button onClick={() => handleLoadTemplate("finishing", "commercial")} className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-txt-secondary hover:text-indigo-700 text-sm font-medium transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Commercial Office</Button>
                             </div>
                           </div>
                           {selectedItems.size > 0 && (
-                            <button onClick={handleDeleteSelected}
+                            <Button onClick={handleDeleteSelected}
                               className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1.5 rounded-full hover:bg-red-100 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                             >
                               <Trash2 className="w-4 h-4" />
                               Delete Selected ({selectedItems.size})
-                            </button>
+                            </Button>
                           )}
-                          <button
+                          <Button
                             onClick={() => handleExportCSV("finishing")}
                             className="flex items-center gap-2 text-sm bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full font-semibold hover:bg-indigo-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                           >
                             <Download className="w-4 h-4" />
                             Export CSV
-                          </button>
+                          </Button>
                         </div>
                       </div>
-                      <div className="border border-slate-200 rounded-[24px] overflow-y-auto max-h-[400px] bg-white shadow-sm mb-8 relative hide-scrollbar">
+                      <div className="border border-ui-borderSubtle rounded-2xl overflow-y-auto max-h-[400px] bg-surface-default shadow-sm mb-8 relative hide-scrollbar">
                         <table className="boq-table-print-breaks w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
-                          <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
+                          <thead className="bg-slate-100 text-txt-secondary border-b border-ui-borderSubtle uppercase text-sm tracking-wider sticky top-0 z-10 shadow-sm before:content-[''] before:absolute before:inset-0 before:bg-slate-100 before:-z-10">
                             <tr>
                               <th className="px-6 py-4 font-bold">
                                 Material / Item
@@ -1858,7 +1860,7 @@ export default function HouseEstimator() {
                               </th>
                             </tr>
                           </thead>
-                          <Reorder.Group as="tbody" values={sortedFinishingCostData.map(i => i.name)} onReorder={setFinishingOrder} className="text-slate-800 divide-y divide-slate-100">
+                          <Reorder.Group as="tbody" values={sortedFinishingCostData.map(i => i.name)} onReorder={setFinishingOrder} className="text-txt-primary divide-y divide-slate-100">
                             {sortedFinishingCostData.map((item) => (
                               <AnimatedTableRow 
                                 key={item.name} 
@@ -1873,18 +1875,18 @@ export default function HouseEstimator() {
                               />
                             ))}
                           </Reorder.Group>
-                          <tfoot className="sticky bottom-0 bg-slate-100 border-t-2 border-slate-300 shadow-[0_-4px_6px_-1px_rgba(15,23,42,0.05)]">
+                          <tfoot className="sticky bottom-0 bg-slate-100 border-t-2 border-ui-borderDefault shadow-[0_-4px_6px_-1px_rgba(15,23,42,0.05)]">
                             <tr>
-                              <td className="px-6 py-4 font-extrabold text-slate-800 uppercase tracking-widest text-sm">
+                              <td className="px-6 py-4 font-extrabold text-txt-primary uppercase tracking-widest text-sm">
                                 Total Finishing Works
                               </td>
-                              <td className="px-6 py-4 text-center font-bold text-slate-600">
+                              <td className="px-6 py-4 text-center font-bold text-txt-secondary">
                                 -
                               </td>
-                              <td className="px-6 py-4 text-center font-medium text-slate-700">
+                              <td className="px-6 py-4 text-center font-medium text-txt-secondary">
                                 -
                               </td>
-                              <td className="px-6 py-4 text-left font-medium text-slate-700 hidden md:table-cell">
+                              <td className="px-6 py-4 text-left font-medium text-txt-secondary hidden md:table-cell">
                                 -
                               </td>
                               <td className="px-6 py-4 text-right font-extrabold text-indigo-700 text-lg shadow-inner">
@@ -1968,29 +1970,29 @@ export default function HouseEstimator() {
                   {activeTab === "rates" && (
                     <div className="animate-in fade-in slide-in-from-bottom-8 duration-500 h-full flex flex-col text-left">
                       <div className="flex items-center gap-4 mb-6 flex-wrap">
-                        <div className="p-3 bg-indigo-50 text-indigo-600 rounded-[24px] overflow-hidden">
+                        <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl overflow-hidden">
                           <Database className="w-6 h-6" />
                         </div>
                         <div>
-                          <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                          <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                             Configure Material Rates
                           </h2>
-                          <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">
+                          <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">
                             Review market rates and override with custom vendor quotes
                             if needed.
                           </p>
                         </div>
                       </div>
-                      <div className="flex-1 overflow-auto border border-slate-200 rounded-[24px] mb-6">
+                      <div className="flex-1 overflow-auto border border-ui-borderSubtle rounded-2xl mb-6">
                         <table className="boq-table-print-breaks w-full text-sm text-left">
-                          <thead className="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase text-sm tracking-wider sticky top-0 z-10">
+                          <thead className="bg-slate-100 text-txt-secondary border-b border-ui-borderSubtle uppercase text-sm tracking-wider sticky top-0 z-10">
                             <tr>
                               <th className="px-6 py-4 font-bold">Material Item</th>
                               <th className="px-6 py-4 font-bold">Current Market Rate</th>
                               <th className="px-6 py-4 font-bold bg-indigo-50/50 text-indigo-700">Your Custom Rate</th>
                             </tr>
                           </thead>
-                          <tbody className="bg-white divide-y divide-slate-100">
+                          <tbody className="bg-surface-default divide-y divide-slate-100">
                             {(
                               [
                                 { key: "cement", name: "Cement (Per Bag)", color: "bg-stone-500", bg: "bg-stone-50" },
@@ -2003,20 +2005,20 @@ export default function HouseEstimator() {
                               ] as const
                             ).map((item) => (
                               <tr key={item.key} className="hover:bg-transparent/80 transition-colors group">
-                                <td className="px-6 py-4 font-bold text-slate-700">
+                                <td className="px-6 py-4 font-bold text-txt-secondary">
                                   <div className="flex items-center gap-3">
-                                    <div className={`flex items-center justify-center w-8 h-8 rounded-[24px] ${item.bg} group-hover:scale-110 transition-transform`}>
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-2xl ${item.bg} group-hover:scale-110 transition-transform`}>
                                       <div className={`w-3 h-3 rounded-full ${item.color} shadow-sm`}></div>
                                     </div>
                                     <span>{item.name}</span>
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 font-bold text-slate-700">
+                                <td className="px-6 py-4 font-bold text-txt-secondary">
                                   {formatCurrency(item.key === "bricks" ? marketRates[item.key] * 1000 : marketRates[item.key])}
                                 </td>
                                 <td className="px-6 py-3 bg-indigo-50/30">
                                   <div className="relative flex items-center">
-                                    <span className="absolute left-3 text-slate-700 font-bold mb-0.5">
+                                    <span className="absolute left-3 text-txt-secondary font-bold mb-0.5">
                                       {settings.currency === "PKR" ? "Rs" : "$"}
                                     </span>
                                     <><label htmlFor="a11y-input-269" className="sr-only">Default</label>
@@ -2024,7 +2026,7 @@ export default function HouseEstimator() {
                                       type="number" inputMode="decimal"
                                       min="0"
                                       step="any"
-                                      className={`w-full bg-white border ${customRates[item.key] !== undefined ? "border-indigo-300 ring-2 ring-indigo-500/20 text-indigo-700 font-bold" : "border-slate-200 text-slate-800"} rounded-[24px] py-2 pl-10 pr-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all`}
+                                      className={`w-full bg-surface-default border ${customRates[item.key] !== undefined ? "border-indigo-300 ring-2 ring-indigo-500/20 text-indigo-700 font-bold" : "border-ui-borderSubtle text-txt-primary"} rounded-2xl py-2 pl-10 pr-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all`}
                                       placeholder="Default"
                                       value={customRates[item.key] !== undefined ? (item.key === "bricks" ? customRates[item.key]! * 1000 : customRates[item.key]) : ""}
                                       onChange={(e) => {
@@ -2044,14 +2046,14 @@ export default function HouseEstimator() {
                         </table>
                       </div>
                       <div className="flex flex-col sm:flex-row items-center justify-between mt-auto gap-4 pt-4 border-t border-slate-100">
-                        <button
+                        <Button
                           onClick={() => {
                             if(window.confirm("Are you sure you want to reset all inputs? This action cannot be undone.")) resetCustomRates();
                           }}
-                          className="flex items-center gap-2 text-slate-700 font-bold hover:text-slate-800 px-4 py-2 rounded-full hover:bg-slate-100 transition-colors w-full sm:w-auto justify-center active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                          className="flex items-center gap-2 text-txt-secondary font-bold hover:text-txt-primary px-4 py-2 rounded-full hover:bg-slate-100 transition-colors w-full sm:w-auto justify-center active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                         >
                           <RotateCcw className="w-4 h-4" /> Reset Defaults
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   )}
@@ -2069,24 +2071,24 @@ export default function HouseEstimator() {
             <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 relative hidden lg:block">
               <div className="sticky top-6 z-10 bg-[var(--bg-card)]/50 backdrop-blur-2xl border border-[var(--border-color)] rounded-[2.5rem] p-4 sm:p-6 lg:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col items-start gap-8">
               <div className="flex flex-col gap-4">
-                <div className="p-4 bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 border border-slate-100 rounded-[24px] overflow-hidden">
-                  <Calculator className="w-8 h-8 text-slate-600" />
+                <div className="p-4 bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border border-slate-100 rounded-2xl overflow-hidden">
+                  <Calculator className="w-8 h-8 text-txt-secondary" />
                 </div>
                 <div>
-                  <h3 className="uppercase st mb-1.5 text-sm text-lg font-medium text-slate-800 mb-4">Total Estimated Cost</h3>
-                  <p className="text-2xl sm:text-2xl break-all tabular-nums tracking-tighter text-slate-900 dark:text-white drop-shadow-sm text-base font-normal text-slate-600 leading-relaxed">{formatCurrency(currentTotalCost)}</p>
-                  <p className="mt-2 max-w-[200px] text-base font-normal text-slate-600 leading-relaxed">Rates based on current regional market — verify with local suppliers.</p>
+                  <h3 className="uppercase st mb-1.5 text-sm text-lg font-medium text-txt-primary mb-4">Total Estimated Cost</h3>
+                  <p className="text-2xl sm:text-2xl break-all tabular-nums tracking-tighter text-txt-primary dark:text-white drop-shadow-sm text-base font-normal text-txt-secondary leading-relaxed">{formatCurrency(currentTotalCost)}</p>
+                  <p className="mt-2 max-w-[200px] text-base font-normal text-txt-secondary leading-relaxed">Rates based on current regional market — verify with local suppliers.</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4 mt-6 w-full pt-6 border-t border-[var(--border-color)]">
                 <div>
-                  <div className="text-slate-500 text-base font-medium uppercase tracking-wider text-sm mb-0.5">Basic Structure</div>
-                  <div className="text-lg font-bold tabular-nums text-slate-900 dark:text-white">{formatCurrency(filteredTotalGrey)}</div>
+                  <div className="text-txt-tertiary text-base font-medium uppercase tracking-wider text-sm mb-0.5">Basic Structure</div>
+                  <div className="text-lg font-bold tabular-nums text-txt-primary dark:text-white">{formatCurrency(filteredTotalGrey)}</div>
                 </div>
                 <div className="w-px h-8 bg-border-color self-center hidden sm:block"></div>
                 <div>
-                  <div className="text-slate-500 text-base font-medium uppercase tracking-wider text-sm mb-0.5">Finishings</div>
-                  <div className="text-lg font-bold tabular-nums text-slate-900 dark:text-white">{formatCurrency(filteredTotalFinishing)}</div>
+                  <div className="text-txt-tertiary text-base font-medium uppercase tracking-wider text-sm mb-0.5">Finishings</div>
+                  <div className="text-lg font-bold tabular-nums text-txt-primary dark:text-white">{formatCurrency(filteredTotalFinishing)}</div>
                 </div>
               </div>
             </div>
@@ -2105,30 +2107,30 @@ export default function HouseEstimator() {
       {/* Room Customization Modal */}
       {isRoomModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#F5F5F7] backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl border border-slate-100 flex flex-col max-h-[90vh] overflow-hidden">
+          <div className="bg-surface-default rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-100 flex flex-col max-h-[90vh] overflow-hidden">
             <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
               <div>
-                <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">Advanced Room Specs</h2>
-                <p className="text-base font-normal text-slate-600 leading-relaxed">Configure exact dimensions and features per room</p>
+                <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">Advanced Room Specs</h2>
+                <p className="text-base font-normal text-txt-secondary leading-relaxed">Configure exact dimensions and features per room</p>
               </div>
-              <button onClick={() => setIsRoomModalOpen(false)} className="w-full p-2 bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
+              <Button onClick={() => setIsRoomModalOpen(false)} className="w-full p-2 bg-surface-default border border-ui-borderSubtle text-txt-tertiary hover:bg-slate-100 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden">
                 <X className="w-5 h-5" />
-              </button>
+              </Button>
             </div>
             
             <div className="flex border-b border-slate-100 overflow-x-auto no-scrollbar">
                {(["bedroom", "washroom", "kitchen", "living", "basement"] as const).map(tab => (
-                 <button
+                 <Button
                    key={tab}
                    onClick={() => setActiveRoomTab(tab)}
                    className={`px-6 py-4 text-base font-medium uppercase tracking-wider whitespace-nowrap border-b-2 transition-colors ${
                      activeRoomTab === tab 
                      ? "border-indigo-600 text-indigo-700 bg-indigo-50/50" 
-                     : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                     : "border-transparent text-txt-tertiary hover:text-txt-secondary hover:bg-slate-50"
                    }`}
                  >
                    {tab === "living" ? "Drawing/Living" : tab}
-                 </button>
+                 </Button>
                ))}
             </div>
 
@@ -2138,24 +2140,24 @@ export default function HouseEstimator() {
                 {activeRoomTab === "bedroom" && (
                   <>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Typical Length (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Typical Length (ft)</label>
                        <><label htmlFor="a11y-input-270" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-270" type="number" inputMode="decimal" value={roomConfigs.bedroom.length} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-270" type="number" inputMode="decimal" value={roomConfigs.bedroom.length} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Typical Width (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Typical Width (ft)</label>
                        <><label htmlFor="a11y-input-271" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-271" type="number" inputMode="decimal" value={roomConfigs.bedroom.width} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-271" type="number" inputMode="decimal" value={roomConfigs.bedroom.width} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Ceiling Height (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Ceiling Height (ft)</label>
                        <><label htmlFor="a11y-input-272" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-272" type="number" inputMode="decimal" value={roomConfigs.bedroom.height} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, height: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-272" type="number" inputMode="decimal" value={roomConfigs.bedroom.height} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, height: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Wardrobe Length (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Wardrobe Length (ft)</label>
                        <><label htmlFor="a11y-input-273" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-273" type="number" inputMode="decimal" value={roomConfigs.bedroom.wardrobeLength} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, wardrobeLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-273" type="number" inputMode="decimal" value={roomConfigs.bedroom.wardrobeLength} onChange={e => setRoomConfigs(p => ({...p, bedroom: {...p.bedroom, wardrobeLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                   </>
                 )}
@@ -2163,34 +2165,34 @@ export default function HouseEstimator() {
                 {activeRoomTab === "washroom" && (
                   <>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Length (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Length (ft)</label>
                        <><label htmlFor="a11y-input-274" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-274" type="number" inputMode="decimal" value={roomConfigs.washroom.length} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-274" type="number" inputMode="decimal" value={roomConfigs.washroom.length} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Width (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Width (ft)</label>
                        <><label htmlFor="a11y-input-275" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-275" type="number" inputMode="decimal" value={roomConfigs.washroom.width} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-275" type="number" inputMode="decimal" value={roomConfigs.washroom.width} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Commode / WC Type</label>
-                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.wcType} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, wcType: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Commode / WC Type</label>
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.wcType} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, wcType: e.target.value}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Floor Mounted (Asian)</option>
                          <option>Floor Mounted (Western)</option>
                          <option>Wall Hung (Concealed)</option>
                        </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Shower Setup</label>
-                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.showerSetup} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, showerSetup: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Shower Setup</label>
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.showerSetup} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, showerSetup: e.target.value}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Standard Mixer</option>
                          <option>Glass Enclosure</option>
                          <option>Jacuzzi Tub</option>
                        </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Vanity / Basin</label>
-                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.vanity} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, vanity: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Vanity / Basin</label>
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.washroom.vanity} onChange={e => setRoomConfigs(p => ({...p, washroom: {...p.washroom, vanity: e.target.value}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Standard Ceramic</option>
                          <option>Custom PVC Vanity</option>
                          <option>Corian Marble Top</option>
@@ -2202,31 +2204,31 @@ export default function HouseEstimator() {
                 {activeRoomTab === "kitchen" && (
                   <>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Length (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Length (ft)</label>
                        <><label htmlFor="a11y-input-276" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-276" type="number" inputMode="decimal" value={roomConfigs.kitchen.length} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-276" type="number" inputMode="decimal" value={roomConfigs.kitchen.length} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Width (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Width (ft)</label>
                        <><label htmlFor="a11y-input-277" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-277" type="number" inputMode="decimal" value={roomConfigs.kitchen.width} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-277" type="number" inputMode="decimal" value={roomConfigs.kitchen.width} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Countertop (Length ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Countertop (Length ft)</label>
                        <><label htmlFor="a11y-input-278" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-278" type="number" inputMode="decimal" value={roomConfigs.kitchen.counterLength} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, counterLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-278" type="number" inputMode="decimal" value={roomConfigs.kitchen.counterLength} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, counterLength: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Cabinets Material</label>
-                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.kitchen.cabinets} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, cabinets: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Cabinets Material</label>
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.kitchen.cabinets} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, cabinets: e.target.value}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Lasani Wood</option>
                          <option>UV/Acrylic</option>
                          <option>Solid Ash/Oak</option>
                        </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Backsplash</label>
-                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.kitchen.backsplash} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, backsplash: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Backsplash</label>
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.kitchen.backsplash} onChange={e => setRoomConfigs(p => ({...p, kitchen: {...p.kitchen, backsplash: e.target.value}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Ceramic Tiles</option>
                          <option>Glass/Mosaic</option>
                          <option>Corian Full Wall</option>
@@ -2238,27 +2240,27 @@ export default function HouseEstimator() {
                 {activeRoomTab === "living" && (
                   <>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Length (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Length (ft)</label>
                        <><label htmlFor="a11y-input-279" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-279" type="number" inputMode="decimal" value={roomConfigs.livingRoom.length} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-279" type="number" inputMode="decimal" value={roomConfigs.livingRoom.length} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, length: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Width (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Width (ft)</label>
                        <><label htmlFor="a11y-input-280" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-280" type="number" inputMode="decimal" value={roomConfigs.livingRoom.width} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-280" type="number" inputMode="decimal" value={roomConfigs.livingRoom.width} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, width: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Feature Wall Setup</label>
-                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.livingRoom.featureWall} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, featureWall: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Feature Wall Setup</label>
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.livingRoom.featureWall} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, featureWall: e.target.value}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>None</option>
                          <option>Yes (Wallpaper/Paint)</option>
                          <option>Yes (Wood Paneling / Marble)</option>
                        </motion.select>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Chandelier Points</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Chandelier Points</label>
                        <><label htmlFor="a11y-input-281" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-281" type="number" inputMode="decimal" value={roomConfigs.livingRoom.chandelierPoints} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, chandelierPoints: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-281" type="number" inputMode="decimal" value={roomConfigs.livingRoom.chandelierPoints} onChange={e => setRoomConfigs(p => ({...p, livingRoom: {...p.livingRoom, chandelierPoints: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                   </>
                 )}
@@ -2266,13 +2268,13 @@ export default function HouseEstimator() {
                 {activeRoomTab === "basement" && (
                   <>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Excavation Depth (ft)</label>
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Excavation Depth (ft)</label>
                        <><label htmlFor="a11y-input-282" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-282" type="number" inputMode="decimal" value={roomConfigs.basement.depth} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, depth: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-282" type="number" inputMode="decimal" value={roomConfigs.basement.depth} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, depth: Number(e.target.value)}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none" /></>
                     </div>
                     <div className="p-4 calc-input flex flex-col gap-2">
-                       <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Retaining Wall Spec</label>
-                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.basement.retainingWall} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, retainingWall: e.target.value}}))} className="w-full bg-slate-50 border border-slate-200 rounded-[24px] px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
+                       <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Retaining Wall Spec</label>
+                       <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} value={roomConfigs.basement.retainingWall} onChange={e => setRoomConfigs(p => ({...p, basement: {...p.basement, retainingWall: e.target.value}}))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 focus:outline-none overflow-hidden">
                          <option>Standard Brick 13.5-inch</option>
                          <option>RCC 9-Inch</option>
                          <option>RCC 12-Inch Heavy</option>
@@ -2284,17 +2286,17 @@ export default function HouseEstimator() {
               </div>
             </div>
             
-            <div className="p-4 sm:p-6 border-t border-slate-100 bg-white">
-               <button onClick={() => setIsRoomModalOpen(false)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-full transition-all shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] active:scale-95 flex justify-center items-center gap-2 hover:-translate-y-0.5">
+            <div className="p-4 sm:p-6 border-t border-slate-100 bg-surface-default">
+               <Button onClick={() => setIsRoomModalOpen(false)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-full transition-all shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] active:scale-95 flex justify-center items-center gap-2 hover:-translate-y-0.5">
                  <CheckCircle2 className="w-5 h-5" /> Save Detail Configurations
-               </button>
+               </Button>
             </div>
           </div>
         </div>
       )}
 
       <section className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 my-12 px-4 md:px-0" aria-label="Popular Estimates">
-        <h3 className="md: text-slate-900 dark:text-white text-center mb-6 text-lg font-medium text-slate-800 mb-4">
+        <h3 className="md: text-txt-primary dark:text-white text-center mb-6 text-lg font-medium text-txt-primary mb-4">
           Popular Construction Estimates
         </h3>
         <div className="flex flex-wrap justify-center gap-3">
@@ -2308,7 +2310,7 @@ export default function HouseEstimator() {
             <a
               key={`${route.size}-${route.unit}-${route.city}`}
               href={`/estimate/${route.size}-${route.unit}-house-construction-cost-${route.city}`}
-              className="px-4 py-2 bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-full hover:bg-slate-50 hover:shadow-sm transition-all"
+              className="px-4 py-2 bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full hover:bg-slate-50 hover:shadow-sm transition-all"
             >
               {route.size} {route.unit} House Cost in {route.city}
             </a>

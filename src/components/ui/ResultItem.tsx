@@ -1,8 +1,10 @@
+import { Button } from './/Button';
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HelpCircle, AlertTriangle, CheckCircle, Info } from "lucide-react";
 import { useCountUp } from "../../hooks/useCountUp";
 import { useSettings } from "../../context/SettingsContext";
+
 
 export interface ResultItemProps {
   label: string;
@@ -134,27 +136,27 @@ export function ResultItem({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-      className={`p-4 rounded-[24px] bg-white  border border-slate-200   shadow-sm hover:shadow-md transition-all duration-300 w-full mb-3`}
+      className={`p-4 rounded-2xl bg-surface-default  border border-ui-borderSubtle   shadow-sm hover:shadow-md transition-all duration-300 w-full mb-3`}
     >
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 relative z-10 w-full">
         {/* Left side labels */}
         <div className="flex flex-col flex-1 pr-2">
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-bold text-sm tracking-tight text-slate-700">
+            <span className="font-bold text-sm tracking-tight text-txt-secondary">
               {label}
             </span>
             {explanation && (
-              <button aria-label="HelpCircle"
+              <Button aria-label="HelpCircle"
                 onClick={() => setExpanded(!expanded)}
-                className="opacity-70 hover:opacity-100 transition-opacity text-slate-500"
+                className="opacity-70 hover:opacity-100 transition-opacity text-txt-tertiary"
               >
                 <HelpCircle className="w-3.5 h-3.5" />
-              </button>
+              </Button>
             )}
           </div>
 
           {comparisonText && (
-            <div className="flex items-center gap-1.5 mt-1.5 text-slate-500">
+            <div className="flex items-center gap-1.5 mt-1.5 text-txt-tertiary">
               {/* Mini sparkline visualization */}
               <div className="flex items-end gap-0.5 h-3 opacity-70">
                 <div className="w-1 bg-current h-1/3 rounded-full" />
@@ -176,14 +178,14 @@ export function ResultItem({
             >
               {displayValueStr}
             </span>
-            <span className="text-sm font-bold opacity-80 text-slate-600">
+            <span className="text-sm font-bold opacity-80 text-txt-secondary">
               {displayUnit}
             </span>
           </div>
 
           {/* Secondary unit conversion */}
           {secondaryValue !== undefined && secondaryUnit && (
-            <div className="text-[11px] font-bold text-slate-500 tabular-nums">
+            <div className="text-[11px] font-bold text-txt-tertiary tabular-nums">
               ={" "}
               {typeof secondaryValue === "number"
                 ? secondaryValue.toLocaleString("en-US", {
@@ -213,7 +215,7 @@ export function ResultItem({
             className="overflow-hidden"
           >
             <div className="mt-3 pt-3 border-t border-slate-100">
-              <div className="flex items-start gap-2 text-slate-600">
+              <div className="flex items-start gap-2 text-txt-secondary">
                 <Info className="w-4 h-4 mt-0.5 opacity-80 text-[#6B46C1]" />
                 <p className="text-sm opacity-90 leading-relaxed font-medium">
                   {explanation}

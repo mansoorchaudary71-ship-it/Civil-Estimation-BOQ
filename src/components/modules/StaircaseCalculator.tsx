@@ -43,19 +43,19 @@ const StaircaseVisualizer = ({ rise, tread, numSteps, uLen }: { rise: number, tr
   d += `L 0 ${viewBoxH + waistThickness} Z`;
 
   return (
-    <div className="w-full bg-slate-50 dark:bg-slate-800/40 rounded-[24px] border border-slate-200 dark:border-slate-700/50 p-4 sm:p-6 flex flex-col relative overflow-hidden mt-6 shadow-sm group">
+    <div className="w-full bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-ui-borderSubtle dark:border-slate-700/50 p-4 sm:p-6 flex flex-col relative overflow-hidden mt-6 shadow-sm group">
         <div className="flex items-center justify-between mb-4">
-           <h4 className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
+           <h4 className="text-[11px] font-bold text-txt-tertiary dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
               <Ruler className="w-4 h-4" />
               Live Layout Schematic
            </h4>
            <div className="flex gap-4 flex-wrap">
-              <span className="text-[11px] font-semibold text-slate-500"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalH.toFixed(2)}{uLen}</span> Rise</span>
-              <span className="text-[11px] font-semibold text-slate-500"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalW.toFixed(2)}{uLen}</span> Run</span>
+              <span className="text-[11px] font-semibold text-txt-tertiary"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalH.toFixed(2)}{uLen}</span> Rise</span>
+              <span className="text-[11px] font-semibold text-txt-tertiary"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalW.toFixed(2)}{uLen}</span> Run</span>
            </div>
         </div>
         
-        <div className="w-full aspect-[4/3] sm:aspect-[16/9] bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 relative flex items-center justify-center p-4 sm:p-10 overflow-hidden shadow-inner">
+        <div className="w-full aspect-[4/3] sm:aspect-[16/9] bg-surface-default dark:bg-slate-900/60 rounded-2xl border border-ui-borderSubtle/50 dark:border-slate-700/50 relative flex items-center justify-center p-4 sm:p-10 overflow-hidden shadow-inner">
            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{ backgroundImage: "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
            
            <svg viewBox={`-30 -30 ${viewBoxW + 60} ${viewBoxH + 60 + waistThickness}`} className="w-full h-full overflow-visible drop-shadow-xl z-10 transition-all duration-300 transform group-hover:scale-[1.02]">
@@ -376,7 +376,7 @@ export default function StaircaseCalculator() {
             setLandingWidth(stairWidth);
           }
         }}
-        className="px-6 py-3 bg-white border border-slate-200/60 text-slate-700 text-base font-medium tracking-wide rounded-full shadow-[0_2px_14px_rgba(0,0,0,0.02)] hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/20 transition-all cursor-pointer w-full sm:w-auto min-w-[200px] overflow-hidden"
+        className="px-6 py-3 bg-surface-default border border-ui-borderSubtle/60 text-txt-secondary text-base font-medium tracking-wide rounded-full shadow-[0_2px_14px_rgba(0,0,0,0.02)] hover:border-ui-borderDefault focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/20 transition-all cursor-pointer w-full sm:w-auto min-w-[200px] overflow-hidden"
       >
         <option value="Straight">Straight Flight</option>
         <option value="L-Shape">L-Shape (Quarter Turn)</option>
@@ -389,59 +389,59 @@ export default function StaircaseCalculator() {
     <div className="space-y-6 mt-4">
       <SEO title="Staircase Calculator" description="Calculate concrete and steel for stairs." />
       {portalTarget && createPortal(dropdownElement, portalTarget)}
-      <div className="w-full bg-slate-50/50 rounded-[32px] overflow-hidden">
+      <div className="w-full bg-slate-50/50 rounded-2xl overflow-hidden">
         <div className="p-6 md:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full items-start responsive-tool-grid">
             <div className="space-y-6">
               {stairShape === "Straight" ? (
                 <div className="grid grid-cols-2 gap-4">
                   <InputGroup label="Total Steps">
-                    <NumberInput value={numSteps} onChange={(val) => setNumSteps(val.toString())} className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                    <NumberInput value={numSteps} onChange={(val) => setNumSteps(val.toString())} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                   </InputGroup>
                   <InputGroup label={`Stair Width (${uLen})`}>
-                    <NumberInput value={stairWidth} onChange={(val) => setStairWidth(val.toString())} placeholder="e.g. 1.2" step="0.1" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                    <NumberInput value={stairWidth} onChange={(val) => setStairWidth(val.toString())} placeholder="e.g. 1.2" step="0.1" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                   </InputGroup>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   <InputGroup label="Flight 1 Steps">
-                    <NumberInput value={flight1Steps} onChange={(val) => setFlight1Steps(val.toString())} className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                    <NumberInput value={flight1Steps} onChange={(val) => setFlight1Steps(val.toString())} className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                   </InputGroup>
                   <InputGroup label="Flight 2 Steps">
-                    <NumberInput value={flight2Steps} onChange={(val) => setFlight2Steps(val.toString())} className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                    <NumberInput value={flight2Steps} onChange={(val) => setFlight2Steps(val.toString())} className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                   </InputGroup>
                   <InputGroup label={`Stair Width (${uLen})`}>
-                    <NumberInput value={stairWidth} onChange={(val) => setStairWidth(val.toString())} placeholder="e.g. 1.2" step="0.1" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                    <NumberInput value={stairWidth} onChange={(val) => setStairWidth(val.toString())} placeholder="e.g. 1.2" step="0.1" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                   </InputGroup>
                 </div>
               )}
               
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <InputGroup label={`Rise (${uLen})`}>
-                  <NumberInput value={rise} onChange={(val) => setRise(val.toString())} placeholder="e.g. 0.15" step="0.01" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                  <NumberInput value={rise} onChange={(val) => setRise(val.toString())} placeholder="e.g. 0.15" step="0.01" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                 </InputGroup>
                 <InputGroup label={`Tread (${uLen})`}>
-                  <NumberInput value={tread} onChange={(val) => setTread(val.toString())} placeholder="e.g. 0.25" step="0.01" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                  <NumberInput value={tread} onChange={(val) => setTread(val.toString())} placeholder="e.g. 0.25" step="0.01" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                 </InputGroup>
                 <InputGroup label={`Waist Thick (${uLen})`}>
-                  <NumberInput value={waistThickness} onChange={(val) => setWaistThickness(val.toString())} placeholder="e.g. 0.15" step="0.01" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                  <NumberInput value={waistThickness} onChange={(val) => setWaistThickness(val.toString())} placeholder="e.g. 0.15" step="0.01" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                 </InputGroup>
               </div>
 
               {stairShape !== "Straight" && (
                 <div className="grid grid-cols-2 gap-4">
                   <InputGroup label={`Landing Length (${uLen})`}>
-                    <NumberInput value={landingLength} onChange={(val) => setLandingLength(val.toString())} placeholder="e.g. 1.2" step="0.1" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                    <NumberInput value={landingLength} onChange={(val) => setLandingLength(val.toString())} placeholder="e.g. 1.2" step="0.1" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                   </InputGroup>
                   <InputGroup label={`Landing Width (${uLen})`}>
-                    <NumberInput value={landingWidth} onChange={(val) => setLandingWidth(val.toString())} placeholder="e.g. 2.4" step="0.1" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                    <NumberInput value={landingWidth} onChange={(val) => setLandingWidth(val.toString())} placeholder="e.g. 2.4" step="0.1" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                   </InputGroup>
                 </div>
               )}
               
               <div className="grid grid-cols-2 gap-4">
                 <InputGroup label={<span className="flex items-center">Mix Ratio <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions for ordinary concrete (Table 9)." /></span>}>
-                  <select value={concreteGrade} onChange={e => setConcreteGrade(e.target.value)} className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] px-5 py-3.5 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 hover:border-indigo-300 shadow-sm transition-all overflow-hidden">
+                  <select value={concreteGrade} onChange={e => setConcreteGrade(e.target.value)} className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl px-5 py-3.5 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 hover:border-indigo-300 shadow-sm transition-all overflow-hidden">
                     <option value="M10 (1:3:6)">M10 (1:3:6)</option>
                     <option value="M15 (1:2:4)">M15 (1:2:4)</option>
                     <option value="M20 (1:1.5:3)">M20 (1:1.5:3)</option>
@@ -449,12 +449,12 @@ export default function StaircaseCalculator() {
                   </select>
                 </InputGroup>
                 <InputGroup label="Wastage (%)">
-                  <NumberInput value={wastage} onChange={(val) => setWastage(val.toString())} placeholder="e.g. 5" className="w-full bg-white border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-[24px] font-semibold shadow-sm transition-all overflow-hidden" />
+                  <NumberInput value={wastage} onChange={(val) => setWastage(val.toString())} placeholder="e.g. 5" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-sm transition-all overflow-hidden" />
                 </InputGroup>
               </div>
               
               {warningText && (
-                <div className="p-4 bg-amber-50 border border-amber-200 text-amber-700 rounded-[24px] text-base font-normal flex items-start gap-3 overflow-hidden">
+                <div className="p-4 bg-amber-50 border border-amber-200 text-amber-700 rounded-2xl text-base font-normal flex items-start gap-3 overflow-hidden">
                   <Info className="w-5 h-5 shrink-0 mt-0.5" />
                   <p>{warningText}</p>
                 </div>

@@ -1,8 +1,10 @@
+import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { Calculator, Copy, RotateCw, RefreshCw } from "lucide-react";
 import { useGlobalSettings } from "../../context/SettingsContext";
 import { CalculationHistory } from '../ui/CalculationHistory';
 import { CodeTooltip } from "../ui/CodeTooltip";
+
 
 export default function CageEstimator() {
   const { currentUnit } = useGlobalSettings();
@@ -78,112 +80,112 @@ export default function CageEstimator() {
   return (
     <div className="animate-in fade-in duration-300">
       <div className="mb-8">
-        <h2 className="tabular-nums flex items-center gap-2 mb-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+        <h2 className="tabular-nums flex items-center gap-2 mb-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
           <RotateCw className="w-6 h-6 text-emerald-500" />
           Cage / Spiral Estimator
         </h2>
-        <p className="text-base font-normal text-slate-600 leading-relaxed">
+        <p className="text-base font-normal text-txt-secondary leading-relaxed">
           Calculate quantities for helical spirals or circular hoops used in piles and columns.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
         {/* Input Form */}
-        <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
-          <h3 className="mb-6 flex items-center gap-2 text-lg font-medium text-slate-800 mb-4">
+        <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+          <h3 className="mb-6 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
             <Calculator className="w-5 h-5 text-emerald-500" />
             Cage Parameters
           </h3>
           
           <div className="space-y-4">
-             <div className="flex bg-slate-100 p-1 rounded-[24px] w-full overflow-hidden">
-              <button
+             <div className="flex bg-slate-100 p-1 rounded-2xl w-full overflow-hidden">
+              <Button
                 onClick={() => setCageType("spiral")}
-                className={`flex-1 py-3 rounded-[24px] text-base font-medium transition-all ${
+                className={`flex-1 py-3 rounded-2xl text-base font-medium transition-all ${
                   cageType === "spiral"
-                    ? "bg-white  text-emerald-600 shadow-sm"
-                    : "text-slate-500 hover:text-slate-700"
+                    ? "bg-surface-default  text-emerald-600 shadow-sm"
+                    : "text-txt-tertiary hover:text-txt-secondary"
                 }`}
               >
                 Continuous Spiral
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setCageType("hoop")}
-                className={`flex-1 py-3 rounded-[24px] text-base font-medium transition-all ${
+                className={`flex-1 py-3 rounded-2xl text-base font-medium transition-all ${
                   cageType === "hoop"
-                    ? "bg-white  text-emerald-600 shadow-sm"
-                    : "text-slate-500 hover:text-slate-700"
+                    ? "bg-surface-default  text-emerald-600 shadow-sm"
+                    : "text-txt-tertiary hover:text-txt-secondary"
                 }`}
               >
                 Circular Hoops / Rings
-              </button>
+              </Button>
             </div>
 
             <div className="grid grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Pile/Col Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
+                <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center gap-1">Pile/Col Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                 <><label htmlFor="a11y-input-132" className="sr-only">Input</label>
 <input id="a11y-input-132"
                   type="number" inputMode="decimal"
                   value={pileDiameter}
                   onChange={(e) => setPileDiameter(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
                 /></>
               </div>
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block">Length ({isMetric ? "m" : "ft"})</label>
+                <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Length ({isMetric ? "m" : "ft"})</label>
                 <><label htmlFor="a11y-input-133" className="sr-only">Input</label>
 <input id="a11y-input-133"
                   type="number" inputMode="decimal"
                   value={pileLength}
                   onChange={(e) => setPileLength(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
                 /></>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center">Clear Cover (mm) <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
+                <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center">Clear Cover (mm) <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
                 <><label htmlFor="a11y-input-134" className="sr-only">Input</label>
 <input id="a11y-input-134"
                   type="number" inputMode="decimal"
                   value={clearCover}
                   onChange={(e) => setClearCover(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
                 /></>
               </div>
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
+                <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                 <><label htmlFor="a11y-input-135" className="sr-only">Input</label>
 <input id="a11y-input-135"
                   type="number" inputMode="decimal"
                   value={barDiameter}
                   onChange={(e) => setBarDiameter(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
                 /></>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Pitch/Spacing (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span></label>
+                <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center gap-1">Pitch/Spacing (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span></label>
                 <><label htmlFor="a11y-input-136" className="sr-only">Input</label>
 <input id="a11y-input-136"
                   type="number" inputMode="decimal"
                   value={pitch}
                   onChange={(e) => setPitch(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
                 /></>
               </div>
               <div>
-                <label className="uppercase tracking-widest text-sm font-medium text-slate-700 mb-1 block"><span className="flex items-center gap-1">Lap Length (x Dia) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
+                <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center gap-1">Lap Length (x Dia) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                 <><label htmlFor="a11y-input-137" className="sr-only">Input</label>
 <input id="a11y-input-137"
                   type="number" inputMode="decimal"
                   value={lapLength}
                   onChange={(e) => setLapLength(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
                 /></>
               </div>
             </div>
@@ -193,9 +195,9 @@ export default function CageEstimator() {
 
         {/* Results */}
         <div className="bg-slate-50 space-y-6">
-           <div className="bg-emerald-600 rounded-[24px] p-4 sm:p-6 text-slate-900 shadow-lg relative overflow-hidden">
+           <div className="bg-emerald-600 rounded-2xl p-4 sm:p-6 text-txt-primary shadow-lg relative overflow-hidden">
              <RefreshCw className="absolute -right-6 -bottom-6 w-32 h-32 text-emerald-500 opacity-20" />
-              <h3 className="text-emerald-100 uppercase st mb-1 relative z-10 text-lg font-medium text-slate-800 mb-4">Total Rebar Weight</h3>
+              <h3 className="text-emerald-100 uppercase st mb-1 relative z-10 text-lg font-medium text-txt-primary mb-4">Total Rebar Weight</h3>
               <div className="flex items-end gap-2 relative z-10">
                 <span className="text-[clamp(1.75rem,5vw,2.5rem)] break-all font-semibold tabular-nums tracking-tight tracking-tight">{results ? results.totalWeight : "0.00"}</span>
                 <span className="text-xl text-emerald-200 mb-1 font-bold">kg</span>
@@ -203,32 +205,32 @@ export default function CageEstimator() {
            </div>
 
            {results && (
-             <div className="w-full bg-white rounded-[24px] p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden">
-                <h3 className="tabular-nums uppercase st mb-4 text-lg font-medium text-slate-800">Detailed Breakdown</h3>
+             <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+                <h3 className="tabular-nums uppercase st mb-4 text-lg font-medium text-txt-primary">Detailed Breakdown</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <span className="text-slate-600 font-medium">Core/Mean Dia</span>
-                    <span className="font-bold text-slate-900">{results.coreDiameter} mm</span>
+                    <span className="text-txt-secondary font-medium">Core/Mean Dia</span>
+                    <span className="font-bold text-txt-primary">{results.coreDiameter} mm</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <span className="text-slate-600 font-medium">{cageType === "spiral" ? "Loop Length" : "Ring Length"}</span>
-                    <span className="font-bold text-slate-900">{results.loopLength} m</span>
+                    <span className="text-txt-secondary font-medium">{cageType === "spiral" ? "Loop Length" : "Ring Length"}</span>
+                    <span className="font-bold text-txt-primary">{results.loopLength} m</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <span className="text-slate-600 font-medium">No. of Loops/Rings</span>
-                    <span className="font-bold text-slate-900">{results.noOfPitch} nos</span>
+                    <span className="text-txt-secondary font-medium">No. of Loops/Rings</span>
+                    <span className="font-bold text-txt-primary">{results.noOfPitch} nos</span>
                   </div>
                    <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <span className="text-slate-600 font-medium">Lap Allowance</span>
-                    <span className="font-bold text-slate-900">{results.lapAdjustment} m (x{results.totalLaps})</span>
+                    <span className="text-txt-secondary font-medium">Lap Allowance</span>
+                    <span className="font-bold text-txt-primary">{results.lapAdjustment} m (x{results.totalLaps})</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <span className="text-slate-600 font-medium">Total Cut Length</span>
-                    <span className="font-bold text-slate-900">{results.totalLength} m</span>
+                    <span className="text-txt-secondary font-medium">Total Cut Length</span>
+                    <span className="font-bold text-txt-primary">{results.totalLength} m</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-600 font-medium">Unit Weight</span>
-                    <span className="font-bold text-slate-900">{results.unitWeight} kg/m</span>
+                    <span className="text-txt-secondary font-medium">Unit Weight</span>
+                    <span className="font-bold text-txt-primary">{results.unitWeight} kg/m</span>
                   </div>
                 </div>
              </div>

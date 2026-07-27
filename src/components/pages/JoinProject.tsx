@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -5,6 +6,7 @@ import { db, auth, handleFirestoreError, OperationType } from '../../lib/firebas
 import { onAuthStateChanged } from 'firebase/auth';
 import TopNavbar from '../TopNavbar';
 import { Users, CheckCircle, XCircle } from 'lucide-react';
+
 
 export default function JoinProject() {
   const { projectId, shareToken } = useParams();
@@ -81,61 +83,61 @@ export default function JoinProject() {
     <div className="min-h-screen bg-slate-50 flex flex-col">
       <TopNavbar />
       <main className="flex-1 max-w-lg w-full mx-auto px-4 py-20 flex flex-col items-center justify-center">
-        <div className="w-full bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+        <div className="w-full bg-surface-default p-8 rounded-2xl border border-ui-borderSubtle shadow-sm text-center">
           
           {status === 'loading' && (
             <div className="py-8 flex flex-col items-center">
               <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
-              <h2 className="text-xl font-semibold text-slate-900">Joining Project...</h2>
-              <p className="text-slate-500 mt-2">Please wait while we verify your invite.</p>
+              <h2 className="text-xl font-semibold text-txt-primary">Joining Project...</h2>
+              <p className="text-txt-tertiary mt-2">Please wait while we verify your invite.</p>
             </div>
           )}
 
           {status === 'auth_required' && (
             <div className="py-8">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-slate-500" />
+                <Users className="w-8 h-8 text-txt-tertiary" />
               </div>
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">Sign in Required</h2>
-              <p className="text-slate-500 mb-6">You need to sign in to join this project.</p>
-              <button 
+              <h2 className="text-xl font-semibold text-txt-primary mb-2">Sign in Required</h2>
+              <p className="text-txt-tertiary mb-6">You need to sign in to join this project.</p>
+              <Button 
                 onClick={() => {
                   window.dispatchEvent(new CustomEvent("open-login-modal"));
                 }}
                 className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-colors"
               >
                 Sign In / Sign Up
-              </button>
+              </Button>
             </div>
           )}
 
           {status === 'error' && (
             <div className="py-8">
               <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">Unable to Join</h2>
-              <p className="text-slate-500 mb-6">{errorMsg}</p>
-              <button 
+              <h2 className="text-xl font-semibold text-txt-primary mb-2">Unable to Join</h2>
+              <p className="text-txt-tertiary mb-6">{errorMsg}</p>
+              <Button 
                 onClick={() => navigate('/team')}
-                className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors"
+                className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-txt-secondary font-medium rounded-xl transition-colors"
               >
                 Go to My Projects
-              </button>
+              </Button>
             </div>
           )}
 
           {status === 'success' && (
             <div className="py-8">
               <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">You're In!</h2>
-              <p className="text-slate-500 mb-6">
+              <h2 className="text-xl font-semibold text-txt-primary mb-2">You're In!</h2>
+              <p className="text-txt-tertiary mb-6">
                 You have successfully joined <strong>{projectData?.name || 'the project'}</strong>.
               </p>
-              <button 
+              <Button 
                 onClick={() => navigate('/team')}
                 className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-colors"
               >
                 View Project
-              </button>
+              </Button>
             </div>
           )}
 

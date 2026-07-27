@@ -1,5 +1,7 @@
+import { Button } from '../ui/Button';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, Calculator, Layers, FileText, CheckCircle } from 'lucide-react';
+
 
 // Configuration for easy theme swapping
 const themeConfig = {
@@ -70,7 +72,7 @@ export default function MintroHero() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-surface-default/5 backdrop-blur-md mb-8"
           >
             <span className="flex h-2 w-2 rounded-full relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: themeConfig.colors.accent3 }}></span>
@@ -110,7 +112,7 @@ export default function MintroHero() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
           >
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full font-bold transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group shadow-xl hover:-translate-y-0.5"
+            <Button className="w-full sm:w-auto px-8 py-4 rounded-full font-bold transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group shadow-xl hover:-translate-y-0.5"
               style={{ 
                 backgroundColor: themeConfig.colors.primary, 
                 color: themeConfig.colors.accent1,
@@ -120,12 +122,12 @@ export default function MintroHero() {
             >
               Start Estimating Free
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full font-medium transition-all hover:bg-white/10 flex items-center justify-center gap-2 border border-white/20 bg-white/5 backdrop-blur-sm text-white active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden"
+            </Button>
+            <Button className="w-full sm:w-auto px-8 py-4 rounded-full font-medium transition-all hover:bg-surface-default/10 flex items-center justify-center gap-2 border border-white/20 bg-surface-default/5 backdrop-blur-sm text-white active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden"
             >
               <Play className="w-5 h-5 fill-white" />
               Watch Demo
-            </button>
+            </Button>
           </motion.div>
           
           <motion.div 
@@ -151,22 +153,22 @@ export default function MintroHero() {
           className="flex-1 w-full max-w-xl lg:max-w-none relative mt-16 lg:mt-0"
         >
           {/* Glassmorphic Wrapper Card */}
-          <div className="relative rounded-3xl p-1 overflow-hidden group">
+          <div className="relative rounded-2xl p-1 overflow-hidden group">
             {/* Gradient Border Glow */}
             <div className="absolute inset-0 bg-gradient-to-br opacity-50 transition-opacity group-hover:opacity-100 duration-500" 
                  style={{ backgroundImage: `linear-gradient(to bottom right, ${themeConfig.colors.accent2}, ${themeConfig.colors.accent3}, ${themeConfig.colors.accent1})` }}></div>
             
             {/* Inner Card Content */}
-            <div className="relative rounded-[23px] bg-[#0A0F1E]/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden aspect-[4/3] flex flex-col">
+            <div className="relative rounded-2xl bg-[#0A0F1E]/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden aspect-[4/3] flex flex-col">
               
               {/* Mockup Top Bar */}
-              <div className="h-10 border-b border-white/10 bg-white/5 flex items-center px-4 gap-2">
+              <div className="h-10 border-b border-white/10 bg-surface-default/5 flex items-center px-4 gap-2">
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-rose-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 </div>
-                <div className="mx-auto px-4 py-1 rounded-md bg-white/5 text-[10px] font-mono text-white/40 tracking-wider">civil-estimation-pro.ai</div>
+                <div className="mx-auto px-4 py-1 rounded-md bg-surface-default/5 text-[10px] font-mono text-white/40 tracking-wider">civil-estimation-pro.ai</div>
               </div>
               
               {/* Mockup Body Content */}
@@ -175,32 +177,32 @@ export default function MintroHero() {
                 
                 <div className="grid grid-cols-2 gap-4 h-full">
                   <div className="space-y-4">
-                    <div className="h-24 rounded-2xl bg-white/5 border border-white/5 p-4 flex flex-col justify-between overflow-hidden">
+                    <div className="h-24 rounded-2xl bg-surface-default/5 border border-white/5 p-4 flex flex-col justify-between overflow-hidden">
                        <div className="flex items-center gap-2 text-white/60 text-xs font-medium"><Calculator className="w-4 h-4"/> Concrete Volume</div>
-                       <div className="text-xl font-semibold text-slate-800 text-white">450 <span className="text-sm font-normal text-white/40">cu.m</span></div>
+                       <div className="text-xl font-semibold text-txt-primary text-white">450 <span className="text-sm font-normal text-white/40">cu.m</span></div>
                     </div>
                     <div className="h-32 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 p-4 relative overflow-hidden">
                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 to-purple-500"></div>
                        <div className="flex items-center gap-2 text-white/80 text-sm font-medium mb-2"><Layers className="w-4 h-4 text-amber-400"/> Cost Breakdown</div>
                        <div className="space-y-2 mt-4">
-                         <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden"><div className="h-full bg-amber-400 w-[60%]"></div></div>
-                         <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden"><div className="h-full bg-purple-500 w-[30%]"></div></div>
-                         <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden"><div className="h-full bg-cyan-400 w-[10%]"></div></div>
+                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-amber-400 w-[60%]"></div></div>
+                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-purple-500 w-[30%]"></div></div>
+                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-cyan-400 w-[10%]"></div></div>
                        </div>
                     </div>
                   </div>
                   
                   <div className="space-y-4 pt-8">
-                    <div className="h-32 rounded-2xl bg-white/5 border border-white/5 p-4 flex flex-col relative overflow-hidden">
+                    <div className="h-32 rounded-2xl bg-surface-default/5 border border-white/5 p-4 flex flex-col relative overflow-hidden">
                        <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-cyan-500/20 blur-xl rounded-full"></div>
                        <div className="flex items-center gap-2 text-white/60 text-xs font-medium"><FileText className="w-4 h-4"/> Live BOQ</div>
                        <div className="mt-auto space-y-1.5">
-                          <div className="h-2 w-full rounded bg-white/10"></div>
-                          <div className="h-2 w-4/5 rounded bg-white/10"></div>
-                          <div className="h-2 w-5/6 rounded bg-white/10"></div>
+                          <div className="h-2 w-full rounded bg-surface-default/10"></div>
+                          <div className="h-2 w-4/5 rounded bg-surface-default/10"></div>
+                          <div className="h-2 w-5/6 rounded bg-surface-default/10"></div>
                        </div>
                     </div>
-                    <div className="h-20 rounded-2xl border border-white/10 bg-white/5 p-4 flex items-center justify-between backdrop-blur-md relative overflow-hidden">
+                    <div className="h-20 rounded-2xl border border-white/10 bg-surface-default/5 p-4 flex items-center justify-between backdrop-blur-md relative overflow-hidden">
                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent"></div>
                        <div>
                          <div className="text-white/60 text-xs font-medium">Status</div>
@@ -245,7 +247,7 @@ export default function MintroHero() {
           {/* Logo placeholders using SVGs */}
           {[1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="flex items-center gap-2 group cursor-pointer hover:opacity-100 transition-opacity">
-              <div className="w-8 h-8 rounded bg-white/20 group-hover:bg-white/40 transition-colors"></div>
+              <div className="w-8 h-8 rounded bg-surface-default/20 group-hover:bg-surface-default/40 transition-colors"></div>
               <span className="text-white font-bold text-xl tracking-tight" style={{ fontFamily: themeConfig.typography.headline }}>Partner {i}</span>
             </div>
           ))}

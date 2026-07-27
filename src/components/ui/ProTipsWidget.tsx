@@ -1,5 +1,7 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
 import { Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
+
 
 const TIPS_DATABASE: Record<string, string[]> = {
   'quick-rough': [
@@ -140,8 +142,8 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
   const tips = TIPS_DATABASE[moduleId] || DEFAULT_TIPS;
 
   return (
-    <div className="w-full overflow-hidden bg-white rounded-[32px] border border-slate-100 shadow-sm">
-      <button 
+    <div className="w-full overflow-hidden bg-surface-default rounded-2xl border border-slate-100 shadow-sm">
+      <Button 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-slate-50 transition-colors"
       >
@@ -153,20 +155,20 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
             <Lightbulb className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-800 leading-none mb-1">Engineering Pro Tips</h3>
-            <p className="text-sm text-slate-500 font-medium">Best practices & principles for this calculation</p>
+            <h3 className="font-semibold text-txt-primary leading-none mb-1">Engineering Pro Tips</h3>
+            <p className="text-sm text-txt-tertiary font-medium">Best practices & principles for this calculation</p>
           </div>
         </div>
         <div className="text-slate-400 shrink-0 ml-4">
           {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
         </div>
-      </button>
+      </Button>
 
       {isOpen && (
         <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-slate-100 bg-slate-50/50">
           <ul className="space-y-4">
             {tips.map((tip, idx) => (
-              <li key={idx} className="flex gap-3 text-slate-700 text-sm">
+              <li key={idx} className="flex gap-3 text-txt-secondary text-sm">
                 <span 
                   className="shrink-0 w-6 h-6 rounded-full bg-slate-200/60 flex items-center justify-center font-bold text-xs mt-0.5"
                   style={{ color: 'var(--tool-theme-color, #4f46e5)' }}

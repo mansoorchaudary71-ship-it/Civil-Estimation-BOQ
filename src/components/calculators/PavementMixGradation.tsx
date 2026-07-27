@@ -1,6 +1,8 @@
+import { Button } from '../ui/Button';
 import React, { useState, useEffect } from 'react';
 import { Layers, Activity, AlertTriangle, CheckCircle, SlidersHorizontal, Download, Printer, Plus } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, ReferenceArea } from 'recharts';
+
 
 type MixPreset = 'gsb-i' | 'dbm-1' | 'sma';
 
@@ -154,8 +156,8 @@ export function PavementMixGradation() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white border border-slate-200 p-3 shadow-lg rounded-xl">
-          <p className="font-bold text-slate-800 text-sm mb-1">Sieve: {label} mm</p>
+        <div className="bg-surface-default border border-ui-borderSubtle p-3 shadow-lg rounded-xl">
+          <p className="font-bold text-txt-primary text-sm mb-1">Sieve: {label} mm</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm font-medium">
               {entry.name}: {entry.value !== null ? entry.value.toFixed(1) + '%' : 'N/A'}
@@ -170,15 +172,15 @@ export function PavementMixGradation() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 shadow-sm">
+      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex items-center gap-4">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-100 text-purple-600">
               <Layers size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">Aggregate Blending Suite</h1>
-              <p className="text-slate-600 text-sm">Blend aggregate proportions and verify against standard specifications.</p>
+              <h1 className="text-2xl font-bold text-txt-primary">Aggregate Blending Suite</h1>
+              <p className="text-txt-secondary text-sm">Blend aggregate proportions and verify against standard specifications.</p>
             </div>
           </div>
           
@@ -186,7 +188,7 @@ export function PavementMixGradation() {
             <select 
               value={preset} 
               onChange={(e) => setPreset(e.target.value as MixPreset)}
-              className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block px-4 py-2 font-medium"
+              className="bg-slate-50 border border-ui-borderSubtle text-txt-primary text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block px-4 py-2 font-medium"
             >
               <option value="gsb-i">GSB Grade I</option>
               <option value="dbm-1">DBM Grade 1</option>
@@ -195,9 +197,9 @@ export function PavementMixGradation() {
             
             <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
             
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-purple-600 border border-purple-700 rounded-lg hover:bg-purple-700 transition-colors shadow-sm">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-purple-600 border border-purple-700 rounded-lg hover:bg-purple-700 transition-colors shadow-sm">
               <Download size={16} /> Export
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -205,15 +207,15 @@ export function PavementMixGradation() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Sliders and Status */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+            <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2">
               <SlidersHorizontal size={20} className="text-purple-500" />
               Blending Proportions
             </h2>
             
             <div className="space-y-6">
               <div className="space-y-2">
-                <div className="flex justify-between text-sm font-medium text-slate-700">
+                <div className="flex justify-between text-sm font-medium text-txt-secondary">
                   <span>Aggregate A (Coarse)</span>
                   <span>{propA}%</span>
                 </div>
@@ -227,7 +229,7 @@ export function PavementMixGradation() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-sm font-medium text-slate-700">
+                <div className="flex justify-between text-sm font-medium text-txt-secondary">
                   <span>Aggregate B (Intermediate)</span>
                   <span>{propB}%</span>
                 </div>
@@ -241,7 +243,7 @@ export function PavementMixGradation() {
               </div>
 
               <div className="space-y-2 opacity-70">
-                <div className="flex justify-between text-sm font-medium text-slate-700">
+                <div className="flex justify-between text-sm font-medium text-txt-secondary">
                   <span>Aggregate C (Fine/Dust)</span>
                   <span>{propC}%</span>
                 </div>
@@ -273,7 +275,7 @@ export function PavementMixGradation() {
             )}
           </div>
           
-          <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex gap-3 text-sm text-slate-600">
+          <div className="bg-slate-50 border border-ui-borderSubtle p-4 rounded-2xl flex gap-3 text-sm text-txt-secondary">
             <Activity size={20} className="text-slate-400 flex-shrink-0" />
             <p>
               Chart uses a logarithmic scale for sieve sizes as per standard highway engineering practices (0.45 power curve approximate viewing).
@@ -283,8 +285,8 @@ export function PavementMixGradation() {
 
         {/* Chart Panel */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 h-[500px] flex flex-col relative">
-            <h2 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+          <div className="bg-surface-default rounded-2xl p-6 shadow-sm border border-ui-borderSubtle h-[500px] flex flex-col relative">
+            <h2 className="text-lg font-bold text-txt-primary mb-6 flex items-center gap-2">
               <Activity size={20} className="text-purple-500" />
               Gradation Curve
             </h2>
@@ -353,7 +355,7 @@ export function PavementMixGradation() {
             </div>
           </div>
           
-          <div className="bg-slate-900 rounded-3xl p-6 shadow-xl text-white">
+          <div className="bg-slate-900 rounded-2xl p-6 shadow-xl text-white">
             <h3 className="text-sm font-bold text-slate-300 mb-4 uppercase tracking-wider">Calculation Table</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm whitespace-nowrap">
@@ -368,7 +370,7 @@ export function PavementMixGradation() {
                 </thead>
                 <tbody>
                   {chartData.sort((a, b) => b.sieve - a.sieve).map((row, i) => (
-                    <tr key={i} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
+                    <tr key={i} className="border-b border-white/5 last:border-0 hover:bg-surface-default/5 transition-colors">
                       <td className="py-3 px-2 font-medium text-slate-200">{row.sieve}</td>
                       <td className="py-3 px-2 text-slate-400">
                         {row.min !== null ? row.min : '-'}
@@ -379,7 +381,7 @@ export function PavementMixGradation() {
                       </td>
                       <td className="py-3 px-2">
                         {row.min === null ? (
-                          <span className="text-slate-500">-</span>
+                          <span className="text-txt-tertiary">-</span>
                         ) : row.status === 'pass' ? (
                           <span className="inline-flex items-center gap-1 text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded text-xs font-bold">
                             PASS
@@ -404,15 +406,15 @@ export function PavementMixGradation() {
                    value={newSieve}
                    onChange={(e) => setNewSieve(e.target.value)}
                    placeholder="e.g. 12.5"
-                   className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                   className="w-full bg-surface-default/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                  />
                </div>
-               <button 
+               <Button 
                  onClick={handleAddSieve}
                  className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors h-[38px]"
                >
                  <Plus size={16} /> Add Sieve
-               </button>
+               </Button>
             </div>
           </div>
         </div>

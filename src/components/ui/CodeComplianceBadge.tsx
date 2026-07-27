@@ -1,5 +1,7 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
 import { ShieldCheck, TestTube, Settings2, Info } from 'lucide-react';
+
 
 interface CodeComplianceBadgeProps {
   standard: string; // e.g., "IS 2720 / ASTM D1883"
@@ -30,20 +32,20 @@ export function ApparatusHelperBox({ items }: ApparatusHelperBoxProps) {
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="mt-4 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-white dark:bg-slate-800">
-      <button 
+    <div className="mt-4 border border-ui-borderSubtle dark:border-slate-700 rounded-lg overflow-hidden bg-surface-default dark:bg-slate-800">
+      <Button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-2 p-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors"
+        className="w-full flex items-center gap-2 p-3 text-sm font-semibold text-txt-secondary dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors"
       >
         <TestTube size={16} className="text-blue-500" />
         Required Lab Apparatus & Scientific Equipment
         <Info size={14} className="ml-auto text-slate-400" />
-      </button>
+      </Button>
       {isOpen && (
-        <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+        <div className="p-4 border-t border-ui-borderSubtle dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {items.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
+              <li key={idx} className="flex items-start gap-2 text-sm text-txt-secondary dark:text-slate-300">
                 <Settings2 size={14} className="text-slate-400 mt-1 shrink-0" />
                 {item}
               </li>

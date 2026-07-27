@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import React, { useState, useMemo } from "react";
 import {
   Truck,
@@ -20,6 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
 import { FieldTooltip } from "../ui/FieldTooltip";
+
 
 interface Station {
   id: string;
@@ -237,43 +239,43 @@ export default function ChainageVolumeEstimator() {
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             
-            <div className="w-full bg-white px-6 py-5 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
+            <div className="w-full bg-surface-default px-6 py-5 rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden">
               <div className="flex items-center gap-3 mb-5 border-b border-slate-100 pb-4">
                 <Mountain className="w-6 h-6 text-emerald-600" />
-                <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                   Cross-Sectional Earthworks Engine
                 </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block uppercase tracking-wider mb-2 ml-1 text-sm font-medium text-slate-700 mb-1">
+                  <label className="block uppercase tracking-wider mb-2 ml-1 text-sm font-medium text-txt-secondary mb-1">
                     Formation Width ({unitL})
                   </label>
                   <><label htmlFor="a11y-input-176" className="sr-only">Input</label>
 <input id="a11y-input-176" type="number" inputMode="decimal"
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 text-slate-800 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
                     value={formationWidth}
                     onChange={(e) => setFormationWidth(e.target.value === "" ? "" : Number(e.target.value))}
                   /></>
                 </div>
                 <div>
-                  <label className="block uppercase tracking-wider mb-2 ml-1 text-sm font-medium text-slate-700 mb-1">
+                  <label className="block uppercase tracking-wider mb-2 ml-1 text-sm font-medium text-txt-secondary mb-1">
                     Cut Slope (H:1V)
                   </label>
                   <><label htmlFor="a11y-input-177" className="sr-only">Input</label>
 <input id="a11y-input-177" type="number" inputMode="decimal"
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 text-slate-800 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
                     value={cutSlope}
                     onChange={(e) => setCutSlope(e.target.value === "" ? "" : Number(e.target.value))}
                   /></>
                 </div>
                 <div>
-                  <label className="block uppercase tracking-wider mb-2 ml-1 text-sm font-medium text-slate-700 mb-1">
+                  <label className="block uppercase tracking-wider mb-2 ml-1 text-sm font-medium text-txt-secondary mb-1">
                     Fill Slope (H:1V)
                   </label>
                   <><label htmlFor="a11y-input-178" className="sr-only">Input</label>
 <input id="a11y-input-178" type="number" inputMode="decimal"
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 text-slate-800 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
                     value={fillSlope}
                     onChange={(e) => setFillSlope(e.target.value === "" ? "" : Number(e.target.value))}
                   /></>
@@ -281,11 +283,11 @@ export default function ChainageVolumeEstimator() {
               </div>
             </div>
 
-            <div className="w-full bg-white px-6 py-5 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
+            <div className="w-full bg-surface-default px-6 py-5 rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 border-b border-slate-100 pb-4 gap-4">
                 <div className="flex items-center gap-3">
                   <Map className="w-5 h-5 text-amber-600" />
-                  <h2 className="text-xl font-semibold text-slate-900 tracking-tight mb-4">
+                  <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                     Station Survey Data
                   </h2>
                 </div>
@@ -293,22 +295,22 @@ export default function ChainageVolumeEstimator() {
                     <select
                         value={method}
                         onChange={(e) => setMethod(e.target.value as any)}
-                        className="bg-slate-50 border border-slate-200 text-slate-700 px-4 py-2 rounded-[12px] text-base font-medium focus:outline-none"
+                        className="bg-slate-50 border border-ui-borderSubtle text-txt-secondary px-4 py-2 rounded-2xl text-base font-medium focus:outline-none"
                     >
                         <option value="trapezoidal">Trapezoidal Rule</option>
                         <option value="simpson">Simpson's (1/3) Rule</option>
                     </select>
-                    <button onClick={addStation}
+                    <Button onClick={addStation}
                       className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-full transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                     >
                       <Plus className="w-4 h-4" /> Add Station
-                    </button>
+                    </Button>
                 </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-100 text-sm uppercase tracking-widest text-slate-500 font-bold">
+                    <tr className="border-b border-slate-100 text-sm uppercase tracking-widest text-txt-tertiary font-bold">
                       <th className="pb-3 pr-4 min-w-[120px]">
                         Chainage
                         <FieldTooltip content="The linear distance along the center line of the road, railway, or pipeline project." />
@@ -325,7 +327,7 @@ export default function ChainageVolumeEstimator() {
                         <td className="py-2.5 pr-4">
                           <><label htmlFor="a11y-input-179" className="sr-only">e.g. 1+200</label>
 <input id="a11y-input-179" type="text"
-                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 text-slate-800 rounded-full px-3 py-1.5 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
+                            className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-1.5 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
                             value={st.chainage}
                             onChange={(e) => handleUpdateStation(st.id, "chainage", e.target.value)}
                             placeholder="e.g. 1+200"
@@ -334,7 +336,7 @@ export default function ChainageVolumeEstimator() {
                         <td className="py-2.5 px-4">
                           <><label htmlFor="a11y-input-180" className="sr-only">Input</label>
 <input id="a11y-input-180" type="number" inputMode="decimal"
-                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 text-slate-800 rounded-full px-3 py-1.5 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
+                            className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-1.5 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
                             value={st.ngl}
                             onChange={(e) => handleUpdateStation(st.id, "ngl", e.target.value)}
                           /></>
@@ -342,26 +344,26 @@ export default function ChainageVolumeEstimator() {
                         <td className="py-2.5 px-4">
                           <><label htmlFor="a11y-input-181" className="sr-only">Input</label>
 <input id="a11y-input-181" type="number" inputMode="decimal"
-                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 text-slate-800 rounded-full px-3 py-1.5 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
+                            className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-1.5 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/50 min-h-[44px] text-base font-normal"
                             value={st.fl}
                             onChange={(e) => handleUpdateStation(st.id, "fl", e.target.value)}
                           /></>
                         </td>
                         <td className="py-2.5 px-4">
-                          <div className="font-mono text-base font-medium flex flex-col items-start bg-slate-100 rounded-[8px] px-2.5 py-1 min-w-[70px]">
+                          <div className="font-mono text-base font-medium flex flex-col items-start bg-slate-100 rounded-2xl px-2.5 py-1 min-w-[70px]">
                             {st.d_cut > 0 && <span className="text-amber-600">C: {st.d_cut.toFixed(2)}</span>}
                             {st.d_fill > 0 && <span className="text-indigo-600">F: {st.d_fill.toFixed(2)}</span>}
-                            {st.d_cut === 0 && st.d_fill === 0 && <span className="text-slate-500">0.00</span>}
+                            {st.d_cut === 0 && st.d_fill === 0 && <span className="text-txt-tertiary">0.00</span>}
                           </div>
                         </td>
                         <td className="py-2.5 pl-4 text-right">
-                          <button aria-label="Delete"
+                          <Button aria-label="Delete"
                             onClick={() => removeStation(st.id)}
                             disabled={stations.length <= 2}
-                            className={`p-2 rounded-full ${stations.length <= 2 ? "text-slate-700 cursor-not-allowed" : "text-red-400 hover:text-red-600 hover:bg-red-50"}`}
+                            className={`p-2 rounded-full ${stations.length <= 2 ? "text-txt-secondary cursor-not-allowed" : "text-red-400 hover:text-red-600 hover:bg-red-50"}`}
                           >
                             <Trash2 className="w-4 h-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
-                          </button>
+                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -370,15 +372,15 @@ export default function ChainageVolumeEstimator() {
               </div>
             </div>
             
-            <div className="w-full bg-white px-6 py-5 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
-              <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight">
-                <LayoutTemplate className="w-5 h-5 text-slate-700" /> 
+            <div className="w-full bg-surface-default px-6 py-5 rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden">
+              <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight">
+                <LayoutTemplate className="w-5 h-5 text-txt-secondary" /> 
                 {method === "simpson" ? "Simpson's Rule Output" : "Trapezoidal Rule Output"}
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-200 text-base font-medium uppercase tracking-widest text-slate-600 bg-slate-50">
+                    <tr className="border-b border-ui-borderSubtle text-base font-medium uppercase tracking-widest text-txt-secondary bg-slate-50">
                       <th className="py-3 px-4 rounded-tl-lg">Stn</th>
                       <th className="py-3 px-4 text-amber-700">Area C ({unitA})</th>
                       <th className="py-3 px-4 text-indigo-700">Area F ({unitA})</th>
@@ -391,7 +393,7 @@ export default function ChainageVolumeEstimator() {
                   <tbody className="divide-y divide-slate-100 font-mono text-sm">
                     {results.segments.map((r, i) => (
                       <tr key={r.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="py-3 px-4 font-medium text-slate-900">{r.chainage || "0"}</td>
+                        <td className="py-3 px-4 font-medium text-txt-primary">{r.chainage || "0"}</td>
                         <td className="py-3 px-4 text-amber-600/70">{r.cutArea > 0 ? r.cutArea.toFixed(2) : "-"}</td>
                         <td className="py-3 px-4 text-indigo-600/70">{r.fillArea > 0 ? r.fillArea.toFixed(2) : "-"}</td>
                         <td className="py-3 px-4 text-amber-600 font-bold bg-amber-50/20">{r.intCut > 0 ? r.intCut.toFixed(2) : "-"}</td>
@@ -405,8 +407,8 @@ export default function ChainageVolumeEstimator() {
               </div>
             </div>
             
-            <div className="w-full bg-white px-6 py-6 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
-              <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+            <div className="w-full bg-surface-default px-6 py-6 rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden">
+              <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
                 <LayoutTemplate className="w-5 h-5 text-indigo-600" /> Mass Haul Curve
               </h2>
               <div className="h-[300px] w-full mt-4">
@@ -438,11 +440,11 @@ export default function ChainageVolumeEstimator() {
           <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
             <div className="flex flex-col h-full sticky top-6 gap-6">
               
-              <div className="w-full bg-white px-5 py-5 rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
-                <h3 className="uppercase st mb-4 text-lg font-medium text-slate-800">Material Behaviors</h3>
+              <div className="w-full bg-surface-default px-5 py-5 rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden">
+                <h3 className="uppercase st mb-4 text-lg font-medium text-txt-primary">Material Behaviors</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block mb-1.5 flex justify-between text-sm font-medium text-slate-700 mb-1">
+                    <label className="block mb-1.5 flex justify-between text-sm font-medium text-txt-secondary mb-1">
                        <span>Swell / Bulking Factor</span>
                        <span className="text-amber-600">%</span>
                     </label>
@@ -452,10 +454,10 @@ export default function ChainageVolumeEstimator() {
                       value={swellFactor}
                       onChange={(e) => setSwellFactor(e.target.value === "" ? "" : Number(e.target.value))}
                     /></>
-                    <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">Increases cut volume (loose volume)</p>
+                    <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">Increases cut volume (loose volume)</p>
                   </div>
                   <div>
-                    <label className="block mb-1.5 flex justify-between text-sm font-medium text-slate-700 mb-1">
+                    <label className="block mb-1.5 flex justify-between text-sm font-medium text-txt-secondary mb-1">
                        <span>Shrinkage Factor</span>
                        <span className="text-indigo-600">%</span>
                     </label>
@@ -465,7 +467,7 @@ export default function ChainageVolumeEstimator() {
                       value={shrinkFactor}
                       onChange={(e) => setShrinkFactor(e.target.value === "" ? "" : Number(e.target.value))}
                     /></>
-                    <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">Decreases fill volume (compacted)</p>
+                    <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">Decreases fill volume (compacted)</p>
                   </div>
                 </div>
               </div>
@@ -490,7 +492,7 @@ export default function ChainageVolumeEstimator() {
                 </div>
                 
                 <div className="mt-4 pt-4 border-t border-slate-100">
-                    <button className="w-full bg-white hover:bg-slate-700 text-slate-900 py-3 rounded-full transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden"
+                    <Button className="w-full bg-surface-default hover:bg-slate-700 text-txt-primary py-3 rounded-full transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden"
                         onClick={() => {
                             const items = [
                             {
@@ -515,7 +517,7 @@ export default function ChainageVolumeEstimator() {
                         }}
                     >
                         Send to BOQ
-                    </button>
+                    </Button>
                 </div>
               </MaterialSummary>
             </div>

@@ -1,9 +1,11 @@
+import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
 import { X, Check, Database, Ruler, Palette } from "lucide-react";
 import { useMarketRates } from "../../context/MarketRatesContext";
 import { useSettings, ModulePreferences } from "../../context/SettingsContext";
+
 interface GlobalSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -85,14 +87,14 @@ export default function GlobalSettingsModal({
     value: number;
     onChangeKey: keyof typeof localRates;
   }) => (
-    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 rounded-[24px] bg-white/50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 hover:bg-white/80 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 transition-colors border border-transparent hover:border-slate-200 : overflow-hidden">
+    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 rounded-2xl bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary hover:bg-surface-default/80 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary transition-colors border border-transparent hover:border-ui-borderSubtle : overflow-hidden">
       {" "}
       <div className="flex flex-col">
         {" "}
-        <span className="font-semibold text-slate-800">
+        <span className="font-semibold text-txt-primary">
           {label}
         </span>{" "}
-        <span className="text-sm text-slate-500">
+        <span className="text-sm text-txt-tertiary">
           per {unit}
         </span>{" "}
       </div>{" "}
@@ -100,7 +102,7 @@ export default function GlobalSettingsModal({
         {" "}
         <div className="relative flex items-center w-full">
           {" "}
-          <span className="absolute left-3 text-slate-700 font-medium text-sm">
+          <span className="absolute left-3 text-txt-secondary font-medium text-sm">
             {currencySymbol}
           </span>{" "}
           <><label htmlFor="a11y-input-250" className="sr-only">Input</label>
@@ -114,7 +116,7 @@ export default function GlobalSettingsModal({
               if (!isNaN(val) && val < 0) return;
               handleChange(onChangeKey, e.target.value);
             }}
-            className="w-full pl-9 pr-4 py-2 bg-bg-card border border-slate-200 dark:border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 text-slate-900 dark:text-white font-medium transition-shadow"
+            className="w-full pl-9 pr-4 py-2 bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 text-txt-primary dark:text-white font-medium transition-shadow"
           /></>{" "}
         </div>{" "}
       </div>{" "}
@@ -127,31 +129,31 @@ export default function GlobalSettingsModal({
         className="absolute inset-0 bg-[#F5F5F7] backdrop-blur-sm"
         onClick={onClose}
       ></div>{" "}
-      <div className="relative bg-transparent/90 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 backdrop-blur-xl border border-slate-200/50 rounded-[24px] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative bg-transparent/90 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary backdrop-blur-xl border border-ui-borderSubtle/50 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
         {" "}
         {/* Header */}{" "}
-        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200/50 shrink-0">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-ui-borderSubtle/50 shrink-0">
           {" "}
           <div>
             {" "}
-            <h3 className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent text-lg font-medium text-slate-800 mb-4">
+            <h3 className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent text-lg font-medium text-txt-primary mb-4">
               {" "}
               Global Settings{" "}
             </h3>{" "}
-            <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">
+            <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">
               {" "}
               Configure parameters & market rates.{" "}
             </p>{" "}
           </div>{" "}
-          <button onClick={onClose}
-            className="p-2 -mr-2 rounded-full hover:bg-slate-200/50 rounded-full border border-slate-200 shadow-sm text-slate-800 text-slate-700 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
+          <Button onClick={onClose}
+            className="p-2 -mr-2 rounded-full hover:bg-slate-200/50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary text-txt-secondary transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
           >
             {" "}
             <X className="w-5 h-5" />{" "}
-          </button>{" "}
+          </Button>{" "}
         </div>{" "}
         {/* Tabs */}{" "}
-        <div className="flex overflow-x-auto px-6 py-4 border-b border-slate-200/50 shrink-0 gap-2 p-1">
+        <div className="flex overflow-x-auto px-6 py-4 border-b border-ui-borderSubtle/50 shrink-0 gap-2 p-1">
           {" "}
           <UniversalTabs tabs={[{id: "rates", label: "Market Rates", icon: <Database className="w-4 h-4" />}]} activeTab={activeTab === "rates" ? "rates" : ""} onTabChange={() => setActiveTab("rates")} />
           <UniversalTabs tabs={[{id: "prefs", label: "Module Preferences", icon: <Ruler className="w-4 h-4" />}]} activeTab={activeTab === "prefs" ? "prefs" : ""} onTabChange={() => setActiveTab("prefs")} />
@@ -200,12 +202,12 @@ export default function GlobalSettingsModal({
               {/* Preferred Units */}{" "}
               <div>
                 {" "}
-                <h4 className="mb-3 flex items-center gap-2 text-lg font-medium text-slate-800 mb-4">
+                <h4 className="mb-3 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
                   {" "}
-                  <Ruler className="w-4 h-4 text-slate-700" /> Preferred
+                  <Ruler className="w-4 h-4 text-txt-secondary" /> Preferred
                   Units{" "}
                 </h4>{" "}
-                <div className="w-full space-y-3 bg-white/50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 px-4 py-3 rounded-[24px] border border-slate-200/50 overflow-hidden">
+                <div className="w-full space-y-3 bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary px-4 py-3 rounded-2xl border border-ui-borderSubtle/50 overflow-hidden">
                   {" "}
                   <div className="flex items-center justify-between">
                     {" "}
@@ -217,7 +219,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("units", "finishing", e.target.value)
                       }
-                      className="bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-800 rounded-[16px] px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
                     >
                       {" "}
                       <option value="mm">Millimeters (mm)</option>{" "}
@@ -236,7 +238,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("units", "roads", e.target.value)
                       }
-                      className="bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-800 rounded-[16px] px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
                     >
                       {" "}
                       <option value="m">Meters (m)</option>{" "}
@@ -255,7 +257,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("units", "earthworks", e.target.value)
                       }
-                      className="bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-800 rounded-[16px] px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
                     >
                       {" "}
                       <option value="m">Meters (m)</option>{" "}
@@ -267,12 +269,12 @@ export default function GlobalSettingsModal({
               {/* Default Colors */}{" "}
               <div>
                 {" "}
-                <h4 className="mb-3 flex items-center gap-2 text-lg font-medium text-slate-800 mb-4">
+                <h4 className="mb-3 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
                   {" "}
-                  <Palette className="w-4 h-4 text-slate-700" /> Default Color
+                  <Palette className="w-4 h-4 text-txt-secondary" /> Default Color
                   Themes{" "}
                 </h4>{" "}
-                <div className="w-full space-y-3 bg-white/50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 px-4 py-3 rounded-[24px] border border-slate-200/50 overflow-hidden">
+                <div className="w-full space-y-3 bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary px-4 py-3 rounded-2xl border border-ui-borderSubtle/50 overflow-hidden">
                   {" "}
                   <div className="flex items-center justify-between">
                     {" "}
@@ -284,7 +286,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("themes", "finishing", e.target.value)
                       }
-                      className="bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-800 rounded-[16px] px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
                     >
                       {" "}
                       <option value="blue">Ocean Blue</option>{" "}
@@ -303,7 +305,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("themes", "roads", e.target.value)
                       }
-                      className="bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-800 rounded-[16px] px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
                     >
                       {" "}
                       <option value="slate">Industrial Slate</option>{" "}
@@ -321,7 +323,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("themes", "earthworks", e.target.value)
                       }
-                      className="bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-800 rounded-[16px] px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
                     >
                       {" "}
                       <option value="amber">Dirt Amber</option>{" "}
@@ -335,20 +337,20 @@ export default function GlobalSettingsModal({
           )}{" "}
         </div>{" "}
         {/* Footer */}{" "}
-        <div className="p-4 sm:p-6 border-t border-slate-200/50 shrink-0 bg-slate-100/50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 flex justify-end gap-3 overflow-hidden">
+        <div className="p-4 sm:p-6 border-t border-ui-borderSubtle/50 shrink-0 bg-slate-100/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary flex justify-end gap-3 overflow-hidden">
           {" "}
-          <button onClick={onClose}
-            className="px-5 py-2.5 rounded-full text-slate-600 hover:bg-slate-200/50 border border-slate-200 shadow-sm text-slate-800 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
+          <Button onClick={onClose}
+            className="px-5 py-2.5 rounded-full text-txt-secondary hover:bg-slate-200/50 border border-ui-borderSubtle shadow-sm text-txt-primary transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
           >
             {" "}
             Cancel{" "}
-          </button>{" "}
-          <button onClick={handleSave}
+          </Button>{" "}
+          <Button onClick={handleSave}
             className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-blue-700 text-white rounded-full shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95 text-base font-semibold hover:-translate-y-0.5"
           >
             {" "}
             <Check className="w-4 h-4" /> Save Settings{" "}
-          </button>{" "}
+          </Button>{" "}
         </div>{" "}
       </div>{" "}
     

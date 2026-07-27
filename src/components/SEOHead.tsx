@@ -93,12 +93,12 @@ export default function SEOHead({ toolId, toolName, category, description }: SEO
       </Helmet>
       
       {/* Dynamic Breadcrumbs rendered to the DOM as well */}
-      <nav className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mb-4 overflow-x-auto whitespace-nowrap">
+      <nav className="flex items-center space-x-2 text-xs text-txt-tertiary dark:text-slate-400 mb-4 overflow-x-auto whitespace-nowrap">
         <a href="#" className="hover:text-indigo-600 transition-colors">Home</a>
         <span>›</span>
         <span className="truncate">{category}</span>
         <span>›</span>
-        <span className="text-slate-800 dark:text-slate-200 font-medium truncate">{toolName}</span>
+        <span className="text-txt-primary dark:text-slate-200 font-medium truncate">{toolName}</span>
       </nav>
     </>
   );

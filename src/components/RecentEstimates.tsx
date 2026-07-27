@@ -1,3 +1,4 @@
+import { Button } from './ui/Button';
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ModuleId } from "./Dashboard";
@@ -18,6 +19,7 @@ import {
 } from "../lib/estimates";
 import { useAuth } from "../contexts/AuthContext";
 import { ALL_MODULES, getCategoryTheme } from "./Dashboard";
+
 
 interface Estimate {
   id: string;
@@ -203,14 +205,14 @@ export default function RecentEstimates({
     return (
       <div className="flex-1 w-full md:max-w-7xl md:mx-auto flex flex-col font-sans mb-auto px-4 md:px-0">
         <div className="mb-8 flex flex-col items-center justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 text-center mt-6">
-          <h1 className="md: text-slate-900 dark:text-white flex items-center justify-center gap-2 text-xl font-semibold text-slate-800 tracking-tight mb-6">
+          <h1 className="md: text-txt-primary dark:text-white flex items-center justify-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-6">
             My Projects
           </h1>
-          <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">
+          <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">
             Manage your saved construction projects and estimates
           </p>
         </div>
-        <div className="w-full bg-bg-card opacity-90 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-[2rem] p-5 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center shadow-sm">
+        <div className="w-full bg-surface-default opacity-90 backdrop-blur-xl border border-ui-borderSubtle dark:border-slate-700 rounded-2xl p-5 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center shadow-sm">
           
 <svg width="200" height="150" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-6 opacity-80">
   <rect x="40" y="30" width="120" height="90" rx="12" fill="#E2E8F0" />
@@ -225,10 +227,10 @@ export default function RecentEstimates({
   <circle cx="45" cy="15" r="8" fill="#CBD5E1" />
 </svg>
 
-          <h4 className="mb-1 text-lg font-medium text-slate-800 mb-4">
+          <h4 className="mb-1 text-lg font-medium text-txt-primary mb-4">
             Sign in to save estimates
           </h4>
-          <p className="max-w-sm mb-6 text-base font-normal text-slate-600 leading-relaxed">
+          <p className="max-w-sm mb-6 text-base font-normal text-txt-secondary leading-relaxed">
             Your saved estimates will appear here once you sign in and start
             estimating.
           </p>
@@ -248,10 +250,10 @@ export default function RecentEstimates({
   return (
     <div className="flex-1 w-full md:max-w-7xl md:mx-auto flex flex-col font-sans pb-12 px-4 md:px-0">
       <div className="mb-8 flex flex-col items-center justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 text-center mt-6">
-        <h1 className="md: text-slate-900 dark:text-white flex items-center justify-center gap-2 text-xl font-semibold text-slate-800 tracking-tight mb-6">
+        <h1 className="md: text-txt-primary dark:text-white flex items-center justify-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-6">
           My Projects
         </h1>
-        <p className="mt-1 text-base font-normal text-slate-600 leading-relaxed">
+        <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">
           Manage your saved construction projects and estimates
         </p>
       </div>
@@ -266,29 +268,29 @@ export default function RecentEstimates({
         <>
           <div className="w-full mb-8 flex flex-col md:flex-row gap-4 items-center justify-between animate-in fade-in slide-in-from-bottom-4 duration-500">
              <div className="relative w-full md:w-96 shrink-0">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-txt-tertiary" />
                 <input
                   type="text"
                   placeholder="Search projects, dates, or categories..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm text-sm font-medium"
+                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm text-sm font-medium"
                 />
              </div>
              
              <div className="flex items-center gap-2 overflow-x-auto w-full pb-2 md:pb-0 scrollbar-hide px-1">
                {categories.map(cat => (
-                 <button
+                 <Button
                    key={cat}
                    onClick={() => setActiveCategory(cat)}
                    className={`whitespace-nowrap px-5 py-2.5 rounded-full text-[14px] font-medium transition-all duration-300 shadow-sm ${
                      activeCategory === cat 
-                       ? 'bg-slate-900 text-white border-slate-800 dark:bg-white dark:text-slate-900 dark:border-white shadow-md' 
-                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700'
+                       ? 'bg-slate-900 text-white border-slate-800 dark:bg-surface-default dark:text-txt-primary dark:border-white shadow-md' 
+                       : 'bg-surface-default text-txt-secondary border border-ui-borderSubtle hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700'
                    }`}
                  >
                    {cat}
-                 </button>
+                 </Button>
                ))}
              </div>
           </div>
@@ -299,12 +301,12 @@ export default function RecentEstimates({
               title="No matching projects"
               description="Try adjusting your search or category filters."
               action={
-                <button
+                <Button
                   onClick={() => { setSearchTerm(''); setActiveCategory('All'); }}
-                  className="px-6 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full font-medium shadow-sm hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
+                  className="px-6 py-2.5 bg-slate-900 dark:bg-surface-default text-white dark:text-txt-primary rounded-full font-medium shadow-sm hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
                 >
                   Clear Filters
-                </button>
+                </Button>
               }
             />
           ) : (
@@ -322,13 +324,13 @@ export default function RecentEstimates({
                     onDrop={handleDrop}
                     whileHover={{ scale: 1.02, y: -4 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`group relative col-span-1 bg-bg-card p-4 md:p-4 rounded-[24px] transition-all duration-300 flex flex-col items-center text-center border-2 ${est.theme.border} cursor-pointer shadow-sm hover:shadow-xl overflow-hidden ${dragOverId === est.id ? "!border-indigo-500 shadow-indigo-500/20" : ""} ${draggedId === est.id ? "opacity-50" : "opacity-100"}`}
+                    className={`group relative col-span-1 bg-surface-default p-4 md:p-4 rounded-2xl transition-all duration-300 flex flex-col items-center text-center border-2 ${est.theme.border} cursor-pointer shadow-sm hover:shadow-lg border-ui-borderSubtle hover:border-ui-borderDefault overflow-hidden ${dragOverId === est.id ? "!border-indigo-500 shadow-indigo-500/20" : ""} ${draggedId === est.id ? "opacity-50" : "opacity-100"}`}
                     onClick={() => onSelectModule(est.type, `recent-${est.id}`)}
                     style={{ minHeight: "150px" }}
                   >
                     {/* Drag Handle Top Left */}
                     <div
-                      className="absolute top-4 left-4 z-20 cursor-grab text-slate-700 hover:text-slate-500 p-1"
+                      className="absolute top-4 left-4 z-20 cursor-grab text-txt-secondary hover:text-txt-tertiary p-1"
                       onPointerDown={(e) => e.stopPropagation()}
                     >
                       <GripVertical className="w-5 h-5" />
@@ -340,12 +342,12 @@ export default function RecentEstimates({
                         value={est.status}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => handleStatusChange(e, est.id)}
-                        className={`text-base font-medium rounded-[24px] px-2 py-1.5 border-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 cursor-pointer shadow-sm transition-colors ${
+                        className={`text-base font-medium rounded-2xl px-2 py-1.5 border-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 cursor-pointer shadow-sm transition-colors ${
                           est.status === "Completed"
                             ? "bg-green-100 text-green-700  "
                             : est.status === "In Progress"
                               ? "bg-amber-100 text-amber-700  "
-                              : "bg-slate-100 text-slate-600  "
+                              : "bg-slate-100 text-txt-secondary  "
                         }`}
                       >
                         <option value="To Do">To Do</option>
@@ -366,21 +368,21 @@ export default function RecentEstimates({
                       </div>
 
                       <div
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[24px] border ${est.theme.border} bg-white dark:bg-slate-800 shadow-sm text-sm md:text-base font-medium tracking-[0.1em] uppercase ${est.theme.textRaw} mb-4`}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border ${est.theme.border} bg-surface-default dark:bg-slate-800 shadow-sm text-sm md:text-base font-medium tracking-[0.1em] uppercase ${est.theme.textRaw} mb-4`}
                       >
                         <span className="truncate">{est.typeLabel}</span>
                       </div>
 
-                      <h3 className="md: text-slate-900 dark:text-white mb-2 leading-[1.2] text-lg font-medium text-slate-800 mb-4">
+                      <h3 className="md: text-txt-primary dark:text-white mb-2 leading-[1.2] text-lg font-medium text-txt-primary mb-4">
                         {est.title}
                       </h3>
 
                       <div className="flex flex-col items-center mt-auto">
-                        <p className="md: whitespace-nowrap overflow-hidden text-ellipsis mb-1 text-base font-normal text-slate-600 leading-relaxed">
+                        <p className="md: whitespace-nowrap overflow-hidden text-ellipsis mb-1 text-base font-normal text-txt-secondary leading-relaxed">
                           <FileText className="w-3 h-3 inline mr-1 opacity-70" />{" "}
                           {est.desc}
                         </p>
-                        <p className="text-base font-normal text-slate-600 leading-relaxed">
+                        <p className="text-base font-normal text-txt-secondary leading-relaxed">
                           Saved: {est.date}
                         </p>
                       </div>

@@ -1,3 +1,4 @@
+import { Button } from './ui/Button';
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
@@ -13,7 +14,7 @@ import { Calculator, Droplets,
  Map,
  Grid2X2,
  Box,
- ArrowRightLeft,
+ ArrowRightLeft, ArrowRight,
  HardHat,
  Scaling,
  Container,
@@ -104,7 +105,7 @@ export const ALL_MODULES = [
  premium: true,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~15 mins",
  isPopular: true,
@@ -117,8 +118,8 @@ export const ALL_MODULES = [
  icon: Ruler,
  styleStyle: "solid",
  colorClass:
- "bg-[var(--accent-purple)] text-slate-900 shadow-[0_8px_30px_rgba(115,103,240,0.3)]",
- iconClass: "text-slate-900 opacity-90",
+ "bg-[var(--accent-purple)] text-txt-primary shadow-[0_8px_30px_rgba(115,103,240,0.3)]",
+ iconClass: "text-txt-primary opacity-90",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  isPopular: true,
@@ -131,7 +132,7 @@ export const ALL_MODULES = [
  icon: TrendingUp,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~1 min",
  isPopular: true,
@@ -144,8 +145,8 @@ export const ALL_MODULES = [
  icon: Sparkles,
  premium: true,
  styleStyle: "solid",
- colorClass: "bg-[var(--primary-dark)] text-slate-900 shadow-lg",
- iconClass: "text-slate-900 opacity-90",
+ colorClass: "bg-[var(--primary-dark)] text-txt-primary shadow-lg",
+ iconClass: "text-txt-primary opacity-90",
  difficulty: "Beginner",
  estimatedTime: "~1 min",
  isNew: true,
@@ -184,7 +185,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: Calculator,
  styleStyle: "solid",
- colorClass: "bg-blue-500 text-slate-900 shadow-lg",
+ colorClass: "bg-blue-500 text-txt-primary shadow-lg",
  difficulty: "Beginner",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -196,7 +197,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
- colorClass: "bg-emerald-600 text-slate-900 shadow-lg",
+ colorClass: "bg-emerald-600 text-txt-primary shadow-lg",
  difficulty: "Beginner",
  estimatedTime: "~6 mins",
  isNew: true,
@@ -208,7 +209,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
- colorClass: "bg-[#FFFFFF] text-slate-900 shadow-lg",
+ colorClass: "bg-[#FFFFFF] text-txt-primary shadow-lg",
  difficulty: "Beginner",
  estimatedTime: "~5 mins",
  isNew: true,
@@ -233,7 +234,7 @@ export const ALL_MODULES = [
  icon: Paintbrush,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~3 mins",
  },
@@ -245,7 +246,7 @@ export const ALL_MODULES = [
  icon: Scaling,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~3 mins",
  },
@@ -257,7 +258,7 @@ export const ALL_MODULES = [
  icon: Container,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~3 mins",
  },
@@ -269,7 +270,7 @@ export const ALL_MODULES = [
  icon: Anvil,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~3 mins",
  },
@@ -281,7 +282,7 @@ export const ALL_MODULES = [
  icon: Repeat,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~1 min",
  },
@@ -306,7 +307,7 @@ export const ALL_MODULES = [
  icon: BarChart,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -319,7 +320,7 @@ export const ALL_MODULES = [
  icon: Users,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~2 mins",
  isNew: true,
@@ -347,8 +348,8 @@ export const ALL_MODULES = [
  icon: Building2,
  styleStyle: "solid",
  colorClass:
- "bg-[var(--accent-teal)] text-slate-900 shadow-[0_8px_30px_rgba(32,201,151,0.3)]",
- iconClass: "text-slate-900 opacity-90",
+ "bg-[var(--accent-teal)] text-txt-primary shadow-[0_8px_30px_rgba(32,201,151,0.3)]",
+ iconClass: "text-txt-primary opacity-90",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  isPopular: true,
@@ -361,8 +362,8 @@ export const ALL_MODULES = [
  icon: HardHat,
  styleStyle: "solid",
  colorClass:
- "bg-gradient-to-br from-indigo-500 to-cyan-500 text-slate-900 shadow-[0_8px_30px_rgba(99,102,241,0.3)]",
- iconClass: "text-slate-900 opacity-90",
+ "bg-gradient-to-br from-indigo-500 to-cyan-500 text-txt-primary shadow-[0_8px_30px_rgba(99,102,241,0.3)]",
+ iconClass: "text-txt-primary opacity-90",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
  isPopular: true,
@@ -389,7 +390,7 @@ export const ALL_MODULES = [
  icon: Square,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
  isNew: true,
@@ -399,10 +400,10 @@ export const ALL_MODULES = [
  title: "Building Setback Calculator",
  desc: "Auto-calculate front, rear setbacks, and side margins given plot size and zone.",
  category: "Masonry, Surfaces & Finishes",
- icon: ArrowRightLeft,
+ icon: ArrowRightLeft, ArrowRight,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -415,7 +416,7 @@ export const ALL_MODULES = [
  icon: Building,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
  isNew: true,
@@ -428,7 +429,7 @@ export const ALL_MODULES = [
  icon: Triangle,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~4 mins",
  isNew: true,
@@ -441,7 +442,7 @@ export const ALL_MODULES = [
  icon: Layout,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~5 mins",
  isNew: true,
@@ -454,7 +455,7 @@ export const ALL_MODULES = [
  icon: Sun,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
  isNew: true,
@@ -467,7 +468,7 @@ export const ALL_MODULES = [
  icon: FileSpreadsheet,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  },
@@ -479,7 +480,7 @@ export const ALL_MODULES = [
  icon: Layers,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -492,7 +493,7 @@ export const ALL_MODULES = [
  icon: Box,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -505,7 +506,7 @@ export const ALL_MODULES = [
  icon: ShieldCheck,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~5 mins",
  isNew: true,
@@ -518,7 +519,7 @@ export const ALL_MODULES = [
  icon: Layers,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
  },
@@ -530,7 +531,7 @@ export const ALL_MODULES = [
  icon: Box,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~4 mins",
  },
@@ -542,7 +543,7 @@ export const ALL_MODULES = [
  icon: Hammer,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~4 mins",
  },
@@ -556,7 +557,7 @@ export const ALL_MODULES = [
  icon: Cone,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
  },
@@ -568,7 +569,7 @@ export const ALL_MODULES = [
  icon: Activity, BookOpen, FileText,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
  isNew: true,
@@ -581,7 +582,7 @@ export const ALL_MODULES = [
  icon: Layers,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  },
@@ -593,7 +594,7 @@ export const ALL_MODULES = [
  icon: Layers,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -606,7 +607,7 @@ export const ALL_MODULES = [
  icon: Droplet,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~2 mins",
  isNew: true,
@@ -621,12 +622,12 @@ export const ALL_MODULES = [
  icon: Zap,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
  isNew: true,
  },
- { id: "solar-water-heater", title: "Solar Water Heater", desc: "Calculate recommended collector area and tank capacity.", category: "MEP, Energy & Landscaping", icon: Sun, styleStyle: "glass", colorClass: "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ", difficulty: "Beginner", estimatedTime: "~3 mins", isNew: true, },
+ { id: "solar-water-heater", title: "Solar Water Heater", desc: "Calculate recommended collector area and tank capacity.", category: "MEP, Energy & Landscaping", icon: Sun, styleStyle: "glass", colorClass: "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ", difficulty: "Beginner", estimatedTime: "~3 mins", isNew: true, },
       { id: "solar-roof",
  title: "Solar Roof Calculator",
  desc: "Estimate required solar system size, panels, and ROI.",
@@ -634,7 +635,7 @@ export const ALL_MODULES = [
  icon: Sun,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
  isNew: true,
@@ -647,7 +648,7 @@ export const ALL_MODULES = [
  icon: Droplet,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -660,7 +661,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-white/80 backdrop-blur-md text-emerald-600",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-emerald-600",
  difficulty: "Beginner",
  estimatedTime: "Read",
  isNew: true,
@@ -672,7 +673,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: FileText,
  styleStyle: "glass",
- colorClass: "bg-white/80 backdrop-blur-md text-slate-800",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-txt-primary",
  difficulty: "Beginner",
  estimatedTime: "Read",
  },
@@ -685,7 +686,7 @@ export const ALL_MODULES = [
  icon: Route,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~15 mins",
  },
@@ -697,7 +698,7 @@ export const ALL_MODULES = [
  icon: Shovel,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
  },
@@ -709,7 +710,7 @@ export const ALL_MODULES = [
  icon: Map,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
  },
@@ -721,7 +722,7 @@ export const ALL_MODULES = [
  icon: Maximize2,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
  },
@@ -733,7 +734,7 @@ export const ALL_MODULES = [
  icon: Bug,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
  isNew: true,
@@ -747,7 +748,7 @@ export const ALL_MODULES = [
  icon: LineChart,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~8 mins",
  },
@@ -759,7 +760,7 @@ export const ALL_MODULES = [
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-white/80 backdrop-blur-md text-slate-900",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-txt-primary",
  difficulty: "Beginner",
  estimatedTime: "Read",
  },
@@ -770,7 +771,7 @@ export const ALL_MODULES = [
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-white/80 backdrop-blur-md text-slate-900",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-txt-primary",
  difficulty: "Intermediate",
  estimatedTime: "Read",
  },
@@ -781,7 +782,7 @@ export const ALL_MODULES = [
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-white/80 backdrop-blur-md text-emerald-600",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-emerald-600",
  difficulty: "Intermediate",
  estimatedTime: "Read",
  },
@@ -792,7 +793,7 @@ export const ALL_MODULES = [
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-white/80 backdrop-blur-md text-emerald-600",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-emerald-600",
  difficulty: "Advanced",
  estimatedTime: "Read",
  },
@@ -806,7 +807,7 @@ export const ALL_MODULES = [
  icon: Layers,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  isNew: true,
@@ -819,7 +820,7 @@ export const ALL_MODULES = [
  icon: Building2,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  isNew: true,
@@ -832,7 +833,7 @@ export const ALL_MODULES = [
  icon: Grid2X2,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~15 mins",
  isNew: true,
@@ -845,7 +846,7 @@ export const ALL_MODULES = [
  icon: Waves,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~12 mins",
  isNew: true,
@@ -858,7 +859,7 @@ export const ALL_MODULES = [
  icon: Pickaxe,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~8 mins",
  isNew: true,
@@ -871,7 +872,7 @@ export const ALL_MODULES = [
  icon: Layers,
  styleStyle: "glass",
  colorClass:
- "bg-white/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  isNew: true,
@@ -891,7 +892,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  if (id === "ai") {
  return {
  textRaw: "text-[#4338CA] [#818CF8]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#4338CA] [#4338CA]",
  stroke: "stroke-[#4338CA]",
  baseHex: "#4338CA",
@@ -903,7 +904,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  case "Concrete Tech":
  return {
  textRaw: "text-[#0D9488]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#0D9488]",
  stroke: "stroke-[#0D9488]",
  baseHex: "#0D9488",
@@ -912,7 +913,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  case "Quantity Estimator":
  return {
  textRaw: "text-[#6B46C1] [#9F7AEA]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#6B46C1] [#6B46C1]",
  stroke: "stroke-[#6B46C1]",
  baseHex: "#6B46C1",
@@ -921,7 +922,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  case "Structural Design":
  return {
  textRaw: "text-[#BE185D] [#F472B6]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#BE185D] [#BE185D]",
  stroke: "stroke-[#BE185D]",
  baseHex: "#BE185D",
@@ -929,8 +930,8 @@ export const getCategoryTheme = (category: string, id: string) => {
  };
  case "Road Construction":
  return {
- textRaw: "text-slate-900 [#2DD4BF]",
- text: "text-slate-900",
+ textRaw: "text-txt-primary [#2DD4BF]",
+ text: "text-txt-primary",
  bg: "bg-[#FFFFFF] [#FFFFFF]",
  stroke: "stroke-[#FFFFFF]",
  baseHex: "#FFFFFF",
@@ -939,7 +940,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  case "Soil Tests":
  return {
  textRaw: "text-[#D97706] [#FBBF24]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#D97706] [#D97706]",
  stroke: "stroke-[#D97706]",
  baseHex: "#D97706",
@@ -948,7 +949,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  case "MEP":
  return {
  textRaw: "text-[#2563EB] [#60A5FA]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#2563EB] [#2563EB]",
  stroke: "stroke-[#2563EB]",
  baseHex: "#2563EB",
@@ -957,7 +958,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  case "Architectural References & Space Planning":
  return {
  textRaw: "text-[#EC4899] [#F472B6]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#EC4899] [#EC4899]",
  stroke: "stroke-[#EC4899]",
  baseHex: "#EC4899",
@@ -966,7 +967,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  case "Analysis & Tools":
  return {
  textRaw: "text-[#4338CA] [#818CF8]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#4338CA] [#4338CA]",
  stroke: "stroke-[#4338CA]",
  baseHex: "#4338CA",
@@ -975,7 +976,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  default:
  return {
  textRaw: "text-[#4338CA] [#818CF8]",
- text: "text-slate-900",
+ text: "text-txt-primary",
  bg: "bg-[#4338CA] [#4338CA]",
  stroke: "stroke-[#4338CA]",
  baseHex: "#4338CA",
@@ -991,7 +992,7 @@ const ToolsSkeleton = () => (
  <div className="h-8 w-48 bg-slate-200 rounded-lg"></div>
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
  {[1, 2, 3, 4, 5].map((card) => (
- <div key={`skeleton-card-${card}`} className="w-full bg-white [#1e1e1e] rounded-[24px] p-4 sm:p-6 h-[180px] border border-slate-100 flex flex-col gap-4 shadow-sm overflow-hidden">
+ <div key={`skeleton-card-${card}`} className="w-full bg-surface-default [#1e1e1e] rounded-2xl p-4 sm:p-6 h-[180px] border border-slate-100 flex flex-col gap-4 shadow-sm overflow-hidden">
  <div className="flex items-center gap-3">
  <div className="w-12 h-12 rounded-xl bg-slate-100 shrink-0"></div>
  <div className="flex flex-col gap-2 flex-1">
@@ -1147,21 +1148,11 @@ export default function Dashboard({
  
   <RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} />
   
-  <button 
-    onClick={() => setIsRecentOpen(true)}
-    className="fixed right-6 bottom-6 z-50 flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-2xl hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 group"
-    title="Calculation History"
-  >
-    <History className="w-6 h-6 group-hover:-rotate-12 transition-transform" />
-    <span className="absolute -top-1 -right-1 flex h-4 w-4">
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-      <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 border-2 border-white"></span>
-    </span>
-  </button>
-<div className="relative w-full flex flex-col font-sans bg-[#f8f9fa] text-slate-900 border-none">
+  <Button onClick={() => setIsRecentOpen(true)} className="fixed right-6 bottom-6 z-50 !w-14 !h-14 !rounded-full !bg-indigo-600 !text-white shadow-2xl hover:!bg-indigo-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 group !p-0" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 border-2 border-white"></span></span></Button>
+<div className="relative w-full flex flex-col font-sans bg-[#f8f9fa] text-txt-primary border-none">
 
   <div 
-    className="relative w-full flex flex-col overflow-hidden bg-white"
+    className="relative w-full flex flex-col overflow-hidden bg-surface-default"
   >
     <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
       <div 
@@ -1190,7 +1181,7 @@ export default function Dashboard({
  <ScrollReveal><SocialProofSection /></ScrollReveal>
  <ScrollReveal yOffset={30}><HowItWorksSection /></ScrollReveal>
  <ScrollReveal yOffset={30}><FeatureComparisonSection /></ScrollReveal>
- <div className="w-full bg-slate-50/50 pb-0 pt-4 -mt-8 relative z-10  border-t border-slate-200/60 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] overflow-visible">
+ <div className="w-full bg-slate-50/50 pb-0 pt-4 -mt-8 relative z-10  border-t border-ui-borderSubtle/60 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] overflow-visible">
  {/* Premium Ambient Background */}
  <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]" 
  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1.5\'/%3E%3C/g%3E%3C/svg%3E")' }} 
@@ -1228,13 +1219,13 @@ export default function Dashboard({
  <div className="absolute top-[-50%] left-[-10%] w-[70%] h-[150%] rounded-full bg-blue-600/10 blur-[80px] pointer-events-none"></div>
  <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[100%] rounded-full bg-blue-600/5 blur-[80px] pointer-events-none"></div>
  <div className="w-full md:max-w-[1400px] md:mx-auto z-10 flex flex-col items-start gap-1 px-4 md:px-0">
- <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-slate-800 tracking-tight">Civil Estimation</h1>
+ <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-txt-primary tracking-tight">Civil Estimation</h1>
  <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-indigo-700 tracking-tight mb-2">Pro.</h1>
- <p className="md: max-w-lg mb-2 text-base font-normal text-slate-600 leading-relaxed">Welcome back, {user.displayName?.split(' ')[0] || 'Engineer'}.</p>
+ <p className="md: max-w-lg mb-2 text-base font-normal text-txt-secondary leading-relaxed">Welcome back, {user.displayName?.split(' ')[0] || 'Engineer'}.</p>
  </div>
  </div>
 
- <div className="w-full bg-slate-50/50  relative overflow-visible shadow-[0_-8px_30px_rgba(163,177,198,0.2)] border-t border-slate-200/60 pb-0 tools-section">
+ <div className="w-full bg-slate-50/50  relative overflow-visible shadow-[0_-8px_30px_rgba(163,177,198,0.2)] border-t border-ui-borderSubtle/60 pb-0 tools-section">
  {/* Premium Ambient Background */}
  <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]" 
  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1.5\'/%3E%3C/g%3E%3C/svg%3E")' }} 
@@ -1256,7 +1247,7 @@ export default function Dashboard({
 
  {/* Recently Used section */}
  <div className="mb-12 flex flex-col gap-5 w-full md:max-w-[1400px] md:mx-auto px-4">
- <h2 id="section-recent-tools" className="md: flex items-center gap-3 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+ <h2 id="section-recent-tools" className="md: flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
  <History className="w-6 h-6 text-indigo-500" />
  Recent Tools
  </h2>
@@ -1268,34 +1259,34 @@ export default function Dashboard({
  return (
  <div key={`recent-${t.id}`} className="relative group bg-[#F0F4F8] rounded-2xl p-4 hover:-translate-y-1.5 hover:scale-[1.02] transition-all flex flex-col gap-3 h-full shadow-[4px_4px_10px_rgba(163,177,198,0.3),-4px_-4px_10px_rgba(255,255,255,0.9)] hover:shadow-[6px_6px_15px_rgba(163,177,198,0.4),-6px_-6px_15px_rgba(255,255,255,1)]">
  <div className="flex items-center gap-2">
- <div className="w-full w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-white shadow-sm border border-slate-100 text-indigo-600 overflow-hidden">
+ <div className="w-full w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-surface-default shadow-sm border border-slate-100 text-indigo-600 overflow-hidden">
  {m.icon && <m.icon className="w-4 h-4" strokeWidth={1.5} />}
  </div>
  <div className="flex flex-col">
- <h3 className="line-clamp-2 min-h-[3rem] group-hover:text-indigo-900 transition-colors text-lg font-medium text-slate-800 mb-4">{m.title}</h3>
- <span className="text-sm font-normal text-slate-500">
+ <h3 className="line-clamp-2 min-h-[3rem] group-hover:text-indigo-900 transition-colors text-lg font-medium text-txt-primary mb-4">{m.title}</h3>
+ <span className="text-sm font-normal text-txt-tertiary">
  {formatTimeAgo(t.timestamp)}
  </span>
  </div>
  </div>
- <button onClick={() => handleSelect(t.id, t.lastInputs)} className="w-full mt-auto bg-white/70 backdrop-blur-md hover:bg-white text-slate-600 hover:text-blue-700 transition-colors py-1.5 rounded-full text-base font-medium border border-white/20 flex justify-center items-center gap-2 shadow-sm active:scale-95 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 overflow-hidden">
- Resume
- </button>
+ <Button onClick={() => handleSelect(t.id, t.lastInputs)} variant="premium" size="sm" fullWidth rightIcon={<ArrowRight className="w-4 h-4" />}>
+Open Calculator
+</Button>
  </div>
  );
  })}
  </div>
  ) : (
- <div className="p-4 sm:p-8 md:p-8 bg-[#F0F4F8] shadow-[inset_4px_4px_8px_rgba(163,177,198,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] rounded-3xl flex flex-col items-center justify-center text-center border-none overflow-hidden">
- <History className="w-10 h-10 text-slate-600 mb-3" />
- <p className="text-base font-normal text-slate-600 leading-relaxed">Start using tools to see your history here.</p>
+ <div className="p-4 sm:p-8 md:p-8 bg-[#F0F4F8] shadow-[inset_4px_4px_8px_rgba(163,177,198,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] rounded-2xl flex flex-col items-center justify-center text-center border-none overflow-hidden">
+ <History className="w-10 h-10 text-txt-secondary mb-3" />
+ <p className="text-base font-normal text-txt-secondary leading-relaxed">Start using tools to see your history here.</p>
  </div>
  )}
  </div>
 
  {settings.favoriteTools && settings.favoriteTools.length > 0 && (
  <div className="mb-12 flex flex-col gap-5 w-full md:max-w-[1400px] md:mx-auto px-4">
- <h2 id="section-personalized-shortcuts" className="flex items-center gap-3 text-xl font-semibold text-slate-800 tracking-tight mb-4">
+ <h2 id="section-personalized-shortcuts" className="flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
                                       <Bookmark className="w-6 h-6 text-indigo-500" fill="transparent" strokeWidth={2.5} />
  Personalized Shortcuts
  </h2>
@@ -1311,7 +1302,7 @@ export default function Dashboard({
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.4, delay: index * 0.05 }}
+    transition={{ duration: 0.4, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
   >
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-fav-${mod.id}`} categoryColor={'#f8fafc'} />
  </motion.div>
@@ -1324,21 +1315,21 @@ export default function Dashboard({
  {/* Quick Overview Row */}
  <div className="w-full md:max-w-[1400px] md:mx-auto px-4"><section className="mb-8">
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
- <div className="bg-blue-600 text-white rounded-3xl p-5 shadow-lg shadow-blue-500/10 overflow-hidden">
+ <div className="bg-blue-600 text-white rounded-2xl p-5 shadow-lg shadow-blue-500/10 overflow-hidden">
  <div className="text-sm opacity-80 uppercase font-semibold tracking-wider">Active Project</div>
  <div className="text-xl font-bold mt-1 truncate">Disposal Well A</div>
  </div>
- <div className="w-full bg-white/70 backdrop-blur-md rounded-3xl p-5 shadow-sm border border-white/20 overflow-hidden">
- <div className="text-sm text-slate-500 uppercase font-semibold tracking-wider">Recent Estimate</div>
- <div className="text-xl font-bold mt-1 text-slate-800 truncate">Rs 1.2M</div>
+ <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-white/20 overflow-hidden">
+ <div className="text-sm text-txt-tertiary uppercase font-semibold tracking-wider">Recent Estimate</div>
+ <div className="text-xl font-bold mt-1 text-txt-primary truncate">Rs 1.2M</div>
  </div>
- <div className="w-full bg-white/70 backdrop-blur-md rounded-3xl p-5 shadow-sm border border-white/20 overflow-hidden">
- <div className="text-sm text-slate-500 uppercase font-semibold tracking-wider">Saved BOQs</div>
- <div className="text-xl font-bold mt-1 text-slate-800 truncate">14</div>
+ <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-white/20 overflow-hidden">
+ <div className="text-sm text-txt-tertiary uppercase font-semibold tracking-wider">Saved BOQs</div>
+ <div className="text-xl font-bold mt-1 text-txt-primary truncate">14</div>
  </div>
- <div className="w-full bg-white/70 backdrop-blur-md rounded-3xl p-5 shadow-sm border border-white/20 overflow-hidden">
- <div className="text-sm text-slate-500 uppercase font-semibold tracking-wider">Tools Used</div>
- <div className="text-xl font-bold mt-1 text-slate-800 truncate">8</div>
+ <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-white/20 overflow-hidden">
+ <div className="text-sm text-txt-tertiary uppercase font-semibold tracking-wider">Tools Used</div>
+ <div className="text-xl font-bold mt-1 text-txt-primary truncate">8</div>
  </div>
  </div>
  </section></div>
@@ -1364,9 +1355,9 @@ export default function Dashboard({
  return (
  <div key={groupName} className={`w-full flex flex-col py-12 md:py-20 ${index % 3 === 0 ? 'bg-[#F4F1EA]' : index % 3 === 1 ? 'bg-[#F0F5FF]' : 'bg-[#D9E6DD]'}`}>
 <div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex flex-col gap-5">
-<h2 id={`section-${groupName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="px-2 flex items-center gap-2 text-xl font-semibold text-slate-800 tracking-tight mb-4">
+<h2 id={`section-${groupName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="px-2 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
  {groupName}
- <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 shadow-sm">{toolsInGroup.length}</span>
+ <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-slate-100 border border-ui-borderSubtle text-txt-tertiary shadow-sm">{toolsInGroup.length}</span>
  </h2>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 tool-card-grid">
  {toolsInGroup.map((mod, modIdx) => (
@@ -1377,7 +1368,7 @@ export default function Dashboard({
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.4, delay: modIdx * 0.05 }}
+    transition={{ duration: 0.4, delay: modIdx * 0.05, ease: [0.16, 1, 0.3, 1] }}
   >
  <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-${groupName || 'group'}-${mod.id}`} categoryColor={index % 3 === 0 ? '#F4F1EA' : index % 3 === 1 ? '#F0F5FF' : '#D9E6DD'} />
  </motion.div>
@@ -1409,7 +1400,7 @@ export default function Dashboard({
 
  {/* Bottom Sheet Modal */}
  <div
- className={`fixed bottom-0 left-0 right-0 h-[80vh] md:h-[70vh] bg-white/90 backdrop-blur-2xl shadow-[0_-20px_60px_rgba(15,23,42,0.2)] rounded-t-[40px] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col border-t border-white/50 overflow-hidden ${isAiChatOpen ? "translate-y-0" : "translate-y-full"}`}
+ className={`fixed bottom-0 left-0 right-0 h-[80vh] md:h-[70vh] bg-surface-default/90 backdrop-blur-2xl shadow-[0_-20px_60px_rgba(15,23,42,0.2)] rounded-t-[40px] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col border-t border-white/50 overflow-hidden ${isAiChatOpen ? "translate-y-0" : "translate-y-full"}`}
  >
  {/* Premium Ambient Backgrounds inside Modal */}
  <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-60">
@@ -1426,24 +1417,24 @@ export default function Dashboard({
  <div className="w-16 h-1.5 rounded-full bg-slate-300 hover:bg-slate-400 transition-colors shadow-inner" />
  </div>
 
- <div className="px-6 flex items-center justify-between pb-4 border-b border-slate-200/50 relative z-10 bg-white/40">
+ <div className="px-6 flex items-center justify-between pb-4 border-b border-ui-borderSubtle/50 relative z-10 bg-surface-default/40">
  <div className="flex items-center gap-3">
  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/20">
  <Sparkles className="w-5 h-5 text-white" strokeWidth={1.5} />
  </div>
  <div className="flex flex-col">
- <h3 className="text-lg font-bold text-slate-800 tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
+ <h3 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
  AI Estimator
  </h3>
  <span className="text-[11px] font-semibold text-indigo-700 uppercase tracking-wider mt-0.5">Premium Copilot</span>
  </div>
  </div>
- <button
+ <Button
  onClick={() => setIsAiChatOpen(false)}
- className="p-2.5 rounded-full bg-white/80 hover:bg-slate-100 text-slate-500 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 shadow-sm border border-slate-200/50"
+ className="p-2.5 rounded-full bg-surface-default/80 hover:bg-slate-100 text-txt-tertiary transition-all duration-300 active:scale-95 hover:-translate-y-0.5 shadow-sm border border-ui-borderSubtle/50"
  >
  <X className="w-5 h-5" />
- </button>
+ </Button>
  </div>
 
  {/* Chat area */}
@@ -1459,7 +1450,7 @@ export default function Dashboard({
  </div>
  )}
  <div
- className={`px-5 py-3.5 max-w-[85%] text-[15px] font-medium leading-relaxed shadow-sm backdrop-blur-md ${msg.role === "user" ? "bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-[24px] rounded-tr-[8px] shadow-slate-900/10" : "bg-white/80 border border-slate-200/60 text-slate-700 rounded-[24px] rounded-tl-[8px] shadow-slate-200/50"}`}
+ className={`px-5 py-3.5 max-w-[85%] text-[15px] font-medium leading-relaxed shadow-sm backdrop-blur-md ${msg.role === "user" ? "bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl rounded-tr-[8px] shadow-slate-900/10" : "bg-surface-default/80 border border-ui-borderSubtle/60 text-txt-secondary rounded-2xl rounded-tl-[8px] shadow-slate-200/50"}`}
  >
  {msg.content}
  </div>
@@ -1469,10 +1460,10 @@ export default function Dashboard({
  </div>
 
  {/* Input area */}
- <div className="p-4 sm:p-6 pt-4 shrink-0 w-full md:max-w-4xl md:mx-auto bg-white/60 backdrop-blur-xl border-t border-slate-200/50 relative z-10">
+ <div className="p-4 sm:p-6 pt-4 shrink-0 w-full md:max-w-4xl md:mx-auto bg-surface-default/60 backdrop-blur-xl border-t border-ui-borderSubtle/50 relative z-10">
  <div className="relative group">
  <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 rounded-full opacity-30 group-focus-within:opacity-100 blur-[4px] transition-all duration-500"></div>
- <div className="w-full relative flex items-center bg-white/90 backdrop-blur-md rounded-full px-5 py-2 border border-slate-200/50 shadow-inner overflow-hidden">
+ <div className="w-full relative flex items-center bg-surface-default/90 backdrop-blur-md rounded-full px-5 py-2 border border-ui-borderSubtle/50 shadow-inner overflow-hidden">
  <><label htmlFor="a11y-input-1" className="sr-only">Ask your assistant...</label>
 <input id="a11y-input-1"
  type="text"
@@ -1498,9 +1489,9 @@ export default function Dashboard({
  }
  }}
  placeholder="Ask your AI Assistant..."
- className="w-full bg-transparent border-none outline-none text-base text-slate-800 px-2 py-2.5 placeholder:text-slate-400 rounded-full"
+ className="w-full bg-transparent border-none outline-none text-base text-txt-primary px-2 py-2.5 placeholder:text-slate-400 rounded-full"
  /></>
- <button aria-label="ArrowUpRight" className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/30 text-white rounded-full transition-all hover:scale-105 active:scale-95 ml-2 shrink-0 flex items-center justify-center relative overflow-hidden group/send"
+ <Button variant="premium" className="ml-2 !rounded-full !w-12 !h-12 !p-0" aria-label="Ask" rightIcon={<ArrowUpRight className="w-5 h-5 text-white" />}
  onClick={() => {
  if (aiMessage.trim()) {
  setAiMessages((prev) => [
@@ -1521,9 +1512,9 @@ export default function Dashboard({
  }
  }}
  >
- <div className="absolute inset-0 bg-white/20 -translate-x-[150%] skew-x-12 group-hover/send:animate-[shimmer_1.5s_infinite]"></div>
+ <div className="absolute inset-0 bg-surface-default/20 -translate-x-[150%] skew-x-12 group-hover/send:animate-[shimmer_1.5s_infinite]"></div>
  <ArrowUpRight className="w-5 h-5 relative z-10" />
- </button>
+ </Button>
  </div>
  </div>
         </div>

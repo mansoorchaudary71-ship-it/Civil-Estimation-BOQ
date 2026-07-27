@@ -55,7 +55,7 @@ export default function ReadingTimeIndicator({ activeModule }: { activeModule: s
 
   return (
     <div className="w-full flex justify-end px-4 md:px-8 py-2 relative z-20 pointer-events-none absolute top-0 right-0">
-      <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-full border border-slate-200/50 dark:border-slate-800/50 shadow-sm pointer-events-auto transition-all animate-in fade-in slide-in-from-top-2">
+      <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-txt-tertiary dark:text-slate-400 bg-surface-default/80 dark:bg-slate-900/80 backdrop-blur-md rounded-full border border-ui-borderSubtle/50 dark:border-slate-800/50 shadow-sm pointer-events-auto transition-all animate-in fade-in slide-in-from-top-2">
         <Clock className="w-3.5 h-3.5 text-indigo-500" strokeWidth={2.5} />
         <span>{readingTime} min read</span>
       </div>

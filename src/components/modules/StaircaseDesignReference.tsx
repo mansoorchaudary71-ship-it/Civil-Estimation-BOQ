@@ -71,8 +71,8 @@ export default function StaircaseDesignReference() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-[24px] shadow-sm overflow-hidden">
-         <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-slate-800 dark:text-slate-200">
+      <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
+         <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-txt-primary dark:text-slate-200">
           <Spline className="w-6 h-6 text-indigo-600" />
           Staircase & Exit Clearance Reference
         </h2>
@@ -80,14 +80,14 @@ export default function StaircaseDesignReference() {
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
             <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Space & Classification</h3>
+                  <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-slate-100 pb-2">Space & Classification</h3>
                   <div className="space-y-4">
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 ml-1">Occupancy Type</label>
+                        <label className="block text-xs font-bold text-txt-secondary uppercase tracking-wider mb-1.5 ml-1">Occupancy Type</label>
                         <select 
                             value={occupancy}
                             onChange={(e) => setOccupancy(e.target.value as OccupancyType)}
-                            className="w-full h-11 bg-slate-50 border border-slate-200 rounded-[16px] px-4 text-sm font-medium focus:outline-none"
+                            className="w-full h-11 bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
                         >
                             {Object.keys(OCCUPANCY_SPECS).map(type => (
                                 <option key={type} value={type}>{type}</option>
@@ -100,7 +100,7 @@ export default function StaircaseDesignReference() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Step Dimensions</h3>
+                  <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-slate-100 pb-2">Step Dimensions</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Target Riser" unit="mm" value={riser} onChange={setRiser} />
                     <NumberInput label="Target Going" unit="mm" value={going} onChange={setGoing} />
@@ -108,7 +108,7 @@ export default function StaircaseDesignReference() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Flight Parameters</h3>
+                  <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-slate-100 pb-2">Flight Parameters</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Stair Width" unit="m" value={width} onChange={setWidth} />
                     <NumberInput label="Landing Depth" unit="m" value={landingDepth} onChange={setLandingDepth} />
@@ -143,8 +143,8 @@ export default function StaircaseDesignReference() {
                     </div>
                 </MaterialSummary>
 
-                <div className="bg-slate-50 border border-slate-100 rounded-3xl p-4 sm:p-6 overflow-hidden">
-                    <h3 className="font-bold text-slate-800 text-sm mb-4 flex items-center justify-between">
+                <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 sm:p-6 overflow-hidden">
+                    <h3 className="font-bold text-txt-primary text-sm mb-4 flex items-center justify-between">
                         <span>Code Compliance Matrix</span>
                         {results.isFullyCompliant 
                             ? <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full flex items-center gap-1.5 font-bold"><ShieldCheck className="w-3.5 h-3.5"/> All Clear</span>
@@ -154,61 +154,61 @@ export default function StaircaseDesignReference() {
                     
                     <div className="space-y-3">
                         {/* Minimum Width */}
-                        <div className={`p-3 rounded-xl border flex items-start justify-between ${results.widthSafe ? "bg-white border-slate-200" : "bg-rose-50 border-rose-200"}`}>
+                        <div className={`p-3 rounded-xl border flex items-start justify-between ${results.widthSafe ? "bg-surface-default border-ui-borderSubtle" : "bg-rose-50 border-rose-200"}`}>
                             <div>
-                                <h4 className={`text-sm font-bold ${results.widthSafe ? "text-slate-700" : "text-rose-800"}`}>1. Minimum Egress Width</h4>
-                                <p className="text-xs text-slate-500 mt-0.5">Required for {occupancy}: {results.reqWidth.toFixed(2)}m</p>
+                                <h4 className={`text-sm font-bold ${results.widthSafe ? "text-txt-secondary" : "text-rose-800"}`}>1. Minimum Egress Width</h4>
+                                <p className="text-xs text-txt-tertiary mt-0.5">Required for {occupancy}: {results.reqWidth.toFixed(2)}m</p>
                             </div>
                             <div className="text-right">
-                                <span className={`font-mono text-sm font-bold ${results.widthSafe ? "text-slate-800" : "text-rose-600"}`}>{Number(width).toFixed(2)} m</span>
+                                <span className={`font-mono text-sm font-bold ${results.widthSafe ? "text-txt-primary" : "text-rose-600"}`}>{Number(width).toFixed(2)} m</span>
                                 <p className="text-xs mt-0.5">{results.widthSafe ? <span className="text-teal-600">✓ Pass</span> : <span className="text-rose-600 font-bold">✗ Fail (Violates Fire Code)</span>}</p>
                             </div>
                         </div>
 
                         {/* Headroom Clearance */}
-                        <div className={`p-3 rounded-xl border flex items-start justify-between ${results.headroomSafe ? "bg-white border-slate-200" : "bg-rose-50 border-rose-600 border-2"}`}>
+                        <div className={`p-3 rounded-xl border flex items-start justify-between ${results.headroomSafe ? "bg-surface-default border-ui-borderSubtle" : "bg-rose-50 border-rose-600 border-2"}`}>
                             <div>
-                                <h4 className={`text-sm font-bold ${results.headroomSafe ? "text-slate-700" : "text-rose-800"}`}>2. Life Safety: Clear Headroom</h4>
-                                <p className="text-xs text-slate-500 mt-0.5">Absolute minimum: 2.10m vertically from nosing</p>
+                                <h4 className={`text-sm font-bold ${results.headroomSafe ? "text-txt-secondary" : "text-rose-800"}`}>2. Life Safety: Clear Headroom</h4>
+                                <p className="text-xs text-txt-tertiary mt-0.5">Absolute minimum: 2.10m vertically from nosing</p>
                             </div>
                             <div className="text-right">
-                                <span className={`font-mono text-sm font-bold ${results.headroomSafe ? "text-slate-800" : "text-rose-700"}`}>{Number(headroom).toFixed(2)} m</span>
+                                <span className={`font-mono text-sm font-bold ${results.headroomSafe ? "text-txt-primary" : "text-rose-700"}`}>{Number(headroom).toFixed(2)} m</span>
                                 <p className="text-xs mt-0.5 whitespace-nowrap">{results.headroomSafe ? <span className="text-teal-600">✓ Pass</span> : <span className="text-rose-600 font-bold">✗ CRITICAL FAIL</span>}</p>
                             </div>
                         </div>
 
                         {/* Landing Depth */}
-                        <div className={`p-3 rounded-xl border flex items-start justify-between ${results.landingSafe ? "bg-white border-slate-200" : "bg-rose-50 border-rose-200"}`}>
+                        <div className={`p-3 rounded-xl border flex items-start justify-between ${results.landingSafe ? "bg-surface-default border-ui-borderSubtle" : "bg-rose-50 border-rose-200"}`}>
                             <div>
-                                <h4 className={`text-sm font-bold ${results.landingSafe ? "text-slate-700" : "text-rose-800"}`}>3. Landing Clearance</h4>
-                                <p className="text-xs text-slate-500 mt-0.5">Landing depth must be ≥ Stair Width ({Number(width).toFixed(2)}m)</p>
+                                <h4 className={`text-sm font-bold ${results.landingSafe ? "text-txt-secondary" : "text-rose-800"}`}>3. Landing Clearance</h4>
+                                <p className="text-xs text-txt-tertiary mt-0.5">Landing depth must be ≥ Stair Width ({Number(width).toFixed(2)}m)</p>
                             </div>
                             <div className="text-right">
-                                <span className={`font-mono text-sm font-bold ${results.landingSafe ? "text-slate-800" : "text-rose-700"}`}>{Number(landingDepth).toFixed(2)} m</span>
+                                <span className={`font-mono text-sm font-bold ${results.landingSafe ? "text-txt-primary" : "text-rose-700"}`}>{Number(landingDepth).toFixed(2)} m</span>
                                 <p className="text-xs mt-0.5">{results.landingSafe ? <span className="text-teal-600">✓ Pass</span> : <span className="text-rose-600 font-bold">✗ Obstruction Hazard</span>}</p>
                             </div>
                         </div>
 
                         {/* Riser / Going */}
                         <div className="grid grid-cols-2 gap-3">
-                            <div className={`p-3 rounded-xl border flex flex-col justify-between ${results.riserSafe ? "bg-white border-slate-200" : "bg-blue-50 border-blue-200"}`}>
+                            <div className={`p-3 rounded-xl border flex flex-col justify-between ${results.riserSafe ? "bg-surface-default border-ui-borderSubtle" : "bg-blue-50 border-blue-200"}`}>
                                 <div>
-                                    <h4 className={`text-xs font-bold leading-tight ${results.riserSafe ? "text-slate-700" : "text-orange-900"}`}>Maximum Riser Check</h4>
-                                    <p className="text-[10px] text-slate-500 mt-0.5">Required limit: {results.reqMaxRiser}mm</p>
+                                    <h4 className={`text-xs font-bold leading-tight ${results.riserSafe ? "text-txt-secondary" : "text-orange-900"}`}>Maximum Riser Check</h4>
+                                    <p className="text-[10px] text-txt-tertiary mt-0.5">Required limit: {results.reqMaxRiser}mm</p>
                                 </div>
                                 <div className="mt-2 flex items-center justify-between">
-                                    <span className={`font-mono text-sm font-bold ${results.riserSafe ? "text-slate-800" : "text-blue-700"}`}>{results.actualRiser.toFixed(1)} mm</span>
+                                    <span className={`font-mono text-sm font-bold ${results.riserSafe ? "text-txt-primary" : "text-blue-700"}`}>{results.actualRiser.toFixed(1)} mm</span>
                                     <span>{results.riserSafe ? <CheckCircle2 className="w-4 h-4 text-teal-600"/> : <AlertTriangle className="w-4 h-4 text-blue-500"/>}</span>
                                 </div>
                             </div>
                             
-                            <div className={`p-3 rounded-xl border flex flex-col justify-between ${results.goingSafe ? "bg-white border-slate-200" : "bg-blue-50 border-blue-200"}`}>
+                            <div className={`p-3 rounded-xl border flex flex-col justify-between ${results.goingSafe ? "bg-surface-default border-ui-borderSubtle" : "bg-blue-50 border-blue-200"}`}>
                                 <div>
-                                    <h4 className={`text-xs font-bold leading-tight ${results.goingSafe ? "text-slate-700" : "text-orange-900"}`}>Minimum Going Check</h4>
-                                    <p className="text-[10px] text-slate-500 mt-0.5">Required min: {results.reqMinGoing}mm</p>
+                                    <h4 className={`text-xs font-bold leading-tight ${results.goingSafe ? "text-txt-secondary" : "text-orange-900"}`}>Minimum Going Check</h4>
+                                    <p className="text-[10px] text-txt-tertiary mt-0.5">Required min: {results.reqMinGoing}mm</p>
                                 </div>
                                 <div className="mt-2 flex items-center justify-between">
-                                    <span className={`font-mono text-sm font-bold ${results.goingSafe ? "text-slate-800" : "text-blue-700"}`}>{Number(going).toFixed(1)} mm</span>
+                                    <span className={`font-mono text-sm font-bold ${results.goingSafe ? "text-txt-primary" : "text-blue-700"}`}>{Number(going).toFixed(1)} mm</span>
                                     <span>{results.goingSafe ? <CheckCircle2 className="w-4 h-4 text-teal-600"/> : <AlertTriangle className="w-4 h-4 text-blue-500"/>}</span>
                                 </div>
                             </div>

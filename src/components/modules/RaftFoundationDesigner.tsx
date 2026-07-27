@@ -9,24 +9,24 @@ export default function RaftFoundationDesigner() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
-      <div className="w-full bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-         <h2 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-100 flex items-center gap-2">
+      <div className="w-full bg-surface-default dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle dark:border-slate-800 overflow-hidden">
+         <h2 className="text-xl font-bold mb-6 text-txt-primary dark:text-slate-100 flex items-center gap-2">
             <Grid2X2 className="text-pink-600" /> Raft Foundation Design
          </h2>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
             <div>
               <label className="block text-base font-medium mb-2"><span className="flex items-center">Soil Bearing Capacity (kN/m²) <CodeTooltip standard="IS" code="1904:1986" description="Design and construction of foundations in soils: General requirements." /></span></label>
               <><label htmlFor="a11y-input-406" className="sr-only">Input</label>
-<input id="a11y-input-406" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 rounded-full px-4 py-3 min-h-[44px]" value={sbc} onChange={e => setSbc(e.target.value)} /></>
+<input id="a11y-input-406" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle rounded-full px-4 py-3 min-h-[44px]" value={sbc} onChange={e => setSbc(e.target.value)} /></>
             </div>
             <div>
               <label className="block text-base font-medium mb-2">Total Raft Area (m²)</label>
               <><label htmlFor="a11y-input-407" className="sr-only">Input</label>
-<input id="a11y-input-407" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 rounded-full px-4 py-3 min-h-[44px]" value={area} onChange={e => setArea(e.target.value)} /></>
+<input id="a11y-input-407" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border border-ui-borderSubtle rounded-full px-4 py-3 min-h-[44px]" value={area} onChange={e => setArea(e.target.value)} /></>
             </div>
          </div>
-         <div className="mt-8 p-4 sm:p-6 bg-slate-50 dark:bg-slate-800 rounded-[24px] overflow-hidden">
-            <p className="text-slate-600 dark:text-slate-300 font-medium text-center">Advanced mesh analysis, punching shear checks at column locations, and settlement estimations (per IS 2950) are verified here.</p>
+         <div className="mt-8 p-4 sm:p-6 bg-slate-50 dark:bg-slate-800 rounded-2xl overflow-hidden">
+            <p className="text-txt-secondary dark:text-slate-300 font-medium text-center">Advanced mesh analysis, punching shear checks at column locations, and settlement estimations (per IS 2950) are verified here.</p>
          </div>
       </div>
     

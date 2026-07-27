@@ -1,3 +1,4 @@
+import { Button } from "./ui/Button";
 import React, { useState, useEffect } from 'react';
 import { Mail, AlertCircle, CheckCircle2, Lock, ShieldCheck, Check, Loader2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
@@ -63,7 +64,7 @@ export default function NewsletterSignupCard() {
   return (
     <div className="w-full relative py-12 md:py-16">
       {/* Background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-white dark:from-slate-900 dark:to-[#0B0F19] rounded-[32px] border border-slate-200/60 dark:border-slate-800/60 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-white dark:from-slate-900 dark:to-[#0B0F19] rounded-2xl border border-ui-borderSubtle/60 dark:border-slate-800/60 overflow-hidden">
          {/* Subtle glowing orbs */}
          <div className="absolute top-0 right-0 w-96 h-96 bg-orange-400/10 dark:bg-orange-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-400/10 dark:bg-blue-500/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3" />
@@ -86,18 +87,18 @@ export default function NewsletterSignupCard() {
             Join 15,000+ Engineers
           </div>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4 leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-txt-primary dark:text-white mb-4 leading-tight">
             Smarter estimation, <br className="hidden lg:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fa5c5c] to-[#f58145]">delivered weekly.</span>
           </h2>
           
-          <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg leading-relaxed mb-8 max-w-lg mx-auto md:mx-0 font-medium">
+          <p className="text-txt-tertiary dark:text-slate-400 text-base md:text-lg leading-relaxed mb-8 max-w-lg mx-auto md:mx-0 font-medium">
             Get exclusive access to pre-built BOQ templates, live material rate updates, and expert strategies to win more bids.
           </p>
 
           <div className="flex flex-col gap-3 mb-8 md:mb-0 hidden md:flex">
             {features.map((feature, idx) => (
-              <div key={idx} className="flex items-center gap-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <div key={idx} className="flex items-center gap-2.5 text-sm font-semibold text-txt-secondary dark:text-slate-300">
                 <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
                   <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" strokeWidth={3} />
                 </div>
@@ -109,7 +110,7 @@ export default function NewsletterSignupCard() {
 
         {/* Right Form Area */}
         <div className="w-full max-w-md">
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/80 dark:border-slate-700/50 p-6 md:p-8 rounded-[24px] shadow-xl shadow-slate-200/40 dark:shadow-none">
+          <div className="bg-surface-default/80 dark:bg-slate-900/80 backdrop-blur-xl border border-ui-borderSubtle/80 dark:border-slate-700/50 p-6 md:p-8 rounded-2xl shadow-xl shadow-slate-200/40 dark:shadow-none">
             <AnimatePresence mode="wait">
               {isSuccess ? (
                 <motion.div 
@@ -121,16 +122,11 @@ export default function NewsletterSignupCard() {
                   <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-500/20 rounded-full flex items-center justify-center mb-4">
                     <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400" strokeWidth={2.5} />
                   </div>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">You're on the list!</h4>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
+                  <h4 className="text-xl font-bold text-txt-primary dark:text-white mb-2">You're on the list!</h4>
+                  <p className="text-txt-tertiary dark:text-slate-400 text-sm mb-6">
                     Check your inbox for confirmation and your first exclusive resource.
                   </p>
-                  <button 
-                    onClick={() => setIsSuccess(false)}
-                    className="text-sm font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
-                  >
-                    Subscribe another email
-                  </button>
+                  <Button variant="ghost" size="sm" onClick={() => setIsSuccess(false)}>Subscribe another email</Button>
                 </motion.div>
               ) : (
                 <motion.form 
@@ -153,10 +149,10 @@ export default function NewsletterSignupCard() {
                   />
                   
                   <div className="flex flex-col gap-1.5 w-full">
-                    <label htmlFor="newsletter-email" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Email address</label>
+                    <label htmlFor="newsletter-email" className="text-sm font-bold text-txt-secondary dark:text-slate-300 ml-1">Email address</label>
                     <div className="relative group w-full">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10 transition-colors">
-                        <Mail className={`w-5 h-5 ${error ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500 group-focus-within:text-orange-500'}`} strokeWidth={2.5} />
+                        <Mail className={`w-5 h-5 ${error ? 'text-rose-500' : 'text-slate-400 dark:text-txt-tertiary group-focus-within:text-orange-500'}`} strokeWidth={2.5} />
                       </div>
                       <motion.input 
                         id="newsletter-email"
@@ -166,7 +162,7 @@ export default function NewsletterSignupCard() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         onBlur={handleBlur}
-                        className={`w-full h-14 pl-12 pr-4 rounded-xl bg-slate-50 dark:bg-slate-950/50 border-2 ${error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 dark:border-slate-800 focus:border-[#fa5c5c] focus:ring-[#fa5c5c]/20'} text-slate-900 dark:text-white placeholder:text-slate-400 font-medium focus:outline-none focus:ring-4 transition-all relative z-0 text-base`}
+                        className={`w-full h-14 pl-12 pr-4 rounded-xl bg-slate-50 dark:bg-slate-950/50 border-2 ${error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20' : 'border-ui-borderSubtle dark:border-slate-800 focus:border-[#fa5c5c] focus:ring-[#fa5c5c]/20'} text-txt-primary dark:text-white placeholder:text-slate-400 font-medium focus:outline-none focus:ring-4 transition-all relative z-0 text-base`}
                         aria-invalid={error ? "true" : "false"}
                         aria-describedby={error ? "email-error" : undefined}
                       />
@@ -187,25 +183,20 @@ export default function NewsletterSignupCard() {
                     </AnimatePresence>
                   </div>
                   
-                  <button 
-                    type="submit"
-                    disabled={isSubscribing}
-                    className="w-full h-14 mt-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-base flex items-center justify-center gap-2 transition-all disabled:opacity-70 disabled:cursor-not-allowed transform active:scale-[0.98] relative overflow-hidden group"
-                  >
-                    {isSubscribing ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Subscribing...
-                      </>
-                    ) : (
-                      <>
-                        Subscribe Now
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    )}
-                  </button>
+                  <Button
+  type="submit"
+  variant="premium"
+  size="lg"
+  fullWidth
+  isLoading={isSubscribing}
+  loadingText="Subscribing..."
+  rightIcon={<ArrowRight className="w-4 h-4" />}
+  className="mt-2"
+>
+  Subscribe Now
+</Button>
 
-                  <div className="flex items-center justify-center gap-4 mt-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  <div className="flex items-center justify-center gap-4 mt-2 text-xs font-semibold text-slate-400 dark:text-txt-tertiary uppercase tracking-wider">
                     <div className="flex items-center gap-1">
                       <Lock className="w-3.5 h-3.5" />
                       <span>No Spam</span>

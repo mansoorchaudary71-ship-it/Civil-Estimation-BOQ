@@ -1,3 +1,4 @@
+import { Button } from './/Button';
 import { useDebounce } from "../../hooks/useDebounce";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
@@ -52,6 +53,7 @@ const statusConfig = {
 };
 
 import { getImperialConversion } from "../../utils/autoConverter";
+
 
 function parseAndFormat(
   strValue: string | number,
@@ -242,7 +244,7 @@ export function ResultCard({
       animate={controls}
       initial={{ opacity: 0, y: 15, scale: 0.98 }}
       exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-      className={`relative p-6 sm:p-8 bg-white dark:bg-slate-900 border-0 rounded-[24px] sm:rounded-[32px] shadow-sm hover:shadow-md flex flex-col justify-between gap-4 transition-all duration-500 w-full h-full overflow-hidden group min-w-[min(100%,180px)] ${className}`}
+      className={`relative p-6 sm:p-8 bg-surface-default dark:bg-slate-900 border-0 rounded-2xl sm:rounded-2xl shadow-sm hover:shadow-md flex flex-col justify-between gap-4 transition-all duration-500 w-full h-full overflow-hidden group min-w-[min(100%,180px)] ${className}`}
     >
       <div className="flex items-start justify-between gap-4 w-full relative z-10">
         <div className="flex flex-col max-w-[80%]">
@@ -252,22 +254,22 @@ export function ResultCard({
                 {icon}
               </div>
             )}
-            <h4 className="text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 min-w-0 flex-1 break-words">
+            <h4 className="text-[10px] sm:text-xs font-black text-txt-tertiary dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 min-w-0 flex-1 break-words">
               {title}
               {explanation && (
-                <button
+                <Button
                   onClick={() => setExpanded(!expanded)}
-                  className="opacity-60 hover:opacity-100 transition-opacity p-0.5 text-slate-400 dark:text-slate-500"
+                  className="opacity-60 hover:opacity-100 transition-opacity p-0.5 text-slate-400 dark:text-txt-tertiary"
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
-                </button>
+                </Button>
               )}
             </h4>
           </div>
 
 
           {comparisonText && (
-            <div className="flex items-center gap-1.5 mt-2 text-slate-600 dark:text-slate-400">
+            <div className="flex items-center gap-1.5 mt-2 text-txt-secondary dark:text-slate-400">
               <div className="flex items-end gap-[3px] h-3.5 opacity-70">
                 <div className="w-1 bg-current h-1/3 rounded-full" />
                 <div className="w-1 bg-current h-2/3 rounded-full" />
@@ -315,14 +317,14 @@ export function ResultCard({
             {displayValue}
           </span>
           {activeUnit && (
-            <span className="text-[13px] sm:text-sm font-bold ml-1 shrink-0 text-slate-600 dark:text-slate-400">
+            <span className="text-[13px] sm:text-sm font-bold ml-1 shrink-0 text-txt-secondary dark:text-slate-400">
               {activeUnit}
             </span>
           )}
         </div>
 
         {secondaryValue !== undefined && secondaryUnit && (
-          <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
+          <div className="text-[11px] sm:text-xs font-bold text-txt-tertiary mt-0.5">
             ={" "}
             {typeof secondaryValue === "number"
               ? secondaryValue.toLocaleString("en-US", {
@@ -334,7 +336,7 @@ export function ResultCard({
         )}
 
         {description && !secondaryValue && (
-          <div className="text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed max-w-full break-words mt-1">
+          <div className="text-[11px] sm:text-xs text-txt-tertiary font-medium leading-relaxed max-w-full break-words mt-1">
             {description}
           </div>
         )}
@@ -349,7 +351,7 @@ export function ResultCard({
             className="overflow-hidden relative z-10"
           >
             <div className="mt-3 pt-3 border-t border-slate-100">
-              <div className="flex items-start gap-2 text-slate-600">
+              <div className="flex items-start gap-2 text-txt-secondary">
                 <Info className="w-4 h-4 mt-0.5 opacity-80 text-[#6B46C1]" />
                 <p className="text-[11px] sm:text-xs opacity-90 leading-relaxed font-medium">
                   {explanation}

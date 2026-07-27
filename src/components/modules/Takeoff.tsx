@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button';
 import { CalculationHistory } from "../ui/CalculationHistory";
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -39,6 +40,7 @@ import {
   convertLength,
 } from "../../../src/utils/measurements";
 import { useTakeoff } from "../../../src/context/TakeoffContext";
+
 const ASSEMBLIES = [
   {
     id: "asm-foundation",
@@ -506,11 +508,11 @@ export default function Takeoff() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleFinishDrawing]);
   return (
-    <div className="flex flex-col h-full text-slate-900 p-8">
-      <div className="flex-1 bg-white border border-slate-200 rounded-[24px] flex flex-col overflow-hidden relative">
+    <div className="flex flex-col h-full text-txt-primary p-8">
+      <div className="flex-1 bg-surface-default border border-ui-borderSubtle rounded-2xl flex flex-col overflow-hidden relative">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-white">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+        <div className="px-6 py-4 border-b border-ui-borderSubtle flex justify-between items-center bg-surface-default">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-txt-tertiary">
             2D Takeoff Engine
           </h2>
           <div className="flex gap-2 items-center">
@@ -544,7 +546,7 @@ export default function Takeoff() {
                   );
                 }
               }}
-              className="px-2 py-0.5 bg-white border border-slate-200 text-slate-700 text-[10px] rounded outline-none hover:border-slate-300 focus:border-blue-500 transition-colors cursor-pointer"
+              className="px-2 py-0.5 bg-surface-default border border-ui-borderSubtle text-txt-secondary text-[10px] rounded outline-none hover:border-ui-borderDefault focus:border-blue-500 transition-colors cursor-pointer"
             >
               <option value="metric">Metric (m, m², m³)</option>
               <option value="imperial">Imperial (ft, sq.ft, cu.ft)</option>
@@ -552,14 +554,14 @@ export default function Takeoff() {
           </div>
         </div>
         {/* Toolbar Inner */}
-        <div className="h-12 border-b border-slate-200 bg-transparent/50 flex items-center justify-between px-4 shrink-0 w-full text-xs">
+        <div className="h-12 border-b border-ui-borderSubtle bg-transparent/50 flex items-center justify-between px-4 shrink-0 w-full text-xs">
           <div className="flex items-center gap-4">
-            <div className="text-slate-800 font-medium truncate max-w-[200px]">
+            <div className="text-txt-primary font-medium truncate max-w-[200px]">
               {filename}
             </div>
             {!image && (
               <div className="flex items-center gap-2">
-                <label className="flex items-center gap-2 cursor-pointer text-xs bg-white border border-slate-200 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded transition-colors" title="Upload a local image file">
+                <label className="flex items-center gap-2 cursor-pointer text-xs bg-surface-default border border-ui-borderSubtle hover:bg-slate-200 text-txt-secondary px-3 py-1.5 rounded transition-colors" title="Upload a local image file">
                   <Upload className="w-[14px] h-[14px]" /> Upload Image Blueprint
                   <><label htmlFor="a11y-input-515" className="sr-only">Input</label>
 <input id="a11y-input-515" type="file"
@@ -568,99 +570,99 @@ export default function Takeoff() {
                     onChange={handleImageUpload}
                   /></>
                 </label>
-                <button onClick={handleLoadDemo}
+                <Button onClick={handleLoadDemo}
                   className="flex items-center gap-2 cursor-pointer text-xs bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 px-3 py-1.5 rounded transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                   title="Load a sample blueprint to try the features"
                 >
                   Try Demo
-                </button>
+                </Button>
               </div>
             )}
             <div className="h-4 w-px bg-slate-200" />
             <div className="flex items-center gap-1">
-              <button
+              <Button
                 onClick={() => setMode("select")}
-                className={`p-1.5 rounded border ${mode === "select" ? "bg-slate-200 border-slate-400 text-slate-800" : "border-transparent text-slate-700  hover:bg-slate-100"}`}
+                className={`p-1.5 rounded border ${mode === "select" ? "bg-slate-200 border-slate-400 text-txt-primary" : "border-transparent text-txt-secondary  hover:bg-slate-100"}`}
                 title="Select"
               >
                 <MousePointer2 className="w-[14px] h-[14px] rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setMode("pan")}
-                className={`p-1.5 rounded border ${mode === "pan" ? "bg-slate-200 border-slate-400 text-slate-800" : "border-transparent text-slate-700  hover:bg-slate-100"}`}
+                className={`p-1.5 rounded border ${mode === "pan" ? "bg-slate-200 border-slate-400 text-txt-primary" : "border-transparent text-txt-secondary  hover:bg-slate-100"}`}
                 title="Pan"
               >
                 <Move className="w-[14px] h-[14px] rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
-              </button>
+              </Button>
             </div>
             <div className="h-4 w-px bg-slate-200" />
             <div className="flex items-center gap-1">
-              <button
+              <Button
                 onClick={() => {
                   setMode("scale");
                   setDrawingPoints([]);
                 }}
-                className={`p-1.5 rounded border ${mode === "scale" ? "bg-slate-200 border-emerald-500 text-emerald-400" : "border-transparent text-slate-700  hover:bg-slate-100 hover:text-emerald-400"}`}
+                className={`p-1.5 rounded border ${mode === "scale" ? "bg-slate-200 border-emerald-500 text-emerald-400" : "border-transparent text-txt-secondary  hover:bg-slate-100 hover:text-emerald-400"}`}
                 title="Set Scale"
               >
                 <Ruler className="w-[14px] h-[14px] rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
-              </button>
+              </Button>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button
+            <Button
               onClick={() => setStageScale((s) => s / 1.2)}
-              className="p-1.5 text-slate-700 hover:text-slate-800 rounded hover:bg-slate-100 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              className="p-1.5 text-txt-secondary hover:text-txt-primary rounded hover:bg-slate-100 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
               title="Zoom Out"
             >
               <ZoomOut className="w-[14px] h-[14px]" />
-            </button>
-            <div className="font-mono text-slate-900 w-12 text-center text-[10px]" title="Current Zoom">
+            </Button>
+            <div className="font-mono text-txt-primary w-12 text-center text-[10px]" title="Current Zoom">
               {Math.round(stageScale * 100)}%
             </div>
-            <button
+            <Button
               onClick={() => setStageScale((s) => s * 1.2)}
-              className="p-1.5 text-slate-700 hover:text-slate-800 rounded hover:bg-slate-100 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              className="p-1.5 text-txt-secondary hover:text-txt-primary rounded hover:bg-slate-100 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
               title="Zoom In"
             >
               <ZoomIn className="w-[14px] h-[14px]" />
-            </button>
+            </Button>
           </div>
         </div>
         {/* Main Workspace */}
         <div className="flex-1 flex overflow-hidden relative">
           {/* Left Measurement Tools */}
-          <div className="w-12 border-r border-slate-200 bg-transparent flex flex-col items-center py-4 gap-3 shrink-0">
-            <button
+          <div className="w-12 border-r border-ui-borderSubtle bg-transparent flex flex-col items-center py-4 gap-3 shrink-0">
+            <Button
               onClick={() => {
                 setMode("area");
                 setDrawingPoints([]);
               }}
-              className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer text-xs font-bold transition-colors ${mode === "area" ? "bg-blue-500/20 text-orange-400 border border-blue-600/30" : "text-slate-700  hover:text-slate-900 hover:bg-slate-100"}`}
+              className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer text-xs font-bold transition-colors ${mode === "area" ? "bg-blue-500/20 text-orange-400 border border-blue-600/30" : "text-txt-secondary  hover:text-txt-primary hover:bg-slate-100"}`}
               title="Area Takeoff"
             >
               <Square className="w-[14px] h-[14px] rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => {
                 setMode("line");
                 setDrawingPoints([]);
               }}
-              className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer text-xs font-bold transition-colors ${mode === "line" ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "text-slate-700  hover:text-slate-900 hover:bg-slate-100"}`}
+              className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer text-xs font-bold transition-colors ${mode === "line" ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "text-txt-secondary  hover:text-txt-primary hover:bg-slate-100"}`}
               title="Line Takeoff"
             >
               <Activity className="w-[14px] h-[14px] rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
-            </button>
+            </Button>
           </div>
           {/* Assemblies Sidebar */}
-          <div className="w-56 border-r border-slate-200 bg-transparent/50 flex flex-col shrink-0">
-            <div className="h-10 border-b border-slate-200 flex items-center px-4 bg-white/30">
-              <span className="text-[10px] font-semibold uppercase text-slate-700 tracking-wider flex-1">
+          <div className="w-56 border-r border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0">
+            <div className="h-10 border-b border-ui-borderSubtle flex items-center px-4 bg-surface-default/30">
+              <span className="text-[10px] font-semibold uppercase text-txt-secondary tracking-wider flex-1">
                 Smart Assemblies
               </span>
             </div>
             <div className="flex-1 p-3 space-y-3 overflow-y-auto">
-              <div className="text-[10px] text-slate-700 pb-1">
+              <div className="text-[10px] text-txt-secondary pb-1">
                 Drag and drop onto canvas:
               </div>
               {ASSEMBLIES.map((asm) => (
@@ -670,24 +672,24 @@ export default function Takeoff() {
                   onDragStart={(e) => {
                     e.dataTransfer.setData("assemblyId", asm.id);
                   }}
-                  className="p-3 bg-white border border-slate-200 rounded cursor-grab active:cursor-grabbing hover:border-slate-400 transition-all group"
+                  className="p-3 bg-surface-default border border-ui-borderSubtle rounded cursor-grab active:cursor-grabbing hover:border-slate-400 transition-all group"
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <div
-                      className="w-6 h-6 rounded bg-white border border-slate-200 flex items-center justify-center group-hover:border-slate-400 transition-colors"
+                      className="w-6 h-6 rounded bg-surface-default border border-ui-borderSubtle flex items-center justify-center group-hover:border-slate-400 transition-colors"
                       style={{ color: asm.color }}
                     >
                       {asm.icon}
                     </div>
                     <span
-                      className="text-xs font-semibold text-slate-900 flex-1 truncate"
+                      className="text-xs font-semibold text-txt-primary flex-1 truncate"
                       title={asm.name}
                     >
                       {asm.name}
                     </span>
-                    <GripVertical className="w-3 h-3 text-slate-300 group-hover:text-slate-700 transition-colors" />
+                    <GripVertical className="w-3 h-3 text-slate-300 group-hover:text-txt-secondary transition-colors" />
                   </div>
-                  <p className="text-[9px] text-slate-700 mt-2 leading-tight">
+                  <p className="text-[9px] text-txt-secondary mt-2 leading-tight">
                     Drop to generate BOQ for this assembly.
                   </p>
                 </div>
@@ -697,7 +699,7 @@ export default function Takeoff() {
           {/* Canvas Area */}
           <div
             ref={containerRef}
-            className="flex-1 relative bg-transparent border border-dashed border-slate-200 m-4 rounded-[16px] bg-[radial-gradient(#27272a_1px,transparent_1px)] bg-[size:20px_20px] overflow-hidden"
+            className="flex-1 relative bg-transparent border border-dashed border-ui-borderSubtle m-4 rounded-2xl bg-[radial-gradient(#27272a_1px,transparent_1px)] bg-[size:20px_20px] overflow-hidden"
             tabIndex={0}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -709,21 +711,21 @@ export default function Takeoff() {
                   <span className="text-sm mb-4">
                     Upload a blueprint image to start
                   </span>
-                  <button onClick={handleLoadDemo}
+                  <Button onClick={handleLoadDemo}
                     className="pointer-events-auto flex items-center gap-2 cursor-pointer text-sm font-bold bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 px-6 py-3 rounded-full transition-all shadow-sm hover:shadow-md active:scale-95 hover:-translate-y-0.5"
                   >
                     Try Demo Blueprint
-                  </button>
+                  </Button>
                 </div>
                 {recentBlueprints.length > 0 && (
-                  <div className="pointer-events-auto w-full max-w-sm z-10 bg-white border border-slate-200 rounded-[16px] p-4 shadow-sm opacity-90 hover:opacity-100 transition-opacity overflow-hidden">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">Recent Blueprints</h3>
+                  <div className="pointer-events-auto w-full max-w-sm z-10 bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 shadow-sm opacity-90 hover:opacity-100 transition-opacity overflow-hidden">
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-txt-tertiary mb-3 border-b border-slate-100 pb-2">Recent Blueprints</h3>
                     <div className="flex flex-col gap-2">
                        {recentBlueprints.map((b, i) => (
-                         <button key={i} onClick={() => handleLoadRecent(b)} className="px-4 py-2 border border-slate-100 rounded text-left hover:bg-blue-50 flex justify-between items-center group transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
-                           <span className="truncate flex-1 text-sm text-slate-700 group-hover:text-blue-700 font-medium">{b.name}</span>
+                         <Button key={i} onClick={() => handleLoadRecent(b)} className="px-4 py-2 border border-slate-100 rounded text-left hover:bg-blue-50 flex justify-between items-center group transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+                           <span className="truncate flex-1 text-sm text-txt-secondary group-hover:text-blue-700 font-medium">{b.name}</span>
                            <span className="text-[10px] uppercase font-bold text-slate-400 group-hover:text-blue-500">Load</span>
-                         </button>
+                         </Button>
                        ))}
                     </div>
                   </div>
@@ -917,11 +919,11 @@ export default function Takeoff() {
             {/* Scale Prompt Overlay */}
             {scalePrompt.visible && (
               <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center z-50">
-                <div className="bg-white border border-slate-200 rounded-[16px] p-4 sm:p-4 sm:p-4 sm:p-6 max-w-sm w-full shadow-2xl overflow-hidden">
-                  <h3 className="text-sm font-semibold mb-4 text-slate-900">
+                <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 max-w-sm w-full shadow-2xl overflow-hidden">
+                  <h3 className="text-sm font-semibold mb-4 text-txt-primary">
                     Set Measurement Scale
                   </h3>
-                  <p className="text-xs text-slate-700 mb-4">
+                  <p className="text-xs text-txt-secondary mb-4">
                     Line length on drawing is
                     <span className="font-mono text-emerald-400">
                       {scalePrompt.pxLen.toFixed(1)} px
@@ -935,12 +937,12 @@ export default function Takeoff() {
                       placeholder="e.g. 10"
                       value={scaleInputValue}
                       onChange={(e) => setScaleInputValue(e.target.value)}
-                      className="flex-1 bg-white border border-slate-200 rounded p-2 text-xs text-slate-800 uppercase font-mono focus:outline-none focus:border-emerald-500 whitespace-nowrap rounded-full"
+                      className="flex-1 bg-surface-default border border-ui-borderSubtle rounded p-2 text-xs text-txt-primary uppercase font-mono focus:outline-none focus:border-emerald-500 whitespace-nowrap rounded-full"
                     /></>
                     <select
                       value={scaleInputUnit}
                       onChange={(e) => setScaleInputUnit(e.target.value)}
-                      className="w-20 bg-white border border-slate-200 rounded p-2 text-xs text-center text-slate-800 focus:outline-none focus:border-emerald-500"
+                      className="w-20 bg-surface-default border border-ui-borderSubtle rounded p-2 text-xs text-center text-txt-primary focus:outline-none focus:border-emerald-500"
                     >
                       <option value="m">m</option>
                       <option value="cm">cm</option>
@@ -951,16 +953,16 @@ export default function Takeoff() {
                     </select>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <button
+                    <Button
                       onClick={() => {
                         setScalePrompt({ visible: false, pxLen: 0 });
                         setMode("select");
                       }}
-                      className="px-3 py-1.5 text-xs text-slate-700 hover:text-slate-800 transition-colors border border-transparent rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                      className="px-3 py-1.5 text-xs text-txt-secondary hover:text-txt-primary transition-colors border border-transparent rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                     >
                       Cancel
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => {
                         const realVal = parseFloat(scaleInputValue);
                         if (realVal > 0) {
@@ -970,10 +972,10 @@ export default function Takeoff() {
                         setScalePrompt({ visible: false, pxLen: 0 });
                         setMode("select");
                       }}
-                      className="px-3 py-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 text-slate-800 rounded transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                      className="px-3 py-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 text-txt-primary rounded transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                     >
                       Save Scale
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -981,22 +983,22 @@ export default function Takeoff() {
             {/* Assembly Prompt Overlay */}
             {assemblyPrompt && (
               <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center z-50">
-                <div className="bg-white border border-slate-200 rounded-[16px] p-4 sm:p-4 sm:p-4 sm:p-6 max-w-sm w-full shadow-2xl overflow-hidden">
+                <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 max-w-sm w-full shadow-2xl overflow-hidden">
                   {(() => {
                     const asmDef = ASSEMBLIES.find(
                       (a) => a.id === assemblyPrompt.assemblyId,
                     );
                     return (
                       <>
-                        <h3 className="text-sm font-semibold mb-2 text-slate-900 flex items-center gap-2">
+                        <h3 className="text-sm font-semibold mb-2 text-txt-primary flex items-center gap-2">
                           <span style={{ color: asmDef?.color }}>
                             {asmDef?.icon}
                           </span>
                           Configure Assembly
                         </h3>
-                        <p className="text-xs text-slate-700 mb-5">
+                        <p className="text-xs text-txt-secondary mb-5">
                           Provide dimensions for
-                          <span className="font-medium text-slate-800">
+                          <span className="font-medium text-txt-primary">
                             {asmDef?.name}
                           </span>
                           to generate BOQ sub-items automatically.
@@ -1004,7 +1006,7 @@ export default function Takeoff() {
                         <div className="flex flex-col gap-3 mb-5">
                           {asmDef?.inputs.map((inp) => (
                             <div key={inp.key}>
-                              <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                              <label className="block text-[10px] font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
                                 {inp.label}
                               </label>
                               <><label htmlFor="a11y-input-517" className="sr-only">Input</label>
@@ -1025,23 +1027,23 @@ export default function Takeoff() {
                                       : null,
                                   )
                                 }
-                                className="w-full bg-white border border-slate-200 rounded p-2 text-xs text-slate-800 focus:outline-none focus:border-blue-500 rounded-full"
+                                className="w-full bg-surface-default border border-ui-borderSubtle rounded p-2 text-xs text-txt-primary focus:outline-none focus:border-blue-500 rounded-full"
                               /></>
                             </div>
                           ))}
                         </div>
                         <div className="flex justify-end gap-2 text-xs">
-                          <button
+                          <Button
                             onClick={() => setAssemblyPrompt(null)}
-                            className="px-4 py-2 text-slate-700 hover:text-slate-800 transition-colors border border-transparent rounded rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                            className="px-4 py-2 text-txt-secondary hover:text-txt-primary transition-colors border border-transparent rounded rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                           >
                             Cancel
-                          </button>
-                          <button onClick={handleCreateAssembly}
+                          </Button>
+                          <Button onClick={handleCreateAssembly}
                             className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                           >
                             Generate BOQ
-                          </button>
+                          </Button>
                         </div>
                       </>
                     );
@@ -1051,21 +1053,21 @@ export default function Takeoff() {
             )}
             {/* Enter/Escape Helper */}
             {drawingPoints.length > 0 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-transparent/80 border border-slate-200 rounded-full px-4 py-1.5 text-[10px] text-slate-700 backdrop-blur-sm pointer-events-none flex gap-4 shadow-lg">
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-transparent/80 border border-ui-borderSubtle rounded-full px-4 py-1.5 text-[10px] text-txt-secondary backdrop-blur-sm pointer-events-none flex gap-4 shadow-lg">
                 <span>
-                  <kbd className="bg-white px-1.5 rounded border border-slate-200 mr-1">
+                  <kbd className="bg-surface-default px-1.5 rounded border border-ui-borderSubtle mr-1">
                     Click
                   </kbd>
                   point
                 </span>
                 <span>
-                  <kbd className="bg-white px-1.5 rounded border border-slate-200 mr-1">
+                  <kbd className="bg-surface-default px-1.5 rounded border border-ui-borderSubtle mr-1">
                     Enter
                   </kbd>
                   finish
                 </span>
                 <span>
-                  <kbd className="bg-white px-1.5 rounded border border-slate-200 mr-1">
+                  <kbd className="bg-surface-default px-1.5 rounded border border-ui-borderSubtle mr-1">
                     Esc
                   </kbd>
                   cancel
@@ -1074,9 +1076,9 @@ export default function Takeoff() {
             )}
           </div>
           {/* Right Panel */}
-          <div className="w-64 border-l border-slate-200 bg-transparent/50 flex flex-col shrink-0">
-            <div className="h-10 border-b border-slate-200 flex items-center px-4 bg-white/30">
-              <span className="text-[10px] font-semibold uppercase text-slate-700 tracking-wider flex-1">
+          <div className="w-64 border-l border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0">
+            <div className="h-10 border-b border-ui-borderSubtle flex items-center px-4 bg-surface-default/30">
+              <span className="text-[10px] font-semibold uppercase text-txt-secondary tracking-wider flex-1">
                 Takeoffs
               </span>
               <span className="text-[10px] text-blue-500 bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20">
@@ -1085,7 +1087,7 @@ export default function Takeoff() {
             </div>
             <div className="flex-1 p-3 space-y-2 overflow-y-auto">
               {measurements.length === 0 && (
-                <div className="text-[10px] text-center text-slate-700 mt-8 p-4 border border-dashed border-slate-200 rounded">
+                <div className="text-[10px] text-center text-txt-secondary mt-8 p-4 border border-dashed border-ui-borderSubtle rounded">
                   No takeoffs recorded.
                   <br />
                   Set scale, then draw lines or drop assemblies.
@@ -1113,7 +1115,7 @@ export default function Takeoff() {
                 return (
                   <div
                     key={m.id}
-                    className="p-2 bg-white border border-slate-200 rounded relative overflow-hidden group flex flex-col gap-1.5"
+                    className="p-2 bg-surface-default border border-ui-borderSubtle rounded relative overflow-hidden group flex flex-col gap-1.5"
                   >
                     <div
                       className="absolute top-0 left-0 h-full w-1"
@@ -1154,13 +1156,13 @@ export default function Takeoff() {
                               if (e.key === "Escape")
                                 setEditingMeasurementId(null);
                             }}
-                            className="bg-white border border-blue-500 text-xs text-slate-800 rounded px-1.5 py-0.5 outline-none w-full min-w-0 rounded-full"
+                            className="bg-surface-default border border-blue-500 text-xs text-txt-primary rounded px-1.5 py-0.5 outline-none w-full min-w-0 rounded-full"
                             
                             onClick={(e) => e.stopPropagation()}
                           /></>
                         ) : (
                           <span
-                            className="text-xs font-medium text-slate-800 truncate cursor-text hover:text-blue-400 focus:text-blue-400 flex-1 outline-none"
+                            className="text-xs font-medium text-txt-primary truncate cursor-text hover:text-blue-400 focus:text-blue-400 flex-1 outline-none"
                             title="Click to rename"
                             onClick={() => {
                               setEditingMeasurementName(m.name);
@@ -1173,13 +1175,13 @@ export default function Takeoff() {
                       </div>
                       <div className="flex flex-col items-end gap-0.5 shrink-0 mt-1">
                         <span
-                          className="text-[10px] font-mono font-medium bg-white px-1.5 py-0.5 rounded border border-slate-200"
+                          className="text-[10px] font-mono font-medium bg-surface-default px-1.5 py-0.5 rounded border border-ui-borderSubtle"
                           style={{ color: m.color }}
                         >
                           {primaryStr}
                         </span>
                         {secondaryStr && (
-                          <span className="text-[9px] font-mono text-slate-700">
+                          <span className="text-[9px] font-mono text-txt-secondary">
                             ({secondaryStr})
                           </span>
                         )}
@@ -1187,7 +1189,7 @@ export default function Takeoff() {
                     </div>
                     {linkedBoqs.length > 0 ? (
                       <div className="pl-2 flex flex-col gap-1 mt-1">
-                        <span className="text-[9px] text-slate-700 font-medium uppercase tracking-wider">
+                        <span className="text-[9px] text-txt-secondary font-medium uppercase tracking-wider">
                           Linked To:
                         </span>
                         {linkedBoqs.map((item) => (
@@ -1201,22 +1203,22 @@ export default function Takeoff() {
                       </div>
                     ) : (
                       <div className="pl-2 mt-1">
-                        <span className="text-[9px] text-slate-700 italic">
+                        <span className="text-[9px] text-txt-secondary italic">
                           Unlinked
                         </span>
                       </div>
                     )}
-                    <div className="pl-2 flex justify-between items-center mt-1 pt-1 border-t border-slate-200">
-                      <span className="text-[9px] text-slate-700 uppercase">
+                    <div className="pl-2 flex justify-between items-center mt-1 pt-1 border-t border-ui-borderSubtle">
+                      <span className="text-[9px] text-txt-secondary uppercase">
                         {m.type}
                       </span>
-                      <button
+                      <Button
                         onClick={() => removeMeasurement(m.id)}
-                        className="text-slate-700 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
+                        className="text-txt-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
                         title="Delete"
                       >
                         <Trash2 className="w-3 h-3" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 );
@@ -1228,48 +1230,48 @@ export default function Takeoff() {
       
       {showTutorial && (
         <div className="absolute inset-0 bg-[#F5F5F7] backdrop-blur-sm flex items-center justify-center z-[100] p-4 font-sans">
-          <div className="bg-white border border-slate-200 rounded-[24px] max-w-lg w-full shadow-2xl p-4 sm:p-4 sm:p-4 sm:p-6 overflow-y-auto max-h-[90vh] relative overflow-hidden">
-            <button onClick={closeTutorial} className="absolute right-4 top-4 p-2 text-slate-400 hover:text-slate-600 transition-colors rounded-full hover:bg-slate-100 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl max-w-lg w-full shadow-2xl p-4 sm:p-4 sm:p-4 sm:p-6 overflow-y-auto max-h-[90vh] relative overflow-hidden">
+            <Button onClick={closeTutorial} className="absolute right-4 top-4 p-2 text-slate-400 hover:text-txt-secondary transition-colors rounded-full hover:bg-slate-100 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
               <X className="w-5 h-5"/>
-            </button>
-            <h2 className="text-xl font-bold text-slate-900 mb-6">Welcome to 2D Takeoff Engine</h2>
+            </Button>
+            <h2 className="text-xl font-bold text-txt-primary mb-6">Welcome to 2D Takeoff Engine</h2>
             
             <div className="space-y-6 mb-8">
               <div className="flex gap-4 items-start">
                 <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0 border border-blue-100">1</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 mb-1">Upload your blueprint image</h4>
-                  <p className="text-sm text-slate-600">Add any floor plan (JPG, PNG, PDF exported as image) or try the demo.</p>
+                  <h4 className="font-semibold text-txt-primary mb-1">Upload your blueprint image</h4>
+                  <p className="text-sm text-txt-secondary">Add any floor plan (JPG, PNG, PDF exported as image) or try the demo.</p>
                 </div>
               </div>
               <div className="flex gap-4 items-start">
                 <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0 border border-emerald-100">2</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 mb-1">Set the scale</h4>
-                  <p className="text-sm text-slate-600">Click the ruler tool, draw a line over a known dimension, and set its real-world length.</p>
+                  <h4 className="font-semibold text-txt-primary mb-1">Set the scale</h4>
+                  <p className="text-sm text-txt-secondary">Click the ruler tool, draw a line over a known dimension, and set its real-world length.</p>
                 </div>
               </div>
               <div className="flex gap-4 items-start">
                 <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0 border border-blue-100">3</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 mb-1">Measure and extract</h4>
-                  <p className="text-sm text-slate-600">Draw lines/areas to extract material quantities or drop Smart Assemblies onto the canvas.</p>
+                  <h4 className="font-semibold text-txt-primary mb-1">Measure and extract</h4>
+                  <p className="text-sm text-txt-secondary">Draw lines/areas to extract material quantities or drop Smart Assemblies onto the canvas.</p>
                 </div>
               </div>
             </div>
 
             <details className="mb-6 group">
-               <summary className="text-sm cursor-pointer font-medium text-blue-600 hover:text-blue-700 list-none flex items-center gap-2 p-3 bg-slate-50 rounded-[24px] border border-slate-200 shadow-sm text-slate-800 rounded-[16px] border border-slate-200 overflow-hidden">
+               <summary className="text-sm cursor-pointer font-medium text-blue-600 hover:text-blue-700 list-none flex items-center gap-2 p-3 bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl border border-ui-borderSubtle overflow-hidden">
                  ▶ Watch Video Tutorial
                </summary>
-               <div className="mt-3 aspect-video bg-slate-100 rounded-[16px] overflow-hidden border border-slate-200">
+               <div className="mt-3 aspect-video bg-slate-100 rounded-2xl overflow-hidden border border-ui-borderSubtle">
                  <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video Tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="border-0"></iframe>
                </div>
             </details>
 
-            <button onClick={closeTutorial} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-colors shadow-sm active:scale-95 hover:-translate-y-0.5">
+            <Button onClick={closeTutorial} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-colors shadow-sm active:scale-95 hover:-translate-y-0.5">
               Get Started
-            </button>
+            </Button>
           </div>
         </div>
       )}

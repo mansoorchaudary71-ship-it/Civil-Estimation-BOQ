@@ -1,5 +1,7 @@
+import { Button } from './/Button';
 import React, { useState } from 'react';
 import { BookOpen, ChevronDown, ChevronUp, Info } from 'lucide-react';
+
 
 interface CodeReference {
   id: string;
@@ -88,24 +90,24 @@ export function CodeReferences({ moduleId }: { moduleId: string }) {
   if (!references || references.length === 0) return null;
 
   return (
-    <div className="w-full mt-4 mb-6 border border-slate-200 dark:border-slate-700/50 rounded-xl bg-white dark:bg-slate-800/80 overflow-hidden shadow-sm">
-      <button 
+    <div className="w-full mt-4 mb-6 border border-ui-borderSubtle dark:border-slate-700/50 rounded-xl bg-surface-default dark:bg-slate-800/80 overflow-hidden shadow-sm">
+      <Button 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 text-white dark:text-slate-200 transition-colors hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
       >
-        <span className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-slate-600 dark:text-slate-400">
+        <span className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-txt-secondary dark:text-slate-400">
           <BookOpen className="w-4 h-4 text-indigo-500" />
           Code References & Standards
         </span>
         {isOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-      </button>
+      </Button>
       
       {isOpen && (
-        <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700/50">
+        <div className="p-4 bg-surface-default dark:bg-slate-800 border-t border-ui-borderSubtle dark:border-slate-700/50">
           <ul className="space-y-3">
             {references.map((ref) => (
               <li key={ref.id} className="flex items-start gap-3">
-                <div className="group relative flex items-center justify-center p-1.5 mt-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-indigo-100 hover:text-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400 cursor-help transition-colors">
+                <div className="group relative flex items-center justify-center p-1.5 mt-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-txt-tertiary dark:text-slate-400 hover:bg-indigo-100 hover:text-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400 cursor-help transition-colors">
                   <Info className="w-3.5 h-3.5" />
                   
                   {/* Tooltip */}
@@ -115,13 +117,13 @@ export function CodeReferences({ moduleId }: { moduleId: string }) {
                 </div>
                 
                 <div className="flex-1">
-                  <span className="font-bold text-slate-900 dark:text-white mr-1.5">[{ref.code}]</span>
+                  <span className="font-bold text-txt-primary dark:text-white mr-1.5">[{ref.code}]</span>
                   {ref.clause && (
                     <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mr-2">
                        {ref.clause}
                     </span>
                   )}
-                  <span className="text-sm text-slate-600 dark:text-slate-300 hidden md:inline">
+                  <span className="text-sm text-txt-secondary dark:text-slate-300 hidden md:inline">
                     — {ref.description}
                   </span>
                 </div>

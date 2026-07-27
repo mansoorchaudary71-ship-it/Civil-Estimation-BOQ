@@ -1,3 +1,4 @@
+import { Button } from './/Button';
 import React, { useState, useEffect, useCallback } from "react";
 import {
   History,
@@ -19,6 +20,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import ShareButtonWithPopup from "../modules/ShareMenu";
 import {
+
   CalculationExplanation,
   CalculationExplanationOptions,
 } from "./CalculationExplanation";
@@ -603,21 +605,21 @@ export function CalculationHistory({
   return (
     <>
       {finalExplanationOpts && (
-        <div className="w-[calc(100%+1.5rem)] -ml-3 md:w-full md:ml-0 mt-2 mb-4 bg-slate-50 dark:bg-slate-900/60 rounded-[20px] md:rounded-[24px] overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
-          <button
+        <div className="w-[calc(100%+1.5rem)] -ml-3 md:w-full md:ml-0 mt-2 mb-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl md:rounded-2xl overflow-hidden border border-ui-borderSubtle dark:border-slate-800 shadow-sm transition-all duration-300">
+          <Button
             onClick={() => setIsExplanationOpen(!isExplanationOpen)}
             className="w-full flex items-center justify-between p-4 sm:p-6 md:p-8 relative z-10 text-left focus:outline-none min-h-[44px]"
           >
             <div className="flex items-center gap-3">
-              <div className="bg-white dark:bg-slate-800 p-2 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 overflow-hidden">
+              <div className="bg-surface-default dark:bg-slate-800 p-2 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50 text-txt-secondary dark:text-slate-300 overflow-hidden">
                 <Calculator className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg sm:text-xl tracking-tight">
+              <h3 className="font-bold text-txt-primary dark:text-slate-100 text-lg sm:text-xl tracking-tight">
                 {finalExplanationOpts.hasInputs ? "Calculation Breakdown" : "Formulas Used"}
               </h3>
             </div>
             <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isExplanationOpen ? 'rotate-180' : ''}`} />
-          </button>
+          </Button>
           
           <div className={`transition-all duration-300 overflow-hidden ${isExplanationOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
             <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8 pt-0">
@@ -634,23 +636,23 @@ export function CalculationHistory({
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-bg-card shadow-2xl border-l border-slate-200 dark:border-slate-700 flex flex-col transform transition-transform duration-300 ease-in-out">
-            <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-700/50">
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-bg-card shadow-2xl border-l border-ui-borderSubtle dark:border-slate-700 flex flex-col transform transition-transform duration-300 ease-in-out">
+            <div className="flex items-center justify-between p-5 border-b border-ui-borderSubtle dark:border-slate-700/50">
+              <h2 className="text-lg font-bold text-txt-primary dark:text-slate-100 flex items-center gap-2">
                 <History className="w-5 h-5 text-indigo-600" />
                 Calculation History
               </h2>
-              <button
+              <Button
                 onClick={() => setIsOpen(false)}
-                className="p-2 -mr-2 text-white hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 -mr-2 text-white hover:text-txt-secondary dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <X className="w-5 h-5" />
-              </button>
+              </Button>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
               {history.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-48 text-slate-700 dark:text-slate-700">
+                <div className="flex flex-col items-center justify-center h-48 text-txt-secondary dark:text-txt-secondary">
                   <History className="w-12 h-12 mb-3 opacity-20" />
                   <p>No history saved yet.</p>
                   <p className="text-sm mt-1">
@@ -661,31 +663,31 @@ export function CalculationHistory({
                 history.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 rounded-xl p-4 transition-all hover:border-indigo-300 dark:hover:border-indigo-500/50 group"
+                    className="bg-surface-default dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700/60 rounded-xl p-4 transition-all hover:border-indigo-300 dark:hover:border-indigo-500/50 group"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <div className="pr-4">
-                        <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-sm truncate">
+                        <h3 className="font-semibold text-txt-primary dark:text-slate-200 text-sm truncate">
                           {item.name}
                         </h3>
-                        <p className="text-[11px] text-slate-700 dark:text-slate-700">
+                        <p className="text-[11px] text-txt-secondary dark:text-txt-secondary">
                           {new Date(item.date).toLocaleString("en-US")}
                         </p>
                       </div>
-                      <button aria-label="Delete"
+                      <Button aria-label="Delete"
                         onClick={() => deleteItem(item.id)}
-                        className="text-slate-700 hover:text-red-500 p-1 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors opacity-0 group-hover:opacity-100 shrink-0"
+                        className="text-txt-secondary hover:text-red-500 p-1 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors opacity-0 group-hover:opacity-100 shrink-0"
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                      </Button>
                     </div>
 
-                    <p className="text-sm text-slate-600 dark:text-slate-300 mb-3 bg-bg-card p-2 rounded border border-slate-200 dark:border-slate-700/50 line-clamp-2">
+                    <p className="text-sm text-txt-secondary dark:text-slate-300 mb-3 bg-bg-card p-2 rounded border border-ui-borderSubtle dark:border-slate-700/50 line-clamp-2">
                       {item.summary}
                     </p>
 
                     <div className="flex gap-2">
-                      <button
+                      <Button
                         onClick={() => {
                           if (onRestore) onRestore(item.inputs);
                           setIsOpen(false);
@@ -693,13 +695,13 @@ export function CalculationHistory({
                         className="flex-1 py-2 bg-bg-card border border-indigo-200 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm font-medium transition-all hover:bg-indigo-50 dark:hover:bg-indigo-500/10 flex items-center justify-center gap-1"
                       >
                         Restore <ChevronRight className="w-4 h-4" />
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => setCompareItem(item)}
-                        className="flex-1 py-2 bg-bg-card border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium transition-all hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center gap-1"
+                        className="flex-1 py-2 bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-secondary dark:text-slate-300 rounded-lg text-sm font-medium transition-all hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center gap-1"
                       >
                         Compare <Scale className="w-4 h-4" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ))
@@ -707,8 +709,8 @@ export function CalculationHistory({
             </div>
 
             {history.length > 0 && (
-              <div className="p-4 border-t border-slate-200 dark:border-slate-700/50">
-                <button
+              <div className="p-4 border-t border-ui-borderSubtle dark:border-slate-700/50">
+                <Button
                   onClick={() => {
                     if (
                       window.confirm("Clear all history for this calculator?")
@@ -717,10 +719,10 @@ export function CalculationHistory({
                       localStorage.removeItem(`calc_history_${calculatorId}`);
                     }
                   }}
-                  className="w-full py-2.5 text-slate-700 hover:text-red-500 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                  className="w-full py-2.5 text-txt-secondary hover:text-red-500 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
                 >
                   Clear All History
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -733,25 +735,25 @@ export function CalculationHistory({
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
             onClick={() => setCompareItem(null)}
           />
-          <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col transform transition-transform duration-300 ease-in-out animate-in zoom-in-95">
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-surface-default dark:bg-slate-900 shadow-2xl rounded-2xl border border-ui-borderSubtle dark:border-slate-800 flex flex-col transform transition-transform duration-300 ease-in-out animate-in zoom-in-95">
             <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-800">
-              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-txt-primary dark:text-slate-100 flex items-center gap-2">
                 <Scale className="w-6 h-6 text-indigo-600" />
                 Compare Results
               </h2>
-              <button
+              <Button
                 onClick={() => setCompareItem(null)}
-                className="p-2 -mr-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 -mr-2 text-slate-400 hover:text-txt-secondary dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <X className="w-5 h-5" />
-              </button>
+              </Button>
             </div>
 
             <div className="flex-1 overflow-y-auto p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Current */}
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-ui-borderSubtle dark:border-slate-700">
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-slate-200 mb-4 pb-2 border-b border-ui-borderSubtle dark:border-slate-700">
                     Current Calculation
                   </h3>
                   
@@ -759,8 +761,8 @@ export function CalculationHistory({
                     <h4 className="text-base font-medium uppercase tracking-wider mb-3">Inputs</h4>
                     <div className="space-y-2">
                       {Object.entries(currentInputs || {}).map(([key, value]) => (
-                        <div key={key} className="flex justify-between items-center bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm">
-                          <span className="text-sm font-medium text-slate-600 dark:text-slate-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <div key={key} className="flex justify-between items-center bg-surface-default dark:bg-slate-800 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm">
+                          <span className="text-sm font-medium text-txt-secondary dark:text-slate-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                           <span className="text-base font-medium dark:text-slate-200">
                             {typeof value === 'object' ? JSON.stringify(value) : String(value)}
                           </span>
@@ -785,17 +787,17 @@ export function CalculationHistory({
                 </div>
 
                 {/* History Item */}
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">
-                    {compareItem.name} <span className="text-sm font-normal text-slate-500 ml-2">{new Date(compareItem.date).toLocaleString()}</span>
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-ui-borderSubtle dark:border-slate-700">
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-slate-200 mb-4 pb-2 border-b border-ui-borderSubtle dark:border-slate-700">
+                    {compareItem.name} <span className="text-sm font-normal text-txt-tertiary ml-2">{new Date(compareItem.date).toLocaleString()}</span>
                   </h3>
                   
                   <div className="mb-6">
                     <h4 className="text-base font-medium uppercase tracking-wider mb-3">Inputs</h4>
                     <div className="space-y-2">
                       {Object.entries(compareItem.inputs || {}).map(([key, value]) => (
-                        <div key={key} className="flex justify-between items-center bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm">
-                          <span className="text-sm font-medium text-slate-600 dark:text-slate-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <div key={key} className="flex justify-between items-center bg-surface-default dark:bg-slate-800 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm">
+                          <span className="text-sm font-medium text-txt-secondary dark:text-slate-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                           <span className="text-base font-medium dark:text-slate-200">
                             {typeof value === 'object' ? JSON.stringify(value) : String(value)}
                           </span>
@@ -808,8 +810,8 @@ export function CalculationHistory({
                     <h4 className="text-base font-medium uppercase tracking-wider mb-3">Results</h4>
                     <div className="space-y-2">
                       {Object.entries(compareItem.results || {}).map(([key, value]) => (
-                        <div key={key} className="flex justify-between items-center bg-slate-200 dark:bg-slate-700 p-2.5 rounded-lg border border-slate-300 dark:border-slate-600">
-                          <span className="text-sm font-medium text-slate-800 dark:text-slate-300 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <div key={key} className="flex justify-between items-center bg-slate-200 dark:bg-slate-700 p-2.5 rounded-lg border border-ui-borderDefault dark:border-slate-600">
+                          <span className="text-sm font-medium text-txt-primary dark:text-slate-300 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                           <span className="text-base font-medium dark:text-slate-200">
                             {typeof value === 'object' ? JSON.stringify(value) : String(value)}
                           </span>
@@ -830,22 +832,22 @@ export function CalculationHistory({
             className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
             onClick={() => setIsSaveModalOpen(false)}
           />
-          <div className="relative w-full max-w-md bg-bg-card shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col transform transition-transform duration-300 ease-in-out p-4 sm:p-6 pt-7 animate-in zoom-in-95">
-            <button
+          <div className="relative w-full max-w-md bg-bg-card shadow-2xl rounded-2xl border border-ui-borderSubtle dark:border-slate-700 flex flex-col transform transition-transform duration-300 ease-in-out p-4 sm:p-6 pt-7 animate-in zoom-in-95">
+            <Button
               onClick={() => setIsSaveModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-slate-500 hover:text-white dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="absolute top-4 right-4 p-2 text-txt-tertiary hover:text-white dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               <X className="w-5 h-5" />
-            </button>
+            </Button>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0">
                 <CloudUpload className="w-6 h-6 text-indigo-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+                <h2 className="text-xl font-bold text-txt-primary dark:text-white tracking-tight">
                   Save Estimate
                 </h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                <p className="text-sm text-txt-tertiary dark:text-slate-400 font-medium">
                   Save to your cloud profile
                 </p>
               </div>
@@ -861,7 +863,7 @@ export function CalculationHistory({
                   type="text"
                   value={saveName}
                   onChange={(e) => setSaveName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-medium"
+                  className="w-full px-4 py-3 rounded-xl border border-ui-borderSubtle dark:border-slate-700 bg-surface-default dark:bg-slate-800 text-txt-primary dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-medium"
                   placeholder="e.g. Dream House Ground Floor"
                   
                 /></>
@@ -875,7 +877,7 @@ export function CalculationHistory({
                   <select
                     value={saveType}
                     onChange={(e) => setSaveType(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-medium appearance-none"
+                    className="w-full px-4 py-3 rounded-xl border border-ui-borderSubtle dark:border-slate-700 bg-surface-default dark:bg-slate-800 text-txt-primary dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-medium appearance-none"
                   >
                     <option value="General">General</option>
                     <option value="House">House</option>
@@ -895,14 +897,14 @@ export function CalculationHistory({
             </div>
 
             <div className="flex gap-3">
-              <button
+              <Button
                 onClick={() => setIsSaveModalOpen(false)}
-                className="flex-1 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-white dark:text-slate-300 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                className="flex-1 px-4 py-3 rounded-xl border border-ui-borderSubtle dark:border-slate-700 text-white dark:text-slate-300 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 disabled={isSavingCloud}
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={confirmCloudSave}
                 disabled={isSavingCloud || !saveName.trim()}
                 className="flex-[2] flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -918,7 +920,7 @@ export function CalculationHistory({
                     Save Estimate
                   </>
                 )}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

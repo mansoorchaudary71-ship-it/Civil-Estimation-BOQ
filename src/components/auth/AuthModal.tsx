@@ -1,7 +1,9 @@
+import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { X, Mail, Lock, User, AtSign, Loader2, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -104,19 +106,19 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="relative w-full max-w-md overflow-hidden bg-bg-card rounded-[28px] shadow-2xl border border-slate-200 dark:border-slate-700"
+          className="relative w-full max-w-md overflow-hidden bg-bg-card rounded-2xl shadow-2xl border border-ui-borderSubtle dark:border-slate-700"
         >
-          <button onClick={onClose}
-            className="absolute top-5 right-5 p-2 text-slate-500 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors z-10 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+          <Button onClick={onClose}
+            className="absolute top-5 right-5 p-2 text-txt-tertiary hover:text-txt-secondary rounded-full hover:bg-slate-100 transition-colors z-10 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
           >
             <X className="w-5 h-5" />
-          </button>
+          </Button>
 
           <div className="px-8 pt-10 pb-8">
-            <h2 className="text-slate-900 dark:text-white mb-2 text-xl font-semibold text-slate-900 tracking-tight mb-4">
+            <h2 className="text-txt-primary dark:text-white mb-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
               {isLogin ? 'Welcome back' : 'Create an account'}
             </h2>
-            <p className="mb-8 text-base font-normal text-slate-600 leading-relaxed">
+            <p className="mb-8 text-base font-normal text-txt-secondary leading-relaxed">
               {isLogin ? 'Sign in to access your estimates' : 'Sign up to save your estimation data safely'}
             </p>
 
@@ -124,7 +126,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               {!isLogin && (
                 <div>
                   <div className="relative flex items-center">
-                    <User className="absolute left-3.5 w-5 h-5 text-slate-700" />
+                    <User className="absolute left-3.5 w-5 h-5 text-txt-secondary" />
                     <><label htmlFor="a11y-input-11" className="sr-only">Full Name</label>
 <input id="a11y-input-11"
                       type="text"
@@ -135,7 +137,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         setError('');
                       }}
                       required
-                      className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
                     /></>
                   </div>
                 </div>
@@ -143,7 +145,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               
               <div>
                 <div className="relative flex items-center">
-                  <AtSign className="absolute left-3.5 w-5 h-5 text-slate-700" />
+                  <AtSign className="absolute left-3.5 w-5 h-5 text-txt-secondary" />
                   <><label htmlFor="a11y-input-12" className="sr-only">Email Address</label>
 <input id="a11y-input-12"
                     type="email"
@@ -154,14 +156,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       setError('');
                     }}
                     required
-                    className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
+                    className="w-full pl-11 pr-4 py-3 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
                   /></>
                 </div>
               </div>
 
               <div>
                 <div className="relative flex items-center">
-                  <Lock className="absolute left-3.5 w-5 h-5 text-slate-700" />
+                  <Lock className="absolute left-3.5 w-5 h-5 text-txt-secondary" />
                   <><label htmlFor="a11y-input-13" className="sr-only">Password</label>
 <input id="a11y-input-13"
                     type={showPassword ? "text" : "password"}
@@ -172,37 +174,37 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       setError('');
                     }}
                     required
-                    className="w-full pl-11 pr-12 py-3 bg-white border border-slate-200 dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
+                    className="w-full pl-11 pr-12 py-3 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
                   /></>
-                  <button
+                  <Button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 text-slate-700 hover:text-slate-600 focus:outline-none rounded-full"
+                    className="absolute right-3.5 text-txt-secondary hover:text-txt-secondary focus:outline-none rounded-full"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
               {error && (
-                <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-[24px] overflow-hidden">
+                <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-2xl overflow-hidden">
                   {error}
                 </div>
               )}
 
-              <button type="submit"
+              <Button type="submit"
                 disabled={isLoading}
                 className="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-sm transition-all flex justify-center items-center h-12 text-base font-semibold active:scale-95 hover:-translate-y-0.5"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (isLogin ? 'Sign In' : 'Sign Up')}
-              </button>
+              </Button>
             </form>
 
             
 
-            <p className="mt-8 text-center text-base font-normal text-slate-600 leading-relaxed">
+            <p className="mt-8 text-center text-base font-normal text-txt-secondary leading-relaxed">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   setIsLogin(!isLogin);
@@ -211,7 +213,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors rounded-full"
               >
                 {isLogin ? 'Sign up' : 'Log in'}
-              </button>
+              </Button>
             </p>
           </div>
         </motion.div>

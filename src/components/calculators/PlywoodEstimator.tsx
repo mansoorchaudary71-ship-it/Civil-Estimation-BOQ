@@ -1,6 +1,8 @@
+import { Button } from '../ui/Button';
 import React, { useState, useEffect } from 'react';
 import { Layers, Calculator, Ruler, Settings, Download, Printer, Box, DollarSign } from 'lucide-react';
 import { FormulaAccordion, FormulaStep } from '../ui/FormulaAccordion';
+
 
 type UnitSystem = 'metric' | 'imperial';
 type InputMode = 'area' | 'dimensions';
@@ -140,42 +142,42 @@ export function PlywoodEstimator() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header & Toolbar */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 shadow-sm">
+      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex items-center gap-4">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orange-100 text-orange-600">
               <Layers size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">Formwork & Plywood Estimator</h1>
-              <p className="text-slate-600 text-sm">Calculate shuttering sheets, wastage, and cost.</p>
+              <h1 className="text-2xl font-bold text-txt-primary">Formwork & Plywood Estimator</h1>
+              <p className="text-txt-secondary text-sm">Calculate shuttering sheets, wastage, and cost.</p>
             </div>
           </div>
           
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex bg-slate-100 p-1 rounded-xl">
-              <button
+              <Button
                 onClick={() => setUnitSystem('metric')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Metric (m)
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setUnitSystem('imperial')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Imperial (ft)
-              </button>
+              </Button>
             </div>
             
             <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
             
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-slate-50 transition-colors">
               <Printer size={16} /> Print
-            </button>
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-orange-600 border border-orange-700 rounded-lg hover:bg-orange-700 transition-colors shadow-sm">
+            </Button>
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-orange-600 border border-orange-700 rounded-lg hover:bg-orange-700 transition-colors shadow-sm">
               <Download size={16} /> Export BOQ
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -183,77 +185,77 @@ export function PlywoodEstimator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Input Parameters */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2">
                 <Ruler size={20} className="text-orange-500" />
                 Target Surface Area
               </h2>
               <div className="flex bg-slate-100 p-1 rounded-xl">
-                <button
+                <Button
                   onClick={() => setInputMode('dimensions')}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'dimensions' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'dimensions' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
                 >
                   Dimensions (L × W)
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => setInputMode('area')}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'area' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'area' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
                 >
                   Direct Area
-                </button>
+                </Button>
               </div>
             </div>
 
             {inputMode === 'dimensions' ? (
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Length ({unitL})</label>
+                  <label className="text-sm font-medium text-txt-secondary">Length ({unitL})</label>
                   <input
                     type="number"
                     min="0.1"
                     value={length}
                     onChange={(e) => setLength(Math.max(0.1, Number(e.target.value)))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Width/Height ({unitL})</label>
+                  <label className="text-sm font-medium text-txt-secondary">Width/Height ({unitL})</label>
                   <input
                     type="number"
                     min="0.1"
                     value={width}
                     onChange={(e) => setWidth(Math.max(0.1, Number(e.target.value)))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
                   />
                 </div>
               </div>
             ) : (
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Total Net Area ({unitA})</label>
+                <label className="text-sm font-medium text-txt-secondary">Total Net Area ({unitA})</label>
                 <input
                   type="number"
                   min="0.1"
                   value={totalArea}
                   onChange={(e) => setTotalArea(Math.max(0.1, Number(e.target.value)))}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
                 />
               </div>
             )}
             
             <div className="pt-4 border-t border-slate-100">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+              <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
                 <Box size={20} className="text-orange-500" />
                 Sheet Specifications
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="space-y-2 md:col-span-2">
-                  <label className="text-sm font-medium text-slate-700">Standard Sheet Size</label>
+                  <label className="text-sm font-medium text-txt-secondary">Standard Sheet Size</label>
                   <select 
                     value={sheetSize}
                     onChange={(e) => setSheetSize(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
                   >
                     {sheetOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
@@ -262,22 +264,22 @@ export function PlywoodEstimator() {
                 {sheetSize === 'custom' && (
                   <>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700">Custom Length ({unitL})</label>
-                      <input type="number" min="0.1" value={customSheetLength} onChange={(e) => setCustomSheetLength(Math.max(0.1, Number(e.target.value)))} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:border-orange-500 outline-none" />
+                      <label className="text-sm font-medium text-txt-secondary">Custom Length ({unitL})</label>
+                      <input type="number" min="0.1" value={customSheetLength} onChange={(e) => setCustomSheetLength(Math.max(0.1, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-orange-500 outline-none" />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700">Custom Width ({unitL})</label>
-                      <input type="number" min="0.1" value={customSheetWidth} onChange={(e) => setCustomSheetWidth(Math.max(0.1, Number(e.target.value)))} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:border-orange-500 outline-none" />
+                      <label className="text-sm font-medium text-txt-secondary">Custom Width ({unitL})</label>
+                      <input type="number" min="0.1" value={customSheetWidth} onChange={(e) => setCustomSheetWidth(Math.max(0.1, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-orange-500 outline-none" />
                     </div>
                   </>
                 )}
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Thickness (mm)</label>
+                  <label className="text-sm font-medium text-txt-secondary">Thickness (mm)</label>
                   <select 
                     value={thickness}
                     onChange={(e) => setThickness(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
                   >
                     <option value={9}>9 mm</option>
                     <option value={12}>12 mm</option>
@@ -288,28 +290,28 @@ export function PlywoodEstimator() {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Wastage & Overlap (%)</label>
-                  <input type="number" min="0" value={wastagePercent} onChange={(e) => setWastagePercent(Math.max(0, Number(e.target.value)))} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:border-orange-500 outline-none" />
+                  <label className="text-sm font-medium text-txt-secondary">Wastage & Overlap (%)</label>
+                  <input type="number" min="0" value={wastagePercent} onChange={(e) => setWastagePercent(Math.max(0, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-orange-500 outline-none" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200 p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
               <DollarSign size={20} className="text-emerald-500" />
               Economics
             </h2>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700">Cost per Plywood Sheet ({currency})</label>
-              <input type="number" min="0" value={costPerSheet} onChange={(e) => setCostPerSheet(Math.max(0, Number(e.target.value)))} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:border-emerald-500 outline-none transition-all" />
+              <label className="text-sm font-medium text-txt-secondary">Cost per Plywood Sheet ({currency})</label>
+              <input type="number" min="0" value={costPerSheet} onChange={(e) => setCostPerSheet(Math.max(0, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-emerald-500 outline-none transition-all" />
             </div>
           </div>
         </div>
 
         {/* Results Panel */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 rounded-3xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
+          <div className="bg-slate-900 rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
               <Layers size={120} />
             </div>
@@ -321,19 +323,19 @@ export function PlywoodEstimator() {
 
             {result && (
               <div className="grid grid-cols-2 gap-4 relative z-10">
-                <div className="bg-white/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
+                <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
                   <div className="text-orange-200 text-sm font-medium mb-1">Total Sheets</div>
                   <div className="text-4xl font-black">{result.totalSheets}</div>
                   <div className="text-xs text-slate-400 mt-1">Rounded up</div>
                 </div>
                 
-                <div className="bg-white/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
+                <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
                   <div className="text-orange-200 text-sm font-medium mb-1">Gross Area</div>
                   <div className="text-2xl font-bold">{result.grossAreaRequired.toFixed(2)} <span className="text-sm font-normal text-slate-300">{unitA}</span></div>
                   <div className="text-xs text-slate-400 mt-1">Inc. {wastagePercent}% waste</div>
                 </div>
                 
-                <div className="bg-white/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md col-span-2">
+                <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md col-span-2">
                   <div className="text-orange-200 text-sm font-medium mb-2">Coverage Grid Visualization</div>
                   <div className="w-full h-24 bg-black/30 rounded-xl border border-white/5 overflow-hidden flex items-center justify-center p-2">
                     {/* Visual representation of grid mapping */}
@@ -371,22 +373,22 @@ export function PlywoodEstimator() {
           </div>
 
           {result && (
-            <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-              <h3 className="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-3">Cost Breakdown</h3>
+            <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-txt-primary mb-4 border-b border-slate-100 pb-3">Cost Breakdown</h3>
               
               <div className="space-y-3 mb-4">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-600">Plywood Sheets ({result.totalSheets} @ {costPerSheet})</span>
-                  <span className="font-medium text-slate-900">{currency} {result.totalCost.toLocaleString()}</span>
+                  <span className="text-txt-secondary">Plywood Sheets ({result.totalSheets} @ {costPerSheet})</span>
+                  <span className="font-medium text-txt-primary">{currency} {result.totalCost.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-600">Total Wastage Area</span>
+                  <span className="text-txt-secondary">Total Wastage Area</span>
                   <span className="font-medium text-rose-600">{result.wastageArea.toFixed(2)} {unitA}</span>
                 </div>
               </div>
               
-              <div className="pt-4 border-t border-slate-200 flex justify-between items-center">
-                <span className="text-base font-bold text-slate-800">Total Estimate</span>
+              <div className="pt-4 border-t border-ui-borderSubtle flex justify-between items-center">
+                <span className="text-base font-bold text-txt-primary">Total Estimate</span>
                 <span className="text-2xl font-bold text-orange-600">{currency} {result.totalCost.toLocaleString()}</span>
               </div>
             </div>

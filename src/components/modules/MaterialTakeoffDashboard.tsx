@@ -33,13 +33,13 @@ export function MaterialTakeoffDashboard({ costs, rates }: MaterialTakeoffDashbo
   const qCrush = rates.crush > 0 ? Math.ceil(costs.crush / rates.crush) : 0;
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-6 lg:p-4 sm:p-8 shadow-sm overflow-hidden">
+    <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-4 sm:p-6 lg:p-4 sm:p-8 shadow-sm overflow-hidden">
       <div className="mb-6 flex flex-col gap-1">
-        <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+        <h2 className="text-xl font-bold text-txt-primary dark:text-white flex items-center gap-2">
           <Container className="w-5 h-5 text-indigo-500" />
           Material Takeoff (MTO) Dashboard
         </h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-txt-tertiary dark:text-slate-400">
           Raw material quantities reverse-calculated from current BOQ totals.
         </p>
       </div>
@@ -88,12 +88,12 @@ export function MaterialTakeoffDashboard({ costs, rates }: MaterialTakeoffDashbo
 
         {/* Crush */}
         <MTOItem 
-          icon={<Diamond className="w-6 h-6 text-slate-600 dark:text-slate-400" />} 
+          icon={<Diamond className="w-6 h-6 text-txt-secondary dark:text-slate-400" />} 
           name="Margalla Crush" 
           quantity={formatNumberMask(qCrush)} 
           unit="Cft" 
           bgColor="bg-slate-100 dark:bg-slate-800" 
-          borderColor="border-slate-200 dark:border-slate-700"
+          borderColor="border-ui-borderSubtle dark:border-slate-700"
         />
 
       </div>
@@ -104,13 +104,13 @@ export function MaterialTakeoffDashboard({ costs, rates }: MaterialTakeoffDashbo
 function MTOItem({ icon, name, quantity, unit, bgColor, borderColor }: any) {
   return (
     <div className={`p-4 rounded-2xl flex items-center gap-4 border ${bgColor} ${borderColor} transition-all hover:scale-[1.02]`}>
-      <div className="w-full shrink-0 p-3 bg-white dark:bg-slate-900 rounded-xl shadow-sm overflow-hidden">
+      <div className="w-full shrink-0 p-3 bg-surface-default dark:bg-slate-900 rounded-xl shadow-sm overflow-hidden">
         {icon}
       </div>
       <div>
-        <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-0.5">{name}</div>
+        <div className="text-sm font-medium text-txt-tertiary dark:text-slate-400 mb-0.5">{name}</div>
         <div className="flex items-baseline gap-1.5">
-          <span className="text-xl font-semibold text-slate-800 tabular-nums text-slate-800 dark:text-white leading-none">{quantity}</span>
+          <span className="text-xl font-semibold text-txt-primary tabular-nums text-txt-primary dark:text-white leading-none">{quantity}</span>
           <span className="text-base font-medium dark:text-slate-300">{unit}</span>
         </div>
       </div>

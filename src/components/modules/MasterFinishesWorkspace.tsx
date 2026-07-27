@@ -1,7 +1,9 @@
+import { Button } from '../ui/Button';
 import React, { useState, useMemo } from 'react';
 import { useBOQ } from '../../context/BOQContext';
 import { Layers, Cuboid, Paintbrush, Square, Ruler, Grid2X2, Settings2, Save, Scissors } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
 
 export default function MasterFinishesWorkspace() {
   const { addItem } = useBOQ();
@@ -147,8 +149,8 @@ export default function MasterFinishesWorkspace() {
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Complete Finishes & Surfaces Workspace</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Masonry, Plaster, Paint, Flooring, Carpentry, and Area computations in one suite.</p>
+          <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Complete Finishes & Surfaces Workspace</h1>
+          <p className="text-txt-tertiary dark:text-slate-400 mt-1">Masonry, Plaster, Paint, Flooring, Carpentry, and Area computations in one suite.</p>
         </div>
       </div>
 
@@ -165,19 +167,19 @@ export default function MasterFinishesWorkspace() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-6 bg-white dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="flex flex-wrap gap-2 mb-6 bg-surface-default dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-ui-borderSubtle dark:border-slate-700">
         {tabs.map(t => (
-          <button
+          <Button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === t.id ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
+            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === t.id ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
           >
             {t.icon} <span className="hidden sm:inline">{t.name}</span>
-          </button>
+          </Button>
         ))}
       </div>
 
-      <div className="flex-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-24">
+      <div className="flex-1 bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6 mb-24">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -191,12 +193,12 @@ export default function MasterFinishesWorkspace() {
             {activeTab === 'carpet' && (
               <>
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Carpet & Built-up Factors</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Carpet & Built-up Factors</h3>
                   <InputGroup label="Wall Area Deduction (%)" value={wallAreaDeductPct} onChange={(e: any) => setWallAreaDeductPct(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Super Built-up Addition (%)" value={superBuiltUpAddPct} onChange={(e: any) => setSuperBuiltUpAddPct(parseFloat(e.target.value) || 0)} />
                 </div>
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-xl">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Area Breakdown</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-4">Area Breakdown</h3>
                   <ResultRow label="RERA Carpet Area (Net)" value={carpetArea} unit="m²" />
                   <ResultRow label="Estimated Built-up Area" value={totalBuiltUp} unit="m²" />
                   <ResultRow label="Super Built-up Area" value={superBuiltUp} unit="m²" />
@@ -207,13 +209,13 @@ export default function MasterFinishesWorkspace() {
             {activeTab === 'masonry' && (
               <>
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Block Specifications</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Block Specifications</h3>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Masonry Type</label>
+                    <label className="text-sm font-medium text-txt-secondary dark:text-slate-300">Masonry Type</label>
                     <select
                       value={masonryType}
                       onChange={(e: any) => setMasonryType(e.target.value)}
-                      className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none dark:text-white"
+                      className="bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none dark:text-white"
                     >
                       <option value="brick">Red Bricks (9"x4.5"x3")</option>
                       <option value="aac">AAC Blocks (600x200x150)</option>
@@ -224,7 +226,7 @@ export default function MasterFinishesWorkspace() {
                   <InputGroup label="Wastage (%)" value={masonryWastage} onChange={(e: any) => setMasonryWastage(parseFloat(e.target.value) || 0)} />
                 </div>
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-xl">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Masonry Takeoff</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-4">Masonry Takeoff</h3>
                   <ResultRow label="Total Volume" value={wallVol} unit="m³" />
                   <ResultRow label="Required Blocks/Bricks" value={totalBlocks} unit="Nos" digits={0} />
                   <ResultRow label="Mortar Volume" value={totalMortarVol} unit="m³" />
@@ -235,13 +237,13 @@ export default function MasterFinishesWorkspace() {
             {activeTab === 'plaster' && (
               <>
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Plaster Configuration</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Plaster Configuration</h3>
                   <InputGroup label="Internal Thickness (mm)" value={plasterIntThick} onChange={(e: any) => setPlasterIntThick(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="External Thickness (mm)" value={plasterExtThick} onChange={(e: any) => setPlasterExtThick(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Mix Ratio (1:X)" value={plasterRatio} onChange={(e: any) => setPlasterRatio(parseFloat(e.target.value) || 0)} />
                 </div>
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-xl">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Plaster Material</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-4">Plaster Material</h3>
                   <ResultRow label="Dry Mortar Volume" value={totalPlasterVolDry} unit="m³" />
                   <ResultRow label="Cement Required" value={plasterCementBags} unit="Bags (50kg)" digits={0} />
                   <ResultRow label="Sand Required" value={plasterSand} unit="m³" />
@@ -252,13 +254,13 @@ export default function MasterFinishesWorkspace() {
             {activeTab === 'paint' && (
               <>
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Paint Properties</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Paint Properties</h3>
                   <InputGroup label="Paint Coverage (m²/L per coat)" value={paintCoverage} onChange={(e: any) => setPaintCoverage(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Number of Coats" value={paintCoats} onChange={(e: any) => setPaintCoats(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Primer Coverage (m²/L)" value={primerCoverage} onChange={(e: any) => setPrimerCoverage(parseFloat(e.target.value) || 0)} />
                 </div>
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-xl">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Paint Estimates</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-4">Paint Estimates</h3>
                   <ResultRow label="Total Paint Area" value={paintArea} unit="m²" />
                   <ResultRow label="Primer Required" value={primerLiters} unit="Liters" digits={0} />
                   <ResultRow label="Paint Required" value={paintLiters} unit="Liters" digits={0} />
@@ -269,7 +271,7 @@ export default function MasterFinishesWorkspace() {
             {activeTab === 'flooring' && (
               <>
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Tile & Skirting</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Tile & Skirting</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <InputGroup label="Tile Length (m)" value={tileSizeL} onChange={(e: any) => setTileSizeL(parseFloat(e.target.value) || 0)} />
                     <InputGroup label="Tile Width (m)" value={tileSizeW} onChange={(e: any) => setTileSizeW(parseFloat(e.target.value) || 0)} />
@@ -279,7 +281,7 @@ export default function MasterFinishesWorkspace() {
                   <InputGroup label="Mortar Bed Thickness (mm)" value={mortarBedThick} onChange={(e: any) => setMortarBedThick(parseFloat(e.target.value) || 0)} />
                 </div>
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-xl">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Flooring BOQ</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-4">Flooring BOQ</h3>
                   <ResultRow label="Total Area (inc. skirting)" value={totalFloorAreaReq} unit="m²" />
                   <ResultRow label="Tiles Needed" value={totalTiles} unit="Nos" digits={0} />
                   <ResultRow label="Tile Boxes Needed" value={totalTileBoxes} unit="Boxes" digits={0} />
@@ -291,14 +293,14 @@ export default function MasterFinishesWorkspace() {
             {activeTab === 'counter' && (
               <>
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Slab Dimensions</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Slab Dimensions</h3>
                   <InputGroup label="Counter Length (m)" value={counterL} onChange={(e: any) => setCounterL(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Counter Width (m)" value={counterW} onChange={(e: any) => setCounterW(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Number of Cutouts (Sink/Hob)" value={cutouts} onChange={(e: any) => setCutouts(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Area per Cutout (m²)" value={cutoutArea} onChange={(e: any) => setCutoutArea(parseFloat(e.target.value) || 0)} />
                 </div>
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-xl">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Stone & Polish</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-4">Stone & Polish</h3>
                   <ResultRow label="Net Granite/Marble Area" value={counterNetArea} unit="m²" />
                   <ResultRow label="Edge Polishing Length" value={edgePolishing} unit="m" />
                   <ResultRow label="Support Wall Volume" value={counterSupportVol} unit="m³" />
@@ -309,12 +311,12 @@ export default function MasterFinishesWorkspace() {
             {activeTab === 'carpentry' && (
               <>
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Wood Framing & Panels</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b pb-2 mb-4 dark:border-slate-700">Wood Framing & Panels</h3>
                   <InputGroup label="Stud Spacing (m)" value={studSpacing} onChange={(e: any) => setStudSpacing(parseFloat(e.target.value) || 0)} />
                   <InputGroup label="Plywood Re-use Factor" value={plywoodReUse} onChange={(e: any) => setPlywoodReUse(parseFloat(e.target.value) || 0)} />
                 </div>
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900 p-5 rounded-xl">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Carpentry Estimates</h3>
+                  <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-4">Carpentry Estimates</h3>
                   <ResultRow label="Vertical Studs" value={studsCount} unit="Nos" digits={0} />
                   <ResultRow label="Wall Covering Area" value={plyAreaSqM} unit="m²" />
                   <ResultRow label="Plywood Sheets (4x8 ft)" value={plySheetsReq} unit="Nos" digits={0} />
@@ -327,7 +329,7 @@ export default function MasterFinishesWorkspace() {
       </div>
 
       {/* Sticky Summary Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-700 p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.1)] z-40">
+      <div className="fixed bottom-0 left-0 right-0 bg-surface-default/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-ui-borderSubtle dark:border-slate-700 p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.1)] z-40">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex gap-6 overflow-x-auto w-full md:w-auto hide-scrollbar pb-2 md:pb-0">
             <SummaryPill label="Bricks/Blocks" value={totalBlocks} />
@@ -335,12 +337,12 @@ export default function MasterFinishesWorkspace() {
             <SummaryPill label="Paint (L)" value={paintLiters} />
             <SummaryPill label="Tile Boxes" value={totalTileBoxes} />
           </div>
-          <button 
+          <Button 
             onClick={syncToBOQ}
             className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl flex items-center justify-center gap-2 font-bold shadow-lg shadow-indigo-600/30 transition-all shrink-0"
           >
             <Save size={18} /> Sync All to Master BOQ
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -350,14 +352,14 @@ export default function MasterFinishesWorkspace() {
 function InputGroup({ label, value, onChange }: { label: string, value: number, onChange: any }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}</label>
+      <label className="text-sm font-medium text-txt-secondary dark:text-slate-300">{label}</label>
       <input
         type="number"
         value={value}
         onChange={onChange}
         min={0}
         step="any"
-        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900 dark:text-white font-mono"
+        className="w-full bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-txt-primary dark:text-white font-mono"
       />
     </div>
   );
@@ -381,10 +383,10 @@ function InputGroupDark({ label, value, onChange }: { label: string, value: numb
 
 function ResultRow({ label, value, unit, digits = 2 }: { label: string, value: number, unit: string, digits?: number }) {
   return (
-    <div className="flex justify-between items-center py-2.5 border-b border-slate-200 dark:border-slate-800 last:border-0">
-      <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">{label}</span>
+    <div className="flex justify-between items-center py-2.5 border-b border-ui-borderSubtle dark:border-slate-800 last:border-0">
+      <span className="text-txt-secondary dark:text-slate-400 text-sm font-medium">{label}</span>
       <div className="text-right flex items-baseline gap-1.5">
-        <span className="text-lg font-bold text-slate-900 dark:text-white">
+        <span className="text-lg font-bold text-txt-primary dark:text-white">
           {isNaN(value) || !isFinite(value) ? "0" : value.toFixed(digits)}
         </span>
         <span className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold">{unit}</span>
@@ -396,8 +398,8 @@ function ResultRow({ label, value, unit, digits = 2 }: { label: string, value: n
 function SummaryPill({ label, value }: { label: string, value: number }) {
   return (
     <div className="flex flex-col shrink-0">
-      <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">{label}</span>
-      <span className="text-lg font-black text-slate-800 dark:text-white leading-none mt-1">
+      <span className="text-[10px] uppercase font-bold text-txt-tertiary dark:text-slate-400 tracking-wider">{label}</span>
+      <span className="text-lg font-black text-txt-primary dark:text-white leading-none mt-1">
         {isNaN(value) || !isFinite(value) ? "0" : value.toLocaleString()}
       </span>
     </div>

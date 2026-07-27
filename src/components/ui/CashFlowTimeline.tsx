@@ -34,10 +34,10 @@ export function CashFlowTimeline({
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-white/90 backdrop-blur-sm border border-slate-200 p-4 rounded-xl shadow-xl">
-          <p className="font-semibold text-slate-800 mb-1">{label}</p>
-          <p className="text-slate-600 text-sm mb-2">
-            Distribution: <span className="font-medium text-slate-800">{data.percentage}%</span>
+        <div className="bg-surface-default/90 backdrop-blur-sm border border-ui-borderSubtle p-4 rounded-xl shadow-xl">
+          <p className="font-semibold text-txt-primary mb-1">{label}</p>
+          <p className="text-txt-secondary text-sm mb-2">
+            Distribution: <span className="font-medium text-txt-primary">{data.percentage}%</span>
           </p>
           <div className="text-xl font-bold text-blue-600">
             Rs {data.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
@@ -49,10 +49,10 @@ export function CashFlowTimeline({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+    <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
       <div className="flex flex-col mb-6">
-        <h3 className="text-lg font-semibold text-slate-900">Construction Cash Flow Timeline</h3>
-        <p className="text-sm text-slate-500">6-Month Capital Requirement Distribution</p>
+        <h3 className="text-lg font-semibold text-txt-primary">Construction Cash Flow Timeline</h3>
+        <p className="text-sm text-txt-tertiary">6-Month Capital Requirement Distribution</p>
       </div>
       
       <div className="h-72 w-full">

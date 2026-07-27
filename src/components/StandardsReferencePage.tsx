@@ -1,6 +1,8 @@
+import { Button } from './ui/Button';
 import React, { useState } from "react";
 import { Search, BookOpen, ShieldCheck, ArrowRight, Download, Eye, X } from "lucide-react";
 import { createPortal } from "react-dom";
+
 
 export const standardsData = [
   {
@@ -160,10 +162,10 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
 
         <div className="w-full md:max-w-7xl md:mx-auto flex flex-col items-center text-center relative z-10 px-4 md:px-0">
           <BookOpen className="w-12 h-12 text-[#B39B72] mb-6" />
-          <h1 className="md: lg: text-[#4A443B] mb-4 relative text-xl font-semibold text-slate-800 tracking-tight mb-6">
+          <h1 className="md: lg: text-[#4A443B] mb-4 relative text-xl font-semibold text-txt-primary tracking-tight mb-6">
             Engineering <span className="text-[#B39B72]">Standards & Codes</span> Hub
           </h1>
-          <p className="text-[#8B8476] max-w-2xl mb-10 text-base font-normal text-slate-600 leading-relaxed">
+          <p className="text-[#8B8476] max-w-2xl mb-10 text-base font-normal text-txt-secondary leading-relaxed">
             A comprehensive reference library of the civil engineering standards, specifications, and building codes powering our estimation tools across key international markets.
           </p>
 
@@ -175,7 +177,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
               placeholder="Search by code (e.g. 'IS 456') or title..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white border border-[#E8E4D9] rounded-full py-4 pl-12 pr-4 text-[#4A443B] placeholder-[#A39D93] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-[#B39B72]/50 shadow-sm overflow-hidden"
+              className="w-full bg-surface-default border border-[#E8E4D9] rounded-full py-4 pl-12 pr-4 text-[#4A443B] placeholder-[#A39D93] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-[#B39B72]/50 shadow-sm overflow-hidden"
             /></>
           </div>
         </div>
@@ -185,17 +187,17 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
         {/* Country Filter */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
           {countries.map(country => (
-            <button
+            <Button
               key={country}
               onClick={() => setActiveCountry(country)}
               className={`px-5 py-2.5 rounded-full text-base font-medium transition-all shadow-sm
                 ${activeCountry === country 
-                  ? 'bg-amber-500 text-slate-900 shadow-md' 
-                  : 'bg-white text-[#8B8476] border border-[#E8E4D9] hover:bg-[#F2EFE9] hover:text-[#4A443B]'
+                  ? 'bg-amber-500 text-txt-primary shadow-md' 
+                  : 'bg-surface-default text-[#8B8476] border border-[#E8E4D9] hover:bg-[#F2EFE9] hover:text-[#4A443B]'
                 }`}
             >
               {country}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -205,7 +207,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
             filteredStandards.map(std => (
               <div 
                 key={std.id} 
-                className="w-full bg-white border border-[#E8E4D9] rounded-2xl p-4 sm:p-6 flex flex-col group hover:border-[#B39B72] hover:shadow-lg transition-all duration-300 overflow-hidden"
+                className="w-full bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-6 flex flex-col group hover:border-[#B39B72] hover:shadow-lg transition-all duration-300 overflow-hidden"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="font-mono text-base font-medium bg-amber-50 text-amber-600 border border-amber-100 px-3 py-1 rounded-lg">
@@ -220,7 +222,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                 <div className="mb-2">
                    <span className={`text-sm inline-block uppercase font-bold tracking-widest mb-2 px-2 py-0.5 rounded-full ${
                       std.category === 'Concrete' ? 'bg-blue-50 text-blue-600' :
-                      std.category === 'Steel' ? 'bg-slate-100 text-slate-600' :
+                      std.category === 'Steel' ? 'bg-slate-100 text-txt-secondary' :
                       std.category === 'Building' ? 'bg-amber-50 text-amber-600' :
                       std.category === 'Infrastructure' ? 'bg-emerald-50 text-emerald-600' :
                       std.category === 'Safety' ? 'bg-rose-50 text-rose-600' :
@@ -228,30 +230,30 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                    }`}>
                     {std.category}
                    </span>
-                   <h3 className="text-[#4A443B] group-hover:text-amber-600 transition-colors text-lg font-medium text-slate-800 mb-4">
+                   <h3 className="text-[#4A443B] group-hover:text-amber-600 transition-colors text-lg font-medium text-txt-primary mb-4">
                     {std.title}
                    </h3>
                 </div>
 
-                <p className="text-[#8B8476] mb-6 flex-grow text-base font-normal text-slate-600 leading-relaxed">
+                <p className="text-[#8B8476] mb-6 flex-grow text-base font-normal text-txt-secondary leading-relaxed">
                   {std.description}
                 </p>
 
                 {std.pdfLink && (
                   <div className="mb-6 flex gap-2 flex-wrap">
-                    <button
+                    <Button
                       onClick={() => setViewPdfUrl(std.pdfLink)}
-                      className="inline-flex items-center gap-2 px-3 py-2 bg-[#F2EFE9] hover:bg-amber-500 hover:text-slate-900 border border-[#E8E4D9] rounded-full text-base font-medium text-[#4A443B] transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-[#F2EFE9] hover:bg-amber-500 hover:text-txt-primary border border-[#E8E4D9] rounded-full text-base font-medium text-[#4A443B] transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                     >
                       <Eye className="w-4 h-4" />
                       Read PDF
-                    </button>
+                    </Button>
                     <a
                       href={std.pdfLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       download
-                      className="inline-flex items-center gap-2 px-3 py-2 bg-white hover:bg-[#F2EFE9] border border-[#E8E4D9] rounded-lg text-base font-medium text-[#6A6458] transition-colors"
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-surface-default hover:bg-[#F2EFE9] border border-[#E8E4D9] rounded-lg text-base font-medium text-[#6A6458] transition-colors"
                     >
                       <Download className="w-4 h-4" />
                       Download
@@ -260,17 +262,17 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                 )}
 
                 <div className="pt-5 border-t border-[#E8E4D9]">
-                  <p className="text-[#A39D93] uppercase tracking-widest mb-3 text-base font-normal text-slate-600 leading-relaxed">Integrations</p>
+                  <p className="text-[#A39D93] uppercase tracking-widest mb-3 text-base font-normal text-txt-secondary leading-relaxed">Integrations</p>
                   <div className="flex flex-wrap gap-2">
                     {std.toolNames.map((tool, idx) => (
-                      <button
+                      <Button
                         key={idx}
                         onClick={() => onNavigate?.(std.toolIds[idx])}
                         className="text-base font-medium px-2.5 py-1.5 bg-[#FAF8F5] hover:bg-amber-50 hover:text-amber-600 border border-[#E8E4D9] hover:border-amber-200 rounded-full text-[#6A6458] transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                       >
                         {tool}
                         <ArrowRight className="w-3 h-3 opacity-50" />
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>
@@ -279,48 +281,48 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
           ) : (
              <div className="col-span-full py-20 text-center">
                <BookOpen className="w-12 h-12 text-[#A39D93] mx-auto mb-4" />
-               <h3 className="text-[#6A6458] mb-2 text-lg font-medium text-slate-800 mb-4">No standards found</h3>
-               <p className="text-[#A39D93] text-base font-normal text-slate-600 leading-relaxed">Try adjusting your search term or country filter.</p>
+               <h3 className="text-[#6A6458] mb-2 text-lg font-medium text-txt-primary mb-4">No standards found</h3>
+               <p className="text-[#A39D93] text-base font-normal text-txt-secondary leading-relaxed">Try adjusting your search term or country filter.</p>
              </div>
           )}
         </div>
 
         {/* Bottom CTA */}
-        <div className="w-full mt-20 bg-white border border-[#E8E4D9] rounded-3xl p-4 sm:p-8 md:p-5 sm:p-12 text-center md:max-w-4xl md:mx-auto shadow-sm overflow-hidden">
-           <h2 className="md: text-[#4A443B] mb-4 text-xl font-semibold text-slate-900 tracking-tight">Ready to put these standards into practice?</h2>
-           <p className="w-full text-[#8B8476] mb-8 md:max-w-xl md:mx-auto text-base font-normal text-slate-600 leading-relaxed px-4 md:px-0">Access 55+ professional civil engineering calculators and tools that automatically apply these specific country codes to your estimates.</p>
-           <button onClick={() => {
+        <div className="w-full mt-20 bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 text-center md:max-w-4xl md:mx-auto shadow-sm overflow-hidden">
+           <h2 className="md: text-[#4A443B] mb-4 text-xl font-semibold text-txt-primary tracking-tight">Ready to put these standards into practice?</h2>
+           <p className="w-full text-[#8B8476] mb-8 md:max-w-xl md:mx-auto text-base font-normal text-txt-secondary leading-relaxed px-4 md:px-0">Access 55+ professional civil engineering calculators and tools that automatically apply these specific country codes to your estimates.</p>
+           <Button onClick={() => {
               if (onNavigate) {
                  onNavigate('home');
               } else {
                  window.location.href = '/#tools';
               }
-           }} className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-full transition-all shadow-md hover:shadow-lg active:scale-95 hover:-translate-y-0.5">
+           }} className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-txt-primary font-bold rounded-full transition-all shadow-md hover:shadow-lg active:scale-95 hover:-translate-y-0.5">
              Explore All Tools
-           </button>
+           </Button>
         </div>
       </div>
 
       {viewPdfUrl && createPortal(
         <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#FAF8F5]/90 backdrop-blur-sm p-4 sm:p-8">
-          <div className="bg-white rounded-2xl w-full max-w-5xl h-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative border border-[#E8E4D9]">
+          <div className="bg-surface-default rounded-2xl w-full max-w-5xl h-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative border border-[#E8E4D9]">
             <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E4D9] bg-[#FAF8F5]">
-              <h2 className="text-[#4A443B] text-xl font-semibold text-slate-900 tracking-tight mb-4">Reading Mode</h2>
+              <h2 className="text-[#4A443B] text-xl font-semibold text-txt-primary tracking-tight mb-4">Reading Mode</h2>
               <div className="flex items-center gap-3">
                 <a
                   href={viewPdfUrl}
                   download
-                  className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E8E4D9] text-[#4A443B] hover:bg-[#F2EFE9] font-semibold rounded-xl transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-surface-default border border-[#E8E4D9] text-[#4A443B] hover:bg-[#F2EFE9] font-semibold rounded-xl transition-colors"
                 >
                   <Download className="w-4 h-4" />
                   Download
                 </a>
-                <button
+                <Button
                   onClick={() => setViewPdfUrl(null)}
                   className="p-2 text-[#A39D93] hover:text-[#4A443B] hover:bg-[#E8E4D9]/50 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
                 >
                   <X className="w-5 h-5" />
-                </button>
+                </Button>
               </div>
             </div>
             <div className="flex-1 bg-[#F2EFE9] overflow-hidden relative">

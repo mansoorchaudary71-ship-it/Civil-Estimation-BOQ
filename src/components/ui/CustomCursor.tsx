@@ -52,7 +52,7 @@ export default function CustomCursor() {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none z-[9999] mix-blend-difference bg-white transition-all duration-300 ease-out flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 will-change-transform ${
+      className={`fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none z-[9999] mix-blend-difference bg-surface-default transition-all duration-300 ease-out flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 will-change-transform ${
         isHovering ? "scale-[2.5] opacity-50" : "scale-100 opacity-100"
       }`}
       style={{

@@ -1,4 +1,6 @@
+import { Button } from './/Button';
 import React from "react";
+
 
 export type TabItem = {
   id: string;
@@ -48,13 +50,13 @@ export function UniversalTabs({
     <div
       className={`w-full overflow-x-auto pb-3 md:pb-4 scroll-smooth ${className}`}
     >
-      <div className="flex px-1 min-w-max border-b border-slate-200 dark:border-slate-800">
+      <div className="flex px-1 min-w-max border-b border-ui-borderSubtle dark:border-slate-800">
         {tabs.map((tab, index) => {
           const isActive = activeTab === tab.id;
           const colorTheme = COLOR_PALETTE[index % COLOR_PALETTE.length];
 
           return (
-            <button
+            <Button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={`
@@ -62,14 +64,14 @@ export function UniversalTabs({
                 rounded-t-xl rounded-b-none
                 ${
                   isActive
-                    ? `bg-white dark:bg-[#151821] shadow-[0_-4px_12px_rgba(15,23,42,0.03)] dark:shadow-slate-900/20 z-20 ${colorTheme.text}`
-                    : "bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-500 dark:text-slate-400 z-10"
+                    ? `bg-surface-default dark:bg-[#151821] shadow-[0_-4px_12px_rgba(15,23,42,0.03)] dark:shadow-slate-900/20 z-20 ${colorTheme.text}`
+                    : "bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50 text-txt-tertiary dark:text-slate-400 z-10"
                 }
               `}
             >
               {tab.icon && (
                 <span
-                  className={`[&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4 md:[&>svg]:w-5 md:[&>svg]:h-5 inline-flex items-center justify-center ${isActive ? colorTheme.text : "text-slate-400 dark:text-slate-500"}`}
+                  className={`[&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4 md:[&>svg]:w-5 md:[&>svg]:h-5 inline-flex items-center justify-center ${isActive ? colorTheme.text : "text-slate-400 dark:text-txt-tertiary"}`}
                 >
                   {tab.icon}
                 </span>
@@ -82,7 +84,7 @@ export function UniversalTabs({
                 }`}
                 style={{ marginBottom: "-1px" }} // cover the container's bottom border
               />
-            </button>
+            </Button>
           );
         })}
       </div>

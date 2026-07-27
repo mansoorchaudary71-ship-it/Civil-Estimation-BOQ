@@ -109,8 +109,8 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              activeIndex={activeIndex as any}
-              activeShape={renderActiveShape}
+              
+              
               data={data}
               cx="50%"
               cy="50%"

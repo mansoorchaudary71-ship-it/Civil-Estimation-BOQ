@@ -1,59 +1,48 @@
 import React from 'react';
-import { MessageSquare, Building2 } from 'lucide-react';
+import { Building2, Globe, ArrowUp, Mail } from 'lucide-react';
 import NewsletterSignupCard from './NewsletterSignupCard';
 import { ModuleId } from './Dashboard';
 
 const SOCIAL_LINKS = [
-  {
-    name: 'LinkedIn',
-    href: '#',
-    icon: (
-      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-      </svg>
-    )
-  },
-  {
-    name: 'Twitter',
-    href: '#',
-    icon: (
-      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-      </svg>
-    )
-  },
-  {
-    name: 'Contact',
-    href: 'mailto:support@civilestimation.pro',
-    icon: <MessageSquare className="w-4 h-4" />
-  }
+  { name: 'Twitter', href: '#', icon: <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 4.076H5.03z" /></svg> },
+  { name: 'LinkedIn', href: '#', icon: <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg> },
+  { name: 'GitHub', href: '#', icon: <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg> },
+  { name: 'Contact', href: 'mailto:support@civilestimation.pro', icon: <Mail className="w-[18px] h-[18px]" /> }
 ];
 
 export default function Footer({ activeModule, onNavigate }: { activeModule?: ModuleId, onNavigate?: (id: ModuleId) => void }) {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="w-full bg-[#fcfcfc] dark:bg-[#0a0a0a] border-t border-gray-200/60 dark:border-white/5 pt-16 pb-8 md:pt-24 font-sans text-[#1a1a1a] dark:text-gray-100">
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
+    <footer className="relative w-full bg-white dark:bg-[#030712] border-t border-slate-200/50 dark:border-slate-800/50 pt-24 pb-8 overflow-hidden mt-auto font-sans">
+      {/* Premium Glow effect in the background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-orange-500/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="relative w-full max-w-[1200px] mx-auto px-6 lg:px-8">
         
         {/* Newsletter Section */}
-        <div className="mb-16 md:mb-24">
+        <div className="mb-24 relative z-10">
           <NewsletterSignupCard />
         </div>
 
         {/* Main Footer Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 md:gap-8 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-x-8 gap-y-16 mb-20">
           
           {/* Brand Column */}
-          <div className="col-span-2 lg:col-span-2 flex flex-col pr-4 md:pr-12">
+          <div className="col-span-2 md:col-span-4 lg:col-span-4 flex flex-col pr-0 lg:pr-12">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-[14px] bg-[#ff5722] flex items-center justify-center text-white shadow-md">
-                <Building2 size={20} />
+              <div className="w-9 h-9 rounded-xl bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 shadow-sm">
+                <Building2 className="w-5 h-5" />
               </div>
-              <span className="font-bold text-xl text-gray-900 dark:text-white tracking-tight">
-                Civil Estimation <span className="text-[#ff5722]">Pro</span>
+              <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white">
+                Civil Estimation
               </span>
             </div>
-            <p className="text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed mb-8 max-w-sm">
-              Professional-grade quantity surveying and civil engineering estimation tools built for modern construction teams.
+            <p className="text-[15px] text-slate-500 dark:text-slate-400 leading-relaxed mb-8 max-w-[320px]">
+              The intelligent estimation engine for modern civil engineers. Instantly calculate quantities, automate pricing, and win more bids.
             </p>
             
             <div className="flex items-center gap-4">
@@ -63,7 +52,7 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
                   href={link.href}
                   target={link.href.startsWith("mailto") ? "_self" : "_blank"}
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-gray-50 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-all"
+                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                   aria-label={link.name}
                 >
                   {link.icon}
@@ -72,51 +61,76 @@ export default function Footer({ activeModule, onNavigate }: { activeModule?: Mo
             </div>
           </div>
 
-          {/* Services */}
-          <div className="flex flex-col">
-            <h4 className="font-semibold text-[15px] text-gray-900 dark:text-white mb-6">Services</h4>
-            <ul className="space-y-4 text-[14px] text-gray-500 dark:text-gray-400 font-medium">
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Quantity Takeoff</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">BOQ Generation</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Cost Analysis</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Structural Design</a></li>
+          {/* Product */}
+          <div className="col-span-1 lg:col-span-2">
+            <h4 className="font-semibold text-sm text-slate-900 dark:text-white mb-6 tracking-wide">Product</h4>
+            <ul className="space-y-4 text-[15px] text-slate-500 dark:text-slate-400">
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Pricing</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Roadmap</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors inline-flex items-center gap-2">Changelog <span className="px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">New</span></a></li>
             </ul>
           </div>
 
-          {/* Industries */}
-          <div className="flex flex-col">
-            <h4 className="font-semibold text-[15px] text-gray-900 dark:text-white mb-6">Industries</h4>
-            <ul className="space-y-4 text-[14px] text-gray-500 dark:text-gray-400 font-medium">
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Residential</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Commercial</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Infrastructure</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Industrial</a></li>
+          {/* Resources */}
+          <div className="col-span-1 lg:col-span-2">
+            <h4 className="font-semibold text-sm text-slate-900 dark:text-white mb-6 tracking-wide">Resources</h4>
+            <ul className="space-y-4 text-[15px] text-slate-500 dark:text-slate-400">
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">API</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Support</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Blog</a></li>
             </ul>
           </div>
 
           {/* Company */}
-          <div className="flex flex-col">
-            <h4 className="font-semibold text-[15px] text-gray-900 dark:text-white mb-6">Company</h4>
-            <ul className="space-y-4 text-[14px] text-gray-500 dark:text-gray-400 font-medium">
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Careers</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Contact</a></li>
-              <li><a href="#" className="global-animated-underline hover:text-gray-900 dark:hover:text-white transition-colors">Partners</a></li>
+          <div className="col-span-1 lg:col-span-2">
+            <h4 className="font-semibold text-sm text-slate-900 dark:text-white mb-6 tracking-wide">Company</h4>
+            <ul className="space-y-4 text-[15px] text-slate-500 dark:text-slate-400">
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Careers</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Contact</a></li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div className="col-span-1 lg:col-span-2">
+            <h4 className="font-semibold text-sm text-slate-900 dark:text-white mb-6 tracking-wide">Legal</h4>
+            <ul className="space-y-4 text-[15px] text-slate-500 dark:text-slate-400">
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Terms</a></li>
+              <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Cookies</a></li>
             </ul>
           </div>
 
         </div>
 
         {/* Bottom Bar */}
-        <div className="w-full pt-8 border-t border-gray-200/80 dark:border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[13px] text-gray-500 dark:text-gray-400 font-medium">
-          <p>© {new Date().getFullYear()} Civil Estimation Pro. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Cookie Policy</a>
+        <div className="w-full pt-8 border-t border-slate-200/80 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
+          
+          <div className="flex items-center gap-3 order-2 md:order-1 group">
+            <Globe className="w-4 h-4 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors" />
+            <select className="bg-transparent border-none text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm focus:ring-0 cursor-pointer outline-none transition-colors appearance-none pr-4 relative">
+              <option value="en">English (US)</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="es">Español</option>
+            </select>
           </div>
+
+          <p className="text-sm text-slate-500 dark:text-slate-400 order-3 md:order-2">
+            © {new Date().getFullYear()} Civil Estimation Pro. All rights reserved.
+          </p>
+
+          <button 
+            onClick={scrollToTop}
+            className="order-1 md:order-3 flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors group"
+          >
+            Back to top
+            <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-slate-800 transition-colors">
+              <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+            </div>
+          </button>
         </div>
-        
+
       </div>
     </footer>
   );

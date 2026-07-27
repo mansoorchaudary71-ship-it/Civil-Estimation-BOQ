@@ -733,7 +733,7 @@ export default function App() {
                   <ProductTour />
                   
                   <TopNavbar
-                    activeModule={activeModule}
+                    
                     onOpenAuth={() => setIsAuthOpen(true)}
                     onOpenProfile={() => setIsProfileOpen(true)}
                     onNavigate={handleSelectModule}
@@ -754,7 +754,7 @@ export default function App() {
                       }}
                       className="flex-1 flex flex-col bg-transparent relative w-full transition-all duration-300"
                     >
-                      <ReadingTimeIndicator activeModule={activeModule} />
+                      <ReadingTimeIndicator  />
                       <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }} className="w-full flex-1 flex flex-col relative transition-all duration-300">
                         <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }} className="flex-1 flex flex-col relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
                           <AnimatePresence>
@@ -798,7 +798,7 @@ export default function App() {
                                     {activeModule === "cookies" && <LegalPages page="cookies" onNavigate={handleSelectModule} />}
                                   </motion.div>
                                   <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}>
-                                    <Footer activeModule={activeModule} onNavigate={handleSelectModule} />
+                                    <Footer  onNavigate={handleSelectModule} />
                                   </motion.div>
                                 </motion.div>
                               ) : (

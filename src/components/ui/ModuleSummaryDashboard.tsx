@@ -276,7 +276,7 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
                   />
                   <Tooltip 
                     cursor={{ fill: 'transparent' }}
-                    formatter={(value: any, name: string) => [new Intl.NumberFormat().format(Number(value)), name === "diff" ? "Difference" : name]}
+                    formatter={(value: any, name: any) => [new Intl.NumberFormat().format(Number(value)), name === "diff" ? "Difference" : name]}
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                   />
                   <Bar dataKey="diff" radius={[4, 4, 4, 4]}>

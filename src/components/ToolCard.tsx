@@ -151,14 +151,11 @@ export default function ToolCard({
                 NEW
               </span>
             )}
-            <Button onClick={toggleFavorite}
-              className="flex items-center justify-center rounded-full hover:bg-gray-50 transition-colors active:scale-95"
-              aria-label={saved ? "Remove from favorites" : "Add to favorites"}
-            >
+            <button onClick={toggleFavorite} className="flex items-center justify-center rounded-full hover:bg-gray-50 transition-colors active:scale-95" aria-label={saved ? "Remove from favorites" : "Add to favorites"}>
               <motion.div whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }} className="p-1">
                 {saved ? <BookmarkCheck size={20} color={cfg.c} /> : <Bookmark size={20} className="text-txt-tertiary" strokeWidth={1.5} />}
               </motion.div>
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -222,15 +219,9 @@ export default function ToolCard({
                 <div className="w-16 h-16 rounded-2xl bg-surface-default shadow-sm border border-slate-100 flex items-center justify-center">
                   <IconComponent size={32} className="text-txt-primary" />
                 </div>
-                <Button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowQuickView(false);
-                  }}
-                  className="p-2 bg-surface-default/50 hover:bg-surface-default rounded-full transition-colors"
-                >
+                <button onClick={(e) => { e.stopPropagation(); setShowQuickView(false); }} className="p-2 bg-surface-default/50 hover:bg-surface-default rounded-full transition-colors">
                   <X size={20} className="text-txt-tertiary" />
-                </Button>
+                </button>
               </div>
 
               <div className="p-6 -mt-4 relative bg-surface-default rounded-t-3xl">
@@ -298,17 +289,11 @@ export default function ToolCard({
                     }}
                     className="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors"
                   >
-                    Open Tool <ArrowRight size={16} />
+                    Open Tool
                   </Button>
-                  <Button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(e);
-                    }}
-                    className="p-3 rounded-xl border border-ui-borderSubtle hover:bg-slate-50 transition-colors flex items-center justify-center text-txt-secondary"
-                  >
+                  <button onClick={(e) => { e.stopPropagation(); toggleFavorite(e); }} className="p-3 rounded-xl border border-ui-borderSubtle hover:bg-slate-50 transition-colors flex items-center justify-center text-txt-secondary">
                     {saved ? <BookmarkCheck size={20} color={cfg.c} /> : <Bookmark size={20} />}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </motion.div>

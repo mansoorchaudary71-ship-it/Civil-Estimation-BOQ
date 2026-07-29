@@ -140,7 +140,7 @@ export default function PricingPage() {
                 <span className="text-2xl font-black tracking-tight text-txt-primary dark:text-white">$0</span>
                 <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
               </div>
-              <Button className="w-full py-3 px-4 rounded-xl font-bold border-2 border-ui-borderSubtle dark:border-slate-700 hover:border-ui-borderDefault dark:hover:border-slate-600 transition-colors text-txt-secondary dark:text-slate-300">
+              <Button variant="outline" size="md" fullWidth>
                 Get Started
               </Button>
             </div>
@@ -176,7 +176,7 @@ export default function PricingPage() {
                 <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
                 {isAnnual && <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $468 yearly</div>}
               </div>
-              <Button className="w-full py-3.5 px-4 rounded-xl font-bold bg-slate-900 dark:bg-amber-500 hover:bg-slate-800 dark:hover:bg-amber-400 text-txt-primary dark:text-white shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5">
+              <Button variant="primary" size="lg" fullWidth>
                 Start 14-Day Free Trial
               </Button>
             </div>
@@ -206,7 +206,7 @@ export default function PricingPage() {
                 <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
                 {isAnnual && <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $1,068 yearly</div>}
               </div>
-              <Button className="w-full py-3 px-4 rounded-xl font-bold bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors">
+              <Button variant="secondary" size="md" fullWidth>
                 Contact Sales
               </Button>
             </div>

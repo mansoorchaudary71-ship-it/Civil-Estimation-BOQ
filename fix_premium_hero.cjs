@@ -2,28 +2,14 @@ const fs = require('fs');
 
 let content = fs.readFileSync('src/components/PremiumHero.tsx', 'utf8');
 
-if (!content.includes('AnimatedCounter')) {
-  content = content.replace(
-    /import React from "react";/,
-    'import React from "react";\nimport { AnimatedCounter } from "./ui/AnimatedCounter";'
-  );
-}
-
-// Replace the stats rendering logic
 content = content.replace(
-  /<h3 className="tabular-nums mb-1 text-lg font-medium text-txt-primary mb-4">\{stat.val\}<\/h3>/g,
-  `<h3 className="tabular-nums mb-1 text-lg font-medium text-txt-primary mb-4">
-              {stat.val === "40+" ? <AnimatedCounter end={40} suffix="+" duration={2} /> :
-               stat.val === "100%" ? <AnimatedCounter end={100} suffix="%" duration={2} /> :
-               stat.val === "15+" ? <AnimatedCounter end={15} suffix="+" duration={2} /> :
-               stat.val}
-            </h3>`
+  /<Button className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-md transition-all active:scale-95 text-base font-semibold hover:-translate-y-0\.5">\s*Start Estimating for Free\s*<ArrowRight className="w-4 h-4" \/>\s*<\/Button>/m,
+  `<Button variant="premium" size="lg" className="w-full sm:w-auto px-8 group" rightIcon={<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}>Start Estimating for Free</Button>`
 );
 
-// Make the cards animate on hover
 content = content.replace(
-  /className="w-full flex flex-col items-center p-4 sm:p-6 bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-sm text-center overflow-hidden"/g,
-  'className="w-full flex flex-col items-center p-4 sm:p-6 bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-sm hover:shadow-md hover:-translate-y-1 transform-gpu transition-all duration-300 ease-out text-center overflow-hidden"'
+  /<Button className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-transparent border border-transparent hover:bg-slate-100 text-txt-secondary rounded-full transition-all active:scale-95 text-base font-semibold hover:-translate-y-0\.5 hover:shadow-lg shadow-sm">\s*View All Tools &gt;\s*<\/Button>/m,
+  `<Button variant="outline" size="lg" className="w-full sm:w-auto px-8">Explore Tools</Button>`
 );
 
 fs.writeFileSync('src/components/PremiumHero.tsx', content);

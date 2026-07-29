@@ -66,14 +66,20 @@ export default function HeroSection({ onStart }: { onStart: () => void }) {
         >
           <Button
             onClick={onStart}
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-900 dark:bg-surface-default text-white dark:text-txt-primary font-semibold text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.1)] flex items-center justify-center gap-2 group"
+            variant="premium"
+            size="xl"
+            className="w-full sm:w-auto group"
+            rightIcon={<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
           >
-            Start Estimating Free
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            Start Estimating for Free
           </Button>
           
-          <Button className="w-full sm:w-auto px-8 py-4 rounded-full bg-surface-default dark:bg-slate-800 text-txt-secondary dark:text-slate-300 font-semibold text-lg border border-ui-borderSubtle dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-txt-primary dark:hover:text-white transition-all flex items-center justify-center gap-2 group shadow-sm hover:shadow-md">
-            <Play className="w-5 h-5 fill-slate-400 group-hover:fill-[#f58145] text-slate-400 group-hover:text-[#f58145] transition-colors" />
+          <Button
+            variant="outline"
+            size="xl"
+            className="w-full sm:w-auto group bg-white dark:bg-slate-900"
+            leftIcon={<Play className="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 text-slate-400 group-hover:text-indigo-500 transition-colors" />}
+          >
             See How It Works
           </Button>
         </motion.div>

@@ -1,4 +1,6 @@
-import { Button } from "./ui/Button";
+const fs = require('fs');
+
+const content = `import { Button } from "./ui/Button";
 import React, { useState, useEffect } from "react";
 import { ChevronDown, Menu, Search, User, Building2, X, ArrowRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -47,11 +49,11 @@ export default function TopNavbar({
   return (
     <>
       <header 
-        className={`fixed top-0 left-0 right-0 z-[120] w-full transition-all duration-300 ${
+        className={\`fixed top-0 left-0 right-0 z-[120] w-full transition-all duration-300 \${
           isScrolled 
             ? "bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm py-3" 
             : "bg-transparent border-b border-transparent py-5"
-        }`}
+        }\`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           
@@ -81,11 +83,11 @@ export default function TopNavbar({
                 <div key={item.name} className="relative group">
                   <button
                     onClick={() => handleNavigation(item.path)}
-                    className={`text-[15px] font-semibold transition-colors duration-200 py-2 ${
+                    className={\`text-[15px] font-semibold transition-colors duration-200 py-2 \${
                       isActive 
                         ? "text-slate-900 dark:text-white" 
                         : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                    }`}
+                    }\`}
                   >
                     {item.name}
                   </button>
@@ -191,11 +193,11 @@ export default function TopNavbar({
                       >
                         <button
                           onClick={() => handleNavigation(item.path)}
-                          className={`w-full flex items-center py-4 px-4 rounded-xl text-[17px] font-semibold transition-colors ${
+                          className={\`w-full flex items-center py-4 px-4 rounded-xl text-[17px] font-semibold transition-colors \${
                             isActive 
                               ? "bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white" 
                               : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white"
-                          }`}
+                          }\`}
                         >
                           {item.name}
                         </button>
@@ -242,3 +244,6 @@ export default function TopNavbar({
     </>
   );
 }
+`;
+
+fs.writeFileSync('src/components/TopNavbar.tsx', content);

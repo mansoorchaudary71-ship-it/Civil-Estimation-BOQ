@@ -37,13 +37,8 @@ export default function PremiumHero() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-          <Button className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-md transition-all active:scale-95 text-base font-semibold hover:-translate-y-0.5">
-            Start Estimating for Free
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-          <Button className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-transparent border border-transparent hover:bg-slate-100 text-txt-secondary rounded-full transition-all active:scale-95 text-base font-semibold hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
-            View All Tools &gt;
-          </Button>
+          <Button variant="premium" size="lg" className="w-full sm:w-auto px-8 group" rightIcon={<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}>Start Estimating for Free</Button>
+          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8">Explore Tools</Button>
         </div>
       </div>
 

@@ -1148,7 +1148,7 @@ export default function Dashboard({
  
   <RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} />
   
-  <Button onClick={() => setIsRecentOpen(true)} className="fixed right-6 bottom-6 z-50 !w-14 !h-14 !rounded-full !bg-indigo-600 !text-white shadow-2xl hover:!bg-indigo-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 group !p-0" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 border-2 border-white"></span></span></Button>
+  <button onClick={() => setIsRecentOpen(true)} className="fixed right-6 bottom-6 z-50 w-14 h-14 rounded-full bg-indigo-600 text-white shadow-2xl hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 group p-0 flex items-center justify-center" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 border-2 border-white"></span></span></button>
 <div className="relative w-full flex flex-col font-sans bg-[#f8f9fa] text-txt-primary border-none">
 
   <div 
@@ -1491,7 +1491,7 @@ Open Calculator
  placeholder="Ask your AI Assistant..."
  className="w-full bg-transparent border-none outline-none text-base text-txt-primary px-2 py-2.5 placeholder:text-slate-400 rounded-full"
  /></>
- <Button variant="premium" className="ml-2 !rounded-full !w-12 !h-12 !p-0" aria-label="Ask" rightIcon={<ArrowUpRight className="w-5 h-5 text-white" />}
+ <Button variant="premium" className="ml-2 rounded-full w-12 h-12 p-0 min-h-[48px] shrink-0" aria-label="Ask" rightIcon={<ArrowUpRight className="w-5 h-5 text-white" />}
  onClick={() => {
  if (aiMessage.trim()) {
  setAiMessages((prev) => [

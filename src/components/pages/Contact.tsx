@@ -164,72 +164,76 @@ export default function Contact() {
             )}
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-base font-medium dark:text-slate-300">First Name</label>
-                <label htmlFor="a11y-input-573" className="sr-only">Jane</label>
-                <input id="a11y-input-573" 
+              <div className="space-y-2 flex flex-col">
+                <label htmlFor="contact-first-name" className="text-sm font-bold text-slate-700 dark:text-slate-300">First Name <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <input id="contact-first-name" 
                   type="text" 
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
                   disabled={status === 'loading'}
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
-                  placeholder="Jane" 
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
+                  placeholder="e.g. Jane" 
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-base font-medium dark:text-slate-300">Last Name</label>
-                <label htmlFor="a11y-input-574" className="sr-only">Smith</label>
-                <input id="a11y-input-574" 
+              <div className="space-y-2 flex flex-col">
+                <label htmlFor="contact-last-name" className="text-sm font-bold text-slate-700 dark:text-slate-300">Last Name <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <input id="contact-last-name" 
                   type="text" 
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
                   disabled={status === 'loading'}
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
-                  placeholder="Smith" 
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
+                  placeholder="e.g. Smith" 
                 />
               </div>
             </div>
             
-            <div className="space-y-2">
-              <label className="text-base font-medium dark:text-slate-300">Email Address</label>
-              <label htmlFor="a11y-input-575" className="sr-only">jane@example.com</label>
-              <input id="a11y-input-575" 
+            <div className="space-y-2 flex flex-col">
+              <label htmlFor="contact-email" className="text-sm font-bold text-slate-700 dark:text-slate-300">Work Email Address <span className="text-rose-500" aria-hidden="true">*</span></label>
+              <input id="contact-email" 
                 type="email" 
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 disabled={status === 'loading'}
-                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden" 
-                placeholder="jane@example.com" 
+                required
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
+                placeholder="jane@company.com" 
               />
             </div>
-
-            <div className="space-y-2">
-              <label className="text-base font-medium dark:text-slate-300">Message</label>
-              <textarea 
+            <div className="space-y-2 flex flex-col">
+              <label htmlFor="contact-message" className="text-sm font-bold text-slate-700 dark:text-slate-300">How can we help? <span className="text-rose-500" aria-hidden="true">*</span></label>
+              <textarea id="contact-message"
                 name="message"
                 rows={5} 
                 value={formData.message}
                 onChange={handleInputChange}
                 disabled={status === 'loading'}
-                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-ui-borderSubtle dark:border-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium resize-none disabled:opacity-50 overflow-hidden" 
-                placeholder="How can we help?" 
+                required
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium resize-none disabled:opacity-50 overflow-hidden text-txt-primary" 
+                placeholder="Tell us about your project, team size, or specific features you need..." 
               />
             </div>
-
-            <Button 
-              type="submit" 
-              disabled={status === 'loading'}
-              className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r hover:from-blue-700 disabled:opacity-75 text-white bg-blue-600 font-bold rounded-2xl shadow-[0_4px_24px_rgba(37,99,235,0.25)] transition-all overflow-hidden"
+            <div className="flex items-start gap-2 mt-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Your data is secure and will only be used to respond to your inquiry. Read our <a href="/privacy" className="text-indigo-600 hover:underline">Privacy Policy</a>.
+              </p>
+            </div>
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              isLoading={status === 'loading'}
+              loadingText="Sending via Gmail..."
+              className="mt-4"
             >
-              {status === 'loading' ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Sending via Gmail...
-                </>
-              ) : (workspaceToken ? 'Send Message via Gmail' : 'Sign in with Google to Send')}
+              {workspaceToken ? 'Send Message via Gmail' : 'Sign in with Google to Send'}
             </Button>
           </form>
         </div>

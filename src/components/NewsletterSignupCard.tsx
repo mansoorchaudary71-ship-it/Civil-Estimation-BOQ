@@ -88,12 +88,12 @@ export default function NewsletterSignupCard() {
           </div>
           
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-txt-primary dark:text-white mb-4 leading-tight">
-            Smarter estimation, <br className="hidden lg:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fa5c5c] to-[#f58145]">delivered weekly.</span>
+            Stop Guessing Costs. <br className="hidden lg:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Start Winning Bids.</span>
           </h2>
           
-          <p className="text-txt-tertiary dark:text-slate-400 text-base md:text-lg leading-relaxed mb-8 max-w-lg mx-auto md:mx-0 font-medium">
-            Get exclusive access to pre-built BOQ templates, live material rate updates, and expert strategies to win more bids.
+          <p className="text-txt-secondary dark:text-slate-300 text-base md:text-lg leading-relaxed mb-8 max-w-lg mx-auto md:mx-0 font-medium">
+            Join 15,000+ contractors getting free weekly insights on live material rates, professional takeoff strategies, and plug-and-play BOQ templates.
           </p>
 
           <div className="flex flex-col gap-3 mb-8 md:mb-0 hidden md:flex">
@@ -122,8 +122,8 @@ export default function NewsletterSignupCard() {
                   <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-500/20 rounded-full flex items-center justify-center mb-4">
                     <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400" strokeWidth={2.5} />
                   </div>
-                  <h4 className="text-xl font-bold text-txt-primary dark:text-white mb-2">You're on the list!</h4>
-                  <p className="text-txt-tertiary dark:text-slate-400 text-sm mb-6">
+                  <h4 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">You're on the list!</h4>
+                  <p className="text-slate-500 dark:text-slate-400 text-base font-medium mb-6">
                     Check your inbox for confirmation and your first exclusive resource.
                   </p>
                   <Button variant="ghost" size="sm" onClick={() => setIsSuccess(false)}>Subscribe another email</Button>
@@ -149,7 +149,7 @@ export default function NewsletterSignupCard() {
                   />
                   
                   <div className="flex flex-col gap-1.5 w-full">
-                    <label htmlFor="newsletter-email" className="text-sm font-bold text-txt-secondary dark:text-slate-300 ml-1">Email address</label>
+                    <label htmlFor="newsletter-email" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Work Email Address <span className="text-rose-500" aria-hidden="true">*</span></label>
                     <div className="relative group w-full">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10 transition-colors">
                         <Mail className={`w-5 h-5 ${error ? 'text-rose-500' : 'text-slate-400 dark:text-txt-tertiary group-focus-within:text-orange-500'}`} strokeWidth={2.5} />
@@ -193,7 +193,7 @@ export default function NewsletterSignupCard() {
   rightIcon={<ArrowRight className="w-4 h-4" />}
   className="mt-2"
 >
-  Subscribe Now
+  Get Free Weekly Insights
 </Button>
 
                   <div className="flex items-center justify-center gap-4 mt-2 text-xs font-semibold text-slate-400 dark:text-txt-tertiary uppercase tracking-wider">

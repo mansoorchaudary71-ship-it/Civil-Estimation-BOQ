@@ -124,79 +124,77 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
-                <div>
-                  <div className="relative flex items-center">
-                    <User className="absolute left-3.5 w-5 h-5 text-txt-secondary" />
-                    <><label htmlFor="a11y-input-11" className="sr-only">Full Name</label>
-<input id="a11y-input-11"
+                <div className="space-y-1.5 flex flex-col">
+                  <label htmlFor="auth-name" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Full Name <span className="text-rose-500" aria-hidden="true">*</span></label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <User className="w-5 h-5 text-slate-400" />
+                    </div>
+                    <input id="auth-name"
                       type="text"
-                      placeholder="Full Name"
+                      placeholder="e.g. John Doe"
                       value={name}
                       onChange={(e) => {
                         setName(e.target.value);
                         setError('');
                       }}
                       required
-                      className="w-full pl-11 pr-4 py-3 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
-                    /></>
+                      className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                    />
                   </div>
                 </div>
               )}
               
-              <div>
-                <div className="relative flex items-center">
-                  <AtSign className="absolute left-3.5 w-5 h-5 text-txt-secondary" />
-                  <><label htmlFor="a11y-input-12" className="sr-only">Email Address</label>
-<input id="a11y-input-12"
+              <div className="space-y-1.5 flex flex-col">
+                <label htmlFor="auth-email" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Work Email Address <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <AtSign className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <input id="auth-email"
                     type="email"
-                    placeholder="Email Address"
+                    placeholder="john@company.com"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
                       setError('');
                     }}
                     required
-                    className="w-full pl-11 pr-4 py-3 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
-                  /></>
+                    className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                  />
                 </div>
               </div>
 
-              <div>
-                <div className="relative flex items-center">
-                  <Lock className="absolute left-3.5 w-5 h-5 text-txt-secondary" />
-                  <><label htmlFor="a11y-input-13" className="sr-only">Password</label>
-<input id="a11y-input-13"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
+              <div className="space-y-1.5 flex flex-col">
+                <label htmlFor="auth-password" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Password <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <input id="auth-password"
+                    type="password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
                       setError('');
                     }}
                     required
-                    className="w-full pl-11 pr-12 py-3 bg-surface-default border border-ui-borderSubtle dark:border-slate-700 rounded-full text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all"
-                  /></>
-                  <Button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 text-txt-secondary hover:text-txt-secondary focus:outline-none rounded-full"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </Button>
+                    className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                  />
                 </div>
               </div>
 
-              {error && (
-                <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-2xl overflow-hidden">
-                  {error}
-                </div>
-              )}
-
-              <Button type="submit"
-                disabled={isLoading}
-                className="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-sm transition-all flex justify-center items-center h-12 text-base font-semibold active:scale-95 hover:-translate-y-0.5"
+              <Button
+                type="submit"
+                variant="primary"
+                fullWidth
+                size="lg"
+                isLoading={isLoading}
+                loadingText={isLogin ? 'Signing In...' : 'Creating Account...'}
+                className="mt-2 text-base shadow-[0_4px_14px_rgba(99,102,241,0.25)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.3)] bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white"
               >
-                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (isLogin ? 'Sign In' : 'Sign Up')}
+                {isLogin ? 'Sign In' : 'Create Account'}
               </Button>
             </form>
 

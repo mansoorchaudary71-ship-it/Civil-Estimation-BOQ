@@ -110,62 +110,51 @@ export default function ExcelPromo() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-txt-secondary mb-1 block">Full Name</label>
+              <div className="space-y-1.5 flex flex-col">
+                <label htmlFor="excel-name" className="text-sm font-bold text-slate-700 dark:text-slate-300">Full Name <span className="text-rose-500" aria-hidden="true">*</span></label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-txt-secondary" />
-                  <><label htmlFor="a11y-input-2" className="sr-only">Engineer Name</label>
-<input id="a11y-input-2" 
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <input id="excel-name" 
                     type="text" 
                     required 
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="Engineer Name"
-                    className="w-full bg-surface-default border border-ui-borderSubtle rounded-full py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 font-medium text-txt-primary placeholder:text-txt-secondary"
-                  /></>
+                    placeholder="e.g. John Doe"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                  />
                 </div>
               </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-txt-secondary mb-1 block">Email Address</label>
+              <div className="space-y-1.5 flex flex-col">
+                <label htmlFor="excel-email" className="text-sm font-bold text-slate-700 dark:text-slate-300">Work Email Address <span className="text-rose-500" aria-hidden="true">*</span></label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-txt-secondary" />
-                  <><label htmlFor="a11y-input-3" className="sr-only">your@email.com</label>
-<input id="a11y-input-3" 
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <input id="excel-email" 
                     type="email" 
                     required 
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    placeholder="your@email.com"
-                    className="w-full bg-surface-default border border-ui-borderSubtle rounded-full py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 font-medium text-txt-primary placeholder:text-txt-secondary"
-                  /></>
+                    placeholder="john@company.com"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                  />
                 </div>
               </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-txt-secondary mb-1 block">WhatsApp Number</label>
-                <div className="relative">
-                  <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-txt-secondary" />
-                  <><label htmlFor="a11y-input-4" className="sr-only">+91 900 0000000</label>
-<input id="a11y-input-4" 
-                    type="tel" 
-                    required 
-                    value={formData.whatsapp}
-                    onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
-                    placeholder="+91 900 0000000"
-                    className="w-full bg-surface-default border border-ui-borderSubtle rounded-full py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 font-medium text-txt-primary placeholder:text-txt-secondary"
-                  /></>
-                </div>
-              </div>
-
-              <Button type="submit" 
-                className="w-full bg-gradient-to-r from-blue-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-txt-primary tabular-nums tracking-tight py-4 rounded-full flex items-center justify-center gap-2 shadow-[0_8px_30px_rgba(249,115,22,0.3)] hover:shadow-[0_8px_40px_rgba(249,115,22,0.5)] transition-all hover:-translate-y-1 active:scale-95 border border-white/10 mt-4 text-base font-semibold"
+              <Button 
+                type="submit" 
+                variant="premium"
+                size="lg"
+                fullWidth
+                isLoading={status === 'loading'}
+                loadingText="Sending Templates..."
+                className="mt-2 text-base shadow-[0_4px_14px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.3)] bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white"
               >
-                <Download className="w-6 h-6" />
-                GET FREE EXCEL PACK
+                Send Me Free Templates
               </Button>
-              <p className="text-center mt-4 text-base font-normal text-txt-secondary leading-relaxed">
-                We respect your privacy. No spam, ever.
+              <p className="text-xs text-center text-slate-500 dark:text-slate-400 mt-3 font-medium">
+                No spam. 100% free forever. Unsubscribe anytime.
               </p>
             </form>
           </div>

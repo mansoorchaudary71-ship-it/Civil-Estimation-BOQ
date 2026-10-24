@@ -362,7 +362,7 @@ export function PlywoodEstimator() {
                       {result.totalSheets > 200 && <div className="text-xs text-white/50 w-full text-center mt-1">...and {result.totalSheets - 200} more</div>}
                     </div>
                   </div>
-                  <div className="flex gap-4 mt-2 text-[10px] text-slate-400 justify-center">
+                  <div className="flex gap-4 mt-2 text-xs text-slate-400 justify-center">
                     <div className="flex items-center gap-1"><div className="w-2 h-2 bg-orange-500/80 rounded-sm"></div> Net</div>
                     <div className="flex items-center gap-1"><div className="w-2 h-2 bg-orange-400/80 rounded-sm"></div> Cut/Waste</div>
                     <div className="flex items-center gap-1"><div className="w-2 h-2 bg-red-500/50 rounded-sm"></div> Extra</div>

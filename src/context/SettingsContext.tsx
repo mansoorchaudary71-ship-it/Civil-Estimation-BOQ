@@ -149,7 +149,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       }
 
-      root.classList.remove('light', 'dark', 'high-contrast');
+      root.classList.remove('light', 'dark', 'high-contrast', 'theme-modern', 'theme-blueprint');
+      // 'modern' and 'engineering-blueprint' are cycled by the theme toggle and have CSS in
+      // index.css, but their classes were never applied, so they looked identical to Light.
+      if (settings.theme === 'modern') root.classList.add('theme-modern');
+      if (settings.theme === 'engineering-blueprint') root.classList.add('theme-blueprint');
 
       if (settings.theme === 'high-contrast') {
           root.classList.add('high-contrast');

@@ -52,8 +52,8 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
       
       <h4 className="text-sm font-black text-txt-primary dark:text-slate-100 mb-6 flex items-center justify-between relative z-10">
         {title}
-        {type === 'pie' && <span className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider">Breakdown</span>}
-        {type === 'bar' && <span className="bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider">Comparison</span>}
+        {type === 'pie' && <span className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-full text-xs uppercase tracking-wider">Breakdown</span>}
+        {type === 'bar' && <span className="bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full text-xs uppercase tracking-wider">Comparison</span>}
       </h4>
 
       <div className="h-56 w-full relative z-10">
@@ -142,7 +142,7 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
             >
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.fill }} />
               <span className="text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider">{entry.name}</span>
-              <span className="text-[10px] font-black opacity-60 text-txt-secondary dark:text-slate-400 bg-slate-100 dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">
+              <span className="text-xs font-black opacity-60 text-txt-secondary dark:text-slate-400 bg-slate-100 dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">
                 {entry.percentage}%
               </span>
             </div>

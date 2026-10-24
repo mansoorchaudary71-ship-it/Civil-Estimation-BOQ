@@ -117,7 +117,7 @@ export default function PricingPage() {
               )}
             />
             {/* Save Badge */}
-            <div className="absolute -top-3 -right-2 md:-right-8 bg-amber-500 text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md transform rotate-12">
+            <div className="absolute -top-3 -right-2 md:-right-8 bg-amber-500 text-white text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md transform rotate-12">
               Save 40%
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function PricingPage() {
                   ${isAnnual ? '39' : '65'}
                 </span>
                 <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
-                {isAnnual && <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $468 yearly</div>}
+                {isAnnual && <div className="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $468 yearly</div>}
               </div>
               <Button variant="primary" size="lg" fullWidth>
                 Start 14-Day Free Trial
@@ -204,7 +204,7 @@ export default function PricingPage() {
                   ${isAnnual ? '89' : '149'}
                 </span>
                 <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
-                {isAnnual && <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $1,068 yearly</div>}
+                {isAnnual && <div className="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $1,068 yearly</div>}
               </div>
               <Button variant="secondary" size="md" fullWidth>
                 Contact Sales

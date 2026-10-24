@@ -203,7 +203,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                 />
                 <div className="absolute top-4 left-4 z-20">
                   <span className={cn(
-                    "px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full shadow-sm backdrop-blur-md",
+                    "px-3 py-1 text-xs uppercase font-bold tracking-wider rounded-full shadow-sm backdrop-blur-md",
                     project.status === "APPROVED" ? "bg-emerald-500/90 text-white" :
                     project.status === "PENDING" ? "bg-amber-500/90 text-white" :
                     project.status === "VERIFIED" ? "bg-blue-500/90 text-white" :
@@ -223,7 +223,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
               <div className="p-6 md:p-8 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
-                  <span className="text-[10px] font-bold tracking-widest text-indigo-500 uppercase">
+                  <span className="text-xs font-bold tracking-widest text-indigo-500 uppercase">
                     {project.category}
                   </span>
                 </div>
@@ -240,10 +240,10 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                     <img src={project.inspectorAvatar} alt="Inspector" className="w-8 h-8 rounded-full shadow-sm ring-2 ring-white" />
                     <div className="flex flex-col">
                       <span className="text-xs font-bold text-txt-primary">{project.inspectorName}</span>
-                      <span className="text-[10px] font-medium text-slate-400">Inspector</span>
+                      <span className="text-xs font-medium text-slate-400">Inspector</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
+                  <div className="flex items-center gap-1 text-xs font-bold text-slate-400">
                     <Clock className="w-3 h-3" />
                     {project.date}
                   </div>
@@ -333,7 +333,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
           </Button>
         </div>
 
-        <p className="mt-4 text-[11px] font-semibold text-slate-400 tracking-wider">
+        <p className="mt-4 text-xs font-semibold text-slate-400 tracking-wider">
           {activeIndex + 1}-{Math.min(activeIndex + 3, PROJECT_DATA.length)} of {PROJECT_DATA.length} civil projects • <span className="text-slate-300">swipe to navigate</span>
         </p>
       </div>

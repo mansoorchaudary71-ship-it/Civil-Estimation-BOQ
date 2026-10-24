@@ -312,7 +312,7 @@ export default function MasterRccCore() {
               {el.steelMode === "thumb" ? (
                 <div>
                   <label className="text-base font-medium mb-1 block">Steel % of Concrete Volume</label>
-                  <p className="text-[10px] text-slate-400 mb-2">Typical reinforcement ratios: slabs (1%), columns (2.0-2.5%), beams (1-2%), stairs (1%).</p>
+                  <p className="text-xs text-slate-400 mb-2">Typical reinforcement ratios: slabs (1%), columns (2.0-2.5%), beams (1-2%), stairs (1%).</p>
                   <><label htmlFor="a11y-input-334" className="sr-only">Input</label>
 <input id="a11y-input-334" value={el.thumbPercentage} onChange={(e) => updateElement(el.id, 'thumbPercentage', e.target.value)} type="number" inputMode="decimal" step="0.1" className="w-32 h-10 px-3 bg-surface-default border border-ui-borderSubtle rounded-full text-sm focus:outline-none" /></>
                 </div>

@@ -69,7 +69,7 @@ export function ToolSection({
             {number}
           </div>
         )}
-        <span className="uppercase text-[11px] sm:text-xs text-txt-secondary dark:text-slate-300 font-black tracking-[0.2em]">
+        <span className="uppercase text-xs sm:text-xs text-txt-secondary dark:text-slate-300 font-black tracking-[0.2em]">
           {title}
         </span>
       </h3>

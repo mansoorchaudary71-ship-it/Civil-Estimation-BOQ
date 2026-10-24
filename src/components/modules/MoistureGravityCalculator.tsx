@@ -132,22 +132,22 @@ export default function MoistureGravityCalculator() {
                         <div className="mt-6 flex flex-col gap-4">
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Natural Moisture Content (w)</span>
+                                     <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Natural Moisture Content (w)</span>
                                      <span className="text-xl font-mono font-bold text-blue-600">{results.mcPercent.toFixed(2)} %</span>
                                  </div>
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Dry Density (\u03b3_d)</span>
+                                     <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Dry Density (\u03b3_d)</span>
                                      <span className="text-xl font-mono font-bold text-amber-600">{results.dryDensity > 0 ? results.dryDensity.toFixed(3) : "0.000"} <span className="text-sm">g/cm³</span></span>
                                  </div>
                              </div>
                              
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Void Ratio (e)</span>
+                                     <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Void Ratio (e)</span>
                                      <span className="text-xl font-mono font-bold text-txt-primary">{results.voidRatio > 0 ? results.voidRatio.toFixed(3) : "0.000"}</span>
                                  </div>
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl relative overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1 relative z-10">Degree of Saturation (S)</span>
+                                     <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1 relative z-10">Degree of Saturation (S)</span>
                                      <span className="text-xl font-mono font-bold text-emerald-600 relative z-10">{results.SPercent > 0 ? Math.min(100, results.SPercent).toFixed(1) : "0.0"} %</span>
                                      
                                      {/* Simple saturation visualizer */}
@@ -168,7 +168,7 @@ export default function MoistureGravityCalculator() {
                              <h4 className="text-base font-medium flex items-center gap-2 mb-4">
                                  <Calculator className="w-4 h-4" /> Math Logic & Linkages
                              </h4>
-                             <div className="text-[11px] font-medium text-txt-secondary space-y-3">
+                             <div className="text-xs font-medium text-txt-secondary space-y-3">
                                   <div>
                                     <span className="font-bold text-txt-secondary block mb-1">Specific Gravity (Gs):</span>
                                     <div className="font-mono bg-slate-50 border border-slate-100 p-2 rounded block">G_s = (W2 - W1) / ((W2 - W1) - (W3 - W4))</div>

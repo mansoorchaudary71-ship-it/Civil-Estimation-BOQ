@@ -807,25 +807,25 @@ export default function VolumeEstimator() {
                     {tankBaseShape === "Rectangular" ? (
                       <>
                         <div>
-                          <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Length ({system === "Metric" ? "m" : "ft"})</label>
+                          <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Length ({system === "Metric" ? "m" : "ft"})</label>
                           <><label htmlFor="a11y-input-547" className="sr-only">Input</label>
 <input id="a11y-input-547" type="number" inputMode="decimal" value={length} onChange={(e) => setLength(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                         </div>
                         <div>
-                          <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Width ({system === "Metric" ? "m" : "ft"})</label>
+                          <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Width ({system === "Metric" ? "m" : "ft"})</label>
                           <><label htmlFor="a11y-input-548" className="sr-only">Input</label>
 <input id="a11y-input-548" type="number" inputMode="decimal" value={width} onChange={(e) => setWidth(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                         </div>
                       </>
                     ) : (
                       <div>
-                        <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Radius ({system === "Metric" ? "m" : "ft"})</label>
+                        <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Radius ({system === "Metric" ? "m" : "ft"})</label>
                         <><label htmlFor="a11y-input-549" className="sr-only">Input</label>
 <input id="a11y-input-549" type="number" inputMode="decimal" value={radius} onChange={(e) => setRadius(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                       </div>
                     )}
                     <div>
-                      <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Main Height ({system === "Metric" ? "m" : "ft"})</label>
+                      <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Main Height ({system === "Metric" ? "m" : "ft"})</label>
                       <><label htmlFor="a11y-input-550" className="sr-only">Input</label>
 <input id="a11y-input-550" type="number" inputMode="decimal" value={height} onChange={(e) => setHeight(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                     </div>
@@ -833,12 +833,12 @@ export default function VolumeEstimator() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-ui-borderSubtle dark:border-slate-700">
                     <div>
-                      <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Freeboard (%)</label>
+                      <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Freeboard (%)</label>
                       <><label htmlFor="a11y-input-551" className="sr-only">Input</label>
 <input id="a11y-input-551" type="number" inputMode="decimal" value={freeboardPercent} onChange={(e) => setFreeboardPercent(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                     </div>
                     <div>
-                      <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Dead Storage Depth ({system === "Metric" ? "m" : "ft"})</label>
+                      <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Dead Storage Depth ({system === "Metric" ? "m" : "ft"})</label>
                       <><label htmlFor="a11y-input-552" className="sr-only">Input</label>
 <input id="a11y-input-552" type="number" inputMode="decimal" value={deadStorageDepth} onChange={(e) => setDeadStorageDepth(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                     </div>
@@ -853,26 +853,26 @@ export default function VolumeEstimator() {
                     {hasSlopedBase && (
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                          <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Hopper Depth ({system === "Metric" ? "m" : "ft"})</label>
+                          <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Hopper Depth ({system === "Metric" ? "m" : "ft"})</label>
                           <><label htmlFor="a11y-input-554" className="sr-only">Input</label>
 <input id="a11y-input-554" type="number" inputMode="decimal" value={slopedHeight} onChange={(e) => setSlopedHeight(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                         </div>
                         {tankBaseShape === "Rectangular" ? (
                           <>
                             <div>
-                              <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Outlet Length</label>
+                              <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Outlet Length</label>
                               <><label htmlFor="a11y-input-555" className="sr-only">Input</label>
 <input id="a11y-input-555" type="number" inputMode="decimal" value={outletLength} onChange={(e) => setOutletLength(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                             </div>
                             <div>
-                              <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Outlet Width</label>
+                              <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Outlet Width</label>
                               <><label htmlFor="a11y-input-556" className="sr-only">Input</label>
 <input id="a11y-input-556" type="number" inputMode="decimal" value={outletWidth} onChange={(e) => setOutletWidth(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                             </div>
                           </>
                         ) : (
                           <div>
-                            <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-wider">Outlet Radius</label>
+                            <label className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Outlet Radius</label>
                             <><label htmlFor="a11y-input-557" className="sr-only">Input</label>
 <input id="a11y-input-557" type="number" inputMode="decimal" value={outletLength} onChange={(e) => setOutletLength(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-2xl mt-1 font-medium text-white dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all outline-none" /></>
                           </div>
@@ -981,7 +981,7 @@ export default function VolumeEstimator() {
                     </div>
                     
                     <div className="flex items-center justify-center p-4 bg-surface-default dark:bg-slate-800 rounded-2xl border border-ui-borderSubtle dark:dark:border-slate-700 shadow-sm relative">
-                      <div className="absolute top-2 left-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cross-Section Schematic</div>
+                      <div className="absolute top-2 left-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Cross-Section Schematic</div>
                       <svg viewBox="0 0 200 200" className="w-[180px] h-[180px] opacity-90 drop-shadow-sm">
                         {/* Outer circle */}
                         <circle cx="100" cy="100" r="80" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="4" className="dark:fill-slate-700 dark:stroke-slate-500" />

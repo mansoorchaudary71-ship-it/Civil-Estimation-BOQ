@@ -174,7 +174,7 @@ export function MaterialSummary({
           <div className="p-2 bg-purple-50 dark:bg-purple-900/20 text-[#6B46C1] dark:text-[#8b5cf6] rounded-xl shadow-sm border border-purple-100 dark:border-purple-800/50">
             {icon || <Layers className="w-4 h-4 flex-shrink-0" />}
           </div>
-          <h3 className="uppercase text-[11px] sm:text-xs font-black tracking-[0.2em] bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent drop-shadow-sm">
+          <h3 className="uppercase text-xs sm:text-xs font-black tracking-[0.2em] bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent drop-shadow-sm">
             {title}
           </h3>
         </div>
@@ -219,7 +219,7 @@ export function MaterialSummary({
         <div className="mb-10 relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             {totalLabel && (
-              <p className="text-[10px] sm:text-xs font-black text-txt-tertiary dark:text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">{totalLabel}</p>
+              <p className="text-xs sm:text-xs font-black text-txt-tertiary dark:text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">{totalLabel}</p>
             )}
             <div className="flex flex-row items-baseline flex-wrap gap-x-2 gap-y-1 max-w-full overflow-hidden">
               <span className="text-[clamp(2.5rem,8vw,4.5rem)] leading-none font-black tracking-tighter bg-gradient-to-br from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent break-words max-w-full">
@@ -244,7 +244,7 @@ export function MaterialSummary({
             >
               <RefreshCw className={`w-5 h-5 ${isRecalculating ? 'animate-spin' : ''}`} />
               Recalculate Values
-              <span className="ml-1 text-[10px] font-medium opacity-70 bg-surface-default/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded px-1.5 py-0.5 hidden sm:inline-block pointer-events-none">Ctrl+Enter</span>
+              <span className="ml-1 text-xs font-medium opacity-70 bg-surface-default/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded px-1.5 py-0.5 hidden sm:inline-block pointer-events-none">Ctrl+Enter</span>
             </Button>
           )}
         </div>
@@ -261,7 +261,7 @@ export function MaterialSummary({
                 <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 sm:p-6 border border-ui-borderSubtle dark:border-slate-700 overflow-hidden">
                   
                   <div className="flex items-center justify-between border-b border-ui-borderSubtle dark:border-slate-700 pb-4 mb-6">
-                    <h4 className="uppercase text-[11px] sm:text-xs font-black text-txt-tertiary dark:text-slate-400 tracking-[0.2em]">
+                    <h4 className="uppercase text-xs sm:text-xs font-black text-txt-tertiary dark:text-slate-400 tracking-[0.2em]">
                       Visual Breakdown
                     </h4>
                     <div className="flex items-center bg-slate-200/50 dark:bg-slate-700/50 p-1 rounded-lg">
@@ -346,7 +346,7 @@ export function MaterialSummary({
 
               {relatedModules.length > 0 && (
                 <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl p-4 sm:p-6 border border-indigo-100 dark:border-indigo-800/50 overflow-hidden">
-                  <h4 className="flex items-center gap-2 text-indigo-900 dark:text-indigo-100 uppercase mb-5 text-[11px] font-black tracking-[0.2em]">
+                  <h4 className="flex items-center gap-2 text-indigo-900 dark:text-indigo-100 uppercase mb-5 text-xs font-black tracking-[0.2em]">
                     <Sparkles className="w-4 h-4 text-indigo-500" />
                     Similar Tools
                   </h4>
@@ -363,7 +363,7 @@ export function MaterialSummary({
                           </div>
                           <div className="flex flex-col">
                             <p className="text-sm font-bold text-txt-primary dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">{mod.title}</p>
-                            <p className="text-[10px] text-txt-tertiary dark:text-slate-400 font-medium truncate max-w-[140px] mt-0.5">{mod.desc}</p>
+                            <p className="text-xs text-txt-tertiary dark:text-slate-400 font-medium truncate max-w-[140px] mt-0.5">{mod.desc}</p>
                           </div>
                         </div>
                         <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />

@@ -174,7 +174,7 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
           <div>
             <div className="flex items-center gap-3">
               <h2 className="text-2xl sm:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">Washroom Estimator</h2>
-              <span className="bg-blue-500 text-white text-[10px] font-bold tabular-nums tracking-tight uppercase px-2.5 py-1 rounded-full tracking-widest shadow-lg">PRO</span>
+              <span className="bg-blue-500 text-white text-xs font-bold tabular-nums tracking-tight uppercase px-2.5 py-1 rounded-full tracking-widest shadow-lg">PRO</span>
             </div>
             <p className="text-txt-secondary dark:text-slate-400 font-medium mt-1">Complete material takeoff for bathrooms</p>
           </div>

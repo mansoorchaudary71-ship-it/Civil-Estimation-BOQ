@@ -42,7 +42,7 @@ export function CodeTooltip({ standard, code, description }: CodeTooltipProps) {
             className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 p-3 bg-surface-default dark:bg-slate-800 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-ui-borderSubtle dark:border-slate-700 z-[100] text-left pointer-events-none"
           >
             <div className="flex flex-col gap-2">
-              <span className={`inline-flex w-max px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md border ${getStandardColor(standard)}`}>
+              <span className={`inline-flex w-max px-2 py-0.5 text-xs font-bold uppercase tracking-wider rounded-md border ${getStandardColor(standard)}`}>
                 {standard} {code}
               </span>
               <p className="text-xs text-txt-secondary dark:text-slate-300 font-normal leading-relaxed">

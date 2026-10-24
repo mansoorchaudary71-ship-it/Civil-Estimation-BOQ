@@ -530,7 +530,7 @@ export default function UnitConverter() {
                    {currentUnits.filter(u => u.id !== fromUnit).map((u, i) => (
                      <div key={i} className="w-full flex justify-between items-center text-txt-secondary bg-surface-default/80 p-3 rounded-xl border border-ui-borderSubtle shadow-sm overflow-hidden">
                        <span className="font-bold text-fuchsia-600 text-lg truncate mr-3">{convertValue(fromValue, fromUnit, u.id, activeCategory)}</span>
-                       <span className="text-xs uppercase font-bold text-txt-secondary text-right shrink-0">{u.id} <br/><span className="font-normal opacity-70 text-[10px]">{u.label.split(' (')[0]}</span></span>
+                       <span className="text-xs uppercase font-bold text-txt-secondary text-right shrink-0">{u.id} <br/><span className="font-normal opacity-70 text-xs">{u.label.split(' (')[0]}</span></span>
                      </div>
                    ))}
                 </div>
@@ -659,7 +659,7 @@ export default function UnitConverter() {
                     >
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-xs font-semibold text-txt-tertiary uppercase">{conv.category}</span>
-                        <span className="text-[10px] text-slate-400">
+                        <span className="text-xs text-slate-400">
                           {new Date(conv.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>

@@ -16,7 +16,7 @@ export default function AIEstimatorBanner({ onOpenChat }: AIEstimatorBannerProps
         style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }}
       ></div>
 
-      <p className="text-txt-tertiary dark:text-slate-400 text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase mb-6 relative z-10">
+      <p className="text-txt-tertiary dark:text-slate-400 text-xs sm:text-xs font-semibold tracking-[0.2em] uppercase mb-6 relative z-10">
         Your Civil Engineering Copilot
       </p>
       
@@ -40,7 +40,7 @@ export default function AIEstimatorBanner({ onOpenChat }: AIEstimatorBannerProps
         </svg>
       </Button>
 
-      <div className="flex flex-wrap justify-center gap-x-5 gap-y-3 text-[11px] sm:text-xs text-txt-tertiary dark:text-slate-400 font-medium tracking-wide uppercase relative z-10">
+      <div className="flex flex-wrap justify-center gap-x-5 gap-y-3 text-xs sm:text-xs text-txt-tertiary dark:text-slate-400 font-medium tracking-wide uppercase relative z-10">
         <div className="flex items-center gap-1.5">
           <CheckCircle2 className="w-3.5 h-3.5" />
           BOQ Generation

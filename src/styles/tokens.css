@@ -1,0 +1,125 @@
+/* ==========================================================================
+   Civil Estimation Pro — Design Tokens
+   --------------------------------------------------------------------------
+   Single source of truth for colour, radius, shadow and motion.
+   Colours are stored as space-separated RGB channels so Tailwind can apply
+   opacity modifiers (e.g. `bg-surface-default/80`, `border-ui-borderSubtle/50`).
+
+   Palette direction
+   - Primary  : Coursera-style trustworthy blue  (#0056D2)
+   - Accent   : Dribbble-style pink              (#EA4C89) — used sparingly
+   - Surfaces : clean white / near-white, hairline borders, soft shadows
+   Every text/background pair below meets WCAG AA (>= 4.5:1) for body text.
+   ========================================================================== */
+
+:root {
+  /* ---- Brand: primary (blue) ---- */
+  --color-primary-50: 240 246 255;
+  --color-primary-100: 224 237 255;
+  --color-primary-200: 194 218 255;
+  --color-primary-300: 143 186 255;
+  --color-primary-400: 77 144 247;
+  --color-primary-500: 31 111 229;
+  --color-primary-600: 0 86 210;   /* brand */
+  --color-primary-700: 0 69 168;
+  --color-primary-800: 0 55 134;
+  --color-primary-900: 0 40 98;
+
+  /* ---- Brand: accent (pink) ---- */
+  --color-accent-50: 254 241 246;
+  --color-accent-100: 253 225 237;
+  --color-accent-200: 251 195 216;
+  --color-accent-300: 247 152 187;
+  --color-accent-400: 240 103 152;
+  --color-accent-500: 234 76 137;  /* brand */
+  --color-accent-600: 214 51 111;
+  --color-accent-700: 178 36 90;
+  --color-accent-800: 143 31 76;
+  --color-accent-900: 117 28 66;
+
+  /* ---- Neutral "secondary" scale (cool slate) ---- */
+  --color-secondary-50: 248 250 252;
+  --color-secondary-100: 241 245 249;
+  --color-secondary-200: 226 232 240;
+  --color-secondary-300: 203 213 225;
+  --color-secondary-400: 148 163 184;
+  --color-secondary-500: 100 116 139;
+  --color-secondary-600: 71 85 105;
+  --color-secondary-700: 51 65 85;
+  --color-secondary-800: 30 41 59;
+  --color-secondary-900: 15 23 42;
+
+  /* ---- Surfaces ---- */
+  --color-bg-base: 247 249 252;
+  --color-bg-surface: 255 255 255;
+  --color-bg-surface-hover: 241 245 250;
+  --color-bg-surface-active: 232 238 247;
+  --color-bg-card: 255 255 255;
+
+  /* ---- Text ---- */
+  --color-text-primary: 15 17 20;      /* 18.9:1 on white */
+  --color-text-secondary: 71 85 105;   /*  7.6:1 on white */
+  --color-text-tertiary: 100 112 138;  /*  5.0:1 on white */
+  --color-text-inverse: 255 255 255;
+
+  /* ---- Borders ---- */
+  --color-border-subtle: 226 232 240;
+  --color-border-default: 203 213 225;
+  --color-border-strong: 148 163 184;
+  --color-border-color: 226 232 240;
+
+  /* ---- Status ---- */
+  --color-success-bg: 236 253 245;  --color-success-text: 4 120 87;   --color-success-border: 167 243 208;
+  --color-warning-bg: 255 251 235;  --color-warning-text: 146 64 14;  --color-warning-border: 253 230 138;
+  --color-error-bg: 254 242 242;    --color-error-text: 185 28 28;    --color-error-border: 254 202 202;
+  --color-info-bg: 240 246 255;     --color-info-text: 0 69 168;      --color-info-border: 194 218 255;
+
+  /* ---- Shape / depth / motion ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(15 23 42 / 0.08), 0 1px 2px rgb(15 23 42 / 0.04);
+  --shadow-md: 0 6px 16px -4px rgb(15 23 42 / 0.10), 0 2px 6px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 18px 40px -12px rgb(15 23 42 / 0.18);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --header-h: 72px;             /* keep in sync with <TopNavbar/> */
+  --header-h-compact: 64px;
+
+  /* legacy aliases used by a few modules */
+  --primary-dark: rgb(0 55 134);
+  color-scheme: light;
+}
+
+.dark {
+  /* Brand scales stay fixed in dark mode so filled buttons keep AA contrast with white text. */
+
+  --color-bg-base: 11 15 25;
+  --color-bg-surface: 17 24 39;
+  --color-bg-surface-hover: 30 41 59;
+  --color-bg-surface-active: 41 55 79;
+  --color-bg-card: 17 24 39;
+
+  --color-text-primary: 240 244 248;
+  --color-text-secondary: 170 183 204;
+  --color-text-tertiary: 138 151 176;
+  --color-text-inverse: 15 17 20;
+
+  --color-border-subtle: 35 46 66;
+  --color-border-default: 51 65 85;
+  --color-border-strong: 100 116 139;
+  --color-border-color: 35 46 66;
+
+  --color-success-bg: 6 46 34;   --color-success-text: 110 231 183; --color-success-border: 6 95 70;
+  --color-warning-bg: 56 36 6;   --color-warning-text: 252 211 77;  --color-warning-border: 120 53 15;
+  --color-error-bg: 69 14 14;    --color-error-text: 252 165 165;   --color-error-border: 127 29 29;
+  --color-info-bg: 12 29 61;     --color-info-text: 143 186 255;    --color-info-border: 22 58 120;
+
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 8px 20px -6px rgb(0 0 0 / 0.55);
+  --shadow-lg: 0 22px 48px -12px rgb(0 0 0 / 0.7);
+  --primary-dark: rgb(194 218 255);
+  color-scheme: dark;
+}

@@ -185,7 +185,7 @@ export default function SolarRoofCalculator() {
     return (
       <div className="flex flex-col relative group/hint">
         {tooltipText && (
-           <div className="absolute z-[100] invisible opacity-0 group-hover/hint:visible group-hover/hint:opacity-100 transition-all duration-200 bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-max max-w-[220px] bg-slate-800 text-white text-[11px] p-2 rounded-lg shadow-xl pointer-events-none whitespace-normal text-center font-medium after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-slate-800">
+           <div className="absolute z-[100] invisible opacity-0 group-hover/hint:visible group-hover/hint:opacity-100 transition-all duration-200 bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-max max-w-[220px] bg-slate-800 text-white text-xs p-2 rounded-lg shadow-xl pointer-events-none whitespace-normal text-center font-medium after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-slate-800">
              {tooltipText}
            </div>
         )}

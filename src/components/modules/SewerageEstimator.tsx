@@ -845,7 +845,7 @@ export default function SewerageEstimator() {
                             <span className="text-purple-700 font-medium">
                               Estimated Weight
                             </span>
-                            <span className="text-purple-500 text-[10px]">
+                            <span className="text-purple-500 text-xs">
                               @ 1600 kg/m³ density
                             </span>
                           </div>

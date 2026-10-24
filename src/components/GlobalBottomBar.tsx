@@ -42,7 +42,7 @@ export default function GlobalBottomBar({
               className={`w-[20px] h-[20px] ${isActive ? "text-white scale-110" : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`} 
               strokeWidth={isActive ? 2.5 : 2}
             />
-            <span className={`text-[10px] font-semibold tracking-wide ${isActive ? "text-white" : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`}>
+            <span className={`text-xs font-semibold tracking-wide ${isActive ? "text-white" : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`}>
               {item.label}
             </span>
           </Button>

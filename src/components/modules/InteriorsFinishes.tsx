@@ -445,7 +445,7 @@ function DoorsWindowsCalculator() {
       <div className="mt-8 p-5 bg-slate-50/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-base font-medium">Proportional Preview</h4>
-          <span className="text-[10px] text-txt-tertiary font-bold uppercase tracking-wider bg-bg-card shadow-sm px-2 py-1 rounded-2xl">
+          <span className="text-xs text-txt-tertiary font-bold uppercase tracking-wider bg-bg-card shadow-sm px-2 py-1 rounded-2xl">
             {wl}{uLen} × {wh}{uLen}
           </span>
         </div>
@@ -490,7 +490,7 @@ function DoorsWindowsCalculator() {
                    }}
                  >
                    <div className="w-full bg-surface-default/90 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded px-1.5 py-0.5 overflow-hidden">
-                     <span className="text-[9px] sm:text-[10px] font-bold text-rose-600 truncate whitespace-nowrap">
+                     <span className="text-xs sm:text-xs font-bold text-rose-600 truncate whitespace-nowrap">
                        {op.name}
                      </span>
                    </div>

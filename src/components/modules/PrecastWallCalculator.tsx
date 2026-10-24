@@ -155,7 +155,7 @@ export default function PrecastWallCalculator() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
                 <div>
-                  <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Rate/Post</label>
+                  <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Rate/Post</label>
                   <><label htmlFor="a11y-input-373" className="sr-only">Input</label>
 <input id="a11y-input-373"
                     type="number" inputMode="decimal"
@@ -165,7 +165,7 @@ export default function PrecastWallCalculator() {
                   /></>
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Rate/Slab</label>
+                  <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Rate/Slab</label>
                   <><label htmlFor="a11y-input-374" className="sr-only">Input</label>
 <input id="a11y-input-374"
                     type="number" inputMode="decimal"
@@ -175,7 +175,7 @@ export default function PrecastWallCalculator() {
                   /></>
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Labor/{isMetric ? "m" : "ft"}</label>
+                  <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Labor/{isMetric ? "m" : "ft"}</label>
                   <><label htmlFor="a11y-input-375" className="sr-only">Input</label>
 <input id="a11y-input-375"
                     type="number" inputMode="decimal"
@@ -200,7 +200,7 @@ export default function PrecastWallCalculator() {
               <h4 className="text-base font-medium text-indigo-900 mb-3 flex items-center gap-2">
                 <Calculator className="w-4 h-4" /> Math Logic & Formulas
               </h4>
-              <ul className="text-[11px] text-indigo-800/80 space-y-2 list-disc list-inside leading-relaxed uppercase tracking-wider font-semibold">
+              <ul className="text-xs text-indigo-800/80 space-y-2 list-disc list-inside leading-relaxed uppercase tracking-wider font-semibold">
                 <li>Bays = CEIL(Total Length / Post Spacing)</li>
                 <li>Posts Required = Total Bays + 1</li>
                 <li>Slabs per Bay = Wall height / Slab height</li>
@@ -232,7 +232,7 @@ export default function PrecastWallCalculator() {
                   
                   <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl border border-ui-borderSubtle overflow-hidden mb-8">
                     <table className="w-full text-left text-sm">
-                      <thead className="bg-slate-100 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border-b border-ui-borderSubtle text-txt-tertiary font-bold uppercase tracking-widest text-[10px] overflow-hidden">
+                      <thead className="bg-slate-100 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border-b border-ui-borderSubtle text-txt-tertiary font-bold uppercase tracking-widest text-xs overflow-hidden">
                         <tr>
                           <th className="px-4 py-3">Component</th>
                           <th className="px-4 py-3 text-right">Quantity</th>
@@ -269,11 +269,11 @@ export default function PrecastWallCalculator() {
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 rounded-2xl border border-ui-borderSubtle shadow-sm text-center overflow-hidden">
-                      <span className="text-txt-tertiary text-[10px] font-bold uppercase tracking-widest block mb-1">Total Bays Formed</span>
+                      <span className="text-txt-tertiary text-xs font-bold uppercase tracking-widest block mb-1">Total Bays Formed</span>
                       <div className="text-xl font-semibold tabular-nums tracking-tight text-txt-primary">{estimateData.numberOfBays}</div>
                     </div>
                     <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 rounded-2xl border border-ui-borderSubtle shadow-sm text-center overflow-hidden">
-                      <span className="text-txt-tertiary text-[10px] font-bold uppercase tracking-widest block mb-1">Slabs per Bay</span>
+                      <span className="text-txt-tertiary text-xs font-bold uppercase tracking-widest block mb-1">Slabs per Bay</span>
                       <div className="text-xl font-semibold tabular-nums tracking-tight text-txt-primary">{estimateData.slabsPerBay}</div>
                     </div>
                   </div>

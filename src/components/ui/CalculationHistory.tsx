@@ -670,7 +670,7 @@ export function CalculationHistory({
                         <h3 className="font-semibold text-txt-primary dark:text-slate-200 text-sm truncate">
                           {item.name}
                         </h3>
-                        <p className="text-[11px] text-txt-secondary dark:text-txt-secondary">
+                        <p className="text-xs text-txt-secondary dark:text-txt-secondary">
                           {new Date(item.date).toLocaleString("en-US")}
                         </p>
                       </div>

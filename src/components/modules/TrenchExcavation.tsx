@@ -23,7 +23,7 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 const Tooltip = ({ content }: { content: string }) => (
   <div className="relative group inline-flex ml-1.5 align-middle">
     <Info className="w-4 h-4 text-txt-tertiary dark:text-gray-400 hover:text-teal-500 transition-colors cursor-help" />
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[200px] p-2 bg-gray-900 text-txt-primary dark:text-white text-[11px] font-normal rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 text-center shadow-xl">
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[200px] p-2 bg-gray-900 text-txt-primary dark:text-white text-xs font-normal rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 text-center shadow-xl">
       {content}
       <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-[5px] border-transparent border-t-gray-900"></div>
     </div>

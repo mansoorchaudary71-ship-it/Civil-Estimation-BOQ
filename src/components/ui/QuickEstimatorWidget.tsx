@@ -99,13 +99,13 @@ export default function QuickEstimatorWidget() {
                   <div className="flex items-center bg-[rgba(255,255,255,0.05)] rounded p-0.5 border border-[rgba(255,255,255,0.08)]">
                     <Button 
                       onClick={() => setUnit('sq.ft')}
-                      className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-sm transition-colors ${unit === 'sq.ft' ? 'bg-[#F59E0B] text-txt-primary' : 'text-[#94A3B8] hover:text-[#F1F5F9]'}`}
+                      className={`text-xs uppercase font-bold px-2 py-0.5 rounded-sm transition-colors ${unit === 'sq.ft' ? 'bg-[#F59E0B] text-txt-primary' : 'text-[#94A3B8] hover:text-[#F1F5F9]'}`}
                     >
                       sq.ft
                     </Button>
                     <Button 
                       onClick={() => setUnit('sq.m')}
-                      className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-sm transition-colors ${unit === 'sq.m' ? 'bg-[#F59E0B] text-txt-primary' : 'text-[#94A3B8] hover:text-[#F1F5F9]'}`}
+                      className={`text-xs uppercase font-bold px-2 py-0.5 rounded-sm transition-colors ${unit === 'sq.m' ? 'bg-[#F59E0B] text-txt-primary' : 'text-[#94A3B8] hover:text-[#F1F5F9]'}`}
                     >
                       sq.m
                     </Button>
@@ -155,7 +155,7 @@ export default function QuickEstimatorWidget() {
                     <span className="text-base text-[#F59E0B]">{result.currency}</span>
                     {formatCurrency(result.min)} - {formatCurrency(result.max)}
                   </div>
-                  <span className="text-[10px] text-[#94A3B8] mt-1 line-clamp-1">
+                  <span className="text-xs text-[#94A3B8] mt-1 line-clamp-1">
                     *Excludes land cost & taxes. Based on current market rates.
                   </span>
                 </div>

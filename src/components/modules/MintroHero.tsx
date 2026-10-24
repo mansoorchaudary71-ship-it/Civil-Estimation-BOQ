@@ -168,7 +168,7 @@ export default function MintroHero() {
                   <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 </div>
-                <div className="mx-auto px-4 py-1 rounded-md bg-surface-default/5 text-[10px] font-mono text-white/40 tracking-wider">civil-estimation-pro.ai</div>
+                <div className="mx-auto px-4 py-1 rounded-md bg-surface-default/5 text-xs font-mono text-white/40 tracking-wider">civil-estimation-pro.ai</div>
               </div>
               
               {/* Mockup Body Content */}

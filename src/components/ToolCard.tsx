@@ -1,21 +1,32 @@
-import { Button } from './ui/Button';
-import React, { useState, useRef, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { AnimatePresence } from "framer-motion";
-import { Bookmark, BookmarkCheck, ArrowRight, Box, Target, Clock, Zap, X } from "lucide-react";
+import React from "react";
+import { Bookmark, BookmarkCheck, ArrowRight, Box, Clock, Flame } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
-import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 
+/**
+ * ToolCard - Dribbble "shot" card: visual thumbnail, quiet meta row, hover reveal, save button.
+ *
+ * Fixes vs. previous card
+ *  - The whole card was a clickable <div> (not focusable, not a link, no ctrl/cmd-click).
+ *    Now the title is a real link with a stretched hit-area (`after:absolute after:inset-0`).
+ *  - A full-screen "quick view" modal opened after hovering 500ms. Scrolling past a card
+ *    popped a modal over the page. Removed.
+ *  - The modal (and card) showed made-up numbers: "Accuracy 98.5%", "Saves 1.2k+", "Usage High"
+ *    for every tool, and a fake difficulty derived from `id.length % 3`. The catalogue already has
+ *    real `difficulty` and `estimatedTime`; those are used and nothing is invented.
+ *  - Button nested in a clickable div, 40px padding, 10px labels, and a shared framer `layoutId`
+ *    that fought with the page transition are gone.
+ */
 
-const CAT_COLORS: Record<string, { c: string, glow: string }> = {
-  "ROAD PAVEMENT":       { c: "#EA580C", glow: "rgba(249,115,22,0.15)" }, // Vibrant orange
-  "QUANTITY ESTIMATION": { c: "#2563EB", glow: "rgba(59,130,246,0.15)" },
-  "CONCRETE":            { c: "#7C3AED", glow: "rgba(139,92,246,0.15)" }, // Deep purple
-  "MEP":                 { c: "#059669", glow: "rgba(16,185,129,0.15)" },
-  "DEFAULT":             { c: "#6366F1", glow: "rgba(99,102,241,0.15)" }, 
+const CAT_COLORS: Record<string, { c: string; glow: string }> = {
+  "ROAD PAVEMENT": { c: "#C2410C", glow: "rgba(249,115,22,0.14)" },
+  "QUANTITY ESTIMATION": { c: "#0056D2", glow: "rgba(0,86,210,0.12)" },
+  CONCRETE: { c: "#6D28D9", glow: "rgba(139,92,246,0.14)" },
+  MEP: { c: "#047857", glow: "rgba(16,185,129,0.14)" },
+  DEFAULT: { c: "#4338CA", glow: "rgba(99,102,241,0.14)" },
 };
 
+// Exported: SmartSearch imports it.
 export const getCategorySpec = (category: string) => {
   const cat = (category || "").toUpperCase();
   if (cat.includes("ROAD") || cat.includes("PAVEMENT") || cat.includes("HIGHWAY")) return CAT_COLORS["ROAD PAVEMENT"];
@@ -25,283 +36,123 @@ export const getCategorySpec = (category: string) => {
   return CAT_COLORS["DEFAULT"];
 };
 
-const LEVEL_MAP: Record<number, string> = { 1: "Basic", 2: "Moderate", 3: "Advanced" };
-
-function Dots({ level, color }: { level: number; color: string }) {
-  return (
-    <span className="inline-flex items-center gap-1">
-      {[1, 2, 3].map(i => (
-        <span key={i} 
-          className="block w-[5px] h-[5px] rounded-full"
-          style={{ background: i <= level ? color : "rgba(156,163,175,0.4)" }} 
-        />
-      ))}
-    </span>
-  );
-}
-
 export default function ToolCard({
   mod,
   onSelect,
-  categoryColor,
   layoutId,
 }: {
   mod: any;
   onSelect: (id: string, layoutId?: string) => void;
   layoutId?: string;
+  /** kept for backwards compatibility with existing callers; the card no longer uses it */
   categoryColor?: string;
 }) {
   const { settings, updateSettings } = useSettings();
-  const [hov, setHov] = useState(false);
-  const [showQuickView, setShowQuickView] = useState(false);
-  const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
-    };
-  }, []);
-
   if (!mod) return null;
 
   const cfg = getCategorySpec(mod.category);
-  const colorToUse = categoryColor || cfg.glow;
-  const favoriteTools = settings?.favoriteTools || [];
+  const favoriteTools: string[] = settings?.favoriteTools || [];
   const saved = favoriteTools.includes(mod.id);
+  const Icon = mod.icon || Box;
 
   const toggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (saved) {
-      updateSettings({ favoriteTools: favoriteTools.filter((id) => id !== mod.id) });
-    } else {
-      updateSettings({ favoriteTools: [...favoriteTools, mod.id] });
-    }
+    updateSettings({
+      favoriteTools: saved ? favoriteTools.filter((id) => id !== mod.id) : [...favoriteTools, mod.id],
+    });
   };
 
-  const IconComponent = mod.icon || Box;
-  const level = mod.level || ((mod.id.length % 3) + 1);
+  const open = (e: React.MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    onSelect(mod.id, layoutId || `module-${mod.id}`);
+  };
 
   return (
-    <motion.div
-      layoutId={layoutId || `module-${mod.id}`}
-      onClick={() => onSelect(mod.id, layoutId || `module-${mod.id}`)}
-      onMouseEnter={() => {
-        setHov(true);
-        hoverTimeout.current = setTimeout(() => {
-          setShowQuickView(true);
-        }, 500);
-      }}
-      onMouseLeave={() => {
-        setHov(false);
-        if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
-      }}
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02, y: -4 }}
-      whileTap={{ scale: 0.98 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ 
-        type: "spring", 
-        stiffness: 400, 
-        damping: 25,
-        opacity: { duration: 0.3 }
-      }}
+    <article
+      id={`module-card-${mod.id}`}
       className={cn(
-        "w-full h-full flex flex-col font-sans cursor-pointer transition-all duration-300",
-        "bg-surface-default relative overflow-hidden rounded-2xl border border-ui-borderSubtle shadow-sm",
-        hov ? "shadow-lg border-ui-borderDefault -translate-y-1" : ""
+        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-ui-borderSubtle bg-surface-default",
+        "transition-[box-shadow,border-color] duration-200 hover:border-ui-borderDefault hover:shadow-brand-md",
+        "focus-within:border-primary-600 focus-within:shadow-brand-md"
       )}
-      style={{
-        backgroundImage: `radial-gradient(circle at 0% 0%, ${colorToUse === '#F4F1EA' ? '#EAE0CC' : colorToUse === '#F0F5FF' ? '#E0E7FF' : colorToUse === '#D9E6DD' ? '#C4D6C9' : colorToUse} 0%, ${colorToUse} 25%, rgba(255,255,255,0) 75%)`
-      }}
     >
-      {/* Top-left fading white border highlight */}
-      <div 
-        className="absolute inset-0 pointer-events-none rounded-[1.5rem]" 
-        style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0) 50%)',
-          padding: '14px',
-          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          WebkitMaskComposite: 'xor',
-          maskComposite: 'exclude',
-        }} 
-      />
-      <div className="relative z-10 flex flex-col h-full p-8 sm:p-10">
-        <div className="flex items-start justify-between min-h-[40px]">
-          <motion.div 
-            layoutId={`icon-${mod.id}`}
-            animate={{ scale: hov ? 1.1 : 1, rotate: hov ? [0, -5, 5, 0] : 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="mb-4"
-          >
-            <IconComponent size={40} className="text-txt-primary" strokeWidth={2.5} />
-          </motion.div>
-          
-          <div className="flex items-center gap-3">
-            {mod.isNew && (
-              <span 
-                className={cn(
-                  "text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-xl shrink-0",
-                  colorToUse === '#F4F1EA' ? "bg-[#EBE4D5] text-[#6B6353]" :
-                  colorToUse === '#F0F5FF' ? "bg-[#E0E7FF] text-[#4F46E5]" :
-                  colorToUse === '#D9E6DD' ? "bg-[#D1FAE5] text-[#059669]" :
-                  "bg-blue-50 text-blue-600"
-                )}
-              >
-                NEW
-              </span>
-            )}
-            <button onClick={toggleFavorite} className="flex items-center justify-center rounded-full hover:bg-gray-50 transition-colors active:scale-95" aria-label={saved ? "Remove from favorites" : "Add to favorites"}>
-              <motion.div whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }} className="p-1">
-                {saved ? <BookmarkCheck size={20} color={cfg.c} /> : <Bookmark size={20} className="text-txt-tertiary" strokeWidth={1.5} />}
-              </motion.div>
-            </button>
-          </div>
-        </div>
+      {/* Thumbnail */}
+      <div
+        className="relative flex aspect-[16/9] items-center justify-center overflow-hidden"
+        style={{ background: `linear-gradient(135deg, ${cfg.glow} 0%, transparent 70%)` }}
+      >
+        <span
+          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-default shadow-sm border border-ui-borderSubtle transition-transform duration-300 group-hover:scale-105"
+          style={{ color: cfg.c }}
+        >
+          <Icon size={30} strokeWidth={1.8} aria-hidden="true" />
+        </span>
 
-        <div className="flex flex-col mt-2">
-          <motion.h3 layoutId={`title-${mod.id}`} className="text-xl font-semibold text-txt-primary leading-tight line-clamp-2 min-h-[3.5rem]">
-            {mod.title}
-          </motion.h3>
-          <p className="text-txt-secondary text-sm mt-3 leading-relaxed line-clamp-2">
-            {mod.desc || "No description available."}
-          </p>
-        </div>
-
-        <div className="mt-auto pt-6 flex items-end justify-between">
-          <div className="flex flex-col items-start gap-1">
-            <Dots level={level} color={cfg.c} />
-            <span className="text-[10px] tracking-widest font-semibold text-txt-tertiary mt-1 uppercase">
-              {LEVEL_MAP[level] || "Moderate"}
+        <div className="absolute left-3 top-3 flex gap-1.5">
+          {mod.isNew && (
+            <span className="rounded-full bg-primary-600 px-2.5 py-1 text-xs font-bold text-white">New</span>
+          )}
+          {mod.isPopular && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-surface-default px-2.5 py-1 text-xs font-bold text-txt-primary border border-ui-borderSubtle">
+              <Flame className="h-3 w-3 text-orange-500" aria-hidden="true" /> Popular
             </span>
-          </div>
-          <Button 
-            className={cn(
-              "text-txt-primary rounded-full px-6 py-2.5 text-xs font-bold tracking-wider uppercase transition-all duration-300 active:scale-95",
-              colorToUse === '#F4F1EA' ? "bg-[#E5DFD3] hover:bg-[#D5CDBF]" :
-              colorToUse === '#F0F5FF' ? "bg-[#D9DDF0] hover:bg-[#C4C9E6]" :
-              colorToUse === '#D9E6DD' ? "bg-[#D9E6DD] hover:bg-[#C4D6C9]" :
-              "bg-[#E2E8F4] hover:bg-[#D4DDF0]"
-            )}
-          >
-            OPEN
-          </Button>
+          )}
+        </div>
+
+        {/* Save - sits above the stretched link */}
+        <button
+          type="button"
+          onClick={toggleFavorite}
+          aria-pressed={saved}
+          aria-label={saved ? `Remove ${mod.title} from saved tools` : `Save ${mod.title}`}
+          className="absolute z-10 right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-surface-default/95 border border-ui-borderSubtle text-txt-secondary hover:text-primary-600 hover:border-primary-600 transition-colors"
+        >
+          {saved ? (
+            <BookmarkCheck size={18} className="text-primary-600" aria-hidden="true" />
+          ) : (
+            <Bookmark size={18} aria-hidden="true" />
+          )}
+        </button>
+
+        {/* Hover reveal (pointer devices only; the title link is always available) */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden translate-y-2 items-center justify-end bg-gradient-to-t from-black/35 to-transparent p-3 opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:flex">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-sm font-semibold text-slate-900">
+            Open tool <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </span>
         </div>
       </div>
-      <AnimatePresence>
-        {showQuickView && createPortal(
-          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowQuickView(false);
-              }}
-              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: "spring", damping: 25, stiffness: 400 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-lg bg-surface-default rounded-2xl shadow-xl overflow-hidden border border-ui-borderSubtle"
-            >
-              <div 
-                className="h-32 p-6 flex justify-between items-start"
-                style={{
-                  backgroundImage: `radial-gradient(circle at top right, ${colorToUse} 0%, rgba(255,255,255,0) 70%)`,
-                  backgroundColor: '#f8fafc'
-                }}
-              >
-                <div className="w-16 h-16 rounded-2xl bg-surface-default shadow-sm border border-slate-100 flex items-center justify-center">
-                  <IconComponent size={32} className="text-txt-primary" />
-                </div>
-                <button onClick={(e) => { e.stopPropagation(); setShowQuickView(false); }} className="p-2 bg-surface-default/50 hover:bg-surface-default rounded-full transition-colors">
-                  <X size={20} className="text-txt-tertiary" />
-                </button>
-              </div>
 
-              <div className="p-6 -mt-4 relative bg-surface-default rounded-t-3xl">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold tracking-wider uppercase" style={{ color: cfg.c }}>
-                    {mod.category}
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <Dots level={level} color={cfg.c} />
-                    <span className="text-[10px] font-semibold text-txt-tertiary uppercase">
-                      {LEVEL_MAP[level]}
-                    </span>
-                  </div>
-                </div>
-                <h2 className="text-2xl font-bold text-txt-primary mb-3">{mod.title}</h2>
-                <p className="text-txt-secondary text-sm leading-relaxed mb-6">
-                  {mod.desc || "No description available for this tool."}
-                </p>
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="text-base font-semibold leading-snug text-txt-primary line-clamp-2">
+          <a
+            href={`#/${mod.id}`}
+            onClick={open}
+            className="after:absolute after:inset-0 after:content-[''] focus:outline-none"
+          >
+            {mod.title}
+          </a>
+        </h3>
+        <p className="mt-1.5 text-sm text-txt-secondary line-clamp-2">{mod.desc || "Engineering calculator."}</p>
 
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-indigo-100/50 text-indigo-600">
-                      <Target size={16} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Accuracy</p>
-                      <p className="text-sm font-bold text-txt-secondary">98.5%</p>
-                    </div>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-emerald-100/50 text-emerald-600">
-                      <Clock size={16} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Time Saved</p>
-                      <p className="text-sm font-bold text-txt-secondary">~15 mins</p>
-                    </div>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-amber-100/50 text-amber-600">
-                      <Zap size={16} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Usage</p>
-                      <p className="text-sm font-bold text-txt-secondary">High</p>
-                    </div>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-100/50 text-blue-600">
-                      <Bookmark size={16} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] uppercase tracking-wider text-txt-tertiary font-semibold">Saves</p>
-                      <p className="text-sm font-bold text-txt-secondary">1.2k+</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <Button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowQuickView(false);
-                      onSelect(mod.id);
-                    }}
-                    className="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    Open Tool
-                  </Button>
-                  <button onClick={(e) => { e.stopPropagation(); toggleFavorite(e); }} className="p-3 rounded-xl border border-ui-borderSubtle hover:bg-slate-50 transition-colors flex items-center justify-center text-txt-secondary">
-                    {saved ? <BookmarkCheck size={20} color={cfg.c} /> : <Bookmark size={20} />}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>,
-          document.body
-        )}
-      </AnimatePresence>
-    </motion.div>
+        <div className="mt-auto flex items-center justify-between gap-3 pt-4 text-[13px] text-txt-tertiary">
+          <span className="flex min-w-0 items-center gap-1.5">
+            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: cfg.c }} aria-hidden="true" />
+            <span className="truncate">{mod.category}</span>
+          </span>
+          <span className="flex shrink-0 items-center gap-3">
+            {mod.difficulty && <span>{mod.difficulty}</span>}
+            {mod.estimatedTime && (
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                {mod.estimatedTime}
+              </span>
+            )}
+          </span>
+        </div>
+      </div>
+    </article>
   );
 }
-

@@ -31,7 +31,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div>
-          <label className="block text-[11px] font-bold text-txt-tertiary uppercase mb-1">Project Name</label>
+          <label className="block text-xs font-bold text-txt-tertiary uppercase mb-1">Project Name</label>
           <><label htmlFor="a11y-input-590" className="sr-only">Input</label>
 <input id="a11y-input-590"
             type="text"
@@ -41,7 +41,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           /></>
         </div>
         <div>
-          <label className="block text-[11px] font-bold text-txt-tertiary uppercase mb-1">Client Name</label>
+          <label className="block text-xs font-bold text-txt-tertiary uppercase mb-1">Client Name</label>
           <><label htmlFor="a11y-input-591" className="sr-only">Input</label>
 <input id="a11y-input-591"
             type="text"
@@ -51,7 +51,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           /></>
         </div>
         <div>
-          <label className="block text-[11px] font-bold text-txt-tertiary uppercase mb-1">Lab Name</label>
+          <label className="block text-xs font-bold text-txt-tertiary uppercase mb-1">Lab Name</label>
           <><label htmlFor="a11y-input-592" className="sr-only">Central Soils Laboratory</label>
 <input id="a11y-input-592"
             type="text"
@@ -62,7 +62,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           /></>
         </div>
         <div>
-          <label className="block text-[11px] font-bold text-txt-tertiary uppercase mb-1">Sample ID</label>
+          <label className="block text-xs font-bold text-txt-tertiary uppercase mb-1">Sample ID</label>
           <><label htmlFor="a11y-input-593" className="sr-only">Input</label>
 <input id="a11y-input-593"
             type="text"
@@ -72,7 +72,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           /></>
         </div>
         <div>
-          <label className="block text-[11px] font-bold text-txt-tertiary uppercase mb-1">Depth (m/ft)</label>
+          <label className="block text-xs font-bold text-txt-tertiary uppercase mb-1">Depth (m/ft)</label>
           <><label htmlFor="a11y-input-594" className="sr-only">Input</label>
 <input id="a11y-input-594"
             type="text"
@@ -82,7 +82,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           /></>
         </div>
         <div>
-          <label className="block text-[11px] font-bold text-txt-tertiary uppercase mb-1">Tested By</label>
+          <label className="block text-xs font-bold text-txt-tertiary uppercase mb-1">Tested By</label>
           <><label htmlFor="a11y-input-595" className="sr-only">Input</label>
 <input id="a11y-input-595"
             type="text"

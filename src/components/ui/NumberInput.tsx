@@ -152,7 +152,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         className={`w-full relative group/field ${containerClassName}`}
       >
         {label && (
-          <label htmlFor={inputId} className="block text-[10px] sm:text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-[0.2em] mb-2.5 ml-1 cursor-help flex items-center gap-1.5 group-hover/field:text-indigo-600 dark:group-hover/field:text-indigo-400 transition-colors">
+          <label htmlFor={inputId} className="block text-xs sm:text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-[0.2em] mb-2.5 ml-1 cursor-help flex items-center gap-1.5 group-hover/field:text-indigo-600 dark:group-hover/field:text-indigo-400 transition-colors">
             {label}
           </label>
         )}
@@ -182,7 +182,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
           <div className="absolute right-3 flex items-center gap-2">
             {displayUnit && (
-              <span className="text-txt-tertiary dark:text-slate-400 text-[10px] font-black uppercase tracking-widest select-none pr-3 border-r border-slate-100 dark:border-slate-800/60">
+              <span className="text-txt-tertiary dark:text-slate-400 text-xs font-black uppercase tracking-widest select-none pr-3 border-r border-slate-100 dark:border-slate-800/60">
                 {displayUnit}
               </span>
             )}
@@ -206,7 +206,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         </div>
 
         {displayError && (
-          <span className="text-[10px] font-bold text-red-500 mt-1.5 ml-2 block uppercase tracking-wider animate-in fade-in slide-in-from-top-1">
+          <span className="text-xs font-bold text-red-500 mt-1.5 ml-2 block uppercase tracking-wider animate-in fade-in slide-in-from-top-1">
             {displayError}
           </span>
         )}

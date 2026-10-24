@@ -31,7 +31,7 @@ export default function MobileLandingPage() {
           
           {/* Simulated Mobile Status Bar & Browser Bar */}
           <div className="w-full px-6 pt-4 pb-2 flex flex-col gap-2">
-            <div className="flex justify-between items-center text-[11px] font-medium text-txt-primary">
+            <div className="flex justify-between items-center text-xs font-medium text-txt-primary">
               <span>11:06</span>
               <div className="flex items-center gap-1.5">
                 <div className="w-4 h-3 bg-slate-800 rounded-sm" /> {/* Battery icon placeholder */}
@@ -122,14 +122,14 @@ export default function MobileLandingPage() {
           <div className="w-full absolute top-[35%] -left-8 bg-surface-default/80 backdrop-blur-xl p-3 rounded-2xl shadow-xl border border-white flex flex-col gap-2 max-w-[140px] animate-float-slow overflow-hidden">
              <div className="flex items-center gap-1.5">
                <CheckCircle className="w-4 h-4 text-emerald-500" />
-               <span className="text-[10px] font-bold text-txt-primary leading-tight">30+ Professional<br/>Tools</span>
+               <span className="text-xs font-bold text-txt-primary leading-tight">30+ Professional<br/>Tools</span>
              </div>
              <div className="flex -space-x-2">
                <div className="w-6 h-6 rounded-full bg-blue-100 border-2 border-white" />
                <div className="w-6 h-6 rounded-full bg-pink-100 border-2 border-white" />
                <div className="w-6 h-6 rounded-full bg-blue-100 border-2 border-white flex items-center justify-center text-[8px] font-bold">+</div>
              </div>
-             <span className="text-[9px] font-medium text-txt-tertiary">10k+ Trust Us</span>
+             <span className="text-xs font-medium text-txt-tertiary">10k+ Trust Us</span>
           </div>
 
           {/* Floating Social Proof Card 2 */}
@@ -137,13 +137,13 @@ export default function MobileLandingPage() {
              <div className="flex gap-0.5">
                {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-orange-400 text-orange-400" />)}
              </div>
-             <p className="text-[10px] leading-snug text-txt-secondary italic">
+             <p className="text-xs leading-snug text-txt-secondary italic">
                "Zero calculation errors and saves hours of manual Excel entries."
              </p>
              <div className="flex items-center gap-2 mt-1">
                <div className="w-6 h-6 rounded-full bg-slate-200" />
                <div className="flex flex-col">
-                 <span className="text-[9px] font-bold text-txt-primary">Michael R.</span>
+                 <span className="text-xs font-bold text-txt-primary">Michael R.</span>
                  <span className="text-[8px] text-txt-tertiary">Civil Engineer</span>
                </div>
              </div>

@@ -178,7 +178,7 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
     
     if (Math.abs(percent) < 1) {
       return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-txt-secondary dark:bg-slate-800 dark:text-slate-400 ml-2">
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-txt-secondary dark:bg-slate-800 dark:text-slate-400 ml-2">
           Stable
         </span>
       );
@@ -186,7 +186,7 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
     
     const isUp = percent > 0;
     return (
-      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ml-2 ${isUp ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'}`}>
+      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ml-2 ${isUp ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'}`}>
         {isUp ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
         {Math.abs(percent).toFixed(1)}% vs last save
       </span>

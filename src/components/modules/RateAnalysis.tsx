@@ -397,7 +397,7 @@ export default function RateAnalysis() {
                     </span>
                   </div>
                   <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary backdrop-blur-md rounded-2xl px-4 py-3 border border-slate-100 mt-4 flex items-center justify-between overflow-hidden">
-                    <span className="text-[10px] sm:text-base font-medium tracking-tight uppercase tracking-[0.15em] text-slate-300">
+                    <span className="text-xs sm:text-base font-medium tracking-tight uppercase tracking-[0.15em] text-slate-300">
                       Analyzed Rate
                     </span>
                     <div className="flex items-end gap-1">

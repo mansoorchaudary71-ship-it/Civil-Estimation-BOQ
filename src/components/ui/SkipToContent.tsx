@@ -1,12 +1,26 @@
 import React from 'react';
 
+/**
+ * Skip link. The app uses HashRouter, so a plain `href="#main-content"` rewrote the URL hash to
+ * "#main-content" and made the router think the user navigated to an unknown page.
+ * We move focus programmatically instead and keep the hash untouched.
+ */
 export default function SkipToContent() {
+  const skip = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const main = document.getElementById('main-content');
+    if (main) {
+      main.focus({ preventScroll: true });
+      main.scrollIntoView({ block: 'start' });
+    }
+  };
   return (
     <a
       href="#main-content"
-      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded-md focus:shadow-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/50 font-bold"
+      onClick={skip}
+      className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[9999] focus:px-4 focus:py-2.5 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:shadow-xl font-semibold"
     >
-      Skip to content
+      Skip to main content
     </a>
   );
 }

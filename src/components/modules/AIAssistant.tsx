@@ -160,7 +160,7 @@ export default function AIAssistant() {
               <h2 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
                 AI Estimator
               </h2>
-              <span className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider mt-0.5">Premium Copilot</span>
+              <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider mt-0.5">Premium Copilot</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -258,7 +258,7 @@ export default function AIAssistant() {
                 </Button>
              </div>
           </div>
-          <div className="text-center mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
+          <div className="text-center mt-4 text-xs text-slate-400 font-bold uppercase tracking-[0.2em]">
             AI generated estimates are preliminary. Always confirm with a certified QS.
           </div>
         </div>

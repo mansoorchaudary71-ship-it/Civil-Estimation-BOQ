@@ -254,7 +254,7 @@ export default function MetalWeightCalculator() {
  onChange={(e) => setLength(e.target.value)}
  className="w-full bg-transparent bg-surface-default border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-neutral-500"
  /></>
- <p className="text-[10px] text-txt-secondary mt-1 pl-1">
+ <p className="text-xs text-txt-secondary mt-1 pl-1">
  Total run length of member
  </p>
  </div>

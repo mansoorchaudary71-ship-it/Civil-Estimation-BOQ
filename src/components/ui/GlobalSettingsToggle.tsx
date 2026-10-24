@@ -41,7 +41,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
       {isOpen && (
         <div className={`absolute top-full mt-2 w-72 ${alignClass} bg-surface-default/90 dark:bg-slate-900/90 backdrop-blur-xl border border-ui-borderSubtle/80 dark:border-slate-700/80 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 ring-1 ring-slate-900/5 dark:ring-white/5`}>
           <div className="p-4">
-            <div className="mb-3 text-[11px] font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+            <div className="mb-3 text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
               <Ruler className="w-3.5 h-3.5"/> Unit System
             </div>
             <div className={`mb-6`}>
@@ -64,7 +64,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
 
             {showCurrency && (
               <>
-                <div className="mb-3 text-[11px] font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+                <div className="mb-3 text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
                   <DollarSign className="w-3.5 h-3.5"/> Currency
                 </div>
                 <div className="mb-6">
@@ -88,7 +88,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
               </>
             )}
 
-            <div className="mb-3 text-[11px] font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+            <div className="mb-3 text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
               <Moon className="w-3.5 h-3.5"/> Theme
             </div>
             <div className="grid grid-cols-3 gap-1.5 mb-2">
@@ -102,7 +102,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
                   <Button
                     key={val}
                     onClick={() => { updateSettings({ theme: val as Theme }); setIsOpen(false); }}
-                    className={`py-2 px-1 text-[10px] font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
+                    className={`py-2 px-1 text-xs font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
                       isActive 
                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20" 
                          : "text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
@@ -125,7 +125,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
                   <Button
                     key={val}
                     onClick={() => { updateSettings({ theme: val as Theme }); setIsOpen(false); }}
-                    className={`py-2 px-1 text-[10px] font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
+                    className={`py-2 px-1 text-xs font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
                       isActive
                           ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20"
                           : "text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"

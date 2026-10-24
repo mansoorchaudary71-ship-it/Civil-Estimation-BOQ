@@ -169,7 +169,7 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
             >
               <X className="w-4 h-4" />
             </Button>
-            <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-2">
+            <div className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">
               Guided Tour • Step {currentStep + 1} of {steps.length}
             </div>
             <h4 className="text-lg font-bold text-txt-primary mb-1">{steps[currentStep].title}</h4>

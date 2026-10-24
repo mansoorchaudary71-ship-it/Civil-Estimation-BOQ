@@ -194,7 +194,7 @@ export default function StaircaseDesignReference() {
                             <div className={`p-3 rounded-xl border flex flex-col justify-between ${results.riserSafe ? "bg-surface-default border-ui-borderSubtle" : "bg-blue-50 border-blue-200"}`}>
                                 <div>
                                     <h4 className={`text-xs font-bold leading-tight ${results.riserSafe ? "text-txt-secondary" : "text-orange-900"}`}>Maximum Riser Check</h4>
-                                    <p className="text-[10px] text-txt-tertiary mt-0.5">Required limit: {results.reqMaxRiser}mm</p>
+                                    <p className="text-xs text-txt-tertiary mt-0.5">Required limit: {results.reqMaxRiser}mm</p>
                                 </div>
                                 <div className="mt-2 flex items-center justify-between">
                                     <span className={`font-mono text-sm font-bold ${results.riserSafe ? "text-txt-primary" : "text-blue-700"}`}>{results.actualRiser.toFixed(1)} mm</span>
@@ -205,7 +205,7 @@ export default function StaircaseDesignReference() {
                             <div className={`p-3 rounded-xl border flex flex-col justify-between ${results.goingSafe ? "bg-surface-default border-ui-borderSubtle" : "bg-blue-50 border-blue-200"}`}>
                                 <div>
                                     <h4 className={`text-xs font-bold leading-tight ${results.goingSafe ? "text-txt-secondary" : "text-orange-900"}`}>Minimum Going Check</h4>
-                                    <p className="text-[10px] text-txt-tertiary mt-0.5">Required min: {results.reqMinGoing}mm</p>
+                                    <p className="text-xs text-txt-tertiary mt-0.5">Required min: {results.reqMinGoing}mm</p>
                                 </div>
                                 <div className="mt-2 flex items-center justify-between">
                                     <span className={`font-mono text-sm font-bold ${results.goingSafe ? "text-txt-primary" : "text-blue-700"}`}>{Number(going).toFixed(1)} mm</span>

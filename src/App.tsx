@@ -170,8 +170,12 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
 
       // Esc to return to the dashboard
       if (e.key === 'Escape') {
-        const activeModals = document.querySelectorAll('[role="dialog"], .modal-overlay, [data-modal]');
-        if (activeModals.length > 0) {
+        // Never hijack Esc while typing, inside a menu/listbox, or when a dialog is open:
+        // it used to throw users out of the tool (losing their inputs) from any field.
+        const t = e.target as HTMLElement | null;
+        const typing = !!t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable);
+        const activeModals = document.querySelectorAll('[role="dialog"], [role="listbox"], [role="menu"], .modal-overlay, [data-modal]');
+        if (typing || activeModals.length > 0 || e.defaultPrevented) {
           return;
         }
         onNavigate('home');
@@ -419,6 +423,12 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
 }
 
 
+/** Pages that are not calculators but are reachable via the URL hash (#/pricing, #/blog ...). */
+const STATIC_PAGES = ["home", "my-estimates", "about", "careers", "contact", "blog", "pricing", "privacy", "terms", "cookies"];
+const idFromPath = (pathname: string) => pathname.replace(/^\/+/, "").split("/")[0] || "home";
+const pathFromId = (id: string) => (id === "home" ? "/" : `/${id}`);
+const isKnownRoute = (id: string) => STATIC_PAGES.includes(id) || ALL_TOOLS.some((t) => t.id === id);
+
 export default function App() {
   const { addRecentTool } = useRecentTools();
   const [searchTerm, setSearchTerm] = useState("");
@@ -434,8 +444,8 @@ export default function App() {
     if (hash.startsWith("#/team")) {
       return "team-collaboration";
     }
-    const saved = sessionStorage.getItem("activeModule");
-    return (saved as ModuleId) || "home";
+    const fromUrl = idFromPath(window.location.hash.replace(/^#/, "") || "/");
+    return (isKnownRoute(fromUrl) ? fromUrl : "home") as ModuleId;
   });
 
   useEffect(() => {
@@ -443,6 +453,9 @@ export default function App() {
       setActiveModule('join-project');
     } else if (location.pathname === '/team') {
       setActiveModule('team-collaboration');
+    } else {
+      const id = idFromPath(location.pathname);
+      if (isKnownRoute(id)) setActiveModule((prev) => (prev === id ? prev : id));
     }
   }, [location]);
 
@@ -518,9 +531,18 @@ export default function App() {
   }, [activeModule]);
 
   useEffect(() => {
-    const handleGoHome = () => { setPreviousModule(activeModule); setActiveModule("home"); };
+    const handleGoHome = () => { setPreviousModule(activeModule); setActiveModule("home"); navigate("/"); };
     const handleOpenProfile = () => { setIsProfileOpen(true); };
-    const handleNavigateModule = (e: Event) => { const ce = e as CustomEvent; setPreviousModule(activeModule); setActiveModule(ce.detail); };
+    const handleNavigateModule = (e: Event) => {
+      const ce = e as CustomEvent;
+      // Callers dispatch either a bare id ("rates") or { moduleId: "rates" }; the object form used to
+      // become the active module itself and rendered "Module not found".
+      const id = typeof ce.detail === "string" ? ce.detail : ce.detail?.moduleId;
+      if (!id) return;
+      setPreviousModule(activeModule);
+      setActiveModule(id);
+      navigate(pathFromId(id));
+    };
     window.addEventListener("navigate-module", handleNavigateModule);
     window.addEventListener("go-home", handleGoHome);
     window.addEventListener("open-profile", handleOpenProfile);
@@ -529,7 +551,7 @@ export default function App() {
       window.removeEventListener("go-home", handleGoHome);
       window.removeEventListener("open-profile", handleOpenProfile);
     };
-  }, [activeModule]);
+  }, [activeModule, navigate]);
 
   // Global input validation for numeric fields
   useEffect(() => {
@@ -693,6 +715,7 @@ export default function App() {
     setPreviousModule(activeModule);
     setActiveLayoutId(layoutId || `module-${id}`);
     setActiveModule(id);
+    navigate(pathFromId(id));
         
     // Track tools that are calculators/modules (not home or pages)
     if (id !== "home" && id !== "about" && id !== "careers" && id !== "contact" && id !== "blog" && id !== "pricing" && id !== "privacy" && id !== "terms" && id !== "cookies") {
@@ -721,7 +744,7 @@ export default function App() {
             <TakeoffProvider>
               <BOQProvider>
           <ProjectProvider>
-                <div className="flex flex-col min-h-screen w-full bg-gradient-to-br from-slate-50 via-[#f8fafc] to-blue-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 bg-[length:200%_200%] animate-gradient-x font-sans text-slate-900 dark:text-slate-100 transition-colors duration-500">
+                <div className="flex flex-col min-h-screen w-full bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
                   <Toaster position="bottom-right" />
                   <AppDownloadBanner />
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
@@ -742,7 +765,8 @@ export default function App() {
                   <div className="flex flex-1 relative w-full pb-24 md:pb-0">
                     
                     <motion.main 
-                      id="main-content" 
+                      id="main-content"
+                      tabIndex={-1}
                       initial="hidden"
                       animate="show"
                       variants={{
@@ -756,11 +780,10 @@ export default function App() {
                     >
                       <ReadingTimeIndicator activeModule={activeModule} />
                       <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="w-full flex-1 flex flex-col relative transition-all duration-300">
-                        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex-1 flex flex-col relative w-full transition-colors duration-300 md:bg-white/50 dark:md:bg-slate-900/50 md:backdrop-blur-sm">
-                          <AnimatePresence>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex-1 flex flex-col relative w-full transition-colors duration-300">
+                          <AnimatePresence mode="wait">
                             <motion.div
                               key={activeModule}
-                              layoutId={activeLayoutId || `module-${activeModule}`}
                               initial="hidden"
                               animate="show"
                               exit="exit"
@@ -771,7 +794,7 @@ export default function App() {
 }}
                               className="flex-1 flex flex-col relative w-full"
                             >
-                              {["home", "my-estimates", "about", "careers", "contact", "blog", "privacy", "terms", "cookies"].includes(activeModule) ? (
+                              {STATIC_PAGES.includes(activeModule) ? (
                                                                 <motion.div ref={scrollRef} className="flex-1 flex flex-col relative w-full overflow-visible" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.15 } } }}>
                                   <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex flex-col relative w-full">
                                     {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule}  onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}

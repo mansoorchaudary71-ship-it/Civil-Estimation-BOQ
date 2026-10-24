@@ -245,7 +245,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                 <div className="group relative flex items-center pt-1">
                   <Button 
                     onClick={() => setIsFormulaModalOpen(true)}
-                    className="text-slate-300 hover:text-txt-secondary transition-colors focus:outline-none"
+                    className="text-txt-tertiary hover:text-txt-primary transition-colors"
                     aria-label="View Engineering Formulas"
                   >
                     <Info className="w-4 h-4" />
@@ -265,16 +265,18 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                 {/* Unit Toggle */}
                 <div className="flex items-center p-1 bg-slate-100/80 rounded-full border border-ui-borderSubtle/60 shadow-inner">
                   <Button
+                    aria-pressed={isMetric}
                     onClick={() => updateSettings({ measurement: 'SI' })}
-                    className={`relative px-3.5 sm:px-4 py-1.5 text-[11px] sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full ${
+                    className={`relative px-3.5 sm:px-4 py-1.5 text-xs sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full ${
                       isMetric ? 'bg-indigo-700 text-white shadow-sm' : 'text-txt-tertiary hover:text-indigo-700'
                     }`}
                   >
                     Metric
                   </Button>
                   <Button
+                    aria-pressed={!isMetric}
                     onClick={() => updateSettings({ measurement: 'FPS' })}
-                    className={`relative px-3.5 sm:px-4 py-1.5 text-[11px] sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full ${
+                    className={`relative px-3.5 sm:px-4 py-1.5 text-xs sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full ${
                       !isMetric ? 'bg-indigo-700 text-white shadow-sm' : 'text-txt-tertiary hover:text-indigo-700'
                     }`}
                   >
@@ -286,7 +288,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                 <div className="relative flex items-center p-1 bg-slate-100/80 rounded-full border border-ui-borderSubtle/60 shadow-inner">
                   <Button
                     onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
-                    className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full text-txt-secondary hover:text-indigo-700 hover:bg-slate-50"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 text-xs sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full text-txt-secondary hover:text-indigo-700 hover:bg-slate-50"
                   >
                     <span className="min-w-[28px] text-center">{settings.currency || 'PKR'}</span>
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCurrencyDropdownOpen ? 'rotate-180 text-indigo-600' : 'text-slate-400'}`} />
@@ -317,7 +319,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                                 }`}
                               >
                                 <span>{currency.code}</span>
-                                <span className={`text-[11px] ${isActive ? 'text-indigo-400' : 'text-slate-400'}`}>{currency.label}</span>
+                                <span className={`text-xs ${isActive ? 'text-indigo-400' : 'text-slate-400'}`}>{currency.label}</span>
                               </Button>
                             );
                           })}
@@ -334,7 +336,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
           {currentUrl && (
             <div className="hidden print:flex flex-col items-center justify-center gap-1 shrink-0">
               <QRCodeSVG value={currentUrl} size={64} level="M" />
-              <span className="text-[10px] text-slate-400 font-medium max-w-[100px] text-center leading-tight">Scan to verify</span>
+              <span className="text-xs text-slate-400 font-medium max-w-[100px] text-center leading-tight">Scan to verify</span>
             </div>
           )}
         </div>
@@ -349,14 +351,14 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
              className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
            >
              <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-             <span className="text-[11px] sm:text-sm font-medium whitespace-nowrap">Formulas</span>
+             <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Formulas</span>
            </Button>
            
            <Button onClick={handlePrint}
              className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
            >
              <Printer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-             <span className="text-[11px] sm:text-sm font-medium whitespace-nowrap">Print</span>
+             <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Print</span>
            </Button>
            
            
@@ -365,7 +367,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                className="flex w-full items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
              >
                <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-               <span className="text-[11px] sm:text-sm font-medium whitespace-nowrap">Share</span>
+               <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Share</span>
                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isShareDropdownOpen ? 'rotate-180 text-indigo-600' : 'text-indigo-700'}`} />
              </Button>
              
@@ -439,14 +441,14 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
              className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
            >
              <Save className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-             <span className="text-[11px] sm:text-sm font-medium whitespace-nowrap">Save Draft</span>
+             <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Save Draft</span>
            </Button>
            
            <Button onClick={handleLoadDraft}
              className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
            >
              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-             <span className="text-[11px] sm:text-sm font-medium whitespace-nowrap">Load Draft</span>
+             <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Load Draft</span>
            </Button>
            
            <Button 
@@ -454,7 +456,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border transition-colors group ${showReferences ? 'bg-indigo-700 text-white border-indigo-700' : 'border-indigo-700 text-indigo-700 hover:bg-indigo-50'}`}
            >
              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-             <span className="text-[11px] sm:text-sm font-medium whitespace-nowrap">References</span>
+             <span className="text-xs sm:text-sm font-medium whitespace-nowrap">References</span>
            </Button>
         </div>
         

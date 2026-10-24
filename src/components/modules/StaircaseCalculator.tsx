@@ -45,13 +45,13 @@ const StaircaseVisualizer = ({ rise, tread, numSteps, uLen }: { rise: number, tr
   return (
     <div className="w-full bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-ui-borderSubtle dark:border-slate-700/50 p-4 sm:p-6 flex flex-col relative overflow-hidden mt-6 shadow-sm group">
         <div className="flex items-center justify-between mb-4">
-           <h4 className="text-[11px] font-bold text-txt-tertiary dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
+           <h4 className="text-xs font-bold text-txt-tertiary dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
               <Ruler className="w-4 h-4" />
               Live Layout Schematic
            </h4>
            <div className="flex gap-4 flex-wrap">
-              <span className="text-[11px] font-semibold text-txt-tertiary"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalH.toFixed(2)}{uLen}</span> Rise</span>
-              <span className="text-[11px] font-semibold text-txt-tertiary"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalW.toFixed(2)}{uLen}</span> Run</span>
+              <span className="text-xs font-semibold text-txt-tertiary"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalH.toFixed(2)}{uLen}</span> Rise</span>
+              <span className="text-xs font-semibold text-txt-tertiary"><span className="text-indigo-600 dark:text-indigo-400 font-bold">{totalW.toFixed(2)}{uLen}</span> Run</span>
            </div>
         </div>
         

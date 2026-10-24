@@ -161,7 +161,7 @@ export default function RigidPavementEstimator() {
                 {" "}
                 <div>
                   {" "}
-                  <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     Length (m)
                   </label>{" "}
                   <><label htmlFor="a11y-input-436" className="sr-only">Input</label>
@@ -173,7 +173,7 @@ export default function RigidPavementEstimator() {
                 </div>{" "}
                 <div>
                   {" "}
-                  <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     Lane Width (m)
                   </label>{" "}
                   <><label htmlFor="a11y-input-437" className="sr-only">Input</label>
@@ -185,7 +185,7 @@ export default function RigidPavementEstimator() {
                 </div>{" "}
                 <div>
                   {" "}
-                  <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     DLC Thk (mm)
                   </label>{" "}
                   <><label htmlFor="a11y-input-438" className="sr-only">Input</label>
@@ -197,7 +197,7 @@ export default function RigidPavementEstimator() {
                 </div>{" "}
                 <div>
                   {" "}
-                  <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     PQC Thk (mm)
                   </label>{" "}
                   <><label htmlFor="a11y-input-439" className="sr-only">Input</label>
@@ -233,7 +233,7 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Cement
                       </label>{" "}
                       <><label htmlFor="a11y-input-440" className="sr-only">Input</label>
@@ -245,7 +245,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Sand
                       </label>{" "}
                       <><label htmlFor="a11y-input-441" className="sr-only">Input</label>
@@ -257,7 +257,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Aggr
                       </label>{" "}
                       <><label htmlFor="a11y-input-442" className="sr-only">Input</label>
@@ -270,7 +270,7 @@ export default function RigidPavementEstimator() {
                   </div>{" "}
                   <div>
                     {" "}
-                    <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                    <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                       Water/Cement Ratio
                     </label>{" "}
                     <><label htmlFor="a11y-input-443" className="sr-only">Input</label>
@@ -291,7 +291,7 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Cement
                       </label>{" "}
                       <><label htmlFor="a11y-input-444" className="sr-only">Input</label>
@@ -303,7 +303,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Sand
                       </label>{" "}
                       <><label htmlFor="a11y-input-445" className="sr-only">Input</label>
@@ -315,7 +315,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Aggr
                       </label>{" "}
                       <><label htmlFor="a11y-input-446" className="sr-only">Input</label>
@@ -328,7 +328,7 @@ export default function RigidPavementEstimator() {
                   </div>{" "}
                   <div>
                     {" "}
-                    <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                    <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                       Water/Cement Ratio
                     </label>{" "}
                     <><label htmlFor="a11y-input-447" className="sr-only">Input</label>
@@ -370,7 +370,7 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Joint Spacing (m)
                       </label>{" "}
                       <><label htmlFor="a11y-input-448" className="sr-only">Input</label>
@@ -382,7 +382,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Diameter (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-449" className="sr-only">Input</label>
@@ -394,7 +394,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Length (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-450" className="sr-only">Input</label>
@@ -406,7 +406,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Bar Spacing (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-451" className="sr-only">Input</label>
@@ -428,7 +428,7 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Joint Spacing (m)
                       </label>{" "}
                       <><label htmlFor="a11y-input-452" className="sr-only">Input</label>
@@ -440,7 +440,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Diameter (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-453" className="sr-only">Input</label>
@@ -452,7 +452,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Length (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-454" className="sr-only">Input</label>
@@ -464,7 +464,7 @@ export default function RigidPavementEstimator() {
                     </div>{" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-[10px] xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Bar Spacing (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-455" className="sr-only">Input</label>

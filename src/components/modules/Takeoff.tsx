@@ -516,7 +516,7 @@ export default function Takeoff() {
             2D Takeoff Engine
           </h2>
           <div className="flex gap-2 items-center">
-            <span className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px]">
+            <span className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 text-xs">
               Scale: 1px = {(1 / scalePxPerUnit).toFixed(4)} {unitName}
             </span>
             <select
@@ -546,7 +546,7 @@ export default function Takeoff() {
                   );
                 }
               }}
-              className="px-2 py-0.5 bg-surface-default border border-ui-borderSubtle text-txt-secondary text-[10px] rounded outline-none hover:border-ui-borderDefault focus:border-blue-500 transition-colors cursor-pointer"
+              className="px-2 py-0.5 bg-surface-default border border-ui-borderSubtle text-txt-secondary text-xs rounded outline-none hover:border-ui-borderDefault focus:border-blue-500 transition-colors cursor-pointer"
             >
               <option value="metric">Metric (m, m², m³)</option>
               <option value="imperial">Imperial (ft, sq.ft, cu.ft)</option>
@@ -617,7 +617,7 @@ export default function Takeoff() {
             >
               <ZoomOut className="w-[14px] h-[14px]" />
             </Button>
-            <div className="font-mono text-txt-primary w-12 text-center text-[10px]" title="Current Zoom">
+            <div className="font-mono text-txt-primary w-12 text-center text-xs" title="Current Zoom">
               {Math.round(stageScale * 100)}%
             </div>
             <Button
@@ -657,12 +657,12 @@ export default function Takeoff() {
           {/* Assemblies Sidebar */}
           <div className="w-56 border-r border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0">
             <div className="h-10 border-b border-ui-borderSubtle flex items-center px-4 bg-surface-default/30">
-              <span className="text-[10px] font-semibold uppercase text-txt-secondary tracking-wider flex-1">
+              <span className="text-xs font-semibold uppercase text-txt-secondary tracking-wider flex-1">
                 Smart Assemblies
               </span>
             </div>
             <div className="flex-1 p-3 space-y-3 overflow-y-auto">
-              <div className="text-[10px] text-txt-secondary pb-1">
+              <div className="text-xs text-txt-secondary pb-1">
                 Drag and drop onto canvas:
               </div>
               {ASSEMBLIES.map((asm) => (
@@ -689,7 +689,7 @@ export default function Takeoff() {
                     </span>
                     <GripVertical className="w-3 h-3 text-slate-300 group-hover:text-txt-secondary transition-colors" />
                   </div>
-                  <p className="text-[9px] text-txt-secondary mt-2 leading-tight">
+                  <p className="text-xs text-txt-secondary mt-2 leading-tight">
                     Drop to generate BOQ for this assembly.
                   </p>
                 </div>
@@ -724,7 +724,7 @@ export default function Takeoff() {
                        {recentBlueprints.map((b, i) => (
                          <Button key={i} onClick={() => handleLoadRecent(b)} className="px-4 py-2 border border-slate-100 rounded text-left hover:bg-blue-50 flex justify-between items-center group transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
                            <span className="truncate flex-1 text-sm text-txt-secondary group-hover:text-blue-700 font-medium">{b.name}</span>
-                           <span className="text-[10px] uppercase font-bold text-slate-400 group-hover:text-blue-500">Load</span>
+                           <span className="text-xs uppercase font-bold text-slate-400 group-hover:text-blue-500">Load</span>
                          </Button>
                        ))}
                     </div>
@@ -1006,7 +1006,7 @@ export default function Takeoff() {
                         <div className="flex flex-col gap-3 mb-5">
                           {asmDef?.inputs.map((inp) => (
                             <div key={inp.key}>
-                              <label className="block text-[10px] font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
+                              <label className="block text-xs font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
                                 {inp.label}
                               </label>
                               <><label htmlFor="a11y-input-517" className="sr-only">Input</label>
@@ -1053,7 +1053,7 @@ export default function Takeoff() {
             )}
             {/* Enter/Escape Helper */}
             {drawingPoints.length > 0 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-transparent/80 border border-ui-borderSubtle rounded-full px-4 py-1.5 text-[10px] text-txt-secondary backdrop-blur-sm pointer-events-none flex gap-4 shadow-lg">
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-transparent/80 border border-ui-borderSubtle rounded-full px-4 py-1.5 text-xs text-txt-secondary backdrop-blur-sm pointer-events-none flex gap-4 shadow-lg">
                 <span>
                   <kbd className="bg-surface-default px-1.5 rounded border border-ui-borderSubtle mr-1">
                     Click
@@ -1078,16 +1078,16 @@ export default function Takeoff() {
           {/* Right Panel */}
           <div className="w-64 border-l border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0">
             <div className="h-10 border-b border-ui-borderSubtle flex items-center px-4 bg-surface-default/30">
-              <span className="text-[10px] font-semibold uppercase text-txt-secondary tracking-wider flex-1">
+              <span className="text-xs font-semibold uppercase text-txt-secondary tracking-wider flex-1">
                 Takeoffs
               </span>
-              <span className="text-[10px] text-blue-500 bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20">
+              <span className="text-xs text-blue-500 bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20">
                 {measurements.length}
               </span>
             </div>
             <div className="flex-1 p-3 space-y-2 overflow-y-auto">
               {measurements.length === 0 && (
-                <div className="text-[10px] text-center text-txt-secondary mt-8 p-4 border border-dashed border-ui-borderSubtle rounded">
+                <div className="text-xs text-center text-txt-secondary mt-8 p-4 border border-dashed border-ui-borderSubtle rounded">
                   No takeoffs recorded.
                   <br />
                   Set scale, then draw lines or drop assemblies.
@@ -1175,13 +1175,13 @@ export default function Takeoff() {
                       </div>
                       <div className="flex flex-col items-end gap-0.5 shrink-0 mt-1">
                         <span
-                          className="text-[10px] font-mono font-medium bg-surface-default px-1.5 py-0.5 rounded border border-ui-borderSubtle"
+                          className="text-xs font-mono font-medium bg-surface-default px-1.5 py-0.5 rounded border border-ui-borderSubtle"
                           style={{ color: m.color }}
                         >
                           {primaryStr}
                         </span>
                         {secondaryStr && (
-                          <span className="text-[9px] font-mono text-txt-secondary">
+                          <span className="text-xs font-mono text-txt-secondary">
                             ({secondaryStr})
                           </span>
                         )}
@@ -1189,13 +1189,13 @@ export default function Takeoff() {
                     </div>
                     {linkedBoqs.length > 0 ? (
                       <div className="pl-2 flex flex-col gap-1 mt-1">
-                        <span className="text-[9px] text-txt-secondary font-medium uppercase tracking-wider">
+                        <span className="text-xs text-txt-secondary font-medium uppercase tracking-wider">
                           Linked To:
                         </span>
                         {linkedBoqs.map((item) => (
                           <div
                             key={item.id}
-                            className="text-[10px] text-blue-400 font-mono truncate leading-tight"
+                            className="text-xs text-blue-400 font-mono truncate leading-tight"
                           >
                             {item.id} - {item.desc}
                           </div>
@@ -1203,13 +1203,13 @@ export default function Takeoff() {
                       </div>
                     ) : (
                       <div className="pl-2 mt-1">
-                        <span className="text-[9px] text-txt-secondary italic">
+                        <span className="text-xs text-txt-secondary italic">
                           Unlinked
                         </span>
                       </div>
                     )}
                     <div className="pl-2 flex justify-between items-center mt-1 pt-1 border-t border-ui-borderSubtle">
-                      <span className="text-[9px] text-txt-secondary uppercase">
+                      <span className="text-xs text-txt-secondary uppercase">
                         {m.type}
                       </span>
                       <Button

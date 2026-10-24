@@ -191,7 +191,7 @@ export default function BottomNavBar({
                 className={`w-[22px] h-[22px] ${isActive ? "text-white" : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"} ${isActive ? "scale-110" : ""}`} 
                 strokeWidth={isActive ? 2.5 : 2} 
               />
-              <span className={`text-[10px] font-semibold tracking-wide ${isActive ? "text-white " : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`}>
+              <span className={`text-xs font-semibold tracking-wide ${isActive ? "text-white " : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`}>
                 {item.label}
               </span>
             </Button>

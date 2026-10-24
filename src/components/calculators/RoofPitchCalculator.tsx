@@ -283,7 +283,7 @@ export function RoofPitchCalculator() {
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
                   <div className="text-orange-200 text-xs font-medium mb-1">Pitch</div>
                   <div className="text-xl font-bold">{result.pitchPercentage.toFixed(1)}%</div>
-                  <div className="text-[10px] text-slate-300">{(result.pitchPercentage / 100 * 12).toFixed(1)}:12</div>
+                  <div className="text-xs text-slate-300">{(result.pitchPercentage / 100 * 12).toFixed(1)}:12</div>
                 </div>
 
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">

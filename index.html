@@ -2,14 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Civil Estimation Pro: free construction quantity, BOQ and cost estimation calculators for concrete, steel, masonry, finishes, earthworks and more." />
+    <meta name="theme-color" content="#0056D2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B0F19" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Apply the saved theme BEFORE first paint (previously the page flashed light, then switched). -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('app-settings');
+          var t = (raw && JSON.parse(raw).theme) || 'system';
+          var root = document.documentElement;
+          if (t === 'high-contrast') root.classList.add('high-contrast');
+          else if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) root.classList.add('dark');
+          else root.classList.add('light');
+          if (t === 'modern') root.classList.add('theme-modern');
+          if (t === 'engineering-blueprint') root.classList.add('theme-blueprint');
+        } catch (e) {}
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <title>Civil Estimation Pro</title>
+    <!-- Single font request (the same font was also @import-ed in index.css). Fewer weights = smaller payload. -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>Civil Estimation Pro | BOQ &amp; Construction Cost Calculators</title>
   </head>
-  <body class="overflow-x-hidden w-full m-0 p-0 antialiased subpixel-antialiased bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50">
-    <div id="root" class="overflow-x-hidden w-full"></div>
+  <body class="overflow-x-clip w-full m-0 p-0 antialiased bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50">
+    <noscript>Civil Estimation Pro needs JavaScript enabled to run its calculators.</noscript>
+    <div id="root" class="overflow-x-clip w-full"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

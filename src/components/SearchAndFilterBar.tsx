@@ -1,7 +1,18 @@
-import { Button } from './ui/Button';
-import React, { useEffect, useRef, useState } from "react";
-import { Search, Sparkles } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Search, Sparkles, X } from "lucide-react";
 
+/**
+ * Sticky search + category filter bar (Dribbble tag-page pattern: search on top, pill filters beneath,
+ * result count, everything stays pinned while the grid scrolls).
+ *
+ * Fixes vs. previous bar
+ *  - `sticky top-[60px]` assumed a 60px header, but the header was 64-80px, so the bar either hid under it
+ *    or floated with a gap. It now pins to the shared `--header-h` token.
+ *  - Hard-coded light colours (#f8f9fa) had no dark variant.
+ *  - Suggestions were only reachable by mouse. Added combobox/listbox semantics and arrow-key navigation.
+ *  - Suggestions closed on a 200ms blur timer (race with click). Uses mouse-down selection instead.
+ *  - Tapping a category now also shows the active state via aria-pressed; count line is aria-live.
+ */
 
 export interface SearchAndFilterBarProps {
   categories: { name: string; count: number }[];
@@ -14,6 +25,8 @@ export interface SearchAndFilterBarProps {
   onSelectModule?: (id: string, inputs?: any) => void;
 }
 
+const POPULAR = ["Concrete Volume", "Steel Weight", "Cost Estimate"];
+
 export default function SearchAndFilterBar({
   categories,
   activeCategory,
@@ -24,163 +37,211 @@ export default function SearchAndFilterBar({
   allTools = [],
   onSelectModule,
 }: SearchAndFilterBarProps) {
-  const popularSearches = ["Concrete Volume", "Steel Weight", "Cost Estimate"];
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [showSuggestions, setShowSuggestions] = useState(false);
-
-
   const inputRef = useRef<HTMLInputElement>(null);
-  
+  const [open, setOpen] = useState(false);
+  const [idx, setIdx] = useState(-1);
+
+  // "/" focuses the search (GitHub/Dribbble convention) unless the user is already typing.
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Prevent '/' if we are already in an input, textarea or contenteditable
-      if (
-        e.key === '/' && 
-        document.activeElement?.tagName !== 'INPUT' && 
-        document.activeElement?.tagName !== 'TEXTAREA' &&
-        !(document.activeElement as HTMLElement)?.isContentEditable
-      ) {
+    const onKey = (e: KeyboardEvent) => {
+      const el = document.activeElement as HTMLElement | null;
+      const typing = !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable);
+      if (e.key === "/" && !typing && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
         inputRef.current?.focus();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const getSuggestions = () => {
-    if (!searchTerm.trim() || !allTools.length) return [];
-    const term = searchTerm.toLowerCase();
+  const suggestions = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term || !allTools.length) return [];
     return allTools
-      .filter(
-        (tool) =>
-          tool.name.toLowerCase().includes(term) ||
-          tool.category.toLowerCase().includes(term)
-      )
+      .filter((t) => t.name.toLowerCase().includes(term) || t.category.toLowerCase().includes(term))
       .slice(0, 6);
-  };
+  }, [searchTerm, allTools]);
 
-  const suggestions = getSuggestions();
+  useEffect(() => setIdx(-1), [searchTerm]);
 
+  // keep the active pill in view
   useEffect(() => {
-    const activeTab = tabRefs.current[activeCategory];
-    if (activeTab && activeTab.parentElement) {
-      const container = activeTab.parentElement;
-      const scrollLeft = activeTab.offsetLeft - container.offsetWidth / 2 + activeTab.offsetWidth / 2;
-      container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+    const tab = tabRefs.current[activeCategory];
+    const row = tab?.parentElement;
+    if (tab && row) {
+      row.scrollTo({ left: tab.offsetLeft - row.offsetWidth / 2 + tab.offsetWidth / 2, behavior: "smooth" });
     }
   }, [activeCategory]);
 
+  const choose = (tool: { id: string; name: string }) => {
+    setOpen(false);
+    if (onSelectModule) {
+      setSearchTerm("");
+      onSelectModule(tool.id);
+    } else {
+      setSearchTerm(tool.name);
+    }
+  };
+
+  const onInputKey = (e: React.KeyboardEvent) => {
+    if (!suggestions.length) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setOpen(true);
+      setIdx((i) => (i + 1) % suggestions.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setIdx((i) => (i <= 0 ? suggestions.length - 1 : i - 1));
+    } else if (e.key === "Enter" && idx >= 0) {
+      e.preventDefault();
+      choose(suggestions[idx]);
+    } else if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
+
+  const showList = open && suggestions.length > 0;
+
   return (
-    <div id="tools" className="sticky top-[60px] z-40 bg-[#f8f9fa]/95 backdrop-blur-xl border-b border-ui-borderSubtle/60 py-3 sm:py-4 w-full shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-      <div className="md:max-w-7xl md:mx-auto px-4 w-full flex flex-col gap-3 sm:gap-4">
-        
-        {/* Search Bar */}
-        <div className="w-full max-w-2xl mx-auto md:mx-0">
-          <div className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none z-10">
-              <Search className="w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors duration-300" />
-            </div>
-            <><label htmlFor="a11y-input-8" className="sr-only">Search tools, materials, or calculations...</label>
-<input id="a11y-input-8"
+    <div
+      id="tools"
+      className="sticky top-[var(--header-h)] z-40 w-full border-b border-ui-borderSubtle bg-surface-default/95 backdrop-blur-md scroll-mt-[var(--header-h)]"
+    >
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 sm:py-4">
+        {/* Search */}
+        <div className="w-full max-w-2xl">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-txt-tertiary" aria-hidden="true" />
+            <label htmlFor="tool-search" className="sr-only">
+              Search tools, materials, or calculations
+            </label>
+            <input
+              id="tool-search"
+              ref={inputRef}
               type="text"
+              role="combobox"
+              aria-expanded={showList}
+              aria-controls="tool-search-list"
+              aria-autocomplete="list"
+              aria-activedescendant={idx >= 0 ? `tool-opt-${idx}` : undefined}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setShowSuggestions(true);
+                setOpen(true);
               }}
-              onFocus={() => setShowSuggestions(true)}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              placeholder="Search tools, materials, or calculations..."
-              className="relative w-full bg-surface-default border border-ui-borderSubtle hover:border-ui-borderDefault rounded-2xl py-3.5 pl-12 pr-12 text-txt-primary placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 transition-all shadow-sm text-[15px] sm:text-base font-medium"
-            /></>
+              onFocus={() => setOpen(true)}
+              onBlur={() => setOpen(false)}
+              onKeyDown={onInputKey}
+              placeholder="Search tools, materials, or calculations…"
+              autoComplete="off"
+              className="h-12 w-full rounded-full border border-ui-borderDefault bg-surface-default pl-12 pr-11 text-base text-txt-primary placeholder:text-txt-tertiary shadow-none focus:border-primary-600 focus:ring-4 focus:ring-primary-600/15"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm("");
+                  inputRef.current?.focus();
+                }}
+                aria-label="Clear search"
+                className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-txt-tertiary hover:bg-surface-hover hover:text-txt-primary"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+            )}
 
-            {/* Suggestions Dropdown */}
-            {showSuggestions && suggestions.length > 0 && (
-              <div className="w-full absolute top-full left-0 right-0 mt-2 bg-surface-default rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                {suggestions.map((tool) => (
-                  <Button
+            {showList && (
+              <ul
+                id="tool-search-list"
+                role="listbox"
+                className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-ui-borderSubtle bg-surface-default shadow-brand-lg animate-in fade-in slide-in-from-top-2 duration-150"
+              >
+                {suggestions.map((tool, i) => (
+                  <li
                     key={tool.id}
-                    onClick={() => {
-                      if (onSelectModule) {
-                        setSearchTerm("");
-                        setShowSuggestions(false);
-                        onSelectModule(tool.id);
-                      } else {
-                        setSearchTerm(tool.name);
-                        setShowSuggestions(false);
-                      }
+                    id={`tool-opt-${i}`}
+                    role="option"
+                    aria-selected={i === idx}
+                    // mousedown fires before the input's blur, so the click is never lost
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      choose(tool);
                     }}
-                    className="w-full text-left px-5 py-3.5 hover:bg-slate-50 border-b border-slate-50 last:border-0 flex items-center justify-between transition-colors group/item"
+                    onMouseEnter={() => setIdx(i)}
+                    className={`flex cursor-pointer items-center justify-between gap-3 px-4 py-3 ${
+                      i === idx ? "bg-surface-hover" : ""
+                    }`}
                   >
-                    <span className="text-[15px] font-medium text-txt-secondary group-hover/item:text-blue-600 transition-colors">{tool.name}</span>
-                    <span className="text-[11px] font-bold tracking-wider uppercase text-txt-tertiary bg-slate-100 px-2.5 py-1 rounded-full">{tool.category}</span>
-                  </Button>
+                    <span className="text-[15px] font-medium text-txt-primary">{tool.name}</span>
+                    <span className="shrink-0 rounded-full bg-surface-hover px-2.5 py-1 text-xs font-semibold text-txt-secondary">
+                      {tool.category}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </div>
-             
-          {/* Popular Chips (hidden mobile, visible md+) */}
-          <div className="hidden md:flex items-center gap-2 mt-3 pl-1">
-            <span className="text-sm font-semibold uppercase tracking-wider text-txt-tertiary flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-blue-500" /> Popular:
+
+          <div className="mt-3 hidden items-center gap-2 md:flex">
+            <span className="flex items-center gap-1.5 text-sm font-semibold text-txt-tertiary">
+              <Sparkles className="h-3.5 w-3.5 text-primary-600" aria-hidden="true" /> Popular:
             </span>
-            {popularSearches.map((chip, idx) => (
-              <Button
-                key={idx}
+            {POPULAR.map((chip) => (
+              <button
+                key={chip}
+                type="button"
                 onClick={() => setSearchTerm(chip)}
-                className="text-[13px] font-medium text-txt-secondary bg-surface-default hover:bg-blue-50 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors border border-ui-borderSubtle shadow-sm"
+                className="h-8 rounded-full border border-ui-borderSubtle bg-surface-default px-3 text-[13px] font-medium text-txt-secondary transition-colors hover:border-primary-600 hover:text-primary-700"
               >
                 {chip}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
 
-        {/* Category Tabs */}
-        <div className="relative w-full mt-1 md:mt-2">
-          {/* Right fade gradient overlay for mobile scroll indicator */}
-          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#f8f9fa] to-transparent pointer-events-none z-10 md:hidden" />
-          <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-[#f8f9fa] to-transparent pointer-events-none z-10 md:hidden" />
-             
-          <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide relative items-center pb-3 px-1 filter-tab-row snap-x snap-mandatory pt-1">
+        {/* Category pills */}
+        <div className="relative -mx-4">
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r from-[rgb(var(--color-bg-surface))] to-transparent md:hidden" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[rgb(var(--color-bg-surface))] to-transparent md:hidden" />
+          <div role="group" aria-label="Filter by category" className="scrollbar-hide flex items-center gap-2 overflow-x-auto px-4 py-1 md:flex-wrap md:overflow-visible">
             {categories.map((cat) => {
-              const isActive = activeCategory === cat.name;
+              const on = activeCategory === cat.name;
               return (
-                 <Button
+                <button
                   key={cat.name}
-                  ref={(el) => { tabRefs.current[cat.name] = el; }}
+                  type="button"
+                  ref={(el) => {
+                    tabRefs.current[cat.name] = el;
+                  }}
+                  aria-pressed={on}
                   onClick={() => setActiveCategory(cat.name)}
-                  className={`
-                    relative flex items-center justify-center flex-shrink-0 gap-2.5 px-5 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 snap-start
-                    ${isActive 
-                      ? "bg-slate-900 text-white shadow-md border border-slate-800" 
-                      : "bg-surface-default text-txt-secondary hover:text-txt-primary hover:bg-slate-50 border border-ui-borderSubtle shadow-sm"}
-                  `}
+                  className={`flex h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 text-sm font-semibold transition-colors ${
+                    on
+                      ? "border-primary-600 bg-primary-600 text-white"
+                      : "border-ui-borderDefault bg-surface-default text-txt-secondary hover:border-primary-600 hover:text-primary-700"
+                  }`}
                 >
-                  <span className={`text-[14px] sm:text-[15px] ${isActive ? 'font-semibold' : 'font-medium'} transition-all duration-300`}>{cat.name}</span>
-                  <span 
-                    className={`
-                      flex items-center justify-center px-2 py-0.5 text-[12px] font-bold rounded-full transition-colors duration-300
-                      ${isActive ? "bg-surface-default/20 text-white" : "bg-slate-100 text-txt-tertiary"}
-                    `}
+                  {cat.name}
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-bold tabular-nums ${
+                      on ? "bg-white/20 text-white" : "bg-surface-hover text-txt-secondary"
+                    }`}
                   >
                     {cat.count}
                   </span>
-                </Button>
+                </button>
               );
             })}
           </div>
         </div>
 
-        {/* Results Count Line */}
-        <div className="text-[13px] sm:text-sm font-medium text-txt-tertiary pl-1 pb-2">
-          Showing <span className="text-txt-primary font-bold">{totalFilteredCount}</span> tools in <span className="text-blue-600 font-bold">{activeCategory}</span>
-        </div>
-
+        <p className="text-sm text-txt-tertiary" role="status" aria-live="polite">
+          Showing <strong className="font-bold text-txt-primary">{totalFilteredCount}</strong> tools in{" "}
+          <strong className="font-bold text-primary-600">{activeCategory}</strong>
+        </p>
       </div>
     </div>
   );
 }
-

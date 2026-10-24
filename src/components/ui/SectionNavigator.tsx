@@ -166,7 +166,7 @@ export default function SectionNavigator() {
                 onKeyDown={handleKeyDown}
               />
               <div className="flex items-center gap-2 ml-3">
-                <span className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-ui-borderSubtle dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-[10px] font-medium text-txt-tertiary uppercase tracking-widest">esc</span>
+                <span className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-ui-borderSubtle dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-medium text-txt-tertiary uppercase tracking-widest">esc</span>
                 <Button onClick={() => setIsOpen(false)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
                   <X className="w-5 h-5" />
                 </Button>

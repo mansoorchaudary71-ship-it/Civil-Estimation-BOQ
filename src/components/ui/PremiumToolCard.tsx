@@ -126,7 +126,7 @@ export default function PremiumToolCard() {
           </div>
           <div className="flex justify-between mt-4 mx-1">
             {['Conc', 'Steel', 'Mas', 'Labor', 'Eqp', 'Ohdr'].map((lbl, i) => (
-              <div key={i} className="text-[10px] font-bold text-txt-secondary uppercase tracking-wider truncate max-w-[40px] text-center">{lbl}</div>
+              <div key={i} className="text-xs font-bold text-txt-secondary uppercase tracking-wider truncate max-w-[40px] text-center">{lbl}</div>
             ))}
           </div>
         </motion.div>

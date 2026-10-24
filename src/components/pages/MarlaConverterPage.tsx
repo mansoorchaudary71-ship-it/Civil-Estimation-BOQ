@@ -88,13 +88,13 @@ export default function MarlaConverterPage() {
         {/* Section 1: H1 SEO Header */}
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="px-3 py-1.5 md:py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full text-[10px] uppercase tracking-wider font-bold shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full text-xs uppercase tracking-wider font-bold shadow-sm flex items-center gap-1.5">
               <Map className="w-3.5 h-3.5" /> Land Measurement
             </span>
-            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-[10px] uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" /> Pakistan / India
             </span>
-            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-[10px] uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
               <RefreshCw className="w-3.5 h-3.5" /> Real-time Converter
             </span>
           </div>

@@ -156,7 +156,7 @@ export function ProductTour() {
             >
               <X className="w-4 h-4" />
             </Button>
-            <div className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider mb-2">
+            <div className="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2">
               Tip {currentStep + 1} of {TOUR_STEPS.length}
             </div>
             <h4 className="text-lg font-bold text-txt-primary mb-1">{TOUR_STEPS[currentStep].title}</h4>

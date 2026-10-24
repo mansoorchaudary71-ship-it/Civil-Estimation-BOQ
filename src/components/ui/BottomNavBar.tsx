@@ -55,7 +55,7 @@ function NavItem({ icon, label, onClick }: NavItemProps) {
       role="button"
     >
       {icon}
-      <span className="text-[10px] font-medium mt-1">{label}</span>
+      <span className="text-xs font-medium mt-1">{label}</span>
     </Button>
   );
 }

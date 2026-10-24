@@ -163,7 +163,7 @@ export function ResultItem({
                 <div className="w-1 bg-current h-2/3 rounded-full" />
                 <div className="w-1 bg-current h-full rounded-full" />
               </div>
-              <span className="text-[10px] font-semibold opacity-80 uppercase tracking-widest">
+              <span className="text-xs font-semibold opacity-80 uppercase tracking-widest">
                 {comparisonText}
               </span>
             </div>
@@ -185,7 +185,7 @@ export function ResultItem({
 
           {/* Secondary unit conversion */}
           {secondaryValue !== undefined && secondaryUnit && (
-            <div className="text-[11px] font-bold text-txt-tertiary tabular-nums">
+            <div className="text-xs font-bold text-txt-tertiary tabular-nums">
               ={" "}
               {typeof secondaryValue === "number"
                 ? secondaryValue.toLocaleString("en-US", {
@@ -197,7 +197,7 @@ export function ResultItem({
           )}
 
           <div
-            className={`mt-2 flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${statusDetails.className} w-fit`}
+            className={`mt-2 flex items-center gap-1 text-xs uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${statusDetails.className} w-fit`}
           >
             <StatusIcon className="w-3 h-3" />
             {statusDetails.label}

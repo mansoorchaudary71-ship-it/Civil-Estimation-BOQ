@@ -21,7 +21,7 @@ export const MetricInput = React.forwardRef<HTMLInputElement, MetricInputProps>(
         className={`w-full ${containerClassName}`}
       >
         {label && (
-          <label htmlFor={inputId} className="block text-[10px] sm:text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-[0.2em] mb-2 ml-1">
+          <label htmlFor={inputId} className="block text-xs sm:text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-[0.2em] mb-2 ml-1">
             {label}
           </label>
         )}

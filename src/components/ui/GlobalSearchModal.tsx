@@ -172,7 +172,7 @@ export default function GlobalSearchModal({
           ) : results.length > 0 ? (
             <div className="p-4 sm:p-6 flex flex-col gap-3">
               <div className="px-3 pb-2">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-txt-tertiary">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-txt-tertiary">
                   {results.length} result{results.length !== 1 && "s"} found
                 </p>
               </div>

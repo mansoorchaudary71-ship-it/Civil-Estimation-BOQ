@@ -643,8 +643,8 @@ export default function SettingsModal({
                             <label className="block text-base font-medium">Material Name Column</label>
                             {columnMap.material && (
                               isMaterialValid ? 
-                                <span className="flex items-center gap-1 text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid format</span> : 
-                                <span className="flex items-center gap-1 text-[10px] text-red-600 font-semibold bg-red-50 px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> Invalid</span>
+                                <span className="flex items-center gap-1 text-xs text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid format</span> : 
+                                <span className="flex items-center gap-1 text-xs text-red-600 font-semibold bg-red-50 px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> Invalid</span>
                             )}
                           </div>
                           <select 
@@ -661,8 +661,8 @@ export default function SettingsModal({
                             <label className="block text-base font-medium">Rate Column</label>
                             {columnMap.rate && (
                               isRateValid ? 
-                                <span className="flex items-center gap-1 text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid numbers found</span> : 
-                                <span className="flex items-center gap-1 text-[10px] text-red-600 font-semibold bg-red-50 px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> No valid numbers</span>
+                                <span className="flex items-center gap-1 text-xs text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid numbers found</span> : 
+                                <span className="flex items-center gap-1 text-xs text-red-600 font-semibold bg-red-50 px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> No valid numbers</span>
                             )}
                           </div>
                           <select 

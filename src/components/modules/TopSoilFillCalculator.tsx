@@ -115,7 +115,7 @@ export default function TopSoilFillCalculator() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="text-[11px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2"><span className="flex items-center gap-1">Area to Cover <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
+                  <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2"><span className="flex items-center gap-1">Area to Cover <CodeTooltip standard="IS" code="456:2000" description="Nominal cover to meet durability requirements (Table 16)." /></span></label>
                   <div className="relative">
                     <><label htmlFor="a11y-input-519" className="sr-only">Input</label>
 <input id="a11y-input-519"
@@ -128,7 +128,7 @@ export default function TopSoilFillCalculator() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-[11px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Average Depth</label>
+                  <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Average Depth</label>
                   <div className="relative">
                     <><label htmlFor="a11y-input-520" className="sr-only">Input</label>
 <input id="a11y-input-520"
@@ -147,7 +147,7 @@ export default function TopSoilFillCalculator() {
               </div>
 
               <div className="mb-4">
-                <label className="text-[11px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2"><span className="flex items-center">Soil Type (Bulking Factor) <CodeTooltip standard="IS" code="1498:1970" description="Classification and identification of soils for general engineering purposes." /></span></label>
+                <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2"><span className="flex items-center">Soil Type (Bulking Factor) <CodeTooltip standard="IS" code="1498:1970" description="Classification and identification of soils for general engineering purposes." /></span></label>
                 <select
                   value={selectedSoilIndex}
                   onChange={(e) => {
@@ -165,7 +165,7 @@ export default function TopSoilFillCalculator() {
 
               {selectedSoilIndex === soilTypes.length - 1 && (
                 <div className="mb-4 fade-in">
-                  <label className="text-[11px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Custom Bulking Factor (e.g. 1.2)</label>
+                  <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Custom Bulking Factor (e.g. 1.2)</label>
                   <div className="flex items-center gap-3">
                     <span className="text-slate-400 font-bold font-mono">× </span>
                     <><label htmlFor="a11y-input-521" className="sr-only">Input</label>
@@ -181,7 +181,7 @@ export default function TopSoilFillCalculator() {
               )}
 
               <div className="mb-2">
-                <label className="text-[11px] font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Truck Capacity</label>
+                <label className="text-xs font-bold text-txt-tertiary uppercase tracking-widest block mb-2">Truck Capacity</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold"><Truck className="w-4 h-4"/></span>
                   <><label htmlFor="a11y-input-522" className="sr-only">Input</label>
@@ -191,7 +191,7 @@ export default function TopSoilFillCalculator() {
                     onChange={(e) => { setTruckCapacity(e.target.value); handleDataChange(); }}
                     className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full pl-10 pr-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 transition-all font-semibold"
                   /></>
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] font-bold uppercase tracking-widest">{isMetric ? "cu m" : "cu ft"}</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold uppercase tracking-widest">{isMetric ? "cu m" : "cu ft"}</span>
                 </div>
               </div>
 
@@ -209,7 +209,7 @@ export default function TopSoilFillCalculator() {
               <h4 className="text-sm font-bold text-amber-900 mb-3 flex items-center gap-2">
                 <Calculator className="w-4 h-4" /> Math Logic & Formulas
               </h4>
-              <ul className="text-[11px] text-amber-800/80 space-y-2 list-disc list-inside leading-relaxed uppercase tracking-wider font-semibold">
+              <ul className="text-xs text-amber-800/80 space-y-2 list-disc list-inside leading-relaxed uppercase tracking-wider font-semibold">
                 <li><strong className="lowercase">Bank Volume</strong> = Area × Depth</li>
                 <li><strong className="lowercase">Loose Volume</strong> = Bank Volume × Bulking Factor</li>
                 <li><strong className="lowercase">Truck Loads</strong> = Ceil(Loose Volume ÷ Truck Capacity)</li>
@@ -247,7 +247,7 @@ export default function TopSoilFillCalculator() {
                         {estimateData.looseVolume.toLocaleString(undefined, {maximumFractionDigits: 1})}
                         <span className="text-lg font-bold">{estimateData.volumeUnit}</span>
                       </div>
-                      <span className="text-[10px] text-amber-500/70 font-bold mt-1 block relative z-10 uppercase tracking-widest">Excavated / Fill State</span>
+                      <span className="text-xs text-amber-500/70 font-bold mt-1 block relative z-10 uppercase tracking-widest">Excavated / Fill State</span>
                     </div>
                     
                     <div className="bg-slate-50 p-5 rounded-2xl border border-ui-borderSubtle relative overflow-hidden">
@@ -256,7 +256,7 @@ export default function TopSoilFillCalculator() {
                         {estimateData.bankVolume.toLocaleString(undefined, {maximumFractionDigits: 1})}
                         <span className="text-lg font-bold">{estimateData.volumeUnit}</span>
                       </div>
-                      <span className="text-[10px] text-txt-tertiary font-bold mt-1 block relative z-10 uppercase tracking-widest">Compacted In-Ground</span>
+                      <span className="text-xs text-txt-tertiary font-bold mt-1 block relative z-10 uppercase tracking-widest">Compacted In-Ground</span>
                     </div>
                   </div>
 
@@ -264,15 +264,15 @@ export default function TopSoilFillCalculator() {
                   
                   <div className="space-y-3 mb-6">
                      <div className="bg-surface-default border border-slate-100 p-4 rounded-2xl flex justify-between items-center group hover:border-amber-200 transition-colors overflow-hidden">
-                       <span className="text-[11px] uppercase tracking-wider text-txt-tertiary font-bold">Expansion Amount</span>
+                       <span className="text-xs uppercase tracking-wider text-txt-tertiary font-bold">Expansion Amount</span>
                        <span className="text-sm font-bold tabular-nums tracking-tight text-txt-primary font-mono">+{(estimateData.looseVolume - estimateData.bankVolume).toFixed(1)} {estimateData.volumeUnit}</span>
                      </div>
                      <div className="bg-surface-default border border-slate-100 p-4 rounded-2xl flex justify-between items-center group hover:border-amber-200 transition-colors overflow-hidden">
-                       <span className="text-[11px] uppercase tracking-wider text-txt-tertiary font-bold">Swell Factor</span>
+                       <span className="text-xs uppercase tracking-wider text-txt-tertiary font-bold">Swell Factor</span>
                        <span className="text-sm font-bold tabular-nums tracking-tight text-txt-primary font-mono">{(estimateData.factor * 100 - 100).toFixed(0)}% ({estimateData.factor}x)</span>
                      </div>
                      <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle p-4 rounded-2xl flex justify-between items-center overflow-hidden">
-                       <span className="text-[11px] uppercase tracking-wider text-txt-tertiary font-bold">Est. Trucks (Capacity {estimateData.capacity} {estimateData.volumeUnit})</span>
+                       <span className="text-xs uppercase tracking-wider text-txt-tertiary font-bold">Est. Trucks (Capacity {estimateData.capacity} {estimateData.volumeUnit})</span>
                        <span className="text-sm font-bold tabular-nums tracking-tight text-txt-primary font-mono">{estimateData.truckLoads} Loads</span>
                      </div>
                   </div>

@@ -1,243 +1,176 @@
-import { Button } from './ui/Button';
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, Play, Star, BarChart3, ShieldCheck, Zap, Calculator, LayoutDashboard } from 'lucide-react';
-import { motion, useAnimation, useScroll, useTransform } from 'framer-motion';
+import React, { useState } from "react";
+import { ArrowRight, Search, FileSpreadsheet, Calculator, Layers, Ruler, CheckCircle2 } from "lucide-react";
+import { Button } from "./ui/Button";
 
+/**
+ * Landing hero.
+ * Patterns: Coursera (left-aligned value prop, one primary CTA, goal-oriented entry points)
+ *           Dribbble (search-first hero with "trending" tag pills).
+ *
+ * Fixes vs. previous hero
+ *  - Removed unverifiable claims ("99.9% Accuracy", "Trusted by 10,000+") and hotlinked pravatar.cc
+ *    stock avatars presented as real users (trust + privacy + availability risk).
+ *  - "See How It Works" had no handler (dead button); it now scrolls to the section.
+ *  - min-h-screen + absolutely-positioned "Scroll" indicator overlapped content on short screens.
+ *  - rotate-x-[12deg] / perspective-[...] are Tailwind v4 utilities and silently did nothing on v3.
+ *  - Heavy scroll-linked parallax removed (jank on mobile, ignored prefers-reduced-motion).
+ */
 
-export default function HeroSection({ onStart }: { onStart: () => void }) {
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 100]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -50]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+const TRENDING: { id: string; label: string }[] = [
+  { id: "house", label: "House cost estimate" },
+  { id: "metal-weight", label: "Steel weight" },
+  { id: "master-rcc", label: "RCC quantities" },
+  { id: "boq", label: "BOQ generator" },
+  { id: "unit-converter", label: "Unit converter" },
+];
+
+const goTo = (id: string) => window.dispatchEvent(new CustomEvent("navigate-module", { detail: id }));
+
+export default function HeroSection({ onStart, toolCount = 60 }: { onStart: () => void; toolCount?: number }) {
+  const [query, setQuery] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent("set-tool-search", { detail: query.trim() }));
+  };
+
+  const facts = [
+    { icon: Calculator, value: `${toolCount}+`, label: "calculators & workflows" },
+    { icon: FileSpreadsheet, value: "Excel + PDF", label: "export ready BOQs" },
+    { icon: Layers, value: "Metric & imperial", label: "units supported" },
+  ];
 
   return (
-    <div className="relative w-full bg-slate-50 dark:bg-[#0B0F19] overflow-hidden pt-32 md:pt-40 pb-20 flex flex-col items-center font-sans min-h-screen justify-center">
-      
-      {/* Premium Gradient Lighting Background */}
-      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-[#f58145]/20 via-[#fa5c5c]/5 to-transparent blur-[100px] rounded-full pointer-events-none z-0"></div>
-      
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwem0yMCAyMGMtMS4xIDAtMi0uOS0yLTJzLjktMiAyLTIgMiAuOSAyIDItLjkgMi0yIDJ6IiBmaWxsPSIjZjFmNWY5IiBmaWxsLW9wYWNpdHk9IjAuMSIvPjwvc3ZnPg==')] opacity-40 dark:opacity-5 pointer-events-none z-0"></div>
+    <section
+      aria-labelledby="hero-title"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-primary-50 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 pt-[calc(var(--header-h)+2.5rem)] pb-16 md:pb-24"
+    >
+      <div className="relative max-w-[1240px] mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        {/* Copy */}
+        <div className="lg:col-span-7 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-primary-700 dark:text-primary-300 bg-primary-100/70 dark:bg-primary-600/20 rounded-full px-3 py-1 mb-5">
+            <CheckCircle2 className="w-4 h-4" aria-hidden="true" /> Built on standard quantity-surveying formulas
+          </p>
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 w-full relative z-10 flex flex-col items-center justify-center text-center">
-        
-        {/* Animated Feature Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-default/60 dark:bg-slate-800/60 backdrop-blur-md border border-ui-borderSubtle/50 dark:border-slate-700/50 shadow-sm mb-8 hover:shadow-md transition-all cursor-pointer group"
-        >
-          <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#fa5c5c] to-[#f58145] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1">
-            <Zap className="w-3 h-3" /> New
-          </span>
-          <span className="text-sm font-medium text-txt-secondary dark:text-slate-300 pr-2 group-hover:text-txt-primary dark:group-hover:text-white transition-colors">
-            AI-Powered Smart Estimations 2.0
-          </span>
-          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#f58145] group-hover:translate-x-0.5 transition-all" />
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-txt-primary dark:text-white tracking-tight leading-[1.1] md:leading-[1.15] max-w-4xl mx-auto mb-6"
-        >
-          Generate Accurate BOQs in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fa5c5c] to-[#f58145]">Seconds, Not Days</span>
-        </motion.h1>
-
-        {/* Supporting Paragraph */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="text-lg md:text-xl text-txt-secondary dark:text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10 font-medium"
-        >
-          The intelligent estimation engine for modern civil engineers. Instantly calculate quantities, automate pricing, and win more bids with zero manual errors.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row items-center gap-4 mb-12 w-full sm:w-auto"
-        >
-          <Button
-            onClick={onStart}
-            variant="premium"
-            size="xl"
-            className="w-full sm:w-auto group"
-            rightIcon={<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+          <h1
+            id="hero-title"
+            className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight leading-[1.1] text-slate-900 dark:text-white"
           >
-            Start Estimating for Free
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="xl"
-            className="w-full sm:w-auto group bg-white dark:bg-slate-900"
-            leftIcon={<Play className="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 text-slate-400 group-hover:text-indigo-500 transition-colors" />}
-          >
-            See How It Works
-          </Button>
-        </motion.div>
+            Estimate quantities and costs{" "}
+            <span className="text-primary-600 dark:text-primary-300">in minutes, not days</span>
+          </h1>
 
-        {/* Trust Indicators */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="flex flex-col items-center gap-3 mb-16"
-        >
-          <div className="flex -space-x-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 overflow-hidden shadow-sm">
-                <img src={`https://i.pravatar.cc/100?img=${i + 15}`} alt="User Avatar" className="w-full h-full object-cover animate-fade-in" />
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-[#f58145] text-[#f58145]" />
+          <p className="mt-5 text-lg text-slate-600 dark:text-slate-300 max-w-xl">
+            Calculators for concrete, steel, masonry, finishes, earthworks and roads, plus a guided workflow that
+            turns your measurements into a priced Bill of Quantities.
+          </p>
+
+          {/* Dribbble-style search + trending pills */}
+          <form onSubmit={submit} role="search" className="mt-8 max-w-xl">
+            <label htmlFor="hero-search" className="sr-only">
+              Search calculators
+            </label>
+            <div className="flex items-center rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 pl-5 pr-1.5 h-14 shadow-sm focus-within:border-primary-600 focus-within:ring-4 focus-within:ring-primary-600/15 transition">
+              <Search className="w-5 h-5 text-slate-400 shrink-0" aria-hidden="true" />
+              <input
+                id="hero-search"
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="What do you need to calculate?"
+                autoComplete="off"
+                className="flex-1 min-w-0 h-full bg-transparent border-0 shadow-none focus:ring-0 focus:outline-none px-3 text-base text-slate-900 dark:text-white placeholder:text-slate-500"
+              />
+              <Button type="submit" className="rounded-full h-11 min-h-0 px-5">
+                Search
+              </Button>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <span className="text-sm font-semibold text-slate-500 dark:text-slate-400 mr-1">Trending:</span>
+              {TRENDING.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => goTo(t.id)}
+                  className="h-9 px-3.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                >
+                  {t.label}
+                </button>
               ))}
             </div>
-            <p className="text-sm font-semibold text-txt-secondary dark:text-slate-400">
-              Trusted by <span className="text-txt-primary dark:text-white font-bold">10,000+</span> professionals
-            </p>
+          </form>
+
+          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <Button size="lg" onClick={onStart} rightIcon={<ArrowRight className="w-5 h-5" aria-hidden="true" />}>
+              Start a house estimate
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              See how it works
+            </Button>
           </div>
-        </motion.div>
 
-        {/* Hero Visual Mockup */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50, damping: 20 }}
-          className="relative w-full max-w-5xl mx-auto perspective-[2000px]"
-        >
-          {/* Floating Element Left */}
-          <motion.div 
-            style={{ y: y1 }}
-            className="hidden lg:flex absolute -left-12 top-24 z-20 bg-surface-default/90 dark:bg-slate-800/90 backdrop-blur-xl border border-ui-borderSubtle/50 dark:border-slate-700/50 p-4 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-black/50 items-center gap-4"
-          >
-            <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div className="text-left">
-              <p className="text-sm font-bold text-txt-primary dark:text-white">99.9% Accuracy</p>
-              <p className="text-xs text-txt-tertiary dark:text-slate-400">Verified by engineers</p>
-            </div>
-          </motion.div>
-
-          {/* Floating Element Right */}
-          <motion.div 
-            style={{ y: y2 }}
-            className="hidden lg:flex absolute -right-8 bottom-32 z-20 bg-surface-default/90 dark:bg-slate-800/90 backdrop-blur-xl border border-ui-borderSubtle/50 dark:border-slate-700/50 p-4 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-black/50 items-center gap-4"
-          >
-            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-              <Calculator className="w-6 h-6" />
-            </div>
-            <div className="text-left">
-              <p className="text-sm font-bold text-txt-primary dark:text-white">15+ Hours Saved</p>
-              <p className="text-xs text-txt-tertiary dark:text-slate-400">Per project average</p>
-            </div>
-          </motion.div>
-
-          <div className="relative rounded-2xl md:rounded-2xl border border-ui-borderSubtle/50 dark:border-slate-700/50 bg-surface-default/40 dark:bg-slate-900/40 backdrop-blur-sm p-2 md:p-4 shadow-2xl shadow-slate-200/50 dark:shadow-black/50 transform-gpu rotate-x-[12deg] hover:rotate-x-[0deg] transition-all duration-700 ease-out origin-bottom">
-            <div className="rounded-xl md:rounded-[1.5rem] overflow-hidden bg-surface-default dark:bg-slate-950 border border-slate-100 dark:border-slate-800 shadow-inner">
-              
-              {/* Dashboard Header Mockup */}
-              <div className="h-12 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center px-4 md:px-6 gap-2">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-400/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-amber-400/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-400/80"></div>
-                </div>
-                <div className="mx-auto bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 rounded-md h-6 w-1/3 md:w-1/4 flex items-center justify-center opacity-70">
-                  <div className="w-1/2 h-1.5 bg-slate-200 dark:bg-slate-600 rounded-full"></div>
+          <dl className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
+            {facts.map(({ icon: Icon, value, label }) => (
+              <div key={label} className="flex items-center gap-3">
+                <span className="w-10 h-10 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-primary-600 dark:text-primary-300 flex items-center justify-center shrink-0">
+                  <Icon className="w-5 h-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <dt className="font-bold text-slate-900 dark:text-white leading-tight">{value}</dt>
+                  <dd className="text-sm text-slate-600 dark:text-slate-400 leading-tight">{label}</dd>
                 </div>
               </div>
+            ))}
+          </dl>
+        </div>
 
-              {/* Dashboard Body Mockup */}
-              <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                {/* Left Sidebar Mock */}
-                <div className="hidden md:flex flex-col gap-4 col-span-1">
-                  <div className="h-8 w-2/3 bg-slate-100 dark:bg-slate-800 rounded-lg"></div>
-                  <div className="h-4 w-1/2 bg-slate-50 dark:bg-slate-800/50 rounded flex items-center px-2 mt-4"><LayoutDashboard className="w-3 h-3 text-slate-400 mr-2" /></div>
-                  <div className="h-4 w-3/4 bg-slate-50 dark:bg-slate-800/50 rounded flex items-center px-2"><BarChart3 className="w-3 h-3 text-slate-400 mr-2" /></div>
-                  <div className="h-4 w-2/3 bg-slate-50 dark:bg-slate-800/50 rounded flex items-center px-2"><Calculator className="w-3 h-3 text-slate-400 mr-2" /></div>
-                  
-                  <div className="mt-8 bg-gradient-to-br from-[#fa5c5c]/10 to-[#f58145]/10 rounded-xl p-4 border border-[#fa5c5c]/20">
-                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#fa5c5c] to-[#f58145] mb-2"></div>
-                     <div className="h-3 w-3/4 bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
-                     <div className="h-2 w-1/2 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        {/* Product preview (static, decorative) */}
+        <div className="lg:col-span-5 hidden md:block animate-in fade-in slide-in-from-bottom-8 duration-700" aria-hidden="true">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-brand-lg overflow-hidden">
+            <div className="h-11 px-4 flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+              <span className="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-600" />
+              <span className="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-600" />
+              <span className="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-600" />
+              <span className="ml-3 text-xs font-semibold text-slate-500 dark:text-slate-400">RCC Slab · Quantity takeoff</span>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { k: "Concrete", v: "12.4 m³" },
+                  { k: "Steel", v: "1,046 kg" },
+                  { k: "Cement", v: "89 bags" },
+                ].map((m) => (
+                  <div key={m.k} className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
+                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">{m.k}</p>
+                    <p className="mt-1 text-lg font-bold tabular-nums text-slate-900 dark:text-white">{m.v}</p>
                   </div>
-                </div>
-
-                {/* Main Content Mock */}
-                <div className="col-span-1 md:col-span-2 flex flex-col gap-6">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="h-6 w-48 bg-slate-200 dark:bg-slate-700 rounded-md mb-2"></div>
-                      <div className="h-3 w-32 bg-slate-100 dark:bg-slate-800 rounded"></div>
-                    </div>
-                    <div className="h-8 w-24 bg-gradient-to-r from-[#fa5c5c] to-[#f58145] rounded-full"></div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-4">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
-                        <div className="h-3 w-16 bg-slate-200 dark:bg-slate-700 rounded mb-3"></div>
-                        <div className="h-6 w-24 bg-slate-300 dark:bg-slate-600 rounded"></div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex-1 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-4">
-                    <div className="h-4 w-32 bg-slate-200 dark:bg-slate-700 rounded mb-6"></div>
-                    <div className="space-y-4">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800 last:border-0 last:pb-0">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-md bg-slate-200 dark:bg-slate-700"></div>
-                            <div className="space-y-2">
-                              <div className="h-3 w-24 bg-slate-300 dark:bg-slate-600 rounded"></div>
-                              <div className="h-2 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                            </div>
-                          </div>
-                          <div className="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
+              <div className="rounded-xl border border-slate-200 dark:border-slate-700 divide-y divide-slate-100 dark:divide-slate-800">
+                {[
+                  ["Excavation", "38.2 m³"],
+                  ["PCC 1:4:8", "2.1 m³"],
+                  ["RCC 1:2:4", "12.4 m³"],
+                  ["Brick masonry", "21.7 m³"],
+                ].map(([a, b]) => (
+                  <div key={a} className="flex items-center justify-between px-4 py-2.5 text-sm">
+                    <span className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                      <Ruler className="w-4 h-4 text-primary-600 dark:text-primary-300" /> {a}
+                    </span>
+                    <span className="font-semibold tabular-nums text-slate-900 dark:text-white">{b}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Illustrative sample values.</p>
             </div>
           </div>
-          
-          {/* Subtle reflection/shadow below mockup */}
-          <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-4/5 h-24 bg-[#fa5c5c]/20 blur-[80px] rounded-[100%] pointer-events-none"></div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          style={{ opacity }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <span className="text-xs font-semibold text-slate-400 dark:text-txt-tertiary uppercase tracking-widest">Scroll</span>
-          <motion.div 
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-5 h-8 rounded-full border-2 border-ui-borderDefault dark:border-slate-600 flex justify-center p-1"
-          >
-            <div className="w-1 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full"></div>
-          </motion.div>
-        </motion.div>
-
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

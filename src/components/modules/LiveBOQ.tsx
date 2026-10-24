@@ -63,7 +63,7 @@ function BOQRow({
   const useManual = isLinked ? !!row.isManualOverride : true;
   return (
     <tr className="hover:bg-transparent transition-colors group">
-      <td className="py-2 px-3 font-mono text-blue-400 text-[10px]">
+      <td className="py-2 px-3 font-mono text-blue-400 text-xs">
         {row.id}
       </td>
       <td className="py-2 px-3 text-txt-primary">{row.desc}</td>
@@ -130,7 +130,7 @@ function BOQRow({
       </td>
       <td className="py-2 px-3 text-right relative">
         <div
-          className="bg-transparent border border-ui-borderSubtle rounded px-2 py-1 text-[10px] text-txt-primary w-full cursor-pointer flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity"
+          className="bg-transparent border border-ui-borderSubtle rounded px-2 py-1 text-xs text-txt-primary w-full cursor-pointer flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           <span className="truncate flex-1 text-left w-20">
@@ -148,7 +148,7 @@ function BOQRow({
             />
             <div className="w-full absolute right-3 top-8 w-44 bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-xl z-20 py-2 flex flex-col gap-1 max-h-48 overflow-y-auto overflow-hidden">
               <div className="px-2 pb-1 border-b border-ui-borderSubtle mb-1">
-                <span className="text-[10px] text-txt-secondary font-semibold uppercase">
+                <span className="text-xs text-txt-secondary font-semibold uppercase">
                   Measurements
                 </span>
               </div>
@@ -199,7 +199,7 @@ function BOQRow({
                       <span className="truncate flex-1" title={m.name}>
                         {m.name}
                       </span>
-                      <div className="flex items-center gap-1 text-[9px] text-txt-secondary mt-0.5">
+                      <div className="flex items-center gap-1 text-xs text-txt-secondary mt-0.5">
                         <span>{typeIcon}</span>
                         <span className="font-mono">{valStr}</span>
                       </div>
@@ -401,7 +401,7 @@ export default function LiveBOQ() {
               <tr>
                 <th
                   colSpan={6}
-                  className="py-3 px-3 text-right text-[10px] text-txt-secondary uppercase font-semibold"
+                  className="py-3 px-3 text-right text-xs text-txt-secondary uppercase font-semibold"
                 >
                   Total Estimated Cost
                 </th>
@@ -428,7 +428,7 @@ export default function LiveBOQ() {
             </h3>
             <div className="flex flex-col gap-4 mb-6">
               <div>
-                <label className="block text-[10px] font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
                   Project Name
                 </label>
                 <><label htmlFor="a11y-input-320" className="sr-only">Input</label>
@@ -445,7 +445,7 @@ export default function LiveBOQ() {
                 /></>
               </div>
               <div>
-                <label className="block text-[10px] font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
                   Client Name
                 </label>
                 <><label htmlFor="a11y-input-321" className="sr-only">Input</label>
@@ -462,7 +462,7 @@ export default function LiveBOQ() {
                 /></>
               </div>
               <div>
-                <label className="block text-[10px] font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-txt-secondary mb-1.5">
                   Site Location
                 </label>
                 <><label htmlFor="a11y-input-322" className="sr-only">Input</label>

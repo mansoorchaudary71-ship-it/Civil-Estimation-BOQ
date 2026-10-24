@@ -46,7 +46,7 @@ export function HowItWorksSection() {
   ];
 
   return (
-    <div className="w-full py-20 bg-[#F8F9FB] relative overflow-hidden" ref={(node) => { ref(node); if(containerRef) containerRef.current = node; }}>
+    <div id="how-it-works" className="w-full py-20 bg-[#F8F9FB] dark:bg-slate-950 relative overflow-hidden scroll-mt-24" ref={(node) => { ref(node); if(containerRef) containerRef.current = node; }}>
       {/* Background glow effects */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#FFFFFF]/5 rounded-full blur-[100px] pointer-events-none" />

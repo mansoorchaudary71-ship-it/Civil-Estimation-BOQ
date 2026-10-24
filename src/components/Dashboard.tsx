@@ -49,6 +49,7 @@ import { SEO } from "./SEO";
 import SearchAndFilterBar from "./SearchAndFilterBar";
 import HeroSection from "./HeroSection";
 import SocialProofSection from "./SocialProofSection";
+import GoalTabs from "./GoalTabs";
 import CategoryHub from "./CategoryHub";
 import WorkspaceSection from "./WorkspaceSection";
 import SummaryStatsWidget from "./SummaryStatsWidget";
@@ -1022,6 +1023,18 @@ export default function Dashboard({
  const { recentTools, addRecentTool } = useRecentTools();
  const [searchTerm, setSearchTerm] = useState("");
  const [activeCategory, setActiveCategory] = useState("All Tools");
+ 
+ // Hero search box dispatches this; filter the catalogue and scroll to it.
+ useEffect(() => {
+   const onToolSearch = (e: Event) => {
+     const term = String((e as CustomEvent).detail ?? "");
+     setSearchTerm(term);
+     setActiveCategory("All Tools");
+     setTimeout(() => document.getElementById("tools")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+   };
+   window.addEventListener("set-tool-search", onToolSearch);
+   return () => window.removeEventListener("set-tool-search", onToolSearch);
+ }, []);
  const [isAiChatOpen, setIsAiChatOpen] = useState(false);
  const [isRecentOpen, setIsRecentOpen] = useState(false);
  const [aiMessage, setAiMessage] = useState("");
@@ -1176,11 +1189,9 @@ export default function Dashboard({
  />
 
  {!user ? (
- <div className="w-full flex flex-col pt-0 pb-0 bg-[#F8F9FB] overflow-x-hidden border-0 rounded-none">
- <HeroSection onStart={() => handleSelect('house')} />
- <ScrollReveal><SocialProofSection /></ScrollReveal>
- <ScrollReveal yOffset={30}><HowItWorksSection /></ScrollReveal>
- <ScrollReveal yOffset={30}><FeatureComparisonSection /></ScrollReveal>
+ <div className="w-full flex flex-col pt-0 pb-0 bg-[#F8F9FB] overflow-x-clip border-0 rounded-none">
+ <HeroSection onStart={() => handleSelect('house')} toolCount={ALL_MODULES.length} />
+ <GoalTabs modules={ALL_MODULES as any} onSelect={(id) => handleSelect(id)} />
  <div className="w-full bg-slate-50/50 pb-0 pt-4 -mt-8 relative z-10  border-t border-ui-borderSubtle/60 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] overflow-visible">
  {/* Premium Ambient Background */}
  <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]" 
@@ -1212,6 +1223,9 @@ export default function Dashboard({
  </div>
  </div>
  </div>
+ <ScrollReveal><SocialProofSection /></ScrollReveal>
+ <ScrollReveal yOffset={30}><HowItWorksSection /></ScrollReveal>
+ <ScrollReveal yOffset={30}><FeatureComparisonSection /></ScrollReveal>
  </div>
  ) : (
  <>
@@ -1426,7 +1440,7 @@ Open Calculator
  <h3 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
  AI Estimator
  </h3>
- <span className="text-[11px] font-semibold text-indigo-700 uppercase tracking-wider mt-0.5">Premium Copilot</span>
+ <span className="text-xs font-semibold text-indigo-700 uppercase tracking-wider mt-0.5">Premium Copilot</span>
  </div>
  </div>
  <Button

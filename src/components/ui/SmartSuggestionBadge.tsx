@@ -37,7 +37,7 @@ export function SmartSuggestionBadge({
   return (
     <Button
       onClick={handleClick}
-      className={`group inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] sm:text-xs font-medium rounded-full bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition-colors duration-300 ease-in-out cursor-pointer whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 border border-indigo-100 hover:border-indigo-600 ${className}`}
+      className={`group inline-flex items-center gap-1.5 px-2.5 py-1 text-xs sm:text-xs font-medium rounded-full bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition-colors duration-300 ease-in-out cursor-pointer whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 border border-indigo-100 hover:border-indigo-600 ${className}`}
       title={`Go to ${label}`}
       type="button"
     >

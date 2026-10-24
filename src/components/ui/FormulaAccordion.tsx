@@ -72,7 +72,7 @@ export function FormulaAccordion({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Theoretical Formula */}
                     <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 relative">
-                      <span className="absolute top-0 right-0 bg-slate-200 text-txt-secondary text-[10px] font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
+                      <span className="absolute top-0 right-0 bg-slate-200 text-txt-secondary text-xs font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
                         Theoretical Formula
                       </span>
                       <div className="mt-2 font-mono text-sm text-txt-secondary overflow-x-auto whitespace-pre-wrap leading-relaxed">
@@ -82,7 +82,7 @@ export function FormulaAccordion({
                     
                     {/* Applied Formula */}
                     <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-100 relative">
-                      <span className="absolute top-0 right-0 bg-indigo-200 text-indigo-800 text-[10px] font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
+                      <span className="absolute top-0 right-0 bg-indigo-200 text-indigo-800 text-xs font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
                         Applied Values
                       </span>
                       <div className="mt-2 font-mono text-sm text-indigo-900 overflow-x-auto whitespace-pre-wrap leading-relaxed font-semibold">

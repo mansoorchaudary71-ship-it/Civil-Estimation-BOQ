@@ -129,13 +129,13 @@ export default function PakistanCostCalculatorPage() {
         {/* Section 1: H1 SEO Header */}
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="px-3 py-1.5 md:py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full text-[10px] uppercase tracking-wider font-bold shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full text-xs uppercase tracking-wider font-bold shadow-sm flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5" /> 2025 Rates
             </span>
-            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-[10px] uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" /> Pakistan
             </span>
-            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-[10px] uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5" /> Local Units (Marla/Kanal)
             </span>
           </div>
@@ -186,7 +186,7 @@ export default function PakistanCostCalculatorPage() {
                        </Button>
                      ))}
                   </div>
-                  {unit === "Marla" && <p className="text-[10px] text-amber-500 mt-2 font-medium">*Using Punjab std: 1 Marla = 272.25 Sq.Ft</p>}
+                  {unit === "Marla" && <p className="text-xs text-amber-500 mt-2 font-medium">*Using Punjab std: 1 Marla = 272.25 Sq.Ft</p>}
                 </div>
               </div>
 
@@ -303,7 +303,7 @@ export default function PakistanCostCalculatorPage() {
               {/* Disclaimer */}
               <div className="bg-[#FFFFFF] border border-amber-200 rounded-xl p-4 flex gap-3 items-start shrink-0">
                 <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-[11px] leading-relaxed text-txt-secondary">
+                <p className="text-xs leading-relaxed text-txt-secondary">
                   <strong className="text-txt-secondary">Disclaimer:</strong> These are 2025 standard market rates. Exact costs vary based on design complexity, material inflation, transportation, and plot conditions. It does not include boundary wall, architect fee, or external utility connections.
                 </p>
               </div>

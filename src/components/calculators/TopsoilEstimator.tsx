@@ -255,7 +255,7 @@ export function TopsoilEstimator() {
                     onChange={(e) => setCompactionFactor(Math.max(0, Number(e.target.value)))}
                     className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-orange-500 outline-none"
                   />
-                  <p className="text-[10px] text-txt-tertiary">Extra material needed due to settling.</p>
+                  <p className="text-xs text-txt-tertiary">Extra material needed due to settling.</p>
                 </div>
               </div>
             </div>
@@ -333,7 +333,7 @@ export function TopsoilEstimator() {
                         ? `${Math.ceil(result.weightKg / 25)} ` 
                         : `${Math.ceil(result.weightKg / (50 * 0.453592))} `}
                     </div>
-                    <div className="text-[10px] text-slate-400">{unitSystem === 'metric' ? '25 kg bags' : '50 lb bags'}</div>
+                    <div className="text-xs text-slate-400">{unitSystem === 'metric' ? '25 kg bags' : '50 lb bags'}</div>
                   </div>
                   
                   <div className="bg-surface-default/5 rounded-2xl p-3 border border-white/5">
@@ -347,7 +347,7 @@ export function TopsoilEstimator() {
                         ? Math.ceil(result.volumeGross / 10) 
                         : Math.ceil((result.volumeGross * 1.30795) / 12)}
                     </div>
-                    <div className="text-[10px] text-slate-400">{unitSystem === 'metric' ? '10 m³ trucks' : '12 yd³ trucks'}</div>
+                    <div className="text-xs text-slate-400">{unitSystem === 'metric' ? '10 m³ trucks' : '12 yd³ trucks'}</div>
                   </div>
                 </div>
               </div>

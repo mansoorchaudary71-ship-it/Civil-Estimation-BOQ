@@ -432,11 +432,11 @@ export default function SlabEstimator() {
                       
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-surface-default/60 p-4 rounded-2xl border border-teal-100 overflow-hidden">
-                          <span className="text-[10px] sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Single Element Wt</span>
+                          <span className="text-xs sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Single Element Wt</span>
                           <span className="text-xl md:text-2xl font-bold tabular-nums tracking-tight text-txt-primary">{(results.elementWeightKg / 1000).toFixed(2)}<span className="text-sm font-medium ml-1 text-txt-tertiary">Tons</span></span>
                         </div>
                         <div className="w-full bg-surface-default/80 p-4 rounded-2xl border border-teal-200 shadow-sm overflow-hidden">
-                          <span className="text-[10px] sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Min. Crane Capacity</span>
+                          <span className="text-xs sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Min. Crane Capacity</span>
                           <span className="text-xl md:text-2xl font-bold tabular-nums tracking-tight text-teal-700">{results.craneCapacityTonnes.toFixed(2)}<span className="text-sm font-medium ml-1 text-teal-600/80">Tons</span></span>
                         </div>
                       </div>
@@ -479,7 +479,7 @@ export default function SlabEstimator() {
               </div>
 
               <div className="mt-8 pt-6 border-t border-ui-borderSubtle/50">
-                <div className="mb-4 text-[10px] sm:text-xs font-bold tracking-tight text-txt-tertiary uppercase tracking-[0.15em]">
+                <div className="mb-4 text-xs sm:text-xs font-bold tracking-tight text-txt-tertiary uppercase tracking-[0.15em]">
                   Rebar Breakdown
                 </div>
                 <div className="w-full bg-surface-default/50 rounded-2xl p-4 shadow-sm text-txt-primary border border-ui-borderSubtle/50 backdrop-blur-md overflow-hidden">

@@ -1,12 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import './styles/tokens.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /* `clip` (not `hidden`): hidden turns html/body into scroll containers, which
+     stops every `position: sticky` element (filter bar, tool headers) from sticking. */
   html, body {
-    overflow-x: hidden;
+    overflow-x: clip;
+  }
+  html {
+    scroll-padding-top: calc(var(--header-h) + 16px);
+    -webkit-text-size-adjust: 100%;
+  }
+  ::selection {
+    background: rgb(var(--color-primary-600) / 0.2);
   }
   body {
     @apply antialiased subpixel-antialiased text-slate-900 dark:text-slate-50 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 font-sans;
@@ -518,11 +527,11 @@ html.high-contrast a {
 /* Ensure html and body take full width and handle main scroll */
 html, body {
   min-height: 100vh;
+  min-height: 100dvh; /* mobile browsers: 100vh includes the collapsing URL bar */
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: clip;   /* see note above: never `hidden`, it breaks sticky */
 }
 
 @layer utilities {
@@ -969,83 +978,26 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
 }
 
 @layer components {
-  /* Button Standardization */
-  button, .btn {
-    font-weight: var(--text-button-weight) !important;
-    letter-spacing: var(--text-button-ls) !important;
+  /* Buttons: centre content, but never force weight/spacing (utilities must win). */
+  :where(button, .btn) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    /* Vertically center the text */
   }
 
-  /* Card Typography Enhancements */
-  .card h3, .card h4, [class*="card"] h3, [class*="card"] h4 {
-    font-weight: 700 !important;
-    letter-spacing: -0.01em !important;
-    margin-bottom: 0.5rem;
-  }
-
-  .card p, [class*="card"] p {
-    color: var(--color-text-secondary); /* slate-500 */
-    line-height: 1.5;
-  }
-  .dark .card p, .dark [class*="card"] p {
-    color: var(--color-text-tertiary); /* slate-400 */
-  }
-  
-  /* Footer Typography */
-  footer h3, footer h4, [class*="footer"] h3, [class*="footer"] h4 {
-    font-weight: 600 !important;
-    letter-spacing: 0.02em !important;
-    text-transform: uppercase;
-    font-size: 0.875rem !important; /* text-sm */
-    color: var(--color-text-primary); /* slate-900 */
-    margin-bottom: 1rem;
-  }
-  .dark footer h3, .dark footer h4, .dark [class*="footer"] h3, .dark [class*="footer"] h4 {
-    color: var(--color-text-inverse); /* slate-50 */
-  }
-
-  footer a, [class*="footer"] a {
-    color: var(--color-text-secondary); /* slate-500 */
-    font-size: 0.875rem !important; /* text-sm */
-    transition: color 0.2s ease;
-  }
-  .dark footer a, .dark [class*="footer"] a {
-    color: var(--color-text-tertiary); /* slate-400 */
-  }
-  footer a:hover, [class*="footer"] a:hover {
-    color: var(--color-text-primary); /* slate-900 */
-  }
-  .dark footer a:hover, .dark [class*="footer"] a:hover {
-    color: var(--color-text-inverse); /* slate-50 */
-  }
-
-  /* Navigation Typography */
-  nav a, [class*="nav"] a, header a {
-    font-weight: 500;
-    font-size: 0.9375rem; /* 15px */
-    letter-spacing: 0;
-  }
-}
-
-
-
-  /* Navigation Hover & Active */
-  nav a:hover, [class*="nav"] a:hover, header a:hover {
-    color: var(--color-text-primary); /* slate-900 */
-    opacity: 1 !important;
-  }
-  .dark nav a:hover, .dark [class*="nav"] a:hover, .dark header a:hover {
-    color: var(--color-text-inverse); /* slate-50 */
-  }
-  
-  /* Inputs */
-  input:focus, textarea:focus, select:focus {
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Focus ring */
+  /* Visible, consistent keyboard focus for form controls (replaces the old
+     unlayered `input:focus` rule that suppressed the outline everywhere). */
+  input:not([type="checkbox"]):not([type="radio"]):focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
     outline: none;
+    border-color: rgb(var(--color-primary-600));
+    box-shadow: 0 0 0 3px rgb(var(--color-primary-600) / 0.25);
   }
+
+  /* Hide number-input steppers on touch + keep numbers aligned */
+  input[type="number"] { font-variant-numeric: tabular-nums; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -1054,4 +1006,41 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+/* ==========================================================================
+   Cross-cutting UX layer (added in the Coursera/Dribbble UI pass)
+   ========================================================================== */
+
+/* Dark-mode safety net: 57 components hard-code light-only hex backgrounds with
+   no `dark:` variant, which rendered pale panels with light text in dark mode. */
+.dark [class*="bg-[#f8f9fa]"]:not([class*="dark:bg"]),
+.dark [class*="bg-[#F8F9FB]"]:not([class*="dark:bg"]),
+.dark [class*="bg-[#F0F4F8]"]:not([class*="dark:bg"]),
+.dark [class*="bg-[#f8fafc]"]:not([class*="dark:bg"]) {
+  background-color: rgb(var(--color-bg-surface)) !important;
+}
+.dark [class*="bg-slate-50/50"]:not([class*="dark:bg"]) {
+  background-color: rgb(var(--color-bg-base) / 0.5);
+}
+
+/* Responsive tables: never let a wide BOQ table push the page sideways. */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { font-variant-numeric: tabular-nums; }
+
+/* Hide scrollbars on horizontal chip rows while keeping them scrollable. */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Touch targets: WCAG 2.5.8 / Apple HIG ask for >= 44px on coarse pointers. */
+@media (pointer: coarse) {
+  button, [role="button"], a.btn, select, input:not([type="checkbox"]):not([type="radio"]) {
+    min-height: 44px;
+  }
+}
+
+/* Respect reduced motion for the animated gradient + marquee helpers too. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient, .hero-mesh-gradient, [class*="animate-gradient-x"], .animate-marquee { animation: none !important; }
 }

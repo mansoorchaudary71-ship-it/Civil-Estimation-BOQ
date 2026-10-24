@@ -27,7 +27,7 @@ export function CalcInput({
       transition={{ duration: 0.4, ease: "easeOut", delay }}
       className={`flex flex-col gap-1.5 ${className}`}
     >
-      <label className="text-txt-secondary dark:text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] mb-1">
+      <label className="text-txt-secondary dark:text-slate-300 text-xs font-black uppercase tracking-[0.2em] mb-1">
         {label}
       </label>
       <div className="relative flex items-center">
@@ -43,7 +43,7 @@ export function CalcInput({
           {...props}
         /></>
         {unit && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-700 dark:text-indigo-400 text-[10px] font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-lg select-none pointer-events-none border border-indigo-100 dark:border-indigo-800/50">
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-700 dark:text-indigo-400 text-xs font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-lg select-none pointer-events-none border border-indigo-100 dark:border-indigo-800/50">
             {unit}
           </span>
         )}

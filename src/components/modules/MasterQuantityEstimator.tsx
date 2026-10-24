@@ -173,7 +173,7 @@ export default function MasterQuantityEstimator({
                     onClick={() => setExpandedGroup(isExpanded && searchTerm === "" ? null : group)}
                     className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-default dark:hover:bg-slate-800 transition-all group/group-btn"
                   >
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-slate-300">{group}</span>
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-slate-300">{group}</span>
                     <ChevronDown className={`w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                   </Button>
                   {isExpanded && (
@@ -231,13 +231,13 @@ export default function MasterQuantityEstimator({
 
                       {activeCalculator.sharedDependencies && activeCalculator.sharedDependencies.length > 0 && (
                          <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 mt-4">
-                           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-slate-300 mb-4 ml-1">Linked State Inputs</p>
+                           <p className="text-xs font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-slate-300 mb-4 ml-1">Linked State Inputs</p>
                            <div className="bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800/50 overflow-hidden">
                              {activeCalculator.sharedDependencies.map((dep, idx) => (
                                <div key={dep} className={`flex justify-between items-center px-4 py-3.5 ${idx !== 0 ? 'border-t border-slate-100 dark:border-slate-800/30' : ''}`}>
                                   <div className="flex items-center gap-3">
                                     <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/80 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
-                                    <span className="font-mono text-[11px] font-black text-txt-primary dark:text-slate-100 uppercase tracking-wider">{dep}</span>
+                                    <span className="font-mono text-xs font-black text-txt-primary dark:text-slate-100 uppercase tracking-wider">{dep}</span>
                                   </div>
                                   <span className="font-black text-sm tracking-tight text-indigo-700 dark:text-indigo-400">{(sharedState[dep] || 0).toFixed(2)}</span>
                                </div>

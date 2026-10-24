@@ -78,7 +78,7 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
           </p>
         </div>
         <div className="flex flex-col items-start w-full sm:w-1/3">
-          <label className="text-[10px] uppercase font-bold text-slate-400 mb-1">
+          <label className="text-xs uppercase font-bold text-slate-400 mb-1">
             Variable Multiplier: {sliderValue}%
           </label>
           <><label htmlFor="a11y-input-583" className="sr-only">Input</label>
@@ -155,7 +155,7 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex justify-between items-center text-[10px] font-medium text-slate-400 mt-2">
+      <div className="flex justify-between items-center text-xs font-medium text-slate-400 mt-2">
         <span>{xLabel} (Low)</span>
         <span>{xLabel} (High)</span>
       </div>

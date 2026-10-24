@@ -398,7 +398,7 @@ function ResultRow({ label, value, unit, digits = 2 }: { label: string, value: n
 function SummaryPill({ label, value }: { label: string, value: number }) {
   return (
     <div className="flex flex-col shrink-0">
-      <span className="text-[10px] uppercase font-bold text-txt-tertiary dark:text-slate-400 tracking-wider">{label}</span>
+      <span className="text-xs uppercase font-bold text-txt-tertiary dark:text-slate-400 tracking-wider">{label}</span>
       <span className="text-lg font-black text-txt-primary dark:text-white leading-none mt-1">
         {isNaN(value) || !isFinite(value) ? "0" : value.toLocaleString()}
       </span>

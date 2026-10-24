@@ -254,7 +254,7 @@ export function ResultCard({
                 {icon}
               </div>
             )}
-            <h4 className="text-[10px] sm:text-xs font-black text-txt-tertiary dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 min-w-0 flex-1 break-words">
+            <h4 className="text-xs sm:text-xs font-black text-txt-tertiary dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 min-w-0 flex-1 break-words">
               {title}
               {explanation && (
                 <Button
@@ -275,7 +275,7 @@ export function ResultCard({
                 <div className="w-1 bg-current h-2/3 rounded-full" />
                 <div className="w-1 bg-current h-full rounded-full animate-pulse" />
               </div>
-              <span className="text-[10px] font-black opacity-80 uppercase tracking-wider">
+              <span className="text-xs font-black opacity-80 uppercase tracking-wider">
                 {comparisonText}
               </span>
             </div>
@@ -284,13 +284,13 @@ export function ResultCard({
 
         <div className="flex flex-col items-end gap-2">
           {badge && (
-            <div className="flex-shrink-0 flex items-center bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 text-indigo-700 dark:text-indigo-300 text-[10px] sm:text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
+            <div className="flex-shrink-0 flex items-center bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 text-indigo-700 dark:text-indigo-300 text-xs sm:text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
               {badge}
             </div>
           )}
           {statusDetails && StatusIcon && (
             <div
-              className={`flex items-center gap-1 text-[10px] uppercase tracking-wider font-black px-2 py-0.5 rounded-full ${statusDetails.className}`}
+              className={`flex items-center gap-1 text-xs uppercase tracking-wider font-black px-2 py-0.5 rounded-full ${statusDetails.className}`}
             >
               <StatusIcon className="w-3 h-3" />
               {statusDetails.label}
@@ -324,7 +324,7 @@ export function ResultCard({
         </div>
 
         {secondaryValue !== undefined && secondaryUnit && (
-          <div className="text-[11px] sm:text-xs font-bold text-txt-tertiary mt-0.5">
+          <div className="text-xs sm:text-xs font-bold text-txt-tertiary mt-0.5">
             ={" "}
             {typeof secondaryValue === "number"
               ? secondaryValue.toLocaleString("en-US", {
@@ -336,7 +336,7 @@ export function ResultCard({
         )}
 
         {description && !secondaryValue && (
-          <div className="text-[11px] sm:text-xs text-txt-tertiary font-medium leading-relaxed max-w-full break-words mt-1">
+          <div className="text-xs sm:text-xs text-txt-tertiary font-medium leading-relaxed max-w-full break-words mt-1">
             {description}
           </div>
         )}
@@ -353,7 +353,7 @@ export function ResultCard({
             <div className="mt-3 pt-3 border-t border-slate-100">
               <div className="flex items-start gap-2 text-txt-secondary">
                 <Info className="w-4 h-4 mt-0.5 opacity-80 text-[#6B46C1]" />
-                <p className="text-[11px] sm:text-xs opacity-90 leading-relaxed font-medium">
+                <p className="text-xs sm:text-xs opacity-90 leading-relaxed font-medium">
                   {explanation}
                 </p>
               </div>

@@ -167,7 +167,7 @@ export default function PermeabilityCalculator() {
                         <div className="mt-6 flex flex-col gap-4">
                              <div className="bg-surface-default border border-ui-borderSubtle p-5 rounded-2xl flex items-center justify-between overflow-hidden">
                                  <div>
-                                     <span className="block text-[11px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Soil Classification</span>
+                                     <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Soil Classification</span>
                                      <span className="text-base font-medium">{results.soilClass}</span>
                                  </div>
                                  <Filter className="w-8 h-8 text-blue-500/50" />
@@ -175,11 +175,11 @@ export default function PermeabilityCalculator() {
 
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Raw Permeability (k_T)</span>
+                                     <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Raw Permeability (k_T)</span>
                                      <span className="text-lg font-mono font-bold text-txt-secondary">{results.k > 0 ? results.k.toExponential(3) : "0"} cm/s</span>
                                  </div>
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
-                                     <span className="block text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-1">Viscosity Correction (Rt)</span>
+                                     <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Viscosity Correction (Rt)</span>
                                      <span className="text-lg font-mono font-bold text-txt-secondary">{results.Rt.toFixed(3)}</span>
                                  </div>
                              </div>
@@ -190,19 +190,19 @@ export default function PermeabilityCalculator() {
                                  <Calculator className="w-4 h-4" /> Darcy's Law Application
                              </h4>
                              {testMethod === "constant" ? (
-                                <div className="text-[11px] font-medium text-blue-800/80 space-y-2">
+                                <div className="text-xs font-medium text-blue-800/80 space-y-2">
                                   <p>The constant head test relies on a steady continuous flow through the sample.</p>
                                   <div className="font-mono bg-blue-100/50 p-2 rounded block">k = (Q × L) / (A × h × t)</div>
                                   <p>Where <strong>Q</strong> = Volume collected, <strong>L</strong> = Sample length, <strong>A</strong> = Sample area, <strong>h</strong> = Hydraulic head.</p>
                                 </div>
                              ) : (
-                                <div className="text-[11px] font-medium text-blue-800/80 space-y-2">
+                                <div className="text-xs font-medium text-blue-800/80 space-y-2">
                                   <p>The falling head test tracks the drop of hydraulic head in a standpipe over time for fine-grained soils.</p>
                                   <div className="font-mono bg-blue-100/50 p-2 rounded block">k = 2.303 × (a × L) / (A × t) × log₁₀(h₁ / h₂)</div>
                                   <p>Where <strong>a</strong> = Standpipe area, <strong>L</strong> = Sample length, <strong>A</strong> = Sample area, <strong>h₁</strong>, <strong>h₂</strong> = Heads.</p>
                                 </div>
                              )}
-                             <p className="text-[10px] text-blue-600/70 mt-3 font-semibold uppercase tracking-wider">Note: Final k is corrected to equivalent water viscosity at 20°C (k₂₀ = k_T × R_T).</p>
+                             <p className="text-xs text-blue-600/70 mt-3 font-semibold uppercase tracking-wider">Note: Final k is corrected to equivalent water viscosity at 20°C (k₂₀ = k_T × R_T).</p>
                         </div>
                     </MaterialSummary>
                 </div>

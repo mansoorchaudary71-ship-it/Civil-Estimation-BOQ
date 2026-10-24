@@ -71,7 +71,7 @@ export default function FormulaTransparencyCard({
                         <span className="text-xs text-txt-tertiary dark:text-slate-400 font-medium">{c.name}</span>
                         <div className="text-right">
                           <span className="text-sm font-bold text-txt-primary dark:text-slate-200">{c.value}</span>
-                          <span className="text-[10px] text-slate-400 ml-1">{c.unit}</span>
+                          <span className="text-xs text-slate-400 ml-1">{c.unit}</span>
                         </div>
                       </div>
                     ))}

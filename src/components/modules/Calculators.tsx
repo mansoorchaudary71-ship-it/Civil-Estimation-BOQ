@@ -584,7 +584,18 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
     } as any;
     content =
       activeTab === "bricks" ? (
-        <Brickwork9InchModule hideHistory={true} />
+        <>
+          <div className="mb-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl px-4 py-3 text-sm">
+            <a href="/brick-calculator" className="font-semibold text-blue-700 dark:text-blue-300 hover:underline">
+              Open the full Brick Calculator →
+            </a>{" "}
+            <span className="text-txt-secondary">
+              Wall thickness, openings, brick sizes for Pakistan / India / UAE, cost in PKR, INR
+              or AED, plus PDF, print and share.
+            </span>
+          </div>
+          <Brickwork9InchModule hideHistory={true} />
+        </>
       ) : (
         <div className="space-y-6 bg-transparent/50 px-4 py-3 rounded-2xl border w-full overflow-hidden">
           <h3 className="border-b pb-2 uppercase st text-lg font-medium text-txt-primary mb-4">

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { HelmetProvider } from 'react-helmet-async'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { initReactivity } from './lib/ReactivityEngine'
 
 initReactivity();
@@ -11,9 +11,9 @@ initReactivity();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HelmetProvider>
-      <HashRouter>
+      <BrowserRouter>
         <App />
-      </HashRouter>
+      </BrowserRouter>
     </HelmetProvider>
   </React.StrictMode>,
 )

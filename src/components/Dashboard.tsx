@@ -82,6 +82,7 @@ function formatTimeAgo(timestamp: number) {
 export type ModuleId = string;
 export const ALL_MODULES = [
   { id: "master-finishes", title: "Complete Finishes Workspace", desc: "Bricks, plaster, paint, flooring, countertops, woodwork, and carpet area in one seamless multi-tab interface.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-indigo-600 text-white shadow-lg", difficulty: "Intermediate", estimatedTime: "~4 mins" },
+  { id: "brick-calculator", title: "Brick Calculator", desc: "Bricks, cement bags, sand and total cost for any wall — with openings, wastage and rates in PKR, INR or AED.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-blue-600 text-white shadow-lg", difficulty: "Beginner", estimatedTime: "~2 mins", isPopular: true },
  // 🚀 Guided Workflows
  {
  id: "qs-workflow",

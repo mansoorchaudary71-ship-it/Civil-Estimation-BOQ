@@ -15,6 +15,7 @@ import Contact from "./components/pages/Contact";
 import Blog from "./components/pages/Blog";
 import LegalPages from "./components/pages/LegalPages";
 import PricingPage from "./components/pages/PricingPage";
+import BrickCalculatorPage from "./components/pages/BrickCalculatorPage";
 import Footer from "./components/Footer";
 import SmoothScroll from "./components/ui/SmoothScroll";
 import SkipToContent from "./components/ui/SkipToContent";
@@ -238,6 +239,9 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
     case "master-quantity":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="MasterQuantityEstimator"><MasterQuantityEstimator /></ModuleWrapper>;
 
+    case "brick-calculator":
+      return <BrickCalculatorPage />;
+
     case "house":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="HouseEstimator"><HouseEstimator /></ModuleWrapper>;
 
@@ -437,14 +441,18 @@ export default function App() {
   const navigate = useNavigate();
 
   const [activeModule, setActiveModule] = useState<ModuleId>(() => {
-    const hash = window.location.hash;
-    if (hash.startsWith("#/join/")) {
+    // Clean URLs (BrowserRouter): read the real path first. Legacy hash links
+    // (#/tool-id) still work as a fallback.
+    const path = window.location.pathname && window.location.pathname !== "/"
+      ? window.location.pathname
+      : (window.location.hash.replace(/^#/, "") || "/");
+    if (path.startsWith("/join/") || window.location.hash.startsWith("#/join/")) {
       return "join-project";
     }
-    if (hash.startsWith("#/team")) {
+    if (path.startsWith("/team") || window.location.hash.startsWith("#/team")) {
       return "team-collaboration";
     }
-    const fromUrl = idFromPath(window.location.hash.replace(/^#/, "") || "/");
+    const fromUrl = idFromPath(path);
     return (isKnownRoute(fromUrl) ? fromUrl : "home") as ModuleId;
   });
 

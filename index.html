@@ -8,6 +8,29 @@
     <meta name="theme-color" content="#0B0F19" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
 
+    <!-- Single Page Apps for GitHub Pages: restore the path that 404.html
+         saved as a query string (?/brick-calculator) back to a real path.
+         Pairs with public/404.html. Required now that the app uses
+         BrowserRouter (clean URLs) instead of HashRouter. -->
+    <script>
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash,
+          );
+        }
+      })(window.location);
+    </script>
+
     <!-- Apply the saved theme BEFORE first paint (previously the page flashed light, then switched). -->
     <script>
       (function () {

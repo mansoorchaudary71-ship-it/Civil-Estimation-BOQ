@@ -11,6 +11,44 @@ export interface ToolSEOData {
 
 export const toolsSeoRegistry: ToolSEOData[] = [
   {
+    id: "brick-calculator",
+    slug: "brick-calculator",
+    category: "Masonry",
+    title: "Brick Calculator Pakistan, India & UAE | Civil Estimation Pro",
+    description:
+      "Free brick calculator for Pakistan, India & UAE. Bricks, cement bags, sand & total cost in PKR, INR or AED — with openings, wastage & local rates.",
+    keywords: [
+      "brick calculator",
+      "brick calculator Pakistan",
+      "bricks calculator",
+      "brick quantity calculator",
+      "how many bricks",
+      "brick cost calculator",
+      "brick calculator India",
+      "brick calculator UAE",
+    ],
+    componentName: "BrickCalculatorPage",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "Brick Calculator",
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Web",
+      url: "https://civilestimationpro.com/brick-calculator",
+      description:
+        "Free brick calculator for Pakistan, India & UAE. Bricks, cement bags, sand & total cost in PKR, INR or AED.",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      featureList: [
+        "Wall length, height and thickness (4.5, 9 and 13.5 inch)",
+        "Doors and windows deduction",
+        "Pakistani, Indian and UAE brick sizes plus custom size",
+        "Cement bags and sand quantity",
+        "Cost in PKR, INR and AED",
+        "PDF download, print, share and copy results",
+      ],
+    },
+  },
+  {
     id: "aggregate-blending",
     slug: "aggregate-blending",
     category: "Geotechnical",

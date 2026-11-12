@@ -13,16 +13,16 @@ interface Props {
 
 export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerateReport, isGenerating }) => {
   return (
-    <div className="bg-surface-default dark:bg-slate-900 rounded-2xl p-5 border border-ui-borderSubtle dark:border-slate-800 shadow-sm mb-6 overflow-hidden">
+    <div className="bg-surface-default dark:bg-ink rounded-2xl p-5 border border-ui-borderSubtle dark:border-ink shadow-brand-sm mb-6 overflow-hidden">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="text-base font-medium dark:text-slate-200 uppercase tracking-widest flex items-center gap-2">
-          <FileText className="w-4 h-4 text-teal-600" />
+        <h4 className="text-base font-medium dark:text-txt-primary uppercase tracking-widest flex items-center gap-2">
+          <FileText className="w-4 h-4 text-accent-800" />
           Test Report Information
         </h4>
         <Button
           onClick={onGenerateReport}
           disabled={isGenerating}
-          className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-base font-medium transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-xl text-base font-medium transition-colors disabled:opacity-50"
         >
           <Download className="w-4 h-4" />
           {isGenerating ? "Generating..." : "Generate PDF Report"}
@@ -35,7 +35,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           <><label htmlFor="a11y-input-590" className="sr-only">Input</label>
 <input id="a11y-input-590"
             type="text"
-            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500"
+            className="w-full bg-surface-default/50 border border-ui-borderSubtle dark:border-ink-600 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500"
             value={details.projectName}
             onChange={(e) => onChange("projectName", e.target.value)}
           /></>
@@ -45,7 +45,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           <><label htmlFor="a11y-input-591" className="sr-only">Input</label>
 <input id="a11y-input-591"
             type="text"
-            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500"
+            className="w-full bg-surface-default/50 border border-ui-borderSubtle dark:border-ink-600 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500"
             value={details.clientName}
             onChange={(e) => onChange("clientName", e.target.value)}
           /></>
@@ -55,7 +55,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           <><label htmlFor="a11y-input-592" className="sr-only">Central Soils Laboratory</label>
 <input id="a11y-input-592"
             type="text"
-            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500"
+            className="w-full bg-surface-default/50 border border-ui-borderSubtle dark:border-ink-600 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500"
             value={details.labName}
             onChange={(e) => onChange("labName", e.target.value)}
             placeholder="Central Soils Laboratory"
@@ -66,7 +66,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           <><label htmlFor="a11y-input-593" className="sr-only">Input</label>
 <input id="a11y-input-593"
             type="text"
-            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500"
+            className="w-full bg-surface-default/50 border border-ui-borderSubtle dark:border-ink-600 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500"
             value={details.sampleId}
             onChange={(e) => onChange("sampleId", e.target.value)}
           /></>
@@ -76,7 +76,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           <><label htmlFor="a11y-input-594" className="sr-only">Input</label>
 <input id="a11y-input-594"
             type="text"
-            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500"
+            className="w-full bg-surface-default/50 border border-ui-borderSubtle dark:border-ink-600 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500"
             value={details.depth}
             onChange={(e) => onChange("depth", e.target.value)}
           /></>
@@ -86,7 +86,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
           <><label htmlFor="a11y-input-595" className="sr-only">Input</label>
 <input id="a11y-input-595"
             type="text"
-            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500"
+            className="w-full bg-surface-default/50 border border-ui-borderSubtle dark:border-ink-600 rounded-xl px-3 py-2 text-sm text-txt-primary dark: text-txt-primary dark:text-white  focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500"
             value={details.testedBy}
             onChange={(e) => onChange("testedBy", e.target.value)}
           /></>

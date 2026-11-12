@@ -11,12 +11,12 @@ interface CodeComplianceBadgeProps {
 
 export function CodeComplianceBadge({ standard, title = "Standard Compliant", description }: CodeComplianceBadgeProps) {
   return (
-    <div className="flex items-start gap-3 p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/30 rounded-lg">
-      <ShieldCheck className="text-emerald-500 mt-0.5" size={18} />
+    <div className="flex items-start gap-3 p-3 bg-ui-success dark:bg-ui-success/20 border border-ui-successBorder dark:border-ui-successText/30 rounded-lg">
+      <ShieldCheck className="text-ui-successText mt-0.5" size={18} />
       <div>
-        <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300">{title}</div>
-        <div className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">{standard}</div>
-        {description && <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-1">{description}</div>}
+        <div className="text-xs font-bold text-ui-successText dark:text-ui-successText">{title}</div>
+        <div className="text-sm font-semibold text-ui-successText dark:text-ui-successText">{standard}</div>
+        {description && <div className="text-xs text-ui-successText dark:text-ui-successText mt-1">{description}</div>}
       </div>
     </div>
   );
@@ -32,21 +32,21 @@ export function ApparatusHelperBox({ items }: ApparatusHelperBoxProps) {
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="mt-4 border border-ui-borderSubtle dark:border-slate-700 rounded-lg overflow-hidden bg-surface-default dark:bg-slate-800">
+    <div className="mt-4 border border-ui-borderSubtle dark:border-ink-600 rounded-lg overflow-hidden bg-surface-default dark:bg-ink">
       <Button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-2 p-3 text-sm font-semibold text-txt-secondary dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors"
+        className="w-full flex items-center gap-2 p-3 text-sm font-semibold text-txt-secondary dark:text-txt-primary hover:bg-surface-hover dark:hover:bg-ink-700 transition-colors"
       >
-        <TestTube size={16} className="text-blue-500" />
+        <TestTube size={16} className="text-accent-800" />
         Required Lab Apparatus & Scientific Equipment
-        <Info size={14} className="ml-auto text-slate-400" />
+        <Info size={14} className="ml-auto text-txt-tertiary" />
       </Button>
       {isOpen && (
-        <div className="p-4 border-t border-ui-borderSubtle dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+        <div className="p-4 border-t border-ui-borderSubtle dark:border-ink-600 bg-surface-default">
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {items.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-sm text-txt-secondary dark:text-slate-300">
-                <Settings2 size={14} className="text-slate-400 mt-1 shrink-0" />
+              <li key={idx} className="flex items-start gap-2 text-sm text-txt-secondary dark:text-txt-tertiary">
+                <Settings2 size={14} className="text-txt-tertiary mt-1 shrink-0" />
                 {item}
               </li>
             ))}

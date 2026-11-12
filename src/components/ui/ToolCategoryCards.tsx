@@ -11,17 +11,17 @@ interface CategoryCardProps {
 
 function CategoryCard({ title, subtitle, rating, icon }: CategoryCardProps) {
   return (
-    <motion.div whileHover={{ scale: 1.02, y: -4 }} whileTap={{ scale: 0.98 }} className="w-full group relative flex flex-col justify-between w-56 h-56 bg-surface-default dark:bg-slate-900 rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-800 transition-all duration-300 cursor-pointer shrink-0 overflow-hidden hover:shadow-md">
+    <motion.div whileHover={{ scale: 1.02, y: -4 }} whileTap={{ scale: 0.98 }} className="w-full group relative flex flex-col justify-between w-56 h-56 bg-surface-default dark:bg-ink rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 shadow-brand-sm border border-border-color dark:border-ink transition-all duration-300 cursor-pointer shrink-0 overflow-hidden hover:shadow-brand-md">
       
       {/* Top-Right Badge: Pill format, absolute positioning */}
       <div className="absolute top-6 right-6">
-        <span className="bg-blue-50 dark:bg-blue-500/10 text-orange-400 text-xs font-semibold px-2.5 py-1 rounded-full">
+        <span className="bg-accent-50 dark:bg-accent-500/10 text-accent-400 text-xs font-semibold px-2.5 py-1 rounded-full">
           {rating}
         </span>
       </div>
 
       {/* Middle Section: Iconography, vertically centered */}
-      <div className="flex-1 flex flex-col justify-center mt-4 text-txt-primary dark:text-slate-200">
+      <div className="flex-1 flex flex-col justify-center mt-4 text-txt-primary dark:text-txt-primary">
         {icon}
       </div>
 
@@ -30,7 +30,7 @@ function CategoryCard({ title, subtitle, rating, icon }: CategoryCardProps) {
         <h3 className="text-txt-primary dark:text-white font-bold text-lg leading-tight">
           {title}
         </h3>
-        <p className="text-slate-400 dark:text-txt-tertiary text-sm font-medium">
+        <p className="text-txt-tertiary dark:text-txt-tertiary text-sm font-medium">
           {subtitle}
         </p>
       </div>

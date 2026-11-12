@@ -12,10 +12,10 @@ export const Accordion: React.FC<AccordionProps> = ({ title, children, defaultOp
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden shadow-sm">
+    <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden shadow-brand-sm">
       <button
         type="button"
-        className="w-full flex items-center justify-between p-4 sm:p-5 text-left bg-surface-default hover:bg-slate-50 transition-colors focus:outline-none"
+        className="w-full flex items-center justify-between p-4 sm:p-5 text-left bg-surface-default hover:bg-surface-hover transition-colors focus:outline-none"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="font-semibold text-txt-primary flex-1">{title}</div>
@@ -37,7 +37,7 @@ export const Accordion: React.FC<AccordionProps> = ({ title, children, defaultOp
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="p-4 sm:p-5 pt-0 border-t border-slate-100">
+            <div className="p-4 sm:p-5 pt-0 border-t border-border-color">
               {children}
             </div>
           </motion.div>

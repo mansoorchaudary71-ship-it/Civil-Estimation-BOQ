@@ -35,7 +35,7 @@ export function CurrencySelector() {
     <div ref={dropdownRef} className="relative">
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="h-10 px-3 rounded-full bg-bg-card shadow-sm border border-ui-borderSubtle dark:border-slate-700 flex items-center justify-center gap-2 text-txt-secondary dark:text-slate-300 hover:text-[var(--accent-vibrant)] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+        className="h-10 px-3 rounded-full bg-bg-card shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600 flex items-center justify-center gap-2 text-txt-secondary dark:text-txt-tertiary hover:text-accent-700 hover:shadow-brand-md hover:-translate-y-0.5 transition-all duration-300"
         title="Currency & Region"
       >
         <span className="text-lg">{currentSettingsObj.flag}</span>
@@ -43,8 +43,8 @@ export function CurrencySelector() {
       </Button>
 
       {isOpen && (
-        <div className="absolute top-12 right-0 w-56 bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-2xl shadow-xl overflow-hidden z-[100] animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="px-3 py-2 border-b border-ui-borderSubtle dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+        <div className="absolute top-12 right-0 w-56 bg-bg-card border border-ui-borderSubtle dark:border-ink-600 rounded-2xl shadow-brand-lg overflow-hidden z-[100] animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="px-3 py-2 border-b border-ui-borderSubtle dark:border-ink-600 bg-surface-default/50">
             <h4 className="text-base font-medium uppercase tracking-wider flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5" />
               Currency & Region
@@ -65,17 +65,17 @@ export function CurrencySelector() {
                     parsed.currency = curr.code;
                     localStorage.setItem('app-settings', JSON.stringify(parsed));
                   }}
-                  className={`px-4 py-2.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors ${
-                    isSelected ? 'bg-indigo-50/50 dark:bg-indigo-900/20' : ''
+                  className={`px-4 py-2.5 flex items-center justify-between hover:bg-surface-hover/80 transition-colors ${
+                    isSelected ? 'bg-accent-50 dark:bg-accent-900/20' : ''
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-lg">{curr.flag}</span>
-                    <span className={`text-sm ${isSelected ? 'font-bold text-indigo-700 dark:text-indigo-400' : 'font-medium text-txt-secondary dark:text-slate-300'}`}>
+                    <span className={`text-sm ${isSelected ? 'font-bold text-accent-800 dark:text-accent-400' : 'font-medium text-txt-secondary dark:text-txt-tertiary'}`}>
                       {curr.label}
                     </span>
                   </div>
-                  {isSelected && <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />}
+                  {isSelected && <Check className="w-4 h-4 text-accent-800 dark:text-accent-400" />}
                 </Button>
               );
             })}

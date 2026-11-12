@@ -66,10 +66,10 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
   }, [type, sliderValue]);
 
   return (
-    <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-5 mt-4 overflow-hidden">
+    <div className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl p-5 mt-4 overflow-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
         <div>
-          <h4 className="text-sm font-semibold text-txt-primary dark:text-slate-200 uppercase tracking-wider">
+          <h4 className="text-sm font-semibold text-txt-primary dark:text-txt-primary uppercase tracking-wider">
             Interactive Relationship
           </h4>
           <p className="text-xs text-txt-tertiary mt-1">
@@ -78,7 +78,7 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
           </p>
         </div>
         <div className="flex flex-col items-start w-full sm:w-1/3">
-          <label className="text-xs uppercase font-bold text-slate-400 mb-1">
+          <label className="text-xs uppercase font-bold text-txt-tertiary mb-1">
             Variable Multiplier: {sliderValue}%
           </label>
           <><label htmlFor="a11y-input-583" className="sr-only">Input</label>
@@ -88,7 +88,7 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
             max="150"
             value={sliderValue}
             onChange={(e) => setSliderValue(Number(e.target.value))}
-            className="w-full accent-indigo-500"
+            className="w-full accent-accent-600"
           /></>
         </div>
       </div>
@@ -155,7 +155,7 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex justify-between items-center text-xs font-medium text-slate-400 mt-2">
+      <div className="flex justify-between items-center text-xs font-medium text-txt-tertiary mt-2">
         <span>{xLabel} (Low)</span>
         <span>{xLabel} (High)</span>
       </div>

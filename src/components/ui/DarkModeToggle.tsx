@@ -17,11 +17,11 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
   const isHighContrast = settings.theme === 'high-contrast';
 
   const getThemeIcon = () => {
-    if (settings.theme === 'high-contrast') return <Eye className="w-5 h-5 text-yellow-500" />;
-    if (settings.theme === 'dark') return <Moon className="w-5 h-5 text-indigo-500" />;
-    if (settings.theme === 'modern') return <Sun className="w-5 h-5 text-zinc-500" />;
-    if (settings.theme === 'engineering-blueprint') return <Settings className="w-5 h-5 text-blue-500" />;
-    return <Sun className="w-5 h-5 text-amber-500" />;
+    if (settings.theme === 'high-contrast') return <Eye className="w-5 h-5 text-accent-700" />;
+    if (settings.theme === 'dark') return <Moon className="w-5 h-5 text-accent-800" />;
+    if (settings.theme === 'modern') return <Sun className="w-5 h-5 text-txt-tertiary" />;
+    if (settings.theme === 'engineering-blueprint') return <Settings className="w-5 h-5 text-accent-800" />;
+    return <Sun className="w-5 h-5 text-accent-700" />;
   };
 
   const getThemeLabel = () => {
@@ -42,7 +42,7 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
           {getThemeIcon()}
           {getThemeLabel()}
         </div>
-        <div className="w-10 h-6 rounded-full bg-slate-200 dark:bg-slate-700 relative transition-colors duration-300">
+        <div className="w-10 h-6 rounded-full bg-surface-active relative transition-colors duration-300">
            <div className={`absolute top-1 w-4 h-4 rounded-full bg-surface-default transition-all duration-300 ${isDarkMode || isHighContrast ? 'left-5' : 'left-1'}`}></div>
         </div>
       </Button>
@@ -52,12 +52,12 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
   return (
     <Button
       onClick={toggleTheme}
-      className={`w-10 h-10 rounded-full shadow-sm flex items-center justify-center transition-all duration-300 ${
+      className={`w-10 h-10 rounded-full shadow-brand-sm flex items-center justify-center transition-all duration-300 ${
         isHighContrast
-          ? 'bg-black border border-yellow-500 text-yellow-500 hover:bg-gray-900 hover:shadow-md hover:-translate-y-0.5'
+          ? 'bg-black border border-accent-500 text-accent-700 hover:bg-ink hover:shadow-brand-md hover:-translate-y-0.5'
           : isDarkMode 
-          ? 'bg-slate-800 border border-slate-700 text-amber-400 hover:bg-slate-700 hover:shadow-md hover:-translate-y-0.5' 
-          : 'bg-surface-default border border-ui-borderSubtle text-amber-500 hover:bg-slate-50 hover:shadow-md hover:-translate-y-0.5'
+          ? 'bg-ink border border-ink-600 text-accent-400 hover:bg-ink-600 hover:shadow-brand-md hover:-translate-y-0.5' 
+          : 'bg-surface-default border border-ui-borderSubtle text-accent-700 hover:bg-surface-hover hover:shadow-brand-md hover:-translate-y-0.5'
       }`}
       title="Toggle Theme"
     >

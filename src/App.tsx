@@ -20,7 +20,6 @@ import Footer from "./components/Footer";
 import SmoothScroll from "./components/ui/SmoothScroll";
 import SkipToContent from "./components/ui/SkipToContent";
 import LoadingScreen from "./components/ui/LoadingScreen";
-import CustomCursor from "./components/ui/CustomCursor";
 import ScrollToTop from "./components/ui/ScrollToTop";
 import SectionNavigator from "./components/ui/SectionNavigator";
 import ScrollProgressBar from "./components/ui/ScrollProgressBar";
@@ -422,7 +421,31 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="VentilationChecker"><VentilationChecker /></ModuleWrapper>;
 
     default:
-      return <div className="p-8 text-center text-slate-500">Module not found</div>;
+      return (
+        <div className="mx-auto w-full max-w-[1024px] px-4 py-24 text-center">
+          <p className="text-7xl font-extrabold tracking-tight text-txt-primary">404</p>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-txt-primary">This page doesn&rsquo;t exist</h1>
+          <p className="mx-auto mt-2 max-w-md text-txt-secondary">
+            The tool or page you&rsquo;re looking for was moved or never existed. Search for a calculator, or go back home.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => onNavigate('home')}
+              className="h-12 rounded-full bg-ink px-6 text-[15px] font-bold text-white shadow-brand-sm transition-colors hover:bg-ink-700"
+            >
+              Back to home
+            </button>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-global-search'))}
+              className="h-12 rounded-full border border-ui-borderStrong bg-surface-default px-6 text-[15px] font-bold text-txt-primary transition-colors hover:bg-surface-hover"
+            >
+              Search calculators
+            </button>
+          </div>
+        </div>
+      );
   }
 }
 
@@ -584,10 +607,10 @@ export default function App() {
         if (val < 0) {
           target.setCustomValidity("Please enter a valid, non-negative value.");
           target.reportValidity();
-          target.classList.add('!border-red-500', '!ring-2', '!ring-red-500', '!bg-red-50', '!text-red-700');
+          target.classList.add('!border-ui-errorBorder', '!ring-2', '!ring-ui-errorText', '!bg-ui-error', '!text-ui-errorText');
         } else {
           target.setCustomValidity("");
-          target.classList.remove('!border-red-500', '!ring-2', '!ring-red-500', '!bg-red-50', '!text-red-700');
+          target.classList.remove('!border-ui-errorBorder', '!ring-2', '!ring-ui-errorText', '!bg-ui-error', '!text-ui-errorText');
         }
       }
     };
@@ -605,7 +628,7 @@ export default function App() {
           setNativeValue(target, Math.abs(val).toString());
           target.dispatchEvent(new Event('input', { bubbles: true }));
           target.setCustomValidity("");
-          target.classList.remove('!border-red-500', '!ring-2', '!ring-red-500', '!bg-red-50', '!text-red-700');
+          target.classList.remove('!border-ui-errorBorder', '!ring-2', '!ring-ui-errorText', '!bg-ui-error', '!text-ui-errorText');
         }
       }
     };
@@ -704,9 +727,9 @@ export default function App() {
           
           // Optional: highlight it temporarily
           const originalClass = targetInput.className;
-          targetInput.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2', 'transition-all');
+          targetInput.classList.add('ring-2', 'ring-accent-500', 'ring-offset-2', 'transition-all');
           setTimeout(() => {
-             targetInput?.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
+             targetInput?.classList.remove('ring-2', 'ring-accent-500', 'ring-offset-2');
           }, 2000);
         }
       }, 500); // Wait for module render
@@ -740,7 +763,6 @@ export default function App() {
     <SmoothScroll>
       <SkipToContent />
       <LoadingScreen />
-      <CustomCursor />
       <ScrollToTop isHome={activeModule === "home"} />
       <SectionNavigator />
       <ScrollProgressBar />
@@ -752,7 +774,7 @@ export default function App() {
             <TakeoffProvider>
               <BOQProvider>
           <ProjectProvider>
-                <div className="flex flex-col min-h-screen w-full bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
+                <div className="flex flex-col min-h-screen w-full bg-surface-hover dark:bg-ink-900 font-sans text-txt-primary dark:text-txt-primary transition-colors duration-300">
                   <Toaster position="bottom-right" />
                   <AppDownloadBanner />
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />

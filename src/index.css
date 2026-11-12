@@ -15,56 +15,61 @@
     -webkit-text-size-adjust: 100%;
   }
   ::selection {
-    background: rgb(var(--color-primary-600) / 0.2);
+    background: rgb(var(--color-accent-500) / 0.2);
   }
   body {
-    @apply antialiased subpixel-antialiased text-slate-900 dark:text-slate-50 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 font-sans;
+    @apply antialiased subpixel-antialiased text-txt-primary bg-bg-base transition-colors duration-300 font-sans;
   }
 
-  /* Global Accessibility Focus Ring */
+  /* Global Accessibility Focus Ring — 2px amber-500 ring with a dark
+     (#1F1D1A) outer ring, so it stays visible on light AND amber surfaces.
+     (Amber-500 alone on white is only 2.08:1; the dark ring carries it.) */
   *:focus-visible {
-    @apply outline-none ring-2 ring-blue-600 dark:ring-blue-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-950;
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(var(--color-accent-500)), 0 0 0 4px rgb(var(--color-ink));
   }
 }
 
 @layer components {
-  /* Universal Surface Contrast Rules */
+  /* Universal Surface Contrast Rules — token-driven, dark mode follows
+     the .dark overrides in tokens.css (warm charcoal, not slate). */
   .surface-light {
-    @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 border border-slate-200 dark:border-slate-800;
+    @apply bg-surface-default text-txt-primary border border-border-color;
   }
   
   .surface-dark {
-    @apply bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900;
+    @apply bg-ink text-white dark:bg-white dark:text-ink;
   }
 
-  /* High contrast inputs */
+  /* High contrast inputs — 12px radius, warm border, amber-800 focus
+     border; the amber focus ring comes from the global :focus-visible rule. */
   input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), 
   select, 
   textarea {
-    @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 font-medium transition-all border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-sm rounded-md px-3 py-2;
+    @apply bg-surface-default text-txt-primary placeholder-txt-tertiary font-medium transition-all border border-border-color focus:border-accent-800 shadow-brand-sm rounded-xl px-3 py-2;
   }
   
   /* Clear labels & Technical units */
   label, .technical-label {
-    @apply text-slate-700 dark:text-slate-300 font-semibold text-sm tracking-wide block mb-1;
+    @apply text-txt-primary font-semibold text-sm tracking-wide block mb-1;
   }
 
   .technical-unit {
-    @apply text-slate-600 dark:text-slate-400 font-medium text-xs ml-1 uppercase tracking-wider;
+    @apply text-txt-secondary font-medium text-xs ml-1 uppercase tracking-wider;
   }
 
   /* Headings readability */
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-900 dark:text-slate-50 font-bold tracking-tight;
+    @apply text-txt-primary font-bold tracking-tight;
   }
 
   /* Dynamic Result Badges and Metrics */
   .result-metric {
-    @apply text-slate-900 dark:text-slate-50 font-bold tabular-nums tracking-tight;
+    @apply text-txt-primary font-bold tabular-nums tracking-tight;
   }
   
   .result-badge {
-    @apply bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-semibold px-3 py-1 rounded-full text-sm tabular-nums inline-flex items-center;
+    @apply bg-accent-100 text-accent-900 font-semibold px-3 py-1 rounded-full text-sm tabular-nums inline-flex items-center;
   }
 }
 
@@ -72,10 +77,9 @@
   .hero-mesh-gradient {
     background: linear-gradient(
       -45deg,
-      #d1fae5,
-      #dbeafe,
-      #e0e7ff,
-      #ffedd5,
+      #FFF8E6,
+      #F4F2EE,
+      #FEEFC3,
       #ffffff
     );
     background-size: 400% 400%;
@@ -652,9 +656,9 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
 
 @layer base {
   :root {
-    --font-primary: 'Inter', sans-serif;
+    --font-primary: 'Mona Sans', 'Inter', sans-serif;
     
-    /* Typography Scale Variables */
+    /* Typography Scale Variables — Dribbble-style (approved spec) */
     
     /* Display */
     --text-display-xl-size: 4.5rem; /* 72px */
@@ -662,10 +666,10 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     --text-display-xl-weight: 800;
     --text-display-xl-ls: -0.04em;
 
-    --text-display-lg-size: 3.75rem; /* 60px */
+    --text-display-lg-size: 3.5rem; /* 56px — hero H1 */
     --text-display-lg-lh: 1.1;
     --text-display-lg-weight: 800;
-    --text-display-lg-ls: -0.03em;
+    --text-display-lg-ls: -0.02em;
 
     /* Headings */
     --text-h1-size: 3rem; /* 48px */
@@ -673,27 +677,27 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     --text-h1-weight: 800;
     --text-h1-ls: -0.02em;
 
-    --text-h2-size: 2.25rem; /* 36px */
+    --text-h2-size: 2rem; /* 32px */
     --text-h2-lh: 1.2;
     --text-h2-weight: 700;
     --text-h2-ls: -0.02em;
 
-    --text-h3-size: 1.875rem; /* 30px */
+    --text-h3-size: 1.5rem; /* 24px */
     --text-h3-lh: 1.3;
     --text-h3-weight: 700;
     --text-h3-ls: -0.01em;
 
-    --text-h4-size: 1.5rem; /* 24px */
+    --text-h4-size: 1.25rem; /* 20px */
     --text-h4-lh: 1.4;
-    --text-h4-weight: 600;
+    --text-h4-weight: 700;
     --text-h4-ls: -0.01em;
 
-    --text-h5-size: 1.25rem; /* 20px */
+    --text-h5-size: 1.125rem; /* 18px */
     --text-h5-lh: 1.4;
     --text-h5-weight: 600;
     --text-h5-ls: 0;
 
-    --text-h6-size: 1.125rem; /* 18px */
+    --text-h6-size: 1rem; /* 16px */
     --text-h6-lh: 1.5;
     --text-h6-weight: 600;
     --text-h6-ls: 0;
@@ -722,12 +726,12 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     /* UI Elements */
     --text-button-size: 0.9375rem; /* 15px */
     --text-button-lh: 1.2;
-    --text-button-weight: 600;
+    --text-button-weight: 700;
     --text-button-ls: 0.01em;
 
     --text-nav-size: 0.9375rem; /* 15px */
     --text-nav-lh: 1.5;
-    --text-nav-weight: 500;
+    --text-nav-weight: 700;
     --text-nav-ls: 0;
 
     --text-card-title-size: 1.125rem; /* 18px */
@@ -747,7 +751,7 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
 
     --text-label-size: 0.875rem; /* 14px */
     --text-label-lh: 1.2;
-    --text-label-weight: 500;
+    --text-label-weight: 600;
     --text-label-ls: 0.01em;
 
     --text-placeholder-size: 1rem; /* 16px */
@@ -755,10 +759,10 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     --text-placeholder-weight: 400;
     --text-placeholder-ls: 0;
 
-    --text-badge-size: 0.75rem; /* 12px */
+    --text-badge-size: 0.6875rem; /* 11px */
     --text-badge-lh: 1;
-    --text-badge-weight: 600;
-    --text-badge-ls: 0.02em;
+    --text-badge-weight: 700;
+    --text-badge-ls: 0.04em;
 
     --text-chip-size: 0.875rem; /* 14px */
     --text-chip-lh: 1.2;
@@ -772,11 +776,11 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
       --text-display-xl-size: 3rem; /* 48px */
       --text-display-lg-size: 2.5rem; /* 40px */
       --text-h1-size: 2.25rem; /* 36px */
-      --text-h2-size: 1.875rem; /* 30px */
-      --text-h3-size: 1.5rem; /* 24px */
-      --text-h4-size: 1.25rem; /* 20px */
-      --text-h5-size: 1.125rem; /* 18px */
-      --text-h6-size: 1rem; /* 16px */
+      --text-h2-size: 1.75rem; /* 28px */
+      --text-h3-size: 1.25rem; /* 20px */
+      --text-h4-size: 1.125rem; /* 18px */
+      --text-h5-size: 1rem; /* 16px */
+      --text-h6-size: 0.875rem; /* 14px */
     }
   }
 
@@ -899,7 +903,7 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     line-height: var(--text-card-desc-lh);
     font-weight: var(--text-card-desc-weight);
     letter-spacing: var(--text-card-desc-ls);
-    @apply text-slate-500 dark:text-slate-400; /* Semantic Color */
+    @apply text-txt-secondary; /* Semantic Color */
   }
 
   .text-footer-text {
@@ -908,7 +912,7 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     line-height: var(--text-footer-lh);
     font-weight: var(--text-footer-weight);
     letter-spacing: var(--text-footer-ls);
-    @apply text-slate-500 dark:text-slate-400; /* Semantic Color */
+    @apply text-txt-secondary; /* Semantic Color */
   }
 
   .text-input-label {
@@ -917,7 +921,7 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     line-height: var(--text-label-lh);
     font-weight: var(--text-label-weight);
     letter-spacing: var(--text-label-ls);
-    @apply text-slate-700 dark:text-slate-300;
+    @apply text-txt-primary;
   }
 
   .text-input-placeholder {
@@ -926,7 +930,7 @@ html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast
     line-height: var(--text-placeholder-lh);
     font-weight: var(--text-placeholder-weight);
     letter-spacing: var(--text-placeholder-ls);
-    @apply text-slate-400 dark:text-slate-500;
+    @apply text-txt-tertiary;
   }
 
   .text-badge {

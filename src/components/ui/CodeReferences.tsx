@@ -90,28 +90,28 @@ export function CodeReferences({ moduleId }: { moduleId: string }) {
   if (!references || references.length === 0) return null;
 
   return (
-    <div className="w-full mt-4 mb-6 border border-ui-borderSubtle dark:border-slate-700/50 rounded-xl bg-surface-default dark:bg-slate-800/80 overflow-hidden shadow-sm">
+    <div className="w-full mt-4 mb-6 border border-ui-borderSubtle dark:border-ink-600/50 rounded-xl bg-surface-default dark:bg-ink/80 overflow-hidden shadow-brand-sm">
       <Button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 text-white dark:text-slate-200 transition-colors hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+        className="w-full flex items-center justify-between p-4 bg-surface-default text-txt-tertiary dark:text-txt-primary transition-colors hover:bg-surface-hover rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
       >
-        <span className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-txt-secondary dark:text-slate-400">
-          <BookOpen className="w-4 h-4 text-indigo-500" />
+        <span className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-txt-secondary dark:text-txt-tertiary">
+          <BookOpen className="w-4 h-4 text-accent-800" />
           Code References & Standards
         </span>
-        {isOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+        {isOpen ? <ChevronUp className="w-4 h-4 text-txt-tertiary" /> : <ChevronDown className="w-4 h-4 text-txt-tertiary" />}
       </Button>
       
       {isOpen && (
-        <div className="p-4 bg-surface-default dark:bg-slate-800 border-t border-ui-borderSubtle dark:border-slate-700/50">
+        <div className="p-4 bg-surface-default dark:bg-ink border-t border-ui-borderSubtle dark:border-ink-600/50">
           <ul className="space-y-3">
             {references.map((ref) => (
               <li key={ref.id} className="flex items-start gap-3">
-                <div className="group relative flex items-center justify-center p-1.5 mt-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-txt-tertiary dark:text-slate-400 hover:bg-indigo-100 hover:text-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400 cursor-help transition-colors">
+                <div className="group relative flex items-center justify-center p-1.5 mt-0.5 rounded-full bg-surface-hover dark:bg-ink-600 text-txt-tertiary dark:text-txt-tertiary hover:bg-accent-100 hover:text-accent-800 dark:hover:bg-accent-900/30 dark:hover:text-accent-400 cursor-help transition-colors">
                   <Info className="w-3.5 h-3.5" />
                   
                   {/* Tooltip */}
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-[130%] min-w-[200px] w-max max-w-xs p-2.5 bg-slate-800 text-white text-xs font-medium rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 pointer-events-none before:absolute before:content-[''] before:bottom-[-4px] before:left-1/2 before:-translate-x-1/2 before:border-[5px] before:border-transparent before:border-t-slate-800">
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-[130%] min-w-[200px] w-max max-w-xs p-2.5 bg-ink text-white text-xs font-medium rounded-lg shadow-brand-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 pointer-events-none before:absolute before:content-[''] before:bottom-[-4px] before:left-1/2 before:-translate-x-1/2 before:border-[5px] before:border-transparent before:border-t-slate-800">
                      {ref.description}
                   </div>
                 </div>
@@ -119,11 +119,11 @@ export function CodeReferences({ moduleId }: { moduleId: string }) {
                 <div className="flex-1">
                   <span className="font-bold text-txt-primary dark:text-white mr-1.5">[{ref.code}]</span>
                   {ref.clause && (
-                    <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mr-2">
+                    <span className="text-sm font-semibold text-accent-800 dark:text-accent-400 mr-2">
                        {ref.clause}
                     </span>
                   )}
-                  <span className="text-sm text-txt-secondary dark:text-slate-300 hidden md:inline">
+                  <span className="text-sm text-txt-secondary dark:text-txt-tertiary hidden md:inline">
                     — {ref.description}
                   </span>
                 </div>

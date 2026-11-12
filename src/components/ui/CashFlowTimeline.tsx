@@ -34,12 +34,12 @@ export function CashFlowTimeline({
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-surface-default/90 backdrop-blur-sm border border-ui-borderSubtle p-4 rounded-xl shadow-xl">
+        <div className="bg-surface-default/90 backdrop-blur-sm border border-ui-borderSubtle p-4 rounded-xl shadow-brand-lg">
           <p className="font-semibold text-txt-primary mb-1">{label}</p>
           <p className="text-txt-secondary text-sm mb-2">
             Distribution: <span className="font-medium text-txt-primary">{data.percentage}%</span>
           </p>
-          <div className="text-xl font-bold text-blue-600">
+          <div className="text-xl font-bold text-accent-800">
             Rs {data.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
           </div>
         </div>
@@ -49,7 +49,7 @@ export function CashFlowTimeline({
   };
 
   return (
-    <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+    <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
       <div className="flex flex-col mb-6">
         <h3 className="text-lg font-semibold text-txt-primary">Construction Cash Flow Timeline</h3>
         <p className="text-sm text-txt-tertiary">6-Month Capital Requirement Distribution</p>

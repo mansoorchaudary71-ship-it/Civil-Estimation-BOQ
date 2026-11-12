@@ -24,40 +24,40 @@ export function FormulaModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[200]"
+            className="fixed inset-0 bg-ink/50 backdrop-blur-sm z-[200]"
             onClick={onClose}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-surface-default dark:bg-slate-900 rounded-2xl shadow-2xl z-[201] overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col"
+            className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-surface-default dark:bg-ink rounded-2xl shadow-2xl z-[201] overflow-hidden border border-border-color dark:border-ink flex flex-col"
           >
-            <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-slate-800 shrink-0 flex items-center justify-between">
+            <div className="p-4 sm:p-6 border-b border-border-color dark:border-ink shrink-0 flex items-center justify-between">
               <h3 className="text-xl font-bold tracking-tight text-txt-primary dark:text-white flex items-center gap-2">
-                <Calculator className="w-5 h-5 text-indigo-500" />
+                <Calculator className="w-5 h-5 text-accent-800" />
                 Formula & Variables
               </h3>
               <Button
                 onClick={onClose}
-                className="p-2 -mr-2 text-slate-400 hover:text-txt-secondary dark:hover:text-slate-200 transition-colors rounded-full hover:bg-slate-50 dark:hover:bg-slate-800"
+                className="p-2 -mr-2 text-txt-tertiary hover:text-txt-secondary dark:hover:text-txt-primary transition-colors rounded-full hover:bg-surface-hover"
               >
                 <X className="w-5 h-5" />
               </Button>
             </div>
 
             <div className="p-6 overflow-y-auto w-full">
-              <div className="flex items-start gap-3 mb-6 bg-indigo-50/50 dark:bg-indigo-500/10 p-4 rounded-2xl border border-indigo-100/50 dark:border-indigo-500/20 overflow-hidden">
-                <Info className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
-                <p className="text-sm font-medium text-indigo-800 dark:text-indigo-300 leading-relaxed">
+              <div className="flex items-start gap-3 mb-6 bg-accent-50 dark:bg-accent-500/10 p-4 rounded-2xl border border-accent-100/50 dark:border-accent-800/20 overflow-hidden">
+                <Info className="w-5 h-5 text-accent-800 shrink-0 mt-0.5" />
+                <p className="text-sm font-medium text-accent-800 dark:text-accent-400 leading-relaxed">
                   The {title} uses internationally recognized civil engineering methodologies. Here is a breakdown of the core formulas and variables used to arrive at your results.
                 </p>
               </div>
 
               <div className="space-y-4">
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-5 border border-slate-100 dark:border-slate-700/50 overflow-hidden">
-                  <h4 className="text-sm font-semibold text-txt-primary dark:text-slate-200 mb-3 uppercase tracking-wider">Methodology Description</h4>
-                  <div className="text-txt-secondary dark:text-slate-400 text-sm leading-relaxed whitespace-pre-wrap font-mono">
+                <div className="bg-surface-default/50 rounded-2xl p-5 border border-border-color dark:border-ink-600/50 overflow-hidden">
+                  <h4 className="text-sm font-semibold text-txt-primary dark:text-txt-primary mb-3 uppercase tracking-wider">Methodology Description</h4>
+                  <div className="text-txt-secondary dark:text-txt-tertiary text-sm leading-relaxed whitespace-pre-wrap font-mono">
                     {formulaDescription}
                   </div>
                 </div>
@@ -69,7 +69,7 @@ export function FormulaModal({
             <div className="p-6 pt-0 shrink-0 mt-2">
               <Button
                 onClick={onClose}
-                className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white rounded-xl font-semibold transition-colors"
+                className="w-full py-3.5 bg-ink hover:bg-ink dark:bg-ink dark:hover:bg-ink-700 text-white rounded-xl font-semibold transition-colors"
               >
                 Understood
               </Button>

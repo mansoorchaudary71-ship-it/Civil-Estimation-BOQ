@@ -22,9 +22,9 @@ export function CopyButton({ textToCopy }: CopyButtonProps) {
   };
 
   return (
-    <div className="flex items-center gap-2.5 bg-surface-default p-3.5 rounded-lg shadow-sm w-full max-w-md border border-ui-borderSubtle">
+    <div className="flex items-center gap-2.5 bg-surface-default p-3.5 rounded-lg shadow-brand-sm w-full max-w-md border border-ui-borderSubtle">
       <div 
-        className="font-mono bg-slate-100 p-2.5 rounded border border-ui-borderDefault text-txt-primary flex-1 truncate text-sm"
+        className="font-mono bg-surface-hover p-2.5 rounded border border-ui-borderDefault text-txt-primary flex-1 truncate text-sm"
         title={textToCopy}
       >
         {textToCopy}
@@ -32,13 +32,13 @@ export function CopyButton({ textToCopy }: CopyButtonProps) {
       <Button 
         onClick={handleCopy}
         className={`relative px-4 py-2.5 rounded font-bold text-white transition-all transform active:scale-95 text-sm ${
-          copied ? 'bg-blue-700' : 'bg-blue-600 hover:bg-blue-700'
+          copied ? 'bg-ink' : 'bg-ink hover:bg-ink-700'
         }`}
       >
         {copied ? '✓' : 'Copy'}
         {/* Tooltip */}
         <div 
-          className={`absolute bottom-[130%] left-1/2 -translate-x-1/2 bg-slate-800 text-white px-2.5 py-1.5 rounded text-xs whitespace-nowrap transition-all duration-300 pointer-events-none ${
+          className={`absolute bottom-[130%] left-1/2 -translate-x-1/2 bg-ink text-white px-2.5 py-1.5 rounded text-xs whitespace-nowrap transition-all duration-300 pointer-events-none ${
             copied ? 'opacity-100 visible' : 'opacity-0 invisible'
           }`}
         >

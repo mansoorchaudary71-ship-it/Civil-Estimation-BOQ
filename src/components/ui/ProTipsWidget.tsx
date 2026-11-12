@@ -142,14 +142,14 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
   const tips = TIPS_DATABASE[moduleId] || DEFAULT_TIPS;
 
   return (
-    <div className="w-full overflow-hidden bg-surface-default rounded-2xl border border-slate-100 shadow-sm">
+    <div className="w-full overflow-hidden bg-surface-default rounded-2xl border border-border-color shadow-brand-sm">
       <Button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-slate-50 transition-colors"
+        className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-surface-hover transition-colors"
       >
         <div className="flex items-center gap-3">
           <div 
-            className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0"
+            className="w-10 h-10 rounded-full bg-surface-hover flex items-center justify-center shrink-0"
             style={{ color: 'var(--tool-theme-color, #4f46e5)' }}
           >
             <Lightbulb className="w-5 h-5" />
@@ -159,18 +159,18 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
             <p className="text-sm text-txt-tertiary font-medium">Best practices & principles for this calculation</p>
           </div>
         </div>
-        <div className="text-slate-400 shrink-0 ml-4">
+        <div className="text-txt-tertiary shrink-0 ml-4">
           {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
         </div>
       </Button>
 
       {isOpen && (
-        <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-slate-100 bg-slate-50/50">
+        <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-border-color bg-surface-hover/50">
           <ul className="space-y-4">
             {tips.map((tip, idx) => (
               <li key={idx} className="flex gap-3 text-txt-secondary text-sm">
                 <span 
-                  className="shrink-0 w-6 h-6 rounded-full bg-slate-200/60 flex items-center justify-center font-bold text-xs mt-0.5"
+                  className="shrink-0 w-6 h-6 rounded-full bg-surface-active/60 flex items-center justify-center font-bold text-xs mt-0.5"
                   style={{ color: 'var(--tool-theme-color, #4f46e5)' }}
                 >
                   {idx + 1}

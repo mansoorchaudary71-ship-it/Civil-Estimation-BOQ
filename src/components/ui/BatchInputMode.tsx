@@ -83,7 +83,7 @@ export function BatchInputMode({ columns, onCalculateTotal, title = "Batch Input
   };
 
   return (
-    <div className="bg-slate-50 border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 w-full animate-in fade-in zoom-in-95 duration-300 overflow-hidden">
+    <div className="bg-surface-hover border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 w-full animate-in fade-in zoom-in-95 duration-300 overflow-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h4 className="font-bold text-lg text-txt-primary">{title}</h4>
@@ -92,10 +92,10 @@ export function BatchInputMode({ columns, onCalculateTotal, title = "Batch Input
         <div className="flex gap-2">
            <><label htmlFor="a11y-input-579" className="sr-only">Input</label>
 <input id="a11y-input-579" type="file" accept=".csv" className="hidden" ref={fileInputRef} onChange={handleFileUpload} /></>
-           <Button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-surface-default border border-ui-borderSubtle text-txt-secondary rounded-xl hover:bg-slate-50 hover:border-ui-borderDefault transition-all shadow-sm">
-              <Upload className="w-4 h-4 text-indigo-500" /> Upload CSV
+           <Button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-surface-default border border-ui-borderSubtle text-txt-secondary rounded-xl hover:bg-surface-hover hover:border-ui-borderDefault transition-all shadow-brand-sm">
+              <Upload className="w-4 h-4 text-accent-800" /> Upload CSV
            </Button>
-           <Button onClick={addRow} className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-slate-800 border border-slate-800 text-white rounded-xl hover:bg-slate-700 transition-all shadow-sm">
+           <Button onClick={addRow} className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-ink border border-ink text-white rounded-xl hover:bg-ink-600 transition-all shadow-brand-sm">
               <Plus className="w-4 h-4" /> Add Row
            </Button>
         </div>
@@ -104,7 +104,7 @@ export function BatchInputMode({ columns, onCalculateTotal, title = "Batch Input
       <div className="overflow-x-auto bg-surface-default border border-ui-borderSubtle rounded-xl">
         <table className="w-full text-left text-sm whitespace-nowrap">
           <thead>
-            <tr className="border-b border-ui-borderSubtle bg-slate-50/50 text-txt-secondary">
+            <tr className="border-b border-ui-borderSubtle bg-surface-hover/50 text-txt-secondary">
               <th className="py-3 px-4 font-semibold w-12text-center">#</th>
               {columns.map(col => (
                 <th key={col.id} className="py-3 px-4 font-semibold uppercase text-xs tracking-wider">{col.label}</th>
@@ -114,15 +114,15 @@ export function BatchInputMode({ columns, onCalculateTotal, title = "Batch Input
           </thead>
           <tbody>
             {rows.map((row, idx) => (
-              <tr key={row.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
-                <td className="py-3 px-4 text-slate-400 font-bold text-xs">{idx + 1}</td>
+              <tr key={row.id} className="border-b border-border-color last:border-0 hover:bg-surface-hover/50 transition-colors">
+                <td className="py-3 px-4 text-txt-tertiary font-bold text-xs">{idx + 1}</td>
                 {columns.map(col => (
                   <td key={col.id} className="py-2 px-2">
                      {col.type === 'select' ? (
                         <select 
                           value={row[col.id] || ''} 
                           onChange={(e) => updateRow(row.id, col.id, e.target.value)}
-                         className="w-full bg-slate-50 border border-ui-borderSubtle rounded-lg px-3 py-2 outline-none focus:border-indigo-500 transition-colors font-medium text-txt-secondary"
+                         className="w-full bg-surface-hover border border-ui-borderSubtle rounded-lg px-3 py-2 outline-none focus:border-accent-800 transition-colors font-medium text-txt-secondary"
                         >
                           <option value="" disabled>Select...</option>
                           {col.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -134,13 +134,13 @@ export function BatchInputMode({ columns, onCalculateTotal, title = "Batch Input
                          value={row[col.id] || ''}
                          placeholder={col.label}
                          onChange={(e) => updateRow(row.id, col.id, e.target.value)}
-                         className="w-full bg-surface-default border border-ui-borderSubtle rounded-lg px-3 py-2 outline-none focus:border-indigo-500 transition-colors font-medium text-txt-secondary"
+                         className="w-full bg-surface-default border border-ui-borderSubtle rounded-lg px-3 py-2 outline-none focus:border-accent-800 transition-colors font-medium text-txt-secondary"
                        /></>
                      )}
                   </td>
                 ))}
                 <td className="py-2 px-2 text-right">
-                  <Button onClick={() => removeRow(row.id)} className="text-slate-400 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-50" title="Remove row">
+                  <Button onClick={() => removeRow(row.id)} className="text-txt-tertiary hover:text-ui-errorText transition-colors p-2 rounded-lg hover:bg-ui-error" title="Remove row">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </td>
@@ -153,7 +153,7 @@ export function BatchInputMode({ columns, onCalculateTotal, title = "Batch Input
       <div className="mt-6 flex justify-end">
         <Button 
            onClick={() => onCalculateTotal(rows)}
-           className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-indigo-700 hover:shadow-md transition-all active:scale-[0.98]"
+           className="flex items-center gap-2 bg-ink text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-brand-sm hover:bg-ink-700 hover:shadow-brand-md transition-all active:scale-[0.98]"
         >
           <Calculator className="w-4 h-4" /> Calculate Batch Totals
         </Button>

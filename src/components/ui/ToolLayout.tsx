@@ -10,7 +10,7 @@ export function ToolLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full py-4 sm:py-8">
       {/* <!-- Main Tool Workspace Wrapper --> */}
-      <div className="w-full bg-surface-default dark:bg-slate-900 rounded-2xl sm:rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800/50 overflow-hidden transition-all duration-500">
+      <div className="w-full bg-surface-default rounded-card shadow-brand-sm border border-border-color overflow-hidden transition-all duration-500">
         <div className="p-6 sm:p-8 lg:p-10 flex flex-col lg:grid lg:grid-cols-12 gap-8 xl:gap-12">
           {children}
         </div>
@@ -49,11 +49,14 @@ export function ToolSection({
   children: React.ReactNode 
 }) {
   const colorMap = {
-    blue: "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800",
-    indigo: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800",
-    violet: "bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-800",
-    emerald: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
-    amber: "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800",
+    // Single Dribbble-amber system (Batch 2): the old per-section colours
+    // (blue / indigo / violet / emerald / amber) collapse to one treatment.
+    // The `color` prop is kept for API compatibility with existing callers.
+    blue: "bg-accent-100 text-accent-900 border-accent-200",
+    indigo: "bg-accent-100 text-accent-900 border-accent-200",
+    violet: "bg-accent-100 text-accent-900 border-accent-200",
+    emerald: "bg-accent-100 text-accent-900 border-accent-200",
+    amber: "bg-accent-100 text-accent-900 border-accent-200",
   };
     
   return (
@@ -61,15 +64,15 @@ export function ToolSection({
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="bg-slate-50/50 dark:bg-slate-800/10 p-6 sm:p-7 rounded-2xl sm:rounded-2xl border border-slate-100 dark:border-slate-800/60 overflow-hidden hover:bg-surface-default dark:hover:bg-slate-800/20 transition-all duration-300 group"
+      className="bg-surface-hover p-6 sm:p-7 rounded-card border border-border-color overflow-hidden hover:bg-surface-default transition-all duration-300 group"
     >
-      <h3 className="font-bold text-base sm:text-lg mb-6 text-txt-primary dark:text-white flex items-center gap-3">
+      <h3 className="font-bold text-base sm:text-lg mb-6 text-txt-primary flex items-center gap-3">
         {number && (
           <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black border ${colorMap[color]} group-hover:scale-110 transition-transform`}>
             {number}
           </div>
         )}
-        <span className="uppercase text-xs sm:text-xs text-txt-secondary dark:text-slate-300 font-black tracking-[0.2em]">
+        <span className="uppercase text-xs sm:text-xs text-txt-secondary font-black tracking-[0.2em]">
           {title}
         </span>
       </h3>

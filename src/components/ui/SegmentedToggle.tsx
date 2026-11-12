@@ -8,20 +8,20 @@ const themeStyles = {
   brown: {
     selectedBg: 'bg-[#f4ebe1]', // Matches the warm light brown/beige card fill
     selectedText: 'text-[#5c4d3c]',
-    borderColor: 'border-gray-400',
-    divideColor: 'divide-gray-400'
+    borderColor: 'border-ui-borderDefault',
+    divideColor: 'divide-border-color'
   },
   blue: {
     selectedBg: 'bg-[#e8f0fe]', // Matches the soft light blue card fill
     selectedText: 'text-[#1a73e8]',
-    borderColor: 'border-gray-400',
-    divideColor: 'divide-gray-400'
+    borderColor: 'border-ui-borderDefault',
+    divideColor: 'divide-border-color'
   },
   green: {
     selectedBg: 'bg-[#e6f4ea]', // Matches the soft environmental green card fill
     selectedText: 'text-[#137333]',
-    borderColor: 'border-gray-400',
-    divideColor: 'divide-gray-400'
+    borderColor: 'border-ui-borderDefault',
+    divideColor: 'divide-border-color'
   }
 };
 
@@ -127,7 +127,7 @@ const SegmentedToggle = ({
               flex flex-1 items-center justify-center gap-2 ${sizeClasses[size]} font-medium transition-colors duration-200
               ${isSelected 
                 ? `${currentTheme.selectedBg} ${currentTheme.selectedText}` 
-                : 'bg-transparent text-txt-secondary hover:bg-gray-50/50'
+                : 'bg-transparent text-txt-secondary hover:bg-surface-hover/50'
               }
             `}
           >

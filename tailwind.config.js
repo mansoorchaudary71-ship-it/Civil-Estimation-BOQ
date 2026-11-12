@@ -9,8 +9,15 @@ const c = (name) => `rgb(var(--color-${name}) / <alpha-value>)`;
 const scale = (name) =>
   Object.fromEntries([50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((n) => [n, c(`${name}-${n}`)]));
 
-/** Brand blue, used to unify the legacy `indigo-*` and `blue-*` utilities (1,000+ usages). */
+/** Brand blue — since Batch 1 (Dribbble-style redesign) this scale is the
+ * INFO/semantic colour only (info bg/border/text). It no longer styles
+ * CTAs or links: those use the `ink` scale and the amber `accent` scale.
+ * The alias stays so the 1,000+ legacy `indigo-*` / `blue-*` utilities keep
+ * rendering while Batch 4+ re-points them file by file. */
 const brandBlue = scale('primary');
+
+/** Warm charcoal ink — Dribbble-style primary buttons, dark pills, headings. */
+const ink = scale('ink');
 
 /**
  * Minimal, dependency-free replacement for `tailwindcss-animate`.
@@ -79,11 +86,13 @@ export default {
     extend: {
       colors: {
         primary: { ...brandBlue, DEFAULT: c('primary-600') },
+        ink: { ...ink, DEFAULT: c('ink-800') },
         accent: { ...scale('accent'), DEFAULT: c('accent-500') },
         secondary: { ...scale('secondary'), DEFAULT: c('secondary-600') },
 
-        // Legacy palettes unified with the brand blue so the 1,000+ `indigo-*`
-        // usages and the Coursera-style primary CTA are one colour.
+        // Legacy palettes still resolve to the (now info-only) brand blue so
+        // the 1,000+ `indigo-*` usages keep rendering while Batch 4+
+        // re-points them file by file.
         indigo: brandBlue,
         blue: brandBlue,
 
@@ -139,10 +148,13 @@ export default {
         '9xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.04em' }],
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Mona Sans', 'Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       borderRadius: {
         brand: 'var(--radius-md)',
+        card: 'var(--radius-card)',
+        media: 'var(--radius-media)',
+        pill: 'var(--radius-pill)',
       },
       boxShadow: {
         'brand-sm': 'var(--shadow-sm)',

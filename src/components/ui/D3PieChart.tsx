@@ -16,7 +16,7 @@ interface D3PieChartProps {
 
 export default function D3PieChart({
   data,
-  colors = ['#8b5cf6', '#10b981', '#3b82f6', '#f59e0b', '#ef4444'],
+  colors = ['#F2A413', '#1F1D1A', '#6B6862', '#0F766E', '#D98F0B'],
   currency = '$',
   width = 300,
   height = 300
@@ -62,14 +62,14 @@ export default function D3PieChart({
       .style('position', 'absolute')
       .style('visibility', 'hidden')
       .style('background', '#fff')
-      .style('border', '1px solid #e2e8f0')
+      .style('border', '1px solid #E7E4DE')
       .style('border-radius', '8px')
       .style('padding', '8px 12px')
       .style('box-shadow', '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)')
       .style('pointer-events', 'none')
       .style('z-index', '1000')
       .style('font-size', '14px')
-      .style('color', '#1e293b');
+      .style('color', '#1F1D1A');
 
     arcs.append('path')
       .attr('d', arc as any)

@@ -223,7 +223,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
   return (
     <div id="tool-header-top" className="relative -mx-2 sm:-mx-4 md:-mx-8 px-2 sm:px-4 md:px-8 bg-transparent pb-8 flex flex-col gap-6 pt-6">
       {/* PRINT-ONLY BRANDING HEADER */}
-      <div className="hidden print:flex flex-col w-full border-b-2 border-slate-800 pb-4 mb-4">
+      <div className="hidden print:flex flex-col w-full border-b-2 border-ink pb-4 mb-4">
          <h1 className="text-2xl font-bold text-txt-primary m-0 p-0 leading-tight">Civil Estimation Pro</h1>
          <h2 className="text-lg font-semibold text-txt-secondary m-0 mt-1 p-0 leading-tight">{title}</h2>
          {subtitle && <p className="text-sm text-txt-tertiary m-0 mt-1 p-0 italic">{subtitle}</p>}
@@ -234,7 +234,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
         {/* Title Header */}
         <div className="w-full flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-2 print:hidden">
           <div className="flex items-start gap-4 relative z-10 w-full lg:w-auto">
-            <motion.div layoutId={`icon-${id}`} className="w-14 h-14 bg-surface-default flex items-center justify-center shrink-0 text-indigo-700 rounded-2xl border border-ui-borderSubtle/60 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
+            <motion.div layoutId={`icon-${id}`} className="w-14 h-14 bg-surface-default flex items-center justify-center shrink-0 text-ink rounded-2xl border border-ui-borderSubtle/60 shadow-[0_2px_12px_rgba(31,29,26,0.04)]">
               {Icon ? <Icon className="w-7 h-7" strokeWidth={1.5} /> : <ClipboardList className="w-7 h-7" strokeWidth={1.5} />}
             </motion.div>
             <div className="flex flex-col">
@@ -250,9 +250,9 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                   >
                     <Info className="w-4 h-4" />
                   </Button>
-                  <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 w-64 bg-slate-900 text-white text-xs rounded-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-sm hidden md:block">
-                    <div className="font-medium text-sm mb-1 text-slate-100">Formulas</div>
-                    <p className="text-slate-400 leading-relaxed font-light">View standardized engineering equations, parameters, and design codes.</p>
+                  <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 w-64 bg-ink text-white text-xs rounded-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-brand-sm hidden md:block">
+                    <div className="font-medium text-sm mb-1 text-white">Formulas</div>
+                    <p className="text-ink-300 leading-relaxed font-light">View standardized engineering equations, parameters, and design codes.</p>
                   </div>
                 </div>
               </div>
@@ -263,12 +263,12 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
               {/* Toggles (Horizontal Row beneath description) */}
               <div className="flex flex-row items-center gap-2 sm:gap-3 print:hidden w-full mt-4">
                 {/* Unit Toggle */}
-                <div className="flex items-center p-1 bg-slate-100/80 rounded-full border border-ui-borderSubtle/60 shadow-inner">
+                <div className="flex items-center p-1 bg-surface-hover rounded-full border border-ui-borderSubtle/60 shadow-inner">
                   <Button
                     aria-pressed={isMetric}
                     onClick={() => updateSettings({ measurement: 'SI' })}
                     className={`relative px-3.5 sm:px-4 py-1.5 text-xs sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full ${
-                      isMetric ? 'bg-indigo-700 text-white shadow-sm' : 'text-txt-tertiary hover:text-indigo-700'
+                      isMetric ? 'bg-ink text-white shadow-brand-sm' : 'text-txt-tertiary hover:text-txt-primary'
                     }`}
                   >
                     Metric
@@ -277,7 +277,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                     aria-pressed={!isMetric}
                     onClick={() => updateSettings({ measurement: 'FPS' })}
                     className={`relative px-3.5 sm:px-4 py-1.5 text-xs sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full ${
-                      !isMetric ? 'bg-indigo-700 text-white shadow-sm' : 'text-txt-tertiary hover:text-indigo-700'
+                      !isMetric ? 'bg-ink text-white shadow-brand-sm' : 'text-txt-tertiary hover:text-txt-primary'
                     }`}
                   >
                     Imperial
@@ -285,13 +285,13 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                 </div>
                 
                 {/* Currency Dropdown (One UI 8.5 style) */}
-                <div className="relative flex items-center p-1 bg-slate-100/80 rounded-full border border-ui-borderSubtle/60 shadow-inner">
+                <div className="relative flex items-center p-1 bg-surface-hover rounded-full border border-ui-borderSubtle/60 shadow-inner">
                   <Button
                     onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
-                    className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 text-xs sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full text-txt-secondary hover:text-indigo-700 hover:bg-slate-50"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 text-xs sm:text-xs font-semibold tracking-wider uppercase transition-all rounded-full text-txt-secondary hover:text-txt-primary hover:bg-secondary-100"
                   >
                     <span className="min-w-[28px] text-center">{settings.currency || 'PKR'}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCurrencyDropdownOpen ? 'rotate-180 text-indigo-600' : 'text-slate-400'}`} />
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCurrencyDropdownOpen ? 'rotate-180 text-accent-800' : 'text-txt-tertiary'}`} />
                   </Button>
                   
                   {/* Dropdown Menu */}
@@ -301,7 +301,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                         className="fixed inset-0 z-40"
                         onClick={() => setIsCurrencyDropdownOpen(false)}
                       />
-                      <div className="absolute left-0 sm:left-auto sm:right-0 top-[calc(100%+8px)] w-44 bg-surface-default/95 backdrop-blur-xl border border-ui-borderSubtle/60 shadow-[0_12px_40px_rgba(15,23,42,0.12)] rounded-2xl p-1.5 z-50 overflow-hidden transform origin-top-left sm:origin-top-right animate-in fade-in zoom-in-95 duration-200">
+                      <div className="absolute left-0 sm:left-auto sm:right-0 top-[calc(100%+8px)] w-44 bg-surface-default/95 backdrop-blur-xl border border-ui-borderSubtle/60 shadow-[0_12px_40px_rgba(31,29,26,0.12)] rounded-2xl p-1.5 z-50 overflow-hidden transform origin-top-left sm:origin-top-right animate-in fade-in zoom-in-95 duration-200">
                         <div className="flex flex-col gap-0.5 max-h-[260px] overflow-y-auto no-scrollbar">
                           {currencies.map((currency) => {
                             const isActive = settings.currency === currency.code;
@@ -314,12 +314,12 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                                 }}
                                 className={`w-full text-left px-3 py-2 text-[13px] rounded-xl flex items-center justify-between transition-all duration-200 ${
                                   isActive 
-                                    ? 'bg-indigo-50/80 text-indigo-700 font-semibold' 
-                                    : 'text-txt-secondary hover:bg-slate-50 font-medium'
+                                    ? 'bg-accent-50 text-accent-900 font-semibold' 
+                                    : 'text-txt-secondary hover:bg-secondary-100 font-medium'
                                 }`}
                               >
                                 <span>{currency.code}</span>
-                                <span className={`text-xs ${isActive ? 'text-indigo-400' : 'text-slate-400'}`}>{currency.label}</span>
+                                <span className={`text-xs ${isActive ? 'text-accent-800' : 'text-txt-tertiary'}`}>{currency.label}</span>
                               </Button>
                             );
                           })}
@@ -336,7 +336,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
           {currentUrl && (
             <div className="hidden print:flex flex-col items-center justify-center gap-1 shrink-0">
               <QRCodeSVG value={currentUrl} size={64} level="M" />
-              <span className="text-xs text-slate-400 font-medium max-w-[100px] text-center leading-tight">Scan to verify</span>
+              <span className="text-xs text-txt-tertiary font-medium max-w-[100px] text-center leading-tight">Scan to verify</span>
             </div>
           )}
         </div>
@@ -344,18 +344,18 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
         <div id="tool-header-extra-controls" className="relative z-10 print:hidden empty:hidden"></div>
 
         {/* Action Button Grid */}
-        <div className="print:hidden grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 border-b border-slate-100 pb-6 mt-4 w-full">
+        <div className="print:hidden grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 border-b border-border-color pb-6 mt-4 w-full">
            {/* Row 1 */}
            <Button 
              onClick={() => setIsFormulaModalOpen(true)}
-             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
+             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-ui-borderStrong text-txt-primary hover:bg-secondary-100 transition-colors group"
            >
              <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Formulas</span>
            </Button>
            
            <Button onClick={handlePrint}
-             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
+             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-ui-borderStrong text-txt-primary hover:bg-secondary-100 transition-colors group"
            >
              <Printer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Print</span>
@@ -364,11 +364,11 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
            
            <div className="relative flex items-center justify-center">
              <Button onClick={() => setIsShareDropdownOpen(!isShareDropdownOpen)}
-               className="flex w-full items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
+               className="flex w-full items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-ui-borderStrong text-txt-primary hover:bg-secondary-100 transition-colors group"
              >
                <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Share</span>
-               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isShareDropdownOpen ? 'rotate-180 text-indigo-600' : 'text-indigo-700'}`} />
+               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isShareDropdownOpen ? 'rotate-180 text-accent-800' : 'text-txt-primary'}`} />
              </Button>
              
              {isShareDropdownOpen && (
@@ -377,13 +377,13 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                    className="fixed inset-0 z-40"
                    onClick={() => setIsShareDropdownOpen(false)}
                  />
-                 <div className="absolute left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-0 top-[calc(100%+8px)] w-64 bg-surface-default/95 backdrop-blur-xl border border-ui-borderSubtle/60 shadow-[0_12px_40px_rgba(15,23,42,0.12)] rounded-2xl p-2 z-50 overflow-hidden transform origin-top animate-in fade-in zoom-in-95 duration-200">
+                 <div className="absolute left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-0 top-[calc(100%+8px)] w-64 bg-surface-default/95 backdrop-blur-xl border border-ui-borderSubtle/60 shadow-[0_12px_40px_rgba(31,29,26,0.12)] rounded-2xl p-2 z-50 overflow-hidden transform origin-top animate-in fade-in zoom-in-95 duration-200">
                    <div className="flex flex-col gap-1">
                      <Button
                        onClick={handleWhatsAppShare}
-                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-slate-50 hover:text-emerald-600 font-medium group"
+                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-secondary-100 hover:text-ui-successText font-medium group"
                      >
-                       <div className="bg-emerald-50 text-emerald-600 p-1.5 rounded-lg group-hover:bg-emerald-100 transition-colors">
+                       <div className="bg-ui-success text-ui-successText p-1.5 rounded-lg transition-colors">
                          <MessageCircle className="w-4 h-4" />
                        </div>
                        <span>Share via WhatsApp</span>
@@ -391,9 +391,9 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                      
                      <Button
                        onClick={handleEmailShare}
-                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-slate-50 hover:text-indigo-600 font-medium group"
+                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-secondary-100 hover:text-accent-800 font-medium group"
                      >
-                       <div className="bg-indigo-50 text-indigo-600 p-1.5 rounded-lg group-hover:bg-indigo-100 transition-colors">
+                       <div className="bg-accent-50 text-accent-800 p-1.5 rounded-lg group-hover:bg-accent-100 transition-colors">
                          <Mail className="w-4 h-4" />
                        </div>
                        <span>Share via Email</span>
@@ -401,21 +401,21 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                      
                      <Button
                        onClick={handleSavePDF}
-                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-slate-50 hover:text-rose-600 font-medium group"
+                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-secondary-100 hover:text-ui-errorText font-medium group"
                      >
-                       <div className="bg-rose-50 text-rose-600 p-1.5 rounded-lg group-hover:bg-rose-100 transition-colors">
+                       <div className="bg-ui-error text-ui-errorText p-1.5 rounded-lg transition-colors">
                          <FileText className="w-4 h-4" />
                        </div>
                        <span>Save PDF Report</span>
                      </Button>
                      
-                     <div className="h-px w-full bg-slate-100 my-1"></div>
+                     <div className="h-px w-full bg-secondary-100 my-1"></div>
                      
                      <Button
                        onClick={handleCopyResults}
-                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-slate-50 hover:text-txt-primary font-medium group"
+                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-secondary-100 hover:text-txt-primary font-medium group"
                      >
-                       <div className="bg-slate-100 text-txt-secondary p-1.5 rounded-lg group-hover:bg-slate-200 transition-colors">
+                       <div className="bg-secondary-100 text-txt-secondary p-1.5 rounded-lg group-hover:bg-secondary-200 transition-colors">
                          <Copy className="w-4 h-4" />
                        </div>
                        <span>Copy Calculations</span>
@@ -423,9 +423,9 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
                      
                      <Button
                        onClick={handleNativeShare}
-                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-slate-50 hover:text-blue-600 font-medium group"
+                       className="w-full text-left px-3 py-2.5 text-[13px] rounded-xl flex items-center gap-3 transition-all duration-200 text-txt-secondary hover:bg-secondary-100 hover:text-ui-infoText font-medium group"
                      >
-                       <div className="bg-blue-50 text-blue-600 p-1.5 rounded-lg group-hover:bg-blue-100 transition-colors">
+                       <div className="bg-ui-info text-ui-infoText p-1.5 rounded-lg transition-colors">
                          <Smartphone className="w-4 h-4" />
                        </div>
                        <span>More Options...</span>
@@ -438,14 +438,14 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
 
            {/* Row 2 */}
            <Button onClick={handleSaveDraft}
-             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
+             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-ui-borderStrong text-txt-primary hover:bg-secondary-100 transition-colors group"
            >
              <Save className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Save Draft</span>
            </Button>
            
            <Button onClick={handleLoadDraft}
-             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-indigo-700 text-indigo-700 hover:bg-indigo-50 transition-colors group"
+             className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-ui-borderStrong text-txt-primary hover:bg-secondary-100 transition-colors group"
            >
              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Load Draft</span>
@@ -453,7 +453,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
            
            <Button 
              onClick={() => setShowReferences(!showReferences)}
-             className={`flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border transition-colors group ${showReferences ? 'bg-indigo-700 text-white border-indigo-700' : 'border-indigo-700 text-indigo-700 hover:bg-indigo-50'}`}
+             className={`flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border transition-colors group ${showReferences ? 'bg-ink text-white border-ink' : 'border-ui-borderStrong text-txt-primary hover:bg-secondary-100'}`}
            >
              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">References</span>

@@ -52,7 +52,7 @@ export default function DynamicToolPage() {
 
       {/* Render the actual tool component */}
       <div className="max-w-7xl mx-auto w-full px-4 md:px-8 flex-1 flex flex-col pt-8">
-        <Suspense fallback={<div className="p-8 text-center text-slate-500">Loading calculator...</div>}>
+        <Suspense fallback={<div className="p-8 text-center text-txt-secondary">Loading calculator...</div>}>
           {ToolComponent ? <ToolComponent /> : <div>Component not found</div>}
         </Suspense>
       </div>

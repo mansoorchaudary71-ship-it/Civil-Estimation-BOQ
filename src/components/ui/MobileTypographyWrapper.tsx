@@ -21,9 +21,9 @@ export function MobileTypographyWrapper({ children, className = '' }: MobileTypo
   return (
     <div 
       className={`
-        font-sans antialiased text-txt-primary dark:text-gray-100
-        selection:bg-indigo-100 selection:text-indigo-900
-        dark:selection:bg-indigo-900 dark:selection:text-indigo-100
+        font-sans antialiased text-txt-primary dark:text-white
+        selection:bg-accent-100 selection:text-accent-900
+        dark:selection:bg-ink dark:selection:text-accent-100
         ${className}
       `}
     >

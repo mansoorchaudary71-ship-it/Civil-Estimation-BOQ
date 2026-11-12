@@ -52,7 +52,7 @@ export default function ScrollProgressBar() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[3px] bg-indigo-600 origin-left z-[200] shadow-[0_0_10px_rgba(79,70,229,0.7)]"
+      className="fixed top-0 left-0 right-0 h-[3px] bg-ink origin-left z-[200] shadow-[0_0_10px_rgba(79,70,229,0.7)]"
       style={{ scaleX }}
       initial={{ opacity: 0 }}
       animate={{ opacity: progress > 0.01 ? 1 : 0 }}

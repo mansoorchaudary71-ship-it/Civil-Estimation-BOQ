@@ -27,7 +27,7 @@ export function CalcInput({
       transition={{ duration: 0.4, ease: "easeOut", delay }}
       className={`flex flex-col gap-1.5 ${className}`}
     >
-      <label className="text-txt-secondary dark:text-slate-300 text-xs font-black uppercase tracking-[0.2em] mb-1">
+      <label className="text-txt-secondary dark:text-txt-tertiary text-xs font-black uppercase tracking-[0.2em] mb-1">
         {label}
       </label>
       <div className="relative flex items-center">
@@ -36,14 +36,14 @@ export function CalcInput({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full bg-slate-50/80 dark:bg-slate-800/50 border border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 px-4 min-h-[48px] text-txt-primary dark:text-white font-bold text-sm placeholder:text-slate-400 dark:placeholder:text-txt-tertiary focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all ${
+          className={`w-full bg-surface-hover/80 dark:bg-ink/50 border border-ui-borderSubtle dark:border-ink-600 rounded-xl py-3 px-4 min-h-[48px] text-txt-primary dark:text-white font-bold text-sm placeholder:text-txt-tertiary dark:placeholder:text-txt-tertiary focus:outline-none focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 transition-all ${
             unit ? 'pr-16' : ''
           }`}
           inputMode={props.type === 'number' ? 'decimal' : props.inputMode}
           {...props}
         /></>
         {unit && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-700 dark:text-indigo-400 text-xs font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-lg select-none pointer-events-none border border-indigo-100 dark:border-indigo-800/50">
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-800 dark:text-accent-400 text-xs font-black uppercase tracking-wider bg-accent-50 dark:bg-accent-900/30 px-2 py-1 rounded-lg select-none pointer-events-none border border-accent-100 dark:border-accent-800/50">
             {unit}
           </span>
         )}

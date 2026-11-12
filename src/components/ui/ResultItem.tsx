@@ -28,17 +28,17 @@ export interface ResultItemProps {
 const statusConfig = {
   normal: {
     icon: CheckCircle,
-    className: "text-emerald-500 bg-emerald-500/10",
+    className: "text-ui-successText bg-ui-successText/10",
     label: "Normal",
   },
   high: {
     icon: AlertTriangle,
-    className: "text-amber-500 bg-amber-500/10",
+    className: "text-accent-700 bg-accent-500/10",
     label: "High",
   },
   exceeds: {
     icon: AlertTriangle,
-    className: "text-rose-500 bg-rose-500/10",
+    className: "text-ui-errorText bg-ui-errorText/10",
     label: "Exceeds limits",
   },
 };
@@ -119,10 +119,10 @@ export function ResultItem({
   const StatusIcon = statusDetails.icon;
 
   const palette = [
-    "text-purple-600",
-    "text-sky-500",
-    "text-amber-500",
-    "text-teal-600",
+    "text-accent-700",
+    "text-accent-700",
+    "text-accent-700",
+    "text-accent-800",
   ];
   const getColor = (str: string) => {
     let hash = 0;
@@ -136,7 +136,7 @@ export function ResultItem({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-      className={`p-4 rounded-2xl bg-surface-default  border border-ui-borderSubtle   shadow-sm hover:shadow-md transition-all duration-300 w-full mb-3`}
+      className={`p-4 rounded-2xl bg-surface-default  border border-ui-borderSubtle   shadow-brand-sm hover:shadow-brand-md transition-all duration-300 w-full mb-3`}
     >
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 relative z-10 w-full">
         {/* Left side labels */}
@@ -214,7 +214,7 @@ export function ResultItem({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="mt-3 pt-3 border-t border-slate-100">
+            <div className="mt-3 pt-3 border-t border-border-color">
               <div className="flex items-start gap-2 text-txt-secondary">
                 <Info className="w-4 h-4 mt-0.5 opacity-80 text-[#6B46C1]" />
                 <p className="text-sm opacity-90 leading-relaxed font-medium">

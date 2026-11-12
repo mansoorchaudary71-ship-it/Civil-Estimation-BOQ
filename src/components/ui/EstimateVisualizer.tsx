@@ -23,17 +23,17 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-surface-default/90 dark:bg-slate-900/90 backdrop-blur-md border border-white/20 dark:border-slate-800 shadow-xl rounded-2xl p-3 transform transition-all overflow-hidden">
+        <div className="bg-surface-default/90 dark:bg-ink/90 backdrop-blur-md border border-white/20 dark:border-ink shadow-brand-lg rounded-2xl p-3 transform transition-all overflow-hidden">
           <div className="flex items-center gap-2 mb-1">
-            <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: data.fill }} />
+            <div className="w-3 h-3 rounded-full shadow-brand-sm" style={{ backgroundColor: data.fill }} />
             <span className="font-bold text-txt-primary dark:text-white text-sm">{data.name}</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-txt-secondary dark:text-slate-300 text-sm font-medium">
+            <span className="text-txt-secondary dark:text-txt-tertiary text-sm font-medium">
               {valueFormatter ? valueFormatter(data.value) : data.value}
             </span>
             {data.percentage !== undefined && (
-              <span className="text-indigo-500 dark:text-indigo-400 text-base font-medium bg-indigo-50 dark:bg-indigo-500/10 inline-block px-1.5 py-0.5 rounded-md w-fit">
+              <span className="text-accent-800 dark:text-accent-400 text-base font-medium bg-accent-50 dark:bg-accent-500/10 inline-block px-1.5 py-0.5 rounded-md w-fit">
                 {data.percentage}% of total
               </span>
             )}
@@ -45,15 +45,15 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
   };
 
   return (
-    <div className="w-full bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl px-4 py-3 border border-ui-borderSubtle dark:border-slate-700/50 relative overflow-hidden backdrop-blur-sm transition-all hover:bg-slate-50/80 dark:hover:bg-slate-800/50">
+    <div className="w-full bg-surface-hover/50 dark:bg-ink/30 rounded-2xl px-4 py-3 border border-ui-borderSubtle dark:border-ink-600/50 relative overflow-hidden backdrop-blur-sm transition-all hover:bg-surface-hover/80 dark:hover:bg-ink-700/50">
       
-      <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl" />
-      <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl" />
+      <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent-500/10 dark:bg-accent-500/5 rounded-full blur-3xl" />
+      <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-ui-successText/10 dark:bg-ui-successText/5 rounded-full blur-3xl" />
       
-      <h4 className="text-sm font-black text-txt-primary dark:text-slate-100 mb-6 flex items-center justify-between relative z-10">
+      <h4 className="text-sm font-black text-txt-primary dark:text-txt-primary mb-6 flex items-center justify-between relative z-10">
         {title}
-        {type === 'pie' && <span className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-full text-xs uppercase tracking-wider">Breakdown</span>}
-        {type === 'bar' && <span className="bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full text-xs uppercase tracking-wider">Comparison</span>}
+        {type === 'pie' && <span className="bg-accent-100 dark:bg-accent-500/20 text-accent-800 dark:text-accent-400 px-2.5 py-1 rounded-full text-xs uppercase tracking-wider">Breakdown</span>}
+        {type === 'bar' && <span className="bg-ui-success dark:bg-ui-successText/20 text-ui-successText dark:text-ui-successText px-2.5 py-1 rounded-full text-xs uppercase tracking-wider">Comparison</span>}
       </h4>
 
       <div className="h-56 w-full relative z-10">
@@ -90,7 +90,7 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
             </PieChart>
           ) : (
             <BarChart data={enrichedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="opacity-10 dark:opacity-5 text-slate-400" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="opacity-10 dark:opacity-5 text-txt-tertiary" />
               <XAxis 
                 dataKey="name" 
                 axisLine={false} 
@@ -133,16 +133,16 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
           {enrichedData.map((entry, idx) => (
             <div 
               key={entry.name} 
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full border border-ui-borderSubtle dark:border-slate-700 bg-bg-card shadow-sm transition-all duration-200 cursor-default
-                ${activeIndex === idx ? 'ring-2 ring-offset-1 dark:ring-offset-slate-900 shadow-md scale-105' : 'opacity-80 hover:opacity-100 hover:scale-105'}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full border border-ui-borderSubtle dark:border-ink-600 bg-bg-card shadow-brand-sm transition-all duration-200 cursor-default
+                ${activeIndex === idx ? 'ring-2 ring-offset-1 dark:ring-offset-slate-900 shadow-brand-md scale-105' : 'opacity-80 hover:opacity-100 hover:scale-105'}
               `}
               style={{ '--tw-ring-color': entry.fill } as React.CSSProperties}
               onMouseEnter={() => setActiveIndex(idx)}
               onMouseLeave={() => setActiveIndex(null)}
             >
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.fill }} />
-              <span className="text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider">{entry.name}</span>
-              <span className="text-xs font-black opacity-60 text-txt-secondary dark:text-slate-400 bg-slate-100 dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">
+              <span className="text-xs font-black text-txt-secondary dark:text-txt-tertiary uppercase tracking-wider">{entry.name}</span>
+              <span className="text-xs font-black opacity-60 text-txt-secondary dark:text-txt-tertiary bg-surface-hover dark:bg-ink-600/50 px-1.5 py-0.5 rounded-md">
                 {entry.percentage}%
               </span>
             </div>

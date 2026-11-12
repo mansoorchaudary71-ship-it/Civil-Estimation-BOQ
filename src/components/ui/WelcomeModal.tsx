@@ -65,15 +65,15 @@ export function WelcomeModal() {
   const recommendedTools = getRecommendedTools();
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#F5F5F7] backdrop-blur-md p-4 animate-in fade-in duration-300 font-sans">
-      <div className="bg-surface-default border border-slate-100 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col min-h-[500px] animate-in zoom-in-95 duration-200 ease-out transform-gpu">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-surface-hover backdrop-blur-md p-4 animate-in fade-in duration-300 font-sans">
+      <div className="bg-surface-default border border-border-color rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col min-h-[500px] animate-in zoom-in-95 duration-200 ease-out transform-gpu">
         
         <div className="p-8 pb-4">
           {/* Progress Indicator */}
           <div className="flex gap-2 mb-8">
-            <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 1 ? 'bg-indigo-600' : 'bg-slate-100 '}`} />
-            <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 2 ? 'bg-indigo-600' : 'bg-slate-100 '}`} />
-            <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 3 ? 'bg-indigo-600' : 'bg-slate-100 '}`} />
+            <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 1 ? 'bg-ink' : 'bg-surface-hover '}`} />
+            <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 2 ? 'bg-ink' : 'bg-surface-hover '}`} />
+            <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 3 ? 'bg-ink' : 'bg-surface-hover '}`} />
           </div>
 
           <h1 className="text-3xl font-extrabold text-txt-primary tracking-tight mb-2" >
@@ -97,22 +97,22 @@ export function WelcomeModal() {
                   onClick={() => setProjectType(pt.id as ProjectType)}
                   className={`flex flex-col items-start gap-4 p-5 rounded-2xl border-2 text-left transition-all group ${
                     projectType === pt.id 
-                      ? 'border-indigo-600 bg-indigo-50/50 ' 
-                      : 'border-slate-100  hover:border-indigo-200 hover:bg-slate-50'
+                      ? 'border-accent-800 bg-accent-50 ' 
+                      : 'border-border-color  hover:border-accent-200 hover:bg-surface-hover'
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
                     projectType === pt.id 
-                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' 
-                      : 'bg-slate-100  text-txt-tertiary group-hover:bg-indigo-100 group-hover:text-indigo-600'
+                      ? 'bg-ink text-white shadow-brand-lg shadow-accent-600/30' 
+                      : 'bg-surface-hover  text-txt-tertiary group-hover:bg-accent-100 group-hover:text-accent-800'
                   }`}>
                     {pt.icon}
                   </div>
                   <div>
-                    <h3 className={`font-bold text-lg mb-1 ${projectType === pt.id ? 'text-indigo-900 ' : 'text-txt-primary '}`}>{pt.label}</h3>
-                    <p className={`text-sm ${projectType === pt.id ? 'text-indigo-700 ' : 'text-txt-tertiary '}`}>{pt.desc}</p>
+                    <h3 className={`font-bold text-lg mb-1 ${projectType === pt.id ? 'text-accent-900 ' : 'text-txt-primary '}`}>{pt.label}</h3>
+                    <p className={`text-sm ${projectType === pt.id ? 'text-accent-800 ' : 'text-txt-tertiary '}`}>{pt.desc}</p>
                   </div>
-                  {projectType === pt.id && <CheckCircle2 className="w-5 h-5 absolute top-5 right-5 text-indigo-600" />}
+                  {projectType === pt.id && <CheckCircle2 className="w-5 h-5 absolute top-5 right-5 text-accent-800" />}
                 </Button>
               ))}
             </div>
@@ -126,15 +126,15 @@ export function WelcomeModal() {
                   onClick={() => setRole(r.id as UserRole)}
                   className={`flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all relative ${
                     role === r.id 
-                      ? 'border-indigo-600 bg-indigo-50/50 ' 
-                      : 'border-slate-100  hover:border-indigo-200 hover:bg-slate-50'
+                      ? 'border-accent-800 bg-accent-50 ' 
+                      : 'border-border-color  hover:border-accent-200 hover:bg-surface-hover'
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${role === r.id ? 'bg-indigo-100 text-indigo-600  ' : 'bg-slate-100 text-slate-400 '}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${role === r.id ? 'bg-accent-100 text-accent-800  ' : 'bg-surface-hover text-txt-tertiary '}`}>
                     {r.icon}
                   </div>
-                  <span className={`font-bold ${role === r.id ? 'text-indigo-900 ' : 'text-txt-primary '}`}>{r.label}</span>
-                  {role === r.id && <CheckCircle2 className="w-5 h-5 absolute right-5 text-indigo-600" />}
+                  <span className={`font-bold ${role === r.id ? 'text-accent-900 ' : 'text-txt-primary '}`}>{r.label}</span>
+                  {role === r.id && <CheckCircle2 className="w-5 h-5 absolute right-5 text-accent-800" />}
                 </Button>
               ))}
             </div>
@@ -148,16 +148,16 @@ export function WelcomeModal() {
                   onClick={() => setSelectedTool(tool.id)}
                   className={`flex items-center justify-between p-5 rounded-2xl border-2 text-left transition-all group ${
                     selectedTool === tool.id 
-                      ? 'border-indigo-600 bg-indigo-50/50  shadow-[0_0_0_4px_rgba(79,70,229,0.1)]' 
-                      : 'border-slate-100  hover:border-indigo-200 hover:bg-slate-50'
+                      ? 'border-accent-800 bg-accent-50  shadow-[0_0_0_4px_rgba(79,70,229,0.1)]' 
+                      : 'border-border-color  hover:border-accent-200 hover:bg-surface-hover'
                   }`}
                 >
                   <div>
-                    <h3 className={`font-bold text-lg mb-1 ${selectedTool === tool.id ? 'text-indigo-900 ' : 'text-txt-primary '}`}>{tool.name}</h3>
-                    <p className={`text-sm ${selectedTool === tool.id ? 'text-indigo-700 ' : 'text-txt-tertiary '}`}>{tool.desc}</p>
+                    <h3 className={`font-bold text-lg mb-1 ${selectedTool === tool.id ? 'text-accent-900 ' : 'text-txt-primary '}`}>{tool.name}</h3>
+                    <p className={`text-sm ${selectedTool === tool.id ? 'text-accent-800 ' : 'text-txt-tertiary '}`}>{tool.desc}</p>
                   </div>
-                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${selectedTool === tool.id ? 'border-indigo-600 text-indigo-600 bg-surface-default' : 'border-ui-borderSubtle text-transparent'}`}>
-                    {selectedTool === tool.id && <div className="w-3 h-3 rounded-full bg-indigo-600" />}
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${selectedTool === tool.id ? 'border-accent-800 text-accent-800 bg-surface-default' : 'border-ui-borderSubtle text-transparent'}`}>
+                    {selectedTool === tool.id && <div className="w-3 h-3 rounded-full bg-ink" />}
                   </div>
                 </Button>
               ))}
@@ -165,7 +165,7 @@ export function WelcomeModal() {
           )}
         </div>
 
-        <div className="p-4 sm:p-6 border-t border-slate-100 flex justify-between items-center bg-slate-50">
+        <div className="p-4 sm:p-6 border-t border-border-color flex justify-between items-center bg-surface-hover">
           {step > 1 ? (
              <Button
               onClick={() => setStep(step - 1)}
@@ -181,7 +181,7 @@ export function WelcomeModal() {
             <Button
               onClick={() => setStep(step + 1)}
               disabled={(step === 1 && !projectType) || (step === 2 && !role)}
-              className="flex items-center gap-2 bg-[#F5F5F7] hover:bg-indigo-600 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold transition-all shadow-sm hover:shadow-md overflow-hidden"
+              className="flex items-center gap-2 bg-surface-hover hover:bg-ink-700 disabled:opacity-50 disabled:hover:bg-ink-700 text-white px-8 py-3 rounded-2xl font-bold transition-all shadow-brand-sm hover:shadow-brand-md overflow-hidden"
             >
               Continue
               <ArrowRight className="w-4 h-4" />
@@ -189,7 +189,7 @@ export function WelcomeModal() {
           ) : (
             <Button
               onClick={handleComplete}
-              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-2xl font-bold transition-all shadow-[0_8px_20px_rgba(79,70,229,0.25)] hover:shadow-[0_12px_25px_rgba(79,70,229,0.35)] hover:-translate-y-0.5 overflow-hidden"
+              className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-8 py-3 rounded-2xl font-bold transition-all shadow-[0_8px_20px_rgba(79,70,229,0.25)] hover:shadow-[0_12px_25px_rgba(79,70,229,0.35)] hover:-translate-y-0.5 overflow-hidden"
             >
               Let's Build It
               <ArrowRight className="w-4 h-4" />

@@ -21,28 +21,28 @@ export function UniversalTabs({
 }) {
   const COLOR_PALETTE = [
     {
-      text: "text-red-600 dark:text-red-400",
+      text: "text-ui-errorText dark:text-ui-errorText",
       border: "border-red-600 dark:border-red-400",
     },
     {
-      text: "text-blue-600 dark:text-blue-400",
-      border: "border-blue-600 dark:border-blue-400",
+      text: "text-accent-800 dark:text-accent-400",
+      border: "border-accent-800 dark:border-accent-800",
     },
     {
-      text: "text-emerald-600 dark:text-emerald-400",
+      text: "text-ui-successText dark:text-ui-successText",
       border: "border-emerald-600 dark:border-emerald-400",
     },
     {
-      text: "text-purple-600 dark:text-purple-400",
+      text: "text-accent-700 dark:text-accent-400",
       border: "border-purple-600 dark:border-purple-400",
     },
     {
-      text: "text-blue-600 dark:text-orange-400",
-      border: "border-orange-600 dark:border-orange-400",
+      text: "text-accent-800 dark:text-accent-400",
+      border: "border-accent-800 dark:border-orange-400",
     },
     {
-      text: "text-teal-600 dark:text-teal-400",
-      border: "border-teal-600 dark:border-teal-400",
+      text: "text-teal-700 dark:text-teal-400",
+      border: "border-teal-700 dark:border-teal-400",
     },
   ];
 
@@ -50,7 +50,7 @@ export function UniversalTabs({
     <div
       className={`w-full overflow-x-auto pb-3 md:pb-4 scroll-smooth ${className}`}
     >
-      <div className="flex px-1 min-w-max border-b border-ui-borderSubtle dark:border-slate-800">
+      <div className="flex px-1 min-w-max border-b border-ui-borderSubtle dark:border-ink">
         {tabs.map((tab, index) => {
           const isActive = activeTab === tab.id;
           const colorTheme = COLOR_PALETTE[index % COLOR_PALETTE.length];
@@ -64,14 +64,14 @@ export function UniversalTabs({
                 rounded-t-xl rounded-b-none
                 ${
                   isActive
-                    ? `bg-surface-default dark:bg-[#151821] shadow-[0_-4px_12px_rgba(15,23,42,0.03)] dark:shadow-slate-900/20 z-20 ${colorTheme.text}`
-                    : "bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50 text-txt-tertiary dark:text-slate-400 z-10"
+                    ? `bg-surface-default dark:bg-[#151821] shadow-[0_-4px_12px_rgba(31,29,26,0.03)] dark:shadow-ink/20 z-20 ${colorTheme.text}`
+                    : "bg-transparent hover:bg-surface-hover/50 text-txt-tertiary dark:text-txt-tertiary z-10"
                 }
               `}
             >
               {tab.icon && (
                 <span
-                  className={`[&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4 md:[&>svg]:w-5 md:[&>svg]:h-5 inline-flex items-center justify-center ${isActive ? colorTheme.text : "text-slate-400 dark:text-txt-tertiary"}`}
+                  className={`[&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4 md:[&>svg]:w-5 md:[&>svg]:h-5 inline-flex items-center justify-center ${isActive ? colorTheme.text : "text-txt-tertiary dark:text-txt-tertiary"}`}
                 >
                   {tab.icon}
                 </span>

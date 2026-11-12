@@ -144,31 +144,31 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
       {/* Header Controls */}
       <div className="flex items-center justify-between px-6 md:px-12 z-10 w-full mb-2">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+          <div className="w-10 h-10 rounded-full bg-accent-100 flex items-center justify-center text-accent-800">
             <Compass className="w-5 h-5" />
           </div>
-          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 tracking-tight">
+          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-ink to-ink-600 tracking-tight">
             Recent Projects
           </h2>
         </div>
 
         {/* Pagination Style Toggle */}
-        <div className="flex items-center bg-slate-100/80 p-1 rounded-full backdrop-blur-md border border-ui-borderSubtle/50 shadow-inner">
+        <div className="flex items-center bg-surface-hover/80 p-1 rounded-full backdrop-blur-md border border-ui-borderSubtle/50 shadow-inner">
           <Button
             onClick={() => setPaginationStyle('classic')}
-            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'classic' ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary")}
+            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'classic' ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-tertiary hover:text-txt-secondary")}
           >
             Classic
           </Button>
           <Button
             onClick={() => setPaginationStyle('counter')}
-            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'counter' ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary")}
+            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'counter' ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-tertiary hover:text-txt-secondary")}
           >
             Counter
           </Button>
           <Button
             onClick={() => setPaginationStyle('dots')}
-            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'dots' ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-tertiary hover:text-txt-secondary")}
+            className={cn("px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-300", paginationStyle === 'dots' ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-tertiary hover:text-txt-secondary")}
           >
             Dots
           </Button>
@@ -189,13 +189,13 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
             <motion.div
               key={project.id}
               className={cn(
-                "carousel-card shrink-0 snap-center w-[300px] md:w-[350px] flex flex-col rounded-[2.5rem] bg-surface-default border border-slate-100 shadow-xl overflow-hidden transition-all duration-500 ease-out",
+                "carousel-card shrink-0 snap-center w-[300px] md:w-[350px] flex flex-col rounded-[2.5rem] bg-surface-default border border-border-color shadow-brand-lg overflow-hidden transition-all duration-500 ease-out",
                 isActive ? "opacity-100 scale-100 shadow-2xl" : "opacity-60 scale-95 hover:opacity-80"
               )}
             >
               {/* Card Image Header */}
               <div className="relative h-56 w-full overflow-hidden">
-                <div className="absolute inset-0 bg-slate-900/10 z-10"></div>
+                <div className="absolute inset-0 bg-ink/10 z-10"></div>
                 <img 
                   src={project.image} 
                   alt={project.title} 
@@ -203,11 +203,11 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                 />
                 <div className="absolute top-4 left-4 z-20">
                   <span className={cn(
-                    "px-3 py-1 text-xs uppercase font-bold tracking-wider rounded-full shadow-sm backdrop-blur-md",
-                    project.status === "APPROVED" ? "bg-emerald-500/90 text-white" :
-                    project.status === "PENDING" ? "bg-amber-500/90 text-white" :
-                    project.status === "VERIFIED" ? "bg-blue-500/90 text-white" :
-                    "bg-slate-800/90 text-white"
+                    "px-3 py-1 text-xs uppercase font-bold tracking-wider rounded-full shadow-brand-sm backdrop-blur-md",
+                    project.status === "APPROVED" ? "bg-ui-successText/90 text-white" :
+                    project.status === "PENDING" ? "bg-accent-500/90 text-ink" :
+                    project.status === "VERIFIED" ? "bg-ink text-white" :
+                    "bg-ink/90 text-white"
                   )}>
                     {project.status}
                   </span>
@@ -222,8 +222,8 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
               {/* Card Body */}
               <div className="p-6 md:p-8 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
-                  <span className="text-xs font-bold tracking-widest text-indigo-500 uppercase">
+                  <div className="w-1.5 h-1.5 rounded-full bg-ink"></div>
+                  <span className="text-xs font-bold tracking-widest text-accent-800 uppercase">
                     {project.category}
                   </span>
                 </div>
@@ -235,15 +235,15 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                 </p>
 
                 {/* Footer / User info */}
-                <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-100">
+                <div className="mt-auto flex items-center justify-between pt-4 border-t border-border-color">
                   <div className="flex items-center gap-3">
-                    <img src={project.inspectorAvatar} alt="Inspector" className="w-8 h-8 rounded-full shadow-sm ring-2 ring-white" />
+                    <img src={project.inspectorAvatar} alt="Inspector" className="w-8 h-8 rounded-full shadow-brand-sm ring-2 ring-white" />
                     <div className="flex flex-col">
                       <span className="text-xs font-bold text-txt-primary">{project.inspectorName}</span>
-                      <span className="text-xs font-medium text-slate-400">Inspector</span>
+                      <span className="text-xs font-medium text-txt-tertiary">Inspector</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-xs font-bold text-slate-400">
+                  <div className="flex items-center gap-1 text-xs font-bold text-txt-tertiary">
                     <Clock className="w-3 h-3" />
                     {project.date}
                   </div>
@@ -261,7 +261,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
           <Button aria-label="ChevronLeft" 
             onClick={handlePrev}
             disabled={activeIndex === 0}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-txt-primary hover:bg-slate-100 disabled:opacity-30 transition-all z-20"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-txt-tertiary hover:text-txt-primary hover:bg-surface-hover disabled:opacity-30 transition-all z-20"
           >
             <ChevronLeft className="w-5 h-5" />
           </Button>
@@ -276,7 +276,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="flex items-center gap-2 text-sm font-bold text-txt-secondary"
                 >
-                  <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg">
+                  <div className="w-8 h-8 rounded-full bg-ink text-white flex items-center justify-center shadow-brand-lg">
                     {activeIndex + 1}
                   </div>
                   <span className="opacity-50 mx-1">of</span>
@@ -292,10 +292,10 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                   exit={{ opacity: 0, y: -15 }}
                   className="flex items-end gap-1 font-black tracking-tighter"
                 >
-                  <span className="text-5xl text-rose-500 leading-none" style={{ background: 'linear-gradient(to right, #f43f5e, #e11d48)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
+                  <span className="text-5xl text-ui-errorText leading-none" style={{ background: 'linear-gradient(to right, #f43f5e, #e11d48)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
                     {String(activeIndex + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-xl text-slate-300 mb-1">
+                  <span className="text-xl text-txt-tertiary mb-1">
                     {String(PROJECT_DATA.length).padStart(2, '0')}
                   </span>
                 </motion.div>
@@ -315,7 +315,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                       onClick={() => setActiveIndex(idx)}
                       className={cn(
                         "transition-all duration-300 rounded-full",
-                        activeIndex === idx ? "w-6 h-2 bg-slate-800 shadow-md" : "w-2 h-2 bg-slate-200 hover:bg-slate-400"
+                        activeIndex === idx ? "w-6 h-2 bg-ink shadow-brand-md" : "w-2 h-2 bg-surface-active hover:bg-secondary-400"
                       )}
                     />
                   ))}
@@ -327,14 +327,14 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
           <Button aria-label="ChevronRight" 
             onClick={handleNext}
             disabled={activeIndex === PROJECT_DATA.length - 1}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-txt-primary hover:bg-slate-100 disabled:opacity-30 transition-all z-20"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-txt-tertiary hover:text-txt-primary hover:bg-surface-hover disabled:opacity-30 transition-all z-20"
           >
             <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
 
-        <p className="mt-4 text-xs font-semibold text-slate-400 tracking-wider">
-          {activeIndex + 1}-{Math.min(activeIndex + 3, PROJECT_DATA.length)} of {PROJECT_DATA.length} civil projects • <span className="text-slate-300">swipe to navigate</span>
+        <p className="mt-4 text-xs font-semibold text-txt-tertiary tracking-wider">
+          {activeIndex + 1}-{Math.min(activeIndex + 3, PROJECT_DATA.length)} of {PROJECT_DATA.length} civil projects • <span className="text-txt-tertiary">swipe to navigate</span>
         </p>
       </div>
 

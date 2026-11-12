@@ -11,16 +11,16 @@ export function HelpGuideModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-ink/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col relative max-h-[90vh]">
         
-        <Button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-txt-secondary dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-full transition-colors">
+        <Button onClick={onClose} className="absolute top-4 right-4 p-2 text-txt-tertiary hover:text-txt-secondary dark:hover:text-txt-primary bg-surface-hover rounded-full transition-colors">
           <X className="w-5 h-5" />
         </Button>
 
         <div className="p-6 md:p-8 border-b border-[var(--border-color)]">
           <h2 className="text-2xl font-bold flex items-center gap-3 text-[var(--text-primary)]">
-            <BookOpen className="w-6 h-6 text-blue-500" />
+            <BookOpen className="w-6 h-6 text-accent-800" />
             Quick Help Guide
           </h2>
           <p className="text-txt-tertiary mt-2 text-sm">
@@ -33,7 +33,7 @@ export function HelpGuideModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
             <h3 className="font-semibold text-[var(--text-primary)] mb-3 uppercase tracking-wider text-xs">Core Features</h3>
             <div className="space-y-3">
               <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 shrink-0">
+                <div className="w-8 h-8 rounded-full bg-accent-50 dark:bg-accent-900/30 flex items-center justify-center text-accent-800 shrink-0">
                   <Layers className="w-4 h-4" />
                 </div>
                 <div>
@@ -42,7 +42,7 @@ export function HelpGuideModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 shrink-0">
+                <div className="w-8 h-8 rounded-full bg-ui-success dark:bg-ui-success/20 flex items-center justify-center text-ui-successText shrink-0">
                   <Bot className="w-4 h-4" />
                 </div>
                 <div>
@@ -51,7 +51,7 @@ export function HelpGuideModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 shrink-0">
+                <div className="w-8 h-8 rounded-full bg-accent-50 dark:bg-accent-900/30 flex items-center justify-center text-accent-800 shrink-0">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div>
@@ -62,11 +62,11 @@ export function HelpGuideModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
             </div>
           </div>
           
-          <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-[var(--border-color)]">
+          <div className="bg-surface-default/50 p-4 rounded-xl border border-[var(--border-color)]">
             <h3 className="font-semibold text-sm text-[var(--text-primary)] mb-1">Your Progress</h3>
             <p className="text-xs text-txt-tertiary mb-2">You've explored {settings.usedTools?.length || 0} out of {ALL_TOOLS.length} tools.</p>
-            <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-              <div className="bg-blue-500 h-2 rounded-full transition-all" style={{ width: `${Math.min(100, ((settings.usedTools?.length || 0) / ALL_TOOLS.length) * 100)}%` }} />
+            <div className="w-full bg-surface-active rounded-full h-2">
+              <div className="bg-ink h-2 rounded-full transition-all" style={{ width: `${Math.min(100, ((settings.usedTools?.length || 0) / ALL_TOOLS.length) * 100)}%` }} />
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ interface BottomNavBarProps {
 export function BottomNavBar({ onHome, onHistory, onSave, onShare, onPrint }: BottomNavBarProps) {
   return (
     <nav
-      className="fixed bottom-0 left-0 w-full bg-surface-default dark:bg-slate-900 border-t border-ui-borderSubtle dark:border-slate-800 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 px-2 sm:px-6 pb-2 pt-2 sm:pb-safe flex items-center justify-between h-16 transition-colors"
+      className="fixed bottom-0 left-0 w-full bg-surface-default dark:bg-ink border-t border-ui-borderSubtle dark:border-ink shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 px-2 sm:px-6 pb-2 pt-2 sm:pb-safe flex items-center justify-between h-16 transition-colors"
       role="navigation"
       aria-label="Bottom Navigation Bar"
     >
@@ -25,7 +25,7 @@ export function BottomNavBar({ onHome, onHistory, onSave, onShare, onPrint }: Bo
         <div className="relative -top-5">
           <Button
             onClick={onSave}
-            className="flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+            className="flex items-center justify-center w-14 h-14 bg-ink text-white rounded-full shadow-brand-lg shadow-accent-500/30 hover:bg-ink-700 hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
             aria-label="Save Project"
             role="button"
           >
@@ -50,7 +50,7 @@ function NavItem({ icon, label, onClick }: NavItemProps) {
   return (
     <Button
       onClick={onClick}
-      className="flex flex-col items-center justify-center p-2 text-txt-tertiary hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 rounded-xl transition-colors min-w-[64px]"
+      className="flex flex-col items-center justify-center p-2 text-txt-tertiary hover:text-accent-800 dark:text-txt-tertiary dark:hover:text-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 rounded-xl transition-colors min-w-[64px]"
       aria-label={label}
       role="button"
     >

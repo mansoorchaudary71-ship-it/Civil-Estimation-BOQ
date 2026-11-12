@@ -19,12 +19,12 @@ interface MaterialCostDonutChartProps {
 }
 
 const CIVIL_COLORS = [
-  '#64748B', // Slate (Cement)
+  '#F2A413', // Amber (Cement)
   '#D4A373', // Sand/Earth (Sand)
-  '#9CA3AF', // Gray (Aggregate)
-  '#374151', // Dark Gray (Steel)
-  '#3B82F6', // Blue (Fittings/Plumbing)
-  '#10B981', // Emerald (Finishers/Glass)
+  '#A8A29A', // Warm Gray (Aggregate)
+  '#1F1D1A', // Ink (Steel)
+  '#0F766E', // Teal (Fittings/Plumbing)
+  '#6B6862', // Muted (Finishers/Glass)
 ];
 
 const DEFAULT_DATA: MaterialCostData[] = [
@@ -80,14 +80,14 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
     if (active && payload && payload.length) {
       const pData = payload[0].payload;
       return (
-        <div className="bg-surface-default/90 backdrop-blur-md border border-ui-borderSubtle/60 p-3 rounded-xl shadow-lg">
+        <div className="bg-surface-default/90 backdrop-blur-md border border-ui-borderSubtle/60 p-3 rounded-xl shadow-brand-lg">
           <p className="font-semibold text-txt-primary mb-1">{pData.name}</p>
           <div className="flex flex-col gap-1">
             <span className="text-sm text-txt-secondary">
               Cost: <span className="font-medium text-txt-primary">Rs {pData.value.toLocaleString()}</span>
             </span>
             <span className="text-sm text-txt-secondary">
-              Share: <span className="font-medium text-blue-600">{pData.percentage.toFixed(1)}%</span>
+              Share: <span className="font-medium text-accent-800">{pData.percentage.toFixed(1)}%</span>
             </span>
           </div>
         </div>
@@ -97,7 +97,7 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
   };
 
   return (
-    <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-white/40 shadow-sm p-6 lg:p-8 flex flex-col md:flex-row items-center gap-8 w-full">
+    <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-white/40 shadow-brand-sm p-6 lg:p-8 flex flex-col md:flex-row items-center gap-8 w-full">
       <div className="relative w-full md:w-1/2 h-64 md:h-80 flex justify-center items-center">
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
            <span className="text-sm font-medium text-txt-tertiary uppercase tracking-wider mb-1">Total Cost</span>
@@ -149,8 +149,8 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
                 key={item.name}
                 className={`flex items-center gap-3 p-3 rounded-xl border transition-all duration-300 cursor-pointer ${
                   isActive 
-                    ? 'bg-slate-50/80 border-ui-borderSubtle shadow-sm' 
-                    : 'bg-transparent border-transparent hover:bg-slate-50/50'
+                    ? 'bg-surface-hover/80 border-ui-borderSubtle shadow-brand-sm' 
+                    : 'bg-transparent border-transparent hover:bg-surface-hover/50'
                 }`}
                 onMouseEnter={() => setActiveIndex(index)}
                 onMouseLeave={() => setActiveIndex(null)}

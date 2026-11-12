@@ -33,13 +33,13 @@ export function FormulaAccordion({
   };
 
   return (
-    <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden mt-6">
+    <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-brand-sm overflow-hidden mt-6">
       <Button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 sm:p-5 bg-slate-50 hover:bg-slate-100 transition-colors text-left focus:outline-none"
+        className="w-full flex items-center justify-between p-4 sm:p-5 bg-surface-hover hover:bg-surface-hover transition-colors text-left focus:outline-none"
       >
         <div className="flex items-center gap-3">
-          <div className="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
+          <div className="bg-accent-100 text-accent-800 p-2 rounded-lg">
             <Calculator size={20} />
           </div>
           <h3 className="text-lg font-semibold text-txt-primary">{title}</h3>
@@ -71,8 +71,8 @@ export function FormulaAccordion({
                   )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Theoretical Formula */}
-                    <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 relative">
-                      <span className="absolute top-0 right-0 bg-slate-200 text-txt-secondary text-xs font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
+                    <div className="bg-surface-hover rounded-xl p-4 border border-border-color relative">
+                      <span className="absolute top-0 right-0 bg-surface-active text-txt-secondary text-xs font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
                         Theoretical Formula
                       </span>
                       <div className="mt-2 font-mono text-sm text-txt-secondary overflow-x-auto whitespace-pre-wrap leading-relaxed">
@@ -81,11 +81,11 @@ export function FormulaAccordion({
                     </div>
                     
                     {/* Applied Formula */}
-                    <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-100 relative">
-                      <span className="absolute top-0 right-0 bg-indigo-200 text-indigo-800 text-xs font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
+                    <div className="bg-accent-50 rounded-xl p-4 border border-accent-100 relative">
+                      <span className="absolute top-0 right-0 bg-accent-200 text-accent-800 text-xs font-bold px-2 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
                         Applied Values
                       </span>
-                      <div className="mt-2 font-mono text-sm text-indigo-900 overflow-x-auto whitespace-pre-wrap leading-relaxed font-semibold">
+                      <div className="mt-2 font-mono text-sm text-accent-900 overflow-x-auto whitespace-pre-wrap leading-relaxed font-semibold">
                         {renderMath(step.applied)}
                       </div>
                     </div>

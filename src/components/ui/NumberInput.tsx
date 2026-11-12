@@ -152,7 +152,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         className={`w-full relative group/field ${containerClassName}`}
       >
         {label && (
-          <label htmlFor={inputId} className="block text-xs sm:text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-[0.2em] mb-2.5 ml-1 cursor-help flex items-center gap-1.5 group-hover/field:text-indigo-600 dark:group-hover/field:text-indigo-400 transition-colors">
+          <label htmlFor={inputId} className="block text-xs sm:text-xs font-black text-txt-secondary dark:text-txt-tertiary uppercase tracking-[0.2em] mb-2.5 ml-1 cursor-help flex items-center gap-1.5 group-hover/field:text-accent-800 dark:group-hover/field:text-accent-400 transition-colors">
             {label}
           </label>
         )}
@@ -170,33 +170,33 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             onBlur={onBlur}
             onFocus={handleFocus}
             aria-invalid={!!displayError}
-            className={`w-full bg-slate-50/80 dark:bg-slate-800/50 border ${
+            className={`w-full bg-surface-hover/80 dark:bg-ink/50 border ${
               displayError 
-                ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' 
-                : 'border-slate-100 dark:border-slate-800/60 focus:border-indigo-500 focus:ring-indigo-500/10'
-            } text-txt-primary dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-2xl px-5 py-4 min-h-[56px] ${
+                ? 'border-ui-errorBorder focus:border-ui-errorText focus:ring-ui-errorText/10' 
+                : 'border-border-color focus:border-accent-800 focus:ring-accent-500/10'
+            } text-txt-primary dark:text-white placeholder-txt-tertiary dark:placeholder-txt-tertiary rounded-2xl px-5 py-4 min-h-[56px] ${
               displayUnit ? 'pr-28' : 'pr-16'
-            } focus:outline-none focus:ring-4 transition-all font-bold text-base shadow-sm group-hover/input:shadow-md ${className || ''}`}
+            } focus:outline-none focus:ring-4 transition-all font-bold text-base shadow-brand-sm group-hover/input:shadow-brand-md ${className || ''}`}
             {...props}
           />
 
           <div className="absolute right-3 flex items-center gap-2">
             {displayUnit && (
-              <span className="text-txt-tertiary dark:text-slate-400 text-xs font-black uppercase tracking-widest select-none pr-3 border-r border-slate-100 dark:border-slate-800/60">
+              <span className="text-txt-tertiary dark:text-txt-tertiary text-xs font-black uppercase tracking-widest select-none pr-3 border-r border-border-color">
                 {displayUnit}
               </span>
             )}
             <div className="flex flex-col -gap-1">
               <Button 
                 type="button" tabIndex={-1}
-                className="p-1 text-slate-400 hover:text-indigo-600 transition-colors active:scale-90"
+                className="p-1 text-txt-tertiary hover:text-accent-800 transition-colors active:scale-90"
                 onClick={() => handleIncrement(1)}
               >
                 <ChevronUp className="w-4 h-4" />
               </Button>
               <Button 
                 type="button" tabIndex={-1}
-                className="p-1 text-slate-400 hover:text-indigo-600 transition-colors active:scale-90"
+                className="p-1 text-txt-tertiary hover:text-accent-800 transition-colors active:scale-90"
                 onClick={() => handleIncrement(-1)}
               >
                 <ChevronDown className="w-4 h-4" />
@@ -206,7 +206,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         </div>
 
         {displayError && (
-          <span className="text-xs font-bold text-red-500 mt-1.5 ml-2 block uppercase tracking-wider animate-in fade-in slide-in-from-top-1">
+          <span className="text-xs font-bold text-ui-errorText mt-1.5 ml-2 block uppercase tracking-wider animate-in fade-in slide-in-from-top-1">
             {displayError}
           </span>
         )}

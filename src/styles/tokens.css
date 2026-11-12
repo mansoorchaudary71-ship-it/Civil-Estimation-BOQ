@@ -1,88 +1,113 @@
 /* ==========================================================================
-   Civil Estimation Pro — Design Tokens
+   Civil Estimation Pro — Design Tokens (Batch 1: Dribbble-style, amber)
    --------------------------------------------------------------------------
    Single source of truth for colour, radius, shadow and motion.
    Colours are stored as space-separated RGB channels so Tailwind can apply
    opacity modifiers (e.g. `bg-surface-default/80`, `border-ui-borderSubtle/50`).
 
-   Palette direction
-   - Primary  : Coursera-style trustworthy blue  (#0056D2)
-   - Accent   : Dribbble-style pink              (#EA4C89) — used sparingly
-   - Surfaces : clean white / near-white, hairline borders, soft shadows
-   Every text/background pair below meets WCAG AA (>= 4.5:1) for body text.
+   Palette direction (approved spec, 10 Nov 2026)
+   - Ink      : warm charcoal #1F1D1A — primary buttons, dark pills, headings
+   - Accent   : construction amber #F2A413 — the ONLY accent colour.
+                Replaces the old Dribbble-pink accent scale 1:1.
+   - Primary  : brand blue #0056D2 — survives ONLY as the info/semantic
+                colour (info bg/border/text). No longer a CTA or link colour.
+   - Surfaces : white / warm near-white, hairline warm borders, soft shadows
+   - Text     : ink #1F1D1A (16.81:1 on white), muted #6B6862 (5.55:1),
+                tertiary #78726A (4.76:1 on white; use secondary on tints)
+   IMPORTANT: use the `accent-*` utilities for the spec amber scale — never
+   Tailwind's built-in `amber-*` (different hex values).
+   Every text/background pair below meets WCAG AA (>= 4.5:1) for body text
+   except where a token is explicitly marked large-text / UI-only.
    ========================================================================== */
 
 :root {
-  /* ---- Brand: primary (blue) ---- */
+  /* ---- Ink (warm charcoal) — NEW: primary buttons, dark surfaces ---- */
+  --color-ink: 31 29 26;
+  --color-ink-50: 245 242 236;
+  --color-ink-100: 232 228 222;
+  --color-ink-200: 210 205 198;
+  --color-ink-300: 168 162 154;
+  --color-ink-400: 120 114 106;
+  --color-ink-500: 82 76 68;
+  --color-ink-600: 56 51 45;
+  --color-ink-700: 42 38 34;
+  --color-ink-800: 31 29 26;   /* ink */
+  --color-ink-900: 20 19 17;
+
+  /* ---- Primary (blue) — info/semantic ONLY from Batch 1 ---- */
   --color-primary-50: 240 246 255;
   --color-primary-100: 224 237 255;
   --color-primary-200: 194 218 255;
   --color-primary-300: 143 186 255;
   --color-primary-400: 77 144 247;
   --color-primary-500: 31 111 229;
-  --color-primary-600: 0 86 210;   /* brand */
+  --color-primary-600: 0 86 210;   /* info blue */
   --color-primary-700: 0 69 168;
   --color-primary-800: 0 55 134;
   --color-primary-900: 0 40 98;
 
-  /* ---- Brand: accent (pink) ---- */
-  --color-accent-50: 254 241 246;
-  --color-accent-100: 253 225 237;
-  --color-accent-200: 251 195 216;
-  --color-accent-300: 247 152 187;
-  --color-accent-400: 240 103 152;
-  --color-accent-500: 234 76 137;  /* brand */
-  --color-accent-600: 214 51 111;
-  --color-accent-700: 178 36 90;
-  --color-accent-800: 143 31 76;
-  --color-accent-900: 117 28 66;
+  /* ---- Accent (construction amber) — was Dribbble pink ---- */
+  --color-accent-50: 255 248 230;   /* #FFF8E6 */
+  --color-accent-100: 254 239 195;  /* #FEEFC3 */
+  --color-accent-200: 252 223 143;  /* #FCDF8F */
+  --color-accent-300: 248 201 90;   /* #F8C95A */
+  --color-accent-400: 245 183 49;   /* #F5B731 */
+  --color-accent-500: 242 164 19;   /* #F2A413 — PRIMARY accent */
+  --color-accent-600: 217 143 11;   /* #D98F0B — hover */
+  --color-accent-700: 176 112 6;    /* #B07006 — large text / icons only */
+  --color-accent-800: 133 83 7;     /* #855307 — amber text / links */
+  --color-accent-900: 92 58 7;      /* #5C3A07 */
 
-  /* ---- Neutral "secondary" scale (cool slate) ---- */
-  --color-secondary-50: 248 250 252;
-  --color-secondary-100: 241 245 249;
-  --color-secondary-200: 226 232 240;
-  --color-secondary-300: 203 213 225;
-  --color-secondary-400: 148 163 184;
-  --color-secondary-500: 100 116 139;
-  --color-secondary-600: 71 85 105;
-  --color-secondary-700: 51 65 85;
-  --color-secondary-800: 30 41 59;
-  --color-secondary-900: 15 23 42;
+  /* ---- Neutral "secondary" scale (warm slate) ---- */
+  --color-secondary-50: 250 249 247;
+  --color-secondary-100: 244 242 238;
+  --color-secondary-200: 231 228 222;
+  --color-secondary-300: 203 199 190;
+  --color-secondary-400: 148 141 130;
+  --color-secondary-500: 107 104 98;   /* #6B6862 muted text */
+  --color-secondary-600: 82 78 71;
+  --color-secondary-700: 61 57 51;
+  --color-secondary-800: 41 38 34;
+  --color-secondary-900: 26 24 22;
 
   /* ---- Surfaces ---- */
-  --color-bg-base: 247 249 252;
+  --color-bg-base: 255 255 255;
   --color-bg-surface: 255 255 255;
-  --color-bg-surface-hover: 241 245 250;
-  --color-bg-surface-active: 232 238 247;
+  --color-bg-surface-hover: 244 242 238;
+  --color-bg-surface-active: 231 228 222;
   --color-bg-card: 255 255 255;
 
   /* ---- Text ---- */
-  --color-text-primary: 15 17 20;      /* 18.9:1 on white */
-  --color-text-secondary: 71 85 105;   /*  7.6:1 on white */
-  --color-text-tertiary: 100 112 138;  /*  5.0:1 on white */
+  --color-text-primary: 31 29 26;      /* 16.81:1 on white */
+  --color-text-secondary: 107 104 98;  /*  5.55:1 on white */
+  --color-text-tertiary: 120 114 106;  /*  4.76:1 on white */
   --color-text-inverse: 255 255 255;
 
   /* ---- Borders ---- */
-  --color-border-subtle: 226 232 240;
-  --color-border-default: 203 213 225;
-  --color-border-strong: 148 163 184;
-  --color-border-color: 226 232 240;
+  --color-border-subtle: 231 228 222;
+  --color-border-default: 203 199 190;
+  --color-border-strong: 148 141 130;
+  --color-border-color: 231 228 222;
 
-  /* ---- Status ---- */
-  --color-success-bg: 236 253 245;  --color-success-text: 4 120 87;   --color-success-border: 167 243 208;
-  --color-warning-bg: 255 251 235;  --color-warning-text: 146 64 14;  --color-warning-border: 253 230 138;
-  --color-error-bg: 254 242 242;    --color-error-text: 185 28 28;    --color-error-border: 254 202 202;
-  --color-info-bg: 240 246 255;     --color-info-text: 0 69 168;      --color-info-border: 194 218 255;
+  /* ---- Status (semantic colours stay distinct from amber) ---- */
+  --color-success-bg: 240 253 244;  --color-success-text: 22 101 52;   --color-success-border: 187 247 208;
+  --color-warning-bg: 255 247 237;  --color-warning-text: 154 52 18;   --color-warning-border: 253 186 116;
+  --color-error-bg: 254 242 242;    --color-error-text: 153 27 27;    --color-error-border: 254 202 202;
+  --color-info-bg: 239 246 255;     --color-info-text: 29 78 216;     --color-info-border: 191 219 254;
 
   /* ---- Shape / depth / motion ---- */
   --radius-sm: 6px;
-  --radius-md: 10px;
+  --radius-md: 12px;
   --radius-lg: 14px;
   --radius-xl: 20px;
-  --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.05);
-  --shadow-sm: 0 1px 3px rgb(15 23 42 / 0.08), 0 1px 2px rgb(15 23 42 / 0.04);
-  --shadow-md: 0 6px 16px -4px rgb(15 23 42 / 0.10), 0 2px 6px -2px rgb(15 23 42 / 0.06);
-  --shadow-lg: 0 18px 40px -12px rgb(15 23 42 / 0.18);
+  --radius-card: 12px;
+  --radius-media: 16px;
+  --radius-pill: 999px;
+  --radius-btn: 999px;
+  --shadow-xs: 0 1px 2px rgb(31 29 26 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(31 29 26 / 0.06);
+  --shadow-md: 0 4px 12px rgb(31 29 26 / 0.08);
+  --shadow-lg: 0 12px 32px rgb(31 29 26 / 0.12);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --header-h: 72px;             /* keep in sync with <TopNavbar/> */
   --header-h-compact: 64px;
@@ -93,23 +118,24 @@
 }
 
 .dark {
-  /* Brand scales stay fixed in dark mode so filled buttons keep AA contrast with white text. */
+  /* Brand scales stay fixed in dark mode so filled amber buttons keep AA
+     contrast with dark text (dark on amber-500 is 8.08:1). */
 
-  --color-bg-base: 11 15 25;
-  --color-bg-surface: 17 24 39;
-  --color-bg-surface-hover: 30 41 59;
-  --color-bg-surface-active: 41 55 79;
-  --color-bg-card: 17 24 39;
+  --color-bg-base: 31 29 26;
+  --color-bg-surface: 42 38 34;
+  --color-bg-surface-hover: 56 51 45;
+  --color-bg-surface-active: 82 76 68;
+  --color-bg-card: 42 38 34;
 
-  --color-text-primary: 240 244 248;
-  --color-text-secondary: 170 183 204;
-  --color-text-tertiary: 138 151 176;
-  --color-text-inverse: 15 17 20;
+  --color-text-primary: 245 242 236;   /* 15.05:1 on ink */
+  --color-text-secondary: 168 162 154; /*  6.65:1 on ink */
+  --color-text-tertiary: 148 141 130;
+  --color-text-inverse: 31 29 26;
 
-  --color-border-subtle: 35 46 66;
-  --color-border-default: 51 65 85;
-  --color-border-strong: 100 116 139;
-  --color-border-color: 35 46 66;
+  --color-border-subtle: 56 51 45;
+  --color-border-default: 82 76 68;
+  --color-border-strong: 120 114 106;
+  --color-border-color: 56 51 45;
 
   --color-success-bg: 6 46 34;   --color-success-text: 110 231 183; --color-success-border: 6 95 70;
   --color-warning-bg: 56 36 6;   --color-warning-text: 252 211 77;  --color-warning-border: 120 53 15;

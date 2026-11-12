@@ -50,7 +50,7 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
       });
 
       // Find possible outputs (looking for text containing numbers inside elements usually used for results)
-      const possibleOutputs = document.querySelectorAll('.global-form-card-wrapper .text-xl, .global-form-card-wrapper .text-2xl, .global-form-card-wrapper .font-bold.text-emerald-600, .global-form-card-wrapper .font-bold.text-blue-600');
+      const possibleOutputs = document.querySelectorAll('.global-form-card-wrapper .text-xl, .global-form-card-wrapper .text-2xl, .global-form-card-wrapper .font-bold.text-ui-successText, .global-form-card-wrapper .font-bold.text-accent-800');
       
       const seenValues = new Set<number>();
       possibleOutputs.forEach((el) => {
@@ -178,7 +178,7 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
     
     if (Math.abs(percent) < 1) {
       return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-txt-secondary dark:bg-slate-800 dark:text-slate-400 ml-2">
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-surface-hover text-txt-secondary dark:bg-ink dark:text-txt-tertiary ml-2">
           Stable
         </span>
       );
@@ -186,7 +186,7 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
     
     const isUp = percent > 0;
     return (
-      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ml-2 ${isUp ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'}`}>
+      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ml-2 ${isUp ? 'bg-ui-success text-ui-successText dark:bg-ui-successText/10 dark:text-ui-successText' : 'bg-ui-error text-ui-errorText dark:bg-ui-errorText/10 dark:text-ui-errorText'}`}>
         {isUp ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
         {Math.abs(percent).toFixed(1)}% vs last save
       </span>
@@ -194,15 +194,15 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
   };
 
   return (
-    <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm print:hidden mt-8 mb-8">
+    <div className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl p-6 sm:p-8 shadow-brand-sm print:hidden mt-8 mb-8">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl">
+          <div className="p-2.5 bg-accent-50 dark:bg-accent-900/20 text-accent-800 dark:text-accent-400 rounded-xl">
             <BarChart2 className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-lg font-bold text-txt-primary dark:text-white">Data Distribution Summary</h3>
-            <p className="text-sm text-txt-tertiary dark:text-slate-400">Live visualization of current parameters vs computed outputs</p>
+            <p className="text-sm text-txt-tertiary dark:text-txt-tertiary">Live visualization of current parameters vs computed outputs</p>
           </div>
         </div>
       </div>
@@ -211,8 +211,8 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
         {data.inputs.length > 0 && (
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-semibold text-txt-secondary dark:text-slate-300 flex items-center gap-2">
-                <Activity className="w-4 h-4 text-slate-400" />
+              <h4 className="text-sm font-semibold text-txt-secondary dark:text-txt-tertiary flex items-center gap-2">
+                <Activity className="w-4 h-4 text-txt-tertiary" />
                 Input Parameter Distribution
               </h4>
               {previousData && renderTrend(currentSumInputs, previousData.sumInputs)}
@@ -247,8 +247,8 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
         {varianceData.length > 0 && (
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-semibold text-txt-secondary dark:text-slate-300 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-slate-400" />
+              <h4 className="text-sm font-semibold text-txt-secondary dark:text-txt-tertiary flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-txt-tertiary" />
                 Input Variance vs Last
               </h4>
             </div>
@@ -293,8 +293,8 @@ export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string 
         {data.outputs.length > 0 && (
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-semibold text-txt-secondary dark:text-slate-300 flex items-center gap-2">
-                <BarChart2 className="w-4 h-4 text-slate-400" />
+              <h4 className="text-sm font-semibold text-txt-secondary dark:text-txt-tertiary flex items-center gap-2">
+                <BarChart2 className="w-4 h-4 text-txt-tertiary" />
                 Computed Outputs (Log Scale)
               </h4>
               {previousData && renderTrend(currentSumOutputs, previousData.sumOutputs)}

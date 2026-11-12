@@ -23,7 +23,7 @@ export function MarketRatesTrendChart() {
         </div>
         <div>
           <select 
-            className="px-4 py-2 border border-ui-borderSubtle rounded-xl bg-slate-50 text-sm font-medium text-txt-secondary outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/20"
+            className="px-4 py-2 border border-ui-borderSubtle rounded-xl bg-surface-hover text-sm font-medium text-txt-secondary outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/20"
             value={region}
             onChange={(e) => setRegion(e.target.value)}
           >
@@ -40,41 +40,41 @@ export function MarketRatesTrendChart() {
             data={trendData}
             margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
             <XAxis 
               dataKey="month" 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }} 
+              tick={{ fill: '#6B6862', fontSize: 12, fontWeight: 500 }} 
               dy={10}
             />
             <YAxis 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fill: '#64748b', fontSize: 12 }} 
+              tick={{ fill: '#6B6862', fontSize: 12 }} 
               dx={-10}
             />
             <Tooltip
               contentStyle={{
                 backgroundColor: '#ffffff',
-                borderColor: '#e2e8f0',
+                borderColor: '#E7E4DE',
                 borderRadius: '16px',
                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
                 padding: '12px'
               }}
               itemStyle={{ fontSize: '13px', fontWeight: 600 }}
-              labelStyle={{ color: '#64748b', marginBottom: '8px', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase' }}
+              labelStyle={{ color: '#6B6862', marginBottom: '8px', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase' }}
             />
             <Legend 
               iconType="circle" 
               wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} 
             />
             
-            <Line type="monotone" dataKey="cement" name="Cement (Bag)" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-            <Line type="monotone" dataKey="steel" name="Steel (kg)" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-            <Line type="monotone" dataKey="bricks" name="Bricks" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-            <Line type="monotone" dataKey="sand" name="Sand (cft)" stroke="#10b981" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-            <Line type="monotone" dataKey="crush" name="Crush (cft)" stroke="#8b5cf6" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="cement" name="Cement (Bag)" stroke="#F2A413" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="steel" name="Steel (kg)" stroke="#1F1D1A" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="bricks" name="Bricks" stroke="#D98F0B" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="sand" name="Sand (cft)" stroke="#0F766E" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="crush" name="Crush (cft)" stroke="#6B6862" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>

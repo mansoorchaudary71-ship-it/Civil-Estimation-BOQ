@@ -84,7 +84,7 @@ export default function QuickEstimatorWidget() {
                 <select 
                   value={projectType}
                   onChange={(e) => setProjectType(e.target.value)}
-                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(245,158,11,0.15)] appearance-none"
+                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(242,164,19,0.15)] appearance-none"
                 >
                   <option value="Residential">Residential</option>
                   <option value="Commercial">Commercial</option>
@@ -117,7 +117,7 @@ export default function QuickEstimatorWidget() {
                   value={area}
                   onChange={(e) => setArea(e.target.value)}
                   placeholder="e.g. 2500"
-                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm placeholder:text-[#475569] focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(245,158,11,0.15)]"
+                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm placeholder:text-[#475569] focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(242,164,19,0.15)]"
                 /></>
               </div>
 
@@ -127,7 +127,7 @@ export default function QuickEstimatorWidget() {
                   <select 
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(245,158,11,0.15)] appearance-none"
+                    className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(242,164,19,0.15)] appearance-none"
                   >
                     <option value="Pakistan">Pakistan</option>
                     <option value="India">India</option>
@@ -139,7 +139,7 @@ export default function QuickEstimatorWidget() {
                   <select 
                     value={quality}
                     onChange={(e) => setQuality(e.target.value)}
-                    className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(245,158,11,0.15)] appearance-none"
+                    className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] rounded-lg py-2.5 px-3 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#F59E0B] focus:ring-[3px] focus:ring-[rgba(242,164,19,0.15)] appearance-none"
                   >
                     <option value="Basic">Basic</option>
                     <option value="Standard">Standard</option>
@@ -149,7 +149,7 @@ export default function QuickEstimatorWidget() {
               </div>
 
               {result ? (
-                <div className="mt-2 bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] rounded-xl p-4 flex flex-col gap-1">
+                <div className="mt-2 bg-[rgba(242,164,19,0.1)] border border-[rgba(242,164,19,0.2)] rounded-xl p-4 flex flex-col gap-1">
                   <span className="text-xs font-medium text-[#F59E0B] uppercase tracking-wide">Rough Estimate</span>
                   <div className="text-xl font-bold text-[#F1F5F9] flex items-baseline gap-1.5 break-all">
                     <span className="text-base text-[#F59E0B]">{result.currency}</span>
@@ -182,7 +182,7 @@ export default function QuickEstimatorWidget() {
 
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-[#F59E0B] hover:bg-[#D97706] text-txt-primary rounded-full shadow-[0_8px_30px_rgba(245,158,11,0.3)] flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+        className="w-14 h-14 bg-[#F59E0B] hover:bg-[#D97706] text-txt-primary rounded-full shadow-[0_8px_30px_rgba(242,164,19,0.3)] flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
         aria-label="Quick Estimator"
       >
         {isOpen ? <X className="w-6 h-6" /> : <Calculator className="w-6 h-6" />}

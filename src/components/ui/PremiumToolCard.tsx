@@ -4,7 +4,7 @@ import { Compass, BarChart3, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function PremiumToolCard() {
   return (
-    <motion.div whileHover={{ y: -6, scale: 1.01, transition: { duration: 0.2, ease: "easeOut" } }} className="relative w-full md:max-w-3xl md:mx-auto p-6 md:p-8 rounded-2xl bg-surface-default/90 backdrop-blur-2xl border border-ui-borderDefault shadow-[0_24px_60px_rgba(15,23,42,0.08)] overflow-hidden transition-shadow hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)] cursor-default">
+    <motion.div whileHover={{ y: -6, scale: 1.01, transition: { duration: 0.2, ease: "easeOut" } }} className="relative w-full md:max-w-3xl md:mx-auto p-6 md:p-8 rounded-2xl bg-surface-default/90 backdrop-blur-2xl border border-ui-borderDefault shadow-[0_24px_60px_rgba(31,29,26,0.08)] overflow-hidden transition-shadow hover:shadow-[0_32px_70px_rgba(31,29,26,0.12)] cursor-default">
       {/* Topographic Background Pattern Overlay - Simulated */}
       <div 
         className="absolute inset-0 opacity-[0.02] pointer-events-none" 
@@ -29,7 +29,7 @@ export default function PremiumToolCard() {
       {/* Header */}
       <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 shadow-inner flex items-center justify-center border border-ui-borderSubtle/60 shrink-0">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-surface-hover to-surface-hover shadow-inner flex items-center justify-center border border-ui-borderSubtle/60 shrink-0">
             <Compass className="w-7 h-7 text-txt-secondary" strokeWidth={1.5} />
           </div>
           <div>
@@ -37,8 +37,8 @@ export default function PremiumToolCard() {
             <p className="text-sm font-semibold text-txt-secondary uppercase tracking-wider mt-0.5">Project Overview Dashboard</p>
           </div>
         </div>
-        <div className="px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-emerald-100/50 shadow-[0_2px_10px_rgba(16,185,129,0.1)] w-max">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div className="px-4 py-2 bg-ui-success text-ui-successText rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-ui-successBorder/50 shadow-[0_2px_10px_rgba(16,185,129,0.1)] w-max">
+          <div className="w-2 h-2 rounded-full bg-ui-successText animate-pulse"></div>
           Status Active
         </div>
       </div>
@@ -49,18 +49,18 @@ export default function PremiumToolCard() {
         {/* Left Column: Stats & Status Ring */}
         <div className="flex flex-col gap-6">
           {/* Status Ring Card */}
-          <motion.div whileHover={{ scale: 1.02, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.98 }} className="w-full p-6 md:p-8 rounded-2xl bg-surface-default/80 border border-ui-borderSubtle shadow-[0_8px_30px_rgba(15,23,42,0.04)] flex items-center gap-6 group hover:shadow-[0_12px_40px_rgba(15,23,42,0.06)] transition-all overflow-hidden cursor-pointer">
+          <motion.div whileHover={{ scale: 1.02, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.98 }} className="w-full p-6 md:p-8 rounded-2xl bg-surface-default/80 border border-ui-borderSubtle shadow-[0_8px_30px_rgba(31,29,26,0.04)] flex items-center gap-6 group hover:shadow-[0_12px_40px_rgba(31,29,26,0.06)] transition-all overflow-hidden cursor-pointer">
             <div className="relative w-24 h-24 shrink-0">
               <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90 drop-shadow-sm">
                 <path
-                  className="text-slate-100"
+                  className="text-secondary-200"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="3.5"
                 />
                 <path
-                  className="text-emerald-500 transition-all duration-1000 ease-out"
+                  className="text-ui-successText transition-all duration-1000 ease-out"
                   strokeDasharray="75, 100"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
@@ -80,24 +80,24 @@ export default function PremiumToolCard() {
           </motion.div>
 
           <div className="grid grid-cols-2 gap-4">
-            <motion.div whileHover={{ scale: 1.03, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.95 }} className="p-4 sm:p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-100/50 shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer">
-              <AlertCircle className="w-6 h-6 text-amber-500 mb-4" strokeWidth={2} />
+            <motion.div whileHover={{ scale: 1.03, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.95 }} className="p-4 sm:p-6 rounded-2xl bg-gradient-to-br from-accent-50 to-accent-50/50 border border-accent-100/50 shadow-brand-sm hover:shadow-brand-md transition-shadow overflow-hidden cursor-pointer">
+              <AlertCircle className="w-6 h-6 text-accent-700 mb-4" strokeWidth={2} />
               <p className="text-3xl font-black text-txt-primary mb-1 tracking-tight">2</p>
-              <p className="text-xs font-bold text-amber-700/80 uppercase tracking-wider">Critical Alerts</p>
+              <p className="text-xs font-bold text-accent-800/80 uppercase tracking-wider">Critical Alerts</p>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.03, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.95 }} className="p-4 sm:p-6 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/50 border border-emerald-100/50 shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer">
-              <CheckCircle2 className="w-6 h-6 text-emerald-500 mb-4" strokeWidth={2} />
+            <motion.div whileHover={{ scale: 1.03, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.95 }} className="p-4 sm:p-6 rounded-2xl bg-gradient-to-br from-ui-success to-ui-success/50 border border-ui-successBorder/50 shadow-brand-sm hover:shadow-brand-md transition-shadow overflow-hidden cursor-pointer">
+              <CheckCircle2 className="w-6 h-6 text-ui-successText mb-4" strokeWidth={2} />
               <p className="text-3xl font-black text-txt-primary mb-1 tracking-tight">14</p>
-              <p className="text-xs font-bold text-emerald-700/80 uppercase tracking-wider">Cleared Tasks</p>
+              <p className="text-xs font-bold text-ui-successText/80 uppercase tracking-wider">Cleared Tasks</p>
             </motion.div>
           </div>
         </div>
 
         {/* Right Column: Bar Chart */}
-        <motion.div whileHover={{ scale: 1.02, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.98 }} className="w-full p-6 md:p-8 rounded-2xl bg-surface-default/80 border border-ui-borderSubtle shadow-[0_8px_30px_rgba(15,23,42,0.04)] flex flex-col drop-shadow-sm overflow-hidden cursor-pointer">
+        <motion.div whileHover={{ scale: 1.02, y: -6, transition: { duration: 0.2, ease: "easeOut" } }} whileTap={{ scale: 0.98 }} className="w-full p-6 md:p-8 rounded-2xl bg-surface-default/80 border border-ui-borderSubtle shadow-[0_8px_30px_rgba(31,29,26,0.04)] flex flex-col drop-shadow-sm overflow-hidden cursor-pointer">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xs font-bold text-txt-primary uppercase tracking-widest">Budget Allocation</h3>
-            <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-ui-borderSubtle">
+            <div className="w-8 h-8 rounded-full bg-surface-hover flex items-center justify-center border border-ui-borderSubtle">
               <BarChart3 className="w-4 h-4 text-txt-secondary" />
             </div>
           </div>
@@ -116,8 +116,8 @@ export default function PremiumToolCard() {
                 <div 
                   className={`w-full rounded-t-lg transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     i === 3 
-                      ? 'bg-gradient-to-t from-amber-400 to-amber-300 shadow-[0_4px_12px_rgba(245,158,11,0.3)]' 
-                      : 'bg-slate-100 group-hover:bg-slate-200 border-x border-t border-ui-borderSubtle/50'
+                      ? 'bg-gradient-to-t from-accent-400 to-accent-300 shadow-[0_4px_12px_rgba(242,164,19,0.3)]' 
+                      : 'bg-surface-hover group-hover:bg-surface-active border-x border-t border-ui-borderSubtle/50'
                   }`} 
                   style={{ height: `${item.val}%` }}
                 ></div>

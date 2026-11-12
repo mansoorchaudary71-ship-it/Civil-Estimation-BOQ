@@ -26,7 +26,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
     <div className="relative z-50" ref={menuRef}>
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-2 rounded-full text-[13px] sm:text-sm font-bold text-txt-secondary  hover:text-amber-700  hover:bg-amber-100/50  transition-all duration-300 whitespace-nowrap"
+        className="flex items-center gap-1.5 px-3 py-2 rounded-full text-[13px] sm:text-sm font-bold text-txt-secondary  hover:text-accent-800  hover:bg-accent-100/50  transition-all duration-300 whitespace-nowrap"
         title={showCurrency ? "Regional & Unit Settings" : "Unit Settings"}
       >
         <span className="hidden sm:inline-block tracking-wide">
@@ -39,9 +39,9 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
       </Button>
 
       {isOpen && (
-        <div className={`absolute top-full mt-2 w-72 ${alignClass} bg-surface-default/90 dark:bg-slate-900/90 backdrop-blur-xl border border-ui-borderSubtle/80 dark:border-slate-700/80 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 ring-1 ring-slate-900/5 dark:ring-white/5`}>
+        <div className={`absolute top-full mt-2 w-72 ${alignClass} bg-surface-default/90 dark:bg-ink/90 backdrop-blur-xl border border-ui-borderSubtle/80 dark:border-ink-600/80 rounded-2xl shadow-brand-lg overflow-hidden animate-in fade-in slide-in-from-top-2 ring-1 ring-ink/5 dark:ring-white/5`}>
           <div className="p-4">
-            <div className="mb-3 text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+            <div className="mb-3 text-xs font-black text-txt-secondary dark:text-txt-tertiary uppercase tracking-wider flex items-center gap-1.5 pl-1">
               <Ruler className="w-3.5 h-3.5"/> Unit System
             </div>
             <div className={`mb-6`}>
@@ -64,7 +64,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
 
             {showCurrency && (
               <>
-                <div className="mb-3 text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+                <div className="mb-3 text-xs font-black text-txt-secondary dark:text-txt-tertiary uppercase tracking-wider flex items-center gap-1.5 pl-1">
                   <DollarSign className="w-3.5 h-3.5"/> Currency
                 </div>
                 <div className="mb-6">
@@ -88,7 +88,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
               </>
             )}
 
-            <div className="mb-3 text-xs font-black text-txt-secondary dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+            <div className="mb-3 text-xs font-black text-txt-secondary dark:text-txt-tertiary uppercase tracking-wider flex items-center gap-1.5 pl-1">
               <Moon className="w-3.5 h-3.5"/> Theme
             </div>
             <div className="grid grid-cols-3 gap-1.5 mb-2">
@@ -104,8 +104,8 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
                     onClick={() => { updateSettings({ theme: val as Theme }); setIsOpen(false); }}
                     className={`py-2 px-1 text-xs font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
                       isActive 
-                         ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20" 
-                         : "text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                         ? "bg-accent-100 text-accent-800 dark:bg-accent-900/30 dark:text-accent-400 ring-1 ring-accent-600/20 dark:ring-accent-500/20" 
+                         : "text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover/50"
                     }`}
                   >
                     {icon}
@@ -116,9 +116,9 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
             </div>
             <div className="grid grid-cols-3 gap-1.5">
               {[
-                { val: "modern", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-zinc-200 border border-zinc-400" />, label: "Modern" },
-                { val: "engineering-blueprint", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-blue-800 border border-blue-400" />, label: "Blueprint" },
-                { val: "high-contrast", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-black border border-yellow-400" />, label: "Contrast" }
+                { val: "modern", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-surface-hover border border-border-color" />, label: "Modern" },
+                { val: "engineering-blueprint", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-ink border border-accent-800" />, label: "Blueprint" },
+                { val: "high-contrast", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-black border border-accent-400" />, label: "Contrast" }
               ].map(({ val, icon, label }) => {
                 const isActive = settings.theme === val;
                 return (
@@ -127,8 +127,8 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
                     onClick={() => { updateSettings({ theme: val as Theme }); setIsOpen(false); }}
                     className={`py-2 px-1 text-xs font-bold rounded-lg transition-colors flex flex-col items-center justify-center ${
                       isActive
-                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 ring-1 ring-amber-600/20 dark:ring-amber-500/20"
-                          : "text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                          ? "bg-accent-100 text-accent-800 dark:bg-accent-900/30 dark:text-accent-400 ring-1 ring-accent-600/20 dark:ring-accent-500/20"
+                          : "text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover/50"
                     }`}
                   >
                     {icon}

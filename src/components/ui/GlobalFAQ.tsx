@@ -131,7 +131,7 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
   const displayedFaqs = showAll ? combinedFaqs : combinedFaqs.slice(0, 2);
 
   return (
-    <section className="w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-slate-100 shadow-sm overflow-hidden" aria-label="Frequently Asked Questions">
+    <section className="w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-border-color shadow-brand-sm overflow-hidden" aria-label="Frequently Asked Questions">
       <h2 className="text-xl md:text-2xl font-bold text-txt-primary tracking-tight mb-6">
         Frequently Asked Questions
       </h2>
@@ -141,9 +141,9 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
           return (
             <div 
               key={index}
-              className="w-full border border-ui-borderSubtle rounded-2xl bg-surface-default/80 backdrop-blur-xl overflow-hidden shadow-sm hover:shadow transition-shadow"
+              className="w-full border border-ui-borderSubtle rounded-2xl bg-surface-default/80 backdrop-blur-xl overflow-hidden shadow-brand-sm hover:shadow transition-shadow"
             >
-              <Button className="w-full text-left px-6 py-4 md:py-5 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/20 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              <Button className="w-full text-left px-6 py-4 md:py-5 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/20 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${index}`}
@@ -152,7 +152,7 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
                   {faq.question}
                 </span>
                 <ChevronDown 
-                  className={`w-5 h-5 text-slate-400 transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-indigo-500' : ''}`}
+                  className={`w-5 h-5 text-txt-tertiary transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-800' : ''}`}
                 />
               </Button>
               
@@ -173,7 +173,7 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
         <div className="text-center mt-8">
           <Button
             onClick={() => setShowAll(!showAll)}
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-full transition-colors shadow-sm active:scale-95 hover:-translate-y-0.5"
+            className="px-6 py-3 bg-ink hover:bg-ink-700 text-white font-bold rounded-full transition-colors shadow-brand-sm active:scale-95 hover:-translate-y-0.5"
           >
             {showAll ? 'Show Less' : `Show all ${combinedFaqs.length} questions`}
           </Button>

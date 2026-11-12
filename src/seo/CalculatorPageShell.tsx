@@ -89,11 +89,11 @@ export default function CalculatorPageShell({
             <li key={crumb.label} className="flex items-center gap-1">
               {i > 0 && <ChevronRight className="w-4 h-4 text-txt-tertiary" />}
               {crumb.href ? (
-                <Link to={crumb.href} className="hover:text-blue-600 hover:underline">
+                <Link to={crumb.href} className="hover:text-accent-800 hover:underline">
                   {crumb.label}
                 </Link>
               ) : (
-                <span aria-current="page" className="font-medium text-txt-primary dark:text-white">
+                <span aria-current="page" className="font-medium text-txt-primary">
                   {crumb.label}
                 </span>
               )}
@@ -103,11 +103,11 @@ export default function CalculatorPageShell({
       </nav>
 
       <header className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-txt-primary dark:text-white">
+        <h1 className="text-[32px] leading-[1.2] font-bold tracking-tight text-txt-primary">
           {h1}
         </h1>
         {intro && (
-          <p className="mt-3 text-lg leading-relaxed text-txt-secondary dark:text-slate-300 max-w-3xl">
+          <p className="mt-3 text-lg leading-relaxed text-txt-secondary max-w-3xl">
             {intro}
           </p>
         )}
@@ -122,18 +122,18 @@ export default function CalculatorPageShell({
         <section aria-labelledby="related-calculators-heading" className="mt-14">
           <h2
             id="related-calculators-heading"
-            className="text-2xl font-bold text-txt-primary dark:text-white mb-4"
+            className="text-2xl font-bold text-txt-primary mb-4"
           >
             Related calculators
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-9">
             {related.map((rel) => (
               <Link
                 key={rel.id}
                 to={`/${rel.id}`}
-                className="block bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-2xl p-5 hover:border-blue-400 hover:shadow-md transition-all"
+                className="block bg-surface-default border border-border-color rounded-card p-5 hover:border-accent-300 hover:shadow-brand-md transition-all"
               >
-                <h3 className="font-semibold text-txt-primary dark:text-white">{rel.title}</h3>
+                <h3 className="font-semibold text-txt-primary">{rel.title}</h3>
                 <p className="text-sm text-txt-secondary mt-1">{rel.desc}</p>
               </Link>
             ))}

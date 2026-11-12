@@ -123,12 +123,12 @@ export function ProductTour() {
   return (
     <>
       {/* Dimmed Overlay */}
-      <div className="fixed inset-0 bg-slate-900/40 z-[9998] pointer-events-none transition-opacity duration-300" />
+      <div className="fixed inset-0 bg-ink/40 z-[9998] pointer-events-none transition-opacity duration-300" />
       
       {/* Highlight Target Box */}
       {targetRect && (
         <div 
-          className="fixed border-2 border-indigo-500 rounded-xl z-[9998] pointer-events-none transition-all duration-300"
+          className="fixed border-2 border-accent-800 rounded-xl z-[9998] pointer-events-none transition-all duration-300"
           style={{
             top: targetRect.top - 4,
             left: targetRect.left - 4,
@@ -152,28 +152,28 @@ export function ProductTour() {
           <div className="p-5 relative">
             <Button 
               onClick={handleClose} 
-              className="absolute top-3 right-3 text-slate-400 hover:text-txt-secondary"
+              className="absolute top-3 right-3 text-txt-tertiary hover:text-txt-secondary"
             >
               <X className="w-4 h-4" />
             </Button>
-            <div className="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2">
+            <div className="text-xs font-bold text-accent-800 uppercase tracking-wider mb-2">
               Tip {currentStep + 1} of {TOUR_STEPS.length}
             </div>
             <h4 className="text-lg font-bold text-txt-primary mb-1">{TOUR_STEPS[currentStep].title}</h4>
             <p className="text-sm text-txt-tertiary">{TOUR_STEPS[currentStep].content}</p>
           </div>
-          <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+          <div className="p-4 bg-surface-hover border-t border-border-color flex items-center justify-between">
             <Button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="text-slate-400 disabled:opacity-0 hover:text-txt-secondary flex items-center text-sm font-medium transition-colors outline-none"
+              className="text-txt-tertiary disabled:opacity-0 hover:text-txt-secondary flex items-center text-sm font-medium transition-colors outline-none"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
               Back
             </Button>
             <Button
               onClick={handleNext}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition-colors shadow-sm outline-none"
+              className="bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition-colors shadow-brand-sm outline-none"
             >
               {currentStep === TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}
               {currentStep < TOUR_STEPS.length - 1 && <ChevronRight className="w-4 h-4 ml-1" />}

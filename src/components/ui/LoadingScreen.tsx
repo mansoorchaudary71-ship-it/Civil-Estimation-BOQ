@@ -24,7 +24,7 @@ export default function LoadingScreen() {
         >
           <div className="relative flex items-center justify-center">
             {/* Ambient glow */}
-            <div className="absolute w-32 h-32 bg-indigo-500 rounded-full blur-[60px] opacity-30 animate-pulse"></div>
+            <div className="absolute w-32 h-32 bg-ink rounded-full blur-[60px] opacity-30 animate-pulse"></div>
 
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -32,22 +32,22 @@ export default function LoadingScreen() {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="relative z-10 flex flex-col items-center gap-4"
             >
-              <div className="font-display text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 to-amber-500">
+              <div className="font-display text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-accent-400 to-accent-500">
                 CEP
               </div>
               <div className="flex gap-1">
                 <motion.div
-                  className="w-1.5 h-1.5 rounded-full bg-indigo-500"
+                  className="w-1.5 h-1.5 rounded-full bg-ink"
                   animate={{ y: [0, -6, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
                 />
                 <motion.div
-                  className="w-1.5 h-1.5 rounded-full bg-indigo-400"
+                  className="w-1.5 h-1.5 rounded-full bg-accent-400"
                   animate={{ y: [0, -6, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
                 />
                 <motion.div
-                  className="w-1.5 h-1.5 rounded-full bg-amber-500"
+                  className="w-1.5 h-1.5 rounded-full bg-accent-500"
                   animate={{ y: [0, -6, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
                 />

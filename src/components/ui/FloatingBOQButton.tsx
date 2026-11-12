@@ -58,7 +58,7 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
               animate={{ scale: 1.5, opacity: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="absolute inset-0 rounded-full bg-cyan-400 blur-sm pointer-events-none"
+              className="absolute inset-0 rounded-full bg-accent-400 blur-sm pointer-events-none"
               style={{ zIndex: -1 }}
             />
           )}
@@ -94,7 +94,7 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
             r={radius}
             fill="none"
             stroke="currentColor"
-            className="text-slate-300/40 dark:text-white/15 transition-colors"
+            className="text-ink-300/40 dark:text-white/15 transition-colors"
             strokeWidth={strokeWidth}
           />
           
@@ -119,7 +119,7 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
         {/* Inner Button */}
         <Button
           onClick={onClick}
-          className="relative w-[56px] h-[56px] rounded-full backdrop-blur-xl bg-gradient-to-br from-indigo-500/95 via-violet-600/95 to-fuchsia-500/95 border border-white/20 text-white flex items-center justify-center focus:outline-none overflow-hidden"
+          className="relative w-[56px] h-[56px] rounded-full backdrop-blur-xl bg-ink border border-white/20 text-white flex items-center justify-center focus:outline-none overflow-hidden"
           style={{ 
             boxShadow: isHovered 
               ? '0 15px 35px -5px rgba(139, 92, 246, 0.5), inset 0 2px 4px rgba(255,255,255,0.3)' 

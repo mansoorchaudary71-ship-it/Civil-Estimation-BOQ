@@ -27,7 +27,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     // Structural & Base Styling (Uniform radius, padding logic, structural baseline)
-    const baseStyles = "relative rounded-2xl bg-surface-default overflow-hidden transition-all duration-300";
+    const baseStyles = "relative rounded-card bg-surface-default overflow-hidden transition-all duration-300";
 
     const paddingStyles = {
       none: "",
@@ -38,27 +38,28 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     };
 
     const variantStyles = {
-      default: "border border-ui-borderSubtle shadow-sm",
+      default: "border border-ui-borderSubtle shadow-brand-sm",
       subtle: "border border-transparent bg-surface-hover",
       outlined: "border-2 border-ui-borderSubtle shadow-none bg-transparent",
-      premium: "border border-ui-borderDefault shadow-md bg-surface-default dark:bg-slate-900",
-      accent: "border border-accent-200 dark:border-accent-800 shadow-sm bg-accent-50/30 dark:bg-accent-900/10",
-      gradientBorder: "shadow-sm bg-surface-default dark:bg-slate-900",
+      premium: "border border-ui-borderDefault shadow-brand-md bg-surface-default",
+      accent: "border border-accent-200 shadow-brand-sm bg-accent-50/30",
+      gradientBorder: "shadow-brand-sm bg-surface-default",
     };
 
     const hoverStyles = {
       none: "",
-      lift: "hover:-translate-y-1 hover:shadow-lg hover:border-ui-borderDefault",
-      glow: "hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] hover:border-primary-300",
-      liftAndGlow: "hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(59,130,246,0.15)] hover:border-primary-300",
+      lift: "hover:-translate-y-1 hover:shadow-brand-lg hover:border-ui-borderDefault",
+      glow: "hover:shadow-[0_0_20px_rgba(242,164,19,0.15)] hover:border-accent-300",
+      liftAndGlow: "hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(242,164,19,0.15)] hover:border-accent-300",
     };
 
     const accentGradients = {
       none: "",
-      blue: "bg-gradient-to-r from-blue-500 to-indigo-600",
-      orange: "bg-gradient-to-r from-orange-400 to-orange-600",
-      teal: "bg-gradient-to-r from-teal-400 to-emerald-500",
-      purple: "bg-gradient-to-r from-purple-500 to-pink-600",
+      // Gradient names are kept for API compatibility; all render in the amber system.
+      blue: "bg-gradient-to-r from-accent-500 to-accent-600",
+      orange: "bg-gradient-to-r from-accent-300 to-accent-600",
+      teal: "bg-gradient-to-r from-[#14B8A6] to-[#0F766E]",
+      purple: "bg-gradient-to-r from-accent-400 to-accent-700",
     };
 
     // Wrapper for gradient border if active
@@ -66,14 +67,14 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       return (
         <div 
           className={cn(
-            "relative p-[1px] rounded-2xl overflow-hidden transition-all duration-300", 
+            "relative p-[1px] rounded-card overflow-hidden transition-all duration-300", 
             hoverStyles[hoverEffect],
             className
           )}
           ref={ref}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-200 via-ui-borderSubtle to-accent-200 opacity-50"></div>
-          <div className={cn("relative h-full w-full rounded-[15px]", variantStyles[variant], paddingStyles[padding])} {...props}>
+          <div className="absolute inset-0 bg-gradient-to-br from-accent-200 via-ui-borderSubtle to-accent-200 opacity-50"></div>
+          <div className={cn("relative h-full w-full rounded-[11px]", variantStyles[variant], paddingStyles[padding])} {...props}>
              {gradientAccent !== 'none' && (
                 <div className={cn("absolute top-0 left-0 w-full h-1 opacity-80", accentGradients[gradientAccent])} />
              )}

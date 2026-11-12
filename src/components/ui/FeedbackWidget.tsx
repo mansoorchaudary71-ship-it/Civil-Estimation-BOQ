@@ -14,7 +14,7 @@ export function FeedbackWidget({ toolName }: { toolName: string }) {
   };
 
   return (
-    <div className="no-print w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-slate-100 shadow-sm overflow-hidden">
+    <div className="no-print w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-border-color shadow-brand-sm overflow-hidden">
       {!submitted ? (
         <div className="flex flex-col items-center justify-center text-center">
           <h3 className="text-xl md:text-2xl font-bold text-txt-primary tracking-tight mb-2">Was this {toolName} helpful?</h3>
@@ -22,14 +22,14 @@ export function FeedbackWidget({ toolName }: { toolName: string }) {
           <div className="flex items-center justify-center gap-4">
             <Button 
               onClick={() => handleRating('up')}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-ui-borderSubtle hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 transition-colors font-medium text-txt-secondary active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-ui-borderSubtle hover:border-ui-successText hover:bg-ui-success hover:text-ui-successText transition-colors font-medium text-txt-secondary active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
             >
               <ThumbsUp className="w-5 h-5" />
               Yes, it was
             </Button>
             <Button 
               onClick={() => handleRating('down')}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-ui-borderSubtle hover:border-rose-500 hover:bg-rose-50 hover:text-rose-700 transition-colors font-medium text-txt-secondary active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-ui-borderSubtle hover:border-ui-errorText hover:bg-ui-error hover:text-ui-errorText transition-colors font-medium text-txt-secondary active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
             >
               <ThumbsDown className="w-5 h-5" />
               No, needs work
@@ -38,7 +38,7 @@ export function FeedbackWidget({ toolName }: { toolName: string }) {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center text-center py-4">
-          <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-3">
+          <div className="w-12 h-12 bg-ui-success text-ui-successText rounded-full flex items-center justify-center mb-3">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <h3 className="text-lg font-semibold text-txt-primary mb-1">Thanks for your feedback!</h3>

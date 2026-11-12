@@ -139,11 +139,11 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
 
   return (
     <>
-      <div className="fixed inset-0 bg-slate-900/40 z-[9998] pointer-events-none transition-opacity duration-300" />
+      <div className="fixed inset-0 bg-ink/40 z-[9998] pointer-events-none transition-opacity duration-300" />
       
       {targetRect && (
         <div 
-          className="fixed border-2 border-[#FF5F15] rounded-xl z-[9998] pointer-events-none transition-all duration-300 shadow-[0_0_0_9999px_rgba(15,23,42,0.4)]"
+          className="fixed border-2 border-[#FF5F15] rounded-xl z-[9998] pointer-events-none transition-all duration-300 shadow-[0_0_0_9999px_rgba(31,29,26,0.4)]"
           style={{
             top: targetRect.top - 8,
             left: targetRect.left - 8,
@@ -165,28 +165,28 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
           <div className="p-5 relative">
             <Button 
               onClick={handleClose} 
-              className="absolute top-3 right-3 text-slate-400 hover:text-txt-secondary"
+              className="absolute top-3 right-3 text-txt-tertiary hover:text-txt-secondary"
             >
               <X className="w-4 h-4" />
             </Button>
-            <div className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">
+            <div className="text-xs font-bold text-accent-800 uppercase tracking-wider mb-2">
               Guided Tour • Step {currentStep + 1} of {steps.length}
             </div>
             <h4 className="text-lg font-bold text-txt-primary mb-1">{steps[currentStep].title}</h4>
             <p className="text-sm text-txt-tertiary">{steps[currentStep].content}</p>
           </div>
-          <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+          <div className="p-4 bg-surface-hover border-t border-border-color flex items-center justify-between">
             <Button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="text-slate-400 disabled:opacity-0 hover:text-txt-secondary flex items-center text-sm font-medium transition-colors outline-none"
+              className="text-txt-tertiary disabled:opacity-0 hover:text-txt-secondary flex items-center text-sm font-medium transition-colors outline-none"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
               Back
             </Button>
             <Button
               onClick={handleNext}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition-colors shadow-sm outline-none"
+              className="bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition-colors shadow-brand-sm outline-none"
             >
               {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
               {currentStep < steps.length - 1 && <ChevronRight className="w-4 h-4 ml-1" />}

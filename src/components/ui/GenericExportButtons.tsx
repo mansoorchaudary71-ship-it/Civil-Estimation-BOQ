@@ -50,13 +50,13 @@ export function GenericExportButtons({ filename = "Export", tableId, data }: Gen
     <div className="flex items-center gap-2">
       <Button 
         onClick={handleCSV}
-        className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-txt-secondary text-sm font-semibold rounded-lg transition-colors border border-ui-borderSubtle active:scale-95"
+        className="flex items-center gap-2 px-3 py-1.5 bg-surface-hover hover:bg-surface-active text-txt-secondary text-sm font-semibold rounded-lg transition-colors border border-ui-borderSubtle active:scale-95"
       >
         <FileText className="w-4 h-4" /> CSV
       </Button>
       <Button 
         onClick={handleExcel}
-        className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-semibold rounded-lg transition-colors border border-emerald-200 active:scale-95"
+        className="flex items-center gap-2 px-3 py-1.5 bg-ui-success hover:bg-ui-success text-ui-successText text-sm font-semibold rounded-lg transition-colors border border-ui-successBorder active:scale-95"
       >
         <FileSpreadsheet className="w-4 h-4" /> Excel
       </Button>

@@ -18,7 +18,7 @@ export default function SkipToContent() {
     <a
       href="#main-content"
       onClick={skip}
-      className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[9999] focus:px-4 focus:py-2.5 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:shadow-xl font-semibold"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[9999] focus:px-4 focus:py-2.5 focus:bg-ink focus:text-white focus:rounded-lg focus:shadow-brand-lg font-semibold"
     >
       Skip to main content
     </a>

@@ -260,14 +260,14 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-4 sm:p-8"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-ink/80 backdrop-blur-md p-4 sm:p-8"
         >
           <motion.div 
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="bg-slate-100 dark:bg-slate-800 w-full max-w-5xl h-full max-h-[90vh] rounded-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-ui-borderSubtle dark:border-slate-700 relative"
+            className="bg-surface-hover w-full max-w-5xl h-full max-h-[90vh] rounded-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-ui-borderSubtle dark:border-ink-600 relative"
           >
             {/* Animated shimmer effect on modal load */}
             <motion.div
@@ -279,15 +279,15 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
 
         
         {/* Header */}
-        <div className="px-6 py-4 bg-surface-default dark:bg-slate-900 border-b border-ui-borderSubtle dark:border-slate-700 flex items-center justify-between z-10 shrink-0">
+        <div className="px-6 py-4 bg-surface-default dark:bg-ink border-b border-ui-borderSubtle dark:border-ink-600 flex items-center justify-between z-10 shrink-0">
           <h2 className="text-lg sm:text-xl font-black text-txt-primary dark:text-white flex items-center gap-2 tracking-tight">
-            <Printer className="w-5 h-5 text-indigo-500" />
+            <Printer className="w-5 h-5 text-accent-800" />
             Print Preview
           </h2>
           <div className="flex items-center gap-3">
-            <div className="relative flex items-center group hidden xl:flex gap-2 mr-2 bg-slate-50 p-2 rounded-xl border border-ui-borderSubtle">
+            <div className="relative flex items-center group hidden xl:flex gap-2 mr-2 bg-surface-hover p-2 rounded-xl border border-ui-borderSubtle">
               <label className="flex items-center gap-2 text-xs text-txt-secondary font-medium cursor-pointer whitespace-nowrap">
-                <input type="checkbox" checked={showVersionStamp} onChange={e => setShowVersionStamp(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500" />
+                <input type="checkbox" checked={showVersionStamp} onChange={e => setShowVersionStamp(e.target.checked)} className="rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500" />
                 Stamp
               </label>
               {showVersionStamp && (
@@ -301,7 +301,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
               <select
                 value={watermark}
                 onChange={(e) => setWatermark(e.target.value as any)}
-                className="block w-full pl-4 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
+                className="block w-full pl-4 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-accent-500 focus:border-ink rounded-xl bg-surface-hover hover:bg-surface-hover font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
               >
                 <option value="none">No Watermark</option>
                 <option value="draft">DRAFT</option>
@@ -315,7 +315,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
               <select
                 value={orientation}
                 onChange={(e) => setOrientation(e.target.value as any)}
-                className="block w-full pl-4 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
+                className="block w-full pl-4 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-accent-500 focus:border-ink rounded-xl bg-surface-hover hover:bg-surface-hover font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
               >
                 <option value="portrait">Portrait</option>
                 <option value="landscape">Landscape</option>
@@ -326,12 +326,12 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             </div>
             <div className="relative flex items-center group hidden sm:flex">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <LayoutTemplate className="w-4 h-4 text-slate-400" />
+                <LayoutTemplate className="w-4 h-4 text-txt-tertiary" />
               </div>
               <select
                 value={pdfTheme}
                 onChange={(e) => setPdfTheme(e.target.value as any)}
-                className="block w-full pl-9 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-indigo-500 focus:border-indigo-500 rounded-xl bg-slate-50 hover:bg-slate-100 font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
+                className="block w-full pl-9 pr-8 py-2.5 text-sm border-ui-borderSubtle focus:ring-accent-500 focus:border-ink rounded-xl bg-surface-hover hover:bg-surface-hover font-medium text-txt-secondary transition-colors appearance-none cursor-pointer"
               >
                 <option value="modern">Modern Theme</option>
                 <option value="minimalist">Minimalist</option>
@@ -344,7 +344,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
              <Button
                onClick={handleDownloadPDF}
                disabled={isGenerating}
-               className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-surface-default hover:bg-slate-50 text-indigo-700 border border-indigo-200 hover:border-indigo-300 font-bold rounded-xl transition-all shadow-sm active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
+               className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-surface-default hover:bg-surface-hover text-accent-800 border border-accent-200 hover:border-accent-300 font-bold rounded-xl transition-all shadow-brand-sm active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
              >
                {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                <span className="hidden sm:inline">{isGenerating ? 'Generating...' : 'Download PDF'}</span>
@@ -361,7 +361,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
                      window.print();
                   }
                }}
-               className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-sm active:scale-95"
+               className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-ink hover:bg-ink-700 text-white font-bold rounded-xl transition-all shadow-brand-sm active:scale-95"
              >
                <Printer className="w-4 h-4" />
                <span className="hidden sm:inline">Print Report</span>
@@ -369,7 +369,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
              </Button>
             <Button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-txt-secondary dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+              className="p-2 text-txt-tertiary hover:text-txt-secondary dark:hover:text-txt-primary hover:bg-surface-hover dark:hover:bg-ink rounded-full transition-colors"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -379,20 +379,20 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
         
         <div className="flex-1 flex overflow-hidden">
           {/* Settings Sidebar */}
-          <div className="w-64 bg-surface-default dark:bg-slate-900 border-r border-ui-borderSubtle dark:border-slate-700 p-6 overflow-y-auto flex-shrink-0 flex flex-col gap-6 hidden md:flex">
+          <div className="w-64 bg-surface-default dark:bg-ink border-r border-ui-borderSubtle dark:border-ink-600 p-6 overflow-y-auto flex-shrink-0 flex flex-col gap-6 hidden md:flex">
             <div>
                <h3 className="text-sm font-bold text-txt-primary dark:text-white mb-4">Print Settings</h3>
                <div className="space-y-4">
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={includeCharts} onChange={e => setIncludeCharts(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <input type="checkbox" checked={includeCharts} onChange={e => setIncludeCharts(e.target.checked)} className="rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500 w-4 h-4" />
                     <span className="text-sm text-txt-secondary font-medium">Include Charts</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={includeBreakdowns} onChange={e => setIncludeBreakdowns(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <input type="checkbox" checked={includeBreakdowns} onChange={e => setIncludeBreakdowns(e.target.checked)} className="rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500 w-4 h-4" />
                     <span className="text-sm text-txt-secondary font-medium">Itemized Breakdowns</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={includeLogo} onChange={e => setIncludeLogo(e.target.checked)} className="rounded border-ui-borderDefault text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                    <input type="checkbox" checked={includeLogo} onChange={e => setIncludeLogo(e.target.checked)} className="rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500 w-4 h-4" />
                     <span className="text-sm text-txt-secondary font-medium">Company Logo</span>
                   </label>
                </div>
@@ -400,7 +400,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
           </div>
   
 {/* Content (Paper simulation) */}
-        <div className="flex-1 bg-slate-100/50 dark:bg-slate-950/50 overflow-hidden relative p-4 sm:p-8 flex justify-center items-start overflow-y-auto hide-scrollbar">
+        <div className="flex-1 bg-surface-hover/50 dark:bg-ink-900/50 overflow-hidden relative p-4 sm:p-8 flex justify-center items-start overflow-y-auto hide-scrollbar">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -20,11 +20,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /**
- * Button
- * - Flat, Coursera-style filled primary + hairline outline secondary.
+ * Button — Dribbble-style (Batch 2)
+ * - Dark ink pill primary; amber-tint secondary; white/border outline; ghost.
  * - No hover "lift" (it shifted layout and fought with grid hover states).
  * - `type="button"` by default: previously every <Button> inside a <form> submitted it.
  * - Ripple + shimmer removed (extra state per button, noisy on a data-heavy app).
+ * - Focus ring comes from the global :focus-visible rule (amber + dark ring);
+ *   no per-button ring classes here.
  */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -47,10 +49,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'relative inline-flex items-center justify-center font-semibold rounded-brand whitespace-nowrap select-none ' +
+      'relative inline-flex items-center justify-center font-semibold rounded-pill whitespace-nowrap select-none ' +
       'transition-colors duration-200 ease-out active:translate-y-px ' +
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 ' +
-      'focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950';
+      'focus-visible:outline-none';
 
     const sizeStyles = {
       sm: 'min-h-[40px] px-4 text-sm gap-1.5',
@@ -60,24 +61,23 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const variantStyles = {
-      primary: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-sm',
-      // legacy name kept: used across the app. Same brand fill, no gradient / lift.
-      premium: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-sm',
+      primary: 'bg-ink text-white hover:bg-ink-700 active:bg-ink-900 shadow-brand-sm',
+      // legacy name kept: used across the app. Same ink fill as primary.
+      premium: 'bg-ink text-white hover:bg-ink-700 active:bg-ink-900 shadow-brand-sm',
       secondary:
-        'bg-primary-50 text-primary-700 hover:bg-primary-100 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
+        'bg-accent-50 text-accent-900 hover:bg-accent-100',
       outline:
-        'bg-transparent border border-primary-600 text-primary-600 hover:bg-primary-50 ' +
-        'dark:border-primary-400 dark:text-primary-300 dark:hover:bg-primary-600/15',
+        'bg-surface-default border border-ui-borderStrong text-txt-primary hover:bg-secondary-100',
       ghost:
-        'bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white',
-      danger: 'bg-rose-600 text-white hover:bg-rose-700 shadow-sm',
+        'bg-transparent text-txt-secondary hover:bg-secondary-100 hover:text-txt-primary',
+      danger: 'bg-ui-errorText text-white hover:bg-ui-errorText/85 shadow-brand-sm',
       bare: '',
-      link: 'bg-transparent min-h-0 px-0 text-primary-600 hover:underline underline-offset-4 dark:text-primary-300',
+      link: 'bg-transparent min-h-0 px-0 text-accent-800 hover:underline underline-offset-4 dark:text-accent-400',
     };
 
     // Most existing call sites (~540) pass no `variant` and style the button entirely with their
     // own `bg-*` / `text-*` classes. Applying the filled-primary variant underneath would leak
-    // `hover:bg-primary-700` / `text-white` into them, so those callers get a "bare" button.
+    // `hover:bg-ink-700` / `text-white` into them, so those callers get a "bare" button.
     const cls = typeof className === 'string' ? className : '';
     const callerStyled =
       /(^|\s)bg-/.test(cls) ||

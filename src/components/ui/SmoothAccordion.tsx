@@ -14,20 +14,20 @@ export function SmoothAccordion({ title, children, defaultExpanded = false }: Sm
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   return (
-    <div className="bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+    <div className="bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl overflow-hidden shadow-brand-sm">
       <Button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
+        className="w-full flex items-center justify-between p-4 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-colors hover:bg-surface-hover/50"
         aria-expanded={isExpanded}
         aria-controls="accordion-content"
       >
-        <div className="font-semibold text-txt-primary dark:text-slate-200 text-left">
+        <div className="font-semibold text-txt-primary dark:text-txt-primary text-left">
           {title}
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="text-slate-400 p-1"
+          className="text-txt-tertiary p-1"
         >
           <ChevronDown className="w-5 h-5" />
         </motion.div>
@@ -46,7 +46,7 @@ export function SmoothAccordion({ title, children, defaultExpanded = false }: Sm
             }}
             className="overflow-hidden"
           >
-            <div className="p-4 pt-0 border-t border-slate-100 dark:border-slate-800/50 mt-2">
+            <div className="p-4 pt-0 border-t border-border-color mt-2">
               {children}
             </div>
           </motion.div>

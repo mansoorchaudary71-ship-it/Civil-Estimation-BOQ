@@ -144,7 +144,7 @@ export default function SectionNavigator() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
           <motion.div
@@ -152,22 +152,22 @@ export default function SectionNavigator() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="relative w-full max-w-lg bg-surface-default dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-ui-borderSubtle dark:border-slate-800 flex flex-col max-h-[60vh]"
+            className="relative w-full max-w-lg bg-surface-default dark:bg-ink rounded-2xl shadow-2xl overflow-hidden border border-ui-borderSubtle dark:border-ink flex flex-col max-h-[60vh]"
           >
-            <div className="flex items-center px-4 py-3 border-b border-slate-100 dark:border-slate-800">
-              <Search className="w-5 h-5 text-slate-400 mr-3 shrink-0" />
+            <div className="flex items-center px-4 py-3 border-b border-border-color dark:border-ink">
+              <Search className="w-5 h-5 text-txt-tertiary mr-3 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
                 placeholder="Jump to section... (Type to filter)"
-                className="flex-1 bg-transparent border-none focus:outline-none text-txt-primary dark:text-slate-200 text-lg placeholder-slate-400"
+                className="flex-1 bg-transparent border-none focus:outline-none text-txt-primary dark:text-txt-primary text-lg placeholder-txt-tertiary"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
               <div className="flex items-center gap-2 ml-3">
-                <span className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-ui-borderSubtle dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-medium text-txt-tertiary uppercase tracking-widest">esc</span>
-                <Button onClick={() => setIsOpen(false)} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
+                <span className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-ui-borderSubtle dark:border-ink-600 bg-surface-default text-xs font-medium text-txt-tertiary uppercase tracking-widest">esc</span>
+                <Button onClick={() => setIsOpen(false)} className="p-1 rounded-md hover:bg-surface-hover text-txt-tertiary transition-colors">
                   <X className="w-5 h-5" />
                 </Button>
               </div>
@@ -181,9 +181,9 @@ export default function SectionNavigator() {
                       key={section.id}
                       onClick={() => handleNavigate(section.element)}
                       onMouseEnter={() => setSelectedIndex(idx)}
-                      className={`w-full text-left flex items-center px-3 py-3 rounded-xl transition-colors ${idx === selectedIndex ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50 text-txt-secondary dark:text-slate-300'}`}
+                      className={`w-full text-left flex items-center px-3 py-3 rounded-xl transition-colors ${idx === selectedIndex ? 'bg-accent-50 dark:bg-accent-500/10 text-accent-800 dark:text-accent-400' : 'hover:bg-surface-hover/50 text-txt-secondary dark:text-txt-tertiary'}`}
                     >
-                      <Hash className={`w-4 h-4 mr-3 shrink-0 ${idx === selectedIndex ? 'text-indigo-500' : 'text-slate-400'}`} />
+                      <Hash className={`w-4 h-4 mr-3 shrink-0 ${idx === selectedIndex ? 'text-accent-800' : 'text-txt-tertiary'}`} />
                       <span className="font-medium truncate">{section.title}</span>
                     </Button>
                   ))}
@@ -194,9 +194,9 @@ export default function SectionNavigator() {
                 </div>
               )}
             </div>
-            <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-xs text-txt-tertiary flex justify-between items-center">
-                <span>Use <kbd className="px-1.5 py-0.5 rounded bg-surface-default dark:bg-slate-700 border border-ui-borderSubtle dark:border-slate-600 font-mono shadow-sm">↑</kbd> <kbd className="px-1.5 py-0.5 rounded bg-surface-default dark:bg-slate-700 border border-ui-borderSubtle dark:border-slate-600 font-mono shadow-sm">↓</kbd> to navigate</span>
-                <span><kbd className="px-1.5 py-0.5 rounded bg-surface-default dark:bg-slate-700 border border-ui-borderSubtle dark:border-slate-600 font-mono shadow-sm">Enter</kbd> to select</span>
+            <div className="px-4 py-3 border-t border-border-color dark:border-ink bg-surface-default/50 text-xs text-txt-tertiary flex justify-between items-center">
+                <span>Use <kbd className="px-1.5 py-0.5 rounded bg-surface-default dark:bg-ink-600 border border-ui-borderSubtle dark:border-ink-600 font-mono shadow-brand-sm">↑</kbd> <kbd className="px-1.5 py-0.5 rounded bg-surface-default dark:bg-ink-600 border border-ui-borderSubtle dark:border-ink-600 font-mono shadow-brand-sm">↓</kbd> to navigate</span>
+                <span><kbd className="px-1.5 py-0.5 rounded bg-surface-default dark:bg-ink-600 border border-ui-borderSubtle dark:border-ink-600 font-mono shadow-brand-sm">Enter</kbd> to select</span>
             </div>
           </motion.div>
         </div>

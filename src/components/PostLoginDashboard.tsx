@@ -87,7 +87,7 @@ export default function PostLoginDashboard({ onSelectModule }: PostLoginDashboar
       <div className="flex flex-col gap-4 mb-4 relative z-10 w-full overflow-hidden rounded-2xl">
         
         {/* Welcome & Button */}
-        <div className="flex flex-col items-center text-center gap-4 bg-surface-default/70 backdrop-blur-3xl border border-white/40 rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 shadow-md hover:shadow-xl transition-shadow relative group w-full box-border overflow-hidden">
+        <div className="flex flex-col items-center text-center gap-4 bg-surface-default/70 backdrop-blur-3xl border border-white/40 rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 shadow-brand-md hover:shadow-brand-lg transition-shadow relative group w-full box-border overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-white/10 pointer-events-none rounded-2xl"></div>
           <div className="z-10 relative flex flex-col items-center">
             <h1 className="md: lg: tabular-nums text-[var(--primary-dark)] mb-3 text-xl font-semibold text-txt-primary tracking-tight mb-6">
@@ -100,7 +100,7 @@ export default function PostLoginDashboard({ onSelectModule }: PostLoginDashboar
           
           <Button 
             onClick={() => onSelectModule('calculators')}
-            className="z-10 mt-2 relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-txt-primary rounded-full px-6 py-3 sm:px-8 sm:py-4 font-bold text-sm sm:text-base transition-all hover:scale-105 active:scale-95 shadow-md w-full md:w-auto min-w-[250px] flex items-center justify-center group/btn hover:-translate-y-0.5"
+            className="z-10 mt-2 relative overflow-hidden bg-gradient-to-r from-accent-600 to-accent-600 text-txt-primary rounded-full px-6 py-3 sm:px-8 sm:py-4 font-bold text-sm sm:text-base transition-all hover:scale-105 active:scale-95 shadow-brand-md w-full md:w-auto min-w-[250px] flex items-center justify-center group/btn hover:-translate-y-0.5"
           >
             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite] pointer-events-none"></div>
             <div className="flex items-center justify-center gap-2 relative z-10 w-full">
@@ -129,13 +129,13 @@ export default function PostLoginDashboard({ onSelectModule }: PostLoginDashboar
     <div className="w-full flex flex-col gap-4 mt-2">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-          <Clock className="w-5 h-5 text-[var(--accent-blue)]" />
+          <Clock className="w-5 h-5 text-accent-700" />
           Recent Estimates
         </h2>
         {estimates.length > 0 && (
           <Button 
             onClick={() => onSelectModule('my-estimates')}
-            className="text-base font-medium text-[var(--accent-blue)] hover:underline rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+            className="text-base font-medium text-accent-700 hover:underline rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
           >
             View All
           </Button>
@@ -144,15 +144,15 @@ export default function PostLoginDashboard({ onSelectModule }: PostLoginDashboar
 
       {loading ? (
         <div className="flex-1 flex items-center justify-center min-h-[200px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-800"></div>
         </div>
       ) : estimates.length > 0 ? (
-        <div className="w-full flex flex-col bg-surface-default/70 backdrop-blur-xl border border-white/50 rounded-2xl overflow-hidden shadow-md">
+        <div className="w-full flex flex-col bg-surface-default/70 backdrop-blur-xl border border-white/50 rounded-2xl overflow-hidden shadow-brand-md">
           {recentEstimates.map((est, index) => (
             <div key={est.id} className={`flex items-center justify-between p-4 sm:p-5 ${index !== recentEstimates.length - 1 ? 'border-b border-ui-borderSubtle/50' : ''} hover:bg-surface-default/50 transition-colors group/est`}>
               <div className="flex items-center gap-4 flex-wrap">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-accent-50 flex items-center justify-center shrink-0">
+                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-accent-800" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-semibold text-base sm:text-lg text-txt-primary leading-tight mb-0.5">{est.name}</span>
@@ -163,7 +163,7 @@ export default function PostLoginDashboard({ onSelectModule }: PostLoginDashboar
                   </div>
                 </div>
               </div>
-              <Button className="px-5 py-2.5 bg-slate-100 text-txt-secondary rounded-full transition-colors group-hover/est:bg-indigo-50 group-hover/est:text-indigo-600 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              <Button className="px-5 py-2.5 bg-surface-hover text-txt-secondary rounded-full transition-colors group-hover/est:bg-accent-50 group-hover/est:text-accent-800 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
               >
                 Resume
               </Button>
@@ -171,7 +171,7 @@ export default function PostLoginDashboard({ onSelectModule }: PostLoginDashboar
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center p-5 sm:p-8 md:p-12 bg-slate-50 border border-ui-borderSubtle rounded-2xl text-center overflow-hidden">
+        <div className="flex flex-col items-center justify-center p-5 sm:p-8 md:p-12 bg-surface-hover border border-ui-borderSubtle rounded-2xl text-center overflow-hidden">
           <div className="w-16 h-16 rounded-2xl bg-surface-default border border-ui-borderSubtle flex items-center justify-center mb-4 overflow-hidden">
             <FileText className="w-8 h-8 text-txt-secondary" />
           </div>

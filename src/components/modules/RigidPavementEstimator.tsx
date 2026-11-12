@@ -145,11 +145,11 @@ export default function RigidPavementEstimator() {
           <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             {" "}
             {/* Base Geometry */}{" "}
-            <div className="bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+            <div className="bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border-color">
               {" "}
-              <div className="flex items-center gap-3 mb-5 border-b border-gray-50 pb-4">
+              <div className="flex items-center gap-3 mb-5 border-b border-border-color pb-4">
                 {" "}
-                <div className="p-2.5 bg-blue-50 text-indigo-600 rounded-xl">
+                <div className="p-2.5 bg-accent-50 text-accent-800 rounded-xl">
                   {" "}
                   <Layers className="w-5 h-5" />{" "}
                 </div>{" "}
@@ -161,48 +161,48 @@ export default function RigidPavementEstimator() {
                 {" "}
                 <div>
                   {" "}
-                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     Length (m)
                   </label>{" "}
                   <><label htmlFor="a11y-input-436" className="sr-only">Input</label>
 <input id="a11y-input-436" type="number" inputMode="decimal"
-                    className="w-full bg-gray-50/50 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 min-h-[44px]"
+                    className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-ink min-h-[44px]"
                     value={length}
                     onChange={(e) => setLength(e.target.value)}
                   /></>{" "}
                 </div>{" "}
                 <div>
                   {" "}
-                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     Lane Width (m)
                   </label>{" "}
                   <><label htmlFor="a11y-input-437" className="sr-only">Input</label>
 <input id="a11y-input-437" type="number" inputMode="decimal"
-                    className="w-full bg-gray-50/50 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 min-h-[44px]"
+                    className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-ink min-h-[44px]"
                     value={laneWidth}
                     onChange={(e) => setLaneWidth(e.target.value)}
                   /></>{" "}
                 </div>{" "}
                 <div>
                   {" "}
-                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     DLC Thk (mm)
                   </label>{" "}
                   <><label htmlFor="a11y-input-438" className="sr-only">Input</label>
 <input id="a11y-input-438" type="number" inputMode="decimal"
-                    className="w-full bg-gray-50/50 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 min-h-[44px]"
+                    className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-ink min-h-[44px]"
                     value={dlcThickness}
                     onChange={(e) => setDlcThickness(e.target.value)}
                   /></>{" "}
                 </div>{" "}
                 <div>
                   {" "}
-                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                  <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                     PQC Thk (mm)
                   </label>{" "}
                   <><label htmlFor="a11y-input-439" className="sr-only">Input</label>
 <input id="a11y-input-439" type="number" inputMode="decimal"
-                    className="w-full bg-gray-50/50 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 min-h-[44px]"
+                    className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-ink min-h-[44px]"
                     value={pqcThickness}
                     onChange={(e) => setPqcThickness(e.target.value)}
                   /></>{" "}
@@ -210,11 +210,11 @@ export default function RigidPavementEstimator() {
               </div>{" "}
             </div>{" "}
             {/* Concrete Mix Design */}{" "}
-            <div className="bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+            <div className="bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border-color">
               {" "}
-              <div className="flex items-center gap-3 mb-5 border-b border-gray-50 pb-4">
+              <div className="flex items-center gap-3 mb-5 border-b border-border-color pb-4">
                 {" "}
-                <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
+                <div className="p-2.5 bg-accent-50 text-accent-800 rounded-xl">
                   {" "}
                   <Calculator className="w-5 h-5" />{" "}
                 </div>{" "}
@@ -233,36 +233,36 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Cement
                       </label>{" "}
                       <><label htmlFor="a11y-input-440" className="sr-only">Input</label>
 <input id="a11y-input-440" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={dlcRatioC}
                         onChange={(e) => setDlcRatioC(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Sand
                       </label>{" "}
                       <><label htmlFor="a11y-input-441" className="sr-only">Input</label>
 <input id="a11y-input-441" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={dlcRatioS}
                         onChange={(e) => setDlcRatioS(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Aggr
                       </label>{" "}
                       <><label htmlFor="a11y-input-442" className="sr-only">Input</label>
 <input id="a11y-input-442" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={dlcRatioA}
                         onChange={(e) => setDlcRatioA(e.target.value)}
                       /></>{" "}
@@ -270,13 +270,13 @@ export default function RigidPavementEstimator() {
                   </div>{" "}
                   <div>
                     {" "}
-                    <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                    <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                       Water/Cement Ratio
                     </label>{" "}
                     <><label htmlFor="a11y-input-443" className="sr-only">Input</label>
 <input id="a11y-input-443" type="number" inputMode="decimal"
                       step="0.05"
-                      className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                      className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                       value={dlcWcRatio}
                       onChange={(e) => setDlcWcRatio(e.target.value)}
                     /></>{" "}
@@ -291,36 +291,36 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Cement
                       </label>{" "}
                       <><label htmlFor="a11y-input-444" className="sr-only">Input</label>
 <input id="a11y-input-444" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={pqcRatioC}
                         onChange={(e) => setPqcRatioC(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Sand
                       </label>{" "}
                       <><label htmlFor="a11y-input-445" className="sr-only">Input</label>
 <input id="a11y-input-445" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={pqcRatioS}
                         onChange={(e) => setPqcRatioS(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Aggr
                       </label>{" "}
                       <><label htmlFor="a11y-input-446" className="sr-only">Input</label>
 <input id="a11y-input-446" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={pqcRatioA}
                         onChange={(e) => setPqcRatioA(e.target.value)}
                       /></>{" "}
@@ -328,13 +328,13 @@ export default function RigidPavementEstimator() {
                   </div>{" "}
                   <div>
                     {" "}
-                    <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                    <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                       Water/Cement Ratio
                     </label>{" "}
                     <><label htmlFor="a11y-input-447" className="sr-only">Input</label>
 <input id="a11y-input-447" type="number" inputMode="decimal"
                       step="0.05"
-                      className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                      className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                       value={pqcWcRatio}
                       onChange={(e) => setPqcWcRatio(e.target.value)}
                     /></>{" "}
@@ -343,13 +343,13 @@ export default function RigidPavementEstimator() {
               </div>{" "}
             </div>{" "}
             {/* Joints & Steel Parameters */}{" "}
-            <div className="bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+            <div className="bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border-color">
               {" "}
-              <div className="flex items-center justify-between mb-5 border-b border-gray-50 pb-4">
+              <div className="flex items-center justify-between mb-5 border-b border-border-color pb-4">
                 {" "}
                 <div className="flex items-center gap-3">
                   {" "}
-                  <div className="p-2.5 bg-slate-100 text-txt-secondary rounded-xl">
+                  <div className="p-2.5 bg-surface-hover text-txt-secondary rounded-xl">
                     {" "}
                     <Settings2 className="w-5 h-5" />{" "}
                   </div>{" "}
@@ -370,48 +370,48 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Joint Spacing (m)
                       </label>{" "}
                       <><label htmlFor="a11y-input-448" className="sr-only">Input</label>
 <input id="a11y-input-448" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={transverseSpacing}
                         onChange={(e) => setTransverseSpacing(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Diameter (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-449" className="sr-only">Input</label>
 <input id="a11y-input-449" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={dowelDiameter}
                         onChange={(e) => setDowelDiameter(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Length (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-450" className="sr-only">Input</label>
 <input id="a11y-input-450" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={dowelLength}
                         onChange={(e) => setDowelLength(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Bar Spacing (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-451" className="sr-only">Input</label>
 <input id="a11y-input-451" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={dowelSpacing}
                         onChange={(e) => setDowelSpacing(e.target.value)}
                       /></>{" "}
@@ -428,48 +428,48 @@ export default function RigidPavementEstimator() {
                     {" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Joint Spacing (m)
                       </label>{" "}
                       <><label htmlFor="a11y-input-452" className="sr-only">Input</label>
 <input id="a11y-input-452" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={longitudinalSpacing}
                         onChange={(e) => setLongitudinalSpacing(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Diameter (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-453" className="sr-only">Input</label>
 <input id="a11y-input-453" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={tieDiameter}
                         onChange={(e) => setTieDiameter(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div>
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Length (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-454" className="sr-only">Input</label>
 <input id="a11y-input-454" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={tieLength}
                         onChange={(e) => setTieLength(e.target.value)}
                       /></>{" "}
                     </div>{" "}
                     <div className="sm:col-span-2">
                       {" "}
-                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-gray-300 uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
+                      <label className="block text-xs xl:text-xs font-semibold text-txt-secondary dark:text-txt-secondary uppercase tracking-wider mb-1.5 ml-1 truncate" title={""}>
                         Bar Spacing (mm)
                       </label>{" "}
                       <><label htmlFor="a11y-input-455" className="sr-only">Input</label>
 <input id="a11y-input-455" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50/50 border border-gray-200 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-slate-400 focus:outline-none min-h-[44px]"
+                        className="w-full bg-surface-default/50 border border-border-color rounded-full px-4 py-2 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 focus:outline-none min-h-[44px]"
                         value={tieSpacing}
                         onChange={(e) => setTieSpacing(e.target.value)}
                       /></>{" "}
@@ -489,37 +489,37 @@ export default function RigidPavementEstimator() {
                subtitle={`DLC: ${volDLC.toFixed(2)} m³ | PQC: ${volPQC.toFixed(2)} m³`}
              >
               <div className="space-y-4 font-mono text-sm mb-6 mt-6">
-                <div className="bg-gray-50/5 p-3 rounded-xl border border-gray-100/10">
+                <div className="bg-white/5 p-3 rounded-xl border border-white/10">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-400 font-sans font-medium">DLC Sub-base</span>
-                    <span className="font-bold text-gray-200 text-lg">
-                      {volDLC.toFixed(2)} <span className="text-sm font-normal text-gray-400">m³</span>
+                    <span className="text-white/60 font-sans font-medium">DLC Sub-base</span>
+                    <span className="font-bold text-white text-lg">
+                      {volDLC.toFixed(2)} <span className="text-sm font-normal text-white/60">m³</span>
                     </span>
                   </div>
-                  <div className="space-y-1 text-xs text-gray-400 border-t border-gray-100/10 pt-2">
-                    <div className="flex justify-between"><span>Cement:</span><span className="font-medium text-gray-300">{dlcCementBags} bags</span></div>
-                    <div className="flex justify-between"><span>Sand:</span><span className="font-medium text-gray-300">{dlcSandVol.toFixed(2)} m³</span></div>
-                    <div className="flex justify-between"><span>Aggregates:</span><span className="font-medium text-gray-300">{dlcAggVol.toFixed(2)} m³</span></div>
-                    <div className="flex justify-between"><span>Water:</span><span className="font-medium text-gray-300">{dlcWaterLiters.toFixed(0)} L</span></div>
+                  <div className="space-y-1 text-xs text-white/60 border-t border-white/10 pt-2">
+                    <div className="flex justify-between"><span>Cement:</span><span className="font-medium text-white/80">{dlcCementBags} bags</span></div>
+                    <div className="flex justify-between"><span>Sand:</span><span className="font-medium text-white/80">{dlcSandVol.toFixed(2)} m³</span></div>
+                    <div className="flex justify-between"><span>Aggregates:</span><span className="font-medium text-white/80">{dlcAggVol.toFixed(2)} m³</span></div>
+                    <div className="flex justify-between"><span>Water:</span><span className="font-medium text-white/80">{dlcWaterLiters.toFixed(0)} L</span></div>
                   </div>
                 </div>
-                <div className="bg-indigo-500/10 p-3 rounded-xl border border-indigo-500/20">
+                <div className="bg-accent-500/10 p-3 rounded-xl border border-ink/20">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-indigo-400 font-sans font-medium">PQC Surface</span>
-                    <span className="font-bold text-indigo-300 text-lg">
-                      {volPQC.toFixed(2)} <span className="text-sm font-normal text-indigo-400/60">m³</span>
+                    <span className="text-accent-400 font-sans font-medium">PQC Surface</span>
+                    <span className="font-bold text-accent-400 text-lg">
+                      {volPQC.toFixed(2)} <span className="text-sm font-normal text-accent-400/60">m³</span>
                     </span>
                   </div>
-                  <div className="space-y-1 text-xs text-indigo-400/80 border-t border-indigo-500/20 pt-2">
-                    <div className="flex justify-between"><span>Cement:</span><span className="font-medium text-indigo-300">{pqcCementBags} bags</span></div>
-                    <div className="flex justify-between"><span>Sand:</span><span className="font-medium text-indigo-300">{pqcSandVol.toFixed(2)} m³</span></div>
-                    <div className="flex justify-between"><span>Aggregates:</span><span className="font-medium text-indigo-300">{pqcAggVol.toFixed(2)} m³</span></div>
-                    <div className="flex justify-between"><span>Water:</span><span className="font-medium text-indigo-300">{pqcWaterLiters.toFixed(0)} L</span></div>
+                  <div className="space-y-1 text-xs text-accent-400/80 border-t border-ink/20 pt-2">
+                    <div className="flex justify-between"><span>Cement:</span><span className="font-medium text-accent-400">{pqcCementBags} bags</span></div>
+                    <div className="flex justify-between"><span>Sand:</span><span className="font-medium text-accent-400">{pqcSandVol.toFixed(2)} m³</span></div>
+                    <div className="flex justify-between"><span>Aggregates:</span><span className="font-medium text-accent-400">{pqcAggVol.toFixed(2)} m³</span></div>
+                    <div className="flex justify-between"><span>Water:</span><span className="font-medium text-accent-400">{pqcWaterLiters.toFixed(0)} L</span></div>
                   </div>
                 </div>
               </div>
               
-              <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 border-t border-slate-700/50 pt-6">
+              <h3 className="text-sm font-bold text-txt-tertiary uppercase tracking-wider mb-4 border-t border-ink-600/50 pt-6">
                 Steel Requirements
               </h3>
               

@@ -33,13 +33,13 @@ export function MaterialTakeoffDashboard({ costs, rates }: MaterialTakeoffDashbo
   const qCrush = rates.crush > 0 ? Math.ceil(costs.crush / rates.crush) : 0;
 
   return (
-    <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-4 sm:p-6 lg:p-4 sm:p-8 shadow-sm overflow-hidden">
+    <div className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl p-4 sm:p-6 lg:p-4 sm:p-8 shadow-brand-sm overflow-hidden">
       <div className="mb-6 flex flex-col gap-1">
         <h2 className="text-xl font-bold text-txt-primary dark:text-white flex items-center gap-2">
-          <Container className="w-5 h-5 text-indigo-500" />
+          <Container className="w-5 h-5 text-accent-800" />
           Material Takeoff (MTO) Dashboard
         </h2>
-        <p className="text-sm text-txt-tertiary dark:text-slate-400">
+        <p className="text-sm text-txt-tertiary dark:text-txt-tertiary">
           Raw material quantities reverse-calculated from current BOQ totals.
         </p>
       </div>
@@ -48,52 +48,52 @@ export function MaterialTakeoffDashboard({ costs, rates }: MaterialTakeoffDashbo
         
         {/* Cement */}
         <MTOItem 
-          icon={<Package className="w-6 h-6 text-emerald-500" />} 
+          icon={<Package className="w-6 h-6 text-ui-successText" />} 
           name="Portland Cement" 
           quantity={formatNumberMask(qCement)} 
           unit="Bags" 
-          bgColor="bg-emerald-50 dark:bg-emerald-500/10" 
-          borderColor="border-emerald-100 dark:border-emerald-500/20"
+          bgColor="bg-ui-success dark:bg-ui-successText/10" 
+          borderColor="border-ui-successBorder dark:border-ui-successText/20"
         />
 
         {/* Steel */}
         <MTOItem 
-          icon={<div className="w-6 h-6 rounded-full border-4 border-rose-500" />} 
+          icon={<div className="w-6 h-6 rounded-full border-4 border-ui-errorText" />} 
           name="Grade 60 Steel" 
           quantity={qSteelTons > 0 ? qSteelTons.toFixed(2) : '0.00'} 
           unit="Tons" 
-          bgColor="bg-rose-50 dark:bg-rose-500/10" 
-          borderColor="border-rose-100 dark:border-rose-500/20"
+          bgColor="bg-ui-error dark:bg-ui-errorText/10" 
+          borderColor="border-ui-errorBorder dark:border-ui-errorText/20"
         />
 
         {/* Bricks */}
         <MTOItem 
-          icon={<Blocks className="w-6 h-6 text-amber-500" />} 
+          icon={<Blocks className="w-6 h-6 text-accent-800" />} 
           name="A-Class Bricks" 
           quantity={formatNumberMask(qBricks)} 
           unit="Units" 
-          bgColor="bg-amber-50 dark:bg-amber-500/10" 
-          borderColor="border-amber-100 dark:border-amber-500/20"
+          bgColor="bg-accent-50 dark:bg-accent-500/10" 
+          borderColor="border-accent-100 dark:border-accent-500/20"
         />
 
         {/* Sand */}
         <MTOItem 
-          icon={<MountainSnow className="w-6 h-6 text-yellow-600" />} 
+          icon={<MountainSnow className="w-6 h-6 text-ui-warningText" />} 
           name="Ravi/Chenab Sand" 
           quantity={formatNumberMask(qSand)} 
           unit="Cft" 
-          bgColor="bg-yellow-50 dark:bg-yellow-600/10" 
-          borderColor="border-yellow-100 dark:border-yellow-600/20"
+          bgColor="bg-ui-warning dark:bg-ui-warningText/10" 
+          borderColor="border-ui-warningBorder dark:border-ui-warningText/20"
         />
 
         {/* Crush */}
         <MTOItem 
-          icon={<Diamond className="w-6 h-6 text-txt-secondary dark:text-slate-400" />} 
+          icon={<Diamond className="w-6 h-6 text-txt-secondary dark:text-txt-tertiary" />} 
           name="Margalla Crush" 
           quantity={formatNumberMask(qCrush)} 
           unit="Cft" 
-          bgColor="bg-slate-100 dark:bg-slate-800" 
-          borderColor="border-ui-borderSubtle dark:border-slate-700"
+          bgColor="bg-surface-hover" 
+          borderColor="border-ui-borderSubtle dark:border-ink-600"
         />
 
       </div>
@@ -104,14 +104,14 @@ export function MaterialTakeoffDashboard({ costs, rates }: MaterialTakeoffDashbo
 function MTOItem({ icon, name, quantity, unit, bgColor, borderColor }: any) {
   return (
     <div className={`p-4 rounded-2xl flex items-center gap-4 border ${bgColor} ${borderColor} transition-all hover:scale-[1.02]`}>
-      <div className="w-full shrink-0 p-3 bg-surface-default dark:bg-slate-900 rounded-xl shadow-sm overflow-hidden">
+      <div className="w-full shrink-0 p-3 bg-surface-default dark:bg-ink rounded-xl shadow-brand-sm overflow-hidden">
         {icon}
       </div>
       <div>
-        <div className="text-sm font-medium text-txt-tertiary dark:text-slate-400 mb-0.5">{name}</div>
+        <div className="text-sm font-medium text-txt-tertiary dark:text-txt-tertiary mb-0.5">{name}</div>
         <div className="flex items-baseline gap-1.5">
           <span className="text-xl font-semibold text-txt-primary tabular-nums text-txt-primary dark:text-white leading-none">{quantity}</span>
-          <span className="text-base font-medium dark:text-slate-300">{unit}</span>
+          <span className="text-base font-medium dark:text-txt-tertiary">{unit}</span>
         </div>
       </div>
     </div>

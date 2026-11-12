@@ -74,13 +74,13 @@ export default function PrecastWallCalculator() {
         <div className="mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <h2 className="text-xl font-semibold text-txt-primary flex items-center gap-3">
-              <BrickWall className="w-8 h-8 text-indigo-600" />
+              <BrickWall className="w-8 h-8 text-accent-800" />
               Precast Wall Calculator
             </h2>
-            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-base font-medium tracking-wide uppercase ml-2 border border-emerald-200">
+            <span className="px-2.5 py-1 rounded-full bg-ui-success text-ui-successText text-base font-medium tracking-wide uppercase ml-2 border border-ui-successBorder">
               Beginner
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-slate-100 text-txt-secondary text-base font-medium tracking-wide flex items-center gap-1 border border-ui-borderSubtle">
+            <span className="px-2.5 py-1 rounded-full bg-surface-hover text-txt-secondary text-base font-medium tracking-wide flex items-center gap-1 border border-ui-borderSubtle">
               <Clock className="w-3.5 h-3.5" /> 3 MIN
             </span>
           </div>
@@ -92,10 +92,10 @@ export default function PrecastWallCalculator() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Input Panel */}
           <div className="w-full md:w-[45%] flex flex-col gap-6">
-            <div className="w-full bg-surface-default p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
+            <div className="w-full bg-surface-default p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle shadow-brand-sm relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-ink"></div>
               
-              <h3 className="font-bold text-lg text-txt-primary mb-6 border-b border-slate-100 pb-4">
+              <h3 className="font-bold text-lg text-txt-primary mb-6 border-b border-border-color pb-4">
                 Boundary Dimensions
               </h3>
 
@@ -107,7 +107,7 @@ export default function PrecastWallCalculator() {
                     type="number" inputMode="decimal"
                     value={totalLength}
                     onChange={(e) => setTotalLength(e.target.value)}
-                    className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all font-semibold"
+                    className="w-full bg-surface-hover rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-semibold"
                   /></>
                 </div>
                 <div>
@@ -117,12 +117,12 @@ export default function PrecastWallCalculator() {
                     type="number" inputMode="decimal"
                     value={wallHeight}
                     onChange={(e) => setWallHeight(e.target.value)}
-                    className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all font-semibold"
+                    className="w-full bg-surface-hover rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-semibold"
                   /></>
                 </div>
               </div>
 
-              <h3 className="font-bold text-lg text-txt-primary mb-6 border-b border-slate-100 pb-4 mt-8">
+              <h3 className="font-bold text-lg text-txt-primary mb-6 border-b border-border-color pb-4 mt-8">
                 Precast Component Specs
               </h3>
 
@@ -134,7 +134,7 @@ export default function PrecastWallCalculator() {
                     type="number" inputMode="decimal"
                     value={postSpacing}
                     onChange={(e) => setPostSpacing(e.target.value)}
-                    className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all font-semibold"
+                    className="w-full bg-surface-hover rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-semibold"
                   /></>
                 </div>
                 <div>
@@ -144,12 +144,12 @@ export default function PrecastWallCalculator() {
                     type="number" inputMode="decimal"
                     value={slabHeight}
                     onChange={(e) => setSlabHeight(e.target.value)}
-                    className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all font-semibold"
+                    className="w-full bg-surface-hover rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-semibold"
                   /></>
                 </div>
               </div>
 
-              <h3 className="font-bold text-lg text-txt-primary mb-6 border-b border-slate-100 pb-4 mt-8">
+              <h3 className="font-bold text-lg text-txt-primary mb-6 border-b border-border-color pb-4 mt-8">
                 Cost & Rates
               </h3>
 
@@ -161,7 +161,7 @@ export default function PrecastWallCalculator() {
                     type="number" inputMode="decimal"
                     value={postRate}
                     onChange={(e) => setPostRate(e.target.value)}
-                    className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all"
+                    className="w-full bg-surface-hover rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all"
                   /></>
                 </div>
                 <div>
@@ -171,7 +171,7 @@ export default function PrecastWallCalculator() {
                     type="number" inputMode="decimal"
                     value={slabRate}
                     onChange={(e) => setSlabRate(e.target.value)}
-                    className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all"
+                    className="w-full bg-surface-hover rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all"
                   /></>
                 </div>
                 <div>
@@ -181,7 +181,7 @@ export default function PrecastWallCalculator() {
                     type="number" inputMode="decimal"
                     value={laborRatePerRunningMeter}
                     onChange={(e) => setLaborRate(e.target.value)}
-                    className="w-full bg-slate-50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-all"
+                    className="w-full bg-surface-hover rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle text-txt-primary rounded-full px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all"
                   /></>
                 </div>
               </div>
@@ -189,18 +189,18 @@ export default function PrecastWallCalculator() {
               <Button
                 onClick={() => processEstimate(() => {})}
                 disabled={isProcessing}
-                className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-full shadow-md shadow-indigo-200 transition-all flex justify-center items-center gap-2 group border border-indigo-500 active:scale-95 hover:-translate-y-0.5"
+                className="w-full mt-6 bg-ink hover:bg-ink-700 text-white font-bold py-3.5 px-6 rounded-full shadow-brand-md shadow-accent-200 transition-all flex justify-center items-center gap-2 group border border-accent-800 active:scale-95 hover:-translate-y-0.5"
               >
                 {isProcessing ? "Computing..." : "Generate BOM"}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
 
-            <div className="p-5 rounded-2xl border border-indigo-200 bg-indigo-50/50 shadow-sm overflow-hidden">
-              <h4 className="text-base font-medium text-indigo-900 mb-3 flex items-center gap-2">
+            <div className="p-5 rounded-2xl border border-accent-200 bg-accent-50 shadow-brand-sm overflow-hidden">
+              <h4 className="text-base font-medium text-accent-900 mb-3 flex items-center gap-2">
                 <Calculator className="w-4 h-4" /> Math Logic & Formulas
               </h4>
-              <ul className="text-xs text-indigo-800/80 space-y-2 list-disc list-inside leading-relaxed uppercase tracking-wider font-semibold">
+              <ul className="text-xs text-accent-800/80 space-y-2 list-disc list-inside leading-relaxed uppercase tracking-wider font-semibold">
                 <li>Bays = CEIL(Total Length / Post Spacing)</li>
                 <li>Posts Required = Total Bays + 1</li>
                 <li>Slabs per Bay = Wall height / Slab height</li>
@@ -215,9 +215,9 @@ export default function PrecastWallCalculator() {
               <ProcessingSkeleton count={5} />
             ) : hasData && estimateData ? (
               <div className="space-y-6">
-                <div className="w-full bg-surface-default p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl border border-ui-borderSubtle shadow-lg relative overflow-hidden">
+                <div className="w-full bg-surface-default p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl border border-ui-borderSubtle shadow-brand-lg relative overflow-hidden">
                   
-                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 pb-6 mb-6">
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-border-color pb-6 mb-6">
                     <div>
                       <span className="text-base font-medium uppercase tracking-widest text-txt-tertiary mb-1 block">Total BOM Cost</span>
                       <div className="flex items-baseline gap-2">
@@ -230,9 +230,9 @@ export default function PrecastWallCalculator() {
 
                   <h4 className="text-base font-medium uppercase tracking-widest mb-4">Material Breakdown</h4>
                   
-                  <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl border border-ui-borderSubtle overflow-hidden mb-8">
+                  <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary rounded-2xl border border-ui-borderSubtle overflow-hidden mb-8">
                     <table className="w-full text-left text-sm">
-                      <thead className="bg-slate-100 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border-b border-ui-borderSubtle text-txt-tertiary font-bold uppercase tracking-widest text-xs overflow-hidden">
+                      <thead className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary border-b border-ui-borderSubtle text-txt-tertiary font-bold uppercase tracking-widest text-xs overflow-hidden">
                         <tr>
                           <th className="px-4 py-3">Component</th>
                           <th className="px-4 py-3 text-right">Quantity</th>
@@ -240,7 +240,7 @@ export default function PrecastWallCalculator() {
                           <th className="px-4 py-3 text-right">Amount</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-border-color">
                         <tr>
                           <td className="px-4 py-3 font-semibold text-txt-primary">H-Column Posts</td>
                           <td className="px-4 py-3 text-right font-mono">{estimateData.numberOfPosts} nos</td>
@@ -259,20 +259,20 @@ export default function PrecastWallCalculator() {
                           <td className="px-4 py-3 text-right font-mono">${laborRatePerRunningMeter}/{estimateData.lengthOption}</td>
                           <td className="px-4 py-3 text-right font-mono font-bold">${estimateData.costLabor.toLocaleString()}</td>
                         </tr>
-                        <tr className="bg-slate-100/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-hidden">
+                        <tr className="bg-surface-hover/50 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                           <td colSpan={3} className="px-4 py-3 font-bold text-txt-primary text-right">Total Estimates</td>
-                          <td className="px-4 py-3 text-right font-semibold tabular-nums tracking-tight text-indigo-600">${estimateData.totalCost.toLocaleString()}</td>
+                          <td className="px-4 py-3 text-right font-semibold tabular-nums tracking-tight text-accent-800">${estimateData.totalCost.toLocaleString()}</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 rounded-2xl border border-ui-borderSubtle shadow-sm text-center overflow-hidden">
+                    <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary p-4 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-center overflow-hidden">
                       <span className="text-txt-tertiary text-xs font-bold uppercase tracking-widest block mb-1">Total Bays Formed</span>
                       <div className="text-xl font-semibold tabular-nums tracking-tight text-txt-primary">{estimateData.numberOfBays}</div>
                     </div>
-                    <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 rounded-2xl border border-ui-borderSubtle shadow-sm text-center overflow-hidden">
+                    <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary p-4 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-center overflow-hidden">
                       <span className="text-txt-tertiary text-xs font-bold uppercase tracking-widest block mb-1">Slabs per Bay</span>
                       <div className="text-xl font-semibold tabular-nums tracking-tight text-txt-primary">{estimateData.slabsPerBay}</div>
                     </div>
@@ -280,9 +280,9 @@ export default function PrecastWallCalculator() {
                 </div>
               </div>
             ) : (
-              <div className="h-full min-h-[400px] flex flex-col items-center justify-center bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl border-2 border-dashed border-ui-borderSubtle p-4 sm:p-8 md:p-8 text-center bg-graph-pattern opacity-80 mix-blend-multiply overflow-hidden">
-                <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mb-6 shadow-highlight">
-                  <BrickWall className="w-10 h-10 text-indigo-600 opacity-80" />
+              <div className="h-full min-h-[400px] flex flex-col items-center justify-center bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary rounded-2xl border-2 border-dashed border-ui-borderSubtle p-4 sm:p-8 md:p-8 text-center bg-graph-pattern opacity-80 mix-blend-multiply overflow-hidden">
+                <div className="w-20 h-20 bg-accent-100 rounded-full flex items-center justify-center mb-6 shadow-highlight">
+                  <BrickWall className="w-10 h-10 text-accent-800 opacity-80" />
                 </div>
                 <h3 className="text-xl font-semibold text-txt-secondary mb-2">Build the Wall</h3>
                 <p className="text-txt-tertiary max-w-sm text-sm leading-relaxed mb-6">

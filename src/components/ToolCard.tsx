@@ -18,23 +18,14 @@ import { cn } from "../lib/utils";
  *    that fought with the page transition are gone.
  */
 
+// One amber system for every category (Dribbble has no per-category colours).
+// getCategorySpec keeps its signature for SmartSearch; it always returns this spec.
 const CAT_COLORS: Record<string, { c: string; glow: string }> = {
-  "ROAD PAVEMENT": { c: "#C2410C", glow: "rgba(249,115,22,0.14)" },
-  "QUANTITY ESTIMATION": { c: "#0056D2", glow: "rgba(0,86,210,0.12)" },
-  CONCRETE: { c: "#6D28D9", glow: "rgba(139,92,246,0.14)" },
-  MEP: { c: "#047857", glow: "rgba(16,185,129,0.14)" },
-  DEFAULT: { c: "#4338CA", glow: "rgba(99,102,241,0.14)" },
+  DEFAULT: { c: "#855307", glow: "rgba(242,164,19,0.14)" },
 };
 
 // Exported: SmartSearch imports it.
-export const getCategorySpec = (category: string) => {
-  const cat = (category || "").toUpperCase();
-  if (cat.includes("ROAD") || cat.includes("PAVEMENT") || cat.includes("HIGHWAY")) return CAT_COLORS["ROAD PAVEMENT"];
-  if (cat.includes("QUANTITY") || cat.includes("ESTIMATION") || cat.includes("ANALYSIS")) return CAT_COLORS["QUANTITY ESTIMATION"];
-  if (cat.includes("CONCRETE") || cat.includes("STRUCTURE") || cat.includes("MASONRY") || cat.includes("DESIGN")) return CAT_COLORS["CONCRETE"];
-  if (cat.includes("MEP") || cat.includes("ENERGY") || cat.includes("WATER") || cat.includes("PLUMBING")) return CAT_COLORS["MEP"];
-  return CAT_COLORS["DEFAULT"];
-};
+export const getCategorySpec = (_category: string) => CAT_COLORS["DEFAULT"];
 
 export default function ToolCard({
   mod,
@@ -73,9 +64,9 @@ export default function ToolCard({
     <article
       id={`module-card-${mod.id}`}
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-ui-borderSubtle bg-surface-default",
+        "group relative flex h-full flex-col overflow-hidden rounded-card border border-ui-borderSubtle bg-surface-default",
         "transition-[box-shadow,border-color] duration-200 hover:border-ui-borderDefault hover:shadow-brand-md",
-        "focus-within:border-primary-600 focus-within:shadow-brand-md"
+        "focus-within:border-accent-800 focus-within:shadow-brand-md"
       )}
     >
       {/* Thumbnail */}
@@ -84,7 +75,7 @@ export default function ToolCard({
         style={{ background: `linear-gradient(135deg, ${cfg.glow} 0%, transparent 70%)` }}
       >
         <span
-          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-default shadow-sm border border-ui-borderSubtle transition-transform duration-300 group-hover:scale-105"
+          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-default shadow-brand-sm border border-ui-borderSubtle transition-transform duration-300 group-hover:scale-105"
           style={{ color: cfg.c }}
         >
           <Icon size={30} strokeWidth={1.8} aria-hidden="true" />
@@ -92,11 +83,11 @@ export default function ToolCard({
 
         <div className="absolute left-3 top-3 flex gap-1.5">
           {mod.isNew && (
-            <span className="rounded-full bg-primary-600 px-2.5 py-1 text-xs font-bold text-white">New</span>
+            <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-bold text-white">New</span>
           )}
           {mod.isPopular && (
             <span className="inline-flex items-center gap-1 rounded-full bg-surface-default px-2.5 py-1 text-xs font-bold text-txt-primary border border-ui-borderSubtle">
-              <Flame className="h-3 w-3 text-orange-500" aria-hidden="true" /> Popular
+              <Flame className="h-3 w-3 text-accent-700" aria-hidden="true" /> Popular
             </span>
           )}
         </div>
@@ -107,10 +98,10 @@ export default function ToolCard({
           onClick={toggleFavorite}
           aria-pressed={saved}
           aria-label={saved ? `Remove ${mod.title} from saved tools` : `Save ${mod.title}`}
-          className="absolute z-10 right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-surface-default/95 border border-ui-borderSubtle text-txt-secondary hover:text-primary-600 hover:border-primary-600 transition-colors"
+          className="absolute z-10 right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-surface-default/95 border border-ui-borderSubtle text-txt-secondary hover:text-accent-800 hover:border-accent-800 transition-colors"
         >
           {saved ? (
-            <BookmarkCheck size={18} className="text-primary-600" aria-hidden="true" />
+            <BookmarkCheck size={18} className="text-accent-800" aria-hidden="true" />
           ) : (
             <Bookmark size={18} aria-hidden="true" />
           )}
@@ -118,7 +109,7 @@ export default function ToolCard({
 
         {/* Hover reveal (pointer devices only; the title link is always available) */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden translate-y-2 items-center justify-end bg-gradient-to-t from-black/35 to-transparent p-3 opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:flex">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-sm font-semibold text-slate-900">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-default px-3.5 py-1.5 text-sm font-semibold text-txt-primary">
             Open tool <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </span>
         </div>

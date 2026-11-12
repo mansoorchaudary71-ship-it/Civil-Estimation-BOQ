@@ -40,8 +40,8 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         return (
           <path 
             d={`M ${xBL} ${yBot} L ${xBR} ${yBot} L ${xTR} ${yTop} L ${xTL} ${yTop} Z`}
-            fill="rgba(59, 130, 246, 0.2)"
-            stroke="#3b82f6"
+            fill="rgba(242, 164, 19, 0.2)"
+            stroke="#F2A413"
             strokeWidth="2"
           />
         );
@@ -68,13 +68,13 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
           <g>
             <path 
               d={`M ${xBL} ${yBot} L ${xBR} ${yBot} L ${xTR} ${yTop} L ${xTL} ${yTop} Z`}
-              fill="rgba(59, 130, 246, 0.2)"
-              stroke="#3b82f6"
+              fill="rgba(242, 164, 19, 0.2)"
+              stroke="#F2A413"
               strokeWidth="2"
             />
             {/* Optional 3D lines */}
-            <path d={`M ${xTR} ${yTop} L ${xTR + 20} ${yTop - 20} L ${xBR + 20} ${yBot - 20} L ${xBR} ${yBot}`} fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6" strokeWidth="1" />
-            <path d={`M ${xTL} ${yTop} L ${xTL + 20} ${yTop - 20} L ${xTR + 20} ${yTop - 20} L ${xTR} ${yTop}`} fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6" strokeWidth="1" />
+            <path d={`M ${xTR} ${yTop} L ${xTR + 20} ${yTop - 20} L ${xBR + 20} ${yBot - 20} L ${xBR} ${yBot}`} fill="rgba(242, 164, 19, 0.1)" stroke="#F2A413" strokeWidth="1" />
+            <path d={`M ${xTL} ${yTop} L ${xTL + 20} ${yTop - 20} L ${xTR + 20} ${yTop - 20} L ${xTR} ${yTop}`} fill="rgba(242, 164, 19, 0.1)" stroke="#F2A413" strokeWidth="1" />
           </g>
         );
       }
@@ -93,10 +93,10 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
             <path 
               d={`M ${cx - sR} ${cy - sH/2} L ${cx - sR} ${cy + sH/2} A ${sR} ${ellipseHeight} 0 0 0 ${cx + sR} ${cy + sH/2} L ${cx + sR} ${cy - sH/2}`}
               fill="rgba(16, 185, 129, 0.2)"
-              stroke="#10b981"
+              stroke="#F2A413"
               strokeWidth="2"
             />
-            <ellipse cx={cx} cy={cy - sH/2} rx={sR} ry={ellipseHeight} fill="rgba(16, 185, 129, 0.4)" stroke="#10b981" strokeWidth="2" />
+            <ellipse cx={cx} cy={cy - sH/2} rx={sR} ry={ellipseHeight} fill="rgba(242, 164, 19, 0.4)" stroke="#F2A413" strokeWidth="2" />
           </g>
         );
       }
@@ -125,13 +125,13 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         return (
           <g>
             {/* Back lines (dashed) */}
-            <path d={`M ${frontBotLeft.x} ${frontBotLeft.y} L ${frontBotLeft.x + xOffset} ${frontBotLeft.y - yOffset} L ${backBotRight.x} ${backBotRight.y}`} fill="none" stroke="#2dd4bf" strokeWidth="1" strokeDasharray="4" opacity="0.5" />
-            <path d={`M ${frontBotLeft.x + xOffset} ${frontBotLeft.y - yOffset} L ${backTopLeft.x} ${backTopLeft.y}`} fill="none" stroke="#2dd4bf" strokeWidth="1" strokeDasharray="4" opacity="0.5" />
+            <path d={`M ${frontBotLeft.x} ${frontBotLeft.y} L ${frontBotLeft.x + xOffset} ${frontBotLeft.y - yOffset} L ${backBotRight.x} ${backBotRight.y}`} fill="none" stroke="#F2A413" strokeWidth="1" strokeDasharray="4" opacity="0.5" />
+            <path d={`M ${frontBotLeft.x + xOffset} ${frontBotLeft.y - yOffset} L ${backTopLeft.x} ${backTopLeft.y}`} fill="none" stroke="#F2A413" strokeWidth="1" strokeDasharray="4" opacity="0.5" />
             
             {/* Faces */}
-            <path d={`M ${backTopLeft.x} ${backTopLeft.y} L ${backTopRight.x} ${backTopRight.y} L ${frontTopRight.x} ${frontTopRight.y} L ${frontTopLeft.x} ${frontTopLeft.y} Z`} fill="rgba(45, 212, 191, 0.4)" stroke="#2dd4bf" strokeWidth="2" />
-            <path d={`M ${frontTopRight.x} ${frontTopRight.y} L ${backTopRight.x} ${backTopRight.y} L ${backBotRight.x} ${backBotRight.y} L ${frontBotRight.x} ${frontBotRight.y} Z`} fill="rgba(45, 212, 191, 0.2)" stroke="#2dd4bf" strokeWidth="2" />
-            <path d={`M ${frontTopLeft.x} ${frontTopLeft.y} L ${frontTopRight.x} ${frontTopRight.y} L ${frontBotRight.x} ${frontBotRight.y} L ${frontBotLeft.x} ${frontBotLeft.y} Z`} fill="rgba(45, 212, 191, 0.3)" stroke="#2dd4bf" strokeWidth="2" />
+            <path d={`M ${backTopLeft.x} ${backTopLeft.y} L ${backTopRight.x} ${backTopRight.y} L ${frontTopRight.x} ${frontTopRight.y} L ${frontTopLeft.x} ${frontTopLeft.y} Z`} fill="rgba(242, 164, 19, 0.4)" stroke="#F2A413" strokeWidth="2" />
+            <path d={`M ${frontTopRight.x} ${frontTopRight.y} L ${backTopRight.x} ${backTopRight.y} L ${backBotRight.x} ${backBotRight.y} L ${frontBotRight.x} ${frontBotRight.y} Z`} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
+            <path d={`M ${frontTopLeft.x} ${frontTopLeft.y} L ${frontTopRight.x} ${frontTopRight.y} L ${frontBotRight.x} ${frontBotRight.y} L ${frontBotLeft.x} ${frontBotLeft.y} Z`} fill="rgba(242, 164, 19, 0.3)" stroke="#F2A413" strokeWidth="2" />
           </g>
         );
       }
@@ -139,7 +139,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         const { radius = 0 } = dimensions;
         if (radius === 0) return null;
         return (
-          <circle cx={cx} cy={cy} r={containerSize * 0.4} fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" strokeWidth="2" />
+          <circle cx={cx} cy={cy} r={containerSize * 0.4} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'Square': {
@@ -147,7 +147,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         if (side === 0) return null;
         const sS = containerSize * 0.7;
         return (
-          <rect x={cx - sS/2} y={cy - sS/2} width={sS} height={sS} fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" strokeWidth="2" />
+          <rect x={cx - sS/2} y={cy - sS/2} width={sS} height={sS} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'Rectangle': {
@@ -157,7 +157,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         const sL = length * scale;
         const sW = width * scale;
         return (
-          <rect x={cx - sL/2} y={cy - sW/2} width={sL} height={sW} fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" strokeWidth="2" />
+          <rect x={cx - sL/2} y={cy - sW/2} width={sL} height={sW} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'Triangle': {
@@ -166,7 +166,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         const sB = containerSize * 0.7;
         const sH = containerSize * 0.6;
         return (
-          <polygon points={`${cx},${cy - sH/2} ${cx + sB/2},${cy + sH/2} ${cx - sB/2},${cy + sH/2}`} fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" strokeWidth="2" />
+          <polygon points={`${cx},${cy - sH/2} ${cx + sB/2},${cy + sH/2} ${cx - sB/2},${cy + sH/2}`} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'RightTriangle': {
@@ -176,7 +176,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         const sB = base * scale;
         const sH = height * scale;
         return (
-          <polygon points={`${cx - sB/2},${cy + sH/2} ${cx + sB/2},${cy + sH/2} ${cx - sB/2},${cy - sH/2}`} fill="rgba(249, 115, 22, 0.2)" stroke="#f97316" strokeWidth="2" />
+          <polygon points={`${cx - sB/2},${cy + sH/2} ${cx + sB/2},${cy + sH/2} ${cx - sB/2},${cy - sH/2}`} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'Ellipse': {
@@ -184,7 +184,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         if (major === 0 || minor === 0) return null;
         const scale = (containerSize * 0.8) / Math.max(major, minor);
         return (
-          <ellipse cx={cx} cy={cy} rx={major * scale / 2} ry={minor * scale / 2} fill="rgba(236, 72, 153, 0.2)" stroke="#ec4899" strokeWidth="2" />
+          <ellipse cx={cx} cy={cy} rx={major * scale / 2} ry={minor * scale / 2} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'HorizontalCapsule': {
@@ -196,7 +196,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         const sL = length * scale;
         const sR = radius * scale;
         return (
-          <path d={`M ${cx - sL/2} ${cy - sR} h ${sL} a ${sR} ${sR} 0 0 1 0 ${sR * 2} h -${sL} a ${sR} ${sR} 0 0 1 0 -${sR * 2} Z`} fill="rgba(6, 182, 212, 0.2)" stroke="#06b6d4" strokeWidth="2" />
+          <path d={`M ${cx - sL/2} ${cy - sR} h ${sL} a ${sR} ${sR} 0 0 1 0 ${sR * 2} h -${sL} a ${sR} ${sR} 0 0 1 0 -${sR * 2} Z`} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'VerticalCapsule': {
@@ -208,7 +208,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         const sL = length * scale;
         const sR = radius * scale;
         return (
-          <path d={`M ${cx - sR} ${cy - sL/2} v ${sL} a ${sR} ${sR} 0 0 0 ${sR * 2} 0 v -${sL} a ${sR} ${sR} 0 0 0 -${sR * 2} 0 Z`} fill="rgba(217, 70, 239, 0.2)" stroke="#d946ef" strokeWidth="2" />
+          <path d={`M ${cx - sR} ${cy - sL/2} v ${sL} a ${sR} ${sR} 0 0 0 ${sR * 2} 0 v -${sL} a ${sR} ${sR} 0 0 0 -${sR * 2} 0 Z`} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'Parallelogram': {
@@ -219,7 +219,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         const sH = height * scale;
         const offset = sH * 0.3;
         return (
-          <polygon points={`${cx - sB/2 + offset},${cy - sH/2} ${cx + sB/2 + offset},${cy - sH/2} ${cx + sB/2 - offset},${cy + sH/2} ${cx - sB/2 - offset},${cy + sH/2}`} fill="rgba(132, 204, 22, 0.2)" stroke="#84cc16" strokeWidth="2" />
+          <polygon points={`${cx - sB/2 + offset},${cy - sH/2} ${cx + sB/2 + offset},${cy - sH/2} ${cx + sB/2 - offset},${cy + sH/2} ${cx - sB/2 - offset},${cy + sH/2}`} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       case 'IrregularQuad': {
@@ -227,7 +227,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
         if (a === 0 && b === 0) return null;
         const sS = containerSize * 0.7;
         return (
-          <polygon points={`${cx - sS/2},${cy - sS/3} ${cx + sS/2.5},${cy - sS/2} ${cx + sS/2},${cy + sS/2.5} ${cx - sS/3},${cy + sS/2}`} fill="rgba(99, 102, 241, 0.2)" stroke="#6366f1" strokeWidth="2" />
+          <polygon points={`${cx - sS/2},${cy - sS/3} ${cx + sS/2.5},${cy - sS/2} ${cx + sS/2},${cy + sS/2.5} ${cx - sS/3},${cy + sS/2}`} fill="rgba(242, 164, 19, 0.2)" stroke="#F2A413" strokeWidth="2" />
         );
       }
       default:
@@ -240,7 +240,7 @@ export const SVGShapeVisualizer: React.FC<SVGShapeVisualizerProps> = ({ shape, d
   if (!svgContent) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-surface-default/5 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl border border-ui-borderSubtle dark:border-slate-700 w-full mb-6 overflow-hidden">
+    <div className="flex flex-col items-center justify-center p-4 bg-surface-default/5 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary rounded-2xl border border-ui-borderSubtle dark:border-ink-600 w-full mb-6 overflow-hidden">
       <h4 className="text-base font-medium uppercase tracking-wider mb-2">Dynamic Preview</h4>
       <svg width="100%" height={containerSize} viewBox={`0 0 ${containerSize} ${containerSize}`}>
         {svgContent}

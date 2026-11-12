@@ -230,7 +230,7 @@ export default function MobileToolsSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#F5F5F7] backdrop-blur-sm z-[60] md:hidden"
+            className="fixed inset-0 bg-surface-hover backdrop-blur-sm z-[60] md:hidden"
             onClick={onClose}
           />
 
@@ -247,18 +247,18 @@ export default function MobileToolsSheet({
                 onClose();
               }
             }}
-            className="w-full fixed bottom-0 left-0 right-0 z-[70] md:hidden flex flex-col bg-surface-default/90 backdrop-blur-2xl border-t border-ui-borderSubtle dark:border-slate-700/50 shadow-[0_-8px_30px_rgba(15,23,42,0.12)] rounded-t-[32px] will-change-transform overflow-hidden"
+            className="w-full fixed bottom-0 left-0 right-0 z-[70] md:hidden flex flex-col bg-surface-default/90 backdrop-blur-2xl border-t border-ui-borderSubtle dark:border-ink-600/50 shadow-[0_-8px_30px_rgba(31,29,26,0.12)] rounded-t-[32px] will-change-transform overflow-hidden"
             style={{ maxHeight: "85vh", height: "85vh" }}
           >
             <div className="flex justify-center pt-3 pb-2 w-full touch-none cursor-grab active:cursor-grabbing">
-              <div className="w-12 h-1.5 bg-slate-300 rounded-full" />
+              <div className="w-12 h-1.5 bg-secondary-300 rounded-full" />
             </div>
 
             <div className="px-6 pb-2 pt-1 flex items-center justify-between shrink-0">
               <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
                 Tools Directory
               </h2>
-              <Button className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-txt-secondary hover:bg-slate-200 transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              <Button className="w-8 h-8 rounded-full bg-surface-hover flex items-center justify-center text-txt-secondary hover:bg-surface-active transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 onClick={onClose}
               >
                 <X className="w-5 h-5" />
@@ -267,7 +267,7 @@ export default function MobileToolsSheet({
 
             <div className="px-6 pb-2 pt-2 shrink-0">
               <div className="flex items-center gap-2">
-                <div className="w-full relative flex flex-1 items-center h-[46px] bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-sm transition-all overflow-hidden focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100">
+                <div className="w-full relative flex flex-1 items-center h-[46px] bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-brand-sm transition-all overflow-hidden focus-within:border-accent-800 focus-within:ring-2 focus-within:ring-accent-100">
                   <Search className="w-4 h-4 text-txt-secondary ml-4 absolute" />
                   <><label htmlFor="a11y-input-7" className="sr-only">Search tools & calculations...</label>
 <input id="a11y-input-7"
@@ -281,7 +281,7 @@ export default function MobileToolsSheet({
               </div>
             </div>
 
-            <div className="w-full overflow-x-auto hide-scrollbar px-6 py-2 shrink-0 border-b border-slate-100">
+            <div className="w-full overflow-x-auto hide-scrollbar px-6 py-2 shrink-0 border-b border-border-color">
               <div className="flex items-center gap-2">
                 {categories.map((cat, idx) => (
                   <Button
@@ -289,8 +289,8 @@ export default function MobileToolsSheet({
                     onClick={() => setActiveTab(idx)}
                     className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                       activeTab === idx
-                        ? "bg-surface-default text-txt-primary shadow-md"
-                        : "bg-slate-100 text-txt-secondary hover:bg-slate-200"
+                        ? "bg-surface-default text-txt-primary shadow-brand-md"
+                        : "bg-surface-hover text-txt-secondary hover:bg-surface-active"
                     }`}
                   >
                     {cat}
@@ -299,7 +299,7 @@ export default function MobileToolsSheet({
               </div>
             </div>
 
-            <div className="flex-1 overflow-x-hidden relative rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+            <div className="flex-1 overflow-x-hidden relative rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
               <motion.div
                 className="h-full overflow-y-auto px-6 pb-8 pt-4"
                 drag="x"
@@ -324,9 +324,9 @@ export default function MobileToolsSheet({
                           onSelectModule(tool.id as ModuleId);
                           onClose();
                         }}
-                        className="group relative flex items-center gap-4 w-full p-3.5 bg-bg-card/80 rounded-2xl border border-transparent shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200 text-left active:scale-95 flex-wrap"
+                        className="group relative flex items-center gap-4 w-full p-3.5 bg-bg-card/80 rounded-2xl border border-transparent shadow-brand-sm hover:shadow-brand-md hover:scale-[1.02] transition-all duration-200 text-left active:scale-95 flex-wrap"
                       >
-                        <div className="w-full flex-shrink-0 w-12 h-12 rounded-2xl bg-surface-default border border-slate-100 flex items-center justify-center text-txt-secondary group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors shadow-sm relative z-10 overflow-hidden">
+                        <div className="w-full flex-shrink-0 w-12 h-12 rounded-2xl bg-surface-default border border-border-color flex items-center justify-center text-txt-secondary group-hover:text-accent-800 group-hover:bg-accent-50 transition-colors shadow-brand-sm relative z-10 overflow-hidden">
                           {typeof tool.icon === "function"
                             ? (() => {
                                 const Icon = tool.icon as any;
@@ -339,7 +339,7 @@ export default function MobileToolsSheet({
                               )}
                         </div>
                         <div className="flex-1 min-w-0 relative z-10">
-                          <h4 className="leading-snug truncate group-hover:text-indigo-600 transition-colors text-lg font-medium text-txt-primary mb-4">
+                          <h4 className="leading-snug truncate group-hover:text-accent-800 transition-colors text-lg font-medium text-txt-primary mb-4">
                             {tool.title}
                           </h4>
                           <p className="truncate mt-0.5 text-base font-normal text-txt-secondary leading-relaxed">
@@ -356,7 +356,7 @@ export default function MobileToolsSheet({
                       animate={{ opacity: 1 }}
                       className="text-center py-10 text-txt-tertiary font-medium"
                     >
-                      <div className="bg-slate-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <div className="bg-surface-hover w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
                         <Search className="w-5 h-5 text-txt-secondary" />
                       </div>
                       No tools found in {activeCategory}

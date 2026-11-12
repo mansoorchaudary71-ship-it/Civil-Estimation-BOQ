@@ -98,7 +98,7 @@ export default function DiscussionWidget({ moduleId, toolName }: { moduleId: str
     <div className="mt-8 p-4 sm:p-6 rounded-2xl bg-surface-default border border-ui-borderSubtle">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <h2 className="text-xl md:text-xl font-semibold text-txt-primary tracking-tight mb-6">Discussion & Comments</h2>
-        <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+        <span className="text-sm font-medium text-accent-800 bg-accent-50 px-3 py-1 rounded-full border border-accent-100">
           {comments.length} engineers found this helpful
         </span>
       </div>
@@ -106,11 +106,11 @@ export default function DiscussionWidget({ moduleId, toolName }: { moduleId: str
       <div className="flex flex-col gap-4">
         {comments.map(comment => (
           <div key={comment.id} className="flex items-start gap-4 flex-wrap">
-            <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center shrink-0 font-bold text-txt-tertiary">
+            <div className="w-10 h-10 rounded-full bg-surface-active flex items-center justify-center shrink-0 font-bold text-txt-tertiary">
               {comment.userName.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1">
-              <div className="bg-slate-50 p-4 rounded-2xl rounded-tl-none border border-slate-100 overflow-hidden">
+              <div className="bg-surface-hover p-4 rounded-2xl rounded-tl-none border border-border-color overflow-hidden">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-lg font-medium text-txt-primary mb-4">{comment.userName}</h4>
                   <span className="text-sm text-txt-tertiary">
@@ -130,7 +130,7 @@ export default function DiscussionWidget({ moduleId, toolName }: { moduleId: str
         )}
         
         <div className="mt-4 flex items-start gap-4 flex-wrap">
-          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 font-bold text-indigo-600">
+          <div className="w-10 h-10 rounded-full bg-accent-100 flex items-center justify-center shrink-0 font-bold text-accent-800">
              {user ? user.displayName?.charAt(0).toUpperCase() || 'U' : 'You'}
           </div>
           <div className="flex-1 relative">
@@ -139,13 +139,13 @@ export default function DiscussionWidget({ moduleId, toolName }: { moduleId: str
               onChange={(e) => setNewComment(e.target.value)}
               placeholder={user ? "Add a comment or ask a question..." : "Sign in to post a comment..."}
               disabled={isPosting}
-              className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl p-4 pb-12 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 resize-none disabled:opacity-60 overflow-hidden"
+              className="w-full bg-surface-hover border border-ui-borderSubtle rounded-2xl p-4 pb-12 text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 resize-none disabled:opacity-60 overflow-hidden"
               rows={3}
             />
-            {successMessage && <div className="absolute bottom-3 left-3 text-sm text-emerald-600 font-medium">{successMessage}</div>}
+            {successMessage && <div className="absolute bottom-3 left-3 text-sm text-ui-successText font-medium">{successMessage}</div>}
             <Button onClick={handlePost}
               disabled={isPosting || !newComment.trim()}
-              className="absolute bottom-3 right-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white px-4 py-1.5 rounded-full transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              className="absolute bottom-3 right-3 bg-ink hover:bg-ink-700 disabled:opacity-50 disabled:hover:bg-ink-700 text-white px-4 py-1.5 rounded-full transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
             >
               {isPosting ? 'Posting...' : 'Post'}
             </Button>

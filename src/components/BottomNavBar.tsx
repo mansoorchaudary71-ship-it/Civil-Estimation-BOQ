@@ -163,17 +163,17 @@ export default function BottomNavBar({
   };
 
   const navItems = [
-    { id: "home", icon: Home, label: "Home", action: () => onNavigate("home"), color: "text-blue-600" },
-    { id: "history", icon: Clock, label: "History", action: onOpenHistory, color: "text-blue-600" },
-    { id: "save", icon: Save, label: "Save", action: handleSave, color: "text-emerald-600" },
-    { id: "share", icon: Share2, label: "Share", action: handleShare, color: "text-purple-600" },
+    { id: "home", icon: Home, label: "Home", action: () => onNavigate("home"), color: "text-accent-800" },
+    { id: "history", icon: Clock, label: "History", action: onOpenHistory, color: "text-accent-800" },
+    { id: "save", icon: Save, label: "Save", action: handleSave, color: "text-ui-successText" },
+    { id: "share", icon: Share2, label: "Share", action: handleShare, color: "text-accent-700" },
     { id: "print", icon: Printer, label: "Print", action: handlePrint, color: "text-txt-secondary" },
   ];
 
   return (
     <>
       <div
-        className="w-full fixed z-50 md:hidden flex justify-around items-center h-[60px] left-0 right-0 bottom-0 bg-surface-default/95 backdrop-blur-2xl border-t border-ui-borderSubtle shadow-[0_-8px_32px_rgba(15,23,42,0.12)] overflow-hidden"
+        className="w-full fixed z-50 md:hidden flex justify-around items-center h-[60px] left-0 right-0 bottom-0 bg-surface-default/95 backdrop-blur-2xl border-t border-ui-borderSubtle shadow-[0_-8px_32px_rgba(31,29,26,0.12)] overflow-hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         {navItems.map((item) => {
@@ -184,14 +184,14 @@ export default function BottomNavBar({
               key={item.id}
               onClick={item.action}
               className={`flex flex-col items-center justify-center flex-1 mx-1 my-1.5 h-[calc(100%-12px)] rounded-full gap-1 transition-all group ${
-                isActive ? "bg-indigo-700 shadow-sm" : "hover:bg-indigo-50/50"
+                isActive ? "bg-ink shadow-brand-sm" : "hover:bg-accent-50"
               }`}
             >
               <item.icon 
-                className={`w-[22px] h-[22px] ${isActive ? "text-white" : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"} ${isActive ? "scale-110" : ""}`} 
+                className={`w-[22px] h-[22px] ${isActive ? "text-white" : "text-txt-tertiary group-hover:text-accent-800 transition-colors"} ${isActive ? "scale-110" : ""}`} 
                 strokeWidth={isActive ? 2.5 : 2} 
               />
-              <span className={`text-xs font-semibold tracking-wide ${isActive ? "text-white " : "text-txt-tertiary group-hover:text-indigo-700 transition-colors"}`}>
+              <span className={`text-xs font-semibold tracking-wide ${isActive ? "text-white " : "text-txt-tertiary group-hover:text-accent-800 transition-colors"}`}>
                 {item.label}
               </span>
             </Button>
@@ -200,13 +200,13 @@ export default function BottomNavBar({
       </div>
 
       {isShareOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 font-sans px-4 sm:px-6 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 font-sans px-4 sm:px-6 rounded-full transition-all duration-300 shadow-brand-sm hover:shadow-brand-md hover:-translate-y-0.5">
           <div 
-            className="absolute inset-0 bg-slate-50/60 backdrop-blur-[4px]"
+            className="absolute inset-0 bg-surface-hover/60 backdrop-blur-[4px]"
             onClick={() => setIsShareOpen(false)}
           />
           <div
-            className="relative w-full max-w-[340px] bg-surface-default/95 backdrop-blur-3xl rounded-2xl shadow-[0_20px_60px_rgba(15,23,42,0.2)] z-10 overflow-hidden font-sans border border-white/50"
+            className="relative w-full max-w-[340px] bg-surface-default/95 backdrop-blur-3xl rounded-2xl shadow-[0_20px_60px_rgba(31,29,26,0.2)] z-10 overflow-hidden font-sans border border-white/50"
             style={{ animation: "modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
           >
             <style>{` @keyframes modalPop { 0% { opacity: 0; transform: scale(0.92) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } } `}</style>
@@ -214,12 +214,12 @@ export default function BottomNavBar({
             <div className="pt-7 pb-5 px-7 flex flex-col items-center text-center relative">
               <Button 
                 onClick={() => setIsShareOpen(false)} 
-                className="absolute right-5 top-5 p-2 bg-slate-100/80 hover:bg-slate-200 rounded-full transition-colors text-txt-tertiary shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                className="absolute right-5 top-5 p-2 bg-surface-hover/80 hover:bg-surface-active rounded-full transition-colors text-txt-tertiary shadow-brand-sm hover:shadow-brand-md hover:-translate-y-0.5"
               >
                 <X className="w-4 h-4"/>
               </Button>
-              <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mb-3">
-                <Share2 className="w-6 h-6 text-indigo-600" />
+              <div className="w-12 h-12 bg-accent-50 rounded-full flex items-center justify-center mb-3">
+                <Share2 className="w-6 h-6 text-accent-800" />
               </div>
               <h3 className="text-lg font-medium text-txt-primary mb-4">Share Result</h3>
               <p className="mt-1 text-base font-normal text-txt-secondary leading-relaxed">Send this calculation to yourself or others</p>
@@ -252,12 +252,12 @@ export default function BottomNavBar({
                   window.open(`https://wa.me/?text=${resultText}${url}`, "_blank");
                   setIsShareOpen(false);
                 }}
-                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-[#F0FDF4] hover:shadow-[0_8px_20px_rgba(22,101,52,0.08)] border border-transparent hover:border-[#BBF7D0] active:scale-95 hover:-translate-y-0.5"
+                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-surface-hover hover:bg-[#F0FDF4] hover:shadow-[0_8px_20px_rgba(22,101,52,0.08)] border border-transparent hover:border-[#BBF7D0] active:scale-95 hover:-translate-y-0.5"
               >
-                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-10 h-10 rounded-full bg-ui-success text-ui-successText flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <MessageCircle className="w-[20px] h-[20px] fill-current" strokeWidth={1} />
                 </div>
-                <span className="text-base font-medium group-hover:text-emerald-700">WhatsApp</span>
+                <span className="text-base font-medium group-hover:text-ui-successText">WhatsApp</span>
               </Button>
 
               <Button
@@ -288,27 +288,27 @@ export default function BottomNavBar({
                   window.open(`mailto:?subject=${titleStr}&body=${resultText}`, "_self");
                   setIsShareOpen(false);
                 }}
-                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-[#EFF6FF] hover:shadow-[0_8px_20px_rgba(30,64,175,0.08)] border border-transparent hover:border-[#BFDBFE] active:scale-95 hover:-translate-y-0.5"
+                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-surface-hover hover:bg-[#EFF6FF] hover:shadow-[0_8px_20px_rgba(30,64,175,0.08)] border border-transparent hover:border-[#BFDBFE] active:scale-95 hover:-translate-y-0.5"
               >
-                <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-10 h-10 rounded-full bg-accent-100 text-accent-800 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Mail className="w-[20px] h-[20px]" strokeWidth={2.5} />
                 </div>
-                <span className="text-base font-medium group-hover:text-blue-700">Email</span>
+                <span className="text-base font-medium group-hover:text-accent-800">Email</span>
               </Button>
 
               <Button onClick={handleDownloadPDF}
-                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-[#FEF2F2] hover:shadow-[0_8px_20px_rgba(153,27,27,0.08)] border border-transparent hover:border-[#FECACA] text-base font-semibold hover:-translate-y-0.5"
+                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-surface-hover hover:bg-[#FEF2F2] hover:shadow-[0_8px_20px_rgba(153,27,27,0.08)] border border-transparent hover:border-[#FECACA] text-base font-semibold hover:-translate-y-0.5"
               >
-                <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-10 h-10 rounded-full bg-ui-error text-ui-errorText flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <FileDown className="w-[20px] h-[20px]" strokeWidth={2.5} />
                 </div>
-                <span className="text-base font-medium group-hover:text-rose-700">PDF Report</span>
+                <span className="text-base font-medium group-hover:text-ui-errorText">PDF Report</span>
               </Button>
 
               <Button onClick={copyToClipboard}
-                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-slate-50 hover:bg-slate-100 hover:shadow-[0_8px_20px_rgba(15,23,42,0.05)] border border-transparent hover:border-ui-borderSubtle text-base font-semibold hover:-translate-y-0.5"
+                className="group flex flex-col items-center justify-center gap-2.5 p-4 rounded-full transition-all duration-300 bg-surface-hover hover:bg-surface-hover hover:shadow-[0_8px_20px_rgba(31,29,26,0.05)] border border-transparent hover:border-ui-borderSubtle text-base font-semibold hover:-translate-y-0.5"
               >
-                <div className="w-10 h-10 rounded-full bg-slate-200 text-txt-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-10 h-10 rounded-full bg-surface-active text-txt-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Copy className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 </div>
                 <span className="text-base font-medium">Copy Link</span>

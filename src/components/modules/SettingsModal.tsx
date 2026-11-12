@@ -371,21 +371,21 @@ export default function SettingsModal({
     { id: "currency", label: "Currencies & Rates", icon: Globe },
   ];
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-50/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-hover/50 backdrop-blur-sm p-4">
       <div
-        className="bg-bg-card/90 text-txt-primary dark:text-white backdrop-blur-2xl border border-ui-borderSubtle dark:border-slate-700 rounded-[2.5rem] w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] sm:h-[650px] relative"
+        className="bg-bg-card/90 text-txt-primary dark:text-white backdrop-blur-2xl border border-ui-borderSubtle dark:border-ink-600 rounded-[2.5rem] w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] sm:h-[650px] relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile Close Button */}
         <Button onClick={onClose}
-          className="w-full md:hidden absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-surface-default text-txt-secondary hover:text-txt-primary transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden"
+          className="w-full md:hidden absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-surface-default text-txt-secondary hover:text-txt-primary transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm overflow-hidden"
         >
           <X className="w-4 h-4" />
         </Button>
         {/* Sidebar */}
         <div className="w-full md:w-64 bg-transparent/50 border-r border-ui-borderSubtle/50 p-4 sm:p-6 flex flex-col shrink-0 overflow-y-auto">
           <div className="flex items-center gap-3 mb-10 pt-2">
-            <div className="w-10 h-10 bg-gradient-to-tr rounded-2xl flex items-center justify-center shadow-md shadow-blue-500/20 overflow-hidden">
+            <div className="w-10 h-10 bg-gradient-to-tr rounded-2xl flex items-center justify-center shadow-brand-md shadow-accent-500/20 overflow-hidden">
               <SettingsIcon className="w-5 h-5 text-txt-primary" />
             </div>
             <div>
@@ -402,17 +402,17 @@ export default function SettingsModal({
                 <Button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-3 w-full px-4 py-3.5 rounded-2xl font-semibold transition-all ${isActive ? "bg-bg-card text-indigo-600  shadow-sm border border-ui-borderSubtle dark:border-slate-700/50" : "text-txt-secondary  hover:bg-slate-100/50  rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary  hover:text-txt-primary border border-transparent"}`}
+                  className={`flex items-center gap-3 w-full px-4 py-3.5 rounded-2xl font-semibold transition-all ${isActive ? "bg-bg-card text-accent-800  shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600/50" : "text-txt-secondary  hover:bg-surface-hover/50  rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary  hover:text-txt-primary border border-transparent"}`}
                 >
                   <Icon
-                    className={`w-5 h-5 ${isActive ? "text-indigo-600 " : "text-txt-secondary   "}`}
+                    className={`w-5 h-5 ${isActive ? "text-accent-800 " : "text-txt-secondary   "}`}
                   />
                   {tab.label}
                 </Button>
               );
             })}
           </div>
-          <div className="hidden md:block mt-auto pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <div className="hidden md:block mt-auto pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
             <p className="text-sm text-txt-secondary font-medium px-4">
               Civil Estimation Pro Settings
               <br />
@@ -422,12 +422,12 @@ export default function SettingsModal({
         </div>
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-h-0 bg-transparent">
-          <div className="hidden md:flex items-center justify-between px-8 py-6 border-b border-ui-borderSubtle dark:border-slate-700/50">
+          <div className="hidden md:flex items-center justify-between px-8 py-6 border-b border-ui-borderSubtle dark:border-ink-600/50">
             <h3 className="text-xl font-semibold text-txt-primary dark:text-white capitalize">
               {tabs.find((t) => t.id === activeTab)?.label}
             </h3>
             <Button onClick={onClose}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-card hover:bg-slate-100 text-txt-secondary hover:text-txt-primary border border-ui-borderSubtle dark:border-slate-700 shadow-sm transition-all active:scale-95 hover:-translate-y-0.5"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-bg-card hover:bg-surface-hover text-txt-secondary hover:text-txt-primary border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm transition-all active:scale-95 hover:-translate-y-0.5"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -442,11 +442,11 @@ export default function SettingsModal({
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <div className="flex items-center gap-6 flex-wrap">
                     <div className="relative group">
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-sky-400 flex items-center justify-center text-xl font-bold text-txt-primary shadow-lg overflow-hidden relative">
+                      <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-accent-500 flex items-center justify-center text-xl font-bold text-txt-primary shadow-brand-lg overflow-hidden relative">
                         <span className="relative z-10 w-full h-full flex items-center justify-center">
                           {name.charAt(0)}
                         </span>
-                        <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-20">
+                        <div className="absolute inset-0 bg-ink/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-20">
                           <Camera className="w-6 h-6 text-txt-primary" />
                         </div>
                       </div>
@@ -459,7 +459,7 @@ export default function SettingsModal({
                         Visible to other team members.
                       </p>
                       <div className="flex gap-2">
-                        <Button className="px-4 py-2 bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-full text-base font-medium hover:bg-transparent transition-colors shadow-sm active:scale-95 hover:-translate-y-0.5">
+                        <Button className="px-4 py-2 bg-bg-card border border-ui-borderSubtle dark:border-ink-600 rounded-full text-base font-medium hover:bg-transparent transition-colors shadow-brand-sm active:scale-95 hover:-translate-y-0.5">
                           Upload New
                         </Button>
                       </div>
@@ -475,7 +475,7 @@ export default function SettingsModal({
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-full px-4 py-3.5 text-txt-primary dark:text-white font-medium focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all shadow-sm"
+                        className="w-full bg-bg-card border border-ui-borderSubtle dark:border-ink-600 rounded-full px-4 py-3.5 text-txt-primary dark:text-white font-medium focus:ring-4 focus:ring-accent-500/10 focus:border-ink outline-none transition-all shadow-brand-sm"
                       /></>
                     </div>
                     <div>
@@ -487,7 +487,7 @@ export default function SettingsModal({
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-full px-4 py-3.5 text-txt-primary dark:text-white font-medium focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all shadow-sm"
+                        className="w-full bg-bg-card border border-ui-borderSubtle dark:border-ink-600 rounded-full px-4 py-3.5 text-txt-primary dark:text-white font-medium focus:ring-4 focus:ring-accent-500/10 focus:border-ink outline-none transition-all shadow-brand-sm"
                       /></>
                     </div>
                   </div>
@@ -495,8 +495,8 @@ export default function SettingsModal({
               )}
               {activeTab === "measurements" && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6 overflow-hidden">
-                    <p className="text-sm font-medium text-blue-700">
+                  <div className="bg-accent-50 border border-accent-100 rounded-2xl p-5 mb-6 overflow-hidden">
+                    <p className="text-sm font-medium text-accent-800">
                       This preference affects all calculation modules globally.
                       Some legacy fields may still expect native inputs.
                     </p>
@@ -504,7 +504,7 @@ export default function SettingsModal({
                   <div className="space-y-6">
                     <div className="flex flex-col gap-4">
                       <label
-                        className={`relative flex items-center justify-between p-5 rounded-2xl border-2 cursor-pointer transition-all ${settings.measurement === "SI" ? "border-blue-500 bg-blue-50/50 " : "border-ui-borderSubtle dark:border-slate-700 hover:border-ui-borderDefault : bg-bg-card"}`}
+                        className={`relative flex items-center justify-between p-5 rounded-2xl border-2 cursor-pointer transition-all ${settings.measurement === "SI" ? "border-ink bg-accent-50/50 " : "border-ui-borderSubtle dark:border-ink-600 hover:border-ui-borderDefault : bg-bg-card"}`}
                       >
                         <div className="flex flex-col">
                           <span className="text-lg font-bold text-txt-primary dark:text-white mb-1">
@@ -515,7 +515,7 @@ export default function SettingsModal({
                           </span>
                         </div>
                         <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${settings.measurement === "SI" ? "border-blue-500 bg-blue-500" : "border-ui-borderSubtle dark:border-slate-700"}`}
+                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${settings.measurement === "SI" ? "border-ink bg-ink" : "border-ui-borderSubtle dark:border-ink-600"}`}
                         >
                           {settings.measurement === "SI" && (
                             <div className="w-2.5 h-2.5 bg-surface-default rounded-full" />
@@ -531,7 +531,7 @@ export default function SettingsModal({
                         /></>
                       </label>
                       <label
-                        className={`relative flex items-center justify-between p-5 rounded-2xl border-2 cursor-pointer transition-all ${settings.measurement === "FPS" ? "border-blue-500 bg-blue-50/50 " : "border-ui-borderSubtle dark:border-slate-700 hover:border-ui-borderDefault : bg-bg-card"}`}
+                        className={`relative flex items-center justify-between p-5 rounded-2xl border-2 cursor-pointer transition-all ${settings.measurement === "FPS" ? "border-ink bg-accent-50/50 " : "border-ui-borderSubtle dark:border-ink-600 hover:border-ui-borderDefault : bg-bg-card"}`}
                       >
                         <div className="flex flex-col">
                           <span className="text-lg font-bold text-txt-primary dark:text-white mb-1">
@@ -542,7 +542,7 @@ export default function SettingsModal({
                           </span>
                         </div>
                         <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${settings.measurement === "FPS" ? "border-blue-500 bg-blue-500" : "border-ui-borderSubtle dark:border-slate-700"}`}
+                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${settings.measurement === "FPS" ? "border-ink bg-ink" : "border-ui-borderSubtle dark:border-ink-600"}`}
                         >
                           {settings.measurement === "FPS" && (
                             <div className="w-2.5 h-2.5 bg-surface-default rounded-full" />
@@ -586,15 +586,15 @@ export default function SettingsModal({
                             onClick={() =>
                               updateSettings({ theme: t.id as Theme })
                             }
-                            className={`flex flex-col items-center justify-center gap-3 p-6 rounded-2xl border-2 transition-all ${isActive ? "border-blue-500 bg-blue-50/50 " : "border-ui-borderSubtle dark:border-slate-700 hover:border-ui-borderDefault : bg-bg-card"}`}
+                            className={`flex flex-col items-center justify-center gap-3 p-6 rounded-2xl border-2 transition-all ${isActive ? "border-ink bg-accent-50/50 " : "border-ui-borderSubtle dark:border-ink-600 hover:border-ui-borderDefault : bg-bg-card"}`}
                           >
                             <div
-                              className={`p-3 rounded-full ${isActive ? "bg-blue-100  text-indigo-600 " : "bg-surface-default dark:bg-slate-800 text-txt-secondary "}`}
+                              className={`p-3 rounded-full ${isActive ? "bg-accent-100  text-accent-800 " : "bg-surface-default dark:bg-ink text-txt-secondary "}`}
                             >
-                              <Icon className="w-6 h-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
+                              <Icon className="w-6 h-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm" />
                             </div>
                             <span
-                              className={`font-bold ${isActive ? "text-blue-700 " : "text-txt-secondary  "}`}
+                              className={`font-bold ${isActive ? "text-accent-800 " : "text-txt-secondary  "}`}
                             >
                               {t.label}
                             </span>
@@ -613,7 +613,7 @@ export default function SettingsModal({
                       <p className="text-sm text-txt-secondary">Set custom rates that will override market defaults across all calculators.</p>
                     </div>
                     <Button onClick={handleClearCompanyRates}
-                      className="flex items-center gap-1.5 px-3 py-1.5 border border-red-200 text-red-600 hover:bg-red-50 text-base font-medium rounded-full transition-all self-start sm:self-center active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                      className="flex items-center gap-1.5 px-3 py-1.5 border border-ui-errorBorder text-ui-errorText hover:bg-ui-error text-base font-medium rounded-full transition-all self-start sm:self-center active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                     >
                       <Trash2 className="w-4 h-4" /> Clear Rates
                     </Button>
@@ -621,14 +621,14 @@ export default function SettingsModal({
 
                   {/* CSV Bulk Import Dropzone or Column Mapping UI */}
                   {mappingStep ? (
-                    <div className="w-full bg-surface-default border text-left border-ui-borderSubtle rounded-2xl p-4 sm:p-6 shadow-sm overflow-hidden">
+                    <div className="w-full bg-surface-default border text-left border-ui-borderSubtle rounded-2xl p-4 sm:p-6 shadow-brand-sm overflow-hidden">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
-                          <AlertCircle className="w-5 h-5 text-indigo-500" />
+                          <AlertCircle className="w-5 h-5 text-accent-800" />
                           <h5 className="font-bold text-txt-primary">Map Columns</h5>
                         </div>
                         <Button onClick={handleAutoMatch}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-base font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-base font-medium text-accent-800 bg-accent-50 hover:bg-accent-100 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                         >
                           <Wand2 className="w-3.5 h-3.5" />
                           Auto-match
@@ -643,14 +643,14 @@ export default function SettingsModal({
                             <label className="block text-base font-medium">Material Name Column</label>
                             {columnMap.material && (
                               isMaterialValid ? 
-                                <span className="flex items-center gap-1 text-xs text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid format</span> : 
-                                <span className="flex items-center gap-1 text-xs text-red-600 font-semibold bg-red-50 px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> Invalid</span>
+                                <span className="flex items-center gap-1 text-xs text-ui-successText font-semibold bg-ui-success px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid format</span> : 
+                                <span className="flex items-center gap-1 text-xs text-ui-errorText font-semibold bg-ui-error px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> Invalid</span>
                             )}
                           </div>
                           <select 
                             value={columnMap.material} 
                             onChange={e => setColumnMap(p => ({ ...p, material: e.target.value }))}
-                            className={`w-full bg-slate-50 border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-colors ${columnMap.material ? (isMaterialValid ? 'border-emerald-200 bg-emerald-50/30' : 'border-red-200 bg-red-50/30') : 'border-ui-borderSubtle focus:border-indigo-500'}`}
+                            className={`w-full bg-surface-hover border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-accent-500 transition-colors ${columnMap.material ? (isMaterialValid ? 'border-ui-successBorder bg-ui-success/30' : 'border-ui-errorBorder bg-ui-error/30') : 'border-ui-borderSubtle focus:border-ink'}`}
                           >
                             <option value="">-- Select --</option>
                             {mappingStep.headers.map((h, i) => <option key={i} value={h}>{h}</option>)}
@@ -661,14 +661,14 @@ export default function SettingsModal({
                             <label className="block text-base font-medium">Rate Column</label>
                             {columnMap.rate && (
                               isRateValid ? 
-                                <span className="flex items-center gap-1 text-xs text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid numbers found</span> : 
-                                <span className="flex items-center gap-1 text-xs text-red-600 font-semibold bg-red-50 px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> No valid numbers</span>
+                                <span className="flex items-center gap-1 text-xs text-ui-successText font-semibold bg-ui-success px-1.5 py-0.5 rounded-md"><CheckCircle className="w-3 h-3" /> Valid numbers found</span> : 
+                                <span className="flex items-center gap-1 text-xs text-ui-errorText font-semibold bg-ui-error px-1.5 py-0.5 rounded-md"><XCircle className="w-3 h-3" /> No valid numbers</span>
                             )}
                           </div>
                           <select 
                             value={columnMap.rate} 
                             onChange={e => setColumnMap(p => ({ ...p, rate: e.target.value }))}
-                            className={`w-full bg-slate-50 border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 transition-colors ${columnMap.rate ? (isRateValid ? 'border-emerald-200 bg-emerald-50/30' : 'border-red-200 bg-red-50/30') : 'border-ui-borderSubtle focus:border-indigo-500'}`}
+                            className={`w-full bg-surface-hover border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-accent-500 transition-colors ${columnMap.rate ? (isRateValid ? 'border-ui-successBorder bg-ui-success/30' : 'border-ui-errorBorder bg-ui-error/30') : 'border-ui-borderSubtle focus:border-ink'}`}
                           >
                             <option value="">-- Select --</option>
                             {mappingStep.headers.map((h, i) => <option key={i} value={h}>{h}</option>)}
@@ -678,19 +678,19 @@ export default function SettingsModal({
                       <div className="flex gap-3 justify-end mt-4">
                         <Button 
                           onClick={() => setMappingStep(null)}
-                          className="px-4 py-2 text-base font-medium hover:bg-slate-100 rounded-full transition-colors min-w-[80px] active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                          className="px-4 py-2 text-base font-medium hover:bg-surface-hover rounded-full transition-colors min-w-[80px] active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                         >
                           Cancel
                         </Button>
                         <Button onClick={saveMapping}
-                          className="px-4 py-2 bg-slate-100 text-txt-secondary text-base font-medium rounded-full hover:bg-slate-200 transition-colors border border-ui-borderSubtle active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                          className="px-4 py-2 bg-surface-hover text-txt-secondary text-base font-medium rounded-full hover:bg-surface-active transition-colors border border-ui-borderSubtle active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                         >
                           Save Preset
                         </Button>
                         <Button 
                           onClick={confirmMapping}
                           disabled={!isMaterialValid || !isRateValid}
-                          className={`px-4 py-2 text-white text-base font-medium rounded-xl transition-colors ${!isMaterialValid || !isRateValid ? 'bg-slate-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
+                          className={`px-4 py-2 text-white text-base font-medium rounded-xl transition-colors ${!isMaterialValid || !isRateValid ? 'bg-secondary-300 cursor-not-allowed' : 'bg-ink hover:bg-ink-700'}`}
                         >
                           Confirm & Import
                         </Button>
@@ -702,21 +702,21 @@ export default function SettingsModal({
                       onDragOver={handleDrag}
                       onDragLeave={handleDrag}
                       onDrop={handleDrop}
-                      className={`relative border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-300 ${dragActive ? "border-indigo-500 bg-indigo-50/80 scale-[1.02]" : "border-ui-borderSubtle bg-slate-50/50 hover:bg-slate-50"}`}
+                      className={`relative border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-300 ${dragActive ? "border-ink bg-accent-50/80 scale-[1.02]" : "border-ui-borderSubtle bg-surface-hover/50 hover:bg-surface-hover"}`}
                     >
                       <><label htmlFor="a11y-input-467" className="sr-only">Input</label>
 <input id="a11y-input-467" ref={fileInputRef}
                         type="file"
                         accept=".csv"
                         onChange={handleFileChange}
-                        className="hidden rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                        className="hidden rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                       /></>
-                      <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-sm mb-4 transition-all duration-300 ${dragActive ? "bg-indigo-600 shadow-indigo-200 animate-bounce" : "bg-surface-default border border-slate-100"}`}>
-                        <Upload className={`w-6 h-6 transition-colors duration-300 ${dragActive ? "text-white" : "text-indigo-500"}`} />
+                      <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-brand-sm mb-4 transition-all duration-300 ${dragActive ? "bg-ink shadow-accent-200 animate-bounce" : "bg-surface-default border border-border-color"}`}>
+                        <Upload className={`w-6 h-6 transition-colors duration-300 ${dragActive ? "text-white" : "text-accent-800"}`} />
                       </div>
                       
                       {dragActive ? (
-                        <h4 className="text-lg font-bold text-indigo-700 mb-2 animate-pulse">
+                        <h4 className="text-lg font-bold text-accent-800 mb-2 animate-pulse">
                           Drop CSV file here...
                         </h4>
                       ) : (
@@ -728,7 +728,7 @@ export default function SettingsModal({
                             Drag & drop your file here, or{" "}
                             <Button 
                               onClick={() => fileInputRef.current?.click()}
-                              className="text-indigo-600 hover:text-indigo-700 hover:underline font-bold transition-colors select-none rounded-full"
+                              className="text-accent-800 hover:text-accent-800 hover:underline font-bold transition-colors select-none rounded-full"
                             >
                               browse
                             </Button>
@@ -741,9 +741,9 @@ export default function SettingsModal({
                       </p>
                       <Button
                         onClick={downloadTemplate}
-                        className={`flex items-center gap-1.5 text-sm text-txt-secondary hover:text-txt-primary bg-surface-default border border-ui-borderSubtle px-3 py-1.5 rounded-xl shadow-sm hover:shadow transition-all font-semibold select-none ${dragActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+                        className={`flex items-center gap-1.5 text-sm text-txt-secondary hover:text-txt-primary bg-surface-default border border-ui-borderSubtle px-3 py-1.5 rounded-xl shadow-brand-sm hover:shadow transition-all font-semibold select-none ${dragActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}
                       >
-                        <Download className="w-3.5 h-3.5 text-txt-tertiary rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" /> Download Template CSV
+                        <Download className="w-3.5 h-3.5 text-txt-tertiary rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm" /> Download Template CSV
                       </Button>
                     </div>
                   )}
@@ -753,7 +753,7 @@ export default function SettingsModal({
                     {Object.keys(RATE_LABELS).map((key) => {
                       const k = key as keyof MarketRates;
                       return (
-                        <div key={k} className="flex items-center justify-between gap-4 p-3 bg-slate-50/80 hover:bg-slate-50 rounded-xl transition-colors flex-wrap">
+                        <div key={k} className="flex items-center justify-between gap-4 p-3 bg-surface-hover/80 hover:bg-surface-hover rounded-xl transition-colors flex-wrap">
                           <label className="text-sm font-medium text-txt-secondary">{RATE_LABELS[k]}</label>
                           <><label htmlFor="a11y-input-468" className="sr-only">Default</label>
 <input id="a11y-input-468"
@@ -761,7 +761,7 @@ export default function SettingsModal({
                             value={companyRates[k] ?? ""}
                             placeholder="Default"
                             onChange={(e) => setCompanyRate(k, parseFloat(e.target.value))}
-                            className="w-32 bg-surface-default border border-ui-borderSubtle rounded-full px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500 outline-none"
+                            className="w-32 bg-surface-default border border-ui-borderSubtle rounded-full px-3 py-2 text-sm focus:ring-2 focus:ring-accent-500 outline-none"
                           /></>
                         </div>
                       );
@@ -770,10 +770,10 @@ export default function SettingsModal({
 
                   {/* Recent Imports History */}
                   {importHistory.length > 0 && (
-                    <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 shadow-sm border-t mt-4 overflow-hidden">
+                    <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 shadow-brand-sm border-t mt-4 overflow-hidden">
                       <div className="flex justify-between items-center mb-4">
                         <h5 className="font-bold text-txt-primary flex items-center gap-2">
-                          <Clock className="w-5 h-5 text-indigo-500" /> Recent Imports
+                          <Clock className="w-5 h-5 text-accent-800" /> Recent Imports
                         </h5>
                         <Button
                           onClick={() => {
@@ -787,17 +787,17 @@ export default function SettingsModal({
                       </div>
                       <div className="space-y-3">
                         {importHistory.map(record => (
-                          <div key={record.id} className={`p-3 rounded-xl border flex items-center justify-between gap-4 ${record.status === 'success' ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100'}`}>
+                          <div key={record.id} className={`p-3 rounded-xl border flex items-center justify-between gap-4 ${record.status === 'success' ? 'bg-ui-success border-ui-successBorder' : 'bg-ui-error border-ui-errorBorder'}`}>
                             <div className="flex flex-col">
-                              <span className={`text-base font-medium ${record.status === 'success' ? 'text-emerald-800' : 'text-red-800'}`}>
+                              <span className={`text-base font-medium ${record.status === 'success' ? 'text-ui-successText' : 'text-ui-errorText'}`}>
                                 {record.fileName} <span className="text-sm font-medium opacity-70 ml-2">{new Date(record.timestamp).toLocaleTimeString()}</span>
                               </span>
-                              <span className={`text-sm ${record.status === 'success' ? 'text-emerald-600' : 'text-red-600'}`}>
+                              <span className={`text-sm ${record.status === 'success' ? 'text-ui-successText' : 'text-ui-errorText'}`}>
                                 {record.message}
                               </span>
                             </div>
                             <div className="shrink-0">
-                              {record.status === 'success' ? <CheckCircle className="w-5 h-5 text-emerald-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
+                              {record.status === 'success' ? <CheckCircle className="w-5 h-5 text-ui-successText" /> : <XCircle className="w-5 h-5 text-ui-errorText" />}
                             </div>
                           </div>
                         ))}
@@ -809,8 +809,8 @@ export default function SettingsModal({
 
               {activeTab === "currency" && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6 overflow-hidden">
-                    <p className="text-sm font-medium text-blue-700">
+                  <div className="bg-accent-50 border border-accent-100 rounded-2xl p-5 mb-6 overflow-hidden">
+                    <p className="text-sm font-medium text-accent-800">
                       Configure your preferred currency, symbol, and custom exchange rates. These will be applied globally across all estimation tools.
                     </p>
                   </div>
@@ -821,7 +821,7 @@ export default function SettingsModal({
                       <select 
                         value={settings.currency}
                         onChange={(e) => updateSettings({ currency: e.target.value as Currency })}
-                        className="w-full bg-slate-50 border border-ui-borderSubtle dark:bg-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-surface-hover border border-ui-borderSubtle dark:bg-ink dark:border-ink-600 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent-500 transition-colors"
                       >
                         {['PKR', 'USD', 'INR', 'AED', 'SAR', 'GBP', 'BDT', 'LKR'].map(c => (
                           <option key={c} value={c}>{c}</option>
@@ -839,7 +839,7 @@ export default function SettingsModal({
                           updateSettings({ customCurrencySymbols: newSymbols });
                         }}
                         placeholder={`Default: ${['PKR','LKR'].includes(settings.currency) ? 'Rs' : settings.currency === 'USD' ? '$' : settings.currency === 'GBP' ? '£' : ''}`}
-                        className="w-full bg-slate-50 border border-ui-borderSubtle dark:bg-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-surface-hover border border-ui-borderSubtle dark:bg-ink dark:border-ink-600 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent-500 transition-colors"
                       />
                     </div>
 
@@ -860,7 +860,7 @@ export default function SettingsModal({
                           updateSettings({ customExchangeRates: newRates });
                         }}
                         placeholder="e.g. 0.0035"
-                        className="w-full bg-slate-50 border border-ui-borderSubtle dark:bg-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-surface-hover border border-ui-borderSubtle dark:bg-ink dark:border-ink-600 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent-500 transition-colors"
                       />
                       <p className="text-xs text-txt-tertiary">Leave blank to use default rates. Current multiplier: {
                         settings.customExchangeRates?.[settings.currency] || 
@@ -874,7 +874,7 @@ export default function SettingsModal({
             </div>
             <div className="w-full mt-12 md:max-w-xl md:mx-auto md:mx-0 flex justify-end px-4 md:px-0">
               <Button onClick={onClose}
-                className="px-8 py-3.5 bg-gradient-to-r hover:from-blue-700 hover: text-txt-primary font-bold rounded-full shadow-md hover:shadow-lg transition-all active:scale-95 hover:-translate-y-0.5"
+                className="px-8 py-3.5 bg-gradient-to-r hover:from-ink hover: text-txt-primary font-bold rounded-full shadow-brand-md hover:shadow-brand-lg transition-all active:scale-95 hover:-translate-y-0.5"
               >
                 Save Changes
               </Button>

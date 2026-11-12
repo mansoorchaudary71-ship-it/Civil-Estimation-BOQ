@@ -22,10 +22,10 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 
 const Tooltip = ({ content }: { content: string }) => (
   <div className="relative group inline-flex ml-1.5 align-middle">
-    <Info className="w-4 h-4 text-txt-tertiary dark:text-gray-400 hover:text-teal-500 transition-colors cursor-help" />
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[200px] p-2 bg-gray-900 text-txt-primary dark:text-white text-xs font-normal rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 text-center shadow-xl">
+    <Info className="w-4 h-4 text-txt-tertiary dark:text-txt-tertiary hover:text-accent-700 transition-colors cursor-help" />
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[200px] p-2 bg-ink text-white text-xs font-normal rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 text-center shadow-brand-lg">
       {content}
-      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-[5px] border-transparent border-t-gray-900"></div>
+      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-[5px] border-transparent border-t-ink"></div>
     </div>
   </div>
 );
@@ -71,7 +71,7 @@ export default function TrenchExcavationEstimator() {
     <div className="w-full bg-transparent text-txt-primary font-sans mt-4">
       <div className="space-y-8">
         <div className="mb-4">
-          <h2 className="text-xl font-semibold text-txt-primary bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent pb-1">
+          <h2 className="text-xl font-semibold text-txt-primary bg-gradient-to-r from-accent-800 to-accent-600 bg-clip-text text-transparent pb-1">
             Trench Excavation
           </h2>
           <GlobalSettingsToggle align="left" showCurrency={false} />
@@ -79,13 +79,13 @@ export default function TrenchExcavationEstimator() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
           <section className="space-y-6">
-            <div className="bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+            <div className="bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
               <Button
                 onClick={() => setIsDimensionsOpen(!isDimensionsOpen)}
-                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50/50 transition-colors focus:outline-none"
+                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors focus:outline-none"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-teal-50 text-teal-600 rounded-xl">
+                  <div className="p-2.5 bg-accent-50 text-accent-800 rounded-xl">
                     <Ruler className="w-5 h-5" />
                   </div>
                   <h2 className="text-xl font-bold tracking-tight text-txt-primary">
@@ -93,7 +93,7 @@ export default function TrenchExcavationEstimator() {
                   </h2>
                 </div>
                 <ChevronDown
-                  className={`w-5 h-5 text-txt-secondary dark:text-gray-300 transition-transform duration-300 ${isDimensionsOpen ? "rotate-180" : ""}`}
+                  className={`w-5 h-5 text-txt-secondary dark:text-txt-secondary transition-transform duration-300 ${isDimensionsOpen ? "rotate-180" : ""}`}
                 />
               </Button>
               
@@ -101,41 +101,41 @@ export default function TrenchExcavationEstimator() {
                 className={`transition-all duration-300 ease-in-out ${isDimensionsOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} grid`}
               >
                 <div className="overflow-hidden">
-                  <div className="px-6 pb-6 pt-2 space-y-5 border-t border-gray-50 bg-gray-50/30">
+                  <div className="px-6 pb-6 pt-2 space-y-5 border-t border-border-color bg-surface-default/30">
                     <div>
-                      <label className="text-base font-medium dark:text-gray-300 uppercase tracking-wider mb-2 ml-1 flex items-center">
+                      <label className="text-base font-medium dark:text-txt-secondary uppercase tracking-wider mb-2 ml-1 flex items-center">
                         Trench Length (L) [{unitL}]
                         <Tooltip content="The total linear distance of the trench along its centerline." />
                       </label>
                       <><label htmlFor="a11y-input-523" className="sr-only">Input</label>
 <input id="a11y-input-523"
                         type="number" inputMode="decimal"
-                        className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 focus:border-teal-500 transition-shadow min-h-[44px]"
+                        className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-shadow min-h-[44px]"
                         value={length}
                         onChange={(e) => setLength(e.target.value)}
                       /></>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
-                        <label className="text-base font-medium dark:text-gray-300 uppercase tracking-wider mb-2 ml-1 flex items-center">
+                        <label className="text-base font-medium dark:text-txt-secondary uppercase tracking-wider mb-2 ml-1 flex items-center">
                           Bottom Width [{unitL}]
                           <Tooltip content="The width of the trench at its flat base." />
                         </label>
                         <><label htmlFor="a11y-input-524" className="sr-only">Input</label>
 <input id="a11y-input-524"
                           type="number" inputMode="decimal"
-                          className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 focus:border-teal-500 transition-shadow min-h-[44px]"
+                          className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-shadow min-h-[44px]"
                           value={bottomWidth}
                           onChange={(e) => setBottomWidth(e.target.value)}
                         /></>
                       </div>
                       <div>
-                        <label className="text-base font-medium dark:text-gray-300 uppercase tracking-wider mb-2 ml-1 flex items-center">
+                        <label className="text-base font-medium dark:text-txt-secondary uppercase tracking-wider mb-2 ml-1 flex items-center">
                           Side Slope (1V : XH)
                           <Tooltip content="Ratio of horizontal run to 1 unit of vertical drop. For example, 0.5 means a 1:0.5 slope (steep), while 2 means a 1:2 slope (gentle)." />
                         </label>
-                        <div className="flex items-center gap-3 w-full bg-surface-default border border-gray-200 rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-teal-500/50 transition-shadow">
-                          <span className="text-txt-secondary dark:text-gray-300 font-semibold text-sm whitespace-nowrap">1 V :</span>
+                        <div className="flex items-center gap-3 w-full bg-surface-default border border-border-color rounded-xl px-4 py-3 focus-within:ring-2 focus-within:ring-accent-500/50 transition-shadow">
+                          <span className="text-txt-secondary dark:text-txt-secondary font-semibold text-sm whitespace-nowrap">1 V :</span>
                           <><label htmlFor="a11y-input-525" className="sr-only">e.g. 0.5</label>
 <input id="a11y-input-525"
                             type="number" inputMode="decimal"
@@ -145,19 +145,19 @@ export default function TrenchExcavationEstimator() {
                             placeholder="e.g. 0.5"
                             onChange={(e) => setSideSlope(e.target.value)}
                           /></>
-                          <span className="text-txt-secondary dark:text-gray-300 font-semibold text-sm whitespace-nowrap">H</span>
+                          <span className="text-txt-secondary dark:text-txt-secondary font-semibold text-sm whitespace-nowrap">H</span>
                         </div>
                       </div>
                     </div>
                     <div>
-                      <label className="text-base font-medium dark:text-gray-300 uppercase tracking-wider mb-2 ml-1 flex items-center">
+                      <label className="text-base font-medium dark:text-txt-secondary uppercase tracking-wider mb-2 ml-1 flex items-center">
                         Depth [{unitL}]
                         <Tooltip content="The vertical distance from the ground surface to the bottom of the trench." />
                       </label>
                       <><label htmlFor="a11y-input-526" className="sr-only">Input</label>
 <input id="a11y-input-526"
                         type="number" inputMode="decimal"
-                        className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 focus:border-teal-500 transition-shadow min-h-[44px]"
+                        className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-shadow min-h-[44px]"
                         value={depth}
                         onChange={(e) => setDepth(e.target.value)}
                       /></>
@@ -167,13 +167,13 @@ export default function TrenchExcavationEstimator() {
               </div>
             </div>
 
-            <div className="bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+            <div className="bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
               <Button
                 onClick={() => setIsBeddingOpen(!isBeddingOpen)}
-                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50/50 transition-colors focus:outline-none"
+                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors focus:outline-none"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
+                  <div className="p-2.5 bg-accent-50 text-accent-800 rounded-xl">
                     <Activity className="w-5 h-5" />
                   </div>
                   <h2 className="text-xl font-bold tracking-tight text-txt-primary">
@@ -181,7 +181,7 @@ export default function TrenchExcavationEstimator() {
                   </h2>
                 </div>
                 <ChevronDown
-                  className={`w-5 h-5 text-txt-secondary dark:text-gray-300 transition-transform duration-300 ${isBeddingOpen ? "rotate-180" : ""}`}
+                  className={`w-5 h-5 text-txt-secondary dark:text-txt-secondary transition-transform duration-300 ${isBeddingOpen ? "rotate-180" : ""}`}
                 />
               </Button>
               
@@ -189,36 +189,36 @@ export default function TrenchExcavationEstimator() {
                 className={`transition-all duration-300 ease-in-out ${isBeddingOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} grid`}
               >
                 <div className="overflow-hidden">
-                  <div className="px-6 pb-6 pt-2 space-y-5 border-t border-gray-50 bg-gray-50/30">
+                  <div className="px-6 pb-6 pt-2 space-y-5 border-t border-border-color bg-surface-default/30">
                     <div>
-                      <label className="block text-base font-medium dark:text-gray-300 uppercase tracking-wider mb-2 ml-1 flex items-center">
+                      <label className="block text-base font-medium dark:text-txt-secondary uppercase tracking-wider mb-2 ml-1 flex items-center">
                         Pipe Diameter [{unitL}]
                         <Tooltip content="The outer diameter of the pipe. Used to deduct pipe volume from bedding material." />
                       </label>
                       <><label htmlFor="a11y-input-527" className="sr-only">Input</label>
 <input id="a11y-input-527"
                         type="number" inputMode="decimal"
-                        className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:border-indigo-500 transition-shadow min-h-[44px]"
+                        className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-accent-800 transition-shadow min-h-[44px]"
                         value={pipeDiameter}
                         onChange={(e) => setPipeDiameter(e.target.value)}
                         placeholder={`e.g. 0.3`}
                       /></>
                     </div>
                     <div>
-                      <label className="block text-base font-medium dark:text-gray-300 uppercase tracking-wider mb-2 ml-1 flex items-center">
+                      <label className="block text-base font-medium dark:text-txt-secondary uppercase tracking-wider mb-2 ml-1 flex items-center">
                         Bedding Depth [{unitL}]
                         <Tooltip content="The thickness of bedding material placed below and around the pipe inside the trench." />
                       </label>
                       <><label htmlFor="a11y-input-528" className="sr-only">Input</label>
 <input id="a11y-input-528"
                         type="number" inputMode="decimal"
-                        className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 focus:border-indigo-500 transition-shadow min-h-[44px]"
+                        className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-accent-800 transition-shadow min-h-[44px]"
                         value={beddingDepth}
                         onChange={(e) => setBeddingDepth(e.target.value)}
                         placeholder={`e.g. 0.5`}
                       /></>
                     </div>
-                    <p className="text-sm text-txt-secondary dark:text-gray-300 font-medium px-1">
+                    <p className="text-sm text-txt-secondary dark:text-txt-secondary font-medium px-1">
                       Leave empty if bedding calculation is not required.
                     </p>
                   </div>
@@ -228,9 +228,9 @@ export default function TrenchExcavationEstimator() {
           </section>
 
           <section className="space-y-6">
-            <div className="bg-gradient-to-br from-gray-900 to-slate-800 rounded-[1.5rem] p-4 sm:p-8 md:p-8 shadow-2xl relative overflow-hidden">
+            <div className="bg-gradient-to-br from-ink to-ink-700 rounded-[1.5rem] p-4 sm:p-8 md:p-8 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-surface-default/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-teal-500/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-accent-500/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
               <div className="relative z-10">
                 <div className="flex flex-col h-full">
                  <MaterialSummary

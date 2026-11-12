@@ -6,10 +6,10 @@ import { ArrowRight, Play, Calculator, Layers, FileText, CheckCircle } from 'luc
 // Configuration for easy theme swapping
 const themeConfig = {
   colors: {
-    primary: '#0A0F1E', // Navy
-    accent1: '#F59E0B', // Amber
-    accent2: '#8B5CF6', // Purple
-    accent3: '#06B6D4', // Cyan
+    primary: '#1F1D1A', // Ink
+    accent1: '#F2A413', // Amber
+    accent2: '#B07006', // Amber-700
+    accent3: '#0F766E', // Teal
   },
   typography: {
     headline: '"Syne", sans-serif',
@@ -123,7 +123,7 @@ export default function MintroHero() {
               Start Estimating Free
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button className="w-full sm:w-auto px-8 py-4 rounded-full font-medium transition-all hover:bg-surface-default/10 flex items-center justify-center gap-2 border border-white/20 bg-surface-default/5 backdrop-blur-sm text-white active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden"
+            <Button className="w-full sm:w-auto px-8 py-4 rounded-full font-medium transition-all hover:bg-surface-default/10 flex items-center justify-center gap-2 border border-white/20 bg-surface-default/5 backdrop-blur-sm text-white active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm overflow-hidden"
             >
               <Play className="w-5 h-5 fill-white" />
               Watch Demo
@@ -137,9 +137,9 @@ export default function MintroHero() {
             className="mt-8 flex items-center gap-4 text-sm text-white/50 flex-wrap"
           >
             <div className="flex -space-x-2">
-              <img className="w-8 h-8 rounded-full border border-[#0A0F1E]" src="https://i.pravatar.cc/100?img=1" alt="User" />
-              <img className="w-8 h-8 rounded-full border border-[#0A0F1E]" src="https://i.pravatar.cc/100?img=2" alt="User" />
-              <img className="w-8 h-8 rounded-full border border-[#0A0F1E]" src="https://i.pravatar.cc/100?img=3" alt="User" />
+              <img className="w-8 h-8 rounded-full border border-ink" src="https://i.pravatar.cc/100?img=1" alt="User" />
+              <img className="w-8 h-8 rounded-full border border-ink" src="https://i.pravatar.cc/100?img=2" alt="User" />
+              <img className="w-8 h-8 rounded-full border border-ink" src="https://i.pravatar.cc/100?img=3" alt="User" />
             </div>
             <p>Trusted by 10,000+ engineers worldwide</p>
           </motion.div>
@@ -159,21 +159,21 @@ export default function MintroHero() {
                  style={{ backgroundImage: `linear-gradient(to bottom right, ${themeConfig.colors.accent2}, ${themeConfig.colors.accent3}, ${themeConfig.colors.accent1})` }}></div>
             
             {/* Inner Card Content */}
-            <div className="relative rounded-2xl bg-[#0A0F1E]/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden aspect-[4/3] flex flex-col">
+            <div className="relative rounded-2xl bg-ink/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden aspect-[4/3] flex flex-col">
               
               {/* Mockup Top Bar */}
               <div className="h-10 border-b border-white/10 bg-surface-default/5 flex items-center px-4 gap-2">
                 <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-rose-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-ui-errorText/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-ink/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-ui-successText/80"></div>
                 </div>
                 <div className="mx-auto px-4 py-1 rounded-md bg-surface-default/5 text-xs font-mono text-white/40 tracking-wider">civil-estimation-pro.ai</div>
               </div>
               
               {/* Mockup Body Content */}
               <div className="flex-1 p-6 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-cyan-500/20 blur-3xl rounded-full"></div>
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-accent-500/20 to-accent-700/20 blur-3xl rounded-full"></div>
                 
                 <div className="grid grid-cols-2 gap-4 h-full">
                   <div className="space-y-4">
@@ -182,19 +182,19 @@ export default function MintroHero() {
                        <div className="text-xl font-semibold text-txt-primary text-white">450 <span className="text-sm font-normal text-white/40">cu.m</span></div>
                     </div>
                     <div className="h-32 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 p-4 relative overflow-hidden">
-                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 to-purple-500"></div>
-                       <div className="flex items-center gap-2 text-white/80 text-sm font-medium mb-2"><Layers className="w-4 h-4 text-amber-400"/> Cost Breakdown</div>
+                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent-400 to-ink"></div>
+                       <div className="flex items-center gap-2 text-white/80 text-sm font-medium mb-2"><Layers className="w-4 h-4 text-accent-400"/> Cost Breakdown</div>
                        <div className="space-y-2 mt-4">
-                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-amber-400 w-[60%]"></div></div>
-                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-purple-500 w-[30%]"></div></div>
-                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-cyan-400 w-[10%]"></div></div>
+                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-accent-400 w-[60%]"></div></div>
+                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-ink w-[30%]"></div></div>
+                         <div className="w-full h-1.5 rounded-full bg-surface-default/10 overflow-hidden"><div className="h-full bg-accent-500 w-[10%]"></div></div>
                        </div>
                     </div>
                   </div>
                   
                   <div className="space-y-4 pt-8">
                     <div className="h-32 rounded-2xl bg-surface-default/5 border border-white/5 p-4 flex flex-col relative overflow-hidden">
-                       <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-cyan-500/20 blur-xl rounded-full"></div>
+                       <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-accent-500/20 blur-xl rounded-full"></div>
                        <div className="flex items-center gap-2 text-white/60 text-xs font-medium"><FileText className="w-4 h-4"/> Live BOQ</div>
                        <div className="mt-auto space-y-1.5">
                           <div className="h-2 w-full rounded bg-surface-default/10"></div>
@@ -203,10 +203,10 @@ export default function MintroHero() {
                        </div>
                     </div>
                     <div className="h-20 rounded-2xl border border-white/10 bg-surface-default/5 p-4 flex items-center justify-between backdrop-blur-md relative overflow-hidden">
-                       <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent"></div>
+                       <div className="absolute inset-0 bg-gradient-to-r from-ui-successText/10 to-transparent"></div>
                        <div>
                          <div className="text-white/60 text-xs font-medium">Status</div>
-                         <div className="text-emerald-400 text-base font-medium flex items-center gap-1 mt-1"><CheckCircle className="w-3 h-3"/> Approved</div>
+                         <div className="text-ui-successText text-base font-medium flex items-center gap-1 mt-1"><CheckCircle className="w-3 h-3"/> Approved</div>
                        </div>
                     </div>
                   </div>
@@ -218,9 +218,9 @@ export default function MintroHero() {
             <motion.div 
                animate={{ y: [0, -10, 0] }}
                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-               className="absolute -right-6 top-12 p-3 rounded-2xl bg-[#0A0F1E]/90 backdrop-blur-xl border border-white/10 shadow-2xl flex items-center gap-3 z-20 overflow-hidden"
+               className="absolute -right-6 top-12 p-3 rounded-2xl bg-ink/90 backdrop-blur-xl border border-white/10 shadow-2xl flex items-center gap-3 z-20 overflow-hidden"
             >
-               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30">
+               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-400 to-ink flex items-center justify-center shadow-brand-lg shadow-accent-500/30">
                  <span className="font-bold text-white text-lg">AI</span>
                </div>
                <div>

@@ -141,7 +141,7 @@ export default function ReinforcementVisualizer() {
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Controls */}
           <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
-            <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle overflow-hidden">
+            <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle overflow-hidden">
               <h3 className="text-lg font-bold text-txt-primary mb-4">
                 Geometry Inputs
               </h3>
@@ -154,7 +154,7 @@ export default function ReinforcementVisualizer() {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value as ElementType)}
-                    className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-2xl focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
+                    className="w-full px-3 py-2 bg-surface-default border border-ui-borderDefault rounded-2xl focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 outline-none"
                   >
                     <option value="Beam">Beam</option>
                     <option value="Column">Column</option>
@@ -203,7 +203,7 @@ export default function ReinforcementVisualizer() {
               </div>
             </div>
 
-            <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle overflow-hidden">
+            <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle overflow-hidden">
               <h3 className="text-lg font-bold text-txt-primary mb-4">
                 Reinforcement
               </h3>
@@ -317,7 +317,7 @@ export default function ReinforcementVisualizer() {
 
             <div className="space-y-3">
               <div
-                className={`p-4 rounded-2xl border flex items-start gap-3 ${coverCheck.pass ? "bg-emerald-50 border-emerald-200 text-emerald-800   " : "bg-rose-50 border-rose-200 text-rose-800   "}`}
+                className={`p-4 rounded-2xl border flex items-start gap-3 ${coverCheck.pass ? "bg-ui-success border-ui-successBorder text-ui-successText   " : "bg-ui-error border-ui-errorBorder text-ui-errorText   "}`}
               >
                 {coverCheck.pass ? (
                   <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -334,7 +334,7 @@ export default function ReinforcementVisualizer() {
 
               {type !== "Slab" && (
                 <div
-                  className={`p-4 rounded-2xl border flex items-start gap-3 ${spacingCheck.pass ? "bg-emerald-50 border-emerald-200 text-emerald-800   " : "bg-rose-50 border-rose-200 text-rose-800   "}`}
+                  className={`p-4 rounded-2xl border flex items-start gap-3 ${spacingCheck.pass ? "bg-ui-success border-ui-successBorder text-ui-successText   " : "bg-ui-error border-ui-errorBorder text-ui-errorText   "}`}
                 >
                   {spacingCheck.pass ? (
                     <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -360,21 +360,21 @@ export default function ReinforcementVisualizer() {
               </h3>
               <div className="flex gap-2">
                 <Button onClick={downloadSvg}
-                  className="px-3 py-1.5 bg-surface-default text-indigo-600 text-sm font-bold border border-ui-borderSubtle rounded-full hover:bg-slate-50 transition flex items-center gap-2 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="px-3 py-1.5 bg-surface-default text-accent-800 text-sm font-bold border border-ui-borderSubtle rounded-full hover:bg-surface-hover transition flex items-center gap-2 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 >
                   <FileImage className="w-4 h-4" /> SVG
                 </Button>
                 <Button onClick={handleDownloadPng}
-                  className="px-3 py-1.5 bg-indigo-600 text-white text-sm font-bold rounded-full hover:bg-indigo-700 transition flex items-center gap-2 shadow-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
+                  className="px-3 py-1.5 bg-ink text-white text-sm font-bold rounded-full hover:bg-ink-700 transition flex items-center gap-2 shadow-brand-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
                 >
                   <Download className="w-4 h-4" /> PNG
                 </Button>
               </div>
             </div>
 
-            <div className="flex-1 bg-surface-default [#1e293b] border border-ui-borderSubtle rounded-2xl overflow-hidden relative min-h-[400px] flex items-center justify-center p-4">
+            <div className="flex-1 bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden relative min-h-[400px] flex items-center justify-center p-4">
               <div
-                className="absolute inset-0 pattern-grid-lg text-slate-100 pointer-events-none"
+                className="absolute inset-0 pattern-grid-lg text-txt-inverse pointer-events-none"
                 style={{
                   backgroundSize: "20px 20px",
                   backgroundImage:
@@ -399,7 +399,7 @@ export default function ReinforcementVisualizer() {
                   >
                     <path
                       d="M 0 0 L 0 40 M 10 0 L 10 40 M 20 0 L 20 40 M 30 0 L 30 40"
-                      stroke="#94a3b8"
+                      stroke="#6B6862"
                       strokeWidth="0.5"
                       strokeDasharray="3 3"
                     />
@@ -413,7 +413,7 @@ export default function ReinforcementVisualizer() {
                     markerHeight="6"
                     orient="auto-start-reverse"
                   >
-                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#6B6862" />
                   </marker>
                 </defs>
 
@@ -423,8 +423,8 @@ export default function ReinforcementVisualizer() {
                   y={startY}
                   width={width}
                   height={depth}
-                  fill="#f1f5f9"
-                  stroke="#64748b"
+                  fill="#F4F2EE"
+                  stroke="#6B6862"
                   strokeWidth="2"
                 />
                 <rect
@@ -443,7 +443,7 @@ export default function ReinforcementVisualizer() {
                     width={Math.max(10, width - 2 * cover)}
                     height={Math.max(10, depth - 2 * cover)}
                     fill="none"
-                    stroke="#3b82f6"
+                    stroke="#F2A413"
                     strokeWidth={stirrupDia}
                     rx={stirrupDia * 1.5}
                   />
@@ -453,7 +453,7 @@ export default function ReinforcementVisualizer() {
                 {type !== "Slab" && (
                   <path
                     d={`M ${startX + cover + stirrupDia * 1.5} ${startY + cover} L ${startX + cover + stirrupDia * 3 + 10} ${startY + cover + stirrupDia * 3 + 10} M ${startX + cover} ${startY + cover + stirrupDia * 1.5} L ${startX + cover + stirrupDia * 3 + 10} ${startY + cover + stirrupDia * 3 + 10}`}
-                    stroke="#3b82f6"
+                    stroke="#F2A413"
                     strokeWidth={stirrupDia}
                     fill="none"
                   />
@@ -480,8 +480,8 @@ export default function ReinforcementVisualizer() {
                         cx={cx}
                         cy={cy}
                         r={topBarsDia / 2}
-                        fill="#ef4444"
-                        stroke="#7f1d1d"
+                        fill="#F2A413"
+                        stroke="#855307"
                         strokeWidth="1"
                       />
                     );
@@ -516,8 +516,8 @@ export default function ReinforcementVisualizer() {
                       cx={cx}
                       cy={cy}
                       r={bottomBarsDia / 2}
-                      fill="#ef4444"
-                      stroke="#7f1d1d"
+                      fill="#F2A413"
+                      stroke="#855307"
                       strokeWidth="1"
                     />
                   );
@@ -529,7 +529,7 @@ export default function ReinforcementVisualizer() {
                   y1={startY - 30}
                   x2={startX + width}
                   y2={startY - 30}
-                  stroke="#334155"
+                  stroke="#6B6862"
                   strokeWidth="1.5"
                   markerStart="url(#arrow)"
                   markerEnd="url(#arrow)"
@@ -539,7 +539,7 @@ export default function ReinforcementVisualizer() {
                   y1={startY - 40}
                   x2={startX}
                   y2={startY - 20}
-                  stroke="#334155"
+                  stroke="#6B6862"
                   strokeWidth="1.5"
                 />
                 <line
@@ -547,14 +547,14 @@ export default function ReinforcementVisualizer() {
                   y1={startY - 40}
                   x2={startX + width}
                   y2={startY - 20}
-                  stroke="#334155"
+                  stroke="#6B6862"
                   strokeWidth="1.5"
                 />
                 <text
                   x={startX + width / 2}
                   y={startY - 38}
                   textAnchor="middle"
-                  fill="#1e293b"
+                  fill="#1F1D1A"
                   fontSize="14"
                   fontWeight="bold"
                   fontFamily="sans-serif"
@@ -568,7 +568,7 @@ export default function ReinforcementVisualizer() {
                   y1={startY}
                   x2={startX + width + 30}
                   y2={startY + depth}
-                  stroke="#334155"
+                  stroke="#6B6862"
                   strokeWidth="1.5"
                   markerStart="url(#arrow)"
                   markerEnd="url(#arrow)"
@@ -578,7 +578,7 @@ export default function ReinforcementVisualizer() {
                   y1={startY}
                   x2={startX + width + 40}
                   y2={startY}
-                  stroke="#334155"
+                  stroke="#6B6862"
                   strokeWidth="1.5"
                 />
                 <line
@@ -586,14 +586,14 @@ export default function ReinforcementVisualizer() {
                   y1={startY + depth}
                   x2={startX + width + 40}
                   y2={startY + depth}
-                  stroke="#334155"
+                  stroke="#6B6862"
                   strokeWidth="1.5"
                 />
                 <text
                   x={startX + width + 38}
                   y={startY + depth / 2}
                   dominantBaseline="middle"
-                  fill="#1e293b"
+                  fill="#1F1D1A"
                   fontSize="14"
                   fontWeight="bold"
                   fontFamily="sans-serif"
@@ -607,7 +607,7 @@ export default function ReinforcementVisualizer() {
                   y1={startY + depth - cover}
                   x2={startX - 30}
                   y2={startY + depth}
-                  stroke="#3b82f6"
+                  stroke="#F2A413"
                   strokeWidth="1.5"
                   markerStart="url(#arrow)"
                   markerEnd="url(#arrow)"
@@ -617,7 +617,7 @@ export default function ReinforcementVisualizer() {
                   y1={startY + depth - cover}
                   x2={startX}
                   y2={startY + depth - cover}
-                  stroke="#3b82f6"
+                  stroke="#F2A413"
                   strokeWidth="1"
                   strokeDasharray="4 4"
                 />
@@ -626,7 +626,7 @@ export default function ReinforcementVisualizer() {
                   y1={startY + depth}
                   x2={startX}
                   y2={startY + depth}
-                  stroke="#3b82f6"
+                  stroke="#F2A413"
                   strokeWidth="1"
                   strokeDasharray="4 4"
                 />
@@ -635,7 +635,7 @@ export default function ReinforcementVisualizer() {
                   y={startY + depth - cover / 2}
                   dominantBaseline="middle"
                   textAnchor="end"
-                  fill="#3b82f6"
+                  fill="#F2A413"
                   fontSize="14"
                   fontWeight="bold"
                   fontFamily="sans-serif"
@@ -647,7 +647,7 @@ export default function ReinforcementVisualizer() {
                 <text
                   x="20"
                   y="30"
-                  fill="#1e293b"
+                  fill="#1F1D1A"
                   fontSize="16"
                   fontWeight="bold"
                   fontFamily="sans-serif"
@@ -657,7 +657,7 @@ export default function ReinforcementVisualizer() {
                 <text
                   x="20"
                   y="55"
-                  fill="#475569"
+                  fill="#6B6862"
                   fontSize="12"
                   fontFamily="sans-serif"
                 >
@@ -667,7 +667,7 @@ export default function ReinforcementVisualizer() {
                   <text
                     x="20"
                     y="75"
-                    fill="#475569"
+                    fill="#6B6862"
                     fontSize="12"
                     fontFamily="sans-serif"
                   >
@@ -678,7 +678,7 @@ export default function ReinforcementVisualizer() {
                   <text
                     x="20"
                     y="95"
-                    fill="#475569"
+                    fill="#6B6862"
                     fontSize="12"
                     fontFamily="sans-serif"
                   >

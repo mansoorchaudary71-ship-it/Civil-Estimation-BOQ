@@ -82,9 +82,9 @@ export default function RateAnalysis() {
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           {/* Rate Inputs */}
           <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
-            <div className="bg-[#FAFAF8] hover:bg-[#FDFCF9] transition-colors duration-500/80 p-4 sm:p-8 md:p-8 rounded-2xl shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl">
+            <div className="bg-surface-default hover:bg-surface-hover transition-colors duration-500/80 p-4 sm:p-8 md:p-8 rounded-2xl shadow-[0_8px_32px_rgba(31,29,26,0.06)] border border-border-color backdrop-blur-xl">
               <div className="flex items-center gap-3 mb-8">
-                <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
+                <div className="p-3 bg-ui-success text-ui-successText rounded-2xl shadow-brand-sm border border-ui-successBorder overflow-hidden">
                   <Database className="w-6 h-6" />
                 </div>
                 <div>
@@ -154,7 +154,7 @@ export default function RateAnalysis() {
                   }
                 />
                 <div className="col-span-1 sm:col-span-2 pt-4 pb-2">
-                  <h3 className="text-base font-medium uppercase tracking-widest border-b border-gray-100 pb-2">
+                  <h3 className="text-base font-medium uppercase tracking-widest border-b border-border-color pb-2">
                     Finishing & Labor
                   </h3>
                 </div>
@@ -204,7 +204,7 @@ export default function RateAnalysis() {
                     )
                   }
                 />
-                <div className="col-span-1 sm:col-span-2 bg-transparent px-4 py-3 rounded-2xl border border-slate-100 flex items-center justify-between overflow-hidden">
+                <div className="col-span-1 sm:col-span-2 bg-transparent px-4 py-3 rounded-2xl border border-border-color flex items-center justify-between overflow-hidden">
                   <div>
                     <div className="font-bold text-txt-secondary">
                       Contractor Overhead & Profit
@@ -216,7 +216,7 @@ export default function RateAnalysis() {
                   <div className="flex items-center gap-2">
                     <><label htmlFor="a11y-input-412" className="sr-only">Input</label>
 <input id="a11y-input-412" type="number" inputMode="decimal"
-                      className="w-24 bg-[#FAFAF8] hover:bg-[#FDFCF9] transition-colors duration-500 border border-ui-borderSubtle rounded-full px-3 py-2 text-center text-lg font-bold text-emerald-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/30 min-h-[44px]"
+                      className="w-24 bg-surface-default hover:bg-surface-hover transition-colors duration-500 border border-ui-borderSubtle rounded-full px-3 py-2 text-center text-lg font-bold text-ui-successText focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
                       value={rates.overheadMarkup}
                       onChange={(e) =>
                         handleRateChange("overheadMarkup", e.target.value)
@@ -232,13 +232,13 @@ export default function RateAnalysis() {
           </section>
           {/* Composite Rate Analyzer */}
           <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
-            <div className="bg-gradient-to-b from-slate-800 to-slate-900 p-4 sm:p-8 md:p-8 rounded-2xl shadow-2xl relative overflow-hidden text-txt-primary">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/20 rounded-full blur-[80px]" />
+            <div className="bg-gradient-to-b from-ink to-ink p-4 sm:p-8 md:p-8 rounded-2xl shadow-2xl relative overflow-hidden text-txt-primary">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/20 rounded-full blur-[80px]" />
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary rounded-2xl backdrop-blur border border-slate-100 overflow-hidden">
-                      <Activity className="w-5 h-5 text-teal-400" />
+                    <div className="p-2.5 bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary rounded-2xl backdrop-blur border border-border-color overflow-hidden">
+                      <Activity className="w-5 h-5 text-accent-400" />
                     </div>
                     <h3 className="text-lg font-bold">
                       Composite Item Analysis
@@ -249,7 +249,7 @@ export default function RateAnalysis() {
                   <h4 className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-txt-primary leading-tight">
                     1.0 m³ Concrete
                   </h4>
-                  <p className="text-teal-400/80 font-mono text-sm mt-1 mb-4 border-b border-slate-100 pb-4">
+                  <p className="text-accent-400/80 font-mono text-sm mt-1 mb-4 border-b border-border-color pb-4">
                     Mix Ratio 1:2:4 | 1.54 Dry Vol
                   </p>
                   <div className="h-48 w-full mb-6 relative">
@@ -259,41 +259,41 @@ export default function RateAnalysis() {
                           {
                             name: "Cement",
                             value: compositeCalc.costCement,
-                            color: "#94a3b8",
+                            color: "#6B6862",
                           },
                           {
                             name: "Sand",
                             value: compositeCalc.costSand,
-                            color: "#fcd34d",
+                            color: "#F2A413",
                           },
                           {
                             name: "Crush",
                             value: compositeCalc.costCrush,
-                            color: "#a3a3a3",
+                            color: "#6B6862",
                           },
                           {
                             name: "Labor/Eq",
                             value:
                               compositeCalc.costLabor +
                               compositeCalc.costEquipment,
-                            color: "#0ea5e9",
+                            color: "#0F766E",
                           },
                           {
                             name: "Overhead",
                             value: compositeCalc.overheadCost,
-                            color: "#10b981",
+                            color: "#0F766E",
                           },
                         ]}
                         margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                       >
                         <XAxis
                           dataKey="name"
-                          tick={{ fill: "#94a3b8", fontSize: 10 }}
+                          tick={{ fill: "#6B6862", fontSize: 10 }}
                           axisLine={false}
                           tickLine={false}
                         />
                         <YAxis
-                          tick={{ fill: "#94a3b8", fontSize: 10 }}
+                          tick={{ fill: "#6B6862", fontSize: 10 }}
                           axisLine={false}
                           tickLine={false}
                           tickFormatter={(value) =>
@@ -303,8 +303,8 @@ export default function RateAnalysis() {
                         <Tooltip
                           cursor={{ fill: "rgba(255,255,255,0.05)" }}
                           contentStyle={{
-                            backgroundColor: "#0f172a",
-                            borderColor: "#1e293b",
+                            backgroundColor: "#1F1D1A",
+                            borderColor: "#6B6862",
                             borderRadius: "12px",
                             color: "#fff",
                           }}
@@ -315,29 +315,29 @@ export default function RateAnalysis() {
                             {
                               name: "Cement",
                               value: compositeCalc.costCement,
-                              color: "#94a3b8",
+                              color: "#6B6862",
                             },
                             {
                               name: "Sand",
                               value: compositeCalc.costSand,
-                              color: "#fcd34d",
+                              color: "#F2A413",
                             },
                             {
                               name: "Crush",
                               value: compositeCalc.costCrush,
-                              color: "#a3a3a3",
+                              color: "#6B6862",
                             },
                             {
                               name: "Labor/Eq",
                               value:
                                 compositeCalc.costLabor +
                                 compositeCalc.costEquipment,
-                              color: "#0ea5e9",
+                              color: "#0F766E",
                             },
                             {
                               name: "Overhead",
                               value: compositeCalc.overheadCost,
-                              color: "#10b981",
+                              color: "#0F766E",
                             },
                           ].map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
@@ -348,26 +348,26 @@ export default function RateAnalysis() {
                   </div>
                   <div className="space-y-4 font-mono text-sm">
                     <div className="flex justify-between items-center group">
-                      <span className="text-txt-secondary group-hover:text-slate-300 transition-colors">
+                      <span className="text-txt-secondary group-hover:text-txt-tertiary transition-colors">
                         Cement ({compositeCalc.cementBags.toFixed(2)} Bags)
                       </span>
-                      <span className="font-bold text-slate-200">
+                      <span className="font-bold text-txt-inverse">
                         {formatCurrency(compositeCalc.costCement)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center group">
-                      <span className="text-txt-secondary group-hover:text-slate-300 transition-colors">
+                      <span className="text-txt-secondary group-hover:text-txt-tertiary transition-colors">
                         Sand ({compositeCalc.sandCft.toFixed(2)} cft)
                       </span>
-                      <span className="font-bold text-slate-200">
+                      <span className="font-bold text-txt-inverse">
                         {formatCurrency(compositeCalc.costSand)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center group">
-                      <span className="text-txt-secondary group-hover:text-slate-300 transition-colors">
+                      <span className="text-txt-secondary group-hover:text-txt-tertiary transition-colors">
                         Crush ({compositeCalc.crushCft.toFixed(2)} cft)
                       </span>
-                      <span className="font-bold text-slate-200">
+                      <span className="font-bold text-txt-inverse">
                         {formatCurrency(compositeCalc.costCrush)}
                       </span>
                     </div>
@@ -381,30 +381,30 @@ export default function RateAnalysis() {
                     </div>
                   </div>
                 </div>
-                <div className="pt-6 border-t border-slate-100 space-y-4">
-                  <div className="flex justify-between items-center text-sm font-medium text-slate-300">
+                <div className="pt-6 border-t border-border-color space-y-4">
+                  <div className="flex justify-between items-center text-sm font-medium text-txt-tertiary">
                     <span>Subtotal</span>
                     <span className="font-mono">
                       {formatCurrency(compositeCalc.primeCost)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-sm font-medium text-slate-300">
+                  <div className="flex justify-between items-center text-sm font-medium text-txt-tertiary">
                     <span>
                       Overhead & Profit ({rates.overheadMarkup}%)
                     </span>
-                    <span className="font-mono text-emerald-400">
+                    <span className="font-mono text-ui-successText">
                       +{formatCurrency(compositeCalc.overheadCost)}
                     </span>
                   </div>
-                  <div className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary backdrop-blur-md rounded-2xl px-4 py-3 border border-slate-100 mt-4 flex items-center justify-between overflow-hidden">
-                    <span className="text-xs sm:text-base font-medium tracking-tight uppercase tracking-[0.15em] text-slate-300">
+                  <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary backdrop-blur-md rounded-2xl px-4 py-3 border border-border-color mt-4 flex items-center justify-between overflow-hidden">
+                    <span className="text-xs sm:text-base font-medium tracking-tight uppercase tracking-[0.15em] text-txt-tertiary">
                       Analyzed Rate
                     </span>
                     <div className="flex items-end gap-1">
                       <span className="text-[clamp(1.75rem,5vw,2.5rem)] break-all sm:text-[clamp(1.75rem,5vw,2.5rem)] break-all tracking-tight font-bold tabular-nums tracking-tight text-txt-primary dark:text-white leading-none whitespace-nowrap">
                         {formatCurrency(compositeCalc.finalRate)}
                       </span>
-                      <span className="text-sm font-medium text-teal-400 pb-0.5">
+                      <span className="text-sm font-medium text-accent-400 pb-0.5">
                         / m³
                       </span>
                     </div>
@@ -451,7 +451,7 @@ function InputCard({
 }) {
   const symbol = unit === "PKR" ? "Rs" : unit === "USD" ? "$" : unit;
   return (
-    <div className="group bg-gray-50/50 hover:bg-[#FAFAF8] hover:bg-[#FDFCF9] transition-colors duration-500 border border-gray-100 hover:border-emerald-200 px-4 py-3 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col justify-between overflow-hidden">
+    <div className="group bg-surface-default/50 hover:bg-surface-default hover:bg-surface-hover transition-colors duration-500 border border-border-color hover:border-ui-successBorder px-4 py-3 rounded-2xl transition-all shadow-brand-sm hover:shadow-brand-md flex flex-col justify-between overflow-hidden">
       <div className="flex justify-between items-center mb-3">
         <label className="text-base font-medium tracking-wide">
           {label}
@@ -468,7 +468,7 @@ function InputCard({
               type="number" inputMode="decimal"
               min="0"
               step="any"
-              className={`w-full bg-[#FAFAF8] hover:bg-[#FDFCF9] transition-colors duration-500 border border-gray-200 rounded-2xl py-2.5 text-lg font-bold text-txt-primary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500/30 transition-shadow ${symbol.length > 1 ? "pl-10" : "pl-7"}`}
+              className={`w-full bg-surface-default hover:bg-surface-hover transition-colors duration-500 border border-border-color rounded-2xl py-2.5 text-lg font-bold text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-500 transition-shadow ${symbol.length > 1 ? "pl-10" : "pl-7"}`}
               value={value}
               onChange={(e) => {
                 const num = parseFloat(e.target.value);

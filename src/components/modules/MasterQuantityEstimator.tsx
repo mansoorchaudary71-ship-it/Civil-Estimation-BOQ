@@ -149,13 +149,13 @@ export default function MasterQuantityEstimator({
         {/* Tool Selector Sidebar */}
         <div className="w-full lg:w-80 flex-shrink-0 space-y-4">
           <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary group-focus-within:text-accent-800 transition-colors" />
             <input 
               type="text"
               placeholder="Search tools..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-surface-default dark:bg-slate-800 border border-slate-100 dark:border-slate-700 pl-11 pr-4 py-3.5 rounded-2xl shadow-sm focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium outline-none placeholder:text-slate-400"
+              className="w-full bg-surface-default dark:bg-ink border border-border-color dark:border-ink-600 pl-11 pr-4 py-3.5 rounded-2xl shadow-brand-sm focus:ring-4 focus:ring-accent-500/10 focus:border-ink transition-all font-medium outline-none placeholder:text-txt-tertiary"
             />
           </div>
 
@@ -168,13 +168,13 @@ export default function MasterQuantityEstimator({
               
               const isExpanded = expandedGroup === group || searchTerm !== "";
               return (
-                <div key={group} className="bg-surface-default/50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800/50 overflow-hidden">
+                <div key={group} className="bg-surface-default/50 dark:bg-ink/30 rounded-2xl border border-border-color dark:border-ink/50 overflow-hidden">
                   <Button
                     onClick={() => setExpandedGroup(isExpanded && searchTerm === "" ? null : group)}
-                    className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-default dark:hover:bg-slate-800 transition-all group/group-btn"
+                    className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-default dark:hover:bg-ink transition-all group/group-btn"
                   >
-                    <span className="text-xs font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-slate-300">{group}</span>
-                    <ChevronDown className={`w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-txt-tertiary">{group}</span>
+                    <ChevronDown className={`w-4 h-4 text-txt-tertiary group-hover:text-accent-800 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                   </Button>
                   {isExpanded && (
                     <div className="p-2 pt-0 space-y-1">
@@ -187,11 +187,11 @@ export default function MasterQuantityEstimator({
                             onClick={() => setActiveCalc(calc.id)}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left ${
                               isActive 
-                              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25 font-bold' 
-                              : 'text-txt-secondary dark:text-slate-300 hover:bg-surface-default dark:hover:bg-slate-800/80 font-bold'
+                              ? 'bg-ink text-white shadow-brand-lg shadow-accent-500/25 font-bold' 
+                              : 'text-txt-secondary dark:text-txt-tertiary hover:bg-surface-default dark:hover:bg-ink/80 font-bold'
                             }`}
                           >
-                            <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-slate-400 group-hover:text-indigo-500"}`} />
+                            <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-txt-tertiary group-hover:text-accent-800"}`} />
                             <span className="text-sm truncate">{calc.label}</span>
                           </Button>
                         );
@@ -214,7 +214,7 @@ export default function MasterQuantityEstimator({
                   <ToolSection title="Input Parameters" color="indigo" number="01">
                     <div className="space-y-6">
                       {activeCalculator.inputs.length === 0 ? (
-                        <div className="text-sm text-txt-tertiary p-6 bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-700/50 italic">
+                        <div className="text-sm text-txt-tertiary p-6 bg-surface-hover/50 dark:bg-ink/30 rounded-2xl border border-border-color dark:border-ink-600/50 italic">
                           This module calculates automatically using shared data from preceding stages.
                         </div>
                       ) : (
@@ -230,16 +230,16 @@ export default function MasterQuantityEstimator({
                       )}
 
                       {activeCalculator.sharedDependencies && activeCalculator.sharedDependencies.length > 0 && (
-                         <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 mt-4">
-                           <p className="text-xs font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-slate-300 mb-4 ml-1">Linked State Inputs</p>
-                           <div className="bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800/50 overflow-hidden">
+                         <div className="pt-6 border-t border-border-color dark:border-ink/50 mt-4">
+                           <p className="text-xs font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-txt-tertiary mb-4 ml-1">Linked State Inputs</p>
+                           <div className="bg-surface-hover/50 dark:bg-ink/30 rounded-2xl border border-border-color dark:border-ink/50 overflow-hidden">
                              {activeCalculator.sharedDependencies.map((dep, idx) => (
-                               <div key={dep} className={`flex justify-between items-center px-4 py-3.5 ${idx !== 0 ? 'border-t border-slate-100 dark:border-slate-800/30' : ''}`}>
+                               <div key={dep} className={`flex justify-between items-center px-4 py-3.5 ${idx !== 0 ? 'border-t border-border-color dark:border-ink/30' : ''}`}>
                                   <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/80 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
-                                    <span className="font-mono text-xs font-black text-txt-primary dark:text-slate-100 uppercase tracking-wider">{dep}</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-ink/80 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
+                                    <span className="font-mono text-xs font-black text-txt-primary dark:text-txt-primary uppercase tracking-wider">{dep}</span>
                                   </div>
-                                  <span className="font-black text-sm tracking-tight text-indigo-700 dark:text-indigo-400">{(sharedState[dep] || 0).toFixed(2)}</span>
+                                  <span className="font-black text-sm tracking-tight text-accent-800 dark:text-accent-400">{(sharedState[dep] || 0).toFixed(2)}</span>
                                </div>
                              ))}
                            </div>
@@ -273,7 +273,7 @@ export default function MasterQuantityEstimator({
                 </ToolLayoutResults>
               </>
             ) : (
-              <div className="lg:col-span-12 p-20 text-center text-slate-400 font-medium italic">
+              <div className="lg:col-span-12 p-20 text-center text-txt-tertiary font-medium italic">
                 Select a tool from the sidebar to begin.
               </div>
             )}

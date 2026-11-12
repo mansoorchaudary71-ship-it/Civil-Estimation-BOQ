@@ -17,10 +17,10 @@ export default function SummaryStatsWidget() {
   const activeProjects = useMemo(() => MOCK_DATA[MOCK_DATA.length - 1].projects, []);
   
   return (
-    <div className="w-full bg-[#F0F4F8] rounded-2xl p-6 shadow-[8px_8px_16px_rgba(163,177,198,0.4),-8px_-8px_16px_rgba(255,255,255,0.8)] mb-8 print-only">
+    <div className="w-full bg-surface-hover rounded-2xl p-6 shadow-[8px_8px_16px_rgba(31,29,26,0.4),-8px_-8px_16px_rgba(255,255,255,0.8)] mb-8 print-only">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-txt-primary flex items-center gap-2">
-          <Activity className="w-6 h-6 text-indigo-500" />
+          <Activity className="w-6 h-6 text-accent-800" />
           Dashboard Overview
         </h2>
       </div>
@@ -28,8 +28,8 @@ export default function SummaryStatsWidget() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Stats Cards */}
         <div className="flex flex-col gap-4">
-          <div className="bg-surface-default rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+          <div className="bg-surface-default rounded-2xl p-5 shadow-brand-sm border border-border-color flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-ui-success text-ui-successText flex items-center justify-center shrink-0">
               <DollarSign className="w-6 h-6" />
             </div>
             <div>
@@ -37,20 +37,20 @@ export default function SummaryStatsWidget() {
               <h3 className="text-2xl font-bold text-txt-primary">
                 Rs {(totalCost / 1000000).toFixed(1)}M
               </h3>
-              <p className="text-xs text-emerald-600 flex items-center mt-1">
+              <p className="text-xs text-ui-successText flex items-center mt-1">
                 <TrendingUp className="w-3 h-3 mr-1" /> +12.5% this month
               </p>
             </div>
           </div>
 
-          <div className="bg-surface-default rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+          <div className="bg-surface-default rounded-2xl p-5 shadow-brand-sm border border-border-color flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-accent-100 text-accent-800 flex items-center justify-center shrink-0">
               <FolderOpen className="w-6 h-6" />
             </div>
             <div>
               <p className="text-sm font-medium text-txt-tertiary">Active Projects</p>
               <h3 className="text-2xl font-bold text-txt-primary">{activeProjects}</h3>
-              <p className="text-xs text-blue-600 flex items-center mt-1">
+              <p className="text-xs text-accent-800 flex items-center mt-1">
                 <TrendingUp className="w-3 h-3 mr-1" /> +2 new this month
               </p>
             </div>
@@ -58,7 +58,7 @@ export default function SummaryStatsWidget() {
         </div>
 
         {/* Middle Column: Area Chart (Costs) */}
-        <div className="bg-surface-default rounded-2xl p-5 shadow-sm border border-slate-100 lg:col-span-1">
+        <div className="bg-surface-default rounded-2xl p-5 shadow-brand-sm border border-border-color lg:col-span-1">
           <h3 className="text-sm font-semibold text-txt-secondary mb-4">Cost Trends</h3>
           <div className="h-[180px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -83,7 +83,7 @@ export default function SummaryStatsWidget() {
         </div>
 
         {/* Right Column: Bar Chart (Projects) */}
-        <div className="bg-surface-default rounded-2xl p-5 shadow-sm border border-slate-100 lg:col-span-1">
+        <div className="bg-surface-default rounded-2xl p-5 shadow-brand-sm border border-border-color lg:col-span-1">
           <h3 className="text-sm font-semibold text-txt-secondary mb-4">Project Activity</h3>
           <div className="h-[180px] w-full">
             <ResponsiveContainer width="100%" height="100%">

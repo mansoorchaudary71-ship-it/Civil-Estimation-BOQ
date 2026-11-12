@@ -179,22 +179,22 @@ export default function UniversalStructuralGeometryEngine() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Universal Structural Geometry</h1>
-          <p className="text-txt-tertiary dark:text-slate-400 mt-1">Unified engine for complex shapes, formwork, steel, and concrete volumes.</p>
+          <p className="text-txt-tertiary dark:text-txt-tertiary mt-1">Unified engine for complex shapes, formwork, steel, and concrete volumes.</p>
         </div>
         <Button 
           onClick={syncToBOQ}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 font-bold shadow-lg shadow-indigo-600/30 transition-all shrink-0"
+          className="bg-ink hover:bg-ink-700 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 font-bold shadow-brand-lg shadow-accent-500/30 transition-all shrink-0"
         >
           <Save size={18} /> Sync to BOQ
         </Button>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-6 bg-surface-default dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-ui-borderSubtle dark:border-slate-700">
+      <div className="flex flex-wrap gap-2 mb-6 bg-surface-default dark:bg-ink p-2 rounded-xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600">
         {tabs.map(t => (
           <Button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === t.id ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
+            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === t.id ? 'bg-accent-50 dark:bg-accent-500/20 text-accent-800 dark:text-accent-400 shadow-brand-sm' : 'text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover dark:hover:bg-ink-600/50'}`}
           >
             {t.icon} <span className="hidden sm:inline">{t.name}</span>
           </Button>
@@ -203,8 +203,8 @@ export default function UniversalStructuralGeometryEngine() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
         {/* Input Panel */}
-        <div className="lg:col-span-7 bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6">
-          <h2 className="text-xl font-bold mb-6 text-txt-primary dark:text-white border-b border-ui-borderSubtle dark:border-slate-700 pb-4">
+        <div className="lg:col-span-7 bg-surface-default dark:bg-ink rounded-2xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600 p-6">
+          <h2 className="text-xl font-bold mb-6 text-txt-primary dark:text-white border-b border-ui-borderSubtle dark:border-ink-600 pb-4">
             Geometry Parameters
           </h2>
           
@@ -281,7 +281,7 @@ export default function UniversalStructuralGeometryEngine() {
               className="mt-6 flex flex-col gap-2"
             >
               {currentWarnings.map((warn, i) => (
-                <div key={i} className="flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-200 p-4 rounded-xl border border-amber-200 dark:border-amber-800/50">
+                <div key={i} className="flex items-start gap-3 bg-accent-50 dark:bg-accent-900/30 text-accent-800 dark:text-accent-200 p-4 rounded-xl border border-accent-200 dark:border-accent-800/50">
                   <AlertTriangle size={18} className="shrink-0 mt-0.5" />
                   <p className="text-sm font-medium">{warn}</p>
                 </div>
@@ -293,8 +293,8 @@ export default function UniversalStructuralGeometryEngine() {
 
         {/* Results Panel */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 text-white rounded-2xl shadow-xl p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-bl-full pointer-events-none" />
+          <div className="bg-ink text-white rounded-2xl shadow-brand-lg p-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-accent-500/10 rounded-bl-full pointer-events-none" />
             <h2 className="text-xl font-bold mb-6 text-white border-b border-white/10 pb-4">
               Analysis Results
             </h2>
@@ -368,9 +368,9 @@ export default function UniversalStructuralGeometryEngine() {
             </div>
           </div>
 
-          <div className="bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6 flex flex-col items-center justify-center">
+          <div className="bg-surface-default dark:bg-ink rounded-2xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600 p-6 flex flex-col items-center justify-center">
             <h3 className="text-sm font-semibold text-txt-tertiary uppercase tracking-wider mb-4 w-full text-left">Cross Section</h3>
-            <div className="w-full max-w-[200px] aspect-square flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl border border-ui-borderSubtle dark:border-slate-700 p-6">
+            <div className="w-full max-w-[200px] aspect-square flex items-center justify-center bg-surface-default rounded-xl border border-ui-borderSubtle dark:border-ink-600 p-6">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -399,7 +399,7 @@ export default function UniversalStructuralGeometryEngine() {
 function InputGroup({ label, name, value, onChange }: { label: string, name: string, value: number, onChange: any }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-txt-secondary dark:text-slate-300">{label}</label>
+      <label className="text-sm font-medium text-txt-secondary dark:text-txt-tertiary">{label}</label>
       <input
         type="number"
         name={name}
@@ -407,7 +407,7 @@ function InputGroup({ label, name, value, onChange }: { label: string, name: str
         onChange={onChange}
         min={0}
         step={0.01}
-        className="w-full bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-txt-primary dark:text-white font-mono"
+        className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-accent-500 focus:border-accent-800 outline-none transition-all text-txt-primary dark:text-white font-mono"
       />
     </div>
   );
@@ -421,7 +421,7 @@ function ResultRow({ label, value, unit }: { label: string, value: number, unit:
         <span className="text-xl font-bold text-white">
           {isNaN(value) || !isFinite(value) ? "0.00" : (value % 1 === 0 && unit === 'Nos' ? value : value.toFixed(2))}
         </span>
-        <span className="text-indigo-300 ml-1.5 text-sm">{unit}</span>
+        <span className="text-accent-400 ml-1.5 text-sm">{unit}</span>
       </div>
     </div>
   );
@@ -444,7 +444,7 @@ const RectangularSVG = ({ w, d }: { w: number, d: number }) => {
   const sd = Math.max(d * scale, 10);
 
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 drop-shadow-md">
+    <svg viewBox="0 0 100 100" className="w-full h-full text-accent-800 drop-shadow-md">
       <SvgDefs />
       <motion.rect 
         initial={false}
@@ -473,7 +473,7 @@ const RectangularSVG = ({ w, d }: { w: number, d: number }) => {
 };
 
 const CircularSVG = ({ d }: { d: number }) => (
-  <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 drop-shadow-md">
+  <svg viewBox="0 0 100 100" className="w-full h-full text-accent-800 drop-shadow-md">
     <SvgDefs />
     <motion.circle initial={false} animate={{ r: 35 }} cx="50" cy="50" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="3" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
     <motion.circle initial={false} animate={{ r: 28 }} cx="50" cy="50" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 2" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
@@ -494,7 +494,7 @@ const HollowTubeSVG = ({ od, id }: { od: number, id: number }) => {
   const rID = Math.max(id * scale, 0);
   
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 drop-shadow-md">
+    <svg viewBox="0 0 100 100" className="w-full h-full text-accent-800 drop-shadow-md">
       <SvgDefs />
       <motion.circle initial={false} animate={{ r: rOD }} cx="50" cy="50" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeWidth="3" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
       <motion.circle initial={false} animate={{ r: rID }} cx="50" cy="50" fill="white" stroke="currentColor" strokeWidth="3" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
@@ -514,7 +514,7 @@ const PrecastWallSVG = ({ totalH, panelH }: { totalH: number, panelH: number }) 
   const panelHeightVisual = 60 / numPanels;
   
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 drop-shadow-md">
+    <svg viewBox="0 0 100 100" className="w-full h-full text-accent-800 drop-shadow-md">
       <SvgDefs />
       <motion.rect initial={false} animate={{ x: 20, y: 10, width: 10, height: 75 }} fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
       <motion.rect initial={false} animate={{ x: 70, y: 10, width: 10, height: 75 }} fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
@@ -537,7 +537,7 @@ const StaircaseSVG = ({ rise, going }: { rise: number, going: number }) => {
   const pathData = `M 20,80 L 80,80 L 80,${80 - stepH} L ${80 - stepW},${80 - stepH} L ${80 - stepW},${80 - 2 * stepH} L ${80 - 2 * stepW},${80 - 2 * stepH} L ${80 - 2 * stepW},${80 - 3 * stepH} L 20,${80 - 3 * stepH} Z`;
   
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 drop-shadow-md">
+    <svg viewBox="0 0 100 100" className="w-full h-full text-accent-800 drop-shadow-md">
       <SvgDefs />
       <motion.path 
         initial={false} 
@@ -572,7 +572,7 @@ const RoofPitchSVG = ({ rise, span }: { rise: number, span: number }) => {
   const pathData = `M ${cx},${by - h} L ${cx - w/2},${by} L ${cx + w/2},${by} Z`;
   
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 drop-shadow-md">
+    <svg viewBox="0 0 100 100" className="w-full h-full text-accent-800 drop-shadow-md">
       <SvgDefs />
       <motion.path initial={false} animate={{ d: pathData }} fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
       <motion.path initial={false} animate={{ d: `M ${cx},${by - h} L ${cx},${by}` }} fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 2" transition={{ type: "spring", stiffness: 300, damping: 30 }} />

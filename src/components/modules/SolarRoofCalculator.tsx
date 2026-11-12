@@ -185,20 +185,20 @@ export default function SolarRoofCalculator() {
     return (
       <div className="flex flex-col relative group/hint">
         {tooltipText && (
-           <div className="absolute z-[100] invisible opacity-0 group-hover/hint:visible group-hover/hint:opacity-100 transition-all duration-200 bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-max max-w-[220px] bg-slate-800 text-white text-xs p-2 rounded-lg shadow-xl pointer-events-none whitespace-normal text-center font-medium after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-slate-800">
+           <div className="absolute z-[100] invisible opacity-0 group-hover/hint:visible group-hover/hint:opacity-100 transition-all duration-200 bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-max max-w-[220px] bg-ink text-white text-xs p-2 rounded-lg shadow-xl pointer-events-none whitespace-normal text-center font-medium after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-slate-800">
              {tooltipText}
            </div>
         )}
         <label className="text-sm text-txt-secondary font-medium mb-1.5 flex items-center justify-between cursor-help">
           <span className="flex items-center gap-1.5">
             {label}
-            <Info className="w-3.5 h-3.5 text-slate-400" />
+            <Info className="w-3.5 h-3.5 text-txt-tertiary" />
           </span>
         </label>
         <div className="relative">
           <><label htmlFor="a11y-input-514" className="sr-only">Input</label>
 <input id="a11y-input-514" type={type} step={step} value={value} onChange={onChange}
-            className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault rounded-full px-4 py-2.5 text-txt-primary focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-txt-tertiary font-medium min-h-[44px]"
+            className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault rounded-full px-4 py-2.5 text-txt-primary focus:outline-none focus:border-ink focus:ring-1 focus:ring-accent-500 transition-all placeholder:text-txt-tertiary font-medium min-h-[44px]"
           /></>
           {unit && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-txt-tertiary text-sm font-medium pointer-events-none">{unit}</span>}
         </div>
@@ -207,22 +207,22 @@ export default function SolarRoofCalculator() {
   };
 
   return (
-    <div className="w-full bg-surface-default text-txt-primary min-h-screen rounded-2xl overflow-hidden shadow-sm border border-ui-borderSubtle font-sans" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+    <div className="w-full bg-surface-default text-txt-primary min-h-screen rounded-2xl overflow-hidden shadow-brand-sm border border-ui-borderSubtle font-sans" style={{ fontFamily: 'DM Sans, sans-serif' }}>
       
       {/* Header */}
-      <div className="bg-slate-50 border-b border-ui-borderSubtle p-6 md:p-8">
+      <div className="bg-surface-hover border-b border-ui-borderSubtle p-6 md:p-8">
         <div className="w-full md:max-w-7xl md:mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-4 md:px-0">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 mb-3">
-               <Sun className="w-4 h-4 text-indigo-600" />
-               <span className="text-base font-medium text-indigo-600 uppercase tracking-wider">Pro Solar Evaluator</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-50 border border-accent-100 mb-3">
+               <Sun className="w-4 h-4 text-accent-800" />
+               <span className="text-base font-medium text-accent-800 uppercase tracking-wider">Pro Solar Evaluator</span>
             </div>
             <h1 className="text-xl md:text-xl font-semibold text-txt-primary tracking-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
               Solar Energy System Calculator
             </h1>
             <p className="text-txt-tertiary mt-2 max-w-2xl">Complete end-to-end solar array, inverter, and financial payback analysis for PK, IN, and UAE markets.</p>
           </div>
-          <Button onClick={resetCalc} className="w-full flex items-center gap-2 px-4 py-2 bg-surface-default hover:bg-slate-50 text-txt-secondary rounded-full transition-all font-medium text-sm border border-ui-borderSubtle shadow-sm active:scale-95 hover:-translate-y-0.5 overflow-hidden">
+          <Button onClick={resetCalc} className="w-full flex items-center gap-2 px-4 py-2 bg-surface-default hover:bg-surface-hover text-txt-secondary rounded-full transition-all font-medium text-sm border border-ui-borderSubtle shadow-brand-sm active:scale-95 hover:-translate-y-0.5 overflow-hidden">
             <RotateCcw className="w-4 h-4" /> Reset Data
           </Button>
         </div>
@@ -243,10 +243,10 @@ export default function SolarRoofCalculator() {
                   key={mod.id}
                   onClick={() => setActiveTab(mod.id)}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-base font-medium whitespace-nowrap transition-all border ${
-                    isActive ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-slate-50 text-txt-secondary border-transparent hover:bg-slate-100 hover:text-txt-primary"
+                    isActive ? "bg-accent-50 text-accent-800 border-accent-200" : "bg-surface-hover text-txt-secondary border-transparent hover:bg-surface-hover hover:text-txt-primary"
                   }`}
                 >
-                  <Icon className="w-4 h-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
+                  <Icon className="w-4 h-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm" />
                   <span className="hidden sm:inline">{mod.id}.</span> {mod.name}
                 </Button>
               )
@@ -254,15 +254,15 @@ export default function SolarRoofCalculator() {
           </div>
 
           {/* Module Content */}
-          <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 md:p-4 sm:p-8 shadow-sm overflow-hidden">
+          <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 md:p-4 sm:p-8 shadow-brand-sm overflow-hidden">
             
             {activeTab === 1 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
-                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Home className="text-indigo-600"/> Site & Load Assessment</h2>
+                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Home className="text-accent-800"/> Site & Load Assessment</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <div className="flex flex-col">
                     <label className="text-sm text-txt-secondary font-medium mb-1.5 min-w-[200px]">Location / City</label>
-                    <select value={city} onChange={(e: any) => setCity(e.target.value)} className="w-full bg-surface-default border border-ui-borderDefault rounded-xl px-4 py-2.5 text-txt-primary focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    <select value={city} onChange={(e: any) => setCity(e.target.value)} className="w-full bg-surface-default border border-ui-borderDefault rounded-xl px-4 py-2.5 text-txt-primary focus:outline-none focus:border-ink focus:ring-1 focus:ring-accent-500">
                       {Object.keys(CITIES).map(c => <option key={c} value={c} className="bg-surface-default">{c}</option>)}
                     </select>
                   </div>
@@ -273,7 +273,7 @@ export default function SolarRoofCalculator() {
                     <label className="text-sm text-txt-secondary font-medium mb-1.5">Grid System Type</label>
                     <div className="flex gap-4 flex-wrap">
                       {["On-Grid", "Off-Grid", "Hybrid"].map(t => (
-                        <Button key={t} onClick={() => setGridType(t as GridType)} className={`flex-1 py-3 rounded-xl border font-bold text-sm transition-all ${gridType === t ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-surface-default border-ui-borderSubtle text-txt-secondary hover:bg-slate-50'}`}>
+                        <Button key={t} onClick={() => setGridType(t as GridType)} className={`flex-1 py-3 rounded-xl border font-bold text-sm transition-all ${gridType === t ? 'bg-ink text-white border-ink' : 'bg-surface-default border-ui-borderSubtle text-txt-secondary hover:bg-surface-hover'}`}>
                           {t}
                         </Button>
                       ))}
@@ -284,8 +284,8 @@ export default function SolarRoofCalculator() {
             )}
 
             {activeTab === 2 && (
-              <div className="animate-in fade-in zoom-in-95 duration-300 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
-                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Sun className="text-indigo-600"/> Solar Potential & Sizing</h2>
+              <div className="animate-in fade-in zoom-in-95 duration-300 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
+                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Sun className="text-accent-800"/> Solar Potential & Sizing</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Peak Sun Hours (PSH)" value={psh} onChange={(e:any) => setPsh(Number(e.target.value))} step="0.1" unit="hrs/day" />
                   <InputField label="Available Roof Area" value={availableRoofArea} onChange={(e:any) => setAvailableRoofArea(Number(e.target.value))} unit="m²" />
@@ -294,28 +294,28 @@ export default function SolarRoofCalculator() {
                   <InputField label="Panel Efficiency" value={panelEfficiency} onChange={(e:any) => setPanelEfficiency(Number(e.target.value))} step="0.1" unit="%" />
                   <InputField label="Panel Tilt Angle" value={tilt} onChange={(e:any) => setTilt(Number(e.target.value))} unit="°" />
                 </div>
-                <div className="mt-8 p-4 sm:p-6 bg-indigo-50 border border-indigo-100 rounded-xl flex flex-col md:flex-row gap-6 justify-between items-center text-center md:text-left">
+                <div className="mt-8 p-4 sm:p-6 bg-accent-50 border border-accent-100 rounded-xl flex flex-col md:flex-row gap-6 justify-between items-center text-center md:text-left">
                   <div>
-                    <p className="text-indigo-700/80 font-medium text-sm mb-1 uppercase tracking-wider">Required Array Size</p>
-                    <p className="text-xl font-bold text-indigo-600">{actualKw.toFixed(2)} kWp</p>
+                    <p className="text-accent-800/80 font-medium text-sm mb-1 uppercase tracking-wider">Required Array Size</p>
+                    <p className="text-xl font-bold text-accent-800">{actualKw.toFixed(2)} kWp</p>
                   </div>
-                  <div className="hidden md:block w-px h-12 bg-indigo-200"></div>
+                  <div className="hidden md:block w-px h-12 bg-accent-200"></div>
                   <div>
-                    <p className="text-indigo-700/80 font-medium text-sm mb-1 uppercase tracking-wider">Number of Panels</p>
-                    <p className="text-xl font-bold text-indigo-600">{numPanels} <span className="text-lg">units</span></p>
+                    <p className="text-accent-800/80 font-medium text-sm mb-1 uppercase tracking-wider">Number of Panels</p>
+                    <p className="text-xl font-bold text-accent-800">{numPanels} <span className="text-lg">units</span></p>
                     {numPanels > maxPanels && (
-                      <p className="text-rose-600 text-base font-medium mt-1.5 flex items-center justify-center md:justify-start gap-1">
+                      <p className="text-ui-errorText text-base font-medium mt-1.5 flex items-center justify-center md:justify-start gap-1">
                         <AlertCircle className="w-3.5 h-3.5"/> Exceeds max {maxPanels} panels
                       </p>
                     )}
                   </div>
-                  <div className="hidden md:block w-px h-12 bg-indigo-200"></div>
+                  <div className="hidden md:block w-px h-12 bg-accent-200"></div>
                   <div>
-                    <p className="text-indigo-700/80 font-medium text-sm mb-1 uppercase tracking-wider">Roof Spacing Needed</p>
-                    <p className="text-xl font-bold text-indigo-600">{roofAreaRequired.toFixed(0)} <span className="text-lg">m²</span></p>
+                    <p className="text-accent-800/80 font-medium text-sm mb-1 uppercase tracking-wider">Roof Spacing Needed</p>
+                    <p className="text-xl font-bold text-accent-800">{roofAreaRequired.toFixed(0)} <span className="text-lg">m²</span></p>
                   </div>
                 </div>
-                <div className="mt-4 p-4 rounded-xl border border-ui-borderSubtle bg-slate-50 flex items-center justify-between hover:border-ui-borderDefault transition-all">
+                <div className="mt-4 p-4 rounded-xl border border-ui-borderSubtle bg-surface-hover flex items-center justify-between hover:border-ui-borderDefault transition-all">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-surface-default border border-ui-borderSubtle flex items-center justify-center">
                       <Home className="w-5 h-5 text-txt-tertiary" />
@@ -326,7 +326,7 @@ export default function SolarRoofCalculator() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-indigo-600">{maxPanels} Panels</p>
+                    <p className="text-lg font-bold text-accent-800">{maxPanels} Panels</p>
                     <p className="text-base font-medium">{maxKw.toFixed(2)} kWp Limit</p>
                   </div>
                 </div>
@@ -335,14 +335,14 @@ export default function SolarRoofCalculator() {
                 <div className="mt-4 w-full bg-surface-default border border-ui-borderSubtle rounded-xl p-4 min-h-[160px] flex flex-wrap gap-1.5 content-start justify-center relative overflow-hidden">
                   <div className="w-full flex justify-between items-center mb-4">
                     <p className="text-base font-medium flex items-center gap-2">
-                      <Grid className="w-4 h-4 text-indigo-500" /> Roof Layout Visualization
+                      <Grid className="w-4 h-4 text-accent-800" /> Roof Layout Visualization
                     </p>
                     <div className="flex gap-4 flex-wrap">
                        <p className="text-sm font-medium text-txt-tertiary flex items-center gap-1.5">
-                         <span className="w-2 h-2 rounded-full bg-indigo-500"></span> Valid Panel
+                         <span className="w-2 h-2 rounded-full bg-ink"></span> Valid Panel
                        </p>
                        <p className="text-sm font-medium text-txt-tertiary flex items-center gap-1.5">
-                         <span className="w-2 h-2 rounded-full bg-rose-500"></span> Exceeds Limit
+                         <span className="w-2 h-2 rounded-full bg-ui-errorText"></span> Exceeds Limit
                        </p>
                     </div>
                   </div>
@@ -354,22 +354,22 @@ export default function SolarRoofCalculator() {
                       transition={{ duration: 0.3, delay: i * 0.02 }}
                       className={`w-6 h-10 rounded-2xl border relative transition-all ${
                         i < maxPanels 
-                          ? 'bg-indigo-500/10 border-indigo-500/30' 
-                          : 'bg-rose-500/10 border-rose-500/30'
+                          ? 'bg-accent-500/10 border-accent-500/30' 
+                          : 'bg-ui-error/10 border-ui-errorBorder'
                       } z-10 flex flex-col items-center justify-center`}
                       title={i < maxPanels ? `Panel ${i+1}` : `Panel ${i+1} (Exceeds capacity)`}
                     >
-                       <div className={`w-full h-px ${i < maxPanels ? 'bg-indigo-500/20' : 'bg-rose-500/20'} absolute top-1/3`}></div>
-                       <div className={`w-full h-px ${i < maxPanels ? 'bg-indigo-500/20' : 'bg-rose-500/20'} absolute top-2/3`}></div>
+                       <div className={`w-full h-px ${i < maxPanels ? 'bg-accent-500/20' : 'bg-ui-errorText/20'} absolute top-1/3`}></div>
+                       <div className={`w-full h-px ${i < maxPanels ? 'bg-accent-500/20' : 'bg-ui-errorText/20'} absolute top-2/3`}></div>
                     </motion.div>
                   ))}
                   {numPanels > 150 && (
-                     <div className="w-full mt-4 py-2 text-center text-base font-medium bg-slate-50 rounded-lg">
+                     <div className="w-full mt-4 py-2 text-center text-base font-medium bg-surface-hover rounded-lg">
                         + {numPanels - 150} more panels not shown due to performance limits
                      </div>
                   )}
                   {numPanels === 0 && (
-                    <div className="absolute inset-0 flex items-center justify-center text-sm font-medium text-slate-400">
+                    <div className="absolute inset-0 flex items-center justify-center text-sm font-medium text-txt-tertiary">
                        No panels required
                     </div>
                   )}
@@ -379,7 +379,7 @@ export default function SolarRoofCalculator() {
 
             {activeTab === 3 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
-                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Battery className="text-indigo-600"/> Inverter & Battery Size</h2>
+                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Battery className="text-accent-800"/> Inverter & Battery Size</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Inverter Efficiency" value={inverterEfficiency} onChange={(e:any) => setInverterEfficiency(Number(e.target.value))} unit="%" />
                   {gridType !== "On-Grid" ? (
@@ -388,7 +388,7 @@ export default function SolarRoofCalculator() {
                       <InputField label="Depth of Discharge (DoD)" value={dod} onChange={(e:any) => setDod(Number(e.target.value))} unit="%" />
                       <div className="flex flex-col">
                         <label className="text-sm text-txt-secondary font-medium mb-1.5 min-w-[200px]">Battery Chemistry</label>
-                        <select value={batteryType} onChange={(e: any) => setBatteryType(e.target.value)} className="w-full bg-surface-default border border-ui-borderDefault rounded-xl px-4 py-2.5 text-txt-primary focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                        <select value={batteryType} onChange={(e: any) => setBatteryType(e.target.value)} className="w-full bg-surface-default border border-ui-borderDefault rounded-xl px-4 py-2.5 text-txt-primary focus:outline-none focus:border-ink focus:ring-1 focus:ring-accent-500">
                           <option value="Lithium-Ion" className="bg-surface-default">Lithium-Ion / LiFePO4</option>
                           <option value="Lead-Acid" className="bg-surface-default">Tubular / Lead-Acid</option>
                         </select>
@@ -396,7 +396,7 @@ export default function SolarRoofCalculator() {
                       <InputField label="System DC Voltage" value={batteryVoltage} onChange={(e:any) => setBatteryVoltage(Number(e.target.value))} step="12" unit="V" />
                     </>
                   ) : (
-             <div className="md:col-span-2 p-4 sm:p-6 bg-slate-50 border border-ui-borderSubtle rounded-xl flex items-center gap-4 text-txt-tertiary flex-wrap">
+             <div className="md:col-span-2 p-4 sm:p-6 bg-surface-hover border border-ui-borderSubtle rounded-xl flex items-center gap-4 text-txt-tertiary flex-wrap">
                <Plug className="w-6 h-6" /> Battery bank sizing is skipped for On-Grid purely net-metered systems.
              </div>
                   )}
@@ -406,11 +406,11 @@ export default function SolarRoofCalculator() {
 
             {activeTab === 4 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
-                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><DollarSign className="text-indigo-600"/> Cost Estimations</h2>
+                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><DollarSign className="text-accent-800"/> Cost Estimations</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <div className="flex flex-col">
                     <label className="text-sm text-txt-secondary font-medium mb-1.5 min-w-[200px]">Currency</label>
-                    <select value={currency} onChange={(e: any) => setCurrency(e.target.value)} className="w-full bg-surface-default border border-ui-borderDefault rounded-xl px-4 py-2.5 text-txt-primary focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    <select value={currency} onChange={(e: any) => setCurrency(e.target.value)} className="w-full bg-surface-default border border-ui-borderDefault rounded-xl px-4 py-2.5 text-txt-primary focus:outline-none focus:border-ink focus:ring-1 focus:ring-accent-500">
                       {["PKR", "INR", "AED", "USD"].map(c => <option key={c} value={c} className="bg-surface-default">{c}</option>)}
                     </select>
                   </div>
@@ -428,7 +428,7 @@ export default function SolarRoofCalculator() {
 
             {activeTab === 5 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
-                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Zap className="text-indigo-600"/> Production & Savings</h2>
+                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Zap className="text-accent-800"/> Production & Savings</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Grid Tariff / Unit Rate" value={gridTariff} onChange={(e:any) => setGridTariff(Number(e.target.value))} unit={`${currency} / kWh`} />
                   {gridType !== "Off-Grid" && <InputField label="Net Metering Export Rate" value={exportRate} onChange={(e:any) => setExportRate(Number(e.target.value))} unit="% of Import Tariff" />}
@@ -436,21 +436,21 @@ export default function SolarRoofCalculator() {
                 </div>
                 
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="bg-slate-50 border border-ui-borderSubtle rounded-xl p-5">
+                  <div className="bg-surface-hover border border-ui-borderSubtle rounded-xl p-5">
                      <p className="text-txt-tertiary text-base font-medium uppercase tracking-wider mb-2">Daily Generation</p>
                      <p className="text-xl font-semibold text-txt-primary">{dailyGen.toFixed(1)} <span className="text-sm font-medium text-txt-tertiary">kWh</span></p>
                   </div>
-                  <div className="bg-slate-50 border border-ui-borderSubtle rounded-xl p-5">
+                  <div className="bg-surface-hover border border-ui-borderSubtle rounded-xl p-5">
                      <p className="text-txt-tertiary text-base font-medium uppercase tracking-wider mb-2">Monthly Gen.</p>
                      <p className="text-xl font-semibold text-txt-primary">{monthlyGen.toFixed(0)} <span className="text-sm font-medium text-txt-tertiary">kWh</span></p>
                   </div>
-                  <div className="bg-slate-50 border border-ui-borderSubtle rounded-xl p-5">
+                  <div className="bg-surface-hover border border-ui-borderSubtle rounded-xl p-5">
                      <p className="text-txt-tertiary text-base font-medium uppercase tracking-wider mb-2">Year 1 Savings</p>
-                     <p className="text-xl font-semibold text-txt-primary text-emerald-600">{formatCurrency(annualSavingsAmount).replace(/[^\d\.,]/g,'')} <span className="text-sm font-medium text-emerald-600/50">{currency}</span></p>
+                     <p className="text-xl font-semibold text-txt-primary text-ui-successText">{formatCurrency(annualSavingsAmount).replace(/[^\d\.,]/g,'')} <span className="text-sm font-medium text-ui-successText/50">{currency}</span></p>
                   </div>
-                  <div className="bg-slate-50 border border-ui-borderSubtle rounded-xl p-5">
+                  <div className="bg-surface-hover border border-ui-borderSubtle rounded-xl p-5">
                      <p className="text-txt-tertiary text-base font-medium uppercase tracking-wider mb-2">CO₂ Offsets (Yr)</p>
-                     <p className="text-xl font-semibold text-txt-primary text-indigo-500">{annualCo2.toFixed(0)} <span className="text-sm font-medium text-indigo-500/50">kg</span></p>
+                     <p className="text-xl font-semibold text-txt-primary text-accent-800">{annualCo2.toFixed(0)} <span className="text-sm font-medium text-accent-800/50">kg</span></p>
                   </div>
                 </div>
               </div>
@@ -458,7 +458,7 @@ export default function SolarRoofCalculator() {
 
             {activeTab === 6 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
-                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><BarChart3 className="text-indigo-600"/> Financial Analysis & ROI</h2>
+                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><BarChart3 className="text-accent-800"/> Financial Analysis & ROI</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                   <InputField label="Maintenance Cost" value={maintenancePercent} onChange={(e:any) => setMaintenancePercent(Number(e.target.value))} step="0.1" unit="% of system / yr" />
                   <InputField label="Tariff Escalation Rate" value={tariffEscalation} onChange={(e:any) => setTariffEscalation(Number(e.target.value))} unit="% / yr" />
@@ -477,10 +477,10 @@ export default function SolarRoofCalculator() {
                     return (
                       <div key={i} className="flex-1 flex flex-col justify-end h-full relative group">
                         <div 
-                          className={`w-full rounded-t-sm transition-all duration-500 ${isPositive ? 'bg-emerald-500 hover:bg-emerald-400' : 'bg-rose-400 hover:bg-rose-300'}`} 
+                          className={`w-full rounded-t-sm transition-all duration-500 ${isPositive ? 'bg-ui-successText hover:bg-ui-successText' : 'bg-ui-errorText hover:bg-ui-errorText'}`} 
                           style={{ height: `${heightPrc}%`, minHeight: '4px' }}
                         />
-                        <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-slate-800 text-white text-sm py-1 px-2 rounded whitespace-nowrap z-10 border border-slate-700 shadow-xl pointer-events-none transition-opacity">
+                        <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-ink text-white text-sm py-1 px-2 rounded whitespace-nowrap z-10 border border-ink-600 shadow-xl pointer-events-none transition-opacity">
                           Yr {cf.year}: {formatCurrency(cf.cumProfit)}
                         </div>
                       </div>
@@ -497,16 +497,16 @@ export default function SolarRoofCalculator() {
 
             {activeTab === 7 && (
               <div className="animate-in fade-in zoom-in-95 duration-300">
-                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Calculator className="text-indigo-600"/> Final Report Summary</h2>
-                <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-8 border border-ui-borderSubtle shadow-sm relative overflow-hidden">
-                   <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-50 rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
+                <h2 className="text-xl font-semibold text-txt-primary mb-6 flex items-center gap-2"><Calculator className="text-accent-800"/> Final Report Summary</h2>
+                <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-8 border border-ui-borderSubtle shadow-brand-sm relative overflow-hidden">
+                   <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-accent-50 rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
                    
                    <div className="flex justify-between items-start mb-10 relative z-10">
                      <div>
                        <h3 className="text-xl font-bold font-heading mb-1 text-txt-primary">{actualKw.toFixed(2)} kWp Solar {gridType}</h3>
                        <p className="text-txt-tertiary">{city} Base Design • {numPanels} Panels • {recInverterKva} kVA Inverter</p>
                      </div>
-                     <span className="px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-sm border border-emerald-200">
+                     <span className="px-4 py-1.5 rounded-full bg-ui-success text-ui-successText font-bold text-sm border border-ui-successBorder">
                         ROI: {lifetimeROI.toFixed(0)}%
                      </span>
                    </div>
@@ -518,15 +518,15 @@ export default function SolarRoofCalculator() {
                      </div>
                      <div>
                        <p className="text-txt-tertiary text-sm font-medium mb-1">Payback Period</p>
-                       <p className="text-xl font-bold text-indigo-600">{simplePayback.toFixed(1)} <span className="text-xl">Years</span></p>
+                       <p className="text-xl font-bold text-accent-800">{simplePayback.toFixed(1)} <span className="text-xl">Years</span></p>
                      </div>
                      <div>
                        <p className="text-txt-tertiary text-sm font-medium mb-1">Year 1 Savings</p>
-                       <p className="text-xl font-bold text-emerald-600">{formatCurrency(netAnnualSavingsYear1)}</p>
+                       <p className="text-xl font-bold text-ui-successText">{formatCurrency(netAnnualSavingsYear1)}</p>
                      </div>
                      <div>
                        <p className="text-txt-tertiary text-sm font-medium mb-1">Lifetime Savings</p>
-                       <p className="text-xl font-bold text-emerald-600">{formatCurrency(lifetimeSavings)}</p>
+                       <p className="text-xl font-bold text-ui-successText">{formatCurrency(lifetimeSavings)}</p>
                      </div>
                      {hasBattery && (
                      <div>
@@ -536,12 +536,12 @@ export default function SolarRoofCalculator() {
                      )}
                      <div>
                        <p className="text-txt-tertiary text-sm font-medium mb-1">CO₂ Offset</p>
-                       <p className="text-xl font-bold text-indigo-500">{(annualCo2 * lifespan / 1000).toFixed(1)} <span className="text-xl">Tons</span></p>
+                       <p className="text-xl font-bold text-accent-800">{(annualCo2 * lifespan / 1000).toFixed(1)} <span className="text-xl">Tons</span></p>
                      </div>
                    </div>
                    
                    <div className="mt-8 flex justify-end relative z-10">
-                     <Button onClick={() => console.log("Download PDF triggered")} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full font-bold transition-all shadow-md active:scale-95 hover:-translate-y-0.5">
+                     <Button onClick={() => console.log("Download PDF triggered")} className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-6 py-3 rounded-full font-bold transition-all shadow-brand-md active:scale-95 hover:-translate-y-0.5">
                         <Download className="w-5 h-5"/> Download PDF Proposal
                      </Button>
                    </div>
@@ -553,19 +553,19 @@ export default function SolarRoofCalculator() {
               <Button 
                 onClick={() => setActiveTab(Math.max(1, activeTab - 1))} 
                 disabled={activeTab === 1}
-                className="w-full px-6 py-2.5 rounded-full font-bold text-sm bg-surface-default border border-ui-borderSubtle text-txt-secondary hover:bg-slate-50 disabled:opacity-30 disabled:pointer-events-none transition-all active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm overflow-hidden"
+                className="w-full px-6 py-2.5 rounded-full font-bold text-sm bg-surface-default border border-ui-borderSubtle text-txt-secondary hover:bg-surface-hover disabled:opacity-30 disabled:pointer-events-none transition-all active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm overflow-hidden"
               >
                 Previous
               </Button>
               <div className="flex gap-1.5 hidden md:flex">
                 {[1,2,3,4,5,6,7].map(n => (
-                  <div key={n} className={`w-2 h-2 rounded-full ${n === activeTab ? 'bg-indigo-600' : n < activeTab ? 'bg-slate-300' : 'bg-slate-200'}`}></div>
+                  <div key={n} className={`w-2 h-2 rounded-full ${n === activeTab ? 'bg-ink' : n < activeTab ? 'bg-secondary-300' : 'bg-surface-active'}`}></div>
                 ))}
               </div>
               <Button 
                 onClick={() => setActiveTab(Math.min(7, activeTab + 1))}
                 disabled={activeTab === 7}
-                className="px-6 py-2.5 rounded-full font-bold text-sm bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-30 disabled:pointer-events-none flex items-center gap-2 transition-all shadow-sm active:scale-95 hover:-translate-y-0.5"
+                className="px-6 py-2.5 rounded-full font-bold text-sm bg-ink text-white hover:bg-ink-700 disabled:opacity-30 disabled:pointer-events-none flex items-center gap-2 transition-all shadow-brand-sm active:scale-95 hover:-translate-y-0.5"
               >
                 {activeTab === 6 ? "View Summary" : "Next Step"} <ChevronRight className="w-4 h-4"/>
               </Button>
@@ -576,9 +576,9 @@ export default function SolarRoofCalculator() {
 
         {/* Right Sidebar Sticky Summary */}
         <div className="xl:w-1/3">
-          <div className="sticky top-6 bg-slate-50 border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 shadow-sm overflow-hidden">
+          <div className="sticky top-6 bg-surface-hover border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 shadow-brand-sm overflow-hidden">
              <h3 className="text-lg font-bold text-txt-primary mb-6 flex items-center gap-2 border-b border-ui-borderSubtle pb-4">
-               <Settings className="text-slate-400 w-5 h-5" /> Live System Snapshot
+               <Settings className="text-txt-tertiary w-5 h-5" /> Live System Snapshot
              </h3>
              
              <div className="space-y-5">
@@ -598,7 +598,7 @@ export default function SolarRoofCalculator() {
                )}
                <div className="flex justify-between items-center mt-2 pt-4 border-t border-ui-borderSubtle">
                   <span className="text-txt-tertiary font-medium">Total Project Cost</span>
-                  <span className="text-indigo-600 font-bold text-xl">{formatCurrency(totalSystemCost)}</span>
+                  <span className="text-accent-800 font-bold text-xl">{formatCurrency(totalSystemCost)}</span>
                </div>
                <div className="flex justify-between items-center">
                   <span className="text-txt-tertiary font-medium">Cost / Watt</span>
@@ -606,15 +606,15 @@ export default function SolarRoofCalculator() {
                </div>
                <div className="flex justify-between items-center pt-2">
                   <span className="text-txt-tertiary font-medium">First Year Savings</span>
-                  <span className="text-emerald-600 font-bold text-lg">{formatCurrency(netAnnualSavingsYear1)}</span>
+                  <span className="text-ui-successText font-bold text-lg">{formatCurrency(netAnnualSavingsYear1)}</span>
                </div>
              </div>
 
-             <div className="w-full mt-8 bg-surface-default border border-ui-borderSubtle rounded-xl p-4 shadow-sm overflow-hidden">
+             <div className="w-full mt-8 bg-surface-default border border-ui-borderSubtle rounded-xl p-4 shadow-brand-sm overflow-hidden">
                <div className="flex justify-between items-center">
                   <span className="text-txt-tertiary font-medium text-sm">Est. Payback</span>
                   <div className="text-right">
-                    <span className="text-indigo-600 font-bold text-2xl">{simplePayback.toFixed(1)}</span>
+                    <span className="text-accent-800 font-bold text-2xl">{simplePayback.toFixed(1)}</span>
                     <span className="text-txt-tertiary text-sm ml-1">Years</span>
                   </div>
                </div>
@@ -626,8 +626,8 @@ export default function SolarRoofCalculator() {
                    <span>Hardware</span>
                    <span>Labor/Misc</span>
                 </div>
-                <div className="w-full h-2 rounded-full overflow-hidden flex bg-slate-200">
-                  <div className="bg-indigo-600 h-full" style={{ width: `${(hardwareTotal/totalSystemCost)*100}%` }}></div>
+                <div className="w-full h-2 rounded-full overflow-hidden flex bg-surface-active">
+                  <div className="bg-ink h-full" style={{ width: `${(hardwareTotal/totalSystemCost)*100}%` }}></div>
                 </div>
              </div>
           </div>

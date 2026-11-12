@@ -97,18 +97,18 @@ export default function PrestressedConcreteEstimator() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
-      <div className="w-full bg-surface-default dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle dark:border-slate-800 overflow-hidden">
-         <h2 className="text-xl font-semibold mb-6 text-txt-primary dark:text-slate-100 flex items-center gap-2">
-            <Layers className="text-pink-600" /> Pre-stressed Concrete Estimator
+      <div className="w-full bg-surface-default dark:bg-ink rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle dark:border-ink overflow-hidden">
+         <h2 className="text-xl font-semibold mb-6 text-txt-primary dark:text-txt-primary flex items-center gap-2">
+            <Layers className="text-accent-700" /> Pre-stressed Concrete Estimator
          </h2>
-         <div className="p-4 sm:p-6 bg-pink-50 dark:bg-pink-900/20 rounded-2xl border border-pink-100 dark:border-pink-900 text-center mb-6 overflow-hidden">
-            <p className="text-pink-800 dark:text-pink-200 font-medium">Evaluate tendon profiles, compute prestress losses (friction, anchorage slip, elastic shortening), and design sections per IS 1343:2012.</p>
+         <div className="p-4 sm:p-6 bg-accent-50 dark:bg-accent-500/10 rounded-2xl border border-accent-200 dark:border-accent-700/40 text-center mb-6 overflow-hidden">
+            <p className="text-accent-800 dark:text-accent-300 font-medium">Evaluate tendon profiles, compute prestress losses (friction, anchorage slip, elastic shortening), and design sections per IS 1343:2012.</p>
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
            <div className="space-y-6">
              <div>
-               <h3 className="font-bold text-txt-primary dark:text-slate-200 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Geometry</h3>
+               <h3 className="font-bold text-txt-primary dark:text-txt-primary mb-4 pb-2 border-b border-border-color dark:border-ink">Geometry</h3>
                <div className="grid grid-cols-2 gap-4">
                  <NumberInput label="Span Length" unit="m" value={spanL} onChange={setSpanL} />
                  <NumberInput label="Eccentricity (Mid)" unit="mm" value={eccentricity} onChange={setEccentricity} />
@@ -118,7 +118,7 @@ export default function PrestressedConcreteEstimator() {
              </div>
 
              <div>
-               <h3 className="font-bold text-txt-primary dark:text-slate-200 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Material & Force</h3>
+               <h3 className="font-bold text-txt-primary dark:text-txt-primary mb-4 pb-2 border-b border-border-color dark:border-ink">Material & Force</h3>
                <div className="grid grid-cols-2 gap-4">
                  <NumberInput label="Jacking Force (P0)" unit="kN" value={ptForce} onChange={setPtForce} />
                  <NumberInput label="Tendon Area (Ap)" unit="mm²" value={areaSteel} onChange={setAreaSteel} />
@@ -128,19 +128,19 @@ export default function PrestressedConcreteEstimator() {
              </div>
 
              <div>
-               <h3 className="font-bold text-txt-primary dark:text-slate-200 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Loss Parameters</h3>
+               <h3 className="font-bold text-txt-primary dark:text-txt-primary mb-4 pb-2 border-b border-border-color dark:border-ink">Loss Parameters</h3>
                
                <div className="mb-4">
                  <label className="text-base font-medium uppercase tracking-wider mb-2 block">System Type</label>
                  <div className="flex gap-4 flex-wrap">
                     <label className="flex items-center gap-2 text-base font-medium cursor-pointer">
                       <><label htmlFor="a11y-input-376" className="sr-only">Input</label>
-<input id="a11y-input-376" type="radio" checked={type === "Pre-tensioned"} onChange={() => setType("Pre-tensioned")} className="w-4 h-4 text-pink-600" /></>
+<input id="a11y-input-376" type="radio" checked={type === "Pre-tensioned"} onChange={() => setType("Pre-tensioned")} className="w-4 h-4 text-accent-700" /></>
                       Pre-tensioned
                     </label>
                     <label className="flex items-center gap-2 text-base font-medium cursor-pointer">
                       <><label htmlFor="a11y-input-377" className="sr-only">Input</label>
-<input id="a11y-input-377" type="radio" checked={type === "Post-tensioned"} onChange={() => setType("Post-tensioned")} className="w-4 h-4 text-pink-600" /></>
+<input id="a11y-input-377" type="radio" checked={type === "Post-tensioned"} onChange={() => setType("Post-tensioned")} className="w-4 h-4 text-accent-700" /></>
                       Post-tensioned
                     </label>
                  </div>
@@ -171,45 +171,45 @@ export default function PrestressedConcreteEstimator() {
                 relatedToolIds={[]}
               >
                 <div className="mb-6 grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden">
+                  <div className="p-4 bg-surface-hover border border-border-color rounded-2xl overflow-hidden">
                     <p className="text-base font-medium mb-1">Initial Stress</p>
                     <p className="text-xl font-bold text-txt-primary">{results.initialStress.toFixed(1)} MPa</p>
                   </div>
-                  <div className="p-4 bg-pink-50 border border-pink-100 rounded-2xl overflow-hidden">
-                    <p className="text-base font-medium text-pink-500 mb-1">Final Effective Stress</p>
-                    <p className="text-xl font-bold text-pink-700">{results.finalStress.toFixed(1)} MPa</p>
+                  <div className="p-4 bg-accent-50 border border-accent-200 rounded-2xl overflow-hidden">
+                    <p className="text-base font-medium text-accent-800 mb-1">Final Effective Stress</p>
+                    <p className="text-xl font-bold text-accent-800">{results.finalStress.toFixed(1)} MPa</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-bold text-sm text-txt-primary border-b border-slate-100 pb-2">Losses Breakdown</h4>
+                  <h4 className="font-bold text-sm text-txt-primary border-b border-border-color pb-2">Losses Breakdown</h4>
                   
                   {type === "Post-tensioned" && (
                     <>
-                      <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+                      <div className="flex justify-between items-center text-sm border-b border-border-color pb-2">
                         <span className="text-txt-secondary">Friction Loss</span>
                         <span className="font-mono font-bold text-txt-primary">{results.lossFriction.toFixed(2)} MPa</span>
                       </div>
-                      <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+                      <div className="flex justify-between items-center text-sm border-b border-border-color pb-2">
                         <span className="text-txt-secondary">Anchorage Slip</span>
                         <span className="font-mono font-bold text-txt-primary">{results.lossSlip.toFixed(2)} MPa</span>
                       </div>
                     </>
                   )}
                   
-                  <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+                  <div className="flex justify-between items-center text-sm border-b border-border-color pb-2">
                     <span className="text-txt-secondary">Elastic Shortening</span>
                     <span className="font-mono font-bold text-txt-primary">{results.lossElastic.toFixed(2)} MPa</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+                  <div className="flex justify-between items-center text-sm border-b border-border-color pb-2">
                     <span className="text-txt-secondary">Creep (Concrete)</span>
                     <span className="font-mono font-bold text-txt-primary">{results.lossCreep.toFixed(2)} MPa</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+                  <div className="flex justify-between items-center text-sm border-b border-border-color pb-2">
                     <span className="text-txt-secondary">Shrinkage (Concrete)</span>
                     <span className="font-mono font-bold text-txt-primary">{results.lossShrinkage.toFixed(2)} MPa</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
+                  <div className="flex justify-between items-center text-sm border-b border-border-color pb-2">
                     <span className="text-txt-secondary">Steel Relaxation</span>
                     <span className="font-mono font-bold text-txt-primary">{results.lossRelaxation.toFixed(2)} MPa</span>
                   </div>
@@ -217,8 +217,8 @@ export default function PrestressedConcreteEstimator() {
                   <div className="pt-2 flex justify-between items-center">
                     <span className="font-bold text-txt-primary">Total Prestress Loss</span>
                     <div className="text-right">
-                       <span className="font-mono font-bold text-xl text-rose-600 block">{results.totalLoss.toFixed(1)} MPa</span>
-                       <span className="text-base font-medium text-rose-500 bg-rose-50 px-2 py-0.5 rounded-full block mt-1">
+                       <span className="font-mono font-bold text-xl text-ui-errorText block">{results.totalLoss.toFixed(1)} MPa</span>
+                       <span className="text-base font-medium text-ui-errorText bg-ui-error px-2 py-0.5 rounded-full block mt-1">
                          {results.pctLoss.toFixed(1)}% of Initial
                        </span>
                     </div>

@@ -177,7 +177,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
               placeholder="Search by code (e.g. 'IS 456') or title..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-surface-default border border-[#E8E4D9] rounded-full py-4 pl-12 pr-4 text-[#4A443B] placeholder-[#A39D93] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-[#B39B72]/50 shadow-sm overflow-hidden"
+              className="w-full bg-surface-default border border-[#E8E4D9] rounded-full py-4 pl-12 pr-4 text-[#4A443B] placeholder-[#A39D93] focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#B39B72]/50 shadow-brand-sm overflow-hidden"
             /></>
           </div>
         </div>
@@ -190,9 +190,9 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
             <Button
               key={country}
               onClick={() => setActiveCountry(country)}
-              className={`px-5 py-2.5 rounded-full text-base font-medium transition-all shadow-sm
+              className={`px-5 py-2.5 rounded-full text-base font-medium transition-all shadow-brand-sm
                 ${activeCountry === country 
-                  ? 'bg-amber-500 text-txt-primary shadow-md' 
+                  ? 'bg-ink text-txt-primary shadow-brand-md' 
                   : 'bg-surface-default text-[#8B8476] border border-[#E8E4D9] hover:bg-[#F2EFE9] hover:text-[#4A443B]'
                 }`}
             >
@@ -202,15 +202,15 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
         </div>
 
         {/* Standards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
           {filteredStandards.length > 0 ? (
             filteredStandards.map(std => (
               <div 
                 key={std.id} 
-                className="w-full bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-6 flex flex-col group hover:border-[#B39B72] hover:shadow-lg transition-all duration-300 overflow-hidden"
+                className="w-full bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-6 flex flex-col group hover:border-[#B39B72] hover:shadow-brand-lg transition-all duration-300 overflow-hidden"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="font-mono text-base font-medium bg-amber-50 text-amber-600 border border-amber-100 px-3 py-1 rounded-lg">
+                  <div className="font-mono text-base font-medium bg-accent-50 text-accent-800 border border-accent-100 px-3 py-1 rounded-lg">
                     {std.code}
                   </div>
                   <div className="flex items-center gap-1.5 text-sm uppercase tracking-wider font-bold text-[#A39D93] bg-[#FAF8F5] px-2 py-1 rounded border border-[#E8E4D9]">
@@ -221,16 +221,16 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
 
                 <div className="mb-2">
                    <span className={`text-sm inline-block uppercase font-bold tracking-widest mb-2 px-2 py-0.5 rounded-full ${
-                      std.category === 'Concrete' ? 'bg-blue-50 text-blue-600' :
-                      std.category === 'Steel' ? 'bg-slate-100 text-txt-secondary' :
-                      std.category === 'Building' ? 'bg-amber-50 text-amber-600' :
-                      std.category === 'Infrastructure' ? 'bg-emerald-50 text-emerald-600' :
-                      std.category === 'Safety' ? 'bg-rose-50 text-rose-600' :
-                      'bg-indigo-50 text-indigo-600'
+                      std.category === 'Concrete' ? 'bg-accent-50 text-accent-800' :
+                      std.category === 'Steel' ? 'bg-surface-hover text-txt-secondary' :
+                      std.category === 'Building' ? 'bg-accent-50 text-accent-800' :
+                      std.category === 'Infrastructure' ? 'bg-ui-success text-ui-successText' :
+                      std.category === 'Safety' ? 'bg-ui-error text-ui-errorText' :
+                      'bg-accent-50 text-accent-800'
                    }`}>
                     {std.category}
                    </span>
-                   <h3 className="text-[#4A443B] group-hover:text-amber-600 transition-colors text-lg font-medium text-txt-primary mb-4">
+                   <h3 className="text-[#4A443B] group-hover:text-accent-800 transition-colors text-lg font-medium text-txt-primary mb-4">
                     {std.title}
                    </h3>
                 </div>
@@ -243,7 +243,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                   <div className="mb-6 flex gap-2 flex-wrap">
                     <Button
                       onClick={() => setViewPdfUrl(std.pdfLink)}
-                      className="inline-flex items-center gap-2 px-3 py-2 bg-[#F2EFE9] hover:bg-amber-500 hover:text-txt-primary border border-[#E8E4D9] rounded-full text-base font-medium text-[#4A443B] transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-[#F2EFE9] hover:bg-ink-700 hover:text-txt-primary border border-[#E8E4D9] rounded-full text-base font-medium text-[#4A443B] transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                     >
                       <Eye className="w-4 h-4" />
                       Read PDF
@@ -268,7 +268,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                       <Button
                         key={idx}
                         onClick={() => onNavigate?.(std.toolIds[idx])}
-                        className="text-base font-medium px-2.5 py-1.5 bg-[#FAF8F5] hover:bg-amber-50 hover:text-amber-600 border border-[#E8E4D9] hover:border-amber-200 rounded-full text-[#6A6458] transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                        className="text-base font-medium px-2.5 py-1.5 bg-[#FAF8F5] hover:bg-accent-50 hover:text-accent-800 border border-[#E8E4D9] hover:border-accent-200 rounded-full text-[#6A6458] transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                       >
                         {tool}
                         <ArrowRight className="w-3 h-3 opacity-50" />
@@ -288,7 +288,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
         </div>
 
         {/* Bottom CTA */}
-        <div className="w-full mt-20 bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 text-center md:max-w-4xl md:mx-auto shadow-sm overflow-hidden">
+        <div className="w-full mt-20 bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 text-center md:max-w-4xl md:mx-auto shadow-brand-sm overflow-hidden">
            <h2 className="md: text-[#4A443B] mb-4 text-xl font-semibold text-txt-primary tracking-tight">Ready to put these standards into practice?</h2>
            <p className="w-full text-[#8B8476] mb-8 md:max-w-xl md:mx-auto text-base font-normal text-txt-secondary leading-relaxed px-4 md:px-0">Access 55+ professional civil engineering calculators and tools that automatically apply these specific country codes to your estimates.</p>
            <Button onClick={() => {
@@ -297,7 +297,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
               } else {
                  window.location.href = '/#tools';
               }
-           }} className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-txt-primary font-bold rounded-full transition-all shadow-md hover:shadow-lg active:scale-95 hover:-translate-y-0.5">
+           }} className="px-8 py-4 bg-ink hover:bg-accent-400 text-txt-primary font-bold rounded-full transition-all shadow-brand-md hover:shadow-brand-lg active:scale-95 hover:-translate-y-0.5">
              Explore All Tools
            </Button>
         </div>
@@ -319,7 +319,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                 </a>
                 <Button
                   onClick={() => setViewPdfUrl(null)}
-                  className="p-2 text-[#A39D93] hover:text-[#4A443B] hover:bg-[#E8E4D9]/50 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="p-2 text-[#A39D93] hover:text-[#4A443B] hover:bg-[#E8E4D9]/50 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 >
                   <X className="w-5 h-5" />
                 </Button>

@@ -8,7 +8,7 @@ interface AIEstimatorBannerProps {
 
 export default function AIEstimatorBanner({ onOpenChat }: AIEstimatorBannerProps) {
   return (
-    <div className="w-full relative group rounded-2xl bg-gradient-to-br from-[#e8e3ff] to-[#cce5ff] dark:from-slate-800 dark:to-slate-900 border border-white/50 dark:border-slate-700 overflow-hidden shadow-sm flex flex-col items-center text-center p-8 sm:p-10 lg:p-14 transition-all duration-300">
+    <div className="w-full relative group rounded-2xl bg-gradient-to-br from-accent-50 to-accent-100 dark:from-ink-800 dark:to-ink border border-white/50 dark:border-ink-600 overflow-hidden shadow-brand-sm flex flex-col items-center text-center p-8 sm:p-10 lg:p-14 transition-all duration-300">
       
       {/* Noise Texture Overlay */}
       <div 
@@ -16,7 +16,7 @@ export default function AIEstimatorBanner({ onOpenChat }: AIEstimatorBannerProps
         style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }}
       ></div>
 
-      <p className="text-txt-tertiary dark:text-slate-400 text-xs sm:text-xs font-semibold tracking-[0.2em] uppercase mb-6 relative z-10">
+      <p className="text-txt-tertiary dark:text-txt-tertiary text-xs sm:text-xs font-semibold tracking-[0.2em] uppercase mb-6 relative z-10">
         Your Civil Engineering Copilot
       </p>
       
@@ -24,7 +24,7 @@ export default function AIEstimatorBanner({ onOpenChat }: AIEstimatorBannerProps
         Meet Your AI Estimator
       </h2>
       
-      <p className="text-txt-secondary dark:text-slate-300 text-base sm:text-lg lg:text-[19px] mb-10 leading-relaxed font-medium max-w-[420px] mx-auto relative z-10">
+      <p className="text-txt-secondary dark:text-txt-tertiary text-base sm:text-lg lg:text-[19px] mb-10 leading-relaxed font-medium max-w-[420px] mx-auto relative z-10">
         Describe your project naturally to instantly generate accurate material takeoffs and cost estimations.
       </p>
 
@@ -40,7 +40,7 @@ export default function AIEstimatorBanner({ onOpenChat }: AIEstimatorBannerProps
         </svg>
       </Button>
 
-      <div className="flex flex-wrap justify-center gap-x-5 gap-y-3 text-xs sm:text-xs text-txt-tertiary dark:text-slate-400 font-medium tracking-wide uppercase relative z-10">
+      <div className="flex flex-wrap justify-center gap-x-5 gap-y-3 text-xs sm:text-xs text-txt-tertiary dark:text-txt-tertiary font-medium tracking-wide uppercase relative z-10">
         <div className="flex items-center gap-1.5">
           <CheckCircle2 className="w-3.5 h-3.5" />
           BOQ Generation

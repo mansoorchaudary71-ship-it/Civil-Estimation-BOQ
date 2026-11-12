@@ -140,7 +140,7 @@ const MaterialTakeoffSheet: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h2 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
-            <Building className="w-6 h-6 text-blue-500" />
+            <Building className="w-6 h-6 text-accent-800" />
             Material Takeoff Sheet
           </h2>
           <p className="text-txt-tertiary mt-1">
@@ -148,7 +148,7 @@ const MaterialTakeoffSheet: React.FC = () => {
           </p>
         </div>
         <Button onClick={copyToBOQ}
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors whitespace-nowrap active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+          className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors whitespace-nowrap active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
         >
           <ClipboardCopy className="w-4 h-4" />
           Copy to BOQ
@@ -156,7 +156,7 @@ const MaterialTakeoffSheet: React.FC = () => {
       </div>
 
       {/* Input Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-purple-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-purple-100 overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-accent-50 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary p-4 sm:p-6 rounded-2xl border border-accent-100 overflow-hidden">
         <div>
           <label className="block text-sm font-medium text-txt-secondary mb-2">
             Built-Up Area (per floor)
@@ -167,9 +167,9 @@ const MaterialTakeoffSheet: React.FC = () => {
               type="number" inputMode="decimal"
               value={area}
               onChange={(e) => setArea(parseFloat(e.target.value) || 0)}
-              className="w-full bg-surface-default border border-ui-borderDefault rounded-full px-4 py-2.5 text-txt-primary focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 outline-none pr-12"
+              className="w-full bg-surface-default border border-ui-borderDefault rounded-full px-4 py-2.5 text-txt-primary focus:ring-2 focus:ring-accent-500 outline-none pr-12"
             /></>
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">sq ft</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-txt-tertiary text-sm">sq ft</span>
           </div>
         </div>
         <div>
@@ -177,13 +177,13 @@ const MaterialTakeoffSheet: React.FC = () => {
             Number of Floors
           </label>
           <div className="relative">
-            <Layers className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Layers className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
             <><label htmlFor="a11y-input-341" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-341"
               type="number" inputMode="decimal"
               value={floors}
               onChange={(e) => setFloors(parseFloat(e.target.value) || 1)}
-              className="w-full bg-surface-default border border-ui-borderDefault rounded-full px-4 py-2.5 text-txt-primary focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 outline-none pl-10"
+              className="w-full bg-surface-default border border-ui-borderDefault rounded-full px-4 py-2.5 text-txt-primary focus:ring-2 focus:ring-accent-500 outline-none pl-10"
               min="1"
             /></>
           </div>
@@ -193,11 +193,11 @@ const MaterialTakeoffSheet: React.FC = () => {
             Finish Quality
           </label>
           <div className="relative">
-            <Settings className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Settings className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
             <motion.select initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
               value={quality}
               onChange={(e) => setQuality(e.target.value as QualityType)}
-              className="w-full bg-surface-default border border-ui-borderDefault rounded-2xl px-4 py-2.5 text-txt-primary focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 outline-none pl-10 appearance-none overflow-hidden"
+              className="w-full bg-surface-default border border-ui-borderDefault rounded-2xl px-4 py-2.5 text-txt-primary focus:ring-2 focus:ring-accent-500 outline-none pl-10 appearance-none overflow-hidden"
             >
               <option value="standard">Standard (Economy)</option>
               <option value="premium">Premium (Mid-Range)</option>
@@ -211,7 +211,7 @@ const MaterialTakeoffSheet: React.FC = () => {
       <div className="overflow-x-auto w-full border border-ui-borderSubtle rounded-2xl">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-blue-50 text-orange-800">
+            <tr className="bg-accent-50 text-accent-800">
               <th className="p-4 font-semibold w-1/3">Material Name</th>
               <th className="p-4 font-semibold w-1/6">Unit</th>
               <th className="p-4 font-semibold w-1/6">Quantity</th>
@@ -219,21 +219,21 @@ const MaterialTakeoffSheet: React.FC = () => {
               <th className="p-4 font-semibold w-1/6 text-right">Amount</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-border-color">
             {items.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary transition-colors overflow-hidden">
+              <tr key={item.id} className="hover:bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary transition-colors overflow-hidden">
                 <td className="p-4 font-medium text-txt-primary">{item.name}</td>
                 <td className="p-4 text-txt-secondary">{item.unit}</td>
-                <td className="p-4 font-semibold text-purple-700">{item.quantity.toLocaleString()}</td>
+                <td className="p-4 font-semibold text-accent-800">{item.quantity.toLocaleString()}</td>
                 <td className="p-4">
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">{/* currency symbol placeholder if needed */}</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-txt-tertiary text-sm">{/* currency symbol placeholder if needed */}</span>
                     <><label htmlFor="a11y-input-342" className="sr-only">Input</label>
 <motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-342"
                       type="number" inputMode="decimal"
                       value={item.rate}
                       onChange={(e) => handleRateChange(item.id, e.target.value)}
-                      className="w-full bg-surface-default border border-ui-borderDefault rounded-full px-2 py-1.5 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none"
+                      className="w-full bg-surface-default border border-ui-borderDefault rounded-full px-2 py-1.5 focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none"
                     /></>
                   </div>
                 </td>
@@ -244,11 +244,11 @@ const MaterialTakeoffSheet: React.FC = () => {
             ))}
           </tbody>
           <tfoot>
-            <tr className="bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary border-t border-ui-borderDefault overflow-hidden">
+            <tr className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary border-t border-ui-borderDefault overflow-hidden">
               <td colSpan={4} className="p-5 text-right font-bold text-txt-primary text-lg">
                 Grand Total Material Cost
               </td>
-              <td className="p-5 text-right font-bold text-blue-600 text-xl">
+              <td className="p-5 text-right font-bold text-accent-800 text-xl">
                 {grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </td>
             </tr>

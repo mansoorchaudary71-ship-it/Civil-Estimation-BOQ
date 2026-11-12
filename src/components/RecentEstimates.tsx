@@ -212,7 +212,7 @@ export default function RecentEstimates({
             Manage your saved construction projects and estimates
           </p>
         </div>
-        <div className="w-full bg-surface-default opacity-90 backdrop-blur-xl border border-ui-borderSubtle dark:border-slate-700 rounded-2xl p-5 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center shadow-sm">
+        <div className="w-full bg-surface-default opacity-90 backdrop-blur-xl border border-ui-borderSubtle dark:border-ink-600 rounded-2xl p-5 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center shadow-brand-sm">
           
 <svg width="200" height="150" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-6 opacity-80">
   <rect x="40" y="30" width="120" height="90" rx="12" fill="#E2E8F0" />
@@ -242,7 +242,7 @@ export default function RecentEstimates({
   if (loading) {
     return (
       <div className="flex-1 py-20 w-full flex justify-center items-center">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-accent-800" />
       </div>
     );
   }
@@ -274,7 +274,7 @@ export default function RecentEstimates({
                   placeholder="Search projects, dates, or categories..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm text-sm font-medium"
+                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink-600 focus:outline-none focus:ring-4 focus:ring-accent-500/10 focus:border-accent-800 transition-all shadow-brand-sm text-sm font-medium"
                 />
              </div>
              
@@ -283,10 +283,10 @@ export default function RecentEstimates({
                  <Button
                    key={cat}
                    onClick={() => setActiveCategory(cat)}
-                   className={`whitespace-nowrap px-5 py-2.5 rounded-full text-[14px] font-medium transition-all duration-300 shadow-sm ${
+                   className={`whitespace-nowrap px-5 py-2.5 rounded-full text-[14px] font-medium transition-all duration-300 shadow-brand-sm ${
                      activeCategory === cat 
-                       ? 'bg-slate-900 text-white border-slate-800 dark:bg-surface-default dark:text-txt-primary dark:border-white shadow-md' 
-                       : 'bg-surface-default text-txt-secondary border border-ui-borderSubtle hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700'
+                       ? 'bg-ink text-white border-ink dark:bg-surface-default dark:text-txt-primary dark:border-white shadow-brand-md' 
+                       : 'bg-surface-default text-txt-secondary border border-ui-borderSubtle hover:bg-surface-default dark:text-txt-tertiary dark:border-ink-600 dark:hover:bg-ink-600'
                    }`}
                  >
                    {cat}
@@ -303,7 +303,7 @@ export default function RecentEstimates({
               action={
                 <Button
                   onClick={() => { setSearchTerm(''); setActiveCategory('All'); }}
-                  className="px-6 py-2.5 bg-slate-900 dark:bg-surface-default text-white dark:text-txt-primary rounded-full font-medium shadow-sm hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
+                  className="px-6 py-2.5 bg-ink dark:bg-surface-default text-white dark:text-txt-primary rounded-full font-medium shadow-brand-sm hover:bg-ink dark:hover:bg-surface-active transition-colors"
                 >
                   Clear Filters
                 </Button>
@@ -324,7 +324,7 @@ export default function RecentEstimates({
                     onDrop={handleDrop}
                     whileHover={{ scale: 1.02, y: -4 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`group relative col-span-1 bg-surface-default p-4 md:p-4 rounded-2xl transition-all duration-300 flex flex-col items-center text-center border-2 ${est.theme.border} cursor-pointer shadow-sm hover:shadow-lg border-ui-borderSubtle hover:border-ui-borderDefault overflow-hidden ${dragOverId === est.id ? "!border-indigo-500 shadow-indigo-500/20" : ""} ${draggedId === est.id ? "opacity-50" : "opacity-100"}`}
+                    className={`group relative col-span-1 bg-surface-default p-4 md:p-4 rounded-2xl transition-all duration-300 flex flex-col items-center text-center border-2 ${est.theme.border} cursor-pointer shadow-brand-sm hover:shadow-brand-lg border-ui-borderSubtle hover:border-ui-borderDefault overflow-hidden ${dragOverId === est.id ? "!border-accent-800 shadow-accent-500/20" : ""} ${draggedId === est.id ? "opacity-50" : "opacity-100"}`}
                     onClick={() => onSelectModule(est.type, `recent-${est.id}`)}
                     style={{ minHeight: "150px" }}
                   >
@@ -342,12 +342,12 @@ export default function RecentEstimates({
                         value={est.status}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => handleStatusChange(e, est.id)}
-                        className={`text-base font-medium rounded-2xl px-2 py-1.5 border-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 cursor-pointer shadow-sm transition-colors ${
+                        className={`text-base font-medium rounded-2xl px-2 py-1.5 border-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 cursor-pointer shadow-brand-sm transition-colors ${
                           est.status === "Completed"
-                            ? "bg-green-100 text-green-700  "
+                            ? "bg-ui-success text-ui-successText  "
                             : est.status === "In Progress"
-                              ? "bg-amber-100 text-amber-700  "
-                              : "bg-slate-100 text-txt-secondary  "
+                              ? "bg-accent-100 text-accent-800  "
+                              : "bg-surface-hover text-txt-secondary  "
                         }`}
                       >
                         <option value="To Do">To Do</option>
@@ -368,7 +368,7 @@ export default function RecentEstimates({
                       </div>
 
                       <div
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border ${est.theme.border} bg-surface-default dark:bg-slate-800 shadow-sm text-sm md:text-base font-medium tracking-[0.1em] uppercase ${est.theme.textRaw} mb-4`}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border ${est.theme.border} bg-surface-default dark:bg-ink shadow-brand-sm text-sm md:text-base font-medium tracking-[0.1em] uppercase ${est.theme.textRaw} mb-4`}
                       >
                         <span className="truncate">{est.typeLabel}</span>
                       </div>

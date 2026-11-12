@@ -94,20 +94,20 @@ export default function PermeabilityCalculator() {
             description="Process constant head and falling head laboratory data to compute soil permeability with temperature corrections (Darcy's Law)."
         />
 
-        <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
-            <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-txt-primary dark:text-slate-200">
-                <Droplets className="w-6 h-6 text-blue-600" />
+        <div className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
+            <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-txt-primary dark:text-txt-primary">
+                <Droplets className="w-6 h-6 text-accent-800" />
                 Permeability Coefficient Engine
             </h2>
 
             <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
                 <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                     <div>
-                        <div className="flex bg-slate-100 p-1 rounded-xl mb-6">
+                        <div className="flex bg-surface-hover p-1 rounded-xl mb-6">
                             <Button
                                 onClick={() => setTestMethod("constant")}
                                 className={`flex-1 px-3 py-2 rounded-lg text-base font-medium transition-all ${
-                                    testMethod === "constant" ? "bg-surface-default shadow-sm text-blue-600" : "text-txt-tertiary hover:text-txt-secondary"
+                                    testMethod === "constant" ? "bg-surface-default shadow-brand-sm text-accent-800" : "text-txt-tertiary hover:text-txt-secondary"
                                 }`}
                             >
                                 Constant Head
@@ -115,14 +115,14 @@ export default function PermeabilityCalculator() {
                             <Button
                                 onClick={() => setTestMethod("falling")}
                                 className={`flex-1 px-3 py-2 rounded-lg text-base font-medium transition-all ${
-                                    testMethod === "falling" ? "bg-surface-default shadow-sm text-blue-600" : "text-txt-tertiary hover:text-txt-secondary"
+                                    testMethod === "falling" ? "bg-surface-default shadow-brand-sm text-accent-800" : "text-txt-tertiary hover:text-txt-secondary"
                                 }`}
                             >
                                 Falling Head
                             </Button>
                         </div>
 
-                        <h3 className="text-base font-medium mb-3 border-b border-slate-100 pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Sample Details</h3>
+                        <h3 className="text-base font-medium mb-3 border-b border-border-color pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Sample Details</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <NumberInput label="Sample Length (L)" unit="cm" value={lengthSample} onChange={setLengthSample} />
                             <NumberInput label="Sample Area (A)" unit="cm²" value={areaSample} onChange={setAreaSample} />
@@ -133,7 +133,7 @@ export default function PermeabilityCalculator() {
                     </div>
 
                     <div>
-                        <h3 className="text-base font-medium mb-3 border-b border-slate-100 pb-2">
+                        <h3 className="text-base font-medium mb-3 border-b border-border-color pb-2">
                             {testMethod === "constant" ? "Constant Head Data" : "Falling Head Data"}
                         </h3>
                         <div className="space-y-4">
@@ -170,7 +170,7 @@ export default function PermeabilityCalculator() {
                                      <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Soil Classification</span>
                                      <span className="text-base font-medium">{results.soilClass}</span>
                                  </div>
-                                 <Filter className="w-8 h-8 text-blue-500/50" />
+                                 <Filter className="w-8 h-8 text-accent-800/50" />
                              </div>
 
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -185,24 +185,24 @@ export default function PermeabilityCalculator() {
                              </div>
                         </div>
 
-                        <div className="mt-8 border-t border-blue-100 pt-6">
-                             <h4 className="text-base font-medium text-blue-900 flex items-center gap-2 mb-4">
+                        <div className="mt-8 border-t border-accent-100 pt-6">
+                             <h4 className="text-base font-medium text-accent-900 flex items-center gap-2 mb-4">
                                  <Calculator className="w-4 h-4" /> Darcy's Law Application
                              </h4>
                              {testMethod === "constant" ? (
-                                <div className="text-xs font-medium text-blue-800/80 space-y-2">
+                                <div className="text-xs font-medium text-accent-800/80 space-y-2">
                                   <p>The constant head test relies on a steady continuous flow through the sample.</p>
-                                  <div className="font-mono bg-blue-100/50 p-2 rounded block">k = (Q × L) / (A × h × t)</div>
+                                  <div className="font-mono bg-accent-100/50 p-2 rounded block">k = (Q × L) / (A × h × t)</div>
                                   <p>Where <strong>Q</strong> = Volume collected, <strong>L</strong> = Sample length, <strong>A</strong> = Sample area, <strong>h</strong> = Hydraulic head.</p>
                                 </div>
                              ) : (
-                                <div className="text-xs font-medium text-blue-800/80 space-y-2">
+                                <div className="text-xs font-medium text-accent-800/80 space-y-2">
                                   <p>The falling head test tracks the drop of hydraulic head in a standpipe over time for fine-grained soils.</p>
-                                  <div className="font-mono bg-blue-100/50 p-2 rounded block">k = 2.303 × (a × L) / (A × t) × log₁₀(h₁ / h₂)</div>
+                                  <div className="font-mono bg-accent-100/50 p-2 rounded block">k = 2.303 × (a × L) / (A × t) × log₁₀(h₁ / h₂)</div>
                                   <p>Where <strong>a</strong> = Standpipe area, <strong>L</strong> = Sample length, <strong>A</strong> = Sample area, <strong>h₁</strong>, <strong>h₂</strong> = Heads.</p>
                                 </div>
                              )}
-                             <p className="text-xs text-blue-600/70 mt-3 font-semibold uppercase tracking-wider">Note: Final k is corrected to equivalent water viscosity at 20°C (k₂₀ = k_T × R_T).</p>
+                             <p className="text-xs text-accent-800/70 mt-3 font-semibold uppercase tracking-wider">Note: Final k is corrected to equivalent water viscosity at 20°C (k₂₀ = k_T × R_T).</p>
                         </div>
                     </MaterialSummary>
                 </div>

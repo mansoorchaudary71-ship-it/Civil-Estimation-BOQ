@@ -25,13 +25,13 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
             )}
             
             {isLast ? (
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-100 shadow-sm transition-colors">
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 text-accent-800 font-semibold border border-accent-100 shadow-brand-sm transition-colors">
                 {item.isHome && <Home className="w-3.5 h-3.5" />}
                 {item.label}
               </span>
             ) : (
               <Button onClick={item.onClick}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-slate-100 text-txt-tertiary hover:text-txt-secondary transition-all text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-surface-hover text-txt-tertiary hover:text-txt-secondary transition-all text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
               >
                 {item.isHome && <Home className="w-3.5 h-3.5" />}
                 {item.label}

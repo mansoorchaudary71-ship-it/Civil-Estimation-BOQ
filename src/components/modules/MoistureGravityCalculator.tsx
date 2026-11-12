@@ -83,17 +83,17 @@ export default function MoistureGravityCalculator() {
             description="Process raw pycnometer and oven-dry weights to calculate natural moisture content, specific gravity, dry density, void ratio, and degree of saturation."
         />
 
-        <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
+        <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
             <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-txt-primary">
-                <FlaskConical className="w-6 h-6 text-blue-600" />
+                <FlaskConical className="w-6 h-6 text-accent-800" />
                 Moisture & Gravity Data Flow
             </h2>
 
             <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
                 <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-8">
                     <div>
-                        <h3 className="text-base font-medium mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
-                           <Droplet className="w-4 h-4 text-blue-500" /> Oven-Dry Weights (Moisture)
+                        <h3 className="text-base font-medium mb-4 border-b border-border-color pb-2 flex items-center gap-2">
+                           <Droplet className="w-4 h-4 text-accent-800" /> Oven-Dry Weights (Moisture)
                         </h3>
                         <div className="space-y-4">
                             <NumberInput label="Empty Container (W1)" unit="g" value={mcW1} onChange={setMcW1} />
@@ -103,8 +103,8 @@ export default function MoistureGravityCalculator() {
                     </div>
 
                     <div>
-                        <h3 className="text-base font-medium mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-amber-500" /> Pycnometer Weights (Gravity)
+                        <h3 className="text-base font-medium mb-4 border-b border-border-color pb-2 flex items-center gap-2">
+                            <Activity className="w-4 h-4 text-accent-800" /> Pycnometer Weights (Gravity)
                         </h3>
                         <div className="space-y-4">
                             <NumberInput label="Empty Pycnometer (W1)" unit="g" value={pycW1} onChange={setPycW1} />
@@ -115,8 +115,8 @@ export default function MoistureGravityCalculator() {
                     </div>
 
                     <div>
-                         <h3 className="text-base font-medium mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
-                            <Hash className="w-4 h-4 text-emerald-500" /> Field Density
+                         <h3 className="text-base font-medium mb-4 border-b border-border-color pb-2 flex items-center gap-2">
+                            <Hash className="w-4 h-4 text-ui-successText" /> Field Density
                         </h3>
                         <NumberInput label="Bulk Density (\u03b3_bulk)" unit="g/cm³" value={bulkDensity} onChange={setBulkDensity} />
                     </div>
@@ -133,11 +133,11 @@ export default function MoistureGravityCalculator() {
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
                                      <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Natural Moisture Content (w)</span>
-                                     <span className="text-xl font-mono font-bold text-blue-600">{results.mcPercent.toFixed(2)} %</span>
+                                     <span className="text-xl font-mono font-bold text-accent-800">{results.mcPercent.toFixed(2)} %</span>
                                  </div>
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl overflow-hidden">
                                      <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1">Dry Density (\u03b3_d)</span>
-                                     <span className="text-xl font-mono font-bold text-amber-600">{results.dryDensity > 0 ? results.dryDensity.toFixed(3) : "0.000"} <span className="text-sm">g/cm³</span></span>
+                                     <span className="text-xl font-mono font-bold text-accent-800">{results.dryDensity > 0 ? results.dryDensity.toFixed(3) : "0.000"} <span className="text-sm">g/cm³</span></span>
                                  </div>
                              </div>
                              
@@ -148,38 +148,38 @@ export default function MoistureGravityCalculator() {
                                  </div>
                                  <div className="bg-surface-default border border-ui-borderSubtle p-4 rounded-2xl relative overflow-hidden">
                                      <span className="block text-xs font-bold uppercase tracking-widest text-txt-tertiary mb-1 relative z-10">Degree of Saturation (S)</span>
-                                     <span className="text-xl font-mono font-bold text-emerald-600 relative z-10">{results.SPercent > 0 ? Math.min(100, results.SPercent).toFixed(1) : "0.0"} %</span>
+                                     <span className="text-xl font-mono font-bold text-ui-successText relative z-10">{results.SPercent > 0 ? Math.min(100, results.SPercent).toFixed(1) : "0.0"} %</span>
                                      
                                      {/* Simple saturation visualizer */}
                                      {results.SPercent > 0 && (
-                                        <div className="absolute bottom-0 left-0 right-0 bg-emerald-500/10 z-0 transition-all duration-1000" style={{ height: `${Math.min(100, results.SPercent)}%` }}></div>
+                                        <div className="absolute bottom-0 left-0 right-0 bg-ui-success/10 z-0 transition-all duration-1000" style={{ height: `${Math.min(100, results.SPercent)}%` }}></div>
                                      )}
                                  </div>
                              </div>
 
                              {results.Gs > 0 && (results.Gs < 2.5 || results.Gs > 2.9) && (
-                                <div className="bg-rose-50 border border-rose-100 p-3 rounded-xl mt-2 text-rose-700 text-base font-medium flex items-center justify-center">
+                                <div className="bg-ui-error border border-ui-errorBorder p-3 rounded-xl mt-2 text-ui-errorText text-base font-medium flex items-center justify-center">
                                     Note: Specific Gravity is outside the typical range of 2.5 - 2.9.
                                 </div>
                              )}
                         </div>
 
-                        <div className="mt-8 border-t border-slate-100 pt-6">
+                        <div className="mt-8 border-t border-border-color pt-6">
                              <h4 className="text-base font-medium flex items-center gap-2 mb-4">
                                  <Calculator className="w-4 h-4" /> Math Logic & Linkages
                              </h4>
                              <div className="text-xs font-medium text-txt-secondary space-y-3">
                                   <div>
                                     <span className="font-bold text-txt-secondary block mb-1">Specific Gravity (Gs):</span>
-                                    <div className="font-mono bg-slate-50 border border-slate-100 p-2 rounded block">G_s = (W2 - W1) / ((W2 - W1) - (W3 - W4))</div>
+                                    <div className="font-mono bg-surface-hover border border-border-color p-2 rounded block">G_s = (W2 - W1) / ((W2 - W1) - (W3 - W4))</div>
                                   </div>
                                   <div>
                                     <span className="font-bold text-txt-secondary block mb-1">Moisture Content (w) & Dry Density (\u03b3_d):</span>
-                                    <div className="font-mono bg-slate-50 border border-slate-100 p-2 rounded block">w = (M_wet - M_dry) / M_dry | \u03b3_d = \u03b3_bulk / (1 + w)</div>
+                                    <div className="font-mono bg-surface-hover border border-border-color p-2 rounded block">w = (M_wet - M_dry) / M_dry | \u03b3_d = \u03b3_bulk / (1 + w)</div>
                                   </div>
                                   <div>
                                     <span className="font-bold text-txt-secondary block mb-1">Phase Linkages:</span>
-                                    <div className="font-mono bg-slate-50 border border-slate-100 p-2 rounded block">e = (G_s * \u03b3_w / \u03b3_d) - 1   |   S = (w * G_s) / e</div>
+                                    <div className="font-mono bg-surface-hover border border-border-color p-2 rounded block">e = (G_s * \u03b3_w / \u03b3_d) - 1   |   S = (w * G_s) / e</div>
                                   </div>
                              </div>
                         </div>

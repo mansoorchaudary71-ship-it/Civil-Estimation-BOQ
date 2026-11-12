@@ -11,19 +11,19 @@ export default function Logo({ className = "w-10 h-10" }: { className?: string }
       <defs>
         {/* Gradients */}
         <linearGradient id="logo-slate" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#475569" /> {/* slate-600 */}
-          <stop offset="100%" stopColor="#0f172a" /> {/* slate-900 */}
+          <stop offset="0%" stopColor="#6B6862" /> {/* muted */}
+          <stop offset="100%" stopColor="#1F1D1A" /> {/* ink */}
         </linearGradient>
         <linearGradient id="logo-slate-light" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#94a3b8" /> {/* slate-400 */}
-          <stop offset="100%" stopColor="#334155" /> {/* slate-700 */}
+          <stop offset="0%" stopColor="#E7E4DE" /> {/* border */}
+          <stop offset="100%" stopColor="#6B6862" /> {/* muted */}
         </linearGradient>
         <linearGradient id="logo-orange" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#ea580c" /> {/* orange-600 */}
-          <stop offset="100%" stopColor="#f59e0b" /> {/* amber-500 */}
+          <stop offset="0%" stopColor="#B07006" /> {/* amber-700 */}
+          <stop offset="100%" stopColor="#F2A413" /> {/* accent-500 */}
         </linearGradient>
         <filter id="logo-shadow" x="-10%" y="-10%" width="120%" height="120%">
-          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#0f172a" floodOpacity="0.25" />
+          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#1F1D1A" floodOpacity="0.25" />
         </filter>
       </defs>
       

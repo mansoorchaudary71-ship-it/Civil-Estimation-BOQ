@@ -25,7 +25,7 @@ import { CodeTooltip } from "../ui/CodeTooltip";
 function InputGroup({ label, children, colSpan = 1 }: { label: React.ReactNode; children: React.ReactNode, colSpan?: number }) {
   return (
     <div className={`flex flex-col gap-2 ${colSpan > 1 ? `md:col-span-${colSpan}` : ''}`}>
-      <label className="text-sm font-bold text-txt-secondary dark:text-slate-300">{label}</label>
+      <label className="text-sm font-bold text-txt-secondary dark:text-txt-tertiary">{label}</label>
       {children}
     </div>
   );
@@ -191,7 +191,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
           <div className="flex-1"></div>
           <div className="flex flex-col items-end gap-2">
             <GlobalSettingsToggle align="left" showCurrency={false} />
-            <Button onClick={sendToBOQ} className="text-xs font-bold px-4 py-2.5 bg-emerald-50 text-emerald-600 rounded-full hover:bg-emerald-100 transition-colors border border-emerald-200 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+            <Button onClick={sendToBOQ} className="text-xs font-bold px-4 py-2.5 bg-ui-success text-ui-successText rounded-full hover:bg-ui-success transition-colors border border-ui-successBorder active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
               Send to BOQ
             </Button>
           </div>
@@ -207,31 +207,31 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
               <InputGroup label="Wall Height (m)">
                 <><label htmlFor="a11y-input-420" className="sr-only">Input</label>
-<input id="a11y-input-420" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50" value={wallH} onChange={(e) => setWallH(e.target.value)} /></>
+<input id="a11y-input-420" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={wallH} onChange={(e) => setWallH(e.target.value)} /></>
               </InputGroup>
               <InputGroup label="Wall Length (m)">
                 <><label htmlFor="a11y-input-421" className="sr-only">Input</label>
-<input id="a11y-input-421" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50" value={wallL} onChange={(e) => setWallL(e.target.value)} /></>
+<input id="a11y-input-421" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={wallL} onChange={(e) => setWallL(e.target.value)} /></>
               </InputGroup>
               <InputGroup label="Base Width (m)">
                 <><label htmlFor="a11y-input-422" className="sr-only">Input</label>
-<input id="a11y-input-422" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50" value={baseW} onChange={(e) => setBaseW(e.target.value)} /></>
+<input id="a11y-input-422" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={baseW} onChange={(e) => setBaseW(e.target.value)} /></>
               </InputGroup>
               <InputGroup label="Base Thk (m)">
                 <><label htmlFor="a11y-input-423" className="sr-only">Input</label>
-<input id="a11y-input-423" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50" value={baseD} onChange={(e) => setBaseD(e.target.value)} /></>
+<input id="a11y-input-423" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={baseD} onChange={(e) => setBaseD(e.target.value)} /></>
               </InputGroup>
               <InputGroup label="Stem Top (m)">
                 <><label htmlFor="a11y-input-424" className="sr-only">Input</label>
-<input id="a11y-input-424" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50" value={stemWTop} onChange={(e) => setStemWTop(e.target.value)} /></>
+<input id="a11y-input-424" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={stemWTop} onChange={(e) => setStemWTop(e.target.value)} /></>
               </InputGroup>
               <InputGroup label="Stem Bot (m)">
                 <><label htmlFor="a11y-input-425" className="sr-only">Input</label>
-<input id="a11y-input-425" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50" value={stemWBot} onChange={(e) => setStemWBot(e.target.value)} /></>
+<input id="a11y-input-425" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={stemWBot} onChange={(e) => setStemWBot(e.target.value)} /></>
               </InputGroup>
               <InputGroup label="Toe Proj (m)">
                 <><label htmlFor="a11y-input-426" className="sr-only">Input</label>
-<input id="a11y-input-426" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50" value={toeProj} onChange={(e) => setToeProj(e.target.value)} /></>
+<input id="a11y-input-426" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={toeProj} onChange={(e) => setToeProj(e.target.value)} /></>
               </InputGroup>
             </div>
           </ToolSection>
@@ -246,7 +246,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                 </span>
               }>
                 <><label htmlFor="a11y-input-427" className="sr-only">Input</label>
-<input id="a11y-input-427" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={soilDens} onChange={(e) => setSoilDens(e.target.value)} /></>
+<input id="a11y-input-427" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={soilDens} onChange={(e) => setSoilDens(e.target.value)} /></>
               </InputGroup>
               <InputGroup label={
                 <span className="flex items-center">
@@ -255,19 +255,19 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                 </span>
               }>
                 <><label htmlFor="a11y-input-428" className="sr-only">Input</label>
-<input id="a11y-input-428" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={phiAngle} onChange={(e) => setPhiAngle(e.target.value)} /></>
+<input id="a11y-input-428" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={phiAngle} onChange={(e) => setPhiAngle(e.target.value)} /></>
               </InputGroup>
               <InputGroup label={<span className="flex items-center gap-1">Base Friction (μ) <CodeTooltip standard="IS" code="1904:1986" description="Coefficient of friction for sliding resistance of foundations." /></span>}>
                 <><label htmlFor="a11y-input-429" className="sr-only">Input</label>
-<input id="a11y-input-429" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={frictionCoeff} onChange={(e) => setFrictionCoeff(e.target.value)} step="0.1" /></>
+<input id="a11y-input-429" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={frictionCoeff} onChange={(e) => setFrictionCoeff(e.target.value)} step="0.1" /></>
               </InputGroup>
               <InputGroup label={<span className="flex items-center gap-1">Surcharge (kN/m²) <CodeTooltip standard="IS" code="875 (Part 2)" description="Imposed loads for residential and commercial buildings." /></span>}>
                 <><label htmlFor="a11y-input-430" className="sr-only">Input</label>
-<input id="a11y-input-430" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} /></>
+<input id="a11y-input-430" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} /></>
               </InputGroup>
               <InputGroup label={<span className="flex items-center gap-1">Safe Bearing (kN/m²) <CodeTooltip standard="IS" code="1904:1986" description="Design and construction of foundations in soils: General requirements." /></span>}>
                 <><label htmlFor="a11y-input-431" className="sr-only">Input</label>
-<input id="a11y-input-431" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" value={sbc} onChange={(e) => setSbc(e.target.value)} /></>
+<input id="a11y-input-431" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-full px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50" value={sbc} onChange={(e) => setSbc(e.target.value)} /></>
               </InputGroup>
             </div>
           </ToolSection>
@@ -276,7 +276,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
           <ToolSection title="Materials" number={3} color="violet">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputGroup label={<span className="flex items-center gap-1">Concrete Mix <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span>}>
-                <select className="w-full bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 shadow-sm text-txt-primary dark:text-slate-200 rounded-2xl px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-violet-500/50" value={mix} onChange={(e) => setMix(e.target.value)}>
+                <select className="w-full bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-txt-primary rounded-2xl px-4 py-3 min-h-[48px] focus:ring-2 focus:ring-accent-500 focus:outline-none" value={mix} onChange={(e) => setMix(e.target.value)}>
                   {Object.keys(mixRatios).map((m) => <option key={m} value={m}>{m}</option>)}
                 </select>
               </InputGroup>
@@ -289,8 +289,8 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
         <ToolLayoutResults>
           
           {/* Visual Profile */}
-            <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 rounded-2xl p-5 flex flex-col items-center justify-center min-h-[300px] shadow-inner relative overflow-hidden">
-              <h4 className="font-bold text-txt-tertiary dark:text-slate-400 uppercase tracking-wider text-xs mb-4 w-full text-center">Cross-Section Profile</h4>
+            <div className="bg-surface-default/40 border border-border-color rounded-2xl p-5 flex flex-col items-center justify-center min-h-[300px] shadow-inner relative overflow-hidden">
+              <h4 className="font-bold text-txt-tertiary dark:text-txt-tertiary uppercase tracking-wider text-xs mb-4 w-full text-center">Cross-Section Profile</h4>
               
               <svg width="100%" height="280" viewBox="-50 -50 400 350" className="max-w-full overflow-visible">
                 <defs>
@@ -304,38 +304,38 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                   <line x1={tp*40 + sb*40} y1={-h*40} x2={350} y2={-h*40} stroke="#8b5a2b" strokeWidth="2" />
                    <rect x={-30} y={-20} width={tp*40 + 30} height={20} fill="url(#soil)" />
                    <line x1={-30} y1={-20} x2={tp*40} y2={-20} stroke="#8b5a2b" strokeWidth="2" />
-                  <rect x={0} y={0} width={b*40} height={bd*40} fill="#cbd5e1" stroke="#475569" strokeWidth="2" />
-                  <polygon points={`${tp*40},0 ${(tp + sb - st)*40},${-h*40} ${(tp + sb)*40},${-h*40} ${(tp + sb)*40},0`} fill="#cbd5e1" stroke="#475569" strokeWidth="2" />
-                  <line x1={-15} y1={0} x2={-15} y2={-h*40} stroke="#64748b" strokeWidth="1" />
-                  <line x1={-20} y1={0} x2={-10} y2={0} stroke="#64748b" strokeWidth="1" />
-                  <line x1={-20} y1={-h*40} x2={-10} y2={-h*40} stroke="#64748b" strokeWidth="1" />
-                  <text x="-25" y={-h*20} fill="#64748b" fontSize="12" textAnchor="end">H={h}m</text>
-                  <line x1={0} y1={bd*40 + 15} x2={b*40} y2={bd*40 + 15} stroke="#64748b" strokeWidth="1" />
-                  <line x1={0} y1={bd*40 + 10} x2={0} y2={bd*40 + 20} stroke="#64748b" strokeWidth="1" />
-                  <line x1={b*40} y1={bd*40 + 10} x2={b*40} y2={bd*40 + 20} stroke="#64748b" strokeWidth="1" />
-                  <text x={b*20} y={bd*40 + 30} fill="#64748b" fontSize="12" textAnchor="middle">B={b}m</text>
+                  <rect x={0} y={0} width={b*40} height={bd*40} fill="#E7E4DE" stroke="#6B6862" strokeWidth="2" />
+                  <polygon points={`${tp*40},0 ${(tp + sb - st)*40},${-h*40} ${(tp + sb)*40},${-h*40} ${(tp + sb)*40},0`} fill="#E7E4DE" stroke="#6B6862" strokeWidth="2" />
+                  <line x1={-15} y1={0} x2={-15} y2={-h*40} stroke="#6B6862" strokeWidth="1" />
+                  <line x1={-20} y1={0} x2={-10} y2={0} stroke="#6B6862" strokeWidth="1" />
+                  <line x1={-20} y1={-h*40} x2={-10} y2={-h*40} stroke="#6B6862" strokeWidth="1" />
+                  <text x="-25" y={-h*20} fill="#6B6862" fontSize="12" textAnchor="end">H={h}m</text>
+                  <line x1={0} y1={bd*40 + 15} x2={b*40} y2={bd*40 + 15} stroke="#6B6862" strokeWidth="1" />
+                  <line x1={0} y1={bd*40 + 10} x2={0} y2={bd*40 + 20} stroke="#6B6862" strokeWidth="1" />
+                  <line x1={b*40} y1={bd*40 + 10} x2={b*40} y2={bd*40 + 20} stroke="#6B6862" strokeWidth="1" />
+                  <text x={b*20} y={bd*40 + 30} fill="#6B6862" fontSize="12" textAnchor="middle">B={b}m</text>
                 </g>
               </svg>
             </div>
 
             {/* Stability Check */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-3">
-              <div className={`p-4 rounded-2xl border ${isSlidingSafe ? 'bg-emerald-50 border-emerald-200/60 dark:bg-emerald-900/10 dark:border-emerald-500/20' : 'bg-rose-50 border-rose-200/60 dark:bg-rose-900/10 dark:border-rose-500/20'}`}>
-                <h4 className="font-bold text-xs text-txt-secondary dark:text-slate-400 mb-1 leading-tight uppercase">Sliding FS</h4>
-                <p className={`text-xl font-bold tabular-nums tracking-tight ${isSlidingSafe ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>{FS_sliding.toFixed(2)}</p>
+              <div className={`p-4 rounded-2xl border ${isSlidingSafe ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
+                <h4 className="font-bold text-xs text-txt-secondary dark:text-txt-tertiary mb-1 leading-tight uppercase">Sliding FS</h4>
+                <p className={`text-xl font-bold tabular-nums tracking-tight ${isSlidingSafe ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{FS_sliding.toFixed(2)}</p>
               </div>
-              <div className={`p-4 rounded-2xl border ${isOverturnSafe ? 'bg-emerald-50 border-emerald-200/60 dark:bg-emerald-900/10 dark:border-emerald-500/20' : 'bg-rose-50 border-rose-200/60 dark:bg-rose-900/10 dark:border-rose-500/20'}`}>
-                <h4 className="font-bold text-xs text-txt-secondary dark:text-slate-400 mb-1 leading-tight uppercase">Overturn FS</h4>
-                <p className={`text-xl font-bold tabular-nums tracking-tight ${isOverturnSafe ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>{FS_overturn.toFixed(2)}</p>
+              <div className={`p-4 rounded-2xl border ${isOverturnSafe ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
+                <h4 className="font-bold text-xs text-txt-secondary dark:text-txt-tertiary mb-1 leading-tight uppercase">Overturn FS</h4>
+                <p className={`text-xl font-bold tabular-nums tracking-tight ${isOverturnSafe ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{FS_overturn.toFixed(2)}</p>
               </div>
-              <div className={`col-span-2 md:col-span-1 lg:col-span-2 p-4 rounded-2xl border ${isBearingSafe ? 'bg-emerald-50 border-emerald-200/60 dark:bg-emerald-900/10 dark:border-emerald-500/20' : 'bg-rose-50 border-rose-200/60 dark:bg-rose-900/10 dark:border-rose-500/20'}`}>
-                <h4 className="font-bold text-xs text-txt-secondary dark:text-slate-400 mb-1 leading-tight uppercase">Bearing Pressure (Max / SBC)</h4>
-                <p className={`text-xl font-bold tabular-nums tracking-tight ${isBearingSafe ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>{q_max.toFixed(1)} / {max_sbc}</p>
+              <div className={`col-span-2 md:col-span-1 lg:col-span-2 p-4 rounded-2xl border ${isBearingSafe ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
+                <h4 className="font-bold text-xs text-txt-secondary dark:text-txt-tertiary mb-1 leading-tight uppercase">Bearing Pressure (Max / SBC)</h4>
+                <p className={`text-xl font-bold tabular-nums tracking-tight ${isBearingSafe ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{q_max.toFixed(1)} / {max_sbc}</p>
               </div>
             </div>
             
             {(!isSlidingSafe || !isOverturnSafe || !isBearingSafe) && (
-              <div className="p-4 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800/50 text-rose-700 dark:text-rose-300 rounded-2xl text-sm font-semibold flex items-start gap-3 shadow-sm">
+              <div className="p-4 bg-ui-error dark:bg-ui-error/20 border border-ui-errorBorder dark:border-ui-errorBorder/50 text-ui-errorText dark:text-ui-errorBorder rounded-2xl text-sm font-semibold flex items-start gap-3 shadow-brand-sm">
                 <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   {!isSlidingSafe && <p>Sliding FS ({FS_sliding.toFixed(2)}) &lt; 1.5</p>}
@@ -361,8 +361,8 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
               >
                 <div className="grid grid-cols-1 gap-6 mt-5">
                   <div>
-                    <h4 className="font-bold text-txt-primary dark:text-slate-200 flex items-center gap-2 mb-3 text-sm uppercase tracking-wider">
-                      <Layers className="w-4 h-4 text-indigo-500" />
+                    <h4 className="font-bold text-txt-primary dark:text-txt-primary flex items-center gap-2 mb-3 text-sm uppercase tracking-wider">
+                      <Layers className="w-4 h-4 text-accent-800" />
                       Concrete Breakdown
                     </h4>
                     <div className="grid grid-cols-2 gap-3">
@@ -374,8 +374,8 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-txt-primary dark:text-slate-200 flex items-center gap-2 mb-3 text-sm uppercase tracking-wider">
-                      <ArrowDownToLine className="w-4 h-4 text-rose-500" />
+                    <h4 className="font-bold text-txt-primary dark:text-txt-primary flex items-center gap-2 mb-3 text-sm uppercase tracking-wider">
+                      <ArrowDownToLine className="w-4 h-4 text-ui-errorText" />
                       Steel (Stem Only)
                     </h4>
                     
@@ -383,25 +383,25 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                       <InputGroup label={<span className="flex items-center gap-1">V. Dia/Spc <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                         <div className="flex gap-1">
                            <><label htmlFor="a11y-input-432" className="sr-only">Input</label>
-<input id="a11y-input-432" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={vertDia} onChange={e => setVertDia(e.target.value)} /></>
+<input id="a11y-input-432" type="number" inputMode="decimal" className="w-full bg-surface-default border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={vertDia} onChange={e => setVertDia(e.target.value)} /></>
                            <><label htmlFor="a11y-input-433" className="sr-only">Input</label>
-<input id="a11y-input-433" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={vertSpace} onChange={e => setVertSpace(e.target.value)} /></>
+<input id="a11y-input-433" type="number" inputMode="decimal" className="w-full bg-surface-default border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={vertSpace} onChange={e => setVertSpace(e.target.value)} /></>
                         </div>
                       </InputGroup>
                       <InputGroup label={<span className="flex items-center gap-1">H. Dia/Spc <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                         <div className="flex gap-1">
                            <><label htmlFor="a11y-input-434" className="sr-only">Input</label>
-<input id="a11y-input-434" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={horizDia} onChange={e => setHorizDia(e.target.value)} /></>
+<input id="a11y-input-434" type="number" inputMode="decimal" className="w-full bg-surface-default border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={horizDia} onChange={e => setHorizDia(e.target.value)} /></>
                            <><label htmlFor="a11y-input-435" className="sr-only">Input</label>
-<input id="a11y-input-435" type="number" inputMode="decimal" className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={horizSpace} onChange={e => setHorizSpace(e.target.value)} /></>
+<input id="a11y-input-435" type="number" inputMode="decimal" className="w-full bg-surface-default border-none rounded-full px-2 py-2 min-h-[40px] text-sm font-semibold" value={horizSpace} onChange={e => setHorizSpace(e.target.value)} /></>
                         </div>
                       </InputGroup>
                     </div>
 
-                    <div className="bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-800/30 rounded-2xl overflow-hidden shadow-sm">
+                    <div className="bg-ui-error dark:bg-ui-error/20 border border-ui-errorBorder dark:border-ui-errorBorder/30 rounded-2xl overflow-hidden shadow-brand-sm">
                       <div className="p-4 flex justify-between items-center">
-                        <span className="font-bold text-txt-secondary dark:text-slate-300">Stem Steel Weight</span>
-                        <span className="text-xl font-bold tabular-nums tracking-tight text-rose-600 dark:text-rose-400">{totalSteel.toFixed(1)} kg</span>
+                        <span className="font-bold text-txt-secondary dark:text-txt-tertiary">Stem Steel Weight</span>
+                        <span className="text-xl font-bold tabular-nums tracking-tight text-ui-errorText dark:text-ui-errorText">{totalSteel.toFixed(1)} kg</span>
                       </div>
                     </div>
                   </div>

@@ -9,8 +9,6 @@ interface CategoryHubProps {
   isComputing?: boolean;
 }
 
-const bgColors = ['bg-[#F4F1EA]', 'bg-[#F0F5FF]', 'bg-[#D9E6DD]', 'bg-[#FFF0F0]', 'bg-[#F3E8FF]', 'bg-[#E0F2FE]'];
-
 export default function CategoryHub({ groupedModules, groupsToDisplay, handleSelect, isComputing }: CategoryHubProps) {
   if (isComputing) {
     return <div className="p-12 text-center text-txt-tertiary">Loading modules...</div>;
@@ -18,22 +16,20 @@ export default function CategoryHub({ groupedModules, groupsToDisplay, handleSel
 
   return (
     <div className="flex flex-col w-full">
-      {groupsToDisplay.map((groupName, index) => {
+      {groupsToDisplay.map((groupName) => {
         const toolsInGroup = groupedModules[groupName];
         if (!toolsInGroup || toolsInGroup.length === 0) return null;
-        
-        const bgColor = bgColors[index % bgColors.length];
-        
+
         return (
-          <div key={groupName} className={`w-full flex flex-col py-12 md:py-20 ${bgColor}`}>
+          <div key={groupName} className="w-full flex flex-col py-12 md:py-16 border-t border-border-color first:border-t-0">
             <div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex flex-col gap-5">
               <h2 className="px-2 flex items-center gap-2 text-2xl font-bold text-txt-primary tracking-tight mb-4">
                 {groupName}
-                <span className="text-sm font-normal px-3 py-1 rounded-full bg-surface-default/50 border border-ui-borderSubtle text-txt-secondary shadow-sm">
+                <span className="text-sm font-normal px-3 py-1 rounded-full bg-surface-hover border border-ui-borderSubtle text-txt-secondary shadow-brand-sm">
                   {toolsInGroup.length} Tools
                 </span>
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 tool-card-grid">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-9 tool-card-grid">
                 {toolsInGroup.map((mod, modIdx) => (
                   <motion.div
                     key={mod.id}
@@ -48,7 +44,7 @@ export default function CategoryHub({ groupedModules, groupsToDisplay, handleSel
                       mod={mod} 
                       onSelect={handleSelect} 
                       layoutId={`card-${groupName || 'group'}-${mod.id}`} 
-                      categoryColor={bgColor === 'bg-[#F4F1EA]' ? '#F4F1EA' : bgColor === 'bg-[#F0F5FF]' ? '#F0F5FF' : '#D9E6DD'} 
+                      
                     />
                   </motion.div>
                 ))}

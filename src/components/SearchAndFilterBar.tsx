@@ -136,7 +136,7 @@ export default function SearchAndFilterBar({
               onKeyDown={onInputKey}
               placeholder="Search tools, materials, or calculations…"
               autoComplete="off"
-              className="h-12 w-full rounded-full border border-ui-borderDefault bg-surface-default pl-12 pr-11 text-base text-txt-primary placeholder:text-txt-tertiary shadow-none focus:border-primary-600 focus:ring-4 focus:ring-primary-600/15"
+              className="h-12 w-full rounded-full border border-ui-borderDefault bg-surface-default pl-12 pr-11 text-base text-txt-primary placeholder:text-txt-tertiary shadow-none focus:border-accent-800 focus:ring-4 focus:ring-accent-500/15"
             />
             {searchTerm && (
               <button
@@ -186,14 +186,14 @@ export default function SearchAndFilterBar({
 
           <div className="mt-3 hidden items-center gap-2 md:flex">
             <span className="flex items-center gap-1.5 text-sm font-semibold text-txt-tertiary">
-              <Sparkles className="h-3.5 w-3.5 text-primary-600" aria-hidden="true" /> Popular:
+              <Sparkles className="h-3.5 w-3.5 text-accent-800" aria-hidden="true" /> Popular:
             </span>
             {POPULAR.map((chip) => (
               <button
                 key={chip}
                 type="button"
                 onClick={() => setSearchTerm(chip)}
-                className="h-8 rounded-full border border-ui-borderSubtle bg-surface-default px-3 text-[13px] font-medium text-txt-secondary transition-colors hover:border-primary-600 hover:text-primary-700"
+                className="h-8 rounded-full border border-ui-borderSubtle bg-surface-default px-3 text-[13px] font-medium text-txt-secondary transition-colors hover:border-accent-800 hover:text-accent-800"
               >
                 {chip}
               </button>
@@ -219,8 +219,8 @@ export default function SearchAndFilterBar({
                   onClick={() => setActiveCategory(cat.name)}
                   className={`flex h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 text-sm font-semibold transition-colors ${
                     on
-                      ? "border-primary-600 bg-primary-600 text-white"
-                      : "border-ui-borderDefault bg-surface-default text-txt-secondary hover:border-primary-600 hover:text-primary-700"
+                      ? "border-accent-800 bg-ink text-white"
+                      : "border-ui-borderDefault bg-surface-default text-txt-secondary hover:border-accent-800 hover:text-accent-800"
                   }`}
                 >
                   {cat.name}
@@ -239,7 +239,7 @@ export default function SearchAndFilterBar({
 
         <p className="text-sm text-txt-tertiary" role="status" aria-live="polite">
           Showing <strong className="font-bold text-txt-primary">{totalFilteredCount}</strong> tools in{" "}
-          <strong className="font-bold text-primary-600">{activeCategory}</strong>
+          <strong className="font-bold text-accent-800">{activeCategory}</strong>
         </p>
       </div>
     </div>

@@ -177,8 +177,8 @@ export default function WorkspaceSection({
 
         {/* Quick Stats */}
         <div className="flex gap-4 overflow-x-auto pb-2 md:pb-0 scrollbar-hide shrink-0 flex-wrap">
-          <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-5 py-4 flex items-center gap-4 shadow-sm min-w-[200px] overflow-hidden flex-wrap">
-            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-txt-tertiary">
+          <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-5 py-4 flex items-center gap-4 shadow-brand-sm min-w-[200px] overflow-hidden flex-wrap">
+            <div className="w-10 h-10 rounded-full bg-surface-hover flex items-center justify-center text-txt-tertiary">
               <Calculator className="w-5 h-5" />
             </div>
             <div>
@@ -190,7 +190,7 @@ export default function WorkspaceSection({
               </div>
             </div>
           </div>
-          <div className="bg-[#FFFFFF]/10 border border-[#FFFFFF]/20 rounded-2xl px-5 py-4 flex items-center gap-4 shadow-sm min-w-[200px] overflow-hidden flex-wrap">
+          <div className="bg-surface-default/10 border border-[#FFFFFF]/20 rounded-2xl px-5 py-4 flex items-center gap-4 shadow-brand-sm min-w-[200px] overflow-hidden flex-wrap">
             <div className="w-10 h-10 rounded-full bg-surface-default flex items-center justify-center text-txt-primary">
               <TrendingUp className="w-5 h-5" />
             </div>
@@ -203,8 +203,8 @@ export default function WorkspaceSection({
               </div>
             </div>
           </div>
-          <div className="w-full bg-surface-default rounded-2xl px-5 py-4 flex items-center gap-4 shadow-sm min-w-[200px] overflow-hidden flex-wrap">
-             <div className="w-full w-10 h-10 rounded-full bg-surface-default flex items-center justify-center text-emerald-400 border border-ui-borderSubtle shadow-sm overflow-hidden">
+          <div className="w-full bg-surface-default rounded-2xl px-5 py-4 flex items-center gap-4 shadow-brand-sm min-w-[200px] overflow-hidden flex-wrap">
+             <div className="w-full w-10 h-10 rounded-full bg-surface-default flex items-center justify-center text-ui-successText border border-ui-borderSubtle shadow-brand-sm overflow-hidden">
                <Flame className="w-5 h-5" />
              </div>
              <div>
@@ -233,9 +233,9 @@ export default function WorkspaceSection({
                   <Button
                     key={`your-${mod.id}`}
                     onClick={() => onSelect(mod.id)}
-                    className="w-full flex items-center gap-3 px-4 py-3 bg-surface-default border border-ui-borderSubtle hover:border-[#FFFFFF]/40 text-txt-primary hover:shadow-md hover:-translate-y-0.5 rounded-full text-base font-medium transition-all text-left active:scale-95 overflow-hidden"
+                    className="w-full flex items-center gap-3 px-4 py-3 bg-surface-default border border-ui-borderSubtle hover:border-[#FFFFFF]/40 text-txt-primary hover:shadow-brand-md hover:-translate-y-0.5 rounded-full text-base font-medium transition-all text-left active:scale-95 overflow-hidden"
                   >
-                    <div className="w-8 h-8 rounded-full bg-[#FFFFFF]/10 flex items-center justify-center text-txt-primary shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-surface-default/10 flex items-center justify-center text-txt-primary shrink-0">
                        <mod.icon className="w-4 h-4" />
                     </div>
                     <span className="truncate">{mod.title}</span>
@@ -243,7 +243,7 @@ export default function WorkspaceSection({
                 ))}
                 <Button
                   onClick={() => {/* open all modules */}}
-                  className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-ui-borderSubtle border-dashed hover:border-ui-borderDefault rounded-full text-base font-medium transition-all text-left active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="flex items-center gap-3 px-4 py-3 bg-surface-hover border border-ui-borderSubtle border-dashed hover:border-ui-borderDefault rounded-full text-base font-medium transition-all text-left active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 >
                    <div className="w-8 h-8 rounded-full bg-surface-default border border-ui-borderSubtle flex items-center justify-center shrink-0">
                       <Plus className="w-4 h-4" />
@@ -261,21 +261,21 @@ export default function WorkspaceSection({
               </h3>
             </div>
             
-            <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden flex flex-col shadow-sm">
+            <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden flex flex-col shadow-brand-sm">
                {loading ? (
                  <div className="p-8 text-center text-txt-secondary flex flex-col items-center">
                    <div className="w-8 h-8 rounded-full border-2 border-[#FFFFFF] border-t-transparent animate-spin mb-3"></div>
                    Loading recent...
                  </div>
                ) : savedProjects.length > 0 ? (
-                 <div className="flex flex-col divide-y divide-slate-100">
+                 <div className="flex flex-col divide-y divide-border-color">
                     {savedProjects.map((proj, idx) => (
                       <div
                         key={`recent-${idx}`}
-                        className="p-4 hover:bg-slate-50 transition-colors group flex items-center justify-between gap-4 flex-wrap"
+                        className="p-4 hover:bg-surface-hover transition-colors group flex items-center justify-between gap-4 flex-wrap"
                       >
                         <div className="flex items-center gap-4 min-w-0 flex-1 flex-wrap">
-                           <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0 overflow-hidden">
+                           <div className="w-10 h-10 rounded-2xl bg-accent-50 text-accent-800 flex items-center justify-center shrink-0 overflow-hidden">
                              <FileText className="w-5 h-5" />
                            </div>
                            <div className="min-w-0 pr-4">
@@ -295,7 +295,7 @@ export default function WorkspaceSection({
                         </div>
                         <Button 
                            onClick={() => { /* re-run logic */ }}
-                           className="px-3 py-1.5 bg-slate-100 text-txt-secondary hover:bg-[#FFFFFF] hover:text-txt-primary rounded-full text-base font-medium transition-colors flex items-center gap-1 shrink-0 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                           className="px-3 py-1.5 bg-surface-hover text-txt-secondary hover:bg-surface-default hover:text-txt-primary rounded-full text-base font-medium transition-colors flex items-center gap-1 shrink-0 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                         >
                            <RefreshCw className="w-3.5 h-3.5" /> Re-run
                         </Button>
@@ -319,26 +319,26 @@ export default function WorkspaceSection({
               </h3>
               <Button aria-label="Add"
                 onClick={() => setIsCreatingProject(true)}
-                className="w-7 h-7 rounded-full bg-[#FFFFFF]/10 text-txt-primary hover:bg-[#FFFFFF]/20 flex items-center justify-center transition-colors active:scale-95 hover:-translate-y-0.5"
+                className="w-7 h-7 rounded-full bg-surface-default/10 text-txt-primary hover:bg-surface-default/20 flex items-center justify-center transition-colors active:scale-95 hover:-translate-y-0.5"
               >
                 <Plus className="w-4 h-4" />
               </Button>
             </div>
             
-            <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden flex flex-col shadow-sm">
+            <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden flex flex-col shadow-brand-sm">
                 <AnimatePresence>
                   {isCreatingProject && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="bg-slate-50 border-b border-ui-borderSubtle overflow-hidden"
+                      className="bg-surface-hover border-b border-ui-borderSubtle overflow-hidden"
                     >
                       <div className="p-4 flex items-center gap-2">
                         <><label htmlFor="a11y-input-10" className="sr-only">e.g. Tower Block Phase 1</label>
 <input id="a11y-input-10" type="text"
                           placeholder="e.g. Tower Block Phase 1"
-                          className="flex-1 bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle rounded-full px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-[#FFFFFF]/50 min-h-[44px] text-base font-normal"
+                          className="flex-1 bg-surface-default dark:bg-ink border border-ui-borderSubtle rounded-full px-3 py-2 outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#FFFFFF]/50 min-h-[44px] text-base font-normal"
                           value={newProjectName}
                           onChange={(e) => setNewProjectName(e.target.value)}
                           onKeyDown={(e) =>
@@ -348,7 +348,7 @@ export default function WorkspaceSection({
                         /></>
                         <Button aria-label="Check" onClick={handleCreateProject}
                           disabled={!newProjectName.trim()}
-                          className="w-9 h-9 flex items-center justify-center bg-[#FFFFFF] hover:bg-[#FFFFFF] disabled:opacity-50 text-txt-primary rounded-full transition-colors shrink-0 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                          className="w-9 h-9 flex items-center justify-center bg-surface-default hover:bg-surface-default disabled:opacity-50 text-txt-primary rounded-full transition-colors shrink-0 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                         >
                           <Check className="w-4 h-4" />
                         </Button>
@@ -357,7 +357,7 @@ export default function WorkspaceSection({
                             setIsCreatingProject(false);
                             setNewProjectName("");
                           }}
-                          className="w-9 h-9 flex items-center justify-center bg-surface-default border border-ui-borderSubtle hover:bg-slate-100 text-txt-tertiary rounded-full transition-colors shrink-0 active:scale-95 hover:-translate-y-0.5"
+                          className="w-9 h-9 flex items-center justify-center bg-surface-default border border-ui-borderSubtle hover:bg-surface-hover text-txt-tertiary rounded-full transition-colors shrink-0 active:scale-95 hover:-translate-y-0.5"
                         >
                           <X className="w-4 h-4" />
                         </Button>
@@ -372,13 +372,13 @@ export default function WorkspaceSection({
                     Loading folders...
                   </div>
                 ) : savedProjects.length > 0 ? (
-                  <div className="flex flex-col divide-y divide-slate-100">
+                  <div className="flex flex-col divide-y divide-border-color">
                      {savedProjects.map((proj, idx) => (
                        <div
                          key={`folder-${idx}`}
-                         className="p-4 hover:bg-slate-50 transition-colors group flex items-start gap-3 cursor-pointer"
+                         className="p-4 hover:bg-surface-hover transition-colors group flex items-start gap-3 cursor-pointer"
                        >
-                         <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0 overflow-hidden">
+                         <div className="w-10 h-10 rounded-2xl bg-accent-50 text-accent-800 flex items-center justify-center shrink-0 overflow-hidden">
                            <FolderOpen className="w-5 h-5 fill-orange-200/50" />
                          </div>
                          <div className="flex-1 min-w-0">
@@ -386,7 +386,7 @@ export default function WorkspaceSection({
                              <h4 className="truncate group-hover: transition-colors text-lg font-medium text-txt-primary mb-4">
                                {proj.name || "Untitled"}
                              </h4>
-                             <Button aria-label="MoreVertical" className="text-txt-secondary hover:text-txt-tertiary text-base font-semibold rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+                             <Button aria-label="MoreVertical" className="text-txt-secondary hover:text-txt-tertiary text-base font-semibold rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
                                <MoreVertical className="w-4 h-4" />
                              </Button>
                            </div>
@@ -412,7 +412,7 @@ export default function WorkspaceSection({
            <div>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="uppercase st flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
-                  <Sparkles className="w-4 h-4 text-amber-500" /> Recommended For You
+                  <Sparkles className="w-4 h-4 text-accent-700" /> Recommended For You
                 </h3>
               </div>
               <div className="flex flex-col gap-3">
@@ -420,10 +420,10 @@ export default function WorkspaceSection({
                     <Button 
                       key={`rec-${mod.id}`}
                       onClick={() => onSelect(mod.id)}
-                      className="w-full flex items-center justify-between p-4 bg-surface-default hover:bg-slate-50 rounded-full border border-ui-borderSubtle transition-all text-left group shadow-sm hover:shadow-md active:scale-95 hover:-translate-y-0.5 overflow-hidden"
+                      className="w-full flex items-center justify-between p-4 bg-surface-default hover:bg-surface-hover rounded-full border border-ui-borderSubtle transition-all text-left group shadow-brand-sm hover:shadow-brand-md active:scale-95 hover:-translate-y-0.5 overflow-hidden"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center text-txt-secondary group-hover:bg-[#FFFFFF] group-hover:text-txt-primary transition-colors overflow-hidden">
+                        <div className="w-10 h-10 rounded-2xl bg-surface-hover flex items-center justify-center text-txt-secondary group-hover:bg-surface-default group-hover:text-txt-primary transition-colors overflow-hidden">
                           <mod.icon className="w-5 h-5" />
                         </div>
                         <div>
@@ -438,7 +438,7 @@ export default function WorkspaceSection({
            </div>
 
            {/* Notifications */}
-           <div className="bg-[#FFFFFF]/10 rounded-2xl border border-[#FFFFFF]/20 p-4 sm:p-6 relative overflow-hidden">
+           <div className="bg-surface-default/10 rounded-2xl border border-[#FFFFFF]/20 p-4 sm:p-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10">
                  <Bell className="w-32 h-32 text-txt-primary -rotate-12" />
               </div>
@@ -447,8 +447,8 @@ export default function WorkspaceSection({
               </h3>
               <div className="flex flex-col gap-3 relative z-10">
                  {notifications.map(note => (
-                    <div key={note.id} className="bg-surface-default backdrop-blur-sm p-3 rounded-2xl border border-indigo-50/50 flex items-start gap-3 overflow-hidden">
-                       <div className={`w-2 h-2 mt-1.5 rounded-full shrink-0 ${note.type === 'new' ? 'bg-amber-500' : 'bg-[#FFFFFF]/10 '}`} />
+                    <div key={note.id} className="bg-surface-default backdrop-blur-sm p-3 rounded-2xl border border-accent-50/50 flex items-start gap-3 overflow-hidden">
+                       <div className={`w-2 h-2 mt-1.5 rounded-full shrink-0 ${note.type === 'new' ? 'bg-accent-500' : 'bg-surface-default/10 '}`} />
                        <p className="text-base font-normal text-txt-secondary leading-relaxed">{note.text}</p>
                     </div>
                  ))}
@@ -460,7 +460,7 @@ export default function WorkspaceSection({
       {/* Settings Modal Toggle Hint */}
       <div className="text-center mt-4">
          <p className="text-base font-normal text-txt-secondary leading-relaxed">
-            Tip: You can toggle Dark/Light mode in your <Button className="text-txt-primary hover:underline text-base font-semibold rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Profile Settings</Button>.
+            Tip: You can toggle Dark/Light mode in your <Button className="text-txt-primary hover:underline text-base font-semibold rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Profile Settings</Button>.
          </p>
       </div>
 

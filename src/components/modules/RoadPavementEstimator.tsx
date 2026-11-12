@@ -46,12 +46,12 @@ export default function RoadPavementEstimator({ onNavigate }: { onNavigate?: (id
       <div className="mb-6 md:mb-8 px-4 md:px-0 flex flex-col md:flex-row md:items-start justify-between gap-4">
         
         <div className="flex flex-col gap-3 sm:flex-row items-center">
-          <div className="flex items-center gap-2 bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 rounded-xl px-3 py-1.5 shadow-sm">
+          <div className="flex items-center gap-2 bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink-600 rounded-xl px-3 py-1.5 shadow-brand-sm">
             <Settings2 className="w-4 h-4 text-txt-tertiary" />
             <select
               value={designStandard}
               onChange={(e) => setDesignStandard(e.target.value)}
-              className="text-sm font-semibold bg-transparent border-none outline-none focus:ring-0 text-txt-secondary dark:text-slate-300 cursor-pointer"
+              className="text-sm font-semibold bg-transparent border-none outline-none focus:ring-0 text-txt-secondary dark:text-txt-tertiary cursor-pointer"
             >
               <option value="IRC:37-2018 (Flexible)">IRC:37-2018 (Flexible)</option>
               <option value="IRC:58-2015 (Rigid)">IRC:58-2015 (Rigid)</option>
@@ -59,7 +59,7 @@ export default function RoadPavementEstimator({ onNavigate }: { onNavigate?: (id
             </select>
           </div>
           <Button onClick={handleUseInBOQ}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-txt-primary dark:text-white font-bold rounded-full shadow-sm hover:shadow-md transition-all text-sm w-full sm:w-auto justify-center active:scale-95 hover:-translate-y-0.5"
+            className="flex items-center gap-2 px-4 py-2 bg-ink hover:bg-ink-700 text-txt-primary dark:text-white font-bold rounded-full shadow-brand-sm hover:shadow-brand-md transition-all text-sm w-full sm:w-auto justify-center active:scale-95 hover:-translate-y-0.5"
           >
             <Send className="w-4 h-4" />
             Use these quantities in BOQ Generator

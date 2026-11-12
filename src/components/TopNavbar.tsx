@@ -150,8 +150,8 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
 
   const linkBase = "relative inline-flex items-center h-10 px-3 rounded-lg text-[15px] font-semibold transition-colors";
   const linkIdle =
-    "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800";
-  const linkActive = "text-primary-600 dark:text-primary-300";
+    "text-txt-secondary hover:text-txt-primary hover:bg-surface-hover dark:text-txt-tertiary dark:hover:text-white dark:hover:bg-ink-700";
+  const linkActive = "text-accent-800 dark:text-accent-400";
 
   const menuButton = (extra: string) => (
     <button
@@ -160,7 +160,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
       aria-label={mobileOpen ? "Close menu" : "Open menu"}
       aria-expanded={mobileOpen}
       aria-controls="mobile-menu"
-      className={`w-11 h-11 rounded-full items-center justify-center text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 ${extra}`}
+      className={`w-11 h-11 rounded-full items-center justify-center text-txt-primary hover:bg-surface-hover ${extra}`}
     >
       {mobileOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
     </button>
@@ -169,8 +169,8 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-[120] h-[var(--header-h)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b transition-colors duration-200 ${
-          isScrolled || exploreOpen ? "border-slate-200 dark:border-slate-800" : "border-transparent"
+        className={`fixed top-0 inset-x-0 z-[120] h-[var(--header-h)] bg-white/95 dark:bg-ink/95 backdrop-blur-md border-b transition-colors duration-200 ${
+          isScrolled || exploreOpen ? "border-border-color" : "border-transparent"
         }`}
       >
         <nav aria-label="Primary" className="max-w-[1400px] h-full mx-auto px-4 sm:px-6 flex items-center gap-2 lg:gap-4">
@@ -181,12 +181,12 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
             aria-label="Civil Estimation Pro - home"
             className="flex items-center gap-2.5 shrink-0 rounded-lg pr-2"
           >
-            <span className="w-9 h-9 rounded-lg bg-primary-600 text-white flex items-center justify-center">
+            <span className="w-9 h-9 rounded-lg bg-ink text-white flex items-center justify-center">
               <Building2 className="w-5 h-5" aria-hidden="true" />
             </span>
             <span className="hidden sm:flex flex-col leading-none">
-              <span className="font-bold text-[17px] tracking-tight text-slate-900 dark:text-white">Civil Estimation</span>
-              <span className="mt-1 text-xs font-bold tracking-[0.18em] text-primary-600 dark:text-primary-300">PRO</span>
+              <span className="font-bold text-[17px] tracking-tight text-txt-primary">Civil Estimation</span>
+              <span className="mt-1 text-xs font-bold tracking-[0.18em] text-accent-800 dark:text-accent-400">PRO</span>
             </span>
           </a>
 
@@ -199,7 +199,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
               aria-controls="explore-menu"
               onClick={() => setExploreOpen((v) => !v)}
               className={`${linkBase} gap-1.5 ${
-                exploreOpen ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : linkIdle
+                exploreOpen ? "bg-surface-hover text-txt-primary" : linkIdle
               }`}
             >
               Explore
@@ -209,10 +209,10 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
             {exploreOpen && active && (
               <div
                 id="explore-menu"
-                className="absolute left-0 top-full mt-2 w-[760px] max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-brand-lg overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
+                className="absolute left-0 top-full mt-2 w-[760px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border-color bg-surface-default shadow-brand-lg overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
               >
                 <div className="grid grid-cols-[260px_1fr]">
-                  <ul className="p-2 bg-slate-50 dark:bg-slate-950/60 border-r border-slate-200 dark:border-slate-800 max-h-[420px] overflow-y-auto">
+                  <ul className="p-2 bg-surface-hover dark:bg-ink-900/60 border-r border-border-color max-h-[420px] overflow-y-auto">
                     {categories.map((c) => {
                       const on = c.name === active.name;
                       return (
@@ -225,12 +225,12 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                             aria-current={on ? "true" : undefined}
                             className={`w-full flex items-center justify-between gap-2 text-left px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
                               on
-                                ? "bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-300 shadow-sm"
-                                : "text-slate-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-800/60"
+                                ? "bg-surface-default text-accent-800 dark:text-accent-400 shadow-brand-sm"
+                                : "text-txt-primary hover:bg-white/70 dark:hover:bg-ink-700/60"
                             }`}
                           >
                             <span className="truncate">{c.name}</span>
-                            <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                            <span className="inline-flex items-center gap-1 text-xs font-medium text-txt-secondary">
                               {c.tools.length}
                               <ChevronRight className="w-4 h-4" aria-hidden="true" />
                             </span>
@@ -241,7 +241,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                   </ul>
 
                   <div className="p-4 flex flex-col">
-                    <p className="px-2 pb-2 text-xs font-bold tracking-wider uppercase text-slate-500 dark:text-slate-400">
+                    <p className="px-2 pb-2 text-xs font-bold tracking-wider uppercase text-txt-secondary">
                       {active.name}
                     </p>
                     <ul className="grid grid-cols-2 gap-1 flex-1 content-start">
@@ -252,12 +252,12 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                             <a
                               href={hrefFor(t.id)}
                               onClick={linkClick(t.id)}
-                              className="flex items-start gap-2.5 px-2 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                              className="flex items-start gap-2.5 px-2 py-2 rounded-lg hover:bg-surface-hover transition-colors"
                             >
-                              <span className="mt-0.5 w-7 h-7 shrink-0 rounded-md bg-primary-50 dark:bg-slate-800 text-primary-600 dark:text-primary-300 flex items-center justify-center">
+                              <span className="mt-0.5 w-7 h-7 shrink-0 rounded-md bg-accent-50 dark:bg-ink text-accent-800 dark:text-accent-400 flex items-center justify-center">
                                 {Icon && <Icon className="w-4 h-4" />}
                               </span>
-                              <span className="text-sm font-medium leading-snug text-slate-800 dark:text-slate-100 line-clamp-2">
+                              <span className="text-sm font-medium leading-snug text-txt-primary line-clamp-2">
                                 {t.title}
                               </span>
                             </a>
@@ -271,7 +271,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                         linkClick("home")(e);
                         setTimeout(() => document.getElementById("tools")?.scrollIntoView({ behavior: "smooth" }), 250);
                       }}
-                      className="mt-3 inline-flex items-center gap-1.5 self-start px-2 py-1.5 text-sm font-semibold text-primary-600 dark:text-primary-300 hover:underline underline-offset-4"
+                      className="mt-3 inline-flex items-center gap-1.5 self-start px-2 py-1.5 text-sm font-semibold text-accent-800 dark:text-accent-400 hover:underline underline-offset-4"
                     >
                       Browse all {toolCount} tools <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </a>
@@ -286,13 +286,16 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
             type="button"
             onClick={openSearch}
             aria-label="Search tools"
-            className="hidden md:flex flex-1 max-w-xl items-center gap-3 h-11 pl-4 pr-2 rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-left text-[15px] text-slate-500 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-500 transition-colors"
+            className="hidden md:flex flex-1 max-w-xl items-center gap-3 h-11 pl-4 pr-2 rounded-full border border-ui-borderDefault dark:border-ink-600 bg-surface-default/60 text-left text-[15px] text-txt-secondary hover:border-ui-borderStrong dark:hover:border-ui-borderStrong transition-colors"
           >
             <Search className="w-[18px] h-[18px] shrink-0" aria-hidden="true" />
             <span className="flex-1 truncate">Search {toolCount}+ calculators, formulas, materials…</span>
-            <kbd className="hidden xl:inline-flex items-center h-7 px-2 rounded-md border border-slate-200 dark:border-slate-600 text-xs font-semibold text-slate-500 dark:text-slate-300 bg-slate-50 dark:bg-slate-900">
+            <kbd className="hidden xl:inline-flex items-center h-7 px-2 rounded-md border border-border-color dark:border-ink-600 text-xs font-semibold text-txt-secondary bg-surface-default">
               Ctrl K
             </kbd>
+            <span className="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center shrink-0">
+              <Search className="w-4 h-4 text-ink" aria-hidden="true" />
+            </span>
           </button>
 
           {/* Primary links */}
@@ -309,7 +312,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                   >
                     {l.label}
                     {on && (
-                      <span className="absolute left-3 right-3 -bottom-[13px] h-0.5 rounded-full bg-primary-600 dark:bg-primary-300" />
+                      <span className="absolute left-3 right-3 -bottom-[13px] h-0.5 rounded-full bg-ink dark:bg-accent-300" />
                     )}
                   </a>
                 </li>
@@ -324,7 +327,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                 type="button"
                 onClick={() => onOpenProfile?.()}
                 aria-label="Open profile"
-                className="w-10 h-10 rounded-full bg-primary-600 text-white font-bold text-sm flex items-center justify-center hover:bg-primary-700 transition-colors"
+                className="w-10 h-10 rounded-full bg-ink text-white font-bold text-sm flex items-center justify-center hover:bg-ink-700 transition-colors"
               >
                 {initial}
               </button>
@@ -333,7 +336,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                 <button
                   type="button"
                   onClick={openAuth}
-                  className="h-10 px-3 rounded-lg text-[15px] font-semibold text-primary-600 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-slate-800 transition-colors"
+                  className="h-10 px-3 rounded-lg text-[15px] font-semibold text-accent-800 dark:text-accent-400 hover:bg-accent-50 dark:hover:bg-ink-700 transition-colors"
                 >
                   Log In
                 </button>
@@ -350,7 +353,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
               type="button"
               onClick={openSearch}
               aria-label="Search tools"
-              className="w-11 h-11 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="w-11 h-11 rounded-full flex items-center justify-center text-txt-primary dark:text-txt-primary hover:bg-surface-hover"
             >
               <Search className="w-5 h-5" aria-hidden="true" />
             </button>
@@ -365,15 +368,15 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
       {/* Mobile / tablet drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[130] lg:hidden" role="dialog" aria-modal="true" aria-label="Menu" id="mobile-menu">
-          <div className="absolute inset-0 bg-slate-900/50" onClick={() => setMobileOpen(false)} aria-hidden="true" />
-          <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white dark:bg-slate-900 shadow-2xl flex flex-col animate-in slide-in-from-right-8 fade-in duration-200">
-            <div className="h-[var(--header-h)] shrink-0 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800">
-              <span className="font-bold text-slate-900 dark:text-white">Menu</span>
+          <div className="absolute inset-0 bg-ink/50" onClick={() => setMobileOpen(false)} aria-hidden="true" />
+          <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-surface-default shadow-2xl flex flex-col animate-in slide-in-from-right-8 fade-in duration-200">
+            <div className="h-[var(--header-h)] shrink-0 flex items-center justify-between px-4 border-b border-border-color">
+              <span className="font-bold text-txt-primary">Menu</span>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close menu"
-                className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-white"
+                className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-surface-hover text-txt-primary"
               >
                 <X className="w-6 h-6" aria-hidden="true" />
               </button>
@@ -383,16 +386,16 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
               <button
                 type="button"
                 onClick={openSearch}
-                className="w-full flex items-center gap-3 h-12 px-4 rounded-full border border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-[15px]"
+                className="w-full flex items-center gap-3 h-12 px-4 rounded-full border border-ui-borderDefault dark:border-ink-600 text-txt-secondary text-[15px]"
               >
                 <Search className="w-5 h-5" aria-hidden="true" /> Search tools…
               </button>
 
               <div>
-                <p className="px-1 pb-2 text-xs font-bold tracking-wider uppercase text-slate-500 dark:text-slate-400">
+                <p className="px-1 pb-2 text-xs font-bold tracking-wider uppercase text-txt-secondary">
                   Explore tools
                 </p>
-                <ul className="divide-y divide-slate-100 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <ul className="divide-y divide-border-color dark:divide-ink rounded-xl border border-border-color overflow-hidden">
                   {categories.map((c) => {
                     const open = mobileCat === c.name;
                     return (
@@ -401,19 +404,19 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                           type="button"
                           aria-expanded={open}
                           onClick={() => setMobileCat(open ? null : c.name)}
-                          className="w-full flex items-center justify-between gap-2 px-4 py-3.5 text-left text-[15px] font-semibold text-slate-800 dark:text-slate-100"
+                          className="w-full flex items-center justify-between gap-2 px-4 py-3.5 text-left text-[15px] font-semibold text-txt-primary"
                         >
                           <span>{c.name}</span>
                           <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden="true" />
                         </button>
                         {open && (
-                          <ul className="bg-slate-50 dark:bg-slate-950/50 px-2 pb-2">
+                          <ul className="bg-surface-hover dark:bg-ink-900/50 px-2 pb-2">
                             {c.tools.map((t) => (
                               <li key={t.id}>
                                 <a
                                   href={hrefFor(t.id)}
                                   onClick={linkClick(t.id)}
-                                  className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800"
+                                  className="block px-3 py-2.5 rounded-lg text-sm font-medium text-txt-primary dark:text-txt-primary hover:bg-white dark:hover:bg-ink-700"
                                 >
                                   {t.title}
                                 </a>
@@ -436,8 +439,8 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
                       aria-current={currentId === l.id ? "page" : undefined}
                       className={`flex items-center h-12 px-3 rounded-lg text-[16px] font-semibold ${
                         currentId === l.id
-                          ? "bg-primary-50 text-primary-700 dark:bg-slate-800 dark:text-primary-300"
-                          : "text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800"
+                          ? "bg-accent-50 text-accent-800 dark:bg-ink dark:text-accent-400"
+                          : "text-txt-primary hover:bg-surface-hover"
                       }`}
                     >
                       {l.label}
@@ -448,7 +451,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
             </div>
 
             <div
-              className="shrink-0 p-4 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2"
+              className="shrink-0 p-4 border-t border-border-color flex flex-col gap-2"
               style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
             >
               {user ? (

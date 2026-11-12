@@ -81,8 +81,8 @@ function formatTimeAgo(timestamp: number) {
 
 export type ModuleId = string;
 export const ALL_MODULES = [
-  { id: "master-finishes", title: "Complete Finishes Workspace", desc: "Bricks, plaster, paint, flooring, countertops, woodwork, and carpet area in one seamless multi-tab interface.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-indigo-600 text-white shadow-lg", difficulty: "Intermediate", estimatedTime: "~4 mins" },
-  { id: "brick-calculator", title: "Brick Calculator", desc: "Bricks, cement bags, sand and total cost for any wall — with openings, wastage and rates in PKR, INR or AED.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-blue-600 text-white shadow-lg", difficulty: "Beginner", estimatedTime: "~2 mins", isPopular: true },
+  { id: "master-finishes", title: "Complete Finishes Workspace", desc: "Bricks, plaster, paint, flooring, countertops, woodwork, and carpet area in one seamless multi-tab interface.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Intermediate", estimatedTime: "~4 mins" },
+  { id: "brick-calculator", title: "Brick Calculator", desc: "Bricks, cement bags, sand and total cost for any wall — with openings, wastage and rates in PKR, INR or AED.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Beginner", estimatedTime: "~2 mins", isPopular: true },
  // 🚀 Guided Workflows
  {
  id: "qs-workflow",
@@ -91,7 +91,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: Activity, BookOpen, FileText,
  styleStyle: "solid",
- colorClass: "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30",
+ colorClass: "bg-ink text-white shadow-brand-lg shadow-accent-500/30",
  difficulty: "Intermediate",
  estimatedTime: "~20 mins",
  isNew: true,
@@ -120,8 +120,8 @@ export const ALL_MODULES = [
  icon: Ruler,
  styleStyle: "solid",
  colorClass:
- "bg-[var(--accent-purple)] text-txt-primary shadow-[0_8px_30px_rgba(115,103,240,0.3)]",
- iconClass: "text-txt-primary opacity-90",
+ "bg-accent-500 text-ink shadow-[0_8px_30px_rgba(242,164,19,0.3)]",
+ iconClass: "text-ink opacity-90",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  isPopular: true,
@@ -147,8 +147,8 @@ export const ALL_MODULES = [
  icon: Sparkles,
  premium: true,
  styleStyle: "solid",
- colorClass: "bg-[var(--primary-dark)] text-txt-primary shadow-lg",
- iconClass: "text-txt-primary opacity-90",
+ colorClass: "bg-ink text-white shadow-brand-lg",
+ iconClass: "text-white opacity-90",
  difficulty: "Beginner",
  estimatedTime: "~1 min",
  isNew: true,
@@ -162,7 +162,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: Calculator,
  styleStyle: "solid",
- colorClass: "bg-indigo-600 text-white shadow-lg",
+ colorClass: "bg-ink text-white shadow-brand-lg",
  difficulty: "Beginner",
  estimatedTime: "~1 min",
  isNew: true,
@@ -175,8 +175,8 @@ export const ALL_MODULES = [
  icon: ClipboardList,
  styleStyle: "solid",
  colorClass:
- "bg-[var(--accent-blue)] text-[var(--primary-dark)] shadow-[0_8px_30px_rgba(0,207,232,0.3)]",
- iconClass: "text-[var(--primary-dark)] opacity-90",
+ "bg-ink text-white shadow-[0_8px_30px_rgba(31,29,26,0.3)]",
+ iconClass: "text-white opacity-90",
  difficulty: "Advanced",
  estimatedTime: "~20 mins",
  },
@@ -187,7 +187,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: Calculator,
  styleStyle: "solid",
- colorClass: "bg-blue-500 text-txt-primary shadow-lg",
+ colorClass: "bg-ink text-txt-primary shadow-brand-lg",
  difficulty: "Beginner",
  estimatedTime: "~3 mins",
  isNew: true,
@@ -199,7 +199,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
- colorClass: "bg-emerald-600 text-txt-primary shadow-lg",
+ colorClass: "bg-ui-successText text-txt-primary shadow-brand-lg",
  difficulty: "Beginner",
  estimatedTime: "~6 mins",
  isNew: true,
@@ -211,7 +211,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
- colorClass: "bg-[#FFFFFF] text-txt-primary shadow-lg",
+ colorClass: "bg-surface-default text-txt-primary shadow-brand-lg",
  difficulty: "Beginner",
  estimatedTime: "~5 mins",
  isNew: true,
@@ -223,7 +223,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
- colorClass: "bg-blue-600 text-white shadow-lg",
+ colorClass: "bg-ink text-white shadow-brand-lg",
  difficulty: "Advanced",
  estimatedTime: "~5 mins",
  isNew: true,
@@ -296,7 +296,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: FolderOpen,
  styleStyle: "solid",
- colorClass: "bg-indigo-600 text-white shadow-lg",
+ colorClass: "bg-ink text-white shadow-brand-lg",
  difficulty: "Beginner",
  estimatedTime: "~1 min",
  isNew: true,
@@ -336,7 +336,7 @@ export const ALL_MODULES = [
         category: "Structural & Concrete Geometry",
         icon: Box,
         styleStyle: "solid",
-        colorClass: "bg-indigo-600 text-white shadow-lg",
+        colorClass: "bg-ink text-white shadow-brand-lg",
         iconClass: "text-white opacity-90",
         difficulty: "Advanced",
         estimatedTime: "~15 mins",
@@ -350,8 +350,8 @@ export const ALL_MODULES = [
  icon: Building2,
  styleStyle: "solid",
  colorClass:
- "bg-[var(--accent-teal)] text-txt-primary shadow-[0_8px_30px_rgba(32,201,151,0.3)]",
- iconClass: "text-txt-primary opacity-90",
+ "bg-[#0F766E] text-white shadow-[0_8px_30px_rgba(15,118,110,0.3)]",
+ iconClass: "text-white opacity-90",
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  isPopular: true,
@@ -364,7 +364,7 @@ export const ALL_MODULES = [
  icon: HardHat,
  styleStyle: "solid",
  colorClass:
- "bg-gradient-to-br from-indigo-500 to-cyan-500 text-txt-primary shadow-[0_8px_30px_rgba(99,102,241,0.3)]",
+ "bg-gradient-to-br from-accent-500 to-accent-700 text-txt-primary shadow-[0_8px_30px_rgba(242,164,19,0.3)]",
  iconClass: "text-txt-primary opacity-90",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
@@ -378,7 +378,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: FileText,
  styleStyle: "solid",
- colorClass: "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30",
+ colorClass: "bg-ink text-white shadow-brand-lg shadow-accent-500/30",
  difficulty: "Beginner",
  estimatedTime: "Download",
  isPopular: true,
@@ -663,7 +663,7 @@ export const ALL_MODULES = [
  category: "Quantity Takeoff & Costing",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-surface-default/80 backdrop-blur-md text-emerald-600",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-ui-successText",
  difficulty: "Beginner",
  estimatedTime: "Read",
  isNew: true,
@@ -784,7 +784,7 @@ export const ALL_MODULES = [
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-surface-default/80 backdrop-blur-md text-emerald-600",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-ui-successText",
  difficulty: "Intermediate",
  estimatedTime: "Read",
  },
@@ -795,7 +795,7 @@ export const ALL_MODULES = [
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
- colorClass: "bg-surface-default/80 backdrop-blur-md text-emerald-600",
+ colorClass: "bg-surface-default/80 backdrop-blur-md text-ui-successText",
  difficulty: "Advanced",
  estimatedTime: "Read",
  },
@@ -895,7 +895,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  return {
  textRaw: "text-[#4338CA] [#818CF8]",
  text: "text-txt-primary",
- bg: "bg-[#4338CA] [#4338CA]",
+ bg: "bg-ink [#4338CA]",
  stroke: "stroke-[#4338CA]",
  baseHex: "#4338CA",
  border: "border-[#4338CA] [#4338CA]",
@@ -925,7 +925,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  return {
  textRaw: "text-[#BE185D] [#F472B6]",
  text: "text-txt-primary",
- bg: "bg-[#BE185D] [#BE185D]",
+ bg: "bg-accent-700 [#BE185D]",
  stroke: "stroke-[#BE185D]",
  baseHex: "#BE185D",
  border: "border-[#BE185D] [#BE185D]",
@@ -934,7 +934,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  return {
  textRaw: "text-txt-primary [#2DD4BF]",
  text: "text-txt-primary",
- bg: "bg-[#FFFFFF] [#FFFFFF]",
+ bg: "bg-surface-default [#FFFFFF]",
  stroke: "stroke-[#FFFFFF]",
  baseHex: "#FFFFFF",
  border: "border-[#FFFFFF] [#FFFFFF]",
@@ -943,7 +943,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  return {
  textRaw: "text-[#D97706] [#FBBF24]",
  text: "text-txt-primary",
- bg: "bg-[#D97706] [#D97706]",
+ bg: "bg-accent-600 [#D97706]",
  stroke: "stroke-[#D97706]",
  baseHex: "#D97706",
  border: "border-[#D97706] [#D97706]",
@@ -961,7 +961,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  return {
  textRaw: "text-[#EC4899] [#F472B6]",
  text: "text-txt-primary",
- bg: "bg-[#EC4899] [#EC4899]",
+ bg: "bg-accent-500 [#EC4899]",
  stroke: "stroke-[#EC4899]",
  baseHex: "#EC4899",
  border: "border-[#EC4899] [#EC4899]",
@@ -970,7 +970,7 @@ export const getCategoryTheme = (category: string, id: string) => {
  return {
  textRaw: "text-[#4338CA] [#818CF8]",
  text: "text-txt-primary",
- bg: "bg-[#4338CA] [#4338CA]",
+ bg: "bg-ink [#4338CA]",
  stroke: "stroke-[#4338CA]",
  baseHex: "#4338CA",
  border: "border-[#4338CA] [#4338CA]",
@@ -979,10 +979,10 @@ export const getCategoryTheme = (category: string, id: string) => {
  return {
  textRaw: "text-[#4338CA] [#818CF8]",
  text: "text-txt-primary",
- bg: "bg-[#4338CA] [#4338CA]",
+ bg: "bg-ink [#4338CA]",
  stroke: "stroke-[#4338CA]",
  baseHex: "#4338CA",
- border: "border-slate-500 ",
+ border: "border-ui-borderStrong ",
  };
  }
 };
@@ -991,21 +991,21 @@ const ToolsSkeleton = () => (
  <div className="flex flex-col gap-8 w-full animate-pulse">
  {[1, 2].map((group) => (
  <div key={`skeleton-group-${group}`} className="flex flex-col gap-5">
- <div className="h-8 w-48 bg-slate-200 rounded-lg"></div>
+ <div className="h-8 w-48 bg-surface-active rounded-lg"></div>
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
  {[1, 2, 3, 4, 5].map((card) => (
- <div key={`skeleton-card-${card}`} className="w-full bg-surface-default [#1e1e1e] rounded-2xl p-4 sm:p-6 h-[180px] border border-slate-100 flex flex-col gap-4 shadow-sm overflow-hidden">
+ <div key={`skeleton-card-${card}`} className="w-full bg-surface-default [#1e1e1e] rounded-2xl p-4 sm:p-6 h-[180px] border border-border-color flex flex-col gap-4 shadow-brand-sm overflow-hidden">
  <div className="flex items-center gap-3">
- <div className="w-12 h-12 rounded-xl bg-slate-100 shrink-0"></div>
+ <div className="w-12 h-12 rounded-xl bg-surface-hover shrink-0"></div>
  <div className="flex flex-col gap-2 flex-1">
- <div className="w-3/4 h-3.5 bg-slate-100 rounded-full"></div>
- <div className="w-1/2 h-2.5 bg-slate-50 rounded-full"></div>
+ <div className="w-3/4 h-3.5 bg-surface-hover rounded-full"></div>
+ <div className="w-1/2 h-2.5 bg-surface-hover rounded-full"></div>
  </div>
  </div>
  <div className="flex flex-col gap-2 mt-2">
- <div className="w-full h-2.5 bg-slate-50 rounded-full"></div>
- <div className="w-5/6 h-2.5 bg-slate-50 rounded-full"></div>
- <div className="w-4/6 h-2.5 bg-slate-50 rounded-full"></div>
+ <div className="w-full h-2.5 bg-surface-hover rounded-full"></div>
+ <div className="w-5/6 h-2.5 bg-surface-hover rounded-full"></div>
+ <div className="w-4/6 h-2.5 bg-surface-hover rounded-full"></div>
  </div>
  </div>
  ))}
@@ -1157,13 +1157,13 @@ export default function Dashboard({
  /* One UI signature scrollbar */
  ::-webkit-scrollbar { width: 6px; height: 6px; }
  ::-webkit-scrollbar-track { background: transparent; }
- ::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.15); border-radius: 10px; }
+ ::-webkit-scrollbar-thumb { background: rgba(31,29,26,0.15); border-radius: 10px; }
  `}</style>
  
   <RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} />
   
-  <button onClick={() => setIsRecentOpen(true)} className="fixed right-6 bottom-6 z-50 w-14 h-14 rounded-full bg-indigo-600 text-white shadow-2xl hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 group p-0 flex items-center justify-center" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 border-2 border-white"></span></span></button>
-<div className="relative w-full flex flex-col font-sans bg-[#f8f9fa] text-txt-primary border-none">
+  <button onClick={() => setIsRecentOpen(true)} className="fixed right-6 bottom-6 z-50 w-14 h-14 rounded-full bg-ink text-white shadow-2xl hover:bg-ink-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-accent-500/30 group p-0 flex items-center justify-center" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-ink border-2 border-white"></span></span></button>
+<div className="relative w-full flex flex-col font-sans bg-surface-default text-txt-primary border-none">
 
   <div 
     className="relative w-full flex flex-col overflow-hidden bg-surface-default"
@@ -1190,20 +1190,10 @@ export default function Dashboard({
  />
 
  {!user ? (
- <div className="w-full flex flex-col pt-0 pb-0 bg-[#F8F9FB] overflow-x-clip border-0 rounded-none">
+ <div className="w-full flex flex-col pt-0 pb-0 bg-surface-default overflow-x-clip border-0 rounded-none">
  <HeroSection onStart={() => handleSelect('house')} toolCount={ALL_MODULES.length} />
  <GoalTabs modules={ALL_MODULES as any} onSelect={(id) => handleSelect(id)} />
- <div className="w-full bg-slate-50/50 pb-0 pt-4 -mt-8 relative z-10  border-t border-ui-borderSubtle/60 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] overflow-visible">
- {/* Premium Ambient Background */}
- <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]" 
- style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1.5\'/%3E%3C/g%3E%3C/svg%3E")' }} 
- />
- <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.08] mix-blend-multiply overflow-hidden">
- <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full filter blur-[100px]" style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)' }} />
- <div className="absolute top-[20%] right-[-10%] w-[60%] h-[60%] rounded-full filter blur-[100px]" style={{ background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)' }} />
- <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[60%] rounded-full filter blur-[100px]" style={{ background: 'radial-gradient(circle, #f97316 0%, transparent 70%)' }} />
- </div>
- <div className="w-full relative z-10 overflow-visible flex flex-col">
+ <div className="w-full bg-surface-default pb-0 pt-4 -mt-8 relative z-10 border-t border-ui-borderSubtle/60 shadow-[0_-8px_30px_rgba(31,29,26,0.04)] overflow-visible"> <div className="w-full relative z-10 overflow-visible flex flex-col">
  <div className="flex flex-col gap-10 w-full" id="tools-section">
  <div className="w-full md:max-w-[1400px] md:mx-auto px-4"><SearchAndFilterBar
  categories={categories.map(catName => ({
@@ -1230,27 +1220,15 @@ export default function Dashboard({
  </div>
  ) : (
  <>
- <div className="flex-shrink-0 h-[30vh] lg:h-[35vh] w-full flex flex-col justify-end px-6 xl:px-12 pb-8 relative overflow-hidden bg-[#f8f9fa]">
- <div className="absolute top-[-50%] left-[-10%] w-[70%] h-[150%] rounded-full bg-blue-600/10 blur-[80px] pointer-events-none"></div>
- <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[100%] rounded-full bg-blue-600/5 blur-[80px] pointer-events-none"></div>
+ <div className="flex-shrink-0 h-[30vh] lg:h-[35vh] w-full flex flex-col justify-end px-6 xl:px-12 pb-8 relative overflow-hidden bg-surface-default">
  <div className="w-full md:max-w-[1400px] md:mx-auto z-10 flex flex-col items-start gap-1 px-4 md:px-0">
  <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-txt-primary tracking-tight">Civil Estimation</h1>
- <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-indigo-700 tracking-tight mb-2">Pro.</h1>
+ <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-accent-800 tracking-tight mb-2">Pro.</h1>
  <p className="md: max-w-lg mb-2 text-base font-normal text-txt-secondary leading-relaxed">Welcome back, {user.displayName?.split(' ')[0] || 'Engineer'}.</p>
  </div>
  </div>
 
- <div className="w-full bg-slate-50/50  relative overflow-visible shadow-[0_-8px_30px_rgba(163,177,198,0.2)] border-t border-ui-borderSubtle/60 pb-0 tools-section">
- {/* Premium Ambient Background */}
- <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]" 
- style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1.5\'/%3E%3C/g%3E%3C/svg%3E")' }} 
- />
- <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.08] mix-blend-multiply overflow-hidden">
- <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full filter blur-[100px]" style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)' }} />
- <div className="absolute top-[20%] right-[-10%] w-[60%] h-[60%] rounded-full filter blur-[100px]" style={{ background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)' }} />
- <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[60%] rounded-full filter blur-[100px]" style={{ background: 'radial-gradient(circle, #f97316 0%, transparent 70%)' }} />
- </div>
- <div className="w-full z-10 overflow-visible flex flex-col pt-4">
+ <div className="w-full bg-surface-default relative overflow-visible shadow-[0_-8px_30px_rgba(31,29,26,0.08)] border-t border-ui-borderSubtle/60 pb-0 tools-section"> <div className="w-full z-10 overflow-visible flex flex-col pt-4">
  <div className="mb-12 w-full md:max-w-[1400px] md:mx-auto px-4">
  <SummaryStatsWidget />
             <div className="mt-8 mb-8 grid grid-cols-1 xl:grid-cols-2 gap-8">
@@ -1263,7 +1241,7 @@ export default function Dashboard({
  {/* Recently Used section */}
  <div className="mb-12 flex flex-col gap-5 w-full md:max-w-[1400px] md:mx-auto px-4">
  <h2 id="section-recent-tools" className="md: flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
- <History className="w-6 h-6 text-indigo-500" />
+ <History className="w-6 h-6 text-accent-800" />
  Recent Tools
  </h2>
  {recentTools.length > 0 ? (
@@ -1272,13 +1250,13 @@ export default function Dashboard({
  const m = ALL_MODULES.find(mod => mod.id === t.id);
  if (!m) return null;
  return (
- <div key={`recent-${t.id}`} className="relative group bg-[#F0F4F8] rounded-2xl p-4 hover:-translate-y-1.5 hover:scale-[1.02] transition-all flex flex-col gap-3 h-full shadow-[4px_4px_10px_rgba(163,177,198,0.3),-4px_-4px_10px_rgba(255,255,255,0.9)] hover:shadow-[6px_6px_15px_rgba(163,177,198,0.4),-6px_-6px_15px_rgba(255,255,255,1)]">
+ <div key={`recent-${t.id}`} className="relative group bg-surface-hover rounded-2xl p-4 hover:-translate-y-1.5 hover:scale-[1.02] transition-all flex flex-col gap-3 h-full shadow-[4px_4px_10px_rgba(31,29,26,0.3),-4px_-4px_10px_rgba(255,255,255,0.9)] hover:shadow-[6px_6px_15px_rgba(31,29,26,0.4),-6px_-6px_15px_rgba(255,255,255,1)]">
  <div className="flex items-center gap-2">
- <div className="w-full w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-surface-default shadow-sm border border-slate-100 text-indigo-600 overflow-hidden">
+ <div className="w-full w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-surface-default shadow-brand-sm border border-border-color text-accent-800 overflow-hidden">
  {m.icon && <m.icon className="w-4 h-4" strokeWidth={1.5} />}
  </div>
  <div className="flex flex-col">
- <h3 className="line-clamp-2 min-h-[3rem] group-hover:text-indigo-900 transition-colors text-lg font-medium text-txt-primary mb-4">{m.title}</h3>
+ <h3 className="line-clamp-2 min-h-[3rem] group-hover:text-accent-900 transition-colors text-lg font-medium text-txt-primary mb-4">{m.title}</h3>
  <span className="text-sm font-normal text-txt-tertiary">
  {formatTimeAgo(t.timestamp)}
  </span>
@@ -1292,7 +1270,7 @@ Open Calculator
  })}
  </div>
  ) : (
- <div className="p-4 sm:p-8 md:p-8 bg-[#F0F4F8] shadow-[inset_4px_4px_8px_rgba(163,177,198,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] rounded-2xl flex flex-col items-center justify-center text-center border-none overflow-hidden">
+ <div className="p-4 sm:p-8 md:p-8 bg-surface-hover shadow-[inset_4px_4px_8px_rgba(31,29,26,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] rounded-2xl flex flex-col items-center justify-center text-center border-none overflow-hidden">
  <History className="w-10 h-10 text-txt-secondary mb-3" />
  <p className="text-base font-normal text-txt-secondary leading-relaxed">Start using tools to see your history here.</p>
  </div>
@@ -1302,7 +1280,7 @@ Open Calculator
  {settings.favoriteTools && settings.favoriteTools.length > 0 && (
  <div className="mb-12 flex flex-col gap-5 w-full md:max-w-[1400px] md:mx-auto px-4">
  <h2 id="section-personalized-shortcuts" className="flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-                                      <Bookmark className="w-6 h-6 text-indigo-500" fill="transparent" strokeWidth={2.5} />
+                                      <Bookmark className="w-6 h-6 text-accent-800" fill="transparent" strokeWidth={2.5} />
  Personalized Shortcuts
  </h2>
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
@@ -1330,19 +1308,19 @@ Open Calculator
  {/* Quick Overview Row */}
  <div className="w-full md:max-w-[1400px] md:mx-auto px-4"><section className="mb-8">
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
- <div className="bg-blue-600 text-white rounded-2xl p-5 shadow-lg shadow-blue-500/10 overflow-hidden">
+ <div className="bg-ink text-white rounded-2xl p-5 shadow-brand-lg shadow-accent-500/10 overflow-hidden">
  <div className="text-sm opacity-80 uppercase font-semibold tracking-wider">Active Project</div>
  <div className="text-xl font-bold mt-1 truncate">Disposal Well A</div>
  </div>
- <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-white/20 overflow-hidden">
+ <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-brand-sm border border-white/20 overflow-hidden">
  <div className="text-sm text-txt-tertiary uppercase font-semibold tracking-wider">Recent Estimate</div>
  <div className="text-xl font-bold mt-1 text-txt-primary truncate">Rs 1.2M</div>
  </div>
- <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-white/20 overflow-hidden">
+ <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-brand-sm border border-white/20 overflow-hidden">
  <div className="text-sm text-txt-tertiary uppercase font-semibold tracking-wider">Saved BOQs</div>
  <div className="text-xl font-bold mt-1 text-txt-primary truncate">14</div>
  </div>
- <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-white/20 overflow-hidden">
+ <div className="w-full bg-surface-default/70 backdrop-blur-md rounded-2xl p-5 shadow-brand-sm border border-white/20 overflow-hidden">
  <div className="text-sm text-txt-tertiary uppercase font-semibold tracking-wider">Tools Used</div>
  <div className="text-xl font-bold mt-1 text-txt-primary truncate">8</div>
  </div>
@@ -1368,11 +1346,11 @@ Open Calculator
  const toolsInGroup = groupedModules[groupName];
  if (!toolsInGroup || toolsInGroup.length === 0) return null;
  return (
- <div key={groupName} className={`w-full flex flex-col py-12 md:py-20 ${index % 3 === 0 ? 'bg-[#F4F1EA]' : index % 3 === 1 ? 'bg-[#F0F5FF]' : 'bg-[#D9E6DD]'}`}>
+ <div key={groupName} className={`w-full flex flex-col py-12 md:py-20 ${index % 3 === 0 ? 'bg-accent-50' : index % 3 === 1 ? 'bg-surface-hover' : 'bg-surface-hover'}`}>
 <div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex flex-col gap-5">
 <h2 id={`section-${groupName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="px-2 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
  {groupName}
- <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-slate-100 border border-ui-borderSubtle text-txt-tertiary shadow-sm">{toolsInGroup.length}</span>
+ <span className="text-sm font-normal px-2 py-0.5 rounded-full bg-surface-hover border border-ui-borderSubtle text-txt-tertiary shadow-brand-sm">{toolsInGroup.length}</span>
  </h2>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 tool-card-grid">
  {toolsInGroup.map((mod, modIdx) => (
@@ -1409,19 +1387,19 @@ Open Calculator
  >
  {/* Backdrop */}
  <div
- className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
+ className="absolute inset-0 bg-ink/40 backdrop-blur-md"
  onClick={() => setIsAiChatOpen(false)}
  />
 
  {/* Bottom Sheet Modal */}
  <div
- className={`fixed bottom-0 left-0 right-0 h-[80vh] md:h-[70vh] bg-surface-default/90 backdrop-blur-2xl shadow-[0_-20px_60px_rgba(15,23,42,0.2)] rounded-t-[40px] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col border-t border-white/50 overflow-hidden ${isAiChatOpen ? "translate-y-0" : "translate-y-full"}`}
+ className={`fixed bottom-0 left-0 right-0 h-[80vh] md:h-[70vh] bg-surface-default/90 backdrop-blur-2xl shadow-[0_-20px_60px_rgba(31,29,26,0.2)] rounded-t-[40px] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col border-t border-white/50 overflow-hidden ${isAiChatOpen ? "translate-y-0" : "translate-y-full"}`}
  >
  {/* Premium Ambient Backgrounds inside Modal */}
  <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-60">
- <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-400/20 rounded-full blur-[100px] animate-pulse"></div>
- <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-400/20 rounded-full blur-[80px] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]"></div>
- <div className="absolute top-[30%] left-[30%] w-[40%] h-[40%] bg-purple-400/10 rounded-full blur-[80px] animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite]"></div>
+ <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-accent-400/20 rounded-full blur-[100px] animate-pulse"></div>
+ <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent-400/20 rounded-full blur-[80px] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]"></div>
+ <div className="absolute top-[30%] left-[30%] w-[40%] h-[40%] bg-accent-400/10 rounded-full blur-[80px] animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite]"></div>
  </div>
 
  {/* Drag handle */}
@@ -1429,24 +1407,24 @@ Open Calculator
  className="w-full flex justify-center pt-5 pb-3 shrink-0 cursor-pointer relative z-10"
  onClick={() => setIsAiChatOpen(false)}
  >
- <div className="w-16 h-1.5 rounded-full bg-slate-300 hover:bg-slate-400 transition-colors shadow-inner" />
+ <div className="w-16 h-1.5 rounded-full bg-secondary-300 hover:bg-secondary-400 transition-colors shadow-inner" />
  </div>
 
  <div className="px-6 flex items-center justify-between pb-4 border-b border-ui-borderSubtle/50 relative z-10 bg-surface-default/40">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/20">
+ <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-600 to-accent-700 flex items-center justify-center shadow-brand-lg shadow-accent-500/20">
  <Sparkles className="w-5 h-5 text-white" strokeWidth={1.5} />
  </div>
  <div className="flex flex-col">
- <h3 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">
+ <h3 className="text-lg font-bold text-txt-primary tracking-tight leading-none text-txt-primary">
  AI Estimator
  </h3>
- <span className="text-xs font-semibold text-indigo-700 uppercase tracking-wider mt-0.5">Premium Copilot</span>
+ <span className="text-xs font-semibold text-accent-800 uppercase tracking-wider mt-0.5">Premium Copilot</span>
  </div>
  </div>
  <Button
  onClick={() => setIsAiChatOpen(false)}
- className="p-2.5 rounded-full bg-surface-default/80 hover:bg-slate-100 text-txt-tertiary transition-all duration-300 active:scale-95 hover:-translate-y-0.5 shadow-sm border border-ui-borderSubtle/50"
+ className="p-2.5 rounded-full bg-surface-default/80 hover:bg-surface-hover text-txt-tertiary transition-all duration-300 active:scale-95 hover:-translate-y-0.5 shadow-brand-sm border border-ui-borderSubtle/50"
  >
  <X className="w-5 h-5" />
  </Button>
@@ -1460,12 +1438,12 @@ Open Calculator
  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
  >
  {msg.role === "system" && (
- <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shrink-0 mr-3 mt-1 shadow-md shadow-blue-600/20">
+ <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-600 to-accent-700 flex items-center justify-center shrink-0 mr-3 mt-1 shadow-brand-md shadow-accent-500/20">
  <Sparkles className="w-4 h-4 text-white" strokeWidth={1.5} />
  </div>
  )}
  <div
- className={`px-5 py-3.5 max-w-[85%] text-[15px] font-medium leading-relaxed shadow-sm backdrop-blur-md ${msg.role === "user" ? "bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl rounded-tr-[8px] shadow-slate-900/10" : "bg-surface-default/80 border border-ui-borderSubtle/60 text-txt-secondary rounded-2xl rounded-tl-[8px] shadow-slate-200/50"}`}
+ className={`px-5 py-3.5 max-w-[85%] text-[15px] font-medium leading-relaxed shadow-brand-sm backdrop-blur-md ${msg.role === "user" ? "bg-gradient-to-br from-ink to-ink-700 text-white rounded-2xl rounded-tr-[8px] shadow-ink/10" : "bg-surface-default/80 border border-ui-borderSubtle/60 text-txt-secondary rounded-2xl rounded-tl-[8px] shadow-ink/10"}`}
  >
  {msg.content}
  </div>
@@ -1477,7 +1455,7 @@ Open Calculator
  {/* Input area */}
  <div className="p-4 sm:p-6 pt-4 shrink-0 w-full md:max-w-4xl md:mx-auto bg-surface-default/60 backdrop-blur-xl border-t border-ui-borderSubtle/50 relative z-10">
  <div className="relative group">
- <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 rounded-full opacity-30 group-focus-within:opacity-100 blur-[4px] transition-all duration-500"></div>
+ <div className="absolute -inset-[1px] bg-gradient-to-r from-accent-400 via-accent-500 to-accent-500 rounded-full opacity-30 group-focus-within:opacity-100 blur-[4px] transition-all duration-500"></div>
  <div className="w-full relative flex items-center bg-surface-default/90 backdrop-blur-md rounded-full px-5 py-2 border border-ui-borderSubtle/50 shadow-inner overflow-hidden">
  <><label htmlFor="a11y-input-1" className="sr-only">Ask your assistant...</label>
 <input id="a11y-input-1"
@@ -1504,7 +1482,7 @@ Open Calculator
  }
  }}
  placeholder="Ask your AI Assistant..."
- className="w-full bg-transparent border-none outline-none text-base text-txt-primary px-2 py-2.5 placeholder:text-slate-400 rounded-full"
+ className="w-full bg-transparent border-none outline-none text-base text-txt-primary px-2 py-2.5 placeholder:text-txt-tertiary rounded-full"
  /></>
  <Button variant="premium" className="ml-2 rounded-full w-12 h-12 p-0 min-h-[48px] shrink-0" aria-label="Ask" rightIcon={<ArrowUpRight className="w-5 h-5 text-white" />}
  onClick={() => {

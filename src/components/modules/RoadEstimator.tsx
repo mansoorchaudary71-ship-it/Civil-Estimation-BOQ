@@ -198,13 +198,13 @@ export default function RoadEstimator() {
 
   return (
     <div className="w-full flex flex-col gap-8 animate-in fade-in">
-        <div className="w-full bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
+        <div className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold flex items-center gap-2 text-txt-primary dark:text-slate-200">
-                    <Route className="w-6 h-6 text-emerald-600" />
+                <h2 className="text-xl font-bold flex items-center gap-2 text-txt-primary dark:text-txt-primary">
+                    <Route className="w-6 h-6 text-ui-successText" />
                     Flexible Pavement Design Engine
                 </h2>
-                <Button onClick={sendToBOQ} className="flex items-center gap-2 text-sm font-bold px-4 py-2 bg-slate-800 text-white rounded-full hover:bg-slate-700 transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+                <Button onClick={sendToBOQ} className="flex items-center gap-2 text-sm font-bold px-4 py-2 bg-ink text-white rounded-full hover:bg-ink-600 transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
                     <Send className="w-4 h-4" /> Send to BOQ
                 </Button>
             </div>
@@ -212,7 +212,7 @@ export default function RoadEstimator() {
             <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
                 <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                     <div>
-                        <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-slate-100 pb-2">Road Geometry</h3>
+                        <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-border-color pb-2">Road Geometry</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <NumberInput label="Total Length" unit="m" value={length} onChange={setLength} />
                             <NumberInput label="Carriageway W" unit="m" value={width} onChange={setWidth} />
@@ -224,7 +224,7 @@ export default function RoadEstimator() {
                     </div>
 
                     <div>
-                        <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-slate-100 pb-2 bg-slate-50 p-2 rounded flex justify-between">
+                        <h3 className="text-sm font-bold text-txt-primary mb-3 border-b border-border-color pb-2 bg-surface-hover p-2 rounded flex justify-between">
                             <span>Layer Thicknesses</span>
                             <span className="text-txt-tertiary font-normal">mm</span>
                         </h3>
@@ -248,7 +248,7 @@ export default function RoadEstimator() {
                         className="mb-0"
                     >
                         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-slate-50 p-4 rounded-xl border border-ui-borderSubtle">
+                            <div className="bg-surface-hover p-4 rounded-xl border border-ui-borderSubtle">
                                 <h4 className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-3 flex items-center justify-between">
                                     <span>Pavement Structure Volumes</span>
                                 </h4>
@@ -261,11 +261,11 @@ export default function RoadEstimator() {
                                 </div>
                             </div>
                             
-                            <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
-                                <h4 className="text-xs font-bold text-emerald-800 uppercase tracking-wider mb-3 flex items-center justify-between">
+                            <div className="bg-ui-success/50 p-4 rounded-xl border border-ui-successBorder">
+                                <h4 className="text-xs font-bold text-ui-successText uppercase tracking-wider mb-3 flex items-center justify-between">
                                     <span>Compacted Tonnage Outputs</span>
                                 </h4>
-                                <div className="space-y-2 text-sm font-mono text-emerald-900">
+                                <div className="space-y-2 text-sm font-mono text-ui-successText">
                                     <div className="flex justify-between"><span>BC Tonnage:</span> <span className="font-bold">{results.tonBC.toFixed(1)} T</span></div>
                                     <div className="flex justify-between"><span>DBM Tonnage:</span> <span className="font-bold">{results.tonDBM.toFixed(1)} T</span></div>
                                     <div className="flex justify-between"><span>WMM Tonnage:</span> <span className="font-bold">{results.tonWMM.toFixed(1)} T</span></div>
@@ -274,20 +274,20 @@ export default function RoadEstimator() {
                             </div>
                         </div>
 
-                        <div className="mt-4 p-4 border border-blue-100 bg-blue-50/50 rounded-xl">
+                        <div className="mt-4 p-4 border border-accent-100 bg-accent-50/50 rounded-xl">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2">Prime Coat</p>
+                                    <p className="text-xs font-bold text-accent-800 uppercase tracking-wider mb-2">Prime Coat</p>
                                     <div className="flex items-end justify-between font-mono text-sm">
-                                        <span className="text-blue-600">@ {Number(primeRate)} L/m²</span>
-                                        <span className="font-bold text-blue-900">{results.primeTons.toFixed(2)} Tons</span>
+                                        <span className="text-accent-800">@ {Number(primeRate)} L/m²</span>
+                                        <span className="font-bold text-accent-900">{results.primeTons.toFixed(2)} Tons</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2">Tack Coat</p>
+                                    <p className="text-xs font-bold text-accent-800 uppercase tracking-wider mb-2">Tack Coat</p>
                                     <div className="flex items-end justify-between font-mono text-sm">
-                                        <span className="text-blue-600">@ {Number(tackRate)} L/m²</span>
-                                        <span className="font-bold text-blue-900">{results.tackTons.toFixed(2)} Tons</span>
+                                        <span className="text-accent-800">@ {Number(tackRate)} L/m²</span>
+                                        <span className="font-bold text-accent-900">{results.tackTons.toFixed(2)} Tons</span>
                                     </div>
                                 </div>
                             </div>
@@ -295,7 +295,7 @@ export default function RoadEstimator() {
                     </MaterialSummary>
 
                     {/* Compacted Densities Config */}
-                    <div className="p-5 border border-ui-borderSubtle rounded-2xl bg-slate-50 overflow-hidden">
+                    <div className="p-5 border border-ui-borderSubtle rounded-2xl bg-surface-hover overflow-hidden">
                         <h3 className="text-sm font-bold text-txt-primary mb-4 flex items-center gap-2">
                             <Layers className="w-4 h-4 text-txt-tertiary" />
                             Compacted Densities (t/m³)

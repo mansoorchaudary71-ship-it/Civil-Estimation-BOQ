@@ -20,22 +20,22 @@ export default function MasterSoilMechanicsLabSuite() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Master Soil Mechanics & Geotech Lab Suite</h1>
-          <p className="text-txt-tertiary dark:text-slate-400 mt-1 mb-4">Comprehensive portal for all major geotechnical laboratory testing and analysis.</p>
+          <p className="text-txt-tertiary dark:text-txt-tertiary mt-1 mb-4">Comprehensive portal for all major geotechnical laboratory testing and analysis.</p>
           <div className="flex gap-4">
             <CodeComplianceBadge standard="IS 2720 / ASTM D1883" title="Geotechnical Standard" description="Adheres to standardized soil mechanics parameters." />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-8 bg-surface-default dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-ui-borderSubtle dark:border-slate-700">
+      <div className="flex flex-wrap gap-2 mb-8 bg-surface-default dark:bg-ink p-2 rounded-xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600">
         {tabs.map(t => (
           <Button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
               activeTab === t.id 
-                ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' 
-                : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'
+                ? 'bg-accent-50 dark:bg-accent-500/20 text-accent-800 dark:text-accent-400 shadow-brand-sm' 
+                : 'text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover dark:hover:bg-ink-600/50'
             }`}
           >
             {t.icon} {t.name}
@@ -156,7 +156,7 @@ function PhysicalPropertiesModule() {
                 <XAxis dataKey="size" reversed type="category" label={{ value: 'Particle Size (mm)', position: 'bottom' }} />
                 <YAxis domain={[0, 100]} label={{ value: '% Passing', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="passing" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="passing" stroke="#F2A413" strokeWidth={3} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -170,8 +170,8 @@ function PhysicalPropertiesModule() {
                 <XAxis dataKey="blows" type="number" domain={[10, 40]} label={{ value: 'Number of Blows (N)', position: 'bottom' }} />
                 <YAxis domain={[30, 50]} label={{ value: 'Water Content (%)', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <ReferenceLine x={25} stroke="#ef4444" strokeDasharray="3 3" label="N=25" />
-                <Line type="monotone" dataKey="moisture" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} />
+                <ReferenceLine x={25} stroke="#B07006" strokeDasharray="3 3" label="N=25" />
+                <Line type="monotone" dataKey="moisture" stroke="#1F1D1A" strokeWidth={3} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -246,12 +246,12 @@ function FieldDensityModule() {
       <div className="space-y-6">
         <Card title="California Bearing Ratio (CBR)">
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-ui-borderSubtle dark:border-slate-700">
-              <div className="text-sm text-txt-tertiary dark:text-slate-400 mb-1">CBR @ 2.5mm</div>
+            <div className="bg-surface-default p-4 rounded-xl border border-ui-borderSubtle dark:border-ink-600">
+              <div className="text-sm text-txt-tertiary dark:text-txt-tertiary mb-1">CBR @ 2.5mm</div>
               <div className="text-2xl font-bold text-txt-primary dark:text-white">{cbr25.toFixed(2)}%</div>
             </div>
-            <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-ui-borderSubtle dark:border-slate-700">
-              <div className="text-sm text-txt-tertiary dark:text-slate-400 mb-1">CBR @ 5.0mm</div>
+            <div className="bg-surface-default p-4 rounded-xl border border-ui-borderSubtle dark:border-ink-600">
+              <div className="text-sm text-txt-tertiary dark:text-txt-tertiary mb-1">CBR @ 5.0mm</div>
               <div className="text-2xl font-bold text-txt-primary dark:text-white">{cbr50.toFixed(2)}%</div>
             </div>
           </div>
@@ -264,9 +264,9 @@ function FieldDensityModule() {
                 <XAxis dataKey="pen" type="number" domain={[0, 13]} label={{ value: 'Penetration (mm)', position: 'bottom' }} />
                 <YAxis label={{ value: 'Load (kg)', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <ReferenceLine x={2.5} stroke="#6366f1" strokeDasharray="3 3" />
-                <ReferenceLine x={5.0} stroke="#6366f1" strokeDasharray="3 3" />
-                <Line type="monotone" dataKey="load" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4 }} />
+                <ReferenceLine x={2.5} stroke="#6B6862" strokeDasharray="3 3" />
+                <ReferenceLine x={5.0} stroke="#6B6862" strokeDasharray="3 3" />
+                <Line type="monotone" dataKey="load" stroke="#F2A413" strokeWidth={3} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -359,8 +359,8 @@ function ShearPermeabilityModule() {
 
         <Card title="Permeability Coefficient">
           <div className="flex gap-2 mb-4">
-            <Button onClick={() => setPermMode('falling')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'falling' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-txt-secondary dark:text-slate-300'}`}>Falling Head</Button>
-            <Button onClick={() => setPermMode('constant')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'constant' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-txt-secondary dark:text-slate-300'}`}>Constant Head</Button>
+            <Button onClick={() => setPermMode('falling')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'falling' ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary dark:text-txt-tertiary'}`}>Falling Head</Button>
+            <Button onClick={() => setPermMode('constant')} className={`flex-1 py-1.5 text-sm rounded ${permMode === 'constant' ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary dark:text-txt-tertiary'}`}>Constant Head</Button>
           </div>
           <div className="grid grid-cols-3 gap-4 mb-4">
             <InputGroup label="Sample Area A (cm²)" value={permA} onChange={(e: any) => setPermA(parseFloat(e.target.value) || 0)} />
@@ -397,7 +397,7 @@ function ShearPermeabilityModule() {
                 <XAxis dataKey="normal" type="number" domain={[0, 200]} label={{ value: 'Normal Stress (kPa)', position: 'bottom' }} />
                 <YAxis type="number" domain={[0, 150]} label={{ value: 'Shear Stress (kPa)', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="shear" stroke="#10b981" strokeWidth={3} dot={{ r: 5 }} name="Failure Env" />
+                <Line type="monotone" dataKey="shear" stroke="#F2A413" strokeWidth={3} dot={{ r: 5 }} name="Failure Env" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -412,8 +412,8 @@ function ShearPermeabilityModule() {
 // --------------------------------------------------------------------------------------
 function Card({ title, children }: { title: string, children: React.ReactNode }) {
   return (
-    <div className="bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6">
-      <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b border-slate-100 dark:border-slate-700 pb-3 mb-4">
+    <div className="bg-surface-default dark:bg-ink rounded-2xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600 p-6">
+      <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b border-border-color dark:border-ink-600 pb-3 mb-4">
         {title}
       </h3>
       {children}
@@ -424,14 +424,14 @@ function Card({ title, children }: { title: string, children: React.ReactNode })
 function InputGroup({ label, value, onChange }: { label: string, value: number, onChange: any }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-semibold text-txt-secondary dark:text-slate-400 leading-tight">{label}</label>
+      <label className="text-xs font-semibold text-txt-secondary dark:text-txt-tertiary leading-tight">{label}</label>
       <input
         type="number"
         value={value}
         onChange={onChange}
         min={0}
         step="any"
-        className="w-full bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-txt-primary dark:text-white font-mono"
+        className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent-500 focus:border-ink outline-none transition-all text-txt-primary dark:text-white font-mono"
       />
     </div>
   );
@@ -439,13 +439,13 @@ function InputGroup({ label, value, onChange }: { label: string, value: number, 
 
 function ResultRow({ label, value, unit, digits = 2 }: { label: string, value: number, unit: string, digits?: number }) {
   return (
-    <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
-      <span className="text-txt-secondary dark:text-slate-400 text-sm font-medium">{label}</span>
+    <div className="flex justify-between items-center py-3 border-b border-border-color dark:border-ink-600/50 last:border-0">
+      <span className="text-txt-secondary dark:text-txt-tertiary text-sm font-medium">{label}</span>
       <div className="text-right flex items-baseline gap-1.5">
         <span className="text-lg font-bold text-txt-primary dark:text-white">
           {isNaN(value) || !isFinite(value) ? "0.00" : value.toFixed(digits)}
         </span>
-        <span className="text-indigo-500 dark:text-indigo-400 text-xs font-semibold">{unit}</span>
+        <span className="text-accent-800 dark:text-accent-400 text-xs font-semibold">{unit}</span>
       </div>
     </div>
   );

@@ -88,47 +88,27 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
   };
 
   const linkClass =
-    'inline-flex items-center gap-2 py-1 text-[15px] text-slate-600 dark:text-slate-400 hover:text-primary-700 dark:hover:text-primary-300 hover:underline underline-offset-4 transition-colors';
+    'inline-flex items-center gap-2 py-1 text-[15px] text-txt-secondary hover:text-accent-800 dark:hover:text-accent-400 hover:underline underline-offset-4 transition-colors';
 
   return (
-    <footer className="w-full mt-auto bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+    <footer className="w-full mt-auto bg-surface-default border-t border-border-color">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-14 pb-8">
         <div className="mb-14">
           <NewsletterSignupCard />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-10">
-          {COLUMNS.map((col) => (
-            <nav key={col.title} aria-label={col.title}>
-              <h2 className="text-sm font-bold tracking-wide text-slate-900 dark:text-white mb-3">{col.title}</h2>
-              <ul>
-                {col.links.map((l) => (
-                  <li key={l.id}>
-                    <a href={`#/${l.id}`} onClick={go(l.id)} className={linkClass}>
-                      {l.label}
-                      {l.badge && (
-                        <span className="px-1.5 py-0.5 rounded-md text-xs font-bold bg-primary-100 text-primary-700 dark:bg-primary-600/20 dark:text-primary-300">
-                          {l.badge}
-                        </span>
-                      )}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
-
           {/* Brand + contact (Coursera puts the app/social block in the last column) */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <a href="#/" onClick={go('home')} className="inline-flex items-center gap-2.5 mb-3" aria-label="Civil Estimation Pro - home">
-              <span className="w-9 h-9 rounded-lg bg-primary-600 text-white flex items-center justify-center">
+              <span className="w-9 h-9 rounded-lg bg-ink text-white flex items-center justify-center">
                 <Building2 className="w-5 h-5" aria-hidden="true" />
               </span>
-              <span className="font-bold text-slate-900 dark:text-white leading-tight">
-                Civil Estimation <span className="text-primary-600 dark:text-primary-300">PRO</span>
+              <span className="font-bold text-txt-primary leading-tight">
+                Civil Estimation <span className="text-accent-800 dark:text-accent-400">PRO</span>
               </span>
             </a>
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs">
+            <p className="text-sm text-txt-secondary max-w-xs">
               Quantity, BOQ and cost estimation calculators for civil engineers, contractors and students.
             </p>
             <ul className="mt-4 flex items-center gap-2">
@@ -137,9 +117,9 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
                   <a
                     href={`mailto:${SUPPORT_EMAIL}`}
                     aria-label="Email support"
-                    className="w-10 h-10 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary-700 hover:border-primary-600 transition-colors"
+                    className="w-9 h-9 rounded-full bg-ink text-white flex items-center justify-center hover:bg-ink-700 transition-colors"
                   >
-                    <Mail className="w-[18px] h-[18px]" aria-hidden="true" />
+                    <Mail className="w-4 h-4" aria-hidden="true" />
                   </a>
                 </li>
               )}
@@ -150,9 +130,9 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${s.name} (opens in a new tab)`}
-                    className="w-10 h-10 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary-700 hover:border-primary-600 transition-colors"
+                    className="w-9 h-9 rounded-full bg-ink text-white flex items-center justify-center hover:bg-ink-700 transition-colors"
                   >
-                    <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d={s.path} />
                     </svg>
                   </a>
@@ -160,12 +140,32 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
               ))}
             </ul>
           </div>
+          {COLUMNS.map((col) => (
+            <nav key={col.title} aria-label={col.title}>
+              <h2 className="text-base font-bold tracking-tight text-txt-primary mb-3">{col.title}</h2>
+              <ul>
+                {col.links.map((l) => (
+                  <li key={l.id}>
+                    <a href={`#/${l.id}`} onClick={go(l.id)} className={linkClass}>
+                      {l.label}
+                      {l.badge && (
+                        <span className="px-1.5 py-0.5 rounded-md text-xs font-bold bg-accent-100 text-accent-800 dark:bg-accent-600/20 dark:text-accent-400">
+                          {l.badge}
+                        </span>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+
         </div>
 
-        <div className="mt-12 pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+        <div className="mt-12 pt-6 border-t border-border-color flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="text-sm text-txt-secondary space-y-1">
             <p>&copy; {new Date().getFullYear()} Civil Estimation Pro. All rights reserved.</p>
-            <p className="max-w-2xl text-[13px] text-slate-500 dark:text-slate-400">
+            <p className="max-w-2xl text-[13px] text-txt-secondary">
               Estimates are algorithmically generated from benchmark rates and standard assumptions. They do not replace a BOQ
               certified by a licensed engineer or quantity surveyor.
             </p>
@@ -174,7 +174,7 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
             <ul className="flex items-center gap-4">
               {LEGAL.map((l) => (
                 <li key={l.id}>
-                  <a href={`#/${l.id}`} onClick={go(l.id)} className="text-sm text-slate-600 dark:text-slate-400 hover:text-primary-700 dark:hover:text-primary-300 hover:underline underline-offset-4">
+                  <a href={`#/${l.id}`} onClick={go(l.id)} className="text-sm text-txt-secondary hover:text-accent-800 dark:hover:text-accent-400 hover:underline underline-offset-4">
                     {l.label}
                   </a>
                 </li>
@@ -183,7 +183,7 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
             <button
               type="button"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-sm font-semibold text-txt-primary dark:text-txt-primary hover:bg-surface-active/60 dark:hover:bg-ink-700 transition-colors"
             >
               Back to top <ArrowUp className="w-4 h-4" aria-hidden="true" />
             </button>

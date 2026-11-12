@@ -167,7 +167,7 @@ const MeasurementSheetCalculator: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h2 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
-            <Section className="w-6 h-6 text-purple-600" />
+            <Section className="w-6 h-6 text-accent-800" />
             Measurement Sheet
           </h2>
           <p className="text-txt-tertiary mt-1">
@@ -175,7 +175,7 @@ const MeasurementSheetCalculator: React.FC = () => {
           </p>
         </div>
         <Button onClick={exportPDF}
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors whitespace-nowrap active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+          className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors whitespace-nowrap active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
         >
           <Download className="w-4 h-4" />
           Export PDF
@@ -190,8 +190,8 @@ const MeasurementSheetCalculator: React.FC = () => {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-2xl font-medium whitespace-nowrap transition-colors ${
               activeTab === tab 
-                ? "bg-purple-100  text-purple-700 "
-                : "text-txt-secondary  hover:bg-slate-100"
+                ? "bg-accent-100  text-accent-800 "
+                : "text-txt-secondary  hover:bg-surface-hover"
             }`}
           >
             {TAB_TITLES[tab]}
@@ -200,23 +200,23 @@ const MeasurementSheetCalculator: React.FC = () => {
       </div>
 
       {/* TABLE */}
-      <div className="overflow-x-auto w-full rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+      <div className="overflow-x-auto w-full rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-blue-50 text-orange-800">
+            <tr className="bg-accent-50 text-accent-800">
               <th className="p-3 font-semibold rounded-tl-xl w-24">Item No</th>
               <th className="p-3 font-semibold min-w-[200px]">Description</th>
               <th className="p-3 font-semibold w-20">Nos</th>
               <th className="p-3 font-semibold w-24">L</th>
               <th className="p-3 font-semibold w-24">W</th>
               <th className="p-3 font-semibold w-24">H/D</th>
-              <th className="p-3 font-semibold w-32 border-l border-blue-200">Total</th>
+              <th className="p-3 font-semibold w-32 border-l border-accent-200">Total</th>
               <th className="p-3 font-semibold rounded-tr-xl w-16"></th>
             </tr>
           </thead>
           <tbody>
             {sheets[activeTab].map((row, idx) => (
-              <tr key={row.id} className="border-b border-slate-100 hover:bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-hidden">
+              <tr key={row.id} className="border-b border-border-color hover:bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                 <td className="p-2">
                   <><label htmlFor="a11y-input-343" className="sr-only">Input</label>
 <input id="a11y-input-343"
@@ -233,7 +233,7 @@ const MeasurementSheetCalculator: React.FC = () => {
                     type="text"
                     value={row.description}
                     onChange={(e) => handleRowChange(activeTab, row.id, "description", e.target.value)}
-                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-3 py-1.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none text-txt-primary"
+                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-3 py-1.5 focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary"
                     placeholder="Enter description..."
                   /></>
                 </td>
@@ -243,7 +243,7 @@ const MeasurementSheetCalculator: React.FC = () => {
                     type="number" inputMode="decimal"
                     value={row.nos}
                     onChange={(e) => handleRowChange(activeTab, row.id, "nos", e.target.value)}
-                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none text-center text-txt-primary"
+                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-center text-txt-primary"
                     min="0"
                   /></>
                 </td>
@@ -253,7 +253,7 @@ const MeasurementSheetCalculator: React.FC = () => {
                     type="number" inputMode="decimal"
                     value={row.length}
                     onChange={(e) => handleRowChange(activeTab, row.id, "length", e.target.value)}
-                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none text-center text-txt-primary"
+                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-center text-txt-primary"
                   /></>
                 </td>
                 <td className="p-2">
@@ -262,7 +262,7 @@ const MeasurementSheetCalculator: React.FC = () => {
                     type="number" inputMode="decimal"
                     value={row.width}
                     onChange={(e) => handleRowChange(activeTab, row.id, "width", e.target.value)}
-                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none text-center text-txt-primary"
+                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-center text-txt-primary"
                   /></>
                 </td>
                 <td className="p-2">
@@ -271,10 +271,10 @@ const MeasurementSheetCalculator: React.FC = () => {
                     type="number" inputMode="decimal"
                     value={row.heightDepth}
                     onChange={(e) => handleRowChange(activeTab, row.id, "heightDepth", e.target.value)}
-                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none text-center text-txt-primary"
+                    className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-center text-txt-primary"
                   /></>
                 </td>
-                <td className="p-2 border-l border-slate-100 bg-slate-50 border-b-0 font-medium text-txt-primary">
+                <td className="p-2 border-l border-border-color bg-surface-hover border-b-0 font-medium text-txt-primary">
                   <div className="w-full text-right px-2">
                     {row.result > 0 ? row.result.toFixed(2) : "-"}
                   </div>
@@ -282,7 +282,7 @@ const MeasurementSheetCalculator: React.FC = () => {
                 <td className="p-2 text-center">
                   <Button
                     onClick={() => deleteRow(activeTab, row.id)}
-                    className="text-txt-secondary hover:text-red-500 transition-colors p-1 rounded-full"
+                    className="text-txt-secondary hover:text-ui-errorText transition-colors p-1 rounded-full"
                     title="Delete row"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -292,11 +292,11 @@ const MeasurementSheetCalculator: React.FC = () => {
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t-2 border-blue-200">
+            <tr className="border-t-2 border-accent-200">
               <td colSpan={6} className="p-4 text-right font-bold text-txt-secondary">
                 SUBTOTAL
               </td>
-              <td className="p-4 text-right font-bold text-purple-700 bg-purple-50">
+              <td className="p-4 text-right font-bold text-accent-800 bg-accent-50">
                 {getSubtotal(activeTab).toFixed(2)}
               </td>
               <td></td>
@@ -308,7 +308,7 @@ const MeasurementSheetCalculator: React.FC = () => {
       <div className="mt-4 flex justify-start">
         <Button
           onClick={() => addRow(activeTab)}
-          className="flex items-center gap-2 text-purple-600 hover:bg-purple-50 px-4 py-2 rounded-full font-medium transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+          className="flex items-center gap-2 text-accent-800 hover:bg-accent-50 px-4 py-2 rounded-full font-medium transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
         >
           <Plus className="w-4 h-4" />
           Add Row

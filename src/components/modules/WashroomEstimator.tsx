@@ -150,9 +150,9 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
           type="number" inputMode="decimal" 
           value={val} 
           onChange={(e)=>setVal(e.target.value)} 
-          className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:dark:border-slate-700 rounded-full px-4 py-2.5 text-txt-primary dark:text-white font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 outline-none transition-all"
+          className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:dark:border-ink-600 rounded-full px-4 py-2.5 text-txt-primary dark:text-white font-semibold focus:ring-2 focus:ring-accent-500 outline-none transition-all"
         /></>
-        {suffix && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-base font-medium">{suffix}</span>}
+        {suffix && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-txt-tertiary text-base font-medium">{suffix}</span>}
       </div>
     
       <CalculationHistory calculatorId="washroomestimator_tool" currentInputs={{}} />
@@ -164,9 +164,9 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-2xl border border-ui-borderSubtle dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] px-4 md:px-0"
+      className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 bg-surface-default rounded-2xl shadow-2xl border border-ui-borderSubtle dark:border-ink overflow-hidden flex flex-col max-h-[90vh] px-4 md:px-0"
     >
-      <div className="bg-gradient-to-r from-[var(--accent-purple)] to-indigo-600 p-6 sm:p-8 flex items-center justify-between shrink-0">
+      <div className="bg-gradient-to-r from-accent-500 to-ink p-6 sm:p-8 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-surface-default/20 backdrop-blur-md rounded-2xl flex items-center justify-center overflow-hidden">
             <Droplets className="w-6 h-6 text-txt-primary dark:text-white" />
@@ -174,13 +174,13 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
           <div>
             <div className="flex items-center gap-3">
               <h2 className="text-2xl sm:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">Washroom Estimator</h2>
-              <span className="bg-blue-500 text-white text-xs font-bold tabular-nums tracking-tight uppercase px-2.5 py-1 rounded-full tracking-widest shadow-lg">PRO</span>
+              <span className="bg-ink text-white text-xs font-bold tabular-nums tracking-tight uppercase px-2.5 py-1 rounded-full tracking-widest shadow-brand-lg">PRO</span>
             </div>
-            <p className="text-txt-secondary dark:text-slate-400 font-medium mt-1">Complete material takeoff for bathrooms</p>
+            <p className="text-txt-secondary dark:text-txt-tertiary font-medium mt-1">Complete material takeoff for bathrooms</p>
           </div>
         </div>
         {onClose && (
-          <Button onClick={onClose} className="p-2 bg-slate-900/10 hover:bg-slate-900/20 rounded-full transition-colors text-txt-primary dark:text-white active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <Button onClick={onClose} className="p-2 bg-ink/10 hover:bg-ink/20 rounded-full transition-colors text-txt-primary dark:text-white active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
             <X className="w-6 h-6" />
           </Button>
         )}
@@ -191,14 +191,14 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
         {/* Input Form Column */}
         <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-8">
           {/* Unit Toggle */}
-          <div className="flex bg-slate-200/50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-slate-700 shadow-sm text-txt-primary dark:text-white p-1 rounded-2xl w-fit overflow-hidden">
-            <Button onClick={()=>setUnit("ft")} className={`px-5 py-2 rounded-2xl text-base font-medium transition-all ${unit === "ft" ? "bg-surface-default dark:bg-slate-700 shadow-sm text-purple-600 dark:text-purple-400" : "text-txt-tertiary hover:text-txt-secondary"}`}>Feet</Button>
-            <Button onClick={()=>setUnit("m")} className={`px-5 py-2 rounded-2xl text-base font-medium transition-all ${unit === "m" ? "bg-surface-default dark:bg-slate-700 shadow-sm text-purple-600 dark:text-purple-400" : "text-txt-tertiary hover:text-txt-secondary"}`}>Meters</Button>
+          <div className="flex bg-surface-active/50 dark:bg-surface-hover dark:bg-ink/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-white p-1 rounded-2xl w-fit overflow-hidden">
+            <Button onClick={()=>setUnit("ft")} className={`px-5 py-2 rounded-2xl text-base font-medium transition-all ${unit === "ft" ? "bg-surface-default dark:bg-ink-600 shadow-brand-sm text-accent-800 dark:text-accent-400" : "text-txt-tertiary hover:text-txt-secondary"}`}>Feet</Button>
+            <Button onClick={()=>setUnit("m")} className={`px-5 py-2 rounded-2xl text-base font-medium transition-all ${unit === "m" ? "bg-surface-default dark:bg-ink-600 shadow-brand-sm text-accent-800 dark:text-accent-400" : "text-txt-tertiary hover:text-txt-secondary"}`}>Meters</Button>
           </div>
 
           <section>
-            <div className="flex items-center gap-2 mb-4 border-b border-ui-borderSubtle dark:border-slate-800 pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
-              <Ruler className="w-5 h-5 text-purple-600" />
+            <div className="flex items-center gap-2 mb-4 border-b border-ui-borderSubtle dark:border-ink pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
+              <Ruler className="w-5 h-5 text-accent-800" />
               <h3 className="text-lg font-bold text-txt-primary dark:text-txt-primary dark:text-white">Dimensions</h3>
             </div>
             <div className="grid grid-cols-3 gap-4">
@@ -211,33 +211,33 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
                 <label className="text-base font-medium uppercase tracking-wider">Door (H x W)</label>
                 <div className="flex gap-2">
                   <><label htmlFor="a11y-input-569" className="sr-only">H</label>
-<input id="a11y-input-569" type="number" inputMode="decimal" value={doorH} onChange={e=>setDoorH(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border box-border border-ui-borderSubtle dark:dark:border-slate-700 rounded-full px-3 py-2.5 text-sm" placeholder="H" /></>
+<input id="a11y-input-569" type="number" inputMode="decimal" value={doorH} onChange={e=>setDoorH(e.target.value)} className="w-full bg-surface-default dark:bg-ink border box-border border-ui-borderSubtle dark:dark:border-ink-600 rounded-full px-3 py-2.5 text-sm" placeholder="H" /></>
                   <><label htmlFor="a11y-input-570" className="sr-only">W</label>
-<input id="a11y-input-570" type="number" inputMode="decimal" value={doorW} onChange={e=>setDoorW(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border box-border border-ui-borderSubtle dark:dark:border-slate-700 rounded-full px-3 py-2.5 text-sm" placeholder="W" /></>
+<input id="a11y-input-570" type="number" inputMode="decimal" value={doorW} onChange={e=>setDoorW(e.target.value)} className="w-full bg-surface-default dark:bg-ink border box-border border-ui-borderSubtle dark:dark:border-ink-600 rounded-full px-3 py-2.5 text-sm" placeholder="W" /></>
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-base font-medium uppercase tracking-wider"><span className="flex items-center gap-1">Window (H x W) <CodeTooltip standard="IS" code="875 (Part 3)" description="Basic wind speed map for structural design." /></span></label>
                 <div className="flex gap-2">
                   <><label htmlFor="a11y-input-571" className="sr-only">H</label>
-<input id="a11y-input-571" type="number" inputMode="decimal" value={winH} onChange={e=>setWinH(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border box-border border-ui-borderSubtle dark:dark:border-slate-700 rounded-full px-3 py-2.5 text-sm" placeholder="H" /></>
+<input id="a11y-input-571" type="number" inputMode="decimal" value={winH} onChange={e=>setWinH(e.target.value)} className="w-full bg-surface-default dark:bg-ink border box-border border-ui-borderSubtle dark:dark:border-ink-600 rounded-full px-3 py-2.5 text-sm" placeholder="H" /></>
                   <><label htmlFor="a11y-input-572" className="sr-only">W</label>
-<input id="a11y-input-572" type="number" inputMode="decimal" value={winW} onChange={e=>setWinW(e.target.value)} className="w-full bg-surface-default dark:bg-slate-800 border box-border border-ui-borderSubtle dark:dark:border-slate-700 rounded-full px-3 py-2.5 text-sm" placeholder="W" /></>
+<input id="a11y-input-572" type="number" inputMode="decimal" value={winW} onChange={e=>setWinW(e.target.value)} className="w-full bg-surface-default dark:bg-ink border box-border border-ui-borderSubtle dark:dark:border-ink-600 rounded-full px-3 py-2.5 text-sm" placeholder="W" /></>
                 </div>
               </div>
             </div>
             <div className="mt-4">
                 <label className="text-base font-medium uppercase tracking-wider block mb-2">Wall Thickness</label>
                 <div className="flex gap-3">
-                  <Button onClick={() => setWallThickness("4.5")} className={`flex-1 py-2.5 rounded-2xl border text-base font-medium transition-colors ${wallThickness === "4.5" ? "bg-purple-50 border-purple-200 text-purple-700" : "bg-surface-default border-ui-borderSubtle text-txt-secondary hover:bg-slate-50"}`}>4.5 inch</Button>
-                  <Button onClick={() => setWallThickness("9")} className={`flex-1 py-2.5 rounded-2xl border text-base font-medium transition-colors ${wallThickness === "9" ? "bg-purple-50 border-purple-200 text-purple-700" : "bg-surface-default border-ui-borderSubtle text-txt-secondary hover:bg-slate-50"}`}>9 inch</Button>
+                  <Button onClick={() => setWallThickness("4.5")} className={`flex-1 py-2.5 rounded-2xl border text-base font-medium transition-colors ${wallThickness === "4.5" ? "bg-accent-50 border-accent-200 text-accent-800" : "bg-surface-default border-ui-borderSubtle text-txt-secondary hover:bg-surface-hover"}`}>4.5 inch</Button>
+                  <Button onClick={() => setWallThickness("9")} className={`flex-1 py-2.5 rounded-2xl border text-base font-medium transition-colors ${wallThickness === "9" ? "bg-accent-50 border-accent-200 text-accent-800" : "bg-surface-default border-ui-borderSubtle text-txt-secondary hover:bg-surface-hover"}`}>9 inch</Button>
                 </div>
             </div>
           </section>
 
           <section>
-            <div className="flex items-center gap-2 mb-4 border-b border-ui-borderSubtle dark:border-slate-800 pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
-              <Grid2X2 className="w-5 h-5 text-purple-600" />
+            <div className="flex items-center gap-2 mb-4 border-b border-ui-borderSubtle dark:border-ink pb-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
+              <Grid2X2 className="w-5 h-5 text-accent-800" />
               <h3 className="text-lg font-bold text-txt-primary dark:text-txt-primary dark:text-white">Finishes & Ceiling</h3>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -246,7 +246,7 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
               {renderInput("Tile Height", tileHeight, setTileHeight, "0", unit)}
               <div className="flex flex-col gap-1.5">
                 <label className="text-base font-medium uppercase tracking-wider">Ceiling Type</label>
-                <select value={ceilingType} onChange={e=>setCeilingType(e.target.value as any)} className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:dark:border-slate-700 rounded-2xl px-3 py-2.5 text-base font-medium outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 overflow-hidden">
+                <select value={ceilingType} onChange={e=>setCeilingType(e.target.value as any)} className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:dark:border-ink-600 rounded-2xl px-3 py-2.5 text-base font-medium outline-none focus:ring-2 focus:ring-accent-500 overflow-hidden">
                   <option value="None">None</option>
                   <option value="Gypsum">Gypsum Board</option>
                   <option value="PVC">PVC Panels</option>
@@ -257,8 +257,8 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
           </section>
 
           <section>
-            <div className="flex items-center gap-2 mb-4 border-b border-ui-borderSubtle dark:border-slate-800 pb-2">
-              <Zap className="w-5 h-5 text-purple-600" />
+            <div className="flex items-center gap-2 mb-4 border-b border-ui-borderSubtle dark:border-ink pb-2">
+              <Zap className="w-5 h-5 text-accent-800" />
               <h3 className="text-lg font-bold text-txt-primary dark:text-txt-primary dark:text-white">Plumbing & Electrical</h3>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-3">
@@ -278,27 +278,27 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
 
         {/* Results Column */}
         <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col h-full flex flex-col">
-          <div className="w-full bg-surface-default dark:bg-slate-800 rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 sm:p-4 sm:p-4 sm:p-4 sm:p-8 shadow-sm flex-1 border border-ui-borderSubtle dark:dark:border-slate-700 overflow-hidden flex flex-col">
+          <div className="w-full bg-surface-default dark:bg-ink rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 sm:p-4 sm:p-4 sm:p-4 sm:p-8 shadow-brand-sm flex-1 border border-ui-borderSubtle dark:dark:border-ink-600 overflow-hidden flex flex-col">
             <h3 className="text-xl font-bold tracking-tight text-txt-primary dark:text-txt-primary dark:text-white mb-6">Bill of Quantities</h3>
             
             <div className="flex-1 overflow-y-auto pr-2 space-y-6">
               
               <div>
-                <h4 className="text-base font-medium uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2"><Hammer className="w-4 h-4"/> Civil Works</h4>
-                <div className="bg-slate-50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-slate-700 shadow-sm text-txt-primary dark:text-white rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm">
+                <h4 className="text-base font-medium uppercase tracking-widest text-txt-tertiary mb-3 flex items-center gap-2"><Hammer className="w-4 h-4"/> Civil Works</h4>
+                <div className="bg-surface-hover dark:bg-surface-hover dark:bg-ink/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-white rounded-2xl overflow-hidden border border-border-color dark:border-ink shadow-brand-sm">
                   <table className="w-full text-left text-sm">
-                    <thead className="bg-[#f8fafc] dark:bg-slate-800 text-txt-tertiary">
+                    <thead className="bg-surface-hover dark:bg-ink text-txt-tertiary">
                       <tr>
                         <th className="py-3 px-4 font-semibold uppercase text-sm tracking-wider">Item Name</th>
                         <th className="py-3 px-4 font-semibold text-right uppercase text-sm tracking-wider">Qty</th>
                         <th className="py-3 px-4 font-semibold uppercase text-sm tracking-wider">Unit</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tbody className="divide-y divide-border-color dark:divide-ink">
                       {results.civil.map((item, i) => (
-                        <tr key={i} className="hover:bg-surface-default dark:hover:bg-slate-800 transition-colors">
-                          <td className="py-3 px-4 font-medium text-txt-secondary dark:text-slate-300">{item.name}</td>
-                          <td className="py-3 px-4 text-right font-bold tabular-nums tracking-tight text-purple-600 dark:text-purple-400 text-base">{item.qty}</td>
+                        <tr key={i} className="hover:bg-surface-default dark:hover:bg-ink transition-colors">
+                          <td className="py-3 px-4 font-medium text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
+                          <td className="py-3 px-4 text-right font-bold tabular-nums tracking-tight text-accent-800 dark:text-accent-400 text-base">{item.qty}</td>
                           <td className="py-3 px-4 text-txt-tertiary text-base font-medium">{item.unit}</td>
                         </tr>
                       ))}
@@ -308,21 +308,21 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
               </div>
 
               <div>
-                 <h4 className="text-base font-medium uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2"><Grid2X2 className="w-4 h-4"/> Tiles & Finishes</h4>
-                 <div className="bg-slate-50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-slate-700 shadow-sm text-txt-primary dark:text-white rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm">
+                 <h4 className="text-base font-medium uppercase tracking-widest text-txt-tertiary mb-3 flex items-center gap-2"><Grid2X2 className="w-4 h-4"/> Tiles & Finishes</h4>
+                 <div className="bg-surface-hover dark:bg-surface-hover dark:bg-ink/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-white rounded-2xl overflow-hidden border border-border-color dark:border-ink shadow-brand-sm">
                    <table className="w-full text-left text-sm">
-                     <thead className="bg-[#f8fafc] dark:bg-slate-800 text-txt-tertiary">
+                     <thead className="bg-surface-hover dark:bg-ink text-txt-tertiary">
                        <tr>
                          <th className="py-3 px-4 font-semibold uppercase text-sm tracking-wider">Item Name</th>
                          <th className="py-3 px-4 font-semibold text-right uppercase text-sm tracking-wider">Qty</th>
                          <th className="py-3 px-4 font-semibold uppercase text-sm tracking-wider">Unit</th>
                        </tr>
                      </thead>
-                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                     <tbody className="divide-y divide-border-color dark:divide-ink">
                        {results.finishes.map((item, i) => (
-                         <tr key={i} className="hover:bg-surface-default dark:hover:bg-slate-800 transition-colors">
-                           <td className="py-3 px-4 font-medium text-txt-secondary dark:text-slate-300">{item.name}</td>
-                           <td className="py-3 px-4 text-right font-bold tabular-nums tracking-tight text-purple-600 dark:text-purple-400 text-base">{item.qty}</td>
+                         <tr key={i} className="hover:bg-surface-default dark:hover:bg-ink transition-colors">
+                           <td className="py-3 px-4 font-medium text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
+                           <td className="py-3 px-4 text-right font-bold tabular-nums tracking-tight text-accent-800 dark:text-accent-400 text-base">{item.qty}</td>
                            <td className="py-3 px-4 text-txt-tertiary text-base font-medium">{item.unit}</td>
                          </tr>
                        ))}
@@ -332,21 +332,21 @@ export default function WashroomEstimator({ onClose }: { onClose?: () => void })
               </div>
 
               <div>
-                 <h4 className="text-base font-medium uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2"><Zap className="w-4 h-4"/> Plumbing & Electrical</h4>
-                 <div className="bg-slate-50 dark:bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-slate-700 shadow-sm text-txt-primary dark:text-white rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm">
+                 <h4 className="text-base font-medium uppercase tracking-widest text-txt-tertiary mb-3 flex items-center gap-2"><Zap className="w-4 h-4"/> Plumbing & Electrical</h4>
+                 <div className="bg-surface-hover dark:bg-surface-hover dark:bg-ink/50 rounded-2xl border border-ui-borderSubtle dark:dark:border-ink-600 shadow-brand-sm text-txt-primary dark:text-white rounded-2xl overflow-hidden border border-border-color dark:border-ink shadow-brand-sm">
                    <table className="w-full text-left text-sm">
-                     <thead className="bg-[#f8fafc] dark:bg-slate-800 text-txt-tertiary">
+                     <thead className="bg-surface-hover dark:bg-ink text-txt-tertiary">
                        <tr>
                          <th className="py-3 px-4 font-semibold uppercase text-sm tracking-wider">Item Name</th>
                          <th className="py-3 px-4 font-semibold text-right uppercase text-sm tracking-wider">Qty</th>
                          <th className="py-3 px-4 font-semibold uppercase text-sm tracking-wider">Unit</th>
                        </tr>
                      </thead>
-                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                     <tbody className="divide-y divide-border-color dark:divide-ink">
                        {results.mep.map((item, i) => (
-                         <tr key={i} className="hover:bg-surface-default dark:hover:bg-slate-800 transition-colors">
-                           <td className="py-3 px-4 font-medium text-txt-secondary dark:text-slate-300">{item.name}</td>
-                           <td className="py-3 px-4 text-right font-bold tabular-nums tracking-tight text-purple-600 dark:text-purple-400 text-base">{item.qty}</td>
+                         <tr key={i} className="hover:bg-surface-default dark:hover:bg-ink transition-colors">
+                           <td className="py-3 px-4 font-medium text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
+                           <td className="py-3 px-4 text-right font-bold tabular-nums tracking-tight text-accent-800 dark:text-accent-400 text-base">{item.qty}</td>
                            <td className="py-3 px-4 text-txt-tertiary text-base font-medium">{item.unit}</td>
                          </tr>
                        ))}

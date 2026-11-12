@@ -72,15 +72,15 @@ export function WastewaterCalculator() {
   }, [activeTab, initialDO, finalDO, bodSampleVol, bottleVol, vBlank, vSample, normality, codSampleVol]);
 
   const getBodStatus = (bod: number) => {
-    if (bod < 30) return { label: 'Safe / Clean', color: 'text-emerald-600', bg: 'bg-emerald-100', icon: CheckCircle };
-    if (bod <= 100) return { label: 'Moderate Pollution', color: 'text-amber-600', bg: 'bg-amber-100', icon: AlertTriangle };
-    return { label: 'Severe / Industrial', color: 'text-rose-600', bg: 'bg-rose-100', icon: AlertTriangle };
+    if (bod < 30) return { label: 'Safe / Clean', color: 'text-ui-successText', bg: 'bg-ui-success', icon: CheckCircle };
+    if (bod <= 100) return { label: 'Moderate Pollution', color: 'text-accent-800', bg: 'bg-accent-100', icon: AlertTriangle };
+    return { label: 'Severe / Industrial', color: 'text-ui-errorText', bg: 'bg-ui-error', icon: AlertTriangle };
   };
 
   const getCodStatus = (cod: number) => {
-    if (cod < 250) return { label: 'Safe / Clean', color: 'text-emerald-600', bg: 'bg-emerald-100', icon: CheckCircle };
-    if (cod <= 500) return { label: 'Moderate Pollution', color: 'text-amber-600', bg: 'bg-amber-100', icon: AlertTriangle };
-    return { label: 'Severe / Industrial', color: 'text-rose-600', bg: 'bg-rose-100', icon: AlertTriangle };
+    if (cod < 250) return { label: 'Safe / Clean', color: 'text-ui-successText', bg: 'bg-ui-success', icon: CheckCircle };
+    if (cod <= 500) return { label: 'Moderate Pollution', color: 'text-accent-800', bg: 'bg-accent-100', icon: AlertTriangle };
+    return { label: 'Severe / Industrial', color: 'text-ui-errorText', bg: 'bg-ui-error', icon: AlertTriangle };
   };
 
   const bodSteps: FormulaStep[] = bodResult ? [
@@ -122,10 +122,10 @@ export function WastewaterCalculator() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header & Toolbar */}
-      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex items-center gap-4">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal-100 text-teal-600">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-100 text-accent-800">
               <Droplets size={24} />
             </div>
             <div>
@@ -135,27 +135,27 @@ export function WastewaterCalculator() {
           </div>
           
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex bg-slate-100 p-1 rounded-xl">
+            <div className="flex bg-surface-hover p-1 rounded-xl">
               <Button
                 onClick={() => setActiveTab('bod')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'bod' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'bod' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 BOD₅ Test
               </Button>
               <Button
                 onClick={() => setActiveTab('cod')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'cod' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'cod' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 COD Test
               </Button>
             </div>
             
-            <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+            <div className="h-8 w-px bg-surface-active mx-1 hidden sm:block"></div>
             
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-slate-50 transition-colors">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover transition-colors">
               <Printer size={16} /> Print
             </Button>
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-teal-600 border border-teal-700 rounded-lg hover:bg-teal-700 transition-colors shadow-sm">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
               <Download size={16} /> Export
             </Button>
           </div>
@@ -166,9 +166,9 @@ export function WastewaterCalculator() {
         {/* Input Parameters */}
         <div className="lg:col-span-7 space-y-6">
           {activeTab === 'bod' ? (
-            <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+            <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
               <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
-                <Beaker size={20} className="text-teal-500" />
+                <Beaker size={20} className="text-accent-600" />
                 BOD₅ Parameters
               </h2>
               
@@ -181,7 +181,7 @@ export function WastewaterCalculator() {
                     step="0.1"
                     value={initialDO}
                     onChange={(e) => setInitialDO(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-2">
@@ -192,9 +192,9 @@ export function WastewaterCalculator() {
                     step="0.1"
                     value={finalDO}
                     onChange={(e) => setFinalDO(Number(e.target.value))}
-                    className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 outline-none transition-all ${bodError ? 'border-rose-300 focus:border-rose-500' : 'border-ui-borderSubtle focus:border-teal-500'}`}
+                    className={`w-full bg-surface-hover border rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 outline-none transition-all ${bodError ? 'border-ui-errorBorder focus:border-ui-errorText' : 'border-ui-borderSubtle focus:border-accent-500'}`}
                   />
-                  {bodError && <p className="text-xs text-rose-500">{bodError}</p>}
+                  {bodError && <p className="text-xs text-ui-errorText">{bodError}</p>}
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-txt-secondary">Sample Volume (mL)</label>
@@ -203,7 +203,7 @@ export function WastewaterCalculator() {
                     min="1"
                     value={bodSampleVol}
                     onChange={(e) => setBodSampleVol(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-2">
@@ -213,15 +213,15 @@ export function WastewaterCalculator() {
                     min="1"
                     value={bottleVol}
                     onChange={(e) => setBottleVol(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 outline-none transition-all"
                   />
                 </div>
               </div>
             </div>
           ) : (
-            <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+            <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
               <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
-                <TestTube size={20} className="text-teal-500" />
+                <TestTube size={20} className="text-accent-600" />
                 COD Titration Parameters
               </h2>
               
@@ -234,7 +234,7 @@ export function WastewaterCalculator() {
                     step="0.1"
                     value={vBlank}
                     onChange={(e) => setVBlank(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-2">
@@ -245,9 +245,9 @@ export function WastewaterCalculator() {
                     step="0.1"
                     value={vSample}
                     onChange={(e) => setVSample(Number(e.target.value))}
-                    className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 outline-none transition-all ${codError ? 'border-rose-300 focus:border-rose-500' : 'border-ui-borderSubtle focus:border-teal-500'}`}
+                    className={`w-full bg-surface-hover border rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 outline-none transition-all ${codError ? 'border-ui-errorBorder focus:border-ui-errorText' : 'border-ui-borderSubtle focus:border-accent-500'}`}
                   />
-                  {codError && <p className="text-xs text-rose-500">{codError}</p>}
+                  {codError && <p className="text-xs text-ui-errorText">{codError}</p>}
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-txt-secondary">Normality of FAS (N)</label>
@@ -257,7 +257,7 @@ export function WastewaterCalculator() {
                     step="0.01"
                     value={normality}
                     onChange={(e) => setNormality(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-2">
@@ -267,7 +267,7 @@ export function WastewaterCalculator() {
                     min="1"
                     value={codSampleVol}
                     onChange={(e) => setCodSampleVol(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 outline-none transition-all"
                   />
                 </div>
               </div>
@@ -277,13 +277,13 @@ export function WastewaterCalculator() {
 
         {/* Results Panel */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
+          <div className="bg-ink rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
               <Droplets size={120} />
             </div>
             
             <h2 className="text-xl font-bold flex items-center gap-2 relative z-10">
-              <Beaker size={24} className="text-teal-400" />
+              <Beaker size={24} className="text-accent-400" />
               {activeTab === 'bod' ? 'BOD₅ Results' : 'COD Results'}
             </h2>
 
@@ -293,8 +293,8 @@ export function WastewaterCalculator() {
               return (
                 <div className="space-y-4 relative z-10">
                   <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                    <div className="text-teal-200 text-sm font-medium mb-1">Calculated BOD₅</div>
-                    <div className="text-4xl font-black text-white">{bodResult.bod.toFixed(2)} <span className="text-lg font-medium text-teal-200">mg/L</span></div>
+                    <div className="text-accent-200 text-sm font-medium mb-1">Calculated BOD₅</div>
+                    <div className="text-4xl font-black text-white">{bodResult.bod.toFixed(2)} <span className="text-lg font-medium text-accent-200">mg/L</span></div>
                   </div>
                   
                   <div className={`rounded-2xl p-4 flex items-center gap-3 ${status.bg} border border-white/20`}>
@@ -314,8 +314,8 @@ export function WastewaterCalculator() {
               return (
                 <div className="space-y-4 relative z-10">
                   <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                    <div className="text-teal-200 text-sm font-medium mb-1">Calculated COD</div>
-                    <div className="text-4xl font-black text-white">{codResult.cod.toFixed(2)} <span className="text-lg font-medium text-teal-200">mg/L</span></div>
+                    <div className="text-accent-200 text-sm font-medium mb-1">Calculated COD</div>
+                    <div className="text-4xl font-black text-white">{codResult.cod.toFixed(2)} <span className="text-lg font-medium text-accent-200">mg/L</span></div>
                   </div>
                   
                   <div className={`rounded-2xl p-4 flex items-center gap-3 ${status.bg} border border-white/20`}>
@@ -330,7 +330,7 @@ export function WastewaterCalculator() {
             })()}
 
             {(bodError && activeTab === 'bod') || (codError && activeTab === 'cod') ? (
-              <div className="bg-rose-500/20 border border-rose-500/50 rounded-2xl p-4 flex items-center gap-3 text-rose-200">
+              <div className="bg-ui-error border border-ui-errorBorder rounded-2xl p-4 flex items-center gap-3 text-ui-errorText">
                 <AlertTriangle size={20} />
                 <span className="text-sm font-medium">Invalid input parameters. Please check your data.</span>
               </div>

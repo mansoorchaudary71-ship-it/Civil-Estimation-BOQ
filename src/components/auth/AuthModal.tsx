@@ -101,15 +101,15 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#F5F5F7] backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-hover backdrop-blur-sm">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="relative w-full max-w-md overflow-hidden bg-bg-card rounded-2xl shadow-2xl border border-ui-borderSubtle dark:border-slate-700"
+          className="relative w-full max-w-md overflow-hidden bg-bg-card rounded-2xl shadow-2xl border border-ui-borderSubtle dark:border-ink-600"
         >
           <Button onClick={onClose}
-            className="absolute top-5 right-5 p-2 text-txt-tertiary hover:text-txt-secondary rounded-full hover:bg-slate-100 transition-colors z-10 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+            className="absolute top-5 right-5 p-2 text-txt-tertiary hover:text-txt-secondary rounded-full hover:bg-surface-hover transition-colors z-10 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
           >
             <X className="w-5 h-5" />
           </Button>
@@ -125,10 +125,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-1.5 flex flex-col">
-                  <label htmlFor="auth-name" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Full Name <span className="text-rose-500" aria-hidden="true">*</span></label>
+                  <label htmlFor="auth-name" className="text-sm font-bold text-txt-primary ml-1">Full Name <span className="text-ui-errorText" aria-hidden="true">*</span></label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <User className="w-5 h-5 text-slate-400" />
+                      <User className="w-5 h-5 text-txt-tertiary" />
                     </div>
                     <input id="auth-name"
                       type="text"
@@ -139,17 +139,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         setError('');
                       }}
                       required
-                      className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                      className="w-full bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 transition-all font-medium text-txt-primary placeholder:text-txt-tertiary"
                     />
                   </div>
                 </div>
               )}
               
               <div className="space-y-1.5 flex flex-col">
-                <label htmlFor="auth-email" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Work Email Address <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <label htmlFor="auth-email" className="text-sm font-bold text-txt-primary ml-1">Work Email Address <span className="text-ui-errorText" aria-hidden="true">*</span></label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <AtSign className="w-5 h-5 text-slate-400" />
+                    <AtSign className="w-5 h-5 text-txt-tertiary" />
                   </div>
                   <input id="auth-email"
                     type="email"
@@ -160,16 +160,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       setError('');
                     }}
                     required
-                    className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                    className="w-full bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 transition-all font-medium text-txt-primary placeholder:text-txt-tertiary"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5 flex flex-col">
-                <label htmlFor="auth-password" className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Password <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <label htmlFor="auth-password" className="text-sm font-bold text-txt-primary ml-1">Password <span className="text-ui-errorText" aria-hidden="true">*</span></label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="w-5 h-5 text-slate-400" />
+                    <Lock className="w-5 h-5 text-txt-tertiary" />
                   </div>
                   <input id="auth-password"
                     type="password"
@@ -180,7 +180,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       setError('');
                     }}
                     required
-                    className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium text-txt-primary placeholder:text-slate-400"
+                    className="w-full bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 transition-all font-medium text-txt-primary placeholder:text-txt-tertiary"
                   />
                 </div>
               </div>
@@ -192,7 +192,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 size="lg"
                 isLoading={isLoading}
                 loadingText={isLogin ? 'Signing In...' : 'Creating Account...'}
-                className="mt-2 text-base shadow-[0_4px_14px_rgba(99,102,241,0.25)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.3)] bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white"
+                className="mt-2 text-base shadow-[0_4px_14px_rgba(99,102,241,0.25)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.3)] bg-gradient-to-r from-accent-600 to-accent-600 hover:from-accent-500 hover:to-accent-500 text-white"
               >
                 {isLogin ? 'Sign In' : 'Create Account'}
               </Button>
@@ -208,7 +208,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   setIsLogin(!isLogin);
                   setError('');
                 }}
-                className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors rounded-full"
+                className="font-semibold text-accent-800 hover:text-accent-800 transition-colors rounded-full"
               >
                 {isLogin ? 'Sign up' : 'Log in'}
               </Button>

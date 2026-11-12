@@ -17,7 +17,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
       <h2 id={`${id}-heading`} className="text-2xl font-bold text-txt-primary dark:text-white mb-4">
         {title}
       </h2>
-      <div className="space-y-4 text-base leading-relaxed text-txt-secondary dark:text-slate-300">
+      <div className="space-y-4 text-base leading-relaxed text-txt-secondary dark:text-txt-tertiary">
         {children}
       </div>
     </section>
@@ -27,14 +27,14 @@ function Section({ id, title, children }: { id: string; title: string; children:
 function FaqAccordion() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <div className="divide-y divide-ui-borderSubtle dark:divide-slate-700 border border-ui-borderSubtle dark:border-slate-700 rounded-2xl overflow-hidden bg-bg-card">
+    <div className="divide-y divide-ui-borderSubtle dark:divide-ink-600 border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden bg-bg-card">
       {BRICK_FAQS.map((faq, i) => (
         <div key={faq.q}>
           <button
             type="button"
             onClick={() => setOpen(open === i ? null : i)}
             aria-expanded={open === i}
-            className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors"
+            className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-accent-50 dark:hover:bg-accent-900/10 transition-colors"
           >
             <span className="font-semibold text-txt-primary dark:text-white">{faq.q}</span>
             <ChevronDown
@@ -42,7 +42,7 @@ function FaqAccordion() {
             />
           </button>
           {open === i && (
-            <p className="px-5 pb-5 text-base leading-relaxed text-txt-secondary dark:text-slate-300">
+            <p className="px-5 pb-5 text-base leading-relaxed text-txt-secondary dark:text-txt-tertiary">
               {faq.a}
             </p>
           )}
@@ -99,7 +99,7 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           every contractor — 9 bricks per square foot for a 9-inch wall, 13.5 bricks per cubic
           foot — except here every step is shown, so you can check it.
         </p>
-        <div className="bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-2xl p-5 space-y-2 font-mono text-sm overflow-x-auto">
+        <div className="bg-surface-default border border-ui-borderSubtle dark:border-ink-600 rounded-2xl p-5 space-y-2 font-mono text-sm overflow-x-auto">
           <p>Wall volume = length × height × thickness</p>
           <p>Net wall area = gross area − openings area</p>
           <p>Brick with mortar = (length + joint) × (width + joint) × (height + joint)</p>
@@ -143,16 +143,16 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           standards.
         </p>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm border border-ui-borderSubtle dark:border-slate-700 rounded-2xl overflow-hidden">
+          <table className="w-full text-sm border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-900 text-left">
+              <tr className="bg-surface-default text-left">
                 <th className="px-4 py-3 font-semibold">Brick</th>
                 <th className="px-4 py-3 font-semibold">Size (mm)</th>
                 <th className="px-4 py-3 font-semibold">Standard</th>
                 <th className="px-4 py-3 font-semibold">Used in</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-ui-borderSubtle dark:divide-slate-700">
+            <tbody className="divide-y divide-ui-borderSubtle dark:divide-ink-600">
               <tr>
                 <td className="px-4 py-3">Pakistani Awwal</td>
                 <td className="px-4 py-3">230 × 110 × 75</td>
@@ -223,16 +223,16 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           only practical choice, because red-brick kilns are restricted in green zones.
         </p>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm border border-ui-borderSubtle dark:border-slate-700 rounded-2xl overflow-hidden">
+          <table className="w-full text-sm border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-900 text-left">
+              <tr className="bg-surface-default text-left">
                 <th className="px-4 py-3 font-semibold">Type</th>
                 <th className="px-4 py-3 font-semibold">Indicative price / 1,000</th>
                 <th className="px-4 py-3 font-semibold">Best for</th>
                 <th className="px-4 py-3 font-semibold">Wastage</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-ui-borderSubtle dark:divide-slate-700">
+            <tbody className="divide-y divide-ui-borderSubtle dark:divide-ink-600">
               <tr>
                 <td className="px-4 py-3 font-semibold">Awwal (first-class)</td>
                 <td className="px-4 py-3">PKR 16,500–23,000</td>
@@ -276,20 +276,20 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
             supplier before ordering; the calculator lets you overwrite any rate.
           </p>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm border border-ui-borderSubtle dark:border-slate-700 rounded-2xl overflow-hidden">
+            <table className="w-full text-sm border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden">
               <thead>
-                <tr className="bg-slate-50 dark:bg-slate-900 text-left">
+                <tr className="bg-surface-default text-left">
                   <th className="px-4 py-3 font-semibold">City</th>
                   <th className="px-4 py-3 font-semibold">Awwal / red clay (per 1,000)</th>
                   <th className="px-4 py-3 font-semibold">Cement (50 kg bag)</th>
                   <th className="px-4 py-3 font-semibold">Sand</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-ui-borderSubtle dark:divide-slate-700">
+              <tbody className="divide-y divide-ui-borderSubtle dark:divide-ink-600">
                 {CITY_VARIANTS.map((c) => (
                   <tr key={c.slug}>
                     <td className="px-4 py-3 font-semibold">
-                      <Link to={`/brick-calculator/${c.slug}`} className="text-blue-600 hover:underline">
+                      <Link to={`/brick-calculator/${c.slug}`} className="text-accent-800 hover:underline">
                         {c.name}
                       </Link>
                     </td>
@@ -335,9 +335,9 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
             final figure.
           </p>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm border border-ui-borderSubtle dark:border-slate-700 rounded-2xl overflow-hidden">
+            <table className="w-full text-sm border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden">
               <thead>
-                <tr className="bg-slate-50 dark:bg-slate-900 text-left">
+                <tr className="bg-surface-default text-left">
                   <th className="px-4 py-3 font-semibold">House</th>
                   <th className="px-4 py-3 font-semibold">Plot</th>
                   <th className="px-4 py-3 font-semibold">External walls</th>
@@ -346,18 +346,18 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
                   <th className="px-4 py-3 font-semibold">Total (incl. 5%)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-ui-borderSubtle dark:divide-slate-700">
+              <tbody className="divide-y divide-ui-borderSubtle dark:divide-ink-600">
                 {HOUSE_SIZE_VARIANTS.map((s) => (
                   <tr
                     key={s.slug}
                     className={
                       variant.kind === "size" && variant.data.slug === s.slug
-                        ? "bg-blue-50 dark:bg-blue-900/20"
+                        ? "bg-accent-50 dark:bg-accent-900/20"
                         : undefined
                     }
                   >
                     <td className="px-4 py-3 font-semibold">
-                      <Link to={`/brick-calculator/${s.slug}`} className="text-blue-600 hover:underline">
+                      <Link to={`/brick-calculator/${s.slug}`} className="text-accent-800 hover:underline">
                         {s.name}
                       </Link>
                     </td>
@@ -417,7 +417,7 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
         <FaqAccordion />
       </Section>
 
-      <section aria-label="Sources and review" className="mt-12 border-t border-ui-borderSubtle dark:border-slate-700 pt-6 text-sm text-txt-tertiary space-y-2">
+      <section aria-label="Sources and review" className="mt-12 border-t border-ui-borderSubtle dark:border-ink-600 pt-6 text-sm text-txt-tertiary space-y-2">
         <p>
           <strong className="text-txt-primary dark:text-white">Reviewed by:</strong>{" "}
           {REVIEWER.name} — {REVIEWER.role}. {REVIEWER.note}

@@ -55,10 +55,10 @@ export default function PricingPage() {
 
   return (
     <PricingBackgroundWrapper>
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0B1120] text-txt-primary dark:text-slate-100 font-sans pb-24 overflow-x-hidden">
+    <div className="min-h-screen bg-surface-default font-sans pb-24 overflow-x-hidden">
       
       {/* 14-day Free Trial Banner */}
-      <div className="bg-indigo-600 dark:bg-indigo-500 text-white text-center text-sm font-medium py-2 px-4 shadow-sm">
+      <div className="bg-ink dark:bg-ink text-white text-center text-sm font-medium py-2 px-4 shadow-brand-sm">
         Start your 14-day free trial today. <span className="font-bold">No credit card required.</span>
       </div>
 
@@ -72,13 +72,13 @@ export default function PricingPage() {
             transition={{ duration: 0.5 }}
             className="text-2xl md:text-xl font-semibold text-txt-primary dark:text-white"
           >
-            Pricing that scales with your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-amber-500">engineering needs</span>
+            Pricing that scales with your <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-500 to-accent-500">engineering needs</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-lg text-txt-secondary dark:text-slate-400 font-medium"
+            className="text-lg text-txt-secondary dark:text-txt-tertiary font-medium"
           >
             From solo estimators to enterprise teams, we have a plan to streamline your workflow and save you countless hours.
           </motion.p>
@@ -91,12 +91,12 @@ export default function PricingPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex flex-col items-center justify-center mb-16"
         >
-          <div className="flex items-center gap-4 bg-surface-default dark:bg-slate-800 p-2 rounded-full border border-ui-borderSubtle dark:border-slate-700 shadow-sm relative">
+          <div className="flex items-center gap-4 bg-surface-default dark:bg-ink p-2 rounded-full border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm relative">
             <Button 
               onClick={() => setIsAnnual(false)}
               className={cn(
                 "px-6 py-2 rounded-full text-base font-medium transition-all z-10 w-32",
-                !isAnnual ? "text-txt-primary dark:text-white" : "text-txt-tertiary dark:text-slate-400 hover:text-txt-secondary"
+                !isAnnual ? "text-txt-primary dark:text-white" : "text-txt-tertiary dark:text-txt-tertiary hover:text-txt-secondary"
               )}
             >
               Monthly
@@ -105,19 +105,19 @@ export default function PricingPage() {
               onClick={() => setIsAnnual(true)}
               className={cn(
                 "px-6 py-2 rounded-full text-base font-medium transition-all z-10 w-32",
-                isAnnual ? "text-txt-primary dark:text-white" : "text-txt-tertiary dark:text-slate-400 hover:text-txt-secondary"
+                isAnnual ? "text-txt-primary dark:text-white" : "text-txt-tertiary dark:text-txt-tertiary hover:text-txt-secondary"
               )}
             >
               Annual
             </Button>
             <div 
               className={cn(
-                "absolute top-2 bottom-2 w-32 bg-slate-100 dark:bg-slate-700 rounded-full transition-transform duration-300 z-0",
+                "absolute top-2 bottom-2 w-32 bg-surface-hover dark:bg-ink-600 rounded-full transition-transform duration-300 z-0",
                 isAnnual ? "translate-x-[136px]" : "translate-x-0"
               )}
             />
             {/* Save Badge */}
-            <div className="absolute -top-3 -right-2 md:-right-8 bg-amber-500 text-white text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md transform rotate-12">
+            <div className="absolute -top-3 -right-2 md:-right-8 bg-accent-500 text-ink text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-brand-md transform rotate-12">
               Save 40%
             </div>
           </div>
@@ -131,26 +131,26 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-surface-default dark:bg-slate-900 rounded-2xl border border-ui-borderSubtle dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full mt-4 md:mt-0"
+            className="bg-surface-default dark:bg-ink rounded-2xl border border-ui-borderSubtle dark:border-ink shadow-brand-sm overflow-hidden flex flex-col h-full mt-4 md:mt-0"
           >
-            <div className="p-4 sm:p-8 md:p-8 pb-6 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-white dark:from-slate-800/50 dark:to-slate-900">
+            <div className="p-4 sm:p-8 md:p-8 pb-6 border-b border-border-color dark:border-ink bg-gradient-to-br from-surface-hover to-white dark:from-ink-800/50 dark:to-ink">
               <h3 className="text-xl font-bold text-txt-primary dark:text-white mb-2">Free</h3>
-              <p className="text-txt-tertiary dark:text-slate-400 text-sm h-10">Essential tools for students and hobbyists.</p>
+              <p className="text-txt-tertiary dark:text-txt-tertiary text-sm h-10">Essential tools for students and hobbyists.</p>
               <div className="my-6">
                 <span className="text-2xl font-black tracking-tight text-txt-primary dark:text-white">$0</span>
-                <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
+                <span className="text-txt-tertiary dark:text-txt-tertiary font-medium">/mo</span>
               </div>
               <Button variant="outline" size="md" fullWidth>
                 Get Started
               </Button>
             </div>
             <div className="p-8 flex-1 flex flex-col gap-4 text-sm font-medium">
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-emerald-500 shrink-0"/> Basic Calculators</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-emerald-500 shrink-0"/> Web Access</div>
-              <div className="flex items-center gap-3 text-slate-400"><X className="w-5 h-5 text-slate-300 dark:text-txt-secondary shrink-0"/> PDF Exports</div>
-              <div className="flex items-center gap-3 text-slate-400"><X className="w-5 h-5 text-slate-300 dark:text-txt-secondary shrink-0"/> Cloud Saving</div>
-              <div className="flex items-center gap-3 text-slate-400"><X className="w-5 h-5 text-slate-300 dark:text-txt-secondary shrink-0"/> AI Assistant</div>
-              <div className="flex items-center gap-3 text-slate-400"><X className="w-5 h-5 text-slate-300 dark:text-txt-secondary shrink-0"/> Premium Support</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-ui-successText shrink-0"/> Basic Calculators</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-ui-successText shrink-0"/> Web Access</div>
+              <div className="flex items-center gap-3 text-txt-tertiary"><X className="w-5 h-5 text-txt-tertiary dark:text-txt-secondary shrink-0"/> PDF Exports</div>
+              <div className="flex items-center gap-3 text-txt-tertiary"><X className="w-5 h-5 text-txt-tertiary dark:text-txt-secondary shrink-0"/> Cloud Saving</div>
+              <div className="flex items-center gap-3 text-txt-tertiary"><X className="w-5 h-5 text-txt-tertiary dark:text-txt-secondary shrink-0"/> AI Assistant</div>
+              <div className="flex items-center gap-3 text-txt-tertiary"><X className="w-5 h-5 text-txt-tertiary dark:text-txt-secondary shrink-0"/> Premium Support</div>
             </div>
           </motion.div>
 
@@ -159,33 +159,33 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-surface-default dark:bg-slate-900 rounded-2xl border-2 border-amber-400/50 dark:border-amber-500/50 shadow-[0_0_40px_-10px_rgba(245,158,11,0.2)] md:-my-6 relative overflow-hidden flex flex-col z-10"
+            className="bg-surface-default dark:bg-ink rounded-2xl border-2 border-accent-400/50 dark:border-accent-500/50 shadow-[0_0_40px_-10px_rgba(242,164,19,0.2)] md:-my-6 relative overflow-hidden flex flex-col z-10"
           >
-            <div className="absolute top-0 left-0 right-0 py-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-center text-base font-medium tracking-widest uppercase">
+            <div className="absolute top-0 left-0 right-0 py-1.5 bg-gradient-to-r from-accent-400 to-ink text-white text-center text-base font-medium tracking-widest uppercase">
               Most Popular
             </div>
-            <div className="p-4 sm:p-8 md:p-8 pb-6 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-br from-amber-50/50 to-white dark:from-slate-800/80 dark:to-slate-900 pt-12">
+            <div className="p-4 sm:p-8 md:p-8 pb-6 border-b border-border-color dark:border-ink bg-gradient-to-br from-accent-50/50 to-white dark:from-ink-800/80 dark:to-ink pt-12">
               <h3 className="text-xl font-bold flex items-center gap-2 text-txt-primary dark:text-white mb-2">
-                Pro <Sparkles className="w-4 h-4 text-amber-500" />
+                Pro <Sparkles className="w-4 h-4 text-accent-700" />
               </h3>
-              <p className="text-txt-tertiary dark:text-slate-400 text-sm h-10">Advanced features for professional estimators.</p>
+              <p className="text-txt-tertiary dark:text-txt-tertiary text-sm h-10">Advanced features for professional estimators.</p>
               <div className="my-6">
                 <span className="text-2xl font-black tracking-tight text-txt-primary dark:text-white">
                   ${isAnnual ? '39' : '65'}
                 </span>
-                <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
-                {isAnnual && <div className="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $468 yearly</div>}
+                <span className="text-txt-tertiary dark:text-txt-tertiary font-medium">/mo</span>
+                {isAnnual && <div className="text-xs text-ui-successText dark:text-ui-successText font-bold mt-1">Billed $468 yearly</div>}
               </div>
               <Button variant="primary" size="lg" fullWidth>
                 Start 14-Day Free Trial
               </Button>
             </div>
             <div className="p-8 flex-1 flex flex-col gap-4 text-sm font-medium">
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-amber-500 shrink-0"/> All Free Features</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-amber-500 shrink-0"/> PDF & Excel Exports</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-amber-500 shrink-0"/> Unlimited Cloud Saving</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-amber-500 shrink-0"/> Advanced BOQ Generator</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-amber-500 shrink-0"/> Cost Database Integration</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-700 shrink-0"/> All Free Features</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-700 shrink-0"/> PDF & Excel Exports</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-700 shrink-0"/> Unlimited Cloud Saving</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-700 shrink-0"/> Advanced BOQ Generator</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-700 shrink-0"/> Cost Database Integration</div>
             </div>
           </motion.div>
 
@@ -194,34 +194,34 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-surface-default dark:bg-slate-900 rounded-2xl border border-ui-borderSubtle dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full mt-4 md:mt-0"
+            className="bg-surface-default dark:bg-ink rounded-2xl border border-ui-borderSubtle dark:border-ink shadow-brand-sm overflow-hidden flex flex-col h-full mt-4 md:mt-0"
           >
-            <div className="p-4 sm:p-8 md:p-8 pb-6 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-white dark:from-slate-800/50 dark:to-slate-900">
+            <div className="p-4 sm:p-8 md:p-8 pb-6 border-b border-border-color dark:border-ink bg-gradient-to-br from-surface-hover to-white dark:from-ink-800/50 dark:to-ink">
               <h3 className="text-xl font-bold text-txt-primary dark:text-white mb-2">Team</h3>
-              <p className="text-txt-tertiary dark:text-slate-400 text-sm h-10">Collaboration and admin controls for agencies.</p>
+              <p className="text-txt-tertiary dark:text-txt-tertiary text-sm h-10">Collaboration and admin controls for agencies.</p>
               <div className="my-6">
                 <span className="text-2xl font-black tracking-tight text-txt-primary dark:text-white">
                   ${isAnnual ? '89' : '149'}
                 </span>
-                <span className="text-txt-tertiary dark:text-slate-400 font-medium">/mo</span>
-                {isAnnual && <div className="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-1">Billed $1,068 yearly</div>}
+                <span className="text-txt-tertiary dark:text-txt-tertiary font-medium">/mo</span>
+                {isAnnual && <div className="text-xs text-ui-successText dark:text-ui-successText font-bold mt-1">Billed $1,068 yearly</div>}
               </div>
               <Button variant="secondary" size="md" fullWidth>
                 Contact Sales
               </Button>
             </div>
             <div className="p-8 flex-1 flex flex-col gap-4 text-sm font-medium">
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-indigo-500 shrink-0"/> All Pro Features</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-indigo-500 shrink-0"/> 5 User Seats Included</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-indigo-500 shrink-0"/> Shared Team Database</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-indigo-500 shrink-0"/> Analytics Dashboard</div>
-              <div className="flex items-center gap-3 text-txt-secondary dark:text-slate-300"><Check className="w-5 h-5 text-indigo-500 shrink-0"/> Priority Support</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-800 shrink-0"/> All Pro Features</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-800 shrink-0"/> 5 User Seats Included</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-800 shrink-0"/> Shared Team Database</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-800 shrink-0"/> Analytics Dashboard</div>
+              <div className="flex items-center gap-3 text-txt-secondary dark:text-txt-tertiary"><Check className="w-5 h-5 text-accent-800 shrink-0"/> Priority Support</div>
             </div>
           </motion.div>
         </div>
         
         {/* Trusted By Strip */}
-        <div className="border-y border-ui-borderSubtle dark:border-slate-800/50 py-12 mb-24">
+        <div className="border-y border-ui-borderSubtle dark:border-ink/50 py-12 mb-24">
           <p className="text-center text-base font-medium uppercase tracking-widest mb-8">Trusted by teams at</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
             {LOGOS.map((logo, idx) => (
@@ -237,14 +237,14 @@ export default function PricingPage() {
         </div>
 
         {/* ROI Calculator Widget */}
-        <div className="max-w-4xl mx-auto bg-surface-default dark:bg-slate-900 rounded-2xl border border-ui-borderSubtle dark:border-slate-800 shadow-xl overflow-hidden mb-24 flex flex-col md:flex-row">
-          <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center bg-slate-50 dark:bg-slate-800/40">
+        <div className="max-w-4xl mx-auto bg-surface-default dark:bg-ink rounded-2xl border border-ui-borderSubtle dark:border-ink shadow-brand-lg overflow-hidden mb-24 flex flex-col md:flex-row">
+          <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center bg-surface-default/40">
             <h3 id="section-roi-calculator" className="text-xl font-semibold text-txt-primary dark:text-white mb-2">How much time will you save?</h3>
-            <p className="text-txt-tertiary dark:text-slate-400 mb-8">Drag the slider to see how Civil AI pays for itself.</p>
+            <p className="text-txt-tertiary dark:text-txt-tertiary mb-8">Drag the slider to see how Civil AI pays for itself.</p>
             
-            <label className="text-base font-medium dark:text-slate-300 block mb-4 flex justify-between">
+            <label className="text-base font-medium dark:text-txt-tertiary block mb-4 flex justify-between">
               <span>BOQs created per month</span>
-              <span className="text-indigo-600 dark:text-indigo-400">{boqCount}</span>
+              <span className="text-accent-800 dark:text-accent-400">{boqCount}</span>
             </label>
             <><label htmlFor="a11y-input-578" className="sr-only">Input</label>
 <input id="a11y-input-578" 
@@ -253,19 +253,19 @@ export default function PricingPage() {
               max="50" 
               value={boqCount} 
               onChange={(e) => setBoqCount(parseInt(e.target.value))}
-              className="w-full accent-indigo-600 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+              className="w-full accent-accent-600 h-2 bg-surface-active rounded-lg appearance-none cursor-pointer"
             /></>
           </div>
-          <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center gap-8 bg-indigo-600 dark:bg-indigo-900 text-white">
+          <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center gap-8 bg-ink dark:bg-ink text-white">
             <div>
-              <p className="text-indigo-200 font-medium mb-1 text-sm uppercase tracking-wider">Hours Saved</p>
-              <div className="text-2xl font-black">{hoursSaved}<span className="text-2xl font-medium text-indigo-300"> hrs</span></div>
+              <p className="text-accent-200 font-medium mb-1 text-sm uppercase tracking-wider">Hours Saved</p>
+              <div className="text-2xl font-black">{hoursSaved}<span className="text-2xl font-medium text-accent-400"> hrs</span></div>
             </div>
-            <div className="h-px bg-indigo-500/50 w-full" />
+            <div className="h-px bg-ink w-full" />
             <div>
-              <p className="text-indigo-200 font-medium mb-1 text-sm uppercase tracking-wider">Money Saved</p>
-              <div className="text-2xl font-black">${moneySaved}<span className="text-2xl font-medium text-indigo-300"> /mo</span></div>
-              <p className="text-indigo-300 text-sm mt-2">*Based on typical industry estimating time and avg hourly rate.</p>
+              <p className="text-accent-200 font-medium mb-1 text-sm uppercase tracking-wider">Money Saved</p>
+              <div className="text-2xl font-black">${moneySaved}<span className="text-2xl font-medium text-accent-400"> /mo</span></div>
+              <p className="text-accent-400 text-sm mt-2">*Based on typical industry estimating time and avg hourly rate.</p>
             </div>
           </div>
         </div>

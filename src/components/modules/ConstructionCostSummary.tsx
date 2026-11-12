@@ -19,7 +19,7 @@ interface CostItem {
   amount: number;
 }
 
-const COLORS = ["#8b5cf6", "#f97316", "#3b82f6", "#10b981", "#ef4444", "#6366f1"];
+const COLORS = ["#F2A413", "#F2A413", "#1F1D1A", "#0F766E", "#B07006", "#1F1D1A"];
 
 const ConstructionCostSummary: React.FC = () => {
   const [totalArea, setTotalArea] = useState<number>(2000);
@@ -154,78 +154,78 @@ const ConstructionCostSummary: React.FC = () => {
   const renderCardView = () => (
     <div className="space-y-8">
       {/* Grey Structure */}
-      <div className="bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-        <h3 className="mb-4 border-b border-ui-borderSubtle dark:border-slate-800 pb-2 text-lg font-medium text-txt-primary dark:text-slate-200">
+      <div className="bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl p-6 shadow-brand-sm">
+        <h3 className="mb-4 border-b border-ui-borderSubtle dark:border-ink pb-2 text-lg font-medium text-txt-primary dark:text-txt-primary">
           1. Grey Structure Cost
         </h3>
         <div className="space-y-3">
           {greyStructure.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
-              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-slate-300 mb-1 block">{item.name}</label>
+              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
               <div className="relative w-40">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
                 <input
                   type="number" inputMode="decimal"
                   value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
                   onChange={(e) => updateItem("grey", item.id, e.target.value)}
-                  className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault dark:border-slate-700 rounded-xl py-2 pl-9 pr-3 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-txt-primary dark:text-white"
+                  className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-xl py-2 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white"
                 />
               </div>
             </div>
           ))}
-          <div className="flex justify-between items-center pt-3 mt-2 border-t border-slate-100 dark:border-slate-800 font-semibold text-txt-primary dark:text-slate-200">
+          <div className="flex justify-between items-center pt-3 mt-2 border-t border-border-color dark:border-ink font-semibold text-txt-primary dark:text-txt-primary">
             <span>Subtotal:</span>
             <span>{formatCurrency(greyTotal)}</span>
           </div>
         </div>
       </div>
       {/* Finishing */}
-      <div className="bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-        <h3 className="mb-4 border-b border-ui-borderSubtle dark:border-slate-800 pb-2 text-lg font-medium text-txt-primary dark:text-slate-200">
+      <div className="bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl p-6 shadow-brand-sm">
+        <h3 className="mb-4 border-b border-ui-borderSubtle dark:border-ink pb-2 text-lg font-medium text-txt-primary dark:text-txt-primary">
           2. Finishing Cost
         </h3>
         <div className="space-y-3">
           {finishing.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
-              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-slate-300 mb-1 block">{item.name}</label>
+              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
               <div className="relative w-40">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
                 <input
                   type="number" inputMode="decimal"
                   value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
                   onChange={(e) => updateItem("finish", item.id, e.target.value)}
-                  className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault dark:border-slate-700 rounded-xl py-2 pl-9 pr-3 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-txt-primary dark:text-white"
+                  className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-xl py-2 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white"
                 />
               </div>
             </div>
           ))}
-          <div className="flex justify-between items-center pt-3 mt-2 border-t border-slate-100 dark:border-slate-800 font-semibold text-txt-primary dark:text-slate-200">
+          <div className="flex justify-between items-center pt-3 mt-2 border-t border-border-color dark:border-ink font-semibold text-txt-primary dark:text-txt-primary">
             <span>Subtotal:</span>
             <span>{formatCurrency(finishTotal)}</span>
           </div>
         </div>
       </div>
       {/* Labour */}
-      <div className="bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-        <h3 className="mb-4 border-b border-ui-borderSubtle dark:border-slate-800 pb-2 text-lg font-medium text-txt-primary dark:text-slate-200">
+      <div className="bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl p-6 shadow-brand-sm">
+        <h3 className="mb-4 border-b border-ui-borderSubtle dark:border-ink pb-2 text-lg font-medium text-txt-primary dark:text-txt-primary">
           3. Labour Cost
         </h3>
         <div className="space-y-3">
           {labour.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
-              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-slate-300 mb-1 block">{item.name}</label>
+              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
               <div className="relative w-40">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
                 <input
                   type="number" inputMode="decimal"
                   value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
                   onChange={(e) => updateItem("labour", item.id, e.target.value)}
-                  className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault dark:border-slate-700 rounded-xl py-2 pl-9 pr-3 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-txt-primary dark:text-white"
+                  className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-xl py-2 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white"
                 />
               </div>
             </div>
           ))}
-          <div className="flex justify-between items-center pt-3 mt-2 border-t border-slate-100 dark:border-slate-800 font-semibold text-txt-primary dark:text-slate-200">
+          <div className="flex justify-between items-center pt-3 mt-2 border-t border-border-color dark:border-ink font-semibold text-txt-primary dark:text-txt-primary">
             <span>Subtotal:</span>
             <span>{formatCurrency(labourTotal)}</span>
           </div>
@@ -233,16 +233,16 @@ const ConstructionCostSummary: React.FC = () => {
       </div>
       
       {/* O&P / Contingency */}
-      <div className="bg-blue-50/50 dark:bg-blue-900/10 p-6 rounded-2xl border border-blue-100 dark:border-blue-900/50 shadow-sm">
-        <h3 className="mb-5 flex items-center gap-2 text-lg font-medium text-txt-primary dark:text-slate-200">
-          <Settings2 className="w-5 h-5 text-blue-500" />
+      <div className="bg-accent-50/50 dark:bg-accent-900/10 p-6 rounded-2xl border border-accent-100 dark:border-ink/50 shadow-brand-sm">
+        <h3 className="mb-5 flex items-center gap-2 text-lg font-medium text-txt-primary dark:text-txt-primary">
+          <Settings2 className="w-5 h-5 text-accent-800" />
           Additional Factors
         </h3>
         <div className="space-y-6">
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-medium text-txt-secondary dark:text-slate-300 mb-1 block">Overhead & Profit (%)</label>
-              <span className="bg-surface-default dark:bg-slate-800 px-3 py-1 rounded-lg text-blue-600 dark:text-blue-400 font-bold border border-ui-borderSubtle dark:border-slate-700">{overheadProfitPct}%</span>
+              <label className="text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">Overhead & Profit (%)</label>
+              <span className="bg-surface-default dark:bg-ink px-3 py-1 rounded-lg text-accent-800 dark:text-accent-400 font-bold border border-ui-borderSubtle dark:border-ink-600">{overheadProfitPct}%</span>
             </div>
             <input
               type="range"
@@ -251,13 +251,13 @@ const ConstructionCostSummary: React.FC = () => {
               step="1"
               value={overheadProfitPct}
               onChange={(e) => setOverheadProfitPct(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-blue-500"
+              className="w-full h-2 bg-surface-active rounded-full appearance-none cursor-pointer accent-accent-600"
             />
           </div>
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-medium text-txt-secondary dark:text-slate-300 mb-1 block">Contingency (%)</label>
-              <span className="bg-surface-default dark:bg-slate-800 px-3 py-1 rounded-lg text-blue-600 dark:text-blue-400 font-bold border border-ui-borderSubtle dark:border-slate-700">{contingencyPct}%</span>
+              <label className="text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">Contingency (%)</label>
+              <span className="bg-surface-default dark:bg-ink px-3 py-1 rounded-lg text-accent-800 dark:text-accent-400 font-bold border border-ui-borderSubtle dark:border-ink-600">{contingencyPct}%</span>
             </div>
             <input
               type="range"
@@ -266,7 +266,7 @@ const ConstructionCostSummary: React.FC = () => {
               step="1"
               value={contingencyPct}
               onChange={(e) => setContingencyPct(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-blue-500"
+              className="w-full h-2 bg-surface-active rounded-full appearance-none cursor-pointer accent-accent-600"
             />
           </div>
         </div>
@@ -275,80 +275,80 @@ const ConstructionCostSummary: React.FC = () => {
   );
 
   const renderTableView = () => (
-    <div className="bg-surface-default dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink rounded-2xl shadow-brand-sm overflow-hidden">
       
 <div className="flex justify-end mb-4"><GenericExportButtons tableId="cost-summary-table" filename="Cost_Summary" /></div>
 <div className="overflow-x-auto">
         <table id="cost-summary-table"  className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/50 text-txt-secondary dark:text-slate-300 text-sm border-b border-ui-borderSubtle dark:border-slate-700">
+            <tr className="bg-surface-hover dark:bg-ink/50 text-txt-secondary dark:text-txt-tertiary text-sm border-b border-ui-borderSubtle dark:border-ink-600">
               <th className="py-4 px-6 font-semibold w-1/3">Category</th>
               <th className="py-4 px-6 font-semibold w-1/2">Item Description</th>
               <th className="py-4 px-6 font-semibold text-right">Estimated Cost</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-sm">
+          <tbody className="divide-y divide-border-color dark:divide-ink text-sm">
             {greyStructure.map((item, index) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+              <tr key={item.id} className="hover:bg-surface-hover/50 dark:hover:bg-ink/30 transition-colors">
                 {index === 0 && (
-                  <td rowSpan={greyStructure.length} className="py-3 px-6 font-medium text-txt-primary dark:text-slate-200 align-top border-r border-ui-borderSubtle dark:border-slate-800">
+                  <td rowSpan={greyStructure.length} className="py-3 px-6 font-medium text-txt-primary dark:text-txt-primary align-top border-r border-ui-borderSubtle dark:border-ink">
                     Grey Structure
                     <div className="mt-2 text-xs text-txt-tertiary font-normal">Subtotal: {formatCurrency(greyTotal)}</div>
                   </td>
                 )}
-                <td className="py-3 px-6 text-txt-secondary dark:text-slate-400">{item.name}</td>
+                <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
                 <td className="py-3 px-6 text-right">
                   <div className="relative inline-block w-32">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
                     <input
                       type="number" inputMode="decimal"
                       value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
                       onChange={(e) => updateItem("grey", item.id, e.target.value)}
-                      className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault dark:border-slate-700 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-txt-primary dark:text-white transition-all"
+                      className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white transition-all"
                     />
                   </div>
                 </td>
               </tr>
             ))}
             {finishing.map((item, index) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors border-t border-ui-borderSubtle dark:border-slate-800">
+              <tr key={item.id} className="hover:bg-surface-hover/50 dark:hover:bg-ink/30 transition-colors border-t border-ui-borderSubtle dark:border-ink">
                 {index === 0 && (
-                  <td rowSpan={finishing.length} className="py-3 px-6 font-medium text-txt-primary dark:text-slate-200 align-top border-r border-ui-borderSubtle dark:border-slate-800">
+                  <td rowSpan={finishing.length} className="py-3 px-6 font-medium text-txt-primary dark:text-txt-primary align-top border-r border-ui-borderSubtle dark:border-ink">
                     Finishing Cost
                     <div className="mt-2 text-xs text-txt-tertiary font-normal">Subtotal: {formatCurrency(finishTotal)}</div>
                   </td>
                 )}
-                <td className="py-3 px-6 text-txt-secondary dark:text-slate-400">{item.name}</td>
+                <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
                 <td className="py-3 px-6 text-right">
                   <div className="relative inline-block w-32">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
                     <input
                       type="number" inputMode="decimal"
                       value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
                       onChange={(e) => updateItem("finish", item.id, e.target.value)}
-                      className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault dark:border-slate-700 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-txt-primary dark:text-white transition-all"
+                      className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white transition-all"
                     />
                   </div>
                 </td>
               </tr>
             ))}
             {labour.map((item, index) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors border-t border-ui-borderSubtle dark:border-slate-800">
+              <tr key={item.id} className="hover:bg-surface-hover/50 dark:hover:bg-ink/30 transition-colors border-t border-ui-borderSubtle dark:border-ink">
                 {index === 0 && (
-                  <td rowSpan={labour.length} className="py-3 px-6 font-medium text-txt-primary dark:text-slate-200 align-top border-r border-ui-borderSubtle dark:border-slate-800">
+                  <td rowSpan={labour.length} className="py-3 px-6 font-medium text-txt-primary dark:text-txt-primary align-top border-r border-ui-borderSubtle dark:border-ink">
                     Labour Cost
                     <div className="mt-2 text-xs text-txt-tertiary font-normal">Subtotal: {formatCurrency(labourTotal)}</div>
                   </td>
                 )}
-                <td className="py-3 px-6 text-txt-secondary dark:text-slate-400">{item.name}</td>
+                <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
                 <td className="py-3 px-6 text-right">
                   <div className="relative inline-block w-32">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
                     <input
                       type="number" inputMode="decimal"
                       value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
                       onChange={(e) => updateItem("labour", item.id, e.target.value)}
-                      className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault dark:border-slate-700 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-txt-primary dark:text-white transition-all"
+                      className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white transition-all"
                     />
                   </div>
                 </td>
@@ -359,11 +359,11 @@ const ConstructionCostSummary: React.FC = () => {
       </div>
       
       {/* O&P / Contingency inline below table */}
-      <div className="bg-blue-50/50 dark:bg-blue-900/10 p-6 border-t border-blue-100 dark:border-blue-900/50 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="bg-accent-50/50 dark:bg-accent-900/10 p-6 border-t border-accent-100 dark:border-ink/50 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-txt-secondary dark:text-slate-300 mb-1 block">Overhead & Profit (%)</label>
-            <span className="bg-surface-default dark:bg-slate-800 px-3 py-1 rounded-lg text-blue-600 dark:text-blue-400 font-bold border border-ui-borderSubtle dark:border-slate-700">{overheadProfitPct}%</span>
+            <label className="text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">Overhead & Profit (%)</label>
+            <span className="bg-surface-default dark:bg-ink px-3 py-1 rounded-lg text-accent-800 dark:text-accent-400 font-bold border border-ui-borderSubtle dark:border-ink-600">{overheadProfitPct}%</span>
           </div>
           <input
             type="range"
@@ -372,13 +372,13 @@ const ConstructionCostSummary: React.FC = () => {
             step="1"
             value={overheadProfitPct}
             onChange={(e) => setOverheadProfitPct(parseInt(e.target.value))}
-            className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-blue-500"
+            className="w-full h-2 bg-surface-active rounded-full appearance-none cursor-pointer accent-accent-600"
           />
         </div>
         <div>
           <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-txt-secondary dark:text-slate-300 mb-1 block">Contingency (%)</label>
-            <span className="bg-surface-default dark:bg-slate-800 px-3 py-1 rounded-lg text-blue-600 dark:text-blue-400 font-bold border border-ui-borderSubtle dark:border-slate-700">{contingencyPct}%</span>
+            <label className="text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">Contingency (%)</label>
+            <span className="bg-surface-default dark:bg-ink px-3 py-1 rounded-lg text-accent-800 dark:text-accent-400 font-bold border border-ui-borderSubtle dark:border-ink-600">{contingencyPct}%</span>
           </div>
           <input
             type="range"
@@ -387,7 +387,7 @@ const ConstructionCostSummary: React.FC = () => {
             step="1"
             value={contingencyPct}
             onChange={(e) => setContingencyPct(parseInt(e.target.value))}
-            className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-blue-500"
+            className="w-full h-2 bg-surface-active rounded-full appearance-none cursor-pointer accent-accent-600"
           />
         </div>
       </div>
@@ -399,14 +399,14 @@ const ConstructionCostSummary: React.FC = () => {
       <div className="flex justify-between items-end gap-4 flex-wrap mb-4">
         <div>
           <h2 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">Construction Cost Summary</h2>
-          <p className="text-txt-tertiary dark:text-slate-400">Estimate total material and labor costs for your project.</p>
+          <p className="text-txt-tertiary dark:text-txt-tertiary">Estimate total material and labor costs for your project.</p>
         </div>
         
         <div className="flex items-center gap-3">
           <CurrencySelector />
           <Button
             onClick={exportToPDF}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-surface-default text-white dark:text-txt-primary rounded-lg hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-ink dark:bg-surface-default text-white dark:text-txt-primary rounded-lg hover:bg-ink dark:hover:bg-surface-hover transition-colors shadow-brand-sm"
           >
             <Download className="w-4 h-4" />
             <span className="text-sm font-medium">Export PDF</span>
@@ -415,23 +415,23 @@ const ConstructionCostSummary: React.FC = () => {
       </div>
 
       {/* Main Parameters */}
-      <div className="bg-surface-default dark:bg-slate-900 rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-slate-800 shadow-sm relative overflow-hidden mb-8">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+      <div className="bg-surface-default dark:bg-ink rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-ink shadow-brand-sm relative overflow-hidden mb-8">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 justify-between">
           <div>
-            <h3 className="text-xl font-bold text-txt-primary dark:text-slate-200 mb-1 flex items-center gap-2">
-              <Home className="w-6 h-6 text-blue-500" />
+            <h3 className="text-xl font-bold text-txt-primary dark:text-txt-primary mb-1 flex items-center gap-2">
+              <Home className="w-6 h-6 text-accent-800" />
               Project Total Area
             </h3>
-            <p className="text-sm text-txt-tertiary dark:text-slate-400">Total covered area in sq ft</p>
+            <p className="text-sm text-txt-tertiary dark:text-txt-tertiary">Total covered area in sq ft</p>
           </div>
           <div className="relative w-full md:w-64">
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium text-sm pointer-events-none">SQ FT</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-txt-tertiary font-medium text-sm pointer-events-none">SQ FT</span>
             <input
               type="number" inputMode="decimal"
               value={totalArea}
               onChange={(e) => setTotalArea(parseFloat(e.target.value) || 0)}
-              className="w-full bg-surface-default dark:bg-slate-800 border border-ui-borderDefault dark:border-slate-700 rounded-full px-4 py-2.5 pr-14 text-txt-primary dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-full px-4 py-2.5 pr-14 text-txt-primary dark:text-white focus:ring-2 focus:ring-accent-500 focus:outline-none"
             />
           </div>
         </div>
@@ -449,46 +449,46 @@ const ConstructionCostSummary: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-ui-borderSubtle dark:border-slate-800 shadow-sm p-4 sm:p-6 flex flex-col min-h-[450px] mb-2 overflow-hidden"
+            className="bg-surface-default rounded-2xl border border-ui-borderSubtle dark:border-ink shadow-brand-sm p-4 sm:p-6 flex flex-col min-h-[450px] mb-2 overflow-hidden"
           >
-            <h3 className="text-center text-lg font-semibold text-txt-primary dark:text-slate-200 mb-1">Project Summary Dashboard</h3>
+            <h3 className="text-center text-lg font-semibold text-txt-primary dark:text-txt-primary mb-1">Project Summary Dashboard</h3>
             <p className="text-center text-sm font-medium text-txt-tertiary mb-4">Material vs. Labor Distribution</p>
             <div className="flex-1 w-full pt-4 pb-2">
               <CostBreakdownChart data={chartData} formatCurrency={formatCurrency} />
             </div>
           </motion.div>
 
-          <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl p-6 md:p-8 text-white shadow-xl overflow-hidden">
-            <h3 className="text-purple-200 uppercase tracking-wider mb-6 text-lg font-semibold">Final Cost Summary</h3>
+          <div className="bg-gradient-to-br from-ink to-ink rounded-2xl p-6 md:p-8 text-white shadow-xl overflow-hidden">
+            <h3 className="text-accent-200 uppercase tracking-wider mb-6 text-lg font-semibold">Final Cost Summary</h3>
             
-            <div className="space-y-4 mb-8 text-slate-100">
-              <div className="flex justify-between items-center border-b border-purple-700/50 pb-3">
-                <span className="text-purple-200 font-medium">Base Subtotal</span>
+            <div className="space-y-4 mb-8 text-txt-inverse">
+              <div className="flex justify-between items-center border-b border-ink/50 pb-3">
+                <span className="text-accent-200 font-medium">Base Subtotal</span>
                 <span className="font-semibold text-white">{formatCurrency(subTotal)}</span>
               </div>
-              <div className="flex justify-between items-center border-b border-purple-700/50 pb-3">
-                <span className="text-purple-200 font-medium">Overhead & Profit ({overheadProfitPct}%)</span>
+              <div className="flex justify-between items-center border-b border-ink/50 pb-3">
+                <span className="text-accent-200 font-medium">Overhead & Profit ({overheadProfitPct}%)</span>
                 <span className="font-semibold text-white">{formatCurrency(overheadProfitAmount)}</span>
               </div>
-              <div className="flex justify-between items-center border-b border-purple-700/50 pb-3">
-                <span className="text-purple-200 font-medium">Contingency ({contingencyPct}%)</span>
+              <div className="flex justify-between items-center border-b border-ink/50 pb-3">
+                <span className="text-accent-200 font-medium">Contingency ({contingencyPct}%)</span>
                 <span className="font-semibold text-white">{formatCurrency(contingencyAmount)}</span>
               </div>
             </div>
 
             <div className="pt-2">
-              <div className="text-purple-200 font-medium text-sm mb-2">Grand Total Estimation</div>
+              <div className="text-accent-200 font-medium text-sm mb-2">Grand Total Estimation</div>
               <div className="text-3xl md:text-[clamp(2rem,5vw,3rem)] break-all font-bold tracking-tight text-white mb-6">
                 {formatCurrency(grandTotal)}
               </div>
               
-              <div className="w-full bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm p-5 flex items-center justify-between overflow-hidden">
+              <div className="w-full bg-surface-default dark:bg-ink rounded-2xl shadow-brand-sm p-5 flex items-center justify-between overflow-hidden">
                 <div>
-                  <div className="text-txt-secondary dark:text-slate-400 text-xs sm:text-sm font-semibold uppercase tracking-wider mb-1">Cost Per Sq Ft</div>
+                  <div className="text-txt-secondary dark:text-txt-tertiary text-xs sm:text-sm font-semibold uppercase tracking-wider mb-1">Cost Per Sq Ft</div>
                   <div className="text-xl sm:text-2xl font-bold text-txt-primary dark:text-white">{formatCurrency(costPerSqFt)}</div>
                 </div>
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
-                  <PieChartIcon className="w-6 h-6 sm:w-7 sm:h-7 text-txt-secondary dark:text-slate-300" />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-surface-hover dark:bg-ink-600 flex items-center justify-center">
+                  <PieChartIcon className="w-6 h-6 sm:w-7 sm:h-7 text-txt-secondary dark:text-txt-tertiary" />
                 </div>
               </div>
             </div>
@@ -507,7 +507,7 @@ const ConstructionCostSummary: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsTableView(!isTableView)}
-        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-full shadow-[0_10px_25px_-5px_rgba(37,99,235,0.5)] hover:bg-blue-700 transition-colors"
+        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-ink text-white rounded-full shadow-[0_10px_25px_-5px_rgba(37,99,235,0.5)] hover:bg-ink-700 transition-colors"
         title={isTableView ? "Switch to Card View" : "Switch to Table View"}
       >
         {isTableView ? <LayoutGrid className="w-6 h-6" /> : <List className="w-6 h-6" />}

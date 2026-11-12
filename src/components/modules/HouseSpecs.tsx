@@ -25,7 +25,7 @@ export default function HouseSpecs() {
           {/* Brickwork Card */}
           <GlassCard
             title="Brickwork"
-            icon={<Box className="w-5 h-5 text-red-500" />}
+            icon={<Box className="w-5 h-5 text-ui-errorText" />}
             color="red"
           >
             <div className="space-y-4">
@@ -79,7 +79,7 @@ export default function HouseSpecs() {
           {/* Plastering */}
           <GlassCard
             title="Plastering"
-            icon={<Droplet className="w-5 h-5 text-teal-500" />}
+            icon={<Droplet className="w-5 h-5 text-accent-600" />}
             color="teal"
           >
             <div className="space-y-4">
@@ -116,7 +116,7 @@ export default function HouseSpecs() {
           {/* Flooring */}
           <GlassCard
             title="Flooring"
-            icon={<LayoutGrid className="w-5 h-5 text-amber-500" />}
+            icon={<LayoutGrid className="w-5 h-5 text-accent-800" />}
             color="amber"
           >
             <div className="space-y-4">
@@ -143,7 +143,7 @@ export default function HouseSpecs() {
           {/* Ceiling */}
           <GlassCard
             title="Ceiling Finish"
-            icon={<ArrowUpRight className="w-5 h-5 text-indigo-600" />}
+            icon={<ArrowUpRight className="w-5 h-5 text-accent-800" />}
             color="indigo"
           >
             <div className="space-y-4 pb-4">
@@ -169,7 +169,7 @@ export default function HouseSpecs() {
           {/* Doors & Windows */}
           <GlassCard
             title="Doors & Windows"
-            icon={<AppWindow className="w-5 h-5 text-sky-500" />}
+            icon={<AppWindow className="w-5 h-5 text-accent-700" />}
             color="sky"
           >
             <div className="space-y-4">
@@ -197,7 +197,7 @@ export default function HouseSpecs() {
           {/* Paint & Finishes */}
           <GlassCard
             title="Paint & Finishes"
-            icon={<Paintbrush className="w-5 h-5 text-fuchsia-500" />}
+            icon={<Paintbrush className="w-5 h-5 text-accent-800" />}
             color="fuchsia"
           >
             <div className="space-y-4">
@@ -224,7 +224,7 @@ export default function HouseSpecs() {
           {/* Electrical & MEP */}
           <GlassCard
             title="Electrical & MEP"
-            icon={<Sliders className="w-5 h-5 text-cyan-500" />}
+            icon={<Sliders className="w-5 h-5 text-accent-700" />}
             color="sky"
           >
             <div className="space-y-4">
@@ -270,13 +270,13 @@ function GlassCard({
   color: string;
 }) {
   const bgColors: Record<string, string> = {
-    red: "bg-red-500/10 border-red-500/20 text-red-600",
-    gray: "bg-gray-500/10 border-gray-500/20 text-txt-secondary",
-    teal: "bg-teal-500/10 border-teal-500/20 text-teal-600",
-    amber: "bg-amber-500/10 border-amber-500/20 text-amber-600",
-    indigo: "bg-indigo-500/10 border-indigo-500/20 text-indigo-600",
-    sky: "bg-sky-500/10 border-sky-500/20 text-sky-600",
-    fuchsia: "bg-fuchsia-500/10 border-fuchsia-500/20 text-fuchsia-600",
+    red: "bg-ui-error/10 border-ui-errorBorder text-ui-errorText",
+    gray: "bg-surface-hover border-border-color text-txt-secondary",
+    teal: "bg-accent-500/10 border-accent-500/20 text-accent-800",
+    amber: "bg-accent-500/10 border-accent-500/20 text-accent-800",
+    indigo: "bg-accent-500/10 border-accent-500/20 text-accent-800",
+    sky: "bg-accent-500/10 border-accent-500/20 text-accent-800",
+    fuchsia: "bg-accent-500/10 border-accent-500/20 text-accent-800",
   };
   return (
     <div className="w-full bg-surface-default/70 backdrop-blur-3xl border border-white p-4 sm:p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] transition-all overflow-hidden">
@@ -300,7 +300,7 @@ function SelectInput({ label, value, options, onChange }: any) {
       </label>
       <div className="relative">
         <select
-          className="w-full bg-gray-50/80 border border-gray-200 text-txt-primary rounded-2xl px-4 py-3 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/30 transition-shadow transition-colors text-base font-normal overflow-hidden"
+          className="w-full bg-surface-default/80 border border-border-color text-txt-primary rounded-2xl px-4 py-3 appearance-none focus:outline-none focus:ring-2 focus:ring-accent-500 transition-shadow transition-colors text-base font-normal overflow-hidden"
           value={value}
           onChange={(e) => onChange(e.target.value)}
         >
@@ -344,7 +344,7 @@ function NumberInput({ label, value, onChange, desc }: any) {
       <><label htmlFor="a11y-input-283" className="sr-only">Input</label>
 <input id="a11y-input-283" type="number" inputMode="decimal"
         step="any"
-        className="w-full bg-gray-50/80 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/30 transition-shadow transition-colors min-h-[44px] text-base font-normal"
+        className="w-full bg-surface-default/80 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 transition-shadow transition-colors min-h-[44px] text-base font-normal"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       /></>
@@ -353,12 +353,12 @@ function NumberInput({ label, value, onChange, desc }: any) {
 }
 function ToggleGroup({ value, onChange, options }: any) {
   return (
-    <div className="flex bg-gray-100/80 backdrop-blur-sm p-1 rounded-2xl w-full border border-gray-200/50 overflow-hidden">
+    <div className="flex bg-surface-hover/80 backdrop-blur-sm p-1 rounded-2xl w-full border border-border-color overflow-hidden">
       {options.map((opt: any) => (
         <Button
           key={opt.value}
           onClick={() => onChange(opt.value)}
-          className={`flex-1 py-2.5 px-3 text-base font-medium rounded-2xl transition-all duration-300 ${value === opt.value ? "bg-surface-default text-txt-primary shadow-sm" : "text-txt-secondary  hover:text-txt-secondary hover:bg-gray-200/50"}`}
+          className={`flex-1 py-2.5 px-3 text-base font-medium rounded-2xl transition-all duration-300 ${value === opt.value ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-secondary  hover:text-txt-secondary hover:bg-surface-hover/50"}`}
         >
           {opt.label}
         </Button>

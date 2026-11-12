@@ -291,19 +291,19 @@ export default function IsolatedFootingCalculator({
               <div className="flex gap-2">
                 <Button
                   onClick={sendToBOQ}
-                  className="text-base font-medium px-3 py-2 bg-emerald-50 text-emerald-600 rounded-full hover:bg-emerald-100 transition-colors border border-emerald-200 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="text-base font-medium px-3 py-2 bg-ui-success text-ui-successText rounded-full hover:bg-ui-success transition-colors border border-ui-successBorder active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 >
                   Send to BOQ
                 </Button>
                 <Button
                   onClick={loadExample}
-                  className="text-base font-medium px-3 py-2 bg-[#E55A2B]/10 text-[#E55A2B] rounded-full hover:bg-[#E55A2B]/20 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="text-base font-medium px-3 py-2 bg-accent-500/10 text-accent-800 rounded-full hover:bg-accent-500/20 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 >
                   Load Example
                 </Button>
                 <Button
                   onClick={resetDefault}
-                  className="text-base font-medium px-3 py-2 bg-slate-100 text-txt-tertiary rounded-full hover:bg-slate-200 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                  className="text-base font-medium px-3 py-2 bg-surface-hover text-txt-tertiary rounded-full hover:bg-surface-active transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 >
                   Reset
                 </Button>
@@ -312,7 +312,7 @@ export default function IsolatedFootingCalculator({
           </div>
         )}
 
-        <div className="bg-bg-card rounded-2xl shadow-md border border-ui-borderSubtle dark:border-slate-700 overflow-hidden">
+        <div className="bg-bg-card rounded-2xl shadow-brand-md border border-ui-borderSubtle dark:border-ink-600 overflow-hidden">
           <div className="p-6 md:p-8 space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
               {/* Inputs */}
@@ -320,13 +320,13 @@ export default function IsolatedFootingCalculator({
                 <Accordion title="Dimensions & Load" defaultOpen={true}>
                   <div className="space-y-6">
                     <div>
-                      <h4 className="font-bold text-md mb-4 text-txt-secondary dark:text-slate-200 pb-2">
+                      <h4 className="font-bold text-md mb-4 text-txt-secondary dark:text-txt-primary pb-2">
                         Load & SBC Check
                       </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <InputGroup label="Working Load (P)">
                       <NumberInput
-                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                         value={workingLoad}
                         onChange={(val) => setWorkingLoad(val.toString())}
                       />
@@ -337,13 +337,13 @@ export default function IsolatedFootingCalculator({
                       </label>
                       <div className="flex items-center gap-2 h-full">
                         <NumberInput
-                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                           value={safetyFactor}
                           onChange={(val) => setSafetyFactor(val.toString())}
                         />
                         <Button
                           onClick={handleAiSafetyFactor}
-                          className="h-full min-h-[48px] px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center transition-colors shadow-sm whitespace-nowrap text-sm font-medium active:scale-95 hover:-translate-y-0.5"
+                          className="h-full min-h-[48px] px-4 bg-accent-50 hover:bg-accent-100 text-accent-800 rounded-full flex items-center justify-center transition-colors shadow-brand-sm whitespace-nowrap text-sm font-medium active:scale-95 hover:-translate-y-0.5"
                         >
                           <Sparkles className="w-4 h-4 mr-1.5" /> AI Suggest
                         </Button>
@@ -358,7 +358,7 @@ export default function IsolatedFootingCalculator({
                       }
                     >
                       <NumberInput
-                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                         value={sbc}
                         onChange={(val) => setSbc(val.toString())}
                       />
@@ -367,12 +367,12 @@ export default function IsolatedFootingCalculator({
                 </div>
 
                 <div>
-                      <h4 className="font-bold text-md mb-4 text-txt-secondary dark:text-slate-200 pb-2">
+                      <h4 className="font-bold text-md mb-4 text-txt-secondary dark:text-txt-primary pb-2">
                         Footing Details
                       </h4>
                   <InputGroup label="Footing Type" colSpan={3}>
                     <div
-                      className="flex bg-slate-100 p-1 rounded-2xl mb-4 overflow-x-auto whitespace-nowrap hide-scrollbar"
+                      className="flex bg-surface-hover p-1 rounded-2xl mb-4 overflow-x-auto whitespace-nowrap hide-scrollbar"
                       style={{
                         scrollbarWidth: "none",
                         msOverflowStyle: "none",
@@ -381,31 +381,31 @@ export default function IsolatedFootingCalculator({
                       <Button
                         onClick={() => setFootingType("rectangular")}
                         aria-label="Select Rectangular Footing"
-                        className={`flex-none px-6 py-2 text-base font-medium rounded-2xl transition-all ${footingType === "rectangular" ? "bg-surface-default shadow-sm text-indigo-600" : "text-txt-tertiary"}`}
+                        className={`flex-none px-6 py-2 text-base font-medium rounded-2xl transition-all ${footingType === "rectangular" ? "bg-surface-default shadow-brand-sm text-accent-800" : "text-txt-tertiary"}`}
                       >
                         Rectangular
                       </Button>
                       <Button
                         onClick={() => setFootingType("sloped")}
                         aria-label="Select Sloped or Trapezoidal Footing"
-                        className={`flex-none px-6 py-2 text-base font-medium rounded-2xl transition-all ${footingType === "sloped" ? "bg-surface-default shadow-sm text-indigo-600" : "text-txt-tertiary"}`}
+                        className={`flex-none px-6 py-2 text-base font-medium rounded-2xl transition-all ${footingType === "sloped" ? "bg-surface-default shadow-brand-sm text-accent-800" : "text-txt-tertiary"}`}
                       >
                         Sloped/Trapezoidal
                       </Button>
                       <Button
                         onClick={() => setFootingType("stepped")}
                         aria-label="Select Stepped Footing"
-                        className={`flex-none px-6 py-2 text-base font-medium rounded-2xl transition-all ${footingType === "stepped" ? "bg-surface-default shadow-sm text-indigo-600" : "text-txt-tertiary"}`}
+                        className={`flex-none px-6 py-2 text-base font-medium rounded-2xl transition-all ${footingType === "stepped" ? "bg-surface-default shadow-brand-sm text-accent-800" : "text-txt-tertiary"}`}
                       >
                         Stepped
                       </Button>
                     </div>
                   </InputGroup>
-                  <div className="grid grid-cols-2 gap-4 mt-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+                  <div className="grid grid-cols-2 gap-4 mt-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
                     <InputGroup label="Base Length (m)">
                       <NumberInput
                         step="0.1"
-                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                         value={footingL}
                         onChange={(val) => setFootingL(val.toString())}
                       />
@@ -413,7 +413,7 @@ export default function IsolatedFootingCalculator({
                     <InputGroup label="Base Width (m)">
                       <NumberInput
                         step="0.1"
-                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                         value={footingW}
                         onChange={(val) => setFootingW(val.toString())}
                       />
@@ -423,7 +423,7 @@ export default function IsolatedFootingCalculator({
                       <InputGroup label="Depth (m)">
                         <NumberInput
                           step="0.1"
-                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                           value={footingD}
                           onChange={(val) => setFootingD(val.toString())}
                         />
@@ -433,7 +433,7 @@ export default function IsolatedFootingCalculator({
                         <InputGroup label="Base Depth, D1 (m)">
                           <NumberInput
                             step="0.1"
-                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                             value={footingD1}
                             onChange={(val) => setFootingD1(val.toString())}
                           />
@@ -447,7 +447,7 @@ export default function IsolatedFootingCalculator({
                         >
                           <NumberInput
                             step="0.1"
-                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                             value={footingD2}
                             onChange={(val) => setFootingD2(val.toString())}
                           />
@@ -456,7 +456,7 @@ export default function IsolatedFootingCalculator({
                         <InputGroup label="Top Length, A2 (m)">
                           <NumberInput
                             step="0.1"
-                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                             value={topL}
                             onChange={(val) => setTopL(val.toString())}
                           />
@@ -464,7 +464,7 @@ export default function IsolatedFootingCalculator({
                         <InputGroup label="Top Width, B2 (m)">
                           <NumberInput
                             step="0.1"
-                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                            className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                             value={topW}
                             onChange={(val) => setTopW(val.toString())}
                           />
@@ -484,7 +484,7 @@ export default function IsolatedFootingCalculator({
                       <div className="flex gap-2">
                         <NumberInput
                           step="0.1"
-                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary text-center shadow-sm transition-all overflow-hidden"
+                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary text-center shadow-brand-sm transition-all overflow-hidden"
                           value={columnL}
                           onChange={(val) => setColumnL(val.toString())}
                           placeholder="L"
@@ -492,7 +492,7 @@ export default function IsolatedFootingCalculator({
                         <span className="text-txt-secondary self-center">×</span>
                         <NumberInput
                           step="0.1"
-                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary text-center shadow-sm transition-all overflow-hidden"
+                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary text-center shadow-brand-sm transition-all overflow-hidden"
                           value={columnW}
                           onChange={(val) => setColumnW(val.toString())}
                           placeholder="W"
@@ -501,7 +501,7 @@ export default function IsolatedFootingCalculator({
                     </InputGroup>
                     <InputGroup label={<span className="flex items-center gap-1">Concrete Mix <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span>}>
                       <select
-                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-[#E55A2B]/50 outline-none transition-all appearance-none shadow-sm overflow-hidden"
+                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 outline-none transition-all appearance-none shadow-brand-sm overflow-hidden"
                         value={mix}
                         onChange={(e) => setMix(e.target.value)}
                       >
@@ -522,7 +522,7 @@ export default function IsolatedFootingCalculator({
                     >
                       <NumberInput
                         step="0.1"
-                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                         value={workingSpace}
                         onChange={(val) => setWorkingSpace(val.toString())}
                       />
@@ -530,7 +530,7 @@ export default function IsolatedFootingCalculator({
                     <InputGroup label="Excavation Depth (m)">
                       <NumberInput
                         step="0.1"
-                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                        className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                         value={excavationDepth}
                         onChange={(val) => setExcavationDepth(val.toString())}
                       />
@@ -553,7 +553,7 @@ export default function IsolatedFootingCalculator({
                         }
                       >
                         <NumberInput
-                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-sm transition-all overflow-hidden"
+                          className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm transition-all overflow-hidden"
                           value={clearCover}
                           onChange={(val) => setClearCover(val.toString())}
                         />
@@ -561,14 +561,14 @@ export default function IsolatedFootingCalculator({
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-hidden">
+                    <div className="p-4 bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                       <p className="text-base font-medium uppercase text-txt-tertiary mb-3 ml-1 tracking-wider">
                         Bottom Mesh: X-Axis
                       </p>
                       <div className="space-y-4">
                         <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                           <select
-                            className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
+                            className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 shadow-brand-sm"
                             value={diaX}
                             onChange={(e) => setDiaX(e.target.value)}
                           >
@@ -581,21 +581,21 @@ export default function IsolatedFootingCalculator({
                         </InputGroup>
                         <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                           <NumberInput
-                            className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
+                            className="w-full calc-input px-3 py-2 text-sm shadow-brand-sm transition-all"
                             value={spacingX}
                             onChange={(val) => setSpacingX(val.toString())}
                           />
                         </InputGroup>
                       </div>
                     </div>
-                    <div className="p-4 bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-hidden">
+                    <div className="p-4 bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                       <p className="text-base font-medium uppercase text-txt-tertiary mb-3 ml-1 tracking-wider">
                         Bottom Mesh: Y-Axis
                       </p>
                       <div className="space-y-4">
                         <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                           <select
-                            className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
+                            className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 shadow-brand-sm"
                             value={diaY}
                             onChange={(e) => setDiaY(e.target.value)}
                           >
@@ -608,7 +608,7 @@ export default function IsolatedFootingCalculator({
                         </InputGroup>
                         <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                           <NumberInput
-                            className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
+                            className="w-full calc-input px-3 py-2 text-sm shadow-brand-sm transition-all"
                             value={spacingY}
                             onChange={(val) => setSpacingY(val.toString())}
                           />
@@ -618,7 +618,7 @@ export default function IsolatedFootingCalculator({
                   </div>
 
                   <div className="mt-4">
-                    <label className="flex items-center gap-3 cursor-pointer p-4 bg-slate-100 border border-ui-borderSubtle rounded-2xl overflow-hidden">
+                    <label className="flex items-center gap-3 cursor-pointer p-4 bg-surface-hover border border-ui-borderSubtle rounded-2xl overflow-hidden">
                       <>
                         <label htmlFor="a11y-input-309" className="sr-only">
                           Input
@@ -626,7 +626,7 @@ export default function IsolatedFootingCalculator({
                         <input
                           id="a11y-input-309"
                           type="checkbox"
-                          className="w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          className="w-5 h-5 rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500"
                           checked={hasTopMesh}
                           onChange={(e) => setHasTopMesh(e.target.checked)}
                         />
@@ -639,14 +639,14 @@ export default function IsolatedFootingCalculator({
 
                   {hasTopMesh && (
                     <div className="grid grid-cols-2 gap-4 mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 overflow-hidden">
-                        <p className="text-base font-medium uppercase text-indigo-700 mb-3 ml-1 tracking-wider">
+                      <div className="p-4 bg-accent-50 rounded-2xl border border-accent-100 overflow-hidden">
+                        <p className="text-base font-medium uppercase text-accent-800 mb-3 ml-1 tracking-wider">
                           Top Mesh: X-Axis
                         </p>
                         <div className="space-y-4">
                           <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                             <select
-                              className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
+                              className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 shadow-brand-sm"
                               value={diaXTop}
                               onChange={(e) => setDiaXTop(e.target.value)}
                             >
@@ -659,21 +659,21 @@ export default function IsolatedFootingCalculator({
                           </InputGroup>
                           <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                             <NumberInput
-                              className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
+                              className="w-full calc-input px-3 py-2 text-sm shadow-brand-sm transition-all"
                               value={spacingXTop}
                               onChange={(val) => setSpacingXTop(val.toString())}
                             />
                           </InputGroup>
                         </div>
                       </div>
-                      <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 overflow-hidden">
-                        <p className="text-base font-medium uppercase text-indigo-700 mb-3 ml-1 tracking-wider">
+                      <div className="p-4 bg-accent-50 rounded-2xl border border-accent-100 overflow-hidden">
+                        <p className="text-base font-medium uppercase text-accent-800 mb-3 ml-1 tracking-wider">
                           Top Mesh: Y-Axis
                         </p>
                         <div className="space-y-4">
                           <InputGroup label={<span className="flex items-center gap-1">Bar Dia (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>}>
                             <select
-                              className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 shadow-sm"
+                              className="w-full calc-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 shadow-brand-sm"
                               value={diaYTop}
                               onChange={(e) => setDiaYTop(e.target.value)}
                             >
@@ -686,7 +686,7 @@ export default function IsolatedFootingCalculator({
                           </InputGroup>
                           <InputGroup label={<span className="flex items-center gap-1">Spacing c/c (mm) <CodeTooltip standard="IS" code="456:2000" description="Maximum spacing of shear reinforcement in beams and columns." /></span>}>
                             <NumberInput
-                              className="w-full calc-input px-3 py-2 text-sm shadow-sm transition-all"
+                              className="w-full calc-input px-3 py-2 text-sm shadow-brand-sm transition-all"
                               value={spacingYTop}
                               onChange={(val) => setSpacingYTop(val.toString())}
                             />
@@ -701,29 +701,29 @@ export default function IsolatedFootingCalculator({
               {/* Drawing & SBC Status */}
               <div>
                 <div
-                  className={`p-4 rounded-2xl border ${isSafe ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200"} flex items-start gap-4 mb-6 shadow-sm`}
+                  className={`p-4 rounded-2xl border ${isSafe ? "bg-ui-success border-ui-successBorder" : "bg-ui-error border-ui-errorBorder"} flex items-start gap-4 mb-6 shadow-brand-sm`}
                 >
                   {isSafe ? (
-                    <CheckCircle className="w-6 h-6 text-emerald-600 mt-1" />
+                    <CheckCircle className="w-6 h-6 text-ui-successText mt-1" />
                   ) : (
-                    <AlertTriangle className="w-6 h-6 text-rose-600 mt-1" />
+                    <AlertTriangle className="w-6 h-6 text-ui-errorText mt-1" />
                   )}
                   <div>
                     <h4
-                      className={`font-bold ${isSafe ? "text-emerald-800" : "text-rose-800"}`}
+                      className={`font-bold ${isSafe ? "text-ui-successText" : "text-ui-errorText"}`}
                     >
                       {isSafe
                         ? "Safe Bearing Capacity OK"
                         : "Bearing Capacity Exceeded"}
                     </h4>
                     <p
-                      className={`text-sm mt-1 font-medium ${isSafe ? "text-emerald-700" : "text-rose-700"}`}
+                      className={`text-sm mt-1 font-medium ${isSafe ? "text-ui-successText" : "text-ui-errorText"}`}
                     >
                       Required Area: {reqArea.toFixed(2)} m² | Provided Area:{" "}
                       {actualArea.toFixed(2)} m²
                     </p>
                     {!isSafe && (
-                      <p className="text-base font-medium text-rose-600 mt-2">
+                      <p className="text-base font-medium text-ui-errorText mt-2">
                         Increase footing dimensions to prevent settlement
                         failures.
                       </p>
@@ -731,7 +731,7 @@ export default function IsolatedFootingCalculator({
                   </div>
                 </div>
 
-                <div className="calc-input p-6 flex flex-col items-center justify-center min-h-[400px] shadow-sm">
+                <div className="calc-input p-6 flex flex-col items-center justify-center min-h-[400px] shadow-brand-sm">
                   <h4 className="font-bold text-txt-tertiary uppercase tracking-wider text-sm mb-8">
                     Cross-Section Profile
                   </h4>
@@ -781,7 +781,7 @@ export default function IsolatedFootingCalculator({
                       y1="20"
                       x2="150"
                       y2="220"
-                      stroke="#cbd5e1"
+                      stroke="#6B6862"
                       strokeWidth="1"
                       strokeDasharray="10,5,2,5"
                     />
@@ -792,8 +792,8 @@ export default function IsolatedFootingCalculator({
                       y="30"
                       width="30"
                       height="130"
-                      fill="#e2e8f0"
-                      stroke="#64748b"
+                      fill="#F4F2EE"
+                      stroke="#6B6862"
                       strokeWidth="2"
                     />
 
@@ -804,8 +804,8 @@ export default function IsolatedFootingCalculator({
                         y="160"
                         width="160"
                         height="40"
-                        fill="#cbd5e1"
-                        stroke="#475569"
+                        fill="#E7E4DE"
+                        stroke="#6B6862"
                         strokeWidth="2"
                       />
                     )}
@@ -816,8 +816,8 @@ export default function IsolatedFootingCalculator({
                           y="140"
                           width="80"
                           height="20"
-                          fill="#cbd5e1"
-                          stroke="#475569"
+                          fill="#E7E4DE"
+                          stroke="#6B6862"
                           strokeWidth="2"
                         />
                         <rect
@@ -825,8 +825,8 @@ export default function IsolatedFootingCalculator({
                           y="160"
                           width="160"
                           height="40"
-                          fill="#cbd5e1"
-                          stroke="#475569"
+                          fill="#E7E4DE"
+                          stroke="#6B6862"
                           strokeWidth="2"
                         />
                       </>
@@ -835,8 +835,8 @@ export default function IsolatedFootingCalculator({
                       <>
                         <polygon
                           points="110,140 190,140 230,160 70,160"
-                          fill="#cbd5e1"
-                          stroke="#475569"
+                          fill="#E7E4DE"
+                          stroke="#6B6862"
                           strokeWidth="2"
                           strokeLinejoin="round"
                         />
@@ -845,8 +845,8 @@ export default function IsolatedFootingCalculator({
                           y="160"
                           width="160"
                           height="40"
-                          fill="#cbd5e1"
-                          stroke="#475569"
+                          fill="#E7E4DE"
+                          stroke="#6B6862"
                           strokeWidth="2"
                         />
                       </>
@@ -858,7 +858,7 @@ export default function IsolatedFootingCalculator({
                       y1="190"
                       x2="225"
                       y2="190"
-                      stroke="#f43f5e"
+                      stroke="#F2A413"
                       strokeWidth="3"
                       strokeLinecap="round"
                     />
@@ -867,7 +867,7 @@ export default function IsolatedFootingCalculator({
                       y1="190"
                       x2="75"
                       y2="170"
-                      stroke="#f43f5e"
+                      stroke="#F2A413"
                       strokeWidth="3"
                       strokeLinecap="round"
                     />
@@ -876,17 +876,17 @@ export default function IsolatedFootingCalculator({
                       y1="190"
                       x2="225"
                       y2="170"
-                      stroke="#f43f5e"
+                      stroke="#F2A413"
                       strokeWidth="3"
                       strokeLinecap="round"
                     />
 
                     {/* Dots for cross bars */}
-                    <circle cx="85" cy="190" r="2.5" fill="#1e1b4b" />
-                    <circle cx="115" cy="190" r="2.5" fill="#1e1b4b" />
-                    <circle cx="150" cy="190" r="2.5" fill="#1e1b4b" />
-                    <circle cx="185" cy="190" r="2.5" fill="#1e1b4b" />
-                    <circle cx="215" cy="190" r="2.5" fill="#1e1b4b" />
+                    <circle cx="85" cy="190" r="2.5" fill="#855307" />
+                    <circle cx="115" cy="190" r="2.5" fill="#855307" />
+                    <circle cx="150" cy="190" r="2.5" fill="#855307" />
+                    <circle cx="185" cy="190" r="2.5" fill="#855307" />
+                    <circle cx="215" cy="190" r="2.5" fill="#855307" />
 
                     {hasTopMesh && (
                       <>
@@ -895,7 +895,7 @@ export default function IsolatedFootingCalculator({
                           y1="170"
                           x2="225"
                           y2="170"
-                          stroke="#6366f1"
+                          stroke="#1F1D1A"
                           strokeWidth="3"
                           strokeLinecap="round"
                         />
@@ -904,7 +904,7 @@ export default function IsolatedFootingCalculator({
                           y1="170"
                           x2="75"
                           y2="190"
-                          stroke="#6366f1"
+                          stroke="#1F1D1A"
                           strokeWidth="3"
                           strokeLinecap="round"
                         />
@@ -913,15 +913,15 @@ export default function IsolatedFootingCalculator({
                           y1="170"
                           x2="225"
                           y2="190"
-                          stroke="#6366f1"
+                          stroke="#1F1D1A"
                           strokeWidth="3"
                           strokeLinecap="round"
                         />
-                        <circle cx="85" cy="170" r="2.5" fill="#312e81" />
-                        <circle cx="115" cy="170" r="2.5" fill="#312e81" />
-                        <circle cx="150" cy="170" r="2.5" fill="#312e81" />
-                        <circle cx="185" cy="170" r="2.5" fill="#312e81" />
-                        <circle cx="215" cy="170" r="2.5" fill="#312e81" />
+                        <circle cx="85" cy="170" r="2.5" fill="#6B6862" />
+                        <circle cx="115" cy="170" r="2.5" fill="#6B6862" />
+                        <circle cx="150" cy="170" r="2.5" fill="#6B6862" />
+                        <circle cx="185" cy="170" r="2.5" fill="#6B6862" />
+                        <circle cx="215" cy="170" r="2.5" fill="#6B6862" />
                       </>
                     )}
 
@@ -929,7 +929,7 @@ export default function IsolatedFootingCalculator({
                     {/* Width */}
                     <path
                       d="M 70 215 L 230 215"
-                      stroke="#64748b"
+                      stroke="#6B6862"
                       strokeWidth="1"
                     />
                     <line
@@ -937,7 +937,7 @@ export default function IsolatedFootingCalculator({
                       y1="210"
                       x2="70"
                       y2="220"
-                      stroke="#64748b"
+                      stroke="#6B6862"
                       strokeWidth="1"
                     />
                     <line
@@ -945,13 +945,13 @@ export default function IsolatedFootingCalculator({
                       y1="210"
                       x2="230"
                       y2="220"
-                      stroke="#64748b"
+                      stroke="#6B6862"
                       strokeWidth="1"
                     />
                     <text
                       x="150"
                       y="230"
-                      fill="#64748b"
+                      fill="#6B6862"
                       fontSize="12"
                       textAnchor="middle"
                     >
@@ -961,7 +961,7 @@ export default function IsolatedFootingCalculator({
                     {/* Depth */}
                     <path
                       d="M 55 140 L 55 200"
-                      stroke="#64748b"
+                      stroke="#6B6862"
                       strokeWidth="1"
                     />
                     <line
@@ -969,7 +969,7 @@ export default function IsolatedFootingCalculator({
                       y1="140"
                       x2="60"
                       y2="140"
-                      stroke="#64748b"
+                      stroke="#6B6862"
                       strokeWidth="1"
                     />
                     <line
@@ -977,13 +977,13 @@ export default function IsolatedFootingCalculator({
                       y1="200"
                       x2="60"
                       y2="200"
-                      stroke="#64748b"
+                      stroke="#6B6862"
                       strokeWidth="1"
                     />
                     <text
                       x="45"
                       y="174"
-                      fill="#64748b"
+                      fill="#6B6862"
                       fontSize="12"
                       textAnchor="end"
                     >
@@ -993,14 +993,14 @@ export default function IsolatedFootingCalculator({
                     {/* Working Space */}
                     <path
                       d="M 30 215 L 70 215"
-                      stroke="#94a3b8"
+                      stroke="#6B6862"
                       strokeWidth="1"
                       strokeDasharray="2,2"
                     />
                     <text
                       x="50"
                       y="230"
-                      fill="#94a3b8"
+                      fill="#6B6862"
                       fontSize="10"
                       textAnchor="middle"
                     >
@@ -1012,7 +1012,7 @@ export default function IsolatedFootingCalculator({
             </div>
 
             {/* Results */}
-            <div className="pt-8 border-t border-ui-borderSubtle dark:border-slate-700 mt-6">
+            <div className="pt-8 border-t border-ui-borderSubtle dark:border-ink-600 mt-6">
               <MaterialSummary
                 title="Output Quantities"
                 totalLabel="Total Concrete Vol"
@@ -1031,7 +1031,7 @@ export default function IsolatedFootingCalculator({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 responsive-tool-grid">
                   <div>
                     <h4 className="font-bold text-txt-primary flex items-center gap-2 mb-4">
-                      <Spade className="w-5 h-5 text-amber-600" />
+                      <Spade className="w-5 h-5 text-accent-700" />
                       Earthworks
                     </h4>
                     <div className="grid grid-cols-2 gap-4">
@@ -1050,7 +1050,7 @@ export default function IsolatedFootingCalculator({
                     </div>
 
                     <h4 className="font-bold text-txt-primary flex items-center gap-2 mt-8 mb-4">
-                      <Layers className="w-5 h-5 text-indigo-600" />
+                      <Layers className="w-5 h-5 text-accent-800" />
                       Concrete Materials ({mix})
                     </h4>
                     <div className="grid grid-cols-2 gap-4">
@@ -1077,15 +1077,15 @@ export default function IsolatedFootingCalculator({
 
                   <div>
                     <h4 className="font-bold text-txt-primary flex items-center gap-2 mb-4">
-                      <ArrowDownToLine className="w-5 h-5 text-[#f43f5e]" />
+                      <ArrowDownToLine className="w-5 h-5 text-accent-700" />
                       Steel Reinforcement Check
                     </h4>
-                    <div className="bg-slate-50 border border-ui-borderSubtle rounded-2xl overflow-hidden shadow-sm">
-                      <div className="p-4 bg-slate-100 border-b border-ui-borderSubtle flex justify-between items-center">
+                    <div className="bg-surface-hover border border-ui-borderSubtle rounded-2xl overflow-hidden shadow-brand-sm">
+                      <div className="p-4 bg-surface-hover border-b border-ui-borderSubtle flex justify-between items-center">
                         <span className="font-bold text-txt-secondary">
                           Total Steel Required
                         </span>
-                        <span className="text-xl font-semibold tabular-nums tracking-tight text-rose-600">
+                        <span className="text-xl font-semibold tabular-nums tracking-tight text-ui-errorText">
                           {totalSteel.toFixed(2)} kg
                         </span>
                       </div>
@@ -1124,7 +1124,7 @@ export default function IsolatedFootingCalculator({
 
                         {hasTopMesh && (
                           <>
-                            <div className="text-base font-medium text-indigo-500 uppercase tracking-wider mt-4 mb-2">
+                            <div className="text-base font-medium text-accent-800 uppercase tracking-wider mt-4 mb-2">
                               Top Mesh
                             </div>
                             <div className="flex justify-between items-center border-b border-ui-borderSubtle pb-3">
@@ -1160,8 +1160,8 @@ export default function IsolatedFootingCalculator({
                       </div>
                     </div>
 
-                    <div className="mt-4 p-4 bg-indigo-50 rounded-2xl border border-indigo-100 overflow-hidden">
-                      <p className="text-sm font-medium text-indigo-800">
+                    <div className="mt-4 p-4 bg-accent-50 rounded-2xl border border-accent-100 overflow-hidden">
+                      <p className="text-sm font-medium text-accent-800">
                         * Steel weight derived using D²/162.28. Hook lengths
                         added based on footing depths minus clear covers.
                       </p>

@@ -192,14 +192,14 @@ export default function GeotechnicalCalculator() {
           
           {/* Inputs Section */}
           <div 
-            className="bg-bg-card p-6 md:p-8 rounded-2xl shadow-md border border-ui-borderSubtle dark:border-slate-700 flex flex-col gap-6 overflow-hidden"
+            className="bg-bg-card p-6 md:p-8 rounded-2xl shadow-brand-md border border-ui-borderSubtle dark:border-ink-600 flex flex-col gap-6 overflow-hidden"
             onChange={(e) => {
               if ((e.target as HTMLElement).tagName === 'INPUT') {
                 if (hasData) resetEstimate();
               }
             }}
           >
-            <h3 className="border-b border-ui-borderSubtle dark:border-slate-700 pb-3 text-txt-primary dark:text-white text-lg font-medium text-txt-primary mb-4">
+            <h3 className="border-b border-ui-borderSubtle dark:border-ink-600 pb-3 text-txt-primary dark:text-white text-lg font-medium text-txt-primary mb-4">
               Laboratory Data Inputs
             </h3>
 
@@ -208,17 +208,17 @@ export default function GeotechnicalCalculator() {
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight of empty container (W1) in g</label>
                   <><label htmlFor="a11y-input-236" className="sr-only">Input</label>
-<input id="a11y-input-236" type="number" inputMode="decimal" min="0" value={wcW1} onChange={e => setWcW1(e.target.value)} className="mt-1 w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-236" type="number" inputMode="decimal" min="0" value={wcW1} onChange={e => setWcW1(e.target.value)} className="mt-1 w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight of container + wet soil (W2) in g</label>
                   <><label htmlFor="a11y-input-237" className="sr-only">Input</label>
-<input id="a11y-input-237" type="number" inputMode="decimal" min="0" value={wcW2} onChange={e => setWcW2(e.target.value)} className="mt-1 w-full bg-surface-default dark:bg-slate-800 border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-237" type="number" inputMode="decimal" min="0" value={wcW2} onChange={e => setWcW2(e.target.value)} className="mt-1 w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight of container + dry soil (W3) in g</label>
                   <><label htmlFor="a11y-input-238" className="sr-only">Input</label>
-<input id="a11y-input-238" type="number" inputMode="decimal" min="0" value={wcW3} onChange={e => setWcW3(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-238" type="number" inputMode="decimal" min="0" value={wcW3} onChange={e => setWcW3(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
               </div>
             )}
@@ -228,22 +228,22 @@ export default function GeotechnicalCalculator() {
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Empty weight of Pycnometer (W1) in g</label>
                   <><label htmlFor="a11y-input-239" className="sr-only">Input</label>
-<input id="a11y-input-239" type="number" inputMode="decimal" min="0" value={sgW1} onChange={e => setSgW1(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-239" type="number" inputMode="decimal" min="0" value={sgW1} onChange={e => setSgW1(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight of Pycnometer + Soil (W2) in g</label>
                   <><label htmlFor="a11y-input-240" className="sr-only">Input</label>
-<input id="a11y-input-240" type="number" inputMode="decimal" min="0" value={sgW2} onChange={e => setSgW2(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-240" type="number" inputMode="decimal" min="0" value={sgW2} onChange={e => setSgW2(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight of Pycnometer + Soil + Water (W3) in g</label>
                   <><label htmlFor="a11y-input-241" className="sr-only">Input</label>
-<input id="a11y-input-241" type="number" inputMode="decimal" min="0" value={sgW3} onChange={e => setSgW3(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-241" type="number" inputMode="decimal" min="0" value={sgW3} onChange={e => setSgW3(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight of Pycnometer + Water (W4) in g</label>
                   <><label htmlFor="a11y-input-242" className="sr-only">Input</label>
-<input id="a11y-input-242" type="number" inputMode="decimal" min="0" value={sgW4} onChange={e => setSgW4(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-242" type="number" inputMode="decimal" min="0" value={sgW4} onChange={e => setSgW4(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
               </div>
             )}
@@ -253,17 +253,17 @@ export default function GeotechnicalCalculator() {
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Total Weight of Sample (g)</label>
                   <><label htmlFor="a11y-input-243" className="sr-only">Input</label>
-<input id="a11y-input-243" type="number" inputMode="decimal" min="0" value={sieveTotal} onChange={e => setSieveTotal(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-243" type="number" inputMode="decimal" min="0" value={sieveTotal} onChange={e => setSieveTotal(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight Retained on 4.75mm Sieve (g)</label>
                   <><label htmlFor="a11y-input-244" className="sr-only">Input</label>
-<input id="a11y-input-244" type="number" inputMode="decimal" min="0" max={sieveTotal} value={sieveRetainedGravel} onChange={e => setSieveRetainedGravel(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-244" type="number" inputMode="decimal" min="0" max={sieveTotal} value={sieveRetainedGravel} onChange={e => setSieveRetainedGravel(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Weight Retained on 75μm Sieve (g)</label>
                   <><label htmlFor="a11y-input-245" className="sr-only">Input</label>
-<input id="a11y-input-245" type="number" inputMode="decimal" min="0" max={sieveTotal} value={sieveRetainedSand} onChange={e => setSieveRetainedSand(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-245" type="number" inputMode="decimal" min="0" max={sieveTotal} value={sieveRetainedSand} onChange={e => setSieveRetainedSand(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
               </div>
             )}
@@ -273,12 +273,12 @@ export default function GeotechnicalCalculator() {
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Number of Blows (N)</label>
                   <><label htmlFor="a11y-input-246" className="sr-only">Input</label>
-<input id="a11y-input-246" type="number" inputMode="decimal" min="1" value={llBlows} onChange={e => setLlBlows(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-246" type="number" inputMode="decimal" min="1" value={llBlows} onChange={e => setLlBlows(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Water Content (%)</label>
                   <><label htmlFor="a11y-input-247" className="sr-only">Input</label>
-<input id="a11y-input-247" type="number" inputMode="decimal" min="0" value={llWaterContent} onChange={e => setLlWaterContent(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-247" type="number" inputMode="decimal" min="0" value={llWaterContent} onChange={e => setLlWaterContent(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
               </div>
             )}
@@ -288,12 +288,12 @@ export default function GeotechnicalCalculator() {
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Load at 2.5mm Penetration (kg)</label>
                   <><label htmlFor="a11y-input-248" className="sr-only">Input</label>
-<input id="a11y-input-248" type="number" inputMode="decimal" min="0" value={cbrLoad25} onChange={e => setCbrLoad25(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-248" type="number" inputMode="decimal" min="0" value={cbrLoad25} onChange={e => setCbrLoad25(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
                 <div>
                   <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Load at 5.0mm Penetration (kg)</label>
                   <><label htmlFor="a11y-input-249" className="sr-only">Input</label>
-<input id="a11y-input-249" type="number" inputMode="decimal" min="0" value={cbrLoad50} onChange={e => setCbrLoad50(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50" /></>
+<input id="a11y-input-249" type="number" inputMode="decimal" min="0" value={cbrLoad50} onChange={e => setCbrLoad50(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
               </div>
             )}
@@ -301,7 +301,7 @@ export default function GeotechnicalCalculator() {
             <Button
               onClick={() => processEstimate(() => {})}
               disabled={isProcessing}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-full shadow-md transition-all mt-2 active:scale-95 hover:-translate-y-0.5"
+              className="w-full bg-ink hover:bg-ink-700 text-white font-bold py-4 px-6 rounded-full shadow-brand-md transition-all mt-2 active:scale-95 hover:-translate-y-0.5"
             >
               {isProcessing ? "Generating Report..." : "Generate Lab Report"}
             </Button>
@@ -313,27 +313,27 @@ export default function GeotechnicalCalculator() {
               <ProcessingSkeleton count={4} />
             </div>
           ) : hasData ? (
-            <div className="bg-surface-default border border-ui-borderSubtle border-l-[4px] border-l-[#6B46C1] p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-sm sticky top-6 z-10 w-full transition-all overflow-hidden">
+            <div className="bg-surface-default border border-ui-borderSubtle border-l-[4px] border-l-accent-500 p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-brand-sm sticky top-6 z-10 w-full transition-all overflow-hidden">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="uppercase st text-lg font-medium text-txt-primary mb-4">
                   Lab Report Summary
                 </h3>
                 <Download 
-                  className="w-5 h-5 text-indigo-500 cursor-pointer hover:text-indigo-600 transition-colors" 
+                  className="w-5 h-5 text-accent-800 cursor-pointer hover:text-accent-800 transition-colors" 
                   onClick={handleSave} 
                 />
               </div>
               <div className="space-y-4">
                 {Object.entries(currentExportData).map(([key, val]) => (
-                  <div key={key} className="flex justify-between border-b border-slate-100 pb-3 items-center">
+                  <div key={key} className="flex justify-between border-b border-border-color pb-3 items-center">
                     <span className="text-txt-tertiary font-semibold">{key}</span>
-                    <span className="font-mono font-bold bg-gradient-to-br from-[#6B46C1] to-orange-500 bg-clip-text text-transparent bg-slate-50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary py-1 px-3 rounded-2xl overflow-hidden">{val}</span>
+                    <span className="font-mono font-bold bg-gradient-to-br from-accent-500 to-accent-700 bg-clip-text text-transparent bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary py-1 px-3 rounded-2xl overflow-hidden">{val}</span>
                   </div>
                 ))}
               </div>
             </div>
           ) : (
-            <div className="bg-surface-default rounded-2xl p-4 sm:p-8 md:p-8 border-2 border-dashed border-ui-borderSubtle dark:border-slate-700 flex flex-col items-center justify-center text-center sticky top-6 self-start h-full min-h-[300px] w-full overflow-hidden">
+            <div className="bg-surface-default rounded-2xl p-4 sm:p-8 md:p-8 border-2 border-dashed border-ui-borderSubtle dark:border-ink-600 flex flex-col items-center justify-center text-center sticky top-6 self-start h-full min-h-[300px] w-full overflow-hidden">
               <Beaker className="w-12 h-12 text-txt-secondary mb-4" />
               <h3 className="text-lg font-medium text-txt-primary mb-4">Waiting for Input</h3>
               <p className="mt-2 max-w-sm text-base font-normal text-txt-secondary leading-relaxed">

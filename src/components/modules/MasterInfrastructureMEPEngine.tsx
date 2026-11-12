@@ -29,22 +29,22 @@ export default function MasterInfrastructureMEPEngine() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Master Infrastructure & MEP Engine</h1>
-            <p className="text-txt-tertiary dark:text-slate-400 mt-1 mb-4">Earthworks, Pavements, HVAC, and Green Energy integration portal.</p>
+            <p className="text-txt-tertiary dark:text-txt-tertiary mt-1 mb-4">Earthworks, Pavements, HVAC, and Green Energy integration portal.</p>
             <div className="flex gap-4">
               <CodeComplianceBadge standard="AASHTO / IRC:37" title="Highway Design Standard" description="Flexible pavement and structural numbers compliance." />
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-8 bg-surface-default dark:bg-slate-800 p-2 rounded-xl shadow-sm border border-ui-borderSubtle dark:border-slate-700">
+        <div className="flex flex-wrap gap-2 mb-8 bg-surface-default dark:bg-ink p-2 rounded-xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600">
           {tabs.map(t => (
             <Button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
                 activeTab === t.id 
-                  ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 shadow-sm' 
-                  : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'
+                  ? 'bg-accent-50 dark:bg-accent-500/20 text-accent-800 dark:text-accent-400 shadow-brand-sm' 
+                  : 'text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover dark:hover:bg-ink-600/50'
               }`}
             >
               {t.icon} <span className="hidden sm:inline">{t.name}</span>
@@ -313,7 +313,7 @@ function MEPModule({ addItem }: { addItem: any }) {
                 <XAxis dataKey="year" tick={{fontSize: 10}} label={{ value: 'Years', position: 'bottom', offset: -5 }} />
                 <YAxis tick={{fontSize: 10}} label={{ value: 'Net Cost ($)', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="cost" stroke="#10b981" strokeWidth={3} name="Cumulative Net Cost" dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="cost" stroke="#F2A413" strokeWidth={3} name="Cumulative Net Cost" dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -375,8 +375,8 @@ function MEPModule({ addItem }: { addItem: any }) {
 // --------------------------------------------------------------------------------------
 function Card({ title, children }: { title: string, children: React.ReactNode }) {
   return (
-    <div className="bg-surface-default dark:bg-slate-800 rounded-2xl shadow-sm border border-ui-borderSubtle dark:border-slate-700 p-6">
-      <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b border-slate-100 dark:border-slate-700 pb-3 mb-4 flex items-center gap-2">
+    <div className="bg-surface-default dark:bg-ink rounded-2xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600 p-6">
+      <h3 className="text-lg font-bold text-txt-primary dark:text-white border-b border-border-color dark:border-ink-600 pb-3 mb-4 flex items-center gap-2">
         {title}
       </h3>
       {children}
@@ -387,14 +387,14 @@ function Card({ title, children }: { title: string, children: React.ReactNode })
 function InputGroup({ label, value, onChange }: { label: string, value: number, onChange: any }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-semibold text-txt-secondary dark:text-slate-400 leading-tight">{label}</label>
+      <label className="text-xs font-semibold text-txt-secondary dark:text-txt-tertiary leading-tight">{label}</label>
       <input
         type="number"
         value={value}
         onChange={onChange}
         min={0}
         step="any"
-        className="w-full bg-slate-50 dark:bg-slate-900 border border-ui-borderSubtle dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-txt-primary dark:text-white font-mono"
+        className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent-500 focus:border-ink outline-none transition-all text-txt-primary dark:text-white font-mono"
       />
     </div>
   );
@@ -402,13 +402,13 @@ function InputGroup({ label, value, onChange }: { label: string, value: number, 
 
 function ResultRow({ label, value, unit, digits = 2 }: { label: string, value: number, unit: string, digits?: number }) {
   return (
-    <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
-      <span className="text-txt-secondary dark:text-slate-400 text-sm font-medium">{label}</span>
+    <div className="flex justify-between items-center py-3 border-b border-border-color dark:border-ink-600/50 last:border-0">
+      <span className="text-txt-secondary dark:text-txt-tertiary text-sm font-medium">{label}</span>
       <div className="text-right flex items-baseline gap-1.5">
         <span className="text-lg font-bold text-txt-primary dark:text-white">
           {isNaN(value) || !isFinite(value) ? "0.00" : value.toFixed(digits)}
         </span>
-        <span className="text-indigo-500 dark:text-indigo-400 text-xs font-semibold">{unit}</span>
+        <span className="text-accent-800 dark:text-accent-400 text-xs font-semibold">{unit}</span>
       </div>
     </div>
   );
@@ -418,7 +418,7 @@ function BoqBtn({ onClick }: { onClick: () => void }) {
   return (
     <Button 
       onClick={onClick}
-      className="mt-6 w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 dark:text-indigo-400 py-3 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-all"
+      className="mt-6 w-full bg-accent-50 hover:bg-accent-100 text-accent-800 dark:bg-accent-500/10 dark:hover:bg-accent-500/20 dark:text-accent-400 py-3 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-all"
     >
       <Save size={16} /> Add to Master BOQ
     </Button>

@@ -131,10 +131,10 @@ export function PrecastWallEstimator() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header & Toolbar */}
-      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex items-center gap-4">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-100 text-accent-800">
               <Layers size={24} />
             </div>
             <div>
@@ -144,27 +144,27 @@ export function PrecastWallEstimator() {
           </div>
           
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex bg-slate-100 p-1 rounded-xl">
+            <div className="flex bg-surface-hover p-1 rounded-xl">
               <Button
                 onClick={() => setUnitSystem('metric')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Metric (m)
               </Button>
               <Button
                 onClick={() => setUnitSystem('imperial')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Imperial (ft)
               </Button>
             </div>
             
-            <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+            <div className="h-8 w-px bg-surface-active mx-1 hidden sm:block"></div>
             
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-slate-50 transition-colors">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover transition-colors">
               <Printer size={16} /> Print
             </Button>
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 border border-indigo-700 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-accent-800 rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
               <Download size={16} /> Export BOQ
             </Button>
           </div>
@@ -174,9 +174,9 @@ export function PrecastWallEstimator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Input Parameters */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
             <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
-              <Ruler size={20} className="text-indigo-500" />
+              <Ruler size={20} className="text-accent-800" />
               Dimensions & Specs
             </h2>
 
@@ -189,7 +189,7 @@ export function PrecastWallEstimator() {
                   min="1"
                   value={wallLength}
                   onChange={(e) => setWallLength(Math.max(1, Number(e.target.value)))}
-                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                  className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-800 outline-none transition-all"
                 />
               </div>
               
@@ -200,7 +200,7 @@ export function PrecastWallEstimator() {
                   min="0.1"
                   value={wallHeight}
                   onChange={(e) => setWallHeight(Math.max(0.1, Number(e.target.value)))}
-                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                  className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-800 outline-none transition-all"
                 />
               </div>
 
@@ -212,7 +212,7 @@ export function PrecastWallEstimator() {
                   min="0.1"
                   value={panelWidth}
                   onChange={(e) => setPanelWidth(Math.max(0.1, Number(e.target.value)))}
-                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                  className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-800 outline-none transition-all"
                 />
               </div>
               
@@ -223,47 +223,47 @@ export function PrecastWallEstimator() {
                   min="0.1"
                   value={panelHeight}
                   onChange={(e) => setPanelHeight(Math.max(0.1, Number(e.target.value)))}
-                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                  className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-800 outline-none transition-all"
                 />
               </div>
             </div>
             
-            <div className="pt-4 border-t border-slate-100">
+            <div className="pt-4 border-t border-border-color">
               <h3 className="text-sm font-bold text-txt-secondary mb-4">Post Footing Size ({unitL})</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs text-txt-tertiary">Length</label>
-                  <input type="number" value={footingLength} onChange={e => setFootingLength(Number(e.target.value))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+                  <input type="number" value={footingLength} onChange={e => setFootingLength(Number(e.target.value))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-lg px-3 py-2 text-sm outline-none focus:border-accent-800" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs text-txt-tertiary">Width</label>
-                  <input type="number" value={footingWidth} onChange={e => setFootingWidth(Number(e.target.value))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+                  <input type="number" value={footingWidth} onChange={e => setFootingWidth(Number(e.target.value))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-lg px-3 py-2 text-sm outline-none focus:border-accent-800" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs text-txt-tertiary">Depth</label>
-                  <input type="number" value={footingDepth} onChange={e => setFootingDepth(Number(e.target.value))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+                  <input type="number" value={footingDepth} onChange={e => setFootingDepth(Number(e.target.value))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-lg px-3 py-2 text-sm outline-none focus:border-accent-800" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
             <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
-              <DollarSign size={20} className="text-emerald-500" />
+              <DollarSign size={20} className="text-ui-successText" />
               Unit Rates ({currency})
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-txt-secondary">Cost per Post</label>
-                <input type="number" value={unitPostCost} onChange={e => setUnitPostCost(Number(e.target.value))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-emerald-500 outline-none transition-all" />
+                <input type="number" value={unitPostCost} onChange={e => setUnitPostCost(Number(e.target.value))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-accent-500 outline-none transition-all" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-txt-secondary">Cost per Panel</label>
-                <input type="number" value={unitPanelCost} onChange={e => setUnitPanelCost(Number(e.target.value))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-emerald-500 outline-none transition-all" />
+                <input type="number" value={unitPanelCost} onChange={e => setUnitPanelCost(Number(e.target.value))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-accent-500 outline-none transition-all" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-txt-secondary">Concrete ({unitV})</label>
-                <input type="number" value={unitConcreteCost} onChange={e => setUnitConcreteCost(Number(e.target.value))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-emerald-500 outline-none transition-all" />
+                <input type="number" value={unitConcreteCost} onChange={e => setUnitConcreteCost(Number(e.target.value))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-accent-500 outline-none transition-all" />
               </div>
             </div>
           </div>
@@ -271,42 +271,42 @@ export function PrecastWallEstimator() {
 
         {/* Results Panel */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
+          <div className="bg-ink rounded-2xl p-6 shadow-brand-lg text-white space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
               <Box size={120} />
             </div>
             
             <h2 className="text-xl font-bold flex items-center gap-2 relative z-10">
-              <Calculator size={24} className="text-indigo-400" />
+              <Calculator size={24} className="text-accent-400" />
               Material Quantities
             </h2>
 
             <div className="grid grid-cols-2 gap-4 relative z-10">
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                <div className="text-indigo-200 text-sm font-medium mb-1 flex items-center gap-1.5"><Hash size={14}/> Posts</div>
+                <div className="text-accent-200 text-sm font-medium mb-1 flex items-center gap-1.5"><Hash size={14}/> Posts</div>
                 <div className="text-3xl font-bold">{result.postsCount}</div>
-                <div className="text-xs text-slate-400 mt-1">Total columns</div>
+                <div className="text-xs text-txt-tertiary mt-1">Total columns</div>
               </div>
               
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                <div className="text-indigo-200 text-sm font-medium mb-1 flex items-center gap-1.5"><Layers size={14}/> Panels</div>
+                <div className="text-accent-200 text-sm font-medium mb-1 flex items-center gap-1.5"><Layers size={14}/> Panels</div>
                 <div className="text-3xl font-bold">{result.panelsCount}</div>
-                <div className="text-xs text-slate-400 mt-1">Horizontal slabs</div>
+                <div className="text-xs text-txt-tertiary mt-1">Horizontal slabs</div>
               </div>
               
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md col-span-2">
-                <div className="text-indigo-200 text-sm font-medium mb-1 flex items-center justify-between gap-1.5">
+                <div className="text-accent-200 text-sm font-medium mb-1 flex items-center justify-between gap-1.5">
                   <div className="flex items-center gap-1.5"><Box size={14}/> Footing Concrete</div>
-                  <SmartSuggestionBadge label="Calculate Materials" to="calculators" className="!bg-surface-default/20 !text-white hover:!bg-surface-default hover:!text-indigo-900 border-white/30" />
+                  <SmartSuggestionBadge label="Calculate Materials" to="calculators" className="!bg-surface-default/20 !text-white hover:!bg-surface-default hover:!text-accent-900 border-white/30" />
                 </div>
-                <div className="text-3xl font-bold">{result.footingVolume.toFixed(2)} <span className="text-lg font-normal text-slate-300">{unitV}</span></div>
-                <div className="text-xs text-slate-400 mt-1">Total volume for all {result.postsCount} posts</div>
+                <div className="text-3xl font-bold">{result.footingVolume.toFixed(2)} <span className="text-lg font-normal text-txt-tertiary">{unitV}</span></div>
+                <div className="text-xs text-txt-tertiary mt-1">Total volume for all {result.postsCount} posts</div>
               </div>
             </div>
           </div>
 
-          <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
-            <h3 className="text-lg font-bold text-txt-primary mb-4 border-b border-slate-100 pb-3">Cost Breakdown</h3>
+          <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
+            <h3 className="text-lg font-bold text-txt-primary mb-4 border-b border-border-color pb-3">Cost Breakdown</h3>
             
             <div className="space-y-3 mb-4">
               <div className="flex justify-between items-center text-sm">
@@ -325,7 +325,7 @@ export function PrecastWallEstimator() {
             
             <div className="pt-4 border-t border-ui-borderSubtle flex justify-between items-center">
               <span className="text-base font-bold text-txt-primary">Total Estimate</span>
-              <span className="text-2xl font-bold text-indigo-600">{currency} {result.totalCost.toLocaleString()}</span>
+              <span className="text-2xl font-bold text-accent-800">{currency} {result.totalCost.toLocaleString()}</span>
             </div>
           </div>
 

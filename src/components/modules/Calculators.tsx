@@ -321,7 +321,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 }}
                 className={`flex-1 sm:flex-none px-4 py-2 rounded-2xl text-base font-medium transition-all ${
                   concreteType === type 
-                    ? "bg-surface-default  shadow-sm text-indigo-600 " 
+                    ? "bg-surface-default  shadow-brand-sm text-accent-800 " 
                     : "text-txt-tertiary hover:text-txt-secondary "
                 }`}
               >
@@ -332,7 +332,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
         </div>
 
         {concreteType === "slab" && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
             <div>
               <label className="uppercase text-sm font-medium text-txt-secondary mb-1 block">
                 Length ({unitFt})
@@ -342,7 +342,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cLength}
                 onChange={(e) => setCLength(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -354,7 +354,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cWidth}
                 onChange={(e) => setCWidth(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -366,7 +366,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cDepth}
                 onChange={(e) => setCDepth(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
           </div>
@@ -383,7 +383,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cColDia}
                 onChange={(e) => setCColDia(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -395,7 +395,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cColHeight}
                 onChange={(e) => setCColHeight(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
           </div>
@@ -412,7 +412,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cStairSteps}
                 onChange={(e) => setCStairSteps(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -424,7 +424,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cStairWidth}
                 onChange={(e) => setCStairWidth(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -436,7 +436,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cStairTread}
                 onChange={(e) => setCStairTread(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -448,7 +448,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cStairRiser}
                 onChange={(e) => setCStairRiser(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -460,12 +460,12 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={cStairWaist}
                 onChange={(e) => setCStairWaist(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
           </div>
         )}
-        <div className="bg-blue-50/50 rounded-2xl px-4 py-3 border border-blue-100 flex items-center justify-center min-h-[8rem] relative text-base font-medium text-blue-500/80 overflow-hidden">
+        <div className="bg-accent-50 rounded-2xl px-4 py-3 border border-accent-100 flex items-center justify-center min-h-[8rem] relative text-base font-medium text-accent-800/80 overflow-hidden">
           <svg
             viewBox="0 0 120 80"
             className="w-full h-full absolute inset-0 opacity-20 pointer-events-none"
@@ -478,13 +478,13 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               strokeWidth="2"
             />
           </svg>
-          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 bg-blue-50">
+          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 bg-accent-50">
             L {cLength}
           </span>
-          <span className="absolute right-10 top-6 px-2 bg-blue-50">
+          <span className="absolute right-10 top-6 px-2 bg-accent-50">
             W {cWidth}
           </span>
-          <span className="absolute left-8 bottom-6 px-2 bg-blue-50">
+          <span className="absolute left-8 bottom-6 px-2 bg-accent-50">
             D {cDepth}
           </span>
         </div>
@@ -494,14 +494,14 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               <label className="uppercase text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center">
                 Mix Ratio
                <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions for ordinary concrete (Table 9)." /></span></label>
-              <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+              <span className="text-sm font-medium text-ui-successText bg-ui-success px-1.5 py-0.5 rounded">
                 Standard: {concreteType === 'slab' || concreteType === 'column' ? 'M20' : 'M15/M20'}
               </span>
             </div>
             <select
               value={cMix}
               onChange={(e) => setCMix(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm overflow-hidden"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm overflow-hidden"
             >
               <option value="1:5:10">1:5:10 (M5)</option>
               <option value="1:4:8">1:4:8 (M7.5)</option>
@@ -521,7 +521,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               step="0.01"
               value={cWcRatio}
               onChange={(e) => setCWcRatio(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
         </div>
@@ -585,8 +585,8 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
     content =
       activeTab === "bricks" ? (
         <>
-          <div className="mb-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl px-4 py-3 text-sm">
-            <a href="/brick-calculator" className="font-semibold text-blue-700 dark:text-blue-300 hover:underline">
+          <div className="mb-4 bg-accent-50 dark:bg-accent-900/20 border border-accent-200 dark:border-accent-800 rounded-2xl px-4 py-3 text-sm">
+            <a href="/brick-calculator" className="font-semibold text-accent-800 dark:text-accent-400 hover:underline">
               Open the full Brick Calculator →
             </a>{" "}
             <span className="text-txt-secondary">
@@ -611,7 +611,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={bWallL}
                 onChange={(e) => setBWallL(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -623,7 +623,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={bWallH}
                 onChange={(e) => setBWallH(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -635,11 +635,11 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={bWallT}
                 onChange={(e) => setBWallT(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
           </div>
-          <div className="bg-amber-50/50 rounded-2xl px-4 py-3 border border-amber-100 flex items-center justify-center min-h-[8rem] relative text-base font-medium text-amber-600/80 overflow-hidden">
+          <div className="bg-accent-50/50 rounded-2xl px-4 py-3 border border-accent-100 flex items-center justify-center min-h-[8rem] relative text-base font-medium text-accent-700/80 overflow-hidden">
             <svg
               viewBox="0 0 120 80"
               className="w-full h-full absolute inset-0 opacity-20 pointer-events-none"
@@ -655,20 +655,20 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 strokeWidth="2"
               />
             </svg>
-            <span className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 bg-amber-50">
+            <span className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 bg-accent-50">
               L {bWallL}
             </span>
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 px-2 bg-amber-50">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 px-2 bg-accent-50">
               H {bWallH}
             </span>
-            <span className="absolute right-10 bottom-6 px-2 bg-amber-50">
+            <span className="absolute right-10 bottom-6 px-2 bg-accent-50">
               T {bWallT}
             </span>
           </div>
           <div className="bg-surface-default px-4 py-3 rounded-2xl border overflow-hidden">
             <h4 className="text-sm uppercase flex justify-between items-center mb-4 text-lg font-medium text-txt-primary">
               Add Deductions
-              <span className="bg-indigo-50 text-indigo-600 px-2 py-1 rounded text-sm">
+              <span className="bg-accent-50 text-accent-800 px-2 py-1 rounded text-sm">
                 Total:
                 {openings
                   .reduce(
@@ -707,7 +707,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                         quantity: parseFloat(e.target.value),
                       })
                     }
-                    className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                    className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
                   /></>
                 </div>
                 <div>
@@ -722,7 +722,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                         length: parseFloat(e.target.value),
                       })
                     }
-                    className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                    className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
                   /></>
                 </div>
                 <div>
@@ -737,7 +737,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                         height: parseFloat(e.target.value),
                       })
                     }
-                    className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                    className="w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
                   /></>
                 </div>
               </div>
@@ -763,7 +763,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                     });
                   }
                 }}
-                className="w-full py-2 bg-indigo-50 text-indigo-600 rounded-full text-base font-medium hover:bg-indigo-50 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                className="w-full py-2 bg-accent-50 text-accent-800 rounded-full text-base font-medium hover:bg-accent-50 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 disabled={
                   !newOpening.quantity ||
                   !newOpening.length ||
@@ -794,7 +794,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                       onClick={() =>
                         setOpenings(openings.filter((o) => o.id !== op.id))
                       }
-                      className="text-red-400 hover:text-red-600 rounded-full"
+                      className="text-ui-errorText hover:text-ui-errorText rounded-full"
                     >
                       ×
                     </Button>
@@ -816,7 +816,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={l}
                 onChange={(e) => setL(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -828,7 +828,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={w}
                 onChange={(e) => setW(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -840,7 +840,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={h}
                 onChange={(e) => setH(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
           </div>
@@ -854,7 +854,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={j}
                 onChange={(e) => setJ(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -864,7 +864,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               <select
                 value={bMix}
                 onChange={(e) => setBMix(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm overflow-hidden"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm overflow-hidden"
               >
                 <option value="1:3">1:3</option>
                 <option value="1:4">1:4</option>
@@ -926,7 +926,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               type="number" inputMode="decimal"
               value={sDia}
               onChange={(e) => setSDia(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
           <div>
@@ -938,7 +938,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               type="number" inputMode="decimal"
               value={sSpan}
               onChange={(e) => setSSpan(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
           <div>
@@ -953,7 +953,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               type="number" inputMode="decimal"
               value={sSpace}
               onChange={(e) => setSSpace(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
           <div>
@@ -965,7 +965,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               type="number" inputMode="decimal"
               value={sBarL}
               onChange={(e) => setSBarL(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
           <div>
@@ -977,7 +977,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               type="number" inputMode="decimal"
               value={sOverlap}
               onChange={(e) => setSOverlap(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
         </div>
@@ -1087,10 +1087,10 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
             Finishes Estimator
             {finishesType === "plaster" && (
               <>
-                <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-base font-medium tracking-wide uppercase">
+                <span className="px-2 py-0.5 rounded-full bg-ui-success text-ui-successText text-base font-medium tracking-wide uppercase">
                   Beginner
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-slate-100 text-txt-secondary text-base font-medium tracking-wide uppercase flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-full bg-surface-hover text-txt-secondary text-base font-medium tracking-wide uppercase flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   2 MIN
                 </span>
@@ -1104,7 +1104,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 onClick={() => { setFinishesType(type); if(hasData) resetEstimate(); }}
                 className={`flex-1 sm:flex-none px-4 py-2 rounded-2xl text-base font-medium transition-all ${
                   finishesType === type 
-                    ? "bg-surface-default  shadow-sm text-indigo-600 " 
+                    ? "bg-surface-default  shadow-brand-sm text-accent-800 " 
                     : "text-txt-tertiary hover:text-txt-secondary "
                 }`}
               >
@@ -1115,12 +1115,12 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
         </div>
 
         {finishesType === "plaster" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
             <div className="sm:col-span-2">
               <label className="uppercase mb-2 block text-sm font-medium text-txt-secondary mb-1">
                 Plaster Location
               </label>
-              <div className="flex bg-slate-100 p-1 rounded-2xl w-full overflow-hidden">
+              <div className="flex bg-surface-hover p-1 rounded-2xl w-full overflow-hidden">
                 <Button
                   type="button"
                   onClick={() => {
@@ -1130,7 +1130,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                   }}
                   className={`flex-1 px-4 py-2 rounded-2xl text-base font-medium transition-all ${
                     pLocation === "Internal" 
-                      ? "bg-surface-default  shadow-sm text-indigo-600 " 
+                      ? "bg-surface-default  shadow-brand-sm text-accent-800 " 
                       : "text-txt-tertiary hover:text-txt-secondary "
                   }`}
                 >
@@ -1145,7 +1145,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                   }}
                   className={`flex-1 px-4 py-2 rounded-2xl text-base font-medium transition-all ${
                     pLocation === "External" 
-                      ? "bg-surface-default  shadow-sm text-indigo-600 " 
+                      ? "bg-surface-default  shadow-brand-sm text-accent-800 " 
                       : "text-txt-tertiary hover:text-txt-secondary "
                   }`}
                 >
@@ -1154,7 +1154,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               </div>
             </div>
             <div>
-              <label className="uppercase text-sm font-medium text-txt-secondary mb-1 block rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+              <label className="uppercase text-sm font-medium text-txt-secondary mb-1 block rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
                 Wall Area ({unitArea})
               </label>
               <><label htmlFor="a11y-input-164" className="sr-only">Input</label>
@@ -1162,7 +1162,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={pArea}
                 onChange={(e) => setPArea(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -1174,7 +1174,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={pThick}
                 onChange={(e) => setPThick(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -1184,7 +1184,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               <select
                 value={pMix}
                 onChange={(e) => setPMix(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm overflow-hidden"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm overflow-hidden"
               >
                 <option value="1:3">1:3 (Ceiling/Rich mix)</option>
                 <option value="1:4">1:4 (Internal walls)</option>
@@ -1192,7 +1192,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 <option value="1:6">1:6 (External/Rough)</option>
               </select>
             </div>
-            <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 p-3 bg-slate-50 border border-ui-borderSubtle rounded-2xl border border-slate-100 overflow-hidden">
+            <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 p-3 bg-surface-hover border border-ui-borderSubtle rounded-2xl border border-border-color overflow-hidden">
               <div>
                 <label className="uppercase flex items-center justify-between text-sm font-medium text-txt-secondary mb-1 block">
                   Cement Density (kg/m³)
@@ -1201,7 +1201,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 <><label htmlFor="a11y-input-166" className="sr-only">Input</label>
 <input id="a11y-input-166" type="number" inputMode="decimal"
                   defaultValue="1440"
-                  className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all min-h-[44px] text-base font-normal"
+                  className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 transition-all min-h-[44px] text-base font-normal"
                 /></>
               </div>
               <div>
@@ -1212,14 +1212,14 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 <><label htmlFor="a11y-input-167" className="sr-only">Input</label>
 <input id="a11y-input-167" type="number" inputMode="decimal"
                   defaultValue="1600"
-                  className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 transition-all min-h-[44px] text-base font-normal"
+                  className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 transition-all min-h-[44px] text-base font-normal"
                 /></>
               </div>
             </div>
             
-            <div className="sm:col-span-2 mt-4 p-4 rounded-2xl border border-indigo-200 bg-indigo-50/50 overflow-hidden">
-              <h4 className="text-indigo-900 mb-2 text-lg font-medium text-txt-primary mb-4">Math Logic & Formulas (Built-in)</h4>
-              <ul className="text-sm text-indigo-800 space-y-1.5 list-disc list-inside">
+            <div className="sm:col-span-2 mt-4 p-4 rounded-2xl border border-accent-200 bg-accent-50 overflow-hidden">
+              <h4 className="text-accent-900 mb-2 text-lg font-medium text-txt-primary mb-4">Math Logic & Formulas (Built-in)</h4>
+              <ul className="text-sm text-accent-800 space-y-1.5 list-disc list-inside">
                 <li><strong>Wet Volume (V_wet):</strong> Area × (Thickness / 100)</li>
                 <li><strong>Dry Volume (V_dry):</strong> V_wet × 1.33 (for voids) + wastage = <strong>V_dry</strong></li>
                 <li><strong>Cement Bags:</strong> [V_dry × (Cement Ratio / Total Ratio)] / 0.0347</li>
@@ -1229,8 +1229,8 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
             <div className="sm:col-span-2 mt-6">
               <h4 className="mb-3 text-lg font-medium text-txt-primary mb-4">Related Tools</h4>
               <div className="flex gap-2">
-                <Button onClick={() => setActiveTab('concrete')} className="px-3 py-2 text-base font-medium rounded-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Concrete Calculator</Button>
-                <Button onClick={() => setActiveTab('bricks')} className="px-3 py-2 text-base font-medium rounded-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">Brickwork Estimator</Button>
+                <Button onClick={() => setActiveTab('concrete')} className="px-3 py-2 text-base font-medium rounded-full bg-accent-50 text-accent-800 hover:bg-accent-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Concrete Calculator</Button>
+                <Button onClick={() => setActiveTab('bricks')} className="px-3 py-2 text-base font-medium rounded-full bg-accent-50 text-accent-800 hover:bg-accent-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Brickwork Estimator</Button>
               </div>
             </div>
           </div>
@@ -1247,7 +1247,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={paintArea}
                 onChange={(e) => setPaintArea(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
             <div>
@@ -1259,7 +1259,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={paintCoats}
                 onChange={(e) => setPaintCoats(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
           </div>
@@ -1276,7 +1276,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 type="number" inputMode="decimal"
                 value={termiteArea}
                 onChange={(e) => setTermiteArea(e.target.value)}
-                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+                className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
               /></>
             </div>
           </div>
@@ -1319,7 +1319,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               type="number" inputMode="decimal"
               value={wCementKg}
               onChange={(e) => setWCementKg(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
           <div>
@@ -1332,7 +1332,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               step="0.01"
               value={wWcRatio}
               onChange={(e) => setWWcRatio(e.target.value)}
-              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500/50 font-medium text-sm transition-all shadow-sm"
+              className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
           </div>
         </div>
@@ -1506,48 +1506,48 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
       <div className="space-y-6 w-full animate-in fade-in duration-300">
         <div className="flex justify-between items-center mb-4">
            <h3 className="text-lg font-medium text-txt-primary mb-4">{title}</h3>
-           <Button onClick={() => setIsBatchMode(false)} className="px-4 py-2 text-base font-medium bg-slate-100 rounded-full hover:bg-slate-200 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+           <Button onClick={() => setIsBatchMode(false)} className="px-4 py-2 text-base font-medium bg-surface-hover rounded-full hover:bg-surface-active transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
               Exit Batch Mode
            </Button>
         </div>
         <BatchInputMode columns={columns} onCalculateTotal={calcLogic} title={title} />
         {batchResults.map((br, idx) => (
-           <div key={idx} className="bg-emerald-50 border border-emerald-200 p-4 sm:p-6 rounded-2xl overflow-hidden">
-             <h4 className="text-emerald-800 mb-4 text-lg font-medium text-txt-primary">{br.type} Results</h4>
+           <div key={idx} className="bg-ui-success border border-ui-successBorder p-4 sm:p-6 rounded-2xl overflow-hidden">
+             <h4 className="text-ui-successText mb-4 text-lg font-medium text-txt-primary">{br.type} Results</h4>
              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {br.volume !== undefined && (
-                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-                    <p className="uppercase text-emerald-600 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Total Volume</p>
+                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-brand-sm border border-ui-successBorder overflow-hidden">
+                    <p className="uppercase text-ui-successText mb-1 text-base font-normal text-txt-secondary leading-relaxed">Total Volume</p>
                     <p className="text-base font-normal text-txt-secondary leading-relaxed">{br.volume.toFixed(2)} <span className="text-sm font-medium text-txt-tertiary">{unitVol}</span></p>
                   </div>
                 )}
                 {br.cementBags !== undefined && (
-                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-                    <p className="uppercase text-emerald-600 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Cement Required</p>
+                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-brand-sm border border-ui-successBorder overflow-hidden">
+                    <p className="uppercase text-ui-successText mb-1 text-base font-normal text-txt-secondary leading-relaxed">Cement Required</p>
                     <p className="text-base font-normal text-txt-secondary leading-relaxed">{br.cementBags.toFixed(2)} <span className="text-sm font-medium text-txt-tertiary">Bags</span></p>
                   </div>
                 )}
                 {br.sandVol !== undefined && (
-                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-                    <p className="uppercase text-emerald-600 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Sand Required</p>
+                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-brand-sm border border-ui-successBorder overflow-hidden">
+                    <p className="uppercase text-ui-successText mb-1 text-base font-normal text-txt-secondary leading-relaxed">Sand Required</p>
                     <p className="text-base font-normal text-txt-secondary leading-relaxed">{br.sandVol.toFixed(2)} <span className="text-sm font-medium text-txt-tertiary">{unitVol}</span></p>
                   </div>
                 )}
                 {br.aggregateVol !== undefined && (
-                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-                    <p className="uppercase text-emerald-600 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Aggregate</p>
+                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-brand-sm border border-ui-successBorder overflow-hidden">
+                    <p className="uppercase text-ui-successText mb-1 text-base font-normal text-txt-secondary leading-relaxed">Aggregate</p>
                     <p className="text-base font-normal text-txt-secondary leading-relaxed">{br.aggregateVol.toFixed(2)} <span className="text-sm font-medium text-txt-tertiary">{unitVol}</span></p>
                   </div>
                 )}
                 {br.waterLiters !== undefined && (
-                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-                    <p className="uppercase text-emerald-600 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Water Required</p>
+                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-brand-sm border border-ui-successBorder overflow-hidden">
+                    <p className="uppercase text-ui-successText mb-1 text-base font-normal text-txt-secondary leading-relaxed">Water Required</p>
                     <p className="text-base font-normal text-txt-secondary leading-relaxed">{isSI ? br.waterLiters.toFixed(0) : (br.waterLiters/3.785).toFixed(0)} <span className="text-sm font-medium text-txt-tertiary">{isSI ? 'Liters' : 'Gallons'}</span></p>
                   </div>
                 )}
                 {br.count !== undefined && (
-                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
-                    <p className="uppercase text-emerald-600 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Total Pieces</p>
+                  <div className="w-full bg-surface-default p-4 rounded-xl shadow-brand-sm border border-ui-successBorder overflow-hidden">
+                    <p className="uppercase text-ui-successText mb-1 text-base font-normal text-txt-secondary leading-relaxed">Total Pieces</p>
                     <p className="text-base font-normal text-txt-secondary leading-relaxed">{br.count.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">Nos</span></p>
                   </div>
                 )}
@@ -1565,7 +1565,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
     <div className={hideHeader ? "w-full" : "max-w-7xl mx-auto"}>
        {isBatchSupported && !isBatchMode && (
           <div className="flex justify-end mb-4">
-             <Button onClick={() => { setIsBatchMode(true); setBatchResults([]); }} className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 text-base font-medium rounded-full hover:bg-indigo-100 transition-colors shadow-sm active:scale-95 hover:-translate-y-0.5">
+             <Button onClick={() => { setIsBatchMode(true); setBatchResults([]); }} className="flex items-center gap-2 px-4 py-2 bg-accent-50 text-accent-800 text-base font-medium rounded-full hover:bg-accent-100 transition-colors shadow-brand-sm active:scale-95 hover:-translate-y-0.5">
                 <Layers className="w-4 h-4" /> Enable Batch Mode
              </Button>
           </div>

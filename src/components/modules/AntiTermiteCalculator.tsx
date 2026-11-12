@@ -64,16 +64,16 @@ export default function AntiTermiteCalculator() {
         description="Calculate exact chemical emulsion and water dilution rates for pre-construction treatment of foundations, floors, and perimeters."
       />
 
-      <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-sm overflow-hidden">
+      <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
          <h2 className="flex items-center gap-2 mb-6 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-          <Bug className="w-6 h-6 text-indigo-600" />
+          <Bug className="w-6 h-6 text-accent-800" />
           Anti-Termite Treatment & Emulsion Engine
         </h2>
 
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
             <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Surface Dimensions</h3>
+                  <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Surface Dimensions</h3>
                   <div className="space-y-4">
                     <NumberInput label="Total Ground Floor Area" unit="m²" value={floorArea} onChange={setFloorArea} />
                     <NumberInput label="Total Outer Perimeter" unit="m" value={perimeter} onChange={setPerimeter} />
@@ -82,14 +82,14 @@ export default function AntiTermiteCalculator() {
                 </div>
 
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Chemical Configuration</h3>
+                  <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Chemical Configuration</h3>
                   <div className="space-y-4">
                     <div>
                         <label className="block uppercase tracking-wider mb-1.5 ml-1 text-sm font-medium text-txt-secondary mb-1">Treatment Chemical</label>
                         <select 
                             value={selectedChemical.name}
                             onChange={(e) => setSelectedChemical(chemicals.find(c => c.name === e.target.value) || chemicals[0])}
-                            className="w-full h-11 bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
+                            className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
                         >
                             {chemicals.map(c => (
                                 <option key={c.name} value={c.name}>{c.name}</option>
@@ -125,27 +125,27 @@ export default function AntiTermiteCalculator() {
                     </div>
 
                     <div className="mt-6 flex flex-col gap-4">
-                        <div className="bg-indigo-50 border border-indigo-200 p-5 rounded-2xl overflow-hidden">
-                            <h4 className="text-indigo-900 mb-4 flex items-center justify-between text-lg font-medium text-txt-primary">
+                        <div className="bg-accent-50 border border-accent-200 p-5 rounded-2xl overflow-hidden">
+                            <h4 className="text-accent-900 mb-4 flex items-center justify-between text-lg font-medium text-txt-primary">
                                 <span>Pure Chemical Needed</span>
-                                <span className="text-sm bg-indigo-200 text-indigo-800 px-2 py-1 rounded-full uppercase tracking-wider">Dilution 1:{results.dilutionParts.toFixed(1)}</span>
+                                <span className="text-sm bg-accent-200 text-accent-800 px-2 py-1 rounded-full uppercase tracking-wider">Dilution 1:{results.dilutionParts.toFixed(1)}</span>
                             </h4>
                             
                             <div className="flex items-end gap-2">
-                                <span className="font-mono text-xl font-bold text-indigo-700 tracking-tight">{results.chemicalConcentrate.toFixed(2)}</span>
-                                <span className="font-bold text-indigo-600/70 mb-1">Liters</span>
+                                <span className="font-mono text-xl font-bold text-accent-800 tracking-tight">{results.chemicalConcentrate.toFixed(2)}</span>
+                                <span className="font-bold text-accent-800/70 mb-1">Liters</span>
                             </div>
                         </div>
 
-                        <div className="bg-cyan-50 border border-cyan-200 p-5 rounded-2xl overflow-hidden">
-                            <h4 className="text-cyan-900 mb-4 flex items-center justify-between text-lg font-medium text-txt-primary">
+                        <div className="bg-accent-50 border border-accent-200 p-5 rounded-2xl overflow-hidden">
+                            <h4 className="text-accent-900 mb-4 flex items-center justify-between text-lg font-medium">
                                 <span>Water Needed For Mixing</span>
-                                <Droplets className="w-4 h-4 text-cyan-500" />
+                                <Droplets className="w-4 h-4 text-accent-700" />
                             </h4>
                             
                             <div className="flex items-end gap-2">
-                                <span className="font-mono text-xl font-bold text-cyan-700 tracking-tight">{results.water.toFixed(1)}</span>
-                                <span className="font-bold text-cyan-600/70 mb-1">Liters</span>
+                                <span className="font-mono text-xl font-bold text-accent-800 tracking-tight">{results.water.toFixed(1)}</span>
+                                <span className="font-bold text-accent-800/70 mb-1">Liters</span>
                             </div>
                         </div>
                     </div>

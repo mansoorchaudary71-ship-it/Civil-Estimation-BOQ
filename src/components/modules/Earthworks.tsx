@@ -22,7 +22,7 @@ export default function EarthworksEstimator() {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col md:flex-row bg-slate-50 overflow-hidden">
+    <div className="w-full h-full flex flex-col md:flex-row bg-surface-hover overflow-hidden">
       {/* Sidebar for Sub-Navigation */}
       <div className="w-full md:w-64 flex-shrink-0 bg-surface-default border-r border-ui-borderSubtle flex flex-col pt-6 px-4 gap-2">
         <h2 className="tabular-nums px-2 mb-4 text-xl font-semibold text-txt-primary tracking-tight">
@@ -34,7 +34,7 @@ export default function EarthworksEstimator() {
           <select 
             value={designStandard}
             onChange={(e) => setDesignStandard(e.target.value)}
-            className="w-full mt-1 bg-slate-100 border-none p-2 rounded-2xl text-base font-medium outline-none"
+            className="w-full mt-1 bg-surface-hover border-none p-2 rounded-2xl text-base font-medium outline-none"
           >
             <option value="IS 1200 Part 27 (Measurement)">IS 1200 Part 27 (Measurement)</option>
             <option value="IS 3764 (Excavation Safety)">IS 3764 (Safety)</option>
@@ -48,11 +48,11 @@ export default function EarthworksEstimator() {
             onClick={() => setActiveTab(tab.id)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold transition-all text-sm ${
               activeTab === tab.id
-                ? "bg-amber-600 text-txt-primary  shadow-md translate-x-1"
-                : "text-txt-secondary  hover:bg-amber-50 hover:text-amber-700"
+                ? "bg-accent-600 text-txt-primary  shadow-brand-md translate-x-1"
+                : "text-txt-secondary  hover:bg-accent-50 hover:text-accent-800"
             }`}
           >
-            <tab.icon className="w-5 h-5 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
+            <tab.icon className="w-5 h-5 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm" />
             {tab.label}
           </Button>
         ))}

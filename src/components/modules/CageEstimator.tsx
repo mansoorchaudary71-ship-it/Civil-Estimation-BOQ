@@ -81,7 +81,7 @@ export default function CageEstimator() {
     <div className="animate-in fade-in duration-300">
       <div className="mb-8">
         <h2 className="tabular-nums flex items-center gap-2 mb-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-          <RotateCw className="w-6 h-6 text-emerald-500" />
+          <RotateCw className="w-6 h-6 text-ui-successText" />
           Cage / Spiral Estimator
         </h2>
         <p className="text-base font-normal text-txt-secondary leading-relaxed">
@@ -91,19 +91,19 @@ export default function CageEstimator() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
         {/* Input Form */}
-        <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+        <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle overflow-hidden">
           <h3 className="mb-6 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
-            <Calculator className="w-5 h-5 text-emerald-500" />
+            <Calculator className="w-5 h-5 text-ui-successText" />
             Cage Parameters
           </h3>
           
           <div className="space-y-4">
-             <div className="flex bg-slate-100 p-1 rounded-2xl w-full overflow-hidden">
+             <div className="flex bg-surface-hover p-1 rounded-2xl w-full overflow-hidden">
               <Button
                 onClick={() => setCageType("spiral")}
                 className={`flex-1 py-3 rounded-2xl text-base font-medium transition-all ${
                   cageType === "spiral"
-                    ? "bg-surface-default  text-emerald-600 shadow-sm"
+                    ? "bg-surface-default  text-ui-successText shadow-brand-sm"
                     : "text-txt-tertiary hover:text-txt-secondary"
                 }`}
               >
@@ -113,7 +113,7 @@ export default function CageEstimator() {
                 onClick={() => setCageType("hoop")}
                 className={`flex-1 py-3 rounded-2xl text-base font-medium transition-all ${
                   cageType === "hoop"
-                    ? "bg-surface-default  text-emerald-600 shadow-sm"
+                    ? "bg-surface-default  text-ui-successText shadow-brand-sm"
                     : "text-txt-tertiary hover:text-txt-secondary"
                 }`}
               >
@@ -121,7 +121,7 @@ export default function CageEstimator() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+            <div className="grid grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
               <div>
                 <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center gap-1">Pile/Col Diameter (mm) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
                 <><label htmlFor="a11y-input-132" className="sr-only">Input</label>
@@ -129,7 +129,7 @@ export default function CageEstimator() {
                   type="number" inputMode="decimal"
                   value={pileDiameter}
                   onChange={(e) => setPileDiameter(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all font-mono"
                 /></>
               </div>
               <div>
@@ -139,7 +139,7 @@ export default function CageEstimator() {
                   type="number" inputMode="decimal"
                   value={pileLength}
                   onChange={(e) => setPileLength(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all font-mono"
                 /></>
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function CageEstimator() {
                   type="number" inputMode="decimal"
                   value={clearCover}
                   onChange={(e) => setClearCover(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all font-mono"
                 /></>
               </div>
               <div>
@@ -162,7 +162,7 @@ export default function CageEstimator() {
                   type="number" inputMode="decimal"
                   value={barDiameter}
                   onChange={(e) => setBarDiameter(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all font-mono"
                 /></>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function CageEstimator() {
                   type="number" inputMode="decimal"
                   value={pitch}
                   onChange={(e) => setPitch(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all font-mono"
                 /></>
               </div>
               <div>
@@ -185,7 +185,7 @@ export default function CageEstimator() {
                   type="number" inputMode="decimal"
                   value={lapLength}
                   onChange={(e) => setLapLength(e.target.value)}
-                  className="w-full mt-1 bg-slate-50 border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-emerald-500 transition-all font-mono"
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all font-mono"
                 /></>
               </div>
             </div>
@@ -194,10 +194,10 @@ export default function CageEstimator() {
         </div>
 
         {/* Results */}
-        <div className="bg-slate-50 space-y-6">
-           <div className="bg-emerald-600 rounded-2xl p-4 sm:p-6 text-txt-primary shadow-lg relative overflow-hidden">
-             <RefreshCw className="absolute -right-6 -bottom-6 w-32 h-32 text-emerald-500 opacity-20" />
-              <h3 className="text-emerald-100 uppercase st mb-1 relative z-10 text-lg font-medium text-txt-primary mb-4">Total Rebar Weight</h3>
+        <div className="bg-surface-hover space-y-6">
+           <div className="bg-ui-successText rounded-2xl p-4 sm:p-6 text-white shadow-brand-lg relative overflow-hidden">
+             <RefreshCw className="absolute -right-6 -bottom-6 w-32 h-32 text-ui-successText opacity-20" />
+              <h3 className="text-emerald-100 uppercase relative z-10 text-lg font-medium mb-4">Total Rebar Weight</h3>
               <div className="flex items-end gap-2 relative z-10">
                 <span className="text-[clamp(1.75rem,5vw,2.5rem)] break-all font-semibold tabular-nums tracking-tight tracking-tight">{results ? results.totalWeight : "0.00"}</span>
                 <span className="text-xl text-emerald-200 mb-1 font-bold">kg</span>
@@ -205,26 +205,26 @@ export default function CageEstimator() {
            </div>
 
            {results && (
-             <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
-                <h3 className="tabular-nums uppercase st mb-4 text-lg font-medium text-txt-primary">Detailed Breakdown</h3>
+             <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle overflow-hidden">
+                <h3 className="tabular-nums uppercase mb-4 text-lg font-medium text-txt-primary">Detailed Breakdown</h3>
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                  <div className="flex justify-between items-center border-b border-border-color pb-3">
                     <span className="text-txt-secondary font-medium">Core/Mean Dia</span>
                     <span className="font-bold text-txt-primary">{results.coreDiameter} mm</span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                  <div className="flex justify-between items-center border-b border-border-color pb-3">
                     <span className="text-txt-secondary font-medium">{cageType === "spiral" ? "Loop Length" : "Ring Length"}</span>
                     <span className="font-bold text-txt-primary">{results.loopLength} m</span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                  <div className="flex justify-between items-center border-b border-border-color pb-3">
                     <span className="text-txt-secondary font-medium">No. of Loops/Rings</span>
                     <span className="font-bold text-txt-primary">{results.noOfPitch} nos</span>
                   </div>
-                   <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                   <div className="flex justify-between items-center border-b border-border-color pb-3">
                     <span className="text-txt-secondary font-medium">Lap Allowance</span>
                     <span className="font-bold text-txt-primary">{results.lapAdjustment} m (x{results.totalLaps})</span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                  <div className="flex justify-between items-center border-b border-border-color pb-3">
                     <span className="text-txt-secondary font-medium">Total Cut Length</span>
                     <span className="font-bold text-txt-primary">{results.totalLength} m</span>
                   </div>

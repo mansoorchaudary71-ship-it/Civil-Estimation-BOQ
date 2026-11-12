@@ -51,11 +51,11 @@ export interface BrickCalculatorProps {
 }
 
 const inputCls =
-  "w-full bg-bg-card/80 border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-full px-5 py-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-orange-300 shadow-sm transition-all";
+  "w-full bg-bg-card/80 border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-5 py-3 font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 hover:border-accent-300 shadow-brand-sm transition-all";
 const labelCls =
   "block uppercase tracking-widest text-sm font-medium text-txt-secondary mb-2";
 const selectCls =
-  "w-full appearance-none bg-bg-card/80 border border-ui-borderSubtle dark:border-slate-700 text-txt-primary dark:text-white rounded-2xl px-5 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-orange-300 shadow-sm transition-all cursor-pointer font-semibold";
+  "w-full appearance-none bg-bg-card/80 border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-2xl px-5 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-accent-500 hover:border-accent-300 shadow-brand-sm transition-all cursor-pointer font-semibold";
 
 let openingSeq = 0;
 const newOpening = (kind: OpeningInput["kind"]): OpeningInput => ({
@@ -229,7 +229,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
         <div className="space-y-8">
           <section aria-label="Wall dimensions">
             <h3 className="text-txt-primary dark:text-white mb-4 flex items-center gap-2 text-lg font-medium">
-              <span className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="w-2 h-2 rounded-full bg-ink" />
               Wall dimensions
             </h3>
             <div className="flex gap-2 mb-4" role="group" aria-label="Length unit">
@@ -241,8 +241,8 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   aria-pressed={lengthUnit === u}
                   className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
                     lengthUnit === u
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-blue-300"
+                      ? "bg-ink text-white border-accent-800"
+                      : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
                   }`}
                 >
                   {u === "m" ? "Metres (m)" : "Feet (ft)"}
@@ -319,14 +319,14 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
 
           <section aria-label="Openings">
             <h3 className="text-txt-primary dark:text-white mb-2 flex items-center gap-2 text-lg font-medium">
-              <span className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="w-2 h-2 rounded-full bg-ink" />
               Openings — doors &amp; windows
             </h3>
             <p className="text-sm text-txt-tertiary mb-4">
               Deducted from the wall area. A door or window is a hole, not brickwork.
             </p>
             {openings.length === 0 && (
-              <p className="text-sm text-txt-secondary bg-blue-50 dark:bg-blue-900/20 rounded-2xl px-4 py-3">
+              <p className="text-sm text-txt-secondary bg-accent-50 dark:bg-accent-900/20 rounded-2xl px-4 py-3">
                 No openings yet — the full wall is counted as brickwork.
               </p>
             )}
@@ -422,7 +422,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       type="button"
                       onClick={() => setOpenings((prev) => prev.filter((_, j) => j !== i))}
                       aria-label="Remove opening"
-                      className="p-2.5 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      className="p-2.5 rounded-full text-ui-errorText hover:bg-ui-error dark:hover:bg-ui-error/20 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -434,14 +434,14 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
               <button
                 type="button"
                 onClick={() => setOpenings((prev) => [...prev, newOpening("door")])}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-ink text-white hover:bg-ink-700 transition-colors"
               >
                 <Plus className="w-4 h-4" /> Add door (3 × 7 {lengthUnit})
               </button>
               <button
                 type="button"
                 onClick={() => setOpenings((prev) => [...prev, newOpening("window")])}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-blue-300 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-accent-300 transition-colors"
               >
                 <Plus className="w-4 h-4" /> Add window (4 × 4 {lengthUnit})
               </button>
@@ -450,7 +450,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
 
           <section aria-label="Brick and mortar">
             <h3 className="text-txt-primary dark:text-white mb-4 flex items-center gap-2 text-lg font-medium">
-              <span className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="w-2 h-2 rounded-full bg-ink" />
               Brick &amp; mortar
             </h3>
             <label htmlFor="brick-preset" className={labelCls}>
@@ -588,7 +588,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
 
           <section aria-label="Currency and rates">
             <h3 className="text-txt-primary dark:text-white mb-4 flex items-center gap-2 text-lg font-medium">
-              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span className="w-2 h-2 rounded-full bg-accent-500" />
               Currency &amp; rates
             </h3>
             <div className="flex gap-2 mb-4" role="group" aria-label="Currency">
@@ -600,8 +600,8 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   aria-pressed={currency === c}
                   className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
                     currency === c
-                      ? "bg-amber-500 text-white border-amber-500"
-                      : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-amber-400"
+                      ? "bg-ink text-white border-ink"
+                      : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-400"
                   }`}
                 >
                   {c} ({CURRENCY_META[c].symbol})
@@ -668,10 +668,10 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
         {/* Results */}
         <div className="relative flex flex-col h-full">
           <div className="sticky top-6 flex flex-col flex-1">
-            <div className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-2xl overflow-hidden shadow-md">
-              <div className="px-6 md:px-8 py-5 border-b border-ui-borderSubtle dark:border-slate-700 flex items-start justify-between gap-4">
+            <div className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden shadow-brand-md">
+              <div className="px-6 md:px-8 py-5 border-b border-ui-borderSubtle dark:border-ink-600 flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-blue-100 text-blue-600 rounded-2xl">
+                  <div className="p-2.5 bg-accent-100 text-accent-800 rounded-2xl">
                     <Calculator className="w-5 h-5" />
                   </div>
                   <div>
@@ -694,7 +694,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   value={formatInt(results.bricks)}
                   unit="pcs"
                   variant="primary"
-                  icon={<Layers className="w-5 h-5 text-blue-500" />}
+                  icon={<Layers className="w-5 h-5 text-accent-800" />}
                   description={`${formatInt(results.bricksBeforeWastage)} before ${wastagePct}% wastage · ${results.bricksPerSqFt.toFixed(1)} per sq ft of wall`}
                 />
                 <div className="grid grid-cols-2 gap-4">
@@ -730,7 +730,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   />
                 </div>
 
-                <div className="border-t border-ui-borderSubtle dark:border-slate-700 pt-4">
+                <div className="border-t border-ui-borderSubtle dark:border-ink-600 pt-4">
                   <h4 className="text-sm font-semibold uppercase tracking-wider text-txt-secondary mb-3">
                     Estimated material cost ({currency})
                   </h4>
@@ -747,7 +747,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       <dt className="text-txt-secondary">Sand ({results.sandCft.toFixed(1)} cft)</dt>
                       <dd className="font-semibold">{formatMoney(results.sandCost, currency)}</dd>
                     </div>
-                    <div className="flex justify-between border-t border-ui-borderSubtle dark:border-slate-700 pt-2 text-base">
+                    <div className="flex justify-between border-t border-ui-borderSubtle dark:border-ink-600 pt-2 text-base">
                       <dt className="font-semibold">Total (materials only)</dt>
                       <dd className="font-bold">{formatMoney(results.totalCost, currency)}</dd>
                     </div>
@@ -760,7 +760,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   )}
                 </div>
 
-                <div className="border-t border-ui-borderSubtle dark:border-slate-700 pt-4">
+                <div className="border-t border-ui-borderSubtle dark:border-ink-600 pt-4">
                   <h4 className="text-sm font-semibold uppercase tracking-wider text-txt-secondary mb-2">
                     How this was calculated
                   </h4>
@@ -792,31 +792,31 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
               <button
                 type="button"
                 onClick={handlePdf}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-ink text-white hover:bg-ink-700 transition-colors"
               >
                 <Download className="w-4 h-4" /> Download PDF
               </button>
               <button
                 type="button"
                 onClick={handlePrint}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-blue-300 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-accent-300 transition-colors"
               >
                 <Printer className="w-4 h-4" /> Print
               </button>
               <button
                 type="button"
                 onClick={handleShare}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-blue-300 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-accent-300 transition-colors"
               >
-                {shared ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
+                {shared ? <Check className="w-4 h-4 text-ui-successText" /> : <Share2 className="w-4 h-4" />}
                 {shared ? "Shared / copied" : "Share"}
               </button>
               <button
                 type="button"
                 onClick={handleCopy}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-blue-300 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-accent-300 transition-colors"
               >
-                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-ui-successText" /> : <Copy className="w-4 h-4" />}
                 {copied ? "Copied" : "Copy result"}
               </button>
             </div>

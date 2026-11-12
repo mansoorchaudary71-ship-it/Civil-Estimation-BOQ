@@ -171,15 +171,15 @@ export default function ColumnDesignTool() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle overflow-hidden">
          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-            <Columns className="text-rose-600" /> Column Design & P-M Interaction
+            <Columns className="text-ui-errorText" /> Column Design & P-M Interaction
          </h2>
 
          <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
             <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Loads & Boundary</h3>
+                  <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Loads & Boundary</h3>
                   <div className="space-y-4">
                     <NumberInput label="Working Load (P)" unit="kN" value={workingLoad} onChange={setWorkingLoad} />
                     <NumberInput label="Working Moment (M)" unit="kNm" value={workingMoment} onChange={setWorkingMoment} />
@@ -188,7 +188,7 @@ export default function ColumnDesignTool() {
                         <NumberInput label="Safety Factor (γf)" value={safetyFactor} onChange={setSafetyFactor} />
                       </div>
                       <Button onClick={handleAiSafetyFactor}
-                        className="h-11 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center transition-colors shadow-sm text-base font-semibold active:scale-95 hover:-translate-y-0.5"
+                        className="h-11 px-4 bg-accent-50 hover:bg-accent-100 text-accent-800 rounded-full flex items-center justify-center transition-colors shadow-brand-sm text-base font-semibold active:scale-95 hover:-translate-y-0.5"
                         title="AI-Suggested Safety Factor based on Project Settings"
                       >
                         <Sparkles className="w-4 h-4 mr-1.5" /> AI Suggest
@@ -201,7 +201,7 @@ export default function ColumnDesignTool() {
                         <select 
                             value={endCondition}
                             onChange={(e) => setEndCondition(e.target.value as EndCondition)}
-                            className="w-full h-11 bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
+                            className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
                         >
                             {Object.entries(END_CONDITIONS).map(([key, val]) => (
                                 <option key={key} value={key}>{val.label}</option>
@@ -212,7 +212,7 @@ export default function ColumnDesignTool() {
                 </div>
 
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Section & Materials</h3>
+                  <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Section & Materials</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Width (B)" unit="mm" value={width} onChange={setWidth} />
                     <NumberInput label="Depth (D)" unit="mm" value={depth} onChange={setDepth} />
@@ -222,7 +222,7 @@ export default function ColumnDesignTool() {
                 </div>
 
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Reinforcement</h3>
+                  <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Reinforcement</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label={<span className="flex items-center gap-1">Bar Dia <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span>} unit="mm" value={rebarDia} onChange={setRebarDia} />
                     <NumberInput label="No. of Bars" value={rebarCount} onChange={setRebarCount} />
@@ -248,14 +248,14 @@ export default function ColumnDesignTool() {
                         <ResultCard title="Steel %" value={results.pSteel.toFixed(2)} unit="%" variant={results.pSteel > 4 || results.pSteel < 0.8 ? "warning" : "neutral"} />
                     </div>
 
-                    <div className={`mt-6 p-4 rounded-2xl flex items-center justify-between border ${results.isSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
+                    <div className={`mt-6 p-4 rounded-2xl flex items-center justify-between border ${results.isSafe ? "bg-ui-success border-ui-successBorder" : "bg-ui-error border-ui-errorBorder"}`}>
                         <div className="flex items-center gap-3">
-                            {results.isSafe ? <CheckCircle2 className="text-teal-600 w-6 h-6" /> : <AlertTriangle className="text-rose-600 w-6 h-6" />}
+                            {results.isSafe ? <CheckCircle2 className="text-ui-successText w-6 h-6" /> : <AlertTriangle className="text-ui-errorText w-6 h-6" />}
                             <div>
-                                <h4 className={`font-bold ${results.isSafe ? "text-teal-900" : "text-rose-900"}`}>
+                                <h4 className={`font-bold ${results.isSafe ? "text-ui-successText" : "text-ui-errorText"}`}>
                                     {results.isSafe ? "Section is Safe" : "Section Fails"}
                                 </h4>
-                                <p className={`text-sm ${results.isSafe ? "text-teal-700" : "text-rose-700"}`}>
+                                <p className={`text-sm ${results.isSafe ? "text-ui-successText" : "text-ui-errorText"}`}>
                                     Applied M: {results.designMoment.toFixed(1)} kNm | Capacity M: {results.maxCapacityM.toFixed(1)} kNm
                                 </p>
                             </div>
@@ -263,11 +263,11 @@ export default function ColumnDesignTool() {
                     </div>
                 </MaterialSummary>
 
-                <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 sm:p-6 flex-1 min-h-[400px] overflow-hidden">
+                <div className="bg-surface-hover border border-border-color rounded-2xl p-4 sm:p-6 flex-1 min-h-[400px] overflow-hidden">
                     <h3 className="mb-4 text-lg font-medium text-txt-primary">P-M Interaction Diagram (IS 456)</h3>
                     <ResponsiveContainer width="100%" height={350}>
                         <ComposedChart margin={{ top: 10, right: 20, left: 10, bottom: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E7E4DE" />
                             <XAxis 
                                 type="number" 
                                 dataKey="M" 
@@ -287,7 +287,7 @@ export default function ColumnDesignTool() {
                                 data={results.curve} 
                                 type="monotone" 
                                 dataKey="P" 
-                                stroke="#e11d48" 
+                                stroke="#B91C1C" 
                                 strokeWidth={3} 
                                 dot={false} 
                                 name="Capacity Envelope" 
@@ -297,7 +297,7 @@ export default function ColumnDesignTool() {
                             <Scatter 
                                 name="Applied Load (Pu, Mu)" 
                                 data={[{ M: results.designMoment, P: (Number(workingLoad) * Number(safetyFactor)) || 0 }]} 
-                                fill={results.isSafe ? "#FFFFFF" : "#e11d48"} 
+                                fill={results.isSafe ? "#FFFFFF" : "#B91C1C"} 
                                 shape="circle"
                             />
                         </ComposedChart>

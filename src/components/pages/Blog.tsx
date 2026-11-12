@@ -76,7 +76,7 @@ export default function Blog() {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-24">
-        <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-accent-800 animate-spin" />
       </div>
     );
   }
@@ -91,13 +91,13 @@ export default function Blog() {
         
         <Button 
           onClick={() => window.location.hash = '#/blog'}
-          className="flex items-center gap-2 text-base font-medium hover:text-indigo-600 transition-colors"
+          className="flex items-center gap-2 text-base font-medium hover:text-accent-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to all posts
         </Button>
 
-        <article className="bg-bg-card rounded-2xl border border-ui-borderSubtle dark:border-slate-700 shadow-sm overflow-hidden">
+        <article className="bg-bg-card rounded-2xl border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm overflow-hidden">
           <div className="w-full h-64 md:h-96 overflow-hidden">
             <img 
               src={selectedPost.image} 
@@ -110,7 +110,7 @@ export default function Blog() {
           
           <div className="p-8 md:p-12">
             <div className="flex items-center gap-4 mb-6">
-              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-3 py-1 rounded-full text-base font-medium tracking-wide uppercase">
+              <span className="bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-400 px-3 py-1 rounded-full text-base font-medium tracking-wide uppercase">
                 {selectedPost.category}
               </span>
               <div className="flex items-center gap-2 text-sm text-txt-tertiary font-medium">
@@ -123,16 +123,16 @@ export default function Blog() {
               {selectedPost.title}
             </h1>
 
-            <div className="flex items-center gap-3 mb-10 pb-10 border-b border-ui-borderSubtle dark:border-slate-700">
-              <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+            <div className="flex items-center gap-3 mb-10 pb-10 border-b border-ui-borderSubtle dark:border-ink-600">
+              <div className="w-10 h-10 rounded-full bg-surface-active dark:bg-ink flex items-center justify-center">
                 <User className="w-5 h-5 text-txt-tertiary" />
               </div>
-              <span className="font-semibold text-txt-secondary dark:text-slate-300">
+              <span className="font-semibold text-txt-secondary dark:text-txt-tertiary">
                 {selectedPost.author}
               </span>
             </div>
 
-            <div className="prose prose-lg prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-indigo-600 dark:prose-a:text-blue-400 prose-img:rounded-2xl">
+            <div className="prose prose-lg prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-accent-800 dark:prose-a:text-accent-400 prose-img:rounded-2xl">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {selectedPost.content || ''}
               </ReactMarkdown>
@@ -153,7 +153,7 @@ export default function Blog() {
         <h1 className="text-2xl md:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">
           Civil Estimation Pro Blog
         </h1>
-        <p className="text-lg text-txt-tertiary dark:text-slate-400 max-w-2xl mx-auto">
+        <p className="text-lg text-txt-tertiary dark:text-txt-tertiary max-w-2xl mx-auto">
           Insights, updates, and tutorials from the team building the future of construction software.
         </p>
       </div>
@@ -168,27 +168,27 @@ export default function Blog() {
             <article 
               key={post.slug} 
               onClick={() => window.location.hash = `#/blog/${post.slug}`}
-              className="bg-bg-card rounded-2xl border border-ui-borderSubtle dark:border-slate-700 shadow-sm overflow-hidden flex flex-col group cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              className="bg-bg-card rounded-2xl border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm overflow-hidden flex flex-col group cursor-pointer hover:shadow-brand-lg transition-all duration-300 hover:-translate-y-1"
             >
               <div className="h-48 overflow-hidden relative">
                  <img src={post.image} alt={post.title} title={post.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                  <div className="absolute top-4 left-4">
-                   <span className="bg-surface-default/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-base font-medium text-txt-primary dark:text-white shadow-sm">
+                   <span className="bg-surface-default/90 dark:bg-ink/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-base font-medium text-txt-primary dark:text-white shadow-brand-sm">
                      {post.category}
                    </span>
                  </div>
               </div>
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-xl font-bold text-txt-primary dark:text-white mb-3 leading-tight group-hover:text-indigo-600 dark:group-hover:text-blue-400 transition-colors">
+                <h3 className="text-xl font-bold text-txt-primary dark:text-white mb-3 leading-tight group-hover:text-accent-800 dark:group-hover:text-accent-400 transition-colors">
                   {post.title}
                 </h3>
                 <p className="text-txt-tertiary text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
                   {post.excerpt}
                 </p>
                 
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-ui-borderSubtle dark:border-slate-700/50">
-                  <div className="flex items-center gap-2 text-sm font-medium text-txt-secondary dark:text-slate-300">
-                    <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                <div className="flex items-center justify-between mt-auto pt-4 border-t border-ui-borderSubtle dark:border-ink-600/50">
+                  <div className="flex items-center gap-2 text-sm font-medium text-txt-secondary dark:text-txt-tertiary">
+                    <div className="w-6 h-6 rounded-full bg-surface-active dark:bg-ink flex items-center justify-center">
                       <User className="w-3 h-3" />
                     </div>
                     {post.author}

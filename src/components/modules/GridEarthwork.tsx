@@ -72,9 +72,9 @@ export default function GridEarthworkEstimator() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
           <section className="space-y-6">
-            <div className="w-full bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden">
-              <div className="flex items-center gap-3 mb-5 border-b border-gray-50 pb-4">
-                <div className="p-2.5 bg-blue-50 text-indigo-600 rounded-2xl overflow-hidden">
+            <div className="w-full bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border-color transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden">
+              <div className="flex items-center gap-3 mb-5 border-b border-border-color pb-4">
+                <div className="p-2.5 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
                   <Grid2X2 className="w-5 h-5" />
                 </div>
                 <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
@@ -88,7 +88,7 @@ export default function GridEarthworkEstimator() {
                   </label>
                   <><label htmlFor="a11y-input-251" className="sr-only">Input</label>
 <input id="a11y-input-251" type="number" inputMode="decimal"
-                    className="w-full bg-gray-50/50 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 transition-shadow min-h-[44px] text-base font-normal"
+                    className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-accent-800 transition-shadow min-h-[44px] text-base font-normal"
                     value={gridLength}
                     onChange={(e) => setGridLength(e.target.value)}
                   /></>
@@ -99,22 +99,22 @@ export default function GridEarthworkEstimator() {
                   </label>
                   <><label htmlFor="a11y-input-252" className="sr-only">Input</label>
 <input id="a11y-input-252" type="number" inputMode="decimal"
-                    className="w-full bg-gray-50/50 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 transition-shadow min-h-[44px] text-base font-normal"
+                    className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-accent-800 transition-shadow min-h-[44px] text-base font-normal"
                     value={gridWidth}
                     onChange={(e) => setGridWidth(e.target.value)}
                   /></>
                 </div>
               </div>
-              <div className="mt-4 p-3 bg-gray-50 rounded-2xl font-medium text-txt-secondary flex justify-between overflow-hidden">
+              <div className="mt-4 p-3 bg-surface-hover rounded-2xl font-medium text-txt-secondary flex justify-between overflow-hidden">
                 <span>Grid Area:</span>
                 <span className="font-bold text-txt-primary">
                   {area.toFixed(2)} {unitA}
                 </span>
               </div>
             </div>
-            <div className="w-full bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden">
-              <div className="flex items-center gap-3 mb-5 border-b border-gray-50 pb-4">
-                <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-2xl overflow-hidden">
+            <div className="w-full bg-surface-default px-4 py-3 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border-color transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden">
+              <div className="flex items-center gap-3 mb-5 border-b border-border-color pb-4">
+                <div className="p-2.5 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
                   <Layers className="w-5 h-5" />
                 </div>
                 <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
@@ -123,13 +123,13 @@ export default function GridEarthworkEstimator() {
               </div>
               <div className="grid grid-cols-2 gap-6 relative">
                 {/* Visual Connector Lines */}
-                <div className="absolute top-1/2 left-6 right-6 h-0.5 bg-gray-100 -translate-y-1/2" />
-                <div className="absolute left-1/2 top-6 bottom-6 w-0.5 bg-gray-100 -translate-x-1/2" />
+                <div className="absolute top-1/2 left-6 right-6 h-0.5 bg-surface-hover -translate-y-1/2" />
+                <div className="absolute left-1/2 top-6 bottom-6 w-0.5 bg-surface-hover -translate-x-1/2" />
                 {/* Top Left */}
-                <div className="w-full bg-surface-default border-2 border-gray-100 px-4 py-3 rounded-2xl relative z-10 shadow-sm hover:border-blue-200 transition-colors overflow-hidden">
+                <div className="w-full bg-surface-default border-2 border-border-color px-4 py-3 rounded-2xl relative z-10 shadow-brand-sm hover:border-accent-200 transition-colors overflow-hidden">
                   <h3 className="mb-3 flex items-center justify-between text-lg font-medium text-txt-primary mb-4">
                     Top Left
-                    <span className="text-sm uppercase bg-gray-100 px-2 py-1 rounded-2xl text-txt-secondary">
+                    <span className="text-sm uppercase bg-surface-hover px-2 py-1 rounded-2xl text-txt-secondary">
                       Corner 1
                     </span>
                   </h3>
@@ -140,7 +140,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-253" className="sr-only">Input</label>
 <input id="a11y-input-253" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerTL.existing}
                         onChange={(e) =>
                           setCornerTL({ ...cornerTL, existing: e.target.value })
@@ -153,7 +153,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-254" className="sr-only">Input</label>
 <input id="a11y-input-254" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerTL.proposed}
                         onChange={(e) =>
                           setCornerTL({ ...cornerTL, proposed: e.target.value })
@@ -163,10 +163,10 @@ export default function GridEarthworkEstimator() {
                   </div>
                 </div>
                 {/* Top Right */}
-                <div className="w-full bg-surface-default border-2 border-gray-100 px-4 py-3 rounded-2xl relative z-10 shadow-sm hover:border-blue-200 transition-colors overflow-hidden">
+                <div className="w-full bg-surface-default border-2 border-border-color px-4 py-3 rounded-2xl relative z-10 shadow-brand-sm hover:border-accent-200 transition-colors overflow-hidden">
                   <h3 className="mb-3 flex items-center justify-between text-lg font-medium text-txt-primary mb-4">
                     Top Right
-                    <span className="text-sm uppercase bg-gray-100 px-2 py-1 rounded-2xl text-txt-secondary">
+                    <span className="text-sm uppercase bg-surface-hover px-2 py-1 rounded-2xl text-txt-secondary">
                       Corner 2
                     </span>
                   </h3>
@@ -177,7 +177,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-255" className="sr-only">Input</label>
 <input id="a11y-input-255" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerTR.existing}
                         onChange={(e) =>
                           setCornerTR({ ...cornerTR, existing: e.target.value })
@@ -190,7 +190,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-256" className="sr-only">Input</label>
 <input id="a11y-input-256" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerTR.proposed}
                         onChange={(e) =>
                           setCornerTR({ ...cornerTR, proposed: e.target.value })
@@ -200,10 +200,10 @@ export default function GridEarthworkEstimator() {
                   </div>
                 </div>
                 {/* Bottom Left */}
-                <div className="w-full bg-surface-default border-2 border-gray-100 px-4 py-3 rounded-2xl relative z-10 shadow-sm hover:border-blue-200 transition-colors overflow-hidden">
+                <div className="w-full bg-surface-default border-2 border-border-color px-4 py-3 rounded-2xl relative z-10 shadow-brand-sm hover:border-accent-200 transition-colors overflow-hidden">
                   <h3 className="mb-3 flex items-center justify-between text-lg font-medium text-txt-primary mb-4">
                     Bottom Left
-                    <span className="text-sm uppercase bg-gray-100 px-2 py-1 rounded-2xl text-txt-secondary">
+                    <span className="text-sm uppercase bg-surface-hover px-2 py-1 rounded-2xl text-txt-secondary">
                       Corner 3
                     </span>
                   </h3>
@@ -214,7 +214,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-257" className="sr-only">Input</label>
 <input id="a11y-input-257" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerBL.existing}
                         onChange={(e) =>
                           setCornerBL({ ...cornerBL, existing: e.target.value })
@@ -227,7 +227,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-258" className="sr-only">Input</label>
 <input id="a11y-input-258" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerBL.proposed}
                         onChange={(e) =>
                           setCornerBL({ ...cornerBL, proposed: e.target.value })
@@ -237,10 +237,10 @@ export default function GridEarthworkEstimator() {
                   </div>
                 </div>
                 {/* Bottom Right */}
-                <div className="w-full bg-surface-default border-2 border-gray-100 px-4 py-3 rounded-2xl relative z-10 shadow-sm hover:border-blue-200 transition-colors overflow-hidden">
+                <div className="w-full bg-surface-default border-2 border-border-color px-4 py-3 rounded-2xl relative z-10 shadow-brand-sm hover:border-accent-200 transition-colors overflow-hidden">
                   <h3 className="mb-3 flex items-center justify-between text-lg font-medium text-txt-primary mb-4">
                     Bottom Right
-                    <span className="text-sm uppercase bg-gray-100 px-2 py-1 rounded-2xl text-txt-secondary">
+                    <span className="text-sm uppercase bg-surface-hover px-2 py-1 rounded-2xl text-txt-secondary">
                       Corner 4
                     </span>
                   </h3>
@@ -251,7 +251,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-259" className="sr-only">Input</label>
 <input id="a11y-input-259" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerBR.existing}
                         onChange={(e) =>
                           setCornerBR({ ...cornerBR, existing: e.target.value })
@@ -264,7 +264,7 @@ export default function GridEarthworkEstimator() {
                       </label>
                       <><label htmlFor="a11y-input-260" className="sr-only">Input</label>
 <input id="a11y-input-260" type="number" inputMode="decimal"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 min-h-[44px] text-base font-normal"
+                        className="w-full bg-surface-hover border border-border-color rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 min-h-[44px] text-base font-normal"
                         value={cornerBR.proposed}
                         onChange={(e) =>
                           setCornerBR({ ...cornerBR, proposed: e.target.value })

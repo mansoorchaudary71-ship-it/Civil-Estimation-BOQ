@@ -172,7 +172,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
   return (
     <div className="w-full h-full">
       {" "}
-      <div className="px-2 py-4 sm:px-6 sm:py-6 bg-transparent border-b border-gray-100 rounded-t-2xl">
+      <div className="px-2 py-4 sm:px-6 sm:py-6 bg-transparent border-b border-border-color rounded-t-2xl">
         {" "}
         <div className="flex flex-col mb-6">
           {" "}
@@ -194,7 +194,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             </label>{" "}
             <><label htmlFor="a11y-input-323" className="sr-only">Input</label>
 <input id="a11y-input-323" type="number" inputMode="decimal"
-              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all shadow-brand-sm min-h-[44px] overflow-hidden"
               value={mhDepth}
               onChange={(e) => setMhDepth(e.target.value)}
             /></>{" "}
@@ -206,7 +206,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             </label>{" "}
             <><label htmlFor="a11y-input-324" className="sr-only">Input</label>
 <input id="a11y-input-324" type="number" inputMode="decimal"
-              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all shadow-brand-sm min-h-[44px] overflow-hidden"
               value={mhInnerLen}
               onChange={(e) => setMhInnerLen(e.target.value)}
             /></>{" "}
@@ -219,7 +219,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
               </label>{" "}
               <><label htmlFor="a11y-input-325" className="sr-only">Input</label>
 <input id="a11y-input-325" type="number" inputMode="decimal"
-                className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+                className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all shadow-brand-sm min-h-[44px] overflow-hidden"
                 value={mhInnerWid}
                 onChange={(e) => setMhInnerWid(e.target.value)}
               /></>{" "}
@@ -233,7 +233,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             <><label htmlFor="a11y-input-326" className="sr-only">Input</label>
 <input id="a11y-input-326" type="number" inputMode="decimal"
               step="0.01"
-              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all shadow-brand-sm min-h-[44px] overflow-hidden"
               value={mhWallThick}
               onChange={(e) => setMhWallThick(e.target.value)}
             /></>{" "}
@@ -246,7 +246,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             <><label htmlFor="a11y-input-327" className="sr-only">Input</label>
 <input id="a11y-input-327" type="number" inputMode="decimal"
               step="0.01"
-              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all shadow-brand-sm min-h-[44px] overflow-hidden"
               value={mhBaseThick}
               onChange={(e) => setMhBaseThick(e.target.value)}
             /></>{" "}
@@ -259,7 +259,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
             <><label htmlFor="a11y-input-328" className="sr-only">Input</label>
 <input id="a11y-input-328" type="number" inputMode="decimal"
               step="0.01"
-              className="w-full bg-surface-default dark:bg-slate-800 border border-gray-200 text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm min-h-[44px] overflow-hidden"
+              className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all shadow-brand-sm min-h-[44px] overflow-hidden"
               value={mhTopThick}
               onChange={(e) => setMhTopThick(e.target.value)}
             /></>{" "}
@@ -270,7 +270,7 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
               Concrete Mix Grade
              <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions and minimum grade of concrete (Table 5)." /></span></label>{" "}
             <select
-              className="w-full bg-surface-default border border-gray-200 text-txt-primary rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-teal-500/50 transition-all shadow-sm appearance-none overflow-hidden"
+              className="w-full bg-surface-default border border-border-color text-txt-primary rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none transition-all shadow-brand-sm appearance-none overflow-hidden"
               value={concreteMix}
               onChange={(e) => setConcreteMix(e.target.value)}
             >
@@ -288,18 +288,18 @@ export default function ManholeModule({ onStateChange }: ManholeModuleProps) {
         {" "}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {" "}
-          <div className="lg:col-span-1 flex flex-col items-center justify-center p-4 sm:p-6 bg-transparent border border-slate-100 rounded-2xl overflow-hidden">
+          <div className="lg:col-span-1 flex flex-col items-center justify-center p-4 sm:p-6 bg-transparent border border-border-color rounded-2xl overflow-hidden">
             {" "}
             {/* Visual Icon representation based on shape */}{" "}
             <div
-              className="w-32 h-32 relative flex items-center justify-center text-teal-200 border-[8px] mb-4 shadow-inner"
+              className="w-32 h-32 relative flex items-center justify-center text-accent-300 border-[8px] mb-4 shadow-inner"
               style={{
                 borderRadius: mhType === "circular" ? "50%" : "1rem",
                 borderColor: "currentColor",
               }}
             >
               {" "}
-              <span className="text-base font-medium text-teal-700 absolute">
+              <span className="text-base font-medium text-accent-800 absolute">
                 {" "}
                 {mhType === "circular" ? `Ø ${len}m` : `${len}×${wid}m`}{" "}
               </span>{" "}

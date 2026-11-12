@@ -69,12 +69,12 @@ export default function ConcreteMasonryHub({ isEmbedded = false, onNavigate }: C
           {activeTab === "general-concrete" && <ConstructionMaterialEstimator forcedTab="concrete" hideHeader />}
           {activeTab === "bricks-blocks" && (
             <div className="space-y-4">
-              <div className="flex bg-slate-100 p-1 rounded-2xl w-fit overflow-hidden">
+              <div className="flex bg-surface-hover p-1 rounded-2xl w-fit overflow-hidden">
                 <Button
                   onClick={() => setBrickBlockTab("bricks")}
                   className={`px-6 py-2 rounded-2xl text-base font-medium transition-all ${
                     brickBlockTab === "bricks"
-                      ? "bg-surface-default  text-indigo-600 shadow-sm"
+                      ? "bg-surface-default  text-accent-800 shadow-brand-sm"
                       : "text-txt-tertiary hover:text-txt-secondary"
                   }`}
                 >
@@ -84,7 +84,7 @@ export default function ConcreteMasonryHub({ isEmbedded = false, onNavigate }: C
                   onClick={() => setBrickBlockTab("blocks")}
                   className={`px-6 py-2 rounded-2xl text-base font-medium transition-all ${
                     brickBlockTab === "blocks"
-                      ? "bg-surface-default  text-indigo-600 shadow-sm"
+                      ? "bg-surface-default  text-accent-800 shadow-brand-sm"
                       : "text-txt-tertiary hover:text-txt-secondary"
                   }`}
                 >

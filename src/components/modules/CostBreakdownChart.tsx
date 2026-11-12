@@ -11,7 +11,7 @@ interface CostBreakdownChartProps {
   formatCurrency: (value: number, includeSymbol?: boolean) => string;
 }
 
-const COLORS = ["#3b82f6", "#f97316", "#8b5cf6", "#10b981", "#ef4444"];
+const COLORS = ["#F2A413", "#1F1D1A", "#B07006", "#6B6862", "#0F766E"];
 
 export const CostBreakdownChart: React.FC<CostBreakdownChartProps> = ({ data, formatCurrency }) => {
   return (
@@ -37,9 +37,9 @@ export const CostBreakdownChart: React.FC<CostBreakdownChartProps> = ({ data, fo
             border: 'none', 
             boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
             backgroundColor: 'var(--tw-colors-white, #fff)',
-            color: 'var(--tw-colors-slate-900, #0f172a)'
+            color: 'var(--tw-colors-slate-900, #1F1D1A)'
           }}
-          itemStyle={{ color: 'var(--tw-colors-slate-700, #334155)', fontWeight: 500 }}
+          itemStyle={{ color: 'var(--tw-colors-slate-700, #6B6862)', fontWeight: 500 }}
         />
         <Legend 
           verticalAlign="bottom" 
@@ -51,7 +51,7 @@ export const CostBreakdownChart: React.FC<CostBreakdownChartProps> = ({ data, fo
                 {payload?.map((entry, index) => (
                   <li key={`item-${index}`} className="flex items-center gap-2">
                     <div className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: entry.color }} />
-                    <span className="text-txt-primary dark:text-slate-200 font-medium text-sm">{entry.value}</span>
+                    <span className="text-txt-primary dark:text-txt-primary font-medium text-sm">{entry.value}</span>
                   </li>
                 ))}
               </ul>

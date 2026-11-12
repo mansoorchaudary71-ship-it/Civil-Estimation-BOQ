@@ -123,26 +123,26 @@ export default function PakistanCostCalculatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] font-sans pb-12">
+    <div className="min-h-screen bg-surface-default font-sans pb-12">
       <div className="max-w-7xl mx-auto px-4 pt-12 md:pt-20 pb-16">
         
         {/* Section 1: H1 SEO Header */}
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="px-3 py-1.5 md:py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full text-xs uppercase tracking-wider font-bold shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-accent-500/10 border border-accent-500/20 text-accent-700 rounded-full text-xs uppercase tracking-wider font-bold shadow-brand-sm flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5" /> 2025 Rates
             </span>
-            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-brand-sm flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" /> Pakistan
             </span>
-            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-sm flex items-center gap-1.5">
+            <span className="px-3 py-1.5 md:py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-xs uppercase tracking-wider font-bold text-txt-secondary shadow-brand-sm flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5" /> Local Units (Marla/Kanal)
             </span>
           </div>
           
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-txt-primary tracking-tight mb-6">
             House Construction Cost <br className="hidden md:block"/>
-            <span className="text-amber-500">Calculator Pakistan 2025</span>
+            <span className="text-accent-700">Calculator Pakistan 2025</span>
           </h1>
           <p className="text-txt-secondary text-lg max-w-3xl leading-relaxed">
             Estimate accurate building costs in PKR using live 2025 rates for Lahore, Karachi, and Islamabad. 
@@ -155,9 +155,9 @@ export default function PakistanCostCalculatorPage() {
           
           {/* Section 2: Inputs */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <div className="bg-[#FFFFFF] border border-ui-borderSubtle rounded-2xl p-6 md:p-8 shadow-sm overflow-hidden">
+            <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-6 md:p-8 shadow-brand-sm overflow-hidden">
               <div className="flex items-center gap-3 mb-8">
-                 <div className="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">1</div>
+                 <div className="w-10 h-10 rounded-lg bg-accent-500/10 text-accent-700 flex items-center justify-center font-bold">1</div>
                  <h2 className="text-xl font-bold text-txt-primary">Project Dimensions & Location</h2>
               </div>
 
@@ -170,23 +170,23 @@ export default function PakistanCostCalculatorPage() {
                     type="number" inputMode="decimal" 
                     value={area} 
                     onChange={(e) => setArea(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-[#FFFFFF] border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 transition-all font-semibold"
+                    className="w-full bg-surface-default border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-semibold"
                   /></>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-txt-secondary uppercase tracking-wider mb-2">Measurement Unit</label>
-                  <div className="flex bg-[#FFFFFF] p-1 rounded-xl border border-ui-borderSubtle">
+                  <div className="flex bg-surface-default p-1 rounded-xl border border-ui-borderSubtle">
                      {Object.keys(unitMultipliers).map((u) => (
                        <Button
                          key={u}
                          onClick={() => setUnit(u as keyof typeof unitMultipliers)}
-                         className={`flex-1 text-xs py-2.5 rounded-lg font-bold transition-colors ${unit === u ? 'bg-amber-500 text-txt-primary' : 'text-txt-secondary hover:text-txt-primary'}`}
+                         className={`flex-1 text-xs py-2.5 rounded-lg font-bold transition-colors ${unit === u ? 'bg-accent-500 text-txt-primary' : 'text-txt-secondary hover:text-txt-primary'}`}
                        >
                          {u}
                        </Button>
                      ))}
                   </div>
-                  {unit === "Marla" && <p className="text-xs text-amber-500 mt-2 font-medium">*Using Punjab std: 1 Marla = 272.25 Sq.Ft</p>}
+                  {unit === "Marla" && <p className="text-xs text-accent-700 mt-2 font-medium">*Using Punjab std: 1 Marla = 272.25 Sq.Ft</p>}
                 </div>
               </div>
 
@@ -196,7 +196,7 @@ export default function PakistanCostCalculatorPage() {
                     <select 
                        value={city}
                        onChange={(e) => setCity(e.target.value)}
-                       className="w-full bg-[#FFFFFF] border border-ui-borderSubtle rounded-xl px-4 py-3.5 text-txt-primary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-amber-500 transition-all appearance-none font-semibold cursor-pointer"
+                       className="w-full bg-surface-default border border-ui-borderSubtle rounded-xl px-4 py-3.5 text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all appearance-none font-semibold cursor-pointer"
                     >
                       {Object.keys(cityRates).map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
@@ -208,7 +208,7 @@ export default function PakistanCostCalculatorPage() {
                           <Button
                             key={f}
                             onClick={() => setFloors(f as keyof typeof floorModifiers)}
-                            className={`flex-1 text-sm py-2.5 rounded-xl border font-bold transition-all ${floors === f ? 'bg-[#FFFFFF] border-amber-500 text-amber-500' : 'bg-[#FFFFFF] border-ui-borderSubtle text-txt-secondary hover:border-slate-500 hover:text-txt-primary'}`}
+                            className={`flex-1 text-sm py-2.5 rounded-xl border font-bold transition-all ${floors === f ? 'bg-surface-default border-accent-500 text-accent-700' : 'bg-surface-default border-ui-borderSubtle text-txt-secondary hover:border-ui-borderStrong hover:text-txt-primary'}`}
                           >
                             {f}
                           </Button>
@@ -220,22 +220,22 @@ export default function PakistanCostCalculatorPage() {
               {/* Basement Toggle */}
               <Button 
                 onClick={() => setHasBasement(!hasBasement)}
-                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${hasBasement ? 'bg-amber-500/5 border-amber-500/40 text-amber-500' : 'bg-[#FFFFFF] border-ui-borderSubtle text-txt-secondary hover:border-slate-600 hover:text-txt-primary'}`}
+                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${hasBasement ? 'bg-accent-500/5 border-accent-500/40 text-accent-700' : 'bg-surface-default border-ui-borderSubtle text-txt-secondary hover:border-ink-600 hover:text-txt-primary'}`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${hasBasement ? 'border-amber-500' : 'border-slate-500'}`}>
-                    {hasBasement && <div className="w-2 h-2 bg-amber-500 rounded-full" />}
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${hasBasement ? 'border-accent-500' : 'border-ui-borderStrong'}`}>
+                    {hasBasement && <div className="w-2 h-2 bg-accent-500 rounded-full" />}
                   </div>
                   <span className="font-bold">Include Basement</span>
                 </div>
-                <span className="text-xs font-medium px-2 py-1 bg-slate-50/20 rounded-md">+75% base area</span>
+                <span className="text-xs font-medium px-2 py-1 bg-surface-hover/20 rounded-md">+75% base area</span>
               </Button>
 
             </div>
 
-            <div className="bg-[#FFFFFF] border border-ui-borderSubtle rounded-2xl p-6 md:p-8 shadow-sm overflow-hidden">
+            <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-6 md:p-8 shadow-brand-sm overflow-hidden">
               <div className="flex items-center gap-3 mb-6">
-                 <div className="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">2</div>
+                 <div className="w-10 h-10 rounded-lg bg-accent-500/10 text-accent-700 flex items-center justify-center font-bold">2</div>
                  <h2 className="text-xl font-bold text-txt-primary">Construction Quality</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,11 +245,11 @@ export default function PakistanCostCalculatorPage() {
                     <Button
                       key={type}
                       onClick={() => setConstructionType(type)}
-                      className={`text-left p-5 rounded-xl border transition-all ${constructionType === type ? 'bg-amber-500/5 border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.05)]' : 'bg-[#FFFFFF] border-ui-borderSubtle hover:border-slate-500'}`}
+                      className={`text-left p-5 rounded-xl border transition-all ${constructionType === type ? 'bg-accent-50 border-accent-500 shadow-[0_0_15px_rgba(242,164,19,0.05)]' : 'bg-surface-default border-border-color hover:border-ui-borderStrong'}`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className={`font-bold ${constructionType === type ? 'text-amber-500' : 'text-slate-200'}`}>{type}</span>
-                        {constructionType === type && <CheckCircle2 className="w-4 h-4 text-amber-500" />}
+                        <span className={`font-bold ${constructionType === type ? 'text-accent-800' : 'text-txt-primary'}`}>{type}</span>
+                        {constructionType === type && <CheckCircle2 className="w-4 h-4 text-accent-800" />}
                       </div>
                       <span className="text-sm font-mono text-txt-secondary block mt-1">PKR {r[0].toLocaleString()} - {r[1].toLocaleString()} <span className="text-xs text-txt-tertiary">/sqft</span></span>
                     </Button>
@@ -261,20 +261,20 @@ export default function PakistanCostCalculatorPage() {
 
           {/* Section 3: Results Panel */}
           <div className="lg:col-span-5 h-full">
-            <div className="bg-gradient-to-b from-[#152136] to-[#FFFFFF] border border-amber-500/20 rounded-2xl p-4 sm:p-8 md:p-8 sticky top-28 shadow-xl flex flex-col h-full overflow-hidden">
+            <div className="bg-gradient-to-b from-ink to-surface-default border border-accent-500/20 rounded-2xl p-4 sm:p-8 md:p-8 sticky top-28 shadow-brand-lg flex flex-col h-full overflow-hidden">
               
               <div className="mb-8">
-                <p className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-3">Estimated Total Cost</p>
+                <p className="text-accent-700 font-bold text-xs uppercase tracking-widest mb-3">Estimated Total Cost</p>
                 <h3 className="text-4xl lg:text-5xl font-black text-txt-primary tracking-tighter mb-2">
                    PKR {formatLakhCrore(minCost)} <span className="text-txt-tertiary font-medium text-2xl">to</span> <br className="hidden md:block"/> {formatLakhCrore(maxCost)}
                 </h3>
-                <p className="text-txt-secondary mt-4 text-sm font-medium flex justify-between items-center bg-[#FFFFFF]/50 rounded-lg py-2 px-3">
+                <p className="text-txt-secondary mt-4 text-sm font-medium flex justify-between items-center bg-surface-default/50 rounded-lg py-2 px-3">
                   <span>Covered Area:</span>
                   <span className="text-txt-primary font-bold">{formatPKR(totalCoveredArea)} Sq.Ft</span>
                 </p>
-                <p className="text-txt-secondary mt-2 text-sm font-medium flex justify-between items-center bg-[#FFFFFF]/50 rounded-lg py-2 px-3">
+                <p className="text-txt-secondary mt-2 text-sm font-medium flex justify-between items-center bg-surface-default/50 rounded-lg py-2 px-3">
                   <span>Applied Rate:</span>
-                  <span className="text-amber-500 font-bold font-mono">PKR {rates[0].toLocaleString()} - {rates[1].toLocaleString()} /sqft</span>
+                  <span className="text-accent-700 font-bold font-mono">PKR {rates[0].toLocaleString()} - {rates[1].toLocaleString()} /sqft</span>
                 </p>
               </div>
 
@@ -283,17 +283,17 @@ export default function PakistanCostCalculatorPage() {
               {/* Breakdown Table */}
               <div className="flex-1 mb-8">
                  <h4 className="text-sm font-bold text-txt-primary mb-4 uppercase tracking-wider flex items-center gap-2">
-                   <Grid className="w-4 h-4 text-amber-500" /> Cost Breakdown ({constructionType})
+                   <Grid className="w-4 h-4 text-accent-700" /> Cost Breakdown ({constructionType})
                  </h4>
                  <div className="space-y-3">
                     {getBreakdown(constructionType).map((item, idx) => (
                       <div key={idx} className="flex flex-col gap-1.5">
                          <div className="flex justify-between items-end text-sm">
                             <span className="text-txt-secondary font-medium">{item.label}</span>
-                            <span className="text-xs font-mono font-bold text-amber-400 text-right">PKR {formatLakhCrore(avgCost * (item.percentage/100))}</span>
+                            <span className="text-xs font-mono font-bold text-accent-400 text-right">PKR {formatLakhCrore(avgCost * (item.percentage/100))}</span>
                          </div>
-                         <div className="w-full bg-[#FFFFFF] h-1.5 rounded-full overflow-hidden flex">
-                            <div className="bg-amber-500 h-full rounded-full" style={{ width: `${item.percentage}%` }}></div>
+                         <div className="w-full bg-surface-default h-1.5 rounded-full overflow-hidden flex">
+                            <div className="bg-accent-500 h-full rounded-full" style={{ width: `${item.percentage}%` }}></div>
                          </div>
                       </div>
                     ))}
@@ -301,8 +301,8 @@ export default function PakistanCostCalculatorPage() {
               </div>
 
               {/* Disclaimer */}
-              <div className="bg-[#FFFFFF] border border-amber-200 rounded-xl p-4 flex gap-3 items-start shrink-0">
-                <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+              <div className="bg-surface-default border border-accent-200 rounded-xl p-4 flex gap-3 items-start shrink-0">
+                <AlertTriangle className="w-4 h-4 text-accent-700 shrink-0 mt-0.5" />
                 <p className="text-xs leading-relaxed text-txt-secondary">
                   <strong className="text-txt-secondary">Disclaimer:</strong> These are 2025 standard market rates. Exact costs vary based on design complexity, material inflation, transportation, and plot conditions. It does not include boundary wall, architect fee, or external utility connections.
                 </p>
@@ -323,9 +323,9 @@ export default function PakistanCostCalculatorPage() {
              Refer to the precise square foot ranges by city below:
            </p>
 
-           <div className="overflow-x-auto rounded-xl border border-ui-borderSubtle bg-[#FFFFFF] shadow-xl">
+           <div className="overflow-x-auto rounded-xl border border-ui-borderSubtle bg-surface-default shadow-brand-lg">
               <table className="w-full text-left text-sm text-txt-secondary">
-                <thead className="bg-[#FFFFFF] text-txt-secondary uppercase font-bold text-xs tracking-wider border-b border-ui-borderSubtle">
+                <thead className="bg-surface-default text-txt-secondary uppercase font-bold text-xs tracking-wider border-b border-ui-borderSubtle">
                   <tr>
                     <th className="px-6 py-4">City</th>
                     <th className="px-6 py-4">Grey Structure (PKR/sqft)</th>
@@ -334,34 +334,34 @@ export default function PakistanCostCalculatorPage() {
                     <th className="px-6 py-4">Luxury Finish (PKR/sqft)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-ink/60">
                   <tr className="hover:bg-surface-default/30 transition-colors">
                     <td className="px-6 py-4 font-bold text-txt-primary">Lahore</td>
                     <td className="px-6 py-4">2,800 – 3,200</td>
                     <td className="px-6 py-4">3,800 – 4,500</td>
                     <td className="px-6 py-4">4,800 – 5,500</td>
-                    <td className="px-6 py-4 text-amber-500 font-semibold">6,000 – 7,500</td>
+                    <td className="px-6 py-4 text-accent-700 font-semibold">6,000 – 7,500</td>
                   </tr>
-                  <tr className="hover:bg-surface-default/30 transition-colors bg-[#FFFFFF]/30">
+                  <tr className="hover:bg-surface-default/30 transition-colors bg-surface-default/30">
                     <td className="px-6 py-4 font-bold text-txt-primary">Islamabad</td>
                     <td className="px-6 py-4">3,000 – 3,500</td>
                     <td className="px-6 py-4">4,200 – 5,000</td>
                     <td className="px-6 py-4">5,500 – 6,500</td>
-                    <td className="px-6 py-4 text-amber-500 font-semibold">7,000 – 9,000</td>
+                    <td className="px-6 py-4 text-accent-700 font-semibold">7,000 – 9,000</td>
                   </tr>
                   <tr className="hover:bg-surface-default/30 transition-colors">
                     <td className="px-6 py-4 font-bold text-txt-primary">Karachi</td>
                     <td className="px-6 py-4">2,600 – 3,000</td>
                     <td className="px-6 py-4">3,600 – 4,200</td>
                     <td className="px-6 py-4">4,500 – 5,200</td>
-                    <td className="px-6 py-4 text-amber-500 font-semibold">5,500 – 7,000</td>
+                    <td className="px-6 py-4 text-accent-700 font-semibold">5,500 – 7,000</td>
                   </tr>
-                  <tr className="hover:bg-surface-default/30 transition-colors bg-[#FFFFFF]/30">
+                  <tr className="hover:bg-surface-default/30 transition-colors bg-surface-default/30">
                     <td className="px-6 py-4 font-bold text-txt-primary">Other Cities (Avg)</td>
                     <td className="px-6 py-4">2,700 – 3,100</td>
                     <td className="px-6 py-4">3,700 – 4,300</td>
                     <td className="px-6 py-4">4,500 – 5,200</td>
-                    <td className="px-6 py-4 text-amber-500 font-semibold">5,800 – 7,000</td>
+                    <td className="px-6 py-4 text-accent-700 font-semibold">5,800 – 7,000</td>
                   </tr>
                 </tbody>
               </table>
@@ -378,11 +378,11 @@ export default function PakistanCostCalculatorPage() {
                 { title: "Concrete Mix Design", desc: "IS 10262:2019 compliant mix calculations.", icon: Layers, target: "#" },
                 { title: "Steel Weight Estimator", desc: "Calculate precise rebar weights & lengths.", icon: Grid, target: "#" }
               ].map((tool, idx) => (
-                 <a key={idx} href={tool.target} className="bg-[#FFFFFF] border border-ui-borderSubtle hover:border-amber-500/40 rounded-2xl p-5 group transition-all overflow-hidden">
-                    <div className="bg-slate-50/50 w-10 h-10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-amber-500/10 transition-colors">
-                      <tool.icon className="w-5 h-5 text-txt-secondary group-hover:text-amber-500 transition-colors" />
+                 <a key={idx} href={tool.target} className="bg-surface-default border border-ui-borderSubtle hover:border-accent-500/40 rounded-2xl p-5 group transition-all overflow-hidden">
+                    <div className="bg-surface-hover/50 w-10 h-10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent-500/10 transition-colors">
+                      <tool.icon className="w-5 h-5 text-txt-secondary group-hover:text-accent-700 transition-colors" />
                     </div>
-                    <h4 className="text-txt-primary font-bold mb-1 group-hover:text-amber-50 transition-colors">{tool.title}</h4>
+                    <h4 className="text-txt-primary font-bold mb-1 group-hover:text-accent-50 transition-colors">{tool.title}</h4>
                     <p className="text-xs text-txt-secondary leading-relaxed">{tool.desc}</p>
                  </a>
               ))}

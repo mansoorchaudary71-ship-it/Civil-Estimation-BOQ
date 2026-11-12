@@ -71,9 +71,9 @@ export default function CountertopModule() {
   const uA = isMetric ? "m²" : "sq.ft";
 
   return (
-    <div className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-2xl p-4 sm:p-6 shadow-sm overflow-hidden">
+    <div className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 rounded-2xl p-4 sm:p-6 shadow-brand-sm overflow-hidden">
       <div className="flex items-center gap-3 mb-6">
-        <Square className="w-6 h-6 text-indigo-600" />
+        <Square className="w-6 h-6 text-accent-800" />
         <h2 className="text-txt-primary dark:text-white text-xl font-semibold text-txt-primary tracking-tight mb-4">Countertop (Platform) Estimator</h2>
       </div>
 
@@ -86,7 +86,7 @@ export default function CountertopModule() {
                 <Button
                   key={s}
                   onClick={() => setShape(s)}
-                  className={`px-4 py-2 rounded-2xl text-base font-medium transition-all border ${shape === s ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-surface-default dark:bg-slate-800 border-ui-borderSubtle dark:border-slate-700 text-txt-secondary  hover:bg-slate-100'}`}
+                  className={`px-4 py-2 rounded-2xl text-base font-medium transition-all border ${shape === s ? 'bg-ink border-accent-800 text-white' : 'bg-surface-default dark:bg-ink border-ui-borderSubtle dark:border-ink-600 text-txt-secondary  hover:bg-surface-hover'}`}
                 >
                   {s}
                 </Button>
@@ -94,7 +94,7 @@ export default function CountertopModule() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <div className="grid grid-cols-2 gap-4 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
             <div>
               <label className="uppercase block mb-1 text-sm font-medium text-txt-secondary">
                 Main Length ({uL})
@@ -104,7 +104,7 @@ export default function CountertopModule() {
                 type="number" inputMode="decimal"
                 value={lengthA}
                 onChange={(e) => setLengthA(e.target.value)}
-                className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-full font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
+                className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 p-3 rounded-full font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 outline-none"
               /></>
             </div>
             {(shape === "L-Shape" || shape === "U-Shape") && (
@@ -117,7 +117,7 @@ export default function CountertopModule() {
                   type="number" inputMode="decimal"
                   value={lengthB}
                   onChange={(e) => setLengthB(e.target.value)}
-                  className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-full font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
+                  className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 p-3 rounded-full font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 outline-none"
                 /></>
               </div>
             )}
@@ -131,7 +131,7 @@ export default function CountertopModule() {
                   type="number" inputMode="decimal"
                   value={lengthC}
                   onChange={(e) => setLengthC(e.target.value)}
-                  className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-full font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
+                  className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 p-3 rounded-full font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 outline-none"
                 /></>
               </div>
             )}
@@ -144,7 +144,7 @@ export default function CountertopModule() {
                 type="number" inputMode="decimal"
                 value={depth}
                 onChange={(e) => setDepth(e.target.value)}
-                className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-full font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
+                className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 p-3 rounded-full font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 outline-none"
               /></>
             </div>
             <div>
@@ -156,15 +156,15 @@ export default function CountertopModule() {
                 type="number" inputMode="decimal"
                 value={skirtingHeight}
                 onChange={(e) => setSkirtingHeight(e.target.value)}
-                className="w-full bg-surface-default border border-ui-borderSubtle dark:border-slate-700 p-3 rounded-full font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-indigo-500 outline-none"
+                className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 p-3 rounded-full font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 outline-none"
               /></>
             </div>
           </div>
 
-          <div className="space-y-4 border-t border-ui-borderSubtle dark:border-slate-700 pt-4">
+          <div className="space-y-4 border-t border-ui-borderSubtle dark:border-ink-600 pt-4">
             <h4 className="text-txt-primary dark:text-white text-lg font-medium text-txt-primary mb-4">Cutout Deductions</h4>
             <div className="flex items-center justify-between gap-3 w-full relative z-10">
-              <input type="checkbox" id="hasSink" checked={hasSink} onChange={e => setHasSink(e.target.checked)} className="rounded text-indigo-600 w-4 h-4" />
+              <input type="checkbox" id="hasSink" checked={hasSink} onChange={e => setHasSink(e.target.checked)} className="rounded text-accent-800 w-4 h-4" />
               <label htmlFor="hasSink" className="text-sm font-medium text-txt-secondary mb-1 block">Include Sink Cutout</label>
             </div>
             {hasSink && (
@@ -183,7 +183,7 @@ export default function CountertopModule() {
             )}
 
             <div className="flex items-center gap-2 mb-2 mt-4">
-              <input type="checkbox" id="hasHob" checked={hasHob} onChange={e => setHasHob(e.target.checked)} className="rounded text-indigo-600 w-4 h-4" />
+              <input type="checkbox" id="hasHob" checked={hasHob} onChange={e => setHasHob(e.target.checked)} className="rounded text-accent-800 w-4 h-4" />
               <label htmlFor="hasHob" className="text-sm font-medium text-txt-secondary mb-1 block">Include Stove/Hob Cutout</label>
             </div>
             {hasHob && (

@@ -63,7 +63,7 @@ function BOQRow({
   const useManual = isLinked ? !!row.isManualOverride : true;
   return (
     <tr className="hover:bg-transparent transition-colors group">
-      <td className="py-2 px-3 font-mono text-blue-400 text-xs">
+      <td className="py-2 px-3 font-mono text-accent-400 text-xs">
         {row.id}
       </td>
       <td className="py-2 px-3 text-txt-primary">{row.desc}</td>
@@ -71,7 +71,7 @@ function BOQRow({
         <select
           value={row.unit}
           onChange={(e) => updateBoqItem(row.id, { unit: e.target.value })}
-          className="bg-transparent appearance-none rounded focus:ring-1 focus:ring-blue-500 py-0.5 outline-none cursor-pointer max-w-[4rem] border border-transparent hover:border-ui-borderSubtle"
+          className="bg-transparent appearance-none rounded focus:ring-1 focus:ring-accent-500 py-0.5 outline-none cursor-pointer max-w-[4rem] border border-transparent hover:border-ui-borderSubtle"
         >
           {COMMON_UNITS.map((u) => (
             <option key={u} value={u} className="bg-surface-default">
@@ -94,7 +94,7 @@ function BOQRow({
                   isManualOverride: !row.isManualOverride,
                 })
               }
-              className={`p-1 rounded ${row.isManualOverride ? "text-txt-tertiary  hover:text-txt-primary" : "text-blue-400 bg-blue-400/10"}`}
+              className={`p-1 rounded ${row.isManualOverride ? "text-txt-tertiary  hover:text-txt-primary" : "text-accent-400 bg-accent-400/10"}`}
               title={
                 row.isManualOverride
                   ? "Using manual override. Click to use linked."
@@ -102,7 +102,7 @@ function BOQRow({
               }
             >
               {row.isManualOverride ? (
-                <Unlink className="w-3 h-3 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm" />
+                <Unlink className="w-3 h-3 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm" />
               ) : (
                 <LinkIcon className="w-3 h-3" />
               )}
@@ -112,7 +112,7 @@ function BOQRow({
             {useManual ? (
               <><label htmlFor="a11y-input-317" className="sr-only">Input</label>
 <input id="a11y-input-317" type="number" inputMode="decimal"
-                className="w-16 bg-transparent border border-ui-borderSubtle rounded px-1.5 py-0.5 text-right focus:outline-none focus:border-blue-500 text-txt-primary font-mono min-h-[44px] rounded-full"
+                className="w-16 bg-transparent border border-ui-borderSubtle rounded px-1.5 py-0.5 text-right focus:outline-none focus:border-ink text-txt-primary font-mono min-h-[44px] rounded-full"
                 value={row.qtyOverride || 0}
                 onChange={(e) =>
                   updateBoqItem(row.id, {
@@ -121,7 +121,7 @@ function BOQRow({
                 }
               /></>
             ) : (
-              <span className="font-mono text-blue-400 px-1.5 py-0.5 inline-block min-w-[4rem] text-right">
+              <span className="font-mono text-accent-400 px-1.5 py-0.5 inline-block min-w-[4rem] text-right">
                 {qty.toFixed(2)}
               </span>
             )}
@@ -180,7 +180,7 @@ function BOQRow({
                     <><label htmlFor="a11y-input-318" className="sr-only">Input</label>
 <input id="a11y-input-318"
                       type="checkbox"
-                      className="accent-blue-500 rounded bg-transparent border-ui-borderSubtle shrink-0"
+                      className="accent-accent-600 rounded bg-transparent border-ui-borderSubtle shrink-0"
                       checked={isSelected}
                       onChange={(e) => {
                         const newIds = e.target.checked
@@ -330,7 +330,7 @@ export default function LiveBOQ() {
             <h2 className="text-base font-medium uppercase tracking-wider text-txt-secondary">
               Live Bill of Quantities (BOQ)
             </h2>
-            <span className="text-sm font-mono text-green-500 mt-1 block">
+            <span className="text-sm font-mono text-ui-successText mt-1 block">
               Project: {exportData.projectName} • {exportData.projectId}
             </span>
           </div>
@@ -338,11 +338,11 @@ export default function LiveBOQ() {
             <GlobalSettingsToggle align="left" showCurrency={true} />
             <Button
               onClick={() => setShowExportModal(true)}
-              className="px-3 py-1.5 text-sm bg-transparent border border-ui-borderSubtle rounded hover:bg-slate-200 transition-colors flex items-center gap-1.5 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+              className="px-3 py-1.5 text-sm bg-transparent border border-ui-borderSubtle rounded hover:bg-surface-active transition-colors flex items-center gap-1.5 rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
             >
               <Download className="w-[14px] h-[14px]" /> Export Report
             </Button>
-            <Button className="px-3 py-1.5 text-sm bg-indigo-600 font-medium text-white rounded hover:bg-indigo-500 transition-colors flex items-center gap-1.5 shadow-sm rounded-full active:scale-95 hover:-translate-y-0.5">
+            <Button className="px-3 py-1.5 text-sm bg-ink font-medium text-white rounded hover:bg-ink-700 transition-colors flex items-center gap-1.5 shadow-brand-sm rounded-full active:scale-95 hover:-translate-y-0.5">
               <Plus className="w-[14px] h-[14px]" /> Add Item
             </Button>
           </div>
@@ -354,10 +354,10 @@ export default function LiveBOQ() {
             <><label htmlFor="a11y-input-319" className="sr-only">Search items...</label>
 <input id="a11y-input-319" type="text"
               placeholder="Search items..."
-              className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-3 pl-8 py-1.5 text-sm focus:outline-none focus:border-blue-500 text-txt-primary min-h-[44px]"
+              className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-3 pl-8 py-1.5 text-sm focus:outline-none focus:border-ink text-txt-primary min-h-[44px]"
             /></>
           </div>
-          <Button className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-ui-borderSubtle rounded text-sm hover:bg-slate-200 transition-colors text-txt-secondary rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <Button className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-ui-borderSubtle rounded text-sm hover:bg-surface-active transition-colors text-txt-secondary rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
             <Filter className="w-[14px] h-[14px]" /> Filters
           </Button>
           <div className="ml-auto">
@@ -382,7 +382,7 @@ export default function LiveBOQ() {
                 </th>
               </tr>
             </thead>
-            <tbody className="text-txt-secondary divide-y divide-slate-200">
+            <tbody className="text-txt-secondary divide-y divide-border-color">
               {boqItems.map((row) => (
                 <BOQRow
                   key={row.id}
@@ -405,7 +405,7 @@ export default function LiveBOQ() {
                 >
                   Total Estimated Cost
                 </th>
-                <th className="py-3 px-3 font-mono text-right text-sm text-txt-primary font-semibold tabular-nums tracking-tight bg-slate-100 rounded-br-lg">
+                <th className="py-3 px-3 font-mono text-right text-sm text-txt-primary font-semibold tabular-nums tracking-tight bg-surface-hover rounded-br-lg">
                   {formatCurrency(totalCost)}
                 </th>
               </tr>
@@ -420,10 +420,10 @@ export default function LiveBOQ() {
       </div>
       {/* Export Modal */}
       {showExportModal && (
-        <div className="absolute inset-0 bg-slate-50/60 flex items-center justify-center z-50">
+        <div className="absolute inset-0 bg-surface-hover/60 flex items-center justify-center z-50">
           <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 max-w-sm w-full shadow-2xl overflow-hidden">
             <h3 className="text-base font-medium mb-4 text-txt-primary flex items-center gap-2">
-              <Download className="w-[16px] h-[16px] text-blue-400" /> Generate
+              <Download className="w-[16px] h-[16px] text-accent-400" /> Generate
               Professional Report
             </h3>
             <div className="flex flex-col gap-4 mb-6">
@@ -441,7 +441,7 @@ export default function LiveBOQ() {
                       projectName: e.target.value,
                     }))
                   }
-                  className="w-full bg-transparent border border-ui-borderSubtle rounded p-2 text-sm text-txt-primary focus:outline-none focus:border-blue-500 rounded-full"
+                  className="w-full bg-transparent border border-ui-borderSubtle rounded p-2 text-sm text-txt-primary focus:outline-none focus:border-ink rounded-full"
                 /></>
               </div>
               <div>
@@ -458,7 +458,7 @@ export default function LiveBOQ() {
                       clientName: e.target.value,
                     }))
                   }
-                  className="w-full bg-transparent border border-ui-borderSubtle rounded p-2 text-sm text-txt-primary focus:outline-none focus:border-blue-500 rounded-full"
+                  className="w-full bg-transparent border border-ui-borderSubtle rounded p-2 text-sm text-txt-primary focus:outline-none focus:border-ink rounded-full"
                 /></>
               </div>
               <div>
@@ -475,7 +475,7 @@ export default function LiveBOQ() {
                       siteLocation: e.target.value,
                     }))
                   }
-                  className="w-full bg-transparent border border-ui-borderSubtle rounded p-2 text-sm text-txt-primary focus:outline-none focus:border-blue-500 rounded-full"
+                  className="w-full bg-transparent border border-ui-borderSubtle rounded p-2 text-sm text-txt-primary focus:outline-none focus:border-ink rounded-full"
                 /></>
               </div>
             </div>
@@ -483,12 +483,12 @@ export default function LiveBOQ() {
               <Button
                 onClick={() => handleExport("pdf")}
                 disabled={isPdfLoading || isExcelLoading}
-                className="flex flex-col items-center justify-center p-3 bg-transparent border border-ui-borderSubtle rounded hover:border-red-500/50 hover:bg-red-500/10 transition-colors gap-2 disabled:opacity-50 disabled:cursor-not-allowed group relative rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                className="flex flex-col items-center justify-center p-3 bg-transparent border border-ui-borderSubtle rounded hover:border-ui-errorText/50 hover:bg-ui-errorText/10 transition-colors gap-2 disabled:opacity-50 disabled:cursor-not-allowed group relative rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
               >
                 {isPdfLoading ? (
-                  <Loader2 className="w-6 h-6 text-red-500 animate-spin" />
+                  <Loader2 className="w-6 h-6 text-ui-errorText animate-spin" />
                 ) : (
-                  <FileText className="w-6 h-6 text-red-500 group-hover:scale-110 transition-transform" />
+                  <FileText className="w-6 h-6 text-ui-errorText group-hover:scale-110 transition-transform" />
                 )}
                 <span className="text-sm font-medium text-txt-primary">
                   {isPdfLoading ? "Generating..." : "Export PDF"}
@@ -497,12 +497,12 @@ export default function LiveBOQ() {
               <Button
                 onClick={() => handleExport("excel")}
                 disabled={isPdfLoading || isExcelLoading}
-                className="flex flex-col items-center justify-center p-3 bg-transparent border border-ui-borderSubtle rounded hover:border-green-500/50 hover:bg-green-500/10 transition-colors gap-2 disabled:opacity-50 disabled:cursor-not-allowed group relative rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm"
+                className="flex flex-col items-center justify-center p-3 bg-transparent border border-ui-borderSubtle rounded hover:border-ui-successText/50 hover:bg-ui-successText/10 transition-colors gap-2 disabled:opacity-50 disabled:cursor-not-allowed group relative rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
               >
                 {isExcelLoading ? (
-                  <Loader2 className="w-6 h-6 text-green-500 animate-spin" />
+                  <Loader2 className="w-6 h-6 text-ui-successText animate-spin" />
                 ) : (
-                  <FileSpreadsheet className="w-6 h-6 text-green-500 group-hover:scale-110 transition-transform" />
+                  <FileSpreadsheet className="w-6 h-6 text-ui-successText group-hover:scale-110 transition-transform" />
                 )}
                 <span className="text-sm font-medium text-txt-primary">
                   {isExcelLoading ? "Generating..." : "Export Excel"}

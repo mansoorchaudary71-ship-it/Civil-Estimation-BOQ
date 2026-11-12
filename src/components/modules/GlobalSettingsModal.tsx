@@ -87,7 +87,7 @@ export default function GlobalSettingsModal({
     value: number;
     onChangeKey: keyof typeof localRates;
   }) => (
-    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 rounded-2xl bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary hover:bg-surface-default/80 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary transition-colors border border-transparent hover:border-ui-borderSubtle : overflow-hidden">
+    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 rounded-2xl bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary hover:bg-surface-default/80 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary transition-colors border border-transparent hover:border-ui-borderSubtle : overflow-hidden">
       {" "}
       <div className="flex flex-col">
         {" "}
@@ -116,7 +116,7 @@ export default function GlobalSettingsModal({
               if (!isNaN(val) && val < 0) return;
               handleChange(onChangeKey, e.target.value);
             }}
-            className="w-full pl-9 pr-4 py-2 bg-bg-card border border-ui-borderSubtle dark:border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 focus:border-blue-500 text-txt-primary dark:text-white font-medium transition-shadow"
+            className="w-full pl-9 pr-4 py-2 bg-bg-card border border-ui-borderSubtle dark:border-ink-600 rounded-full focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-ink text-txt-primary dark:text-white font-medium transition-shadow"
           /></>{" "}
         </div>{" "}
       </div>{" "}
@@ -126,17 +126,17 @@ export default function GlobalSettingsModal({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {" "}
       <div
-        className="absolute inset-0 bg-[#F5F5F7] backdrop-blur-sm"
+        className="absolute inset-0 bg-surface-hover backdrop-blur-sm"
         onClick={onClose}
       ></div>{" "}
-      <div className="relative bg-transparent/90 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary backdrop-blur-xl border border-ui-borderSubtle/50 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative bg-transparent/90 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary backdrop-blur-xl border border-ui-borderSubtle/50 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
         {" "}
         {/* Header */}{" "}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-ui-borderSubtle/50 shrink-0">
           {" "}
           <div>
             {" "}
-            <h3 className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent text-lg font-medium text-txt-primary mb-4">
+            <h3 className="bg-gradient-to-r from-ink to-ink-600 bg-clip-text text-transparent text-lg font-medium text-txt-primary mb-4">
               {" "}
               Global Settings{" "}
             </h3>{" "}
@@ -146,7 +146,7 @@ export default function GlobalSettingsModal({
             </p>{" "}
           </div>{" "}
           <Button onClick={onClose}
-            className="p-2 -mr-2 rounded-full hover:bg-slate-200/50 rounded-full border border-ui-borderSubtle shadow-sm text-txt-primary text-txt-secondary transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
+            className="p-2 -mr-2 rounded-full hover:bg-surface-active/50 rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary text-txt-secondary transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
           >
             {" "}
             <X className="w-5 h-5" />{" "}
@@ -207,7 +207,7 @@ export default function GlobalSettingsModal({
                   <Ruler className="w-4 h-4 text-txt-secondary" /> Preferred
                   Units{" "}
                 </h4>{" "}
-                <div className="w-full space-y-3 bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary px-4 py-3 rounded-2xl border border-ui-borderSubtle/50 overflow-hidden">
+                <div className="w-full space-y-3 bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary px-4 py-3 rounded-2xl border border-ui-borderSubtle/50 overflow-hidden">
                   {" "}
                   <div className="flex items-center justify-between">
                     {" "}
@@ -219,7 +219,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("units", "finishing", e.target.value)
                       }
-                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm font-medium"
                     >
                       {" "}
                       <option value="mm">Millimeters (mm)</option>{" "}
@@ -238,7 +238,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("units", "roads", e.target.value)
                       }
-                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm font-medium"
                     >
                       {" "}
                       <option value="m">Meters (m)</option>{" "}
@@ -257,7 +257,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("units", "earthworks", e.target.value)
                       }
-                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm font-medium"
                     >
                       {" "}
                       <option value="m">Meters (m)</option>{" "}
@@ -274,7 +274,7 @@ export default function GlobalSettingsModal({
                   <Palette className="w-4 h-4 text-txt-secondary" /> Default Color
                   Themes{" "}
                 </h4>{" "}
-                <div className="w-full space-y-3 bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary px-4 py-3 rounded-2xl border border-ui-borderSubtle/50 overflow-hidden">
+                <div className="w-full space-y-3 bg-surface-default/50 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary px-4 py-3 rounded-2xl border border-ui-borderSubtle/50 overflow-hidden">
                   {" "}
                   <div className="flex items-center justify-between">
                     {" "}
@@ -286,7 +286,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("themes", "finishing", e.target.value)
                       }
-                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm font-medium"
                     >
                       {" "}
                       <option value="blue">Ocean Blue</option>{" "}
@@ -305,7 +305,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("themes", "roads", e.target.value)
                       }
-                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm font-medium"
                     >
                       {" "}
                       <option value="slate">Industrial Slate</option>{" "}
@@ -323,7 +323,7 @@ export default function GlobalSettingsModal({
                       onChange={(e) =>
                         handlePrefChange("themes", "earthworks", e.target.value)
                       }
-                      className="bg-bg-card border border-ui-borderSubtle dark:border-slate-700 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-blue-500/50 text-sm font-medium"
+                      className="bg-bg-card border border-ui-borderSubtle dark:border-ink-600 text-txt-primary rounded-2xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm font-medium"
                     >
                       {" "}
                       <option value="amber">Dirt Amber</option>{" "}
@@ -337,16 +337,16 @@ export default function GlobalSettingsModal({
           )}{" "}
         </div>{" "}
         {/* Footer */}{" "}
-        <div className="p-4 sm:p-6 border-t border-ui-borderSubtle/50 shrink-0 bg-slate-100/50 rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary flex justify-end gap-3 overflow-hidden">
+        <div className="p-4 sm:p-6 border-t border-ui-borderSubtle/50 shrink-0 bg-surface-hover/50 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary flex justify-end gap-3 overflow-hidden">
           {" "}
           <Button onClick={onClose}
-            className="px-5 py-2.5 rounded-full text-txt-secondary hover:bg-slate-200/50 border border-ui-borderSubtle shadow-sm text-txt-primary transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
+            className="px-5 py-2.5 rounded-full text-txt-secondary hover:bg-surface-active/50 border border-ui-borderSubtle shadow-brand-sm text-txt-primary transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5"
           >
             {" "}
             Cancel{" "}
           </Button>{" "}
           <Button onClick={handleSave}
-            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-blue-700 text-white rounded-full shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95 text-base font-semibold hover:-translate-y-0.5"
+            className="flex items-center gap-2 px-6 py-2.5 bg-ink hover:bg-ink-700 text-white rounded-full shadow-brand-lg shadow-accent-500/20 transition-all hover:scale-[1.02] active:scale-95 text-base font-semibold hover:-translate-y-0.5"
           >
             {" "}
             <Check className="w-4 h-4" /> Save Settings{" "}

@@ -43,8 +43,8 @@ const MemoizedFormworkRow = memo(({
   unitStr: string 
 }) => {
   return (
-    <div className="w-full group bg-gray-50/50 hover:bg-surface-default border border-gray-100 hover:border-amber-200 p-5 rounded-2xl transition-all shadow-sm hover:shadow-md relative overflow-hidden flex flex-col md:flex-row gap-4 md:items-center">
-      <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-300 group-hover:bg-amber-400 transition-colors" />
+    <div className="w-full group bg-surface-default/50 hover:bg-surface-default border border-border-color hover:border-accent-200 p-5 rounded-2xl transition-all shadow-brand-sm hover:shadow-brand-md relative overflow-hidden flex flex-col md:flex-row gap-4 md:items-center">
+      <div className="absolute top-0 left-0 w-1.5 h-full bg-secondary-300 group-hover:bg-accent-400 transition-colors" />
       <div className="flex-1 grid grid-cols-2 md:grid-cols-6 gap-4 items-end pl-0 md:pl-2">
         <div className="col-span-2 md:col-span-2 space-y-1">
           <label className="uppercase tracking-widest block text-sm font-medium text-txt-secondary mb-1 truncate">
@@ -52,7 +52,7 @@ const MemoizedFormworkRow = memo(({
           </label>
           <div className="flex gap-2">
             <select
-              className="bg-gray-100 border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-secondary outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal overflow-hidden truncate"
+              className="bg-surface-hover border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-secondary outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px] min-w-[44px] text-base font-normal overflow-hidden truncate"
               value={el.type}
               onChange={(e) => updateElement(index, { type: e.target.value as any })}
             >
@@ -62,7 +62,7 @@ const MemoizedFormworkRow = memo(({
             </select>
             <><label htmlFor="a11y-input-231" className="sr-only">Input</label>
 <input id="a11y-input-231" type="text"
-              className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 text-txt-primary w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+              className="bg-surface-default border border-border-color rounded-full px-3 py-2.5 text-txt-primary w-full outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
               value={el.name}
               onChange={(e) => updateElement(index, { name: e.target.value })}
             /></>
@@ -74,7 +74,7 @@ const MemoizedFormworkRow = memo(({
           </label>
           <><label htmlFor="a11y-input-232" className="sr-only">Input</label>
 <input id="a11y-input-232" type="number" inputMode="decimal" min="0" step="0.1"
-            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-border-color rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.length}
             onChange={(e) => updateElement(index, { length: e.target.value })}
           /></>
@@ -85,7 +85,7 @@ const MemoizedFormworkRow = memo(({
           </label>
           <><label htmlFor="a11y-input-233" className="sr-only">Input</label>
 <input id="a11y-input-233" type="number" inputMode="decimal" min="0" step="0.1"
-            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-border-color rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.width}
             onChange={(e) => updateElement(index, { width: e.target.value })}
           /></>
@@ -96,7 +96,7 @@ const MemoizedFormworkRow = memo(({
           </label>
           <><label htmlFor="a11y-input-234" className="sr-only">Input</label>
 <input id="a11y-input-234" type="number" inputMode="decimal" min="0" step="0.1"
-            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-border-color rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.height}
             onChange={(e) => updateElement(index, { height: e.target.value })}
           /></>
@@ -107,7 +107,7 @@ const MemoizedFormworkRow = memo(({
           </label>
           <><label htmlFor="a11y-input-235" className="sr-only">Input</label>
 <input id="a11y-input-235" type="number" inputMode="decimal" min="0"
-            className="bg-surface-default border border-gray-200 rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
+            className="bg-surface-default border border-border-color rounded-full px-3 py-2.5 w-full outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px] min-w-[44px] text-base font-normal truncate"
             value={el.count}
             onChange={(e) => updateElement(index, { count: e.target.value })}
           /></>
@@ -116,7 +116,7 @@ const MemoizedFormworkRow = memo(({
       <Button
         aria-label="Delete"
         onClick={() => removeElement(index)}
-        className="w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white rounded-full transition-colors ml-auto md:ml-0 self-end md:self-center active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-500"
+        className="w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center bg-ui-error text-ui-errorText hover:bg-ui-errorText hover:text-white rounded-full transition-colors ml-auto md:ml-0 self-end md:self-center active:scale-95 focus:outline-none focus:ring-2 focus:ring-ui-errorText"
       >
         <Trash2 className="w-5 h-5" />
       </Button>
@@ -252,16 +252,16 @@ export default function FormworkEstimator() {
   }, [elements, repetitionFactor, wastagePct, isMetric]);
   const breakdownData = useMemo(() => {
     return [
-      { name: "Columns", value: results.breakdown.colArea, color: "#f59e0b" },
+      { name: "Columns", value: results.breakdown.colArea, color: "#F2A413" },
       {
         name: "Slabs",
         value: results.breakdown.slabArea,
-        color: "#f43f5e",
+        color: "#1F1D1A",
       },
       {
         name: "Beams",
         value: results.breakdown.beamArea,
-        color: "#6366f1",
+        color: "#6B6862",
       },
     ].filter((d: any) => d.value > 0);
   }, [results]);
@@ -276,15 +276,15 @@ export default function FormworkEstimator() {
           {/* Elements Config Section */}
           <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
             
-            <div className="w-full bg-surface-default/90 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
+            <div className="w-full bg-surface-default/90 p-4 sm:p-6 md:p-4 sm:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(31,29,26,0.06)] border border-border-color backdrop-blur-xl overflow-hidden">
               
               <div className="flex items-center justify-between mb-8">
                 
                 <div className="flex items-center gap-3">
                   
-                  <div className="p-3 bg-amber-50 rounded-2xl overflow-hidden">
+                  <div className="p-3 bg-accent-50 rounded-2xl overflow-hidden">
                     
-                    <Grid className="w-6 h-6 text-amber-600" />
+                    <Grid className="w-6 h-6 text-accent-700" />
                   </div>
                   <div>
                     
@@ -307,22 +307,22 @@ export default function FormworkEstimator() {
               />
             </div>
             
-            <div className="w-full bg-surface-default/90 p-4 sm:p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(15,23,42,0.06)] border border-gray-100 backdrop-blur-xl overflow-hidden">
+            <div className="w-full bg-surface-default/90 p-4 sm:p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_32px_rgba(31,29,26,0.06)] border border-border-color backdrop-blur-xl overflow-hidden">
               <Button
                 onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                 className="w-full flex items-center justify-between gap-3 relative z-10 text-left focus:outline-none min-h-[44px]"
               >
                 <div className="flex items-center gap-3">
-                  <RefreshCw className="w-5 h-5 text-indigo-600" />
+                  <RefreshCw className="w-5 h-5 text-accent-800" />
                   <h3 className="text-lg font-medium text-txt-primary">
                     Settings & Repetition
                   </h3>
                 </div>
-                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 text-txt-tertiary transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
               </Button>
               
               {isSettingsOpen && (
-                <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-6 sm:items-center animate-in slide-in-from-top-4 fade-in duration-300">
+                <div className="mt-6 pt-6 border-t border-border-color flex flex-col sm:flex-row gap-6 sm:items-center animate-in slide-in-from-top-4 fade-in duration-300">
                   <div className="flex-1">
                     <p className="text-base font-normal text-txt-secondary leading-relaxed">
                       How many times will the shuttering be reused? This drastically
@@ -334,7 +334,7 @@ export default function FormworkEstimator() {
                       <Button
                         key={factor}
                         onClick={() => setRepetitionFactor(factor)}
-                        className={`w-12 h-12 min-h-[44px] min-w-[44px] rounded-2xl font-semibold tabular-nums tracking-tight transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 ${repetitionFactor === factor ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-110" : "bg-gray-100 text-txt-secondary hover:bg-gray-200"}`}
+                        className={`w-12 h-12 min-h-[44px] min-w-[44px] rounded-2xl font-semibold tabular-nums tracking-tight transition-all focus:outline-none focus:ring-2 focus:ring-accent-500 ${repetitionFactor === factor ? "bg-ink text-white shadow-brand-lg shadow-accent-500/30 scale-110" : "bg-surface-hover text-txt-secondary hover:bg-surface-active"}`}
                       >
                         x{factor}
                       </Button>
@@ -345,7 +345,7 @@ export default function FormworkEstimator() {
             </div>
           </section>
           {/* Results Summary Interface */}
-          <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-lg shadow-sm">
+          <section className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
             <MaterialSummary
               title="Material Summary"
               totalLabel="Total Formwork Area"
@@ -407,12 +407,12 @@ export default function FormworkEstimator() {
                             `${value.toFixed(1)} ${areaUnitStr}`
                           }
                           contentStyle={{
-                            backgroundColor: "#1f2937",
-                            borderColor: "#374151",
-                            color: "#f3f4f6",
+                            backgroundColor: "#1F1D1A",
+                            borderColor: "#3A3630",
+                            color: "#F5F2EC",
                             borderRadius: "12px",
                           }}
-                          itemStyle={{ color: "#f3f4f6" }}
+                          itemStyle={{ color: "#F5F2EC" }}
                         />
                       </PieChart>
                     </ResponsiveContainer>
@@ -420,15 +420,15 @@ export default function FormworkEstimator() {
                   <div className="flex justify-center gap-4 mt-2 text-base font-medium uppercase tracking-wider flex-wrap">
                     
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-accent-500" />
                       Columns
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-ui-errorText" />
                       Slabs
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-ink" />
                       Beams
                     </span>
                   </div>

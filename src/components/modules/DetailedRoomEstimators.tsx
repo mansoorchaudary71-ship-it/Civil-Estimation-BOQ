@@ -20,14 +20,14 @@ export function DetailedRoomEstimators() {
   return (
     <div className="w-full flex justify-center animate-in fade-in slide-in-from-top-4 duration-500 pb-16">
       <div className="w-full max-w-6xl">
-        <div className="flex gap-2 p-1 bg-surface-default/50 backdrop-blur-md rounded-2xl w-fit mx-auto mb-8 shadow-sm border border-ui-borderSubtle rounded-2xl border border-ui-borderSubtle shadow-sm text-txt-primary overflow-x-auto max-w-full overflow-hidden">
+        <div className="flex gap-2 p-1 bg-surface-default/50 backdrop-blur-md rounded-2xl w-fit mx-auto mb-8 shadow-brand-sm border border-ui-borderSubtle rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-x-auto max-w-full overflow-hidden">
           {tabs.map(tab => (
             <Button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-6 py-3 rounded-2xl text-base font-medium transition-all whitespace-nowrap ${
                 activeTab === tab
-                  ? "bg-purple-600 text-white shadow-md shadow-purple-500/20"
+                  ? "bg-ink text-white shadow-brand-md shadow-accent-500/20"
                   : "text-txt-secondary hover:text-txt-primary hover:bg-surface-default/60 "
               }`}
             >
@@ -43,7 +43,7 @@ export function DetailedRoomEstimators() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="bg-slate-50 rounded-full shadow-xl border border-ui-borderSubtle p-6 md:p-8 transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
+            className="bg-surface-hover rounded-full shadow-xl border border-ui-borderSubtle p-6 md:p-8 transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
           >
             {activeTab === "Kitchen" && <KitchenEstimator />}
             {activeTab === "Bedroom" && <BedroomEstimator />}
@@ -62,12 +62,12 @@ function ResultTable({ title, icon: Icon, items, onRateChange }: { title: string
   return (
     <div className="mb-8 last:mb-0">
       <h4 className="uppercase st mb-4 flex items-center gap-2 text-lg font-medium text-txt-primary">
-        <Icon className="w-4 h-4 text-purple-500"/> {title}
+        <Icon className="w-4 h-4 text-accent-800"/> {title}
       </h4>
-      <div className="w-full bg-surface-default shadow-sm border border-ui-borderSubtle rounded-2xl overflow-hidden">
+      <div className="w-full bg-surface-default shadow-brand-sm border border-ui-borderSubtle rounded-2xl overflow-hidden">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-slate-50 border-b border-ui-borderSubtle text-txt-primary">
+            <thead className="bg-surface-hover border-b border-ui-borderSubtle text-txt-primary">
               <tr>
                 <th className="py-3 px-4 font-semibold text-txt-secondary">Item</th>
                 <th className="py-3 px-4 font-semibold text-txt-secondary">Unit</th>
@@ -76,18 +76,18 @@ function ResultTable({ title, icon: Icon, items, onRateChange }: { title: string
                 <th className="py-3 px-4 font-semibold text-right text-txt-secondary">Total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border-color">
               {items.map((item, i) => (
-                <tr key={i} className="hover:bg-slate-50/50 text-txt-primary">
+                <tr key={i} className="hover:bg-surface-hover/50 text-txt-primary">
                   <td className="py-3 px-4 font-medium text-txt-secondary">{item.name}</td>
                   <td className="py-3 px-4 text-txt-tertiary text-base font-medium">{item.unit}</td>
-                  <td className="py-3 px-4 text-right font-semibold tabular-nums tracking-tight text-purple-600 text-base">{item.qty.toLocaleString(undefined, {maximumFractionDigits: 1})}</td>
+                  <td className="py-3 px-4 text-right font-semibold tabular-nums tracking-tight text-accent-800 text-base">{item.qty.toLocaleString(undefined, {maximumFractionDigits: 1})}</td>
                   <td className="py-2 px-4 min-w-[100px]">
                     <><label htmlFor="a11y-input-208" className="sr-only">0.00</label>
 <input id="a11y-input-208" type="number" inputMode="decimal"
                       min="0"
                       placeholder="0.00"
-                      className="w-full bg-slate-100 border-none rounded-full px-2 py-1.5 text-right sm: focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 focus:outline-none text-txt-primary min-h-[44px] text-base font-normal"
+                      className="w-full bg-surface-hover border-none rounded-full px-2 py-1.5 text-right sm: focus:ring-2 focus:ring-accent-500 focus:outline-none text-txt-primary min-h-[44px] text-base font-normal"
                       onChange={(e) => onRateChange(item.name, parseFloat(e.target.value) || 0)}
                     /></>
                   </td>
@@ -139,12 +139,12 @@ function BaseEstimatorWrapper({ title, inputs, renderInputs, calculate }: {
           {renderInputs()}
         </div>
       </div>
-      <div className="w-full flex-1 min-w-[min(100%,380px)] w-full flex flex-col bg-surface-default p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="w-full flex-1 min-w-[min(100%,380px)] w-full flex flex-col bg-surface-default p-4 sm:p-8 rounded-2xl shadow-brand-sm border border-border-color overflow-hidden">
         <div className="flex justify-between items-end mb-8">
           <h3 className="text-lg font-medium text-txt-primary mb-4">Calculation Results</h3>
           <div className="text-right">
             <span className="text-base font-medium uppercase tracking-wider block">Grand Total</span>
-            <span className="text-xl font-semibold tabular-nums tracking-tight text-purple-600 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-500">{grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+            <span className="text-xl font-semibold tabular-nums tracking-tight text-accent-800 bg-clip-text text-transparent bg-gradient-to-r from-ink to-ink">{grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
           </div>
         </div>
         <div className="space-y-2">
@@ -166,7 +166,7 @@ function CommonNumInput({ label, val, setVal, unit }: { label: string, val: stri
 <input id="a11y-input-209" 
           type="number" inputMode="decimal" 
           value={val} onChange={(e)=>setVal(e.target.value)}
-          className="w-full bg-slate-50 border border-ui-borderSubtle rounded-full px-4 py-2.5 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 outline-none transition-all text-txt-primary"
+          className="w-full bg-surface-hover border border-ui-borderSubtle rounded-full px-4 py-2.5 text-base font-medium focus:ring-2 focus:ring-accent-500 outline-none transition-all text-txt-primary"
         /></>
         {unit && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-base font-medium">{unit}</span>}
       </div>
@@ -481,7 +481,7 @@ function BasementEstimator() {
       <CommonNumInput label="Excavation Depth" val={depth} setVal={setDepth} unit="ft" />
       <div className="flex flex-col gap-1.5">
         <label className="uppercase tracking-widest text-sm font-medium text-txt-secondary mb-1 block">Soil Bulking Factor</label>
-        <select value={bulkingF} onChange={e=>setBulkingF(e.target.value)} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 py-2.5 text-base font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-purple-500 outline-none transition-all text-txt-primary overflow-hidden">
+        <select value={bulkingF} onChange={e=>setBulkingF(e.target.value)} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 py-2.5 text-base font-medium focus:ring-2 focus:ring-accent-500 outline-none transition-all text-txt-primary overflow-hidden">
           <option value="1.15">Hard Soil (1.15)</option>
           <option value="1.25">Normal Soil (1.25)</option>
           <option value="1.35">Loose Soil (1.35)</option>

@@ -42,17 +42,17 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
       />
       
       {/* Header */}
-      <div className="text-center space-y-4 pt-4 md:pt-8 bg-surface-default/50 dark:bg-slate-900/50 p-8 md:p-12 rounded-2xl">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-100/50 dark:bg-blue-900/30 text-indigo-600 dark:text-blue-400 mb-4 shadow-[0_8px_16px_-6px_rgba(37,99,235,0.2)] overflow-hidden">
+      <div className="text-center space-y-4 pt-4 md:pt-8 bg-surface-default/50 dark:bg-ink/50 p-8 md:p-12 rounded-2xl">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-400 mb-4 shadow-[0_8px_16px_-6px_rgba(37,99,235,0.2)] overflow-hidden">
           <current.icon className="w-8 h-8" strokeWidth={1.5} />
         </div>
         <h1 className="text-2xl md:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">
           {current.title}
         </h1>
-        <p className="text-lg text-txt-tertiary dark:text-slate-400 max-w-2xl mx-auto">
+        <p className="text-lg text-txt-tertiary dark:text-txt-tertiary max-w-2xl mx-auto">
           {current.description}
         </p>
-        <p className="text-sm font-medium text-slate-400 dark:text-txt-tertiary mt-6">
+        <p className="text-sm font-medium text-txt-tertiary dark:text-txt-tertiary mt-6">
           {current.date}
         </p>
       </div>
@@ -60,7 +60,7 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
         {/* Sidebar Navigation */}
         <aside className="w-full lg:w-72 shrink-0 lg:sticky top-24 self-start">
-          <div className="bg-bg-card p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle dark:border-slate-700 shadow-sm space-y-2 overflow-hidden">
+          <div className="bg-bg-card p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm space-y-2 overflow-hidden">
             <h3 className="text-base font-medium dark:text-txt-tertiary uppercase tracking-widest pl-3 mb-4">
               Legal Pages
             </h3>
@@ -69,8 +69,8 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
               onClick={() => onNavigate('privacy')}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all ${
                 page === 'privacy' 
-                  ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 font-bold' 
-                  : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium'
+                  ? 'bg-accent-50 dark:bg-accent-900/20 text-accent-800 dark:text-accent-400 font-bold' 
+                  : 'text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover/50 font-medium'
               }`}
             >
               <span className="flex items-center gap-3">
@@ -83,8 +83,8 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
               onClick={() => onNavigate('terms')}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all ${
                 page === 'terms' 
-                  ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 font-bold' 
-                  : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium'
+                  ? 'bg-accent-50 dark:bg-accent-900/20 text-accent-800 dark:text-accent-400 font-bold' 
+                  : 'text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover/50 font-medium'
               }`}
             >
               <span className="flex items-center gap-3">
@@ -97,8 +97,8 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
               onClick={() => onNavigate('cookies')}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all ${
                 page === 'cookies' 
-                  ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 font-bold' 
-                  : 'text-txt-secondary dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium'
+                  ? 'bg-accent-50 dark:bg-accent-900/20 text-accent-800 dark:text-accent-400 font-bold' 
+                  : 'text-txt-secondary dark:text-txt-tertiary hover:bg-surface-hover/50 font-medium'
               }`}
             >
               <span className="flex items-center gap-3">
@@ -108,14 +108,14 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
             </Button>
           </div>
           
-          <div className="mt-6 bg-surface-default dark:bg-slate-800/50 p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle/60 dark:border-slate-800/60 text-sm overflow-hidden">
-            <h4 className="font-bold text-txt-primary dark:text-slate-200 mb-2">Have Questions?</h4>
-            <p className="text-txt-tertiary dark:text-slate-400 mb-4 leading-relaxed">
+          <div className="mt-6 bg-surface-default dark:bg-ink/50 p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle/60 dark:border-ink/60 text-sm overflow-hidden">
+            <h4 className="font-bold text-txt-primary dark:text-txt-primary mb-2">Have Questions?</h4>
+            <p className="text-txt-tertiary dark:text-txt-tertiary mb-4 leading-relaxed">
               If you have any questions about our legal policies, please contact our support team.
             </p>
             <Button 
               onClick={() => onNavigate('contact')}
-              className="text-indigo-600 dark:text-blue-400 font-bold hover:underline mt-2 inline-flex items-center gap-1.5"
+              className="text-accent-800 dark:text-accent-400 font-bold hover:underline mt-2 inline-flex items-center gap-1.5"
             >
               Contact Support <ArrowRight className="w-3.5 h-3.5" />
             </Button>
@@ -123,8 +123,8 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
         </aside>
 
         {/* Content Area */}
-        <main className="flex-1 bg-bg-card p-8 md:p-12 lg:p-16 rounded-[2.5rem] border border-ui-borderSubtle dark:border-slate-700 shadow-sm min-w-0">
-          <div className="prose prose-slate dark:prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-indigo-600 dark:prose-a:text-blue-400 transition-colors">
+        <main className="flex-1 bg-bg-card p-8 md:p-12 lg:p-16 rounded-[2.5rem] border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm min-w-0">
+          <div className="prose prose-slate dark:prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-accent-800 dark:prose-a:text-accent-400 transition-colors">
             {page === 'privacy' && <PrivacyContent />}
             {page === 'terms' && <TermsContent />}
             {page === 'cookies' && <CookiesContent />}

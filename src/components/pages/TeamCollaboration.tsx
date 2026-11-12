@@ -97,12 +97,12 @@ export default function TeamCollaboration() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-surface-hover flex flex-col">
       <TopNavbar />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center gap-4 mb-8">
-          <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-            <Users className="w-6 h-6 text-indigo-600" />
+          <div className="w-12 h-12 bg-accent-100 rounded-xl flex items-center justify-center">
+            <Users className="w-6 h-6 text-accent-800" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-txt-primary">Team Collaboration</h1>
@@ -116,7 +116,7 @@ export default function TeamCollaboration() {
           </div>
         ) : loading ? (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-4 border-accent-200 border-t-indigo-600 rounded-full animate-spin"></div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -132,14 +132,14 @@ export default function TeamCollaboration() {
                   <Button
                     key={p.id}
                     onClick={() => setSelectedProject(p)}
-                    className={`w-full text-left p-5 rounded-xl border transition-all ${selectedProject?.id === p.id ? 'bg-indigo-50 border-indigo-200 shadow-sm' : 'bg-surface-default border-ui-borderSubtle hover:border-indigo-200 hover:shadow-sm'}`}
+                    className={`w-full text-left p-5 rounded-xl border transition-all ${selectedProject?.id === p.id ? 'bg-accent-50 border-accent-200 shadow-brand-sm' : 'bg-surface-default border-ui-borderSubtle hover:border-accent-200 hover:shadow-brand-sm'}`}
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-semibold text-txt-primary truncate pr-2">{p.name || 'Untitled Project'}</h3>
                       {p.ownerId === user.uid ? (
-                        <Crown className="w-4 h-4 text-amber-500 shrink-0" />
+                        <Crown className="w-4 h-4 text-accent-700 shrink-0" />
                       ) : (
-                        <Shield className="w-4 h-4 text-slate-400 shrink-0" />
+                        <Shield className="w-4 h-4 text-txt-tertiary shrink-0" />
                       )}
                     </div>
                     <p className="text-xs text-txt-tertiary flex items-center gap-1">
@@ -153,7 +153,7 @@ export default function TeamCollaboration() {
             {/* Selected Project Details */}
             <div className="lg:col-span-2">
               {selectedProject ? (
-                <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-sm overflow-hidden">
+                <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-brand-sm overflow-hidden">
                   <div className="p-6 md:p-8 border-b border-ui-borderSubtle">
                     <h2 className="text-2xl font-bold text-txt-primary mb-2">{selectedProject.name}</h2>
                     <p className="text-sm text-txt-tertiary">Manage sharing and collaboration settings for this project.</p>
@@ -163,26 +163,26 @@ export default function TeamCollaboration() {
                     {/* Share Link Section */}
                     <div>
                       <h3 className="text-lg font-semibold text-txt-primary flex items-center gap-2 mb-4">
-                        <LinkIcon className="w-5 h-5 text-indigo-500" /> Share via Link
+                        <LinkIcon className="w-5 h-5 text-accent-800" /> Share via Link
                       </h3>
                       
                       {selectedProject.ownerId !== user.uid ? (
-                        <div className="p-4 bg-slate-50 rounded-xl border border-ui-borderSubtle">
+                        <div className="p-4 bg-surface-hover rounded-xl border border-ui-borderSubtle">
                           <p className="text-sm text-txt-secondary">Only the project owner can manage sharing links.</p>
                         </div>
                       ) : !selectedProject.shareLinkEnabled ? (
-                        <div className="p-6 bg-slate-50 rounded-xl border border-ui-borderSubtle text-center">
-                          <Share2 className="w-8 h-8 text-slate-400 mx-auto mb-3" />
+                        <div className="p-6 bg-surface-hover rounded-xl border border-ui-borderSubtle text-center">
+                          <Share2 className="w-8 h-8 text-txt-tertiary mx-auto mb-3" />
                           <p className="text-sm text-txt-secondary mb-4">Anyone with the link can join this project.</p>
                           <Button
                             onClick={() => handleEnableSharing(selectedProject.id)}
-                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+                            className="px-4 py-2 bg-ink hover:bg-ink-700 text-white text-sm font-medium rounded-lg transition-colors"
                           >
                             Generate Share Link
                           </Button>
                         </div>
                       ) : (
-                        <div className="p-6 bg-indigo-50/50 rounded-xl border border-indigo-100">
+                        <div className="p-6 bg-accent-50 rounded-xl border border-accent-100">
                           <div className="flex flex-col md:flex-row gap-4 mb-4">
                             <div className="flex-1">
                               <label className="block text-xs font-medium text-txt-tertiary mb-1">Share Link</label>
@@ -194,7 +194,7 @@ export default function TeamCollaboration() {
                                 />
                                 <Button 
                                   onClick={() => copyLink(selectedProject.id, selectedProject.shareToken)}
-                                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-r-lg transition-colors flex items-center gap-2 border border-indigo-600"
+                                  className="bg-ink hover:bg-ink-700 text-white px-4 py-2.5 rounded-r-lg transition-colors flex items-center gap-2 border border-accent-800"
                                 >
                                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                                   {copied ? 'Copied' : 'Copy'}
@@ -206,7 +206,7 @@ export default function TeamCollaboration() {
                               <select 
                                 value={selectedProject.shareRole || 'viewer'}
                                 onChange={(e) => handleChangeRole(selectedProject.id, e.target.value)}
-                                className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary text-sm px-3 py-2.5 rounded-lg outline-none focus:border-indigo-500"
+                                className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary text-sm px-3 py-2.5 rounded-lg outline-none focus:border-accent-800"
                               >
                                 <option value="viewer">Viewer</option>
                                 <option value="editor">Editor</option>
@@ -216,7 +216,7 @@ export default function TeamCollaboration() {
                           <div className="flex justify-end">
                             <Button
                               onClick={() => handleDisableSharing(selectedProject.id)}
-                              className="text-sm text-red-600 hover:text-red-700 font-medium"
+                              className="text-sm text-ui-errorText hover:text-ui-errorText font-medium"
                             >
                               Disable Link Sharing
                             </Button>
@@ -228,19 +228,19 @@ export default function TeamCollaboration() {
                     {/* Members List */}
                     <div>
                       <h3 className="text-lg font-semibold text-txt-primary flex items-center gap-2 mb-4">
-                        <Users className="w-5 h-5 text-indigo-500" /> Project Members
+                        <Users className="w-5 h-5 text-accent-800" /> Project Members
                       </h3>
                       <div className="border border-ui-borderSubtle rounded-xl overflow-hidden bg-surface-default">
                         {selectedProject.memberIds?.map((memberId: string) => (
-                          <div key={memberId} className="flex items-center justify-between p-4 border-b border-slate-100 last:border-0">
+                          <div key={memberId} className="flex items-center justify-between p-4 border-b border-border-color last:border-0">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-txt-tertiary font-medium shrink-0">
+                              <div className="w-10 h-10 rounded-full bg-surface-hover flex items-center justify-center text-txt-tertiary font-medium shrink-0">
                                 {selectedProject.memberEmails?.[memberId]?.[0]?.toUpperCase() || 'U'}
                               </div>
                               <div className="min-w-0">
                                 <p className="font-medium text-txt-primary truncate">
                                   {selectedProject.memberEmails?.[memberId] || 'Unknown User'}
-                                  {memberId === user.uid && <span className="ml-2 text-xs bg-slate-100 text-txt-tertiary px-2 py-0.5 rounded-full">You</span>}
+                                  {memberId === user.uid && <span className="ml-2 text-xs bg-surface-hover text-txt-tertiary px-2 py-0.5 rounded-full">You</span>}
                                 </p>
                                 <p className="text-xs text-txt-tertiary capitalize">{selectedProject.roles?.[memberId] || 'Viewer'}</p>
                               </div>
@@ -268,7 +268,7 @@ export default function TeamCollaboration() {
                                     }
                                   }
                                 }}
-                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                className="p-2 text-txt-tertiary hover:text-ui-errorText hover:bg-ui-error rounded-lg transition-colors"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
@@ -280,9 +280,9 @@ export default function TeamCollaboration() {
                   </div>
                 </div>
               ) : (
-                <div className="h-full flex items-center justify-center bg-slate-50 rounded-2xl border border-ui-borderSubtle border-dashed py-20">
+                <div className="h-full flex items-center justify-center bg-surface-hover rounded-2xl border border-ui-borderSubtle border-dashed py-20">
                   <div className="text-center">
-                    <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                    <Users className="w-12 h-12 text-txt-tertiary mx-auto mb-4" />
                     <p className="text-txt-tertiary">Select a project to view collaboration settings.</p>
                   </div>
                 </div>

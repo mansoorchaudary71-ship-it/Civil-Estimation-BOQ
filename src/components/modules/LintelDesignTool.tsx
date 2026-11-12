@@ -134,15 +134,15 @@ export default function LintelDesignTool() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle overflow-hidden">
          <h2 className="text-xl font-bold mb-6 text-txt-primary flex items-center gap-2">
-            <Columns className="text-indigo-600" /> Lintel Scheduler & Design Tool
+            <Columns className="text-accent-800" /> Lintel Scheduler & Design Tool
          </h2>
          
          <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
             <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
-                  <h3 className="text-base font-medium mb-3 border-b border-slate-100 pb-2">Opening & Wall</h3>
+                  <h3 className="text-base font-medium mb-3 border-b border-border-color pb-2">Opening & Wall</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Clear Span" unit="m" value={clearSpan} onChange={setClearSpan} />
                     <NumberInput label="Wall Thickness" unit="mm" value={wallThickness} onChange={setWallThickness} />
@@ -155,7 +155,7 @@ export default function LintelDesignTool() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-3 border-b border-slate-100 pb-2">Proposed Section</h3>
+                  <h3 className="text-base font-medium mb-3 border-b border-border-color pb-2">Proposed Section</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Lintel Depth (D)" unit="mm" value={lintelDepth} onChange={setLintelDepth} />
                     <NumberInput label={<span className="flex items-center gap-1">Bearing Provided <CodeTooltip standard="IS" code="1904:1986" description="Design and construction of foundations in soils: General requirements." /></span>} unit="mm" value={bearingLength} onChange={setBearingLength} />
@@ -187,11 +187,11 @@ export default function LintelDesignTool() {
                     </div>
 
                     {!results.depthSafe && (
-                        <div className="mt-4 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 overflow-hidden">
-                            <AlertTriangle className="w-5 h-5 text-rose-600 mt-0.5 shrink-0" />
+                        <div className="mt-4 p-4 bg-ui-error border border-ui-errorBorder rounded-2xl flex items-start gap-3 overflow-hidden">
+                            <AlertTriangle className="w-5 h-5 text-ui-errorText mt-0.5 shrink-0" />
                             <div>
-                                <p className="text-base font-medium text-rose-900 mb-1">Section Depth Unsafe</p>
-                                <p className="text-sm text-rose-700">Minimum required depth: <strong className="font-mono">{results.requiredDepth.toFixed(0)} mm</strong>. Consider increasing depth or using a doubly reinforced section.</p>
+                                <p className="text-base font-medium text-ui-errorText mb-1">Section Depth Unsafe</p>
+                                <p className="text-sm text-ui-errorText">Minimum required depth: <strong className="font-mono">{results.requiredDepth.toFixed(0)} mm</strong>. Consider increasing depth or using a doubly reinforced section.</p>
                             </div>
                         </div>
                     )}
@@ -199,25 +199,25 @@ export default function LintelDesignTool() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Bearing Constraint */}
-                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.bearingSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
+                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.bearingSafe ? "bg-ui-success border-ui-successBorder" : "bg-ui-error border-ui-errorBorder"}`}>
                        <div className="flex items-center gap-2">
-                          {results.bearingSafe ? <CheckCircle2 className="text-teal-600 w-5 h-5" /> : <AlertTriangle className="text-rose-600 w-5 h-5" />}
-                          <h3 className={`font-bold ${results.bearingSafe ? "text-teal-900" : "text-rose-900"}`}>Bearing Check</h3>
+                          {results.bearingSafe ? <CheckCircle2 className="text-ui-successText w-5 h-5" /> : <AlertTriangle className="text-ui-errorText w-5 h-5" />}
+                          <h3 className={`font-bold ${results.bearingSafe ? "text-ui-successText" : "text-ui-errorText"}`}>Bearing Check</h3>
                        </div>
                        <div className="space-y-3 flex-1">
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.bearingSafe ? "text-teal-700" : "text-rose-700"}>Provided Bearing</span>
-                            <span className={`font-mono font-bold ${results.bearingSafe ? "text-teal-900" : "text-rose-900"}`}>{Number(bearingLength)} mm</span>
+                            <span className={results.bearingSafe ? "text-ui-successText" : "text-ui-errorText"}>Provided Bearing</span>
+                            <span className={`font-mono font-bold ${results.bearingSafe ? "text-ui-successText" : "text-ui-errorText"}`}>{Number(bearingLength)} mm</span>
                           </div>
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.bearingSafe ? "text-teal-700" : "text-rose-700"}>Minimum Allowed</span>
-                            <span className={`font-mono font-bold ${results.bearingSafe ? "text-teal-900" : "text-rose-900"}`}>{results.minBearing.toFixed(0)} mm</span>
+                            <span className={results.bearingSafe ? "text-ui-successText" : "text-ui-errorText"}>Minimum Allowed</span>
+                            <span className={`font-mono font-bold ${results.bearingSafe ? "text-ui-successText" : "text-ui-errorText"}`}>{results.minBearing.toFixed(0)} mm</span>
                           </div>
                        </div>
                     </div>
                     
                     {/* Rebar Suggestion */}
-                    <div className="p-4 sm:p-6 rounded-2xl border bg-slate-50 border-ui-borderSubtle flex flex-col gap-4 overflow-hidden">
+                    <div className="p-4 sm:p-6 rounded-2xl border bg-surface-hover border-ui-borderSubtle flex flex-col gap-4 overflow-hidden">
                        <div className="flex items-center gap-2">
                           <CheckCircle2 className="text-txt-secondary w-5 h-5" />
                           <h3 className="font-bold text-txt-primary">Provision Summary</h3>
@@ -240,7 +240,7 @@ export default function LintelDesignTool() {
                 </div>
 
                 {/* Diagram visual guide */}
-                <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 sm:p-6 relative overflow-hidden h-40 flex items-end justify-center mt-2 group">
+                <div className="bg-surface-hover border border-border-color rounded-2xl p-4 sm:p-6 relative overflow-hidden h-40 flex items-end justify-center mt-2 group">
                    <div className="absolute inset-x-0 bottom-0 border-b-8 border-ui-borderDefault w-3/4 mx-auto rounded"></div>
                    <div className="absolute bottom-2 inset-x-0 flex justify-between px-10 text-base font-medium">
                       <span>Support ({Number(bearingLength)}mm)</span>
@@ -250,12 +250,12 @@ export default function LintelDesignTool() {
                    
                    {results.isArchAction ? (
                      <div className="absolute bottom-2 w-[60%] flex flex-col items-center">
-                        <Triangle className="w-full text-indigo-200 mb-[-10%]" strokeWidth={1} fill="currentColor" />
-                        <span className="absolute top-1/2 text-indigo-900 font-bold text-sm">60° Dispersion</span>
+                        <Triangle className="w-full text-accent-200 mb-[-10%]" strokeWidth={1} fill="currentColor" />
+                        <span className="absolute top-1/2 text-accent-900 font-bold text-sm">60° Dispersion</span>
                      </div>
                    ) : (
-                     <div className="absolute bottom-2 w-[60%] h-24 bg-blue-100 border-x border-t border-blue-200 border-dashed rounded-t flex items-center justify-center">
-                         <span className="text-orange-800 font-bold text-sm opacity-60">Rectangular Load Zone</span>
+                     <div className="absolute bottom-2 w-[60%] h-24 bg-accent-100 border-x border-t border-accent-200 border-dashed rounded-t flex items-center justify-center">
+                         <span className="text-accent-800 font-bold text-sm opacity-60">Rectangular Load Zone</span>
                      </div>
                    )}
                 </div>

@@ -104,68 +104,68 @@ export default function Contact() {
         <h1 className="text-2xl md:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">
           Get in Touch
         </h1>
-        <p className="text-lg text-txt-tertiary dark:text-slate-400 max-w-2xl mx-auto">
+        <p className="text-lg text-txt-tertiary dark:text-txt-tertiary max-w-2xl mx-auto">
           Have questions about our tools, pricing, or need technical support? Our team is ready to help.
         </p>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
-             <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
-               <MessageSquare className="w-6 h-6 text-indigo-600 dark:text-blue-400" />
+          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm flex items-start gap-4 hover:shadow-brand-md transition-shadow overflow-hidden">
+             <div className="w-12 h-12 bg-accent-50 dark:bg-accent-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
+               <MessageSquare className="w-6 h-6 text-accent-800 dark:text-accent-400" />
              </div>
              <div>
                <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Chat to Sales</h3>
-               <p className="text-sm text-txt-secondary dark:text-slate-300 mb-3">Speak to our friendly team.</p>
-               <a href="mailto:sales@civilpro.com" className="text-base font-medium text-indigo-600 dark:text-blue-400 hover:underline">sales@civilpro.com</a>
+               <p className="text-sm text-txt-secondary dark:text-txt-tertiary mb-3">Speak to our friendly team.</p>
+               <a href="mailto:sales@civilpro.com" className="text-base font-medium text-accent-800 dark:text-accent-400 hover:underline">sales@civilpro.com</a>
              </div>
           </div>
 
-          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
-             <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
-               <MapPin className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm flex items-start gap-4 hover:shadow-brand-md transition-shadow overflow-hidden">
+             <div className="w-12 h-12 bg-accent-50 dark:bg-accent-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
+               <MapPin className="w-6 h-6 text-accent-800 dark:text-accent-400" />
              </div>
              <div>
                <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Visit Us</h3>
-               <p className="text-sm text-txt-secondary dark:text-slate-300 mb-3">Visit our office HQ.</p>
-               <address className="text-base font-medium dark:text-slate-300 not-italic">
+               <p className="text-sm text-txt-secondary dark:text-txt-tertiary mb-3">Visit our office HQ.</p>
+               <address className="text-base font-medium dark:text-txt-tertiary not-italic">
                  100 Civil Way<br/>San Francisco, CA 94107
                </address>
              </div>
           </div>
 
-          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-slate-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow overflow-hidden">
-             <div className="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
-               <PhoneCall className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm flex items-start gap-4 hover:shadow-brand-md transition-shadow overflow-hidden">
+             <div className="w-12 h-12 bg-accent-50 dark:bg-accent-500/20 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
+               <PhoneCall className="w-6 h-6 text-accent-700 dark:text-accent-400" />
              </div>
              <div>
                <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Call Us</h3>
-               <p className="text-sm text-txt-secondary dark:text-slate-300 mb-3">Mon-Fri from 8am to 5pm.</p>
-               <a href="tel:+15550000000" className="text-base font-medium text-indigo-600 dark:text-blue-400 hover:underline">+1 (555) 000-0000</a>
+               <p className="text-sm text-txt-secondary dark:text-txt-tertiary mb-3">Mon-Fri from 8am to 5pm.</p>
+               <a href="tel:+15550000000" className="text-base font-medium text-accent-800 dark:text-accent-400 hover:underline">+1 (555) 000-0000</a>
              </div>
           </div>
         </div>
 
-        <div className="lg:col-span-2 bg-bg-card rounded-[2.5rem] p-8 md:p-10 border border-ui-borderSubtle dark:border-slate-700 shadow-sm">
+        <div className="lg:col-span-2 bg-bg-card rounded-[2.5rem] p-8 md:p-10 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {status === 'success' && (
-              <div className="bg-green-50 border border-green-200 text-green-800 rounded-2xl p-4 flex items-center gap-3 overflow-hidden">
-                <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
+              <div className="bg-ui-success border border-ui-successBorder text-ui-successText rounded-2xl p-4 flex items-center gap-3 overflow-hidden">
+                <CheckCircle className="w-5 h-5 text-ui-successText shrink-0" />
                 <p className="font-semibold text-sm">Your message has been sent successfully!</p>
               </div>
             )}
 
             {status === 'error' && errorMessage && (
-              <div className="bg-red-50 border border-red-200 text-red-800 rounded-2xl p-4 flex items-center gap-3 overflow-hidden">
-                <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+              <div className="bg-ui-error border border-ui-errorBorder text-ui-errorText rounded-2xl p-4 flex items-center gap-3 overflow-hidden">
+                <AlertCircle className="w-5 h-5 text-ui-errorText shrink-0" />
                 <p className="font-semibold text-sm">{errorMessage}</p>
               </div>
             )}
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2 flex flex-col">
-                <label htmlFor="contact-first-name" className="text-sm font-bold text-slate-700 dark:text-slate-300">First Name <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <label htmlFor="contact-first-name" className="text-sm font-bold text-txt-primary">First Name <span className="text-ui-errorText" aria-hidden="true">*</span></label>
                 <input id="contact-first-name" 
                   type="text" 
                   name="firstName"
@@ -173,12 +173,12 @@ export default function Contact() {
                   onChange={handleInputChange}
                   disabled={status === 'loading'}
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
+                  className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
                   placeholder="e.g. Jane" 
                 />
               </div>
               <div className="space-y-2 flex flex-col">
-                <label htmlFor="contact-last-name" className="text-sm font-bold text-slate-700 dark:text-slate-300">Last Name <span className="text-rose-500" aria-hidden="true">*</span></label>
+                <label htmlFor="contact-last-name" className="text-sm font-bold text-txt-primary">Last Name <span className="text-ui-errorText" aria-hidden="true">*</span></label>
                 <input id="contact-last-name" 
                   type="text" 
                   name="lastName"
@@ -186,14 +186,14 @@ export default function Contact() {
                   onChange={handleInputChange}
                   disabled={status === 'loading'}
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
+                  className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
                   placeholder="e.g. Smith" 
                 />
               </div>
             </div>
             
             <div className="space-y-2 flex flex-col">
-              <label htmlFor="contact-email" className="text-sm font-bold text-slate-700 dark:text-slate-300">Work Email Address <span className="text-rose-500" aria-hidden="true">*</span></label>
+              <label htmlFor="contact-email" className="text-sm font-bold text-txt-primary">Work Email Address <span className="text-ui-errorText" aria-hidden="true">*</span></label>
               <input id="contact-email" 
                 type="email" 
                 name="email"
@@ -201,12 +201,12 @@ export default function Contact() {
                 onChange={handleInputChange}
                 disabled={status === 'loading'}
                 required
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
+                className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
                 placeholder="jane@company.com" 
               />
             </div>
             <div className="space-y-2 flex flex-col">
-              <label htmlFor="contact-message" className="text-sm font-bold text-slate-700 dark:text-slate-300">How can we help? <span className="text-rose-500" aria-hidden="true">*</span></label>
+              <label htmlFor="contact-message" className="text-sm font-bold text-txt-primary">How can we help? <span className="text-ui-errorText" aria-hidden="true">*</span></label>
               <textarea id="contact-message"
                 name="message"
                 rows={5} 
@@ -214,14 +214,14 @@ export default function Contact() {
                 onChange={handleInputChange}
                 disabled={status === 'loading'}
                 required
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-ui-borderSubtle dark:border-slate-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 outline-none transition-all font-medium resize-none disabled:opacity-50 overflow-hidden text-txt-primary" 
+                className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium resize-none disabled:opacity-50 overflow-hidden text-txt-primary" 
                 placeholder="Tell us about your project, team size, or specific features you need..." 
               />
             </div>
             <div className="flex items-start gap-2 mt-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                Your data is secure and will only be used to respond to your inquiry. Read our <a href="/privacy" className="text-indigo-600 hover:underline">Privacy Policy</a>.
+              <ShieldCheck className="w-4 h-4 text-ui-successText shrink-0 mt-0.5" />
+              <p className="text-xs font-medium text-txt-secondary">
+                Your data is secure and will only be used to respond to your inquiry. Read our <a href="/privacy" className="text-accent-800 hover:underline">Privacy Policy</a>.
               </p>
             </div>
             <Button

@@ -210,15 +210,15 @@ export default function BeamDesignTool() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-sm border border-ui-borderSubtle overflow-hidden">
+      <div className="w-full bg-surface-default rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle overflow-hidden">
          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-            <Layers className="text-rose-600" /> Beam Design (Limit State - IS 456)
+            <Layers className="text-ui-errorText" /> Beam Design (Limit State - IS 456)
          </h2>
          
          <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
             <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Geometry & Loading</h3>
+                  <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Geometry & Loading</h3>
                   <div className="space-y-4">
                     <NumberInput label="Effective Span (L)" unit="m" value={span} onChange={setSpan} />
                     <NumberInput label="Working Load (w)" unit="kN/m" value={workingLoad} onChange={setWorkingLoad} />
@@ -227,7 +227,7 @@ export default function BeamDesignTool() {
                         <NumberInput label="Safety Factor (γf)" value={safetyFactor} onChange={setSafetyFactor} />
                       </div>
                       <Button onClick={handleAiSafetyFactor}
-                        className="h-11 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center transition-colors shadow-sm text-base font-semibold active:scale-95 hover:-translate-y-0.5"
+                        className="h-11 px-4 bg-accent-50 hover:bg-accent-100 text-accent-800 rounded-full flex items-center justify-center transition-colors shadow-brand-sm text-base font-semibold active:scale-95 hover:-translate-y-0.5"
                         title="AI-Suggested Safety Factor based on Project Settings"
                       >
                         <Sparkles className="w-4 h-4 mr-1.5" /> AI Suggest
@@ -241,7 +241,7 @@ export default function BeamDesignTool() {
                         <select 
                             value={supportCondition}
                             onChange={(e) => setSupportCondition(e.target.value as SupportCondition)}
-                            className="w-full h-11 bg-slate-50 border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
+                            className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none"
                         >
                             {Object.entries(SUPPORT_CONDITIONS).map(([key, val]) => (
                                 <option key={key} value={key}>{val.label}</option>
@@ -252,7 +252,7 @@ export default function BeamDesignTool() {
                 </div>
 
                 <div>
-                  <h3 className="mb-3 border-b border-slate-100 pb-2 text-lg font-medium text-txt-primary mb-4">Materials & Reinforcement</h3>
+                  <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Materials & Reinforcement</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Concrete (fck)" unit="MPa" value={fck} onChange={setFck} />
                     <NumberInput label={<span className="flex items-center gap-1">Steel (fy) <CodeTooltip standard="IS" code="1786:2008" description="High strength deformed steel bars and wires for concrete reinforcement." /></span>} unit="MPa" value={fy} onChange={setFy} />
@@ -287,11 +287,11 @@ export default function BeamDesignTool() {
                     </div>
                     
                     {results.isDoublyReinforced && (
-                      <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-2xl flex items-start gap-3 overflow-hidden">
-                        <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
+                      <div className="mt-4 p-4 bg-accent-50 border border-accent-200 rounded-2xl flex items-start gap-3 overflow-hidden">
+                        <AlertTriangle className="w-5 h-5 text-accent-800 mt-0.5 shrink-0" />
                         <div>
-                          <p className="text-orange-900 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Doubly Reinforced Section</p>
-                          <p className="text-blue-700 text-base font-normal text-txt-secondary leading-relaxed">Moment exceeds limiting moment capacity. Compression steel (Asc) required: <strong className="font-mono">{results.Asc.toFixed(0)} mm²</strong>.</p>
+                          <p className="text-accent-900 mb-1 text-base font-normal text-txt-secondary leading-relaxed">Doubly Reinforced Section</p>
+                          <p className="text-accent-800 text-base font-normal text-txt-secondary leading-relaxed">Moment exceeds limiting moment capacity. Compression steel (Asc) required: <strong className="font-mono">{results.Asc.toFixed(0)} mm²</strong>.</p>
                         </div>
                       </div>
                     )}
@@ -299,48 +299,48 @@ export default function BeamDesignTool() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 responsive-tool-grid">
                     {/* Deflection Check */}
-                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.deflectionSafe ? "bg-teal-50 border-teal-200" : "bg-rose-50 border-rose-200"}`}>
+                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.deflectionSafe ? "bg-ui-success border-ui-successBorder" : "bg-ui-error border-ui-errorBorder"}`}>
                        <div className="flex items-center gap-2">
-                          {results.deflectionSafe ? <CheckCircle2 className="text-teal-600 w-5 h-5" /> : <AlertTriangle className="text-rose-600 w-5 h-5" />}
-                          <h3 className={`font-bold ${results.deflectionSafe ? "text-teal-900" : "text-rose-900"}`}>Deflection Control</h3>
+                          {results.deflectionSafe ? <CheckCircle2 className="text-ui-successText w-5 h-5" /> : <AlertTriangle className="text-ui-errorText w-5 h-5" />}
+                          <h3 className={`font-bold ${results.deflectionSafe ? "text-ui-successText" : "text-ui-errorText"}`}>Deflection Control</h3>
                        </div>
                        <div className="space-y-3 flex-1">
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.deflectionSafe ? "text-teal-700" : "text-rose-700"}>Actual (L/d)</span>
-                            <span className={`font-mono font-bold ${results.deflectionSafe ? "text-teal-900" : "text-rose-900"}`}>{results.actual_L_d.toFixed(2)}</span>
+                            <span className={results.deflectionSafe ? "text-ui-successText" : "text-ui-errorText"}>Actual (L/d)</span>
+                            <span className={`font-mono font-bold ${results.deflectionSafe ? "text-ui-successText" : "text-ui-errorText"}`}>{results.actual_L_d.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.deflectionSafe ? "text-teal-700" : "text-rose-700"}>Allowable (L/d)</span>
-                            <span className={`font-mono font-bold ${results.deflectionSafe ? "text-teal-900" : "text-rose-900"}`}>{results.allowable_L_d.toFixed(2)}</span>
+                            <span className={results.deflectionSafe ? "text-ui-successText" : "text-ui-errorText"}>Allowable (L/d)</span>
+                            <span className={`font-mono font-bold ${results.deflectionSafe ? "text-ui-successText" : "text-ui-errorText"}`}>{results.allowable_L_d.toFixed(2)}</span>
                           </div>
-                          <p className={`text-sm mt-2 ${results.deflectionSafe ? "text-teal-600" : "text-rose-600"}`}>
+                          <p className={`text-sm mt-2 ${results.deflectionSafe ? "text-ui-successText" : "text-ui-errorText"}`}>
                              *Allowable ratio incorporates modification factor for tension steel.
                           </p>
                        </div>
                     </div>
 
                     {/* Shear & Dev Length */}
-                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.shearSafe ? "bg-slate-50 border-ui-borderSubtle" : "bg-rose-50 border-rose-200"}`}>
+                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 ${results.shearSafe ? "bg-surface-hover border-ui-borderSubtle" : "bg-ui-error border-ui-errorBorder"}`}>
                        <div className="flex items-center gap-2">
-                          {results.shearSafe ? <ShieldCheck className="text-txt-secondary w-5 h-5" /> : <AlertTriangle className="text-rose-600 w-5 h-5" />}
-                          <h3 className={`font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-900"}`}>Shear & Anchorage</h3>
+                          {results.shearSafe ? <ShieldCheck className="text-txt-secondary w-5 h-5" /> : <AlertTriangle className="text-ui-errorText w-5 h-5" />}
+                          <h3 className={`font-bold ${results.shearSafe ? "text-txt-primary" : "text-ui-errorText"}`}>Shear & Anchorage</h3>
                        </div>
                        <div className="space-y-3 flex-1">
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.shearSafe ? "text-txt-secondary" : "text-rose-700"}>Nominal Shear (τv)</span>
-                            <span className={`font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-900"}`}>{results.tau_v.toFixed(2)} MPa</span>
+                            <span className={results.shearSafe ? "text-txt-secondary" : "text-ui-errorText"}>Nominal Shear (τv)</span>
+                            <span className={`font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-ui-errorText"}`}>{results.tau_v.toFixed(2)} MPa</span>
                           </div>
                           <div className="flex justify-between items-center text-sm">
-                            <span className={results.shearSafe ? "text-txt-secondary" : "text-rose-700"}>Concrete Capacity (τc)</span>
-                            <span className={`font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-900"}`}>{results.tau_c.toFixed(2)} MPa</span>
+                            <span className={results.shearSafe ? "text-txt-secondary" : "text-ui-errorText"}>Concrete Capacity (τc)</span>
+                            <span className={`font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-ui-errorText"}`}>{results.tau_c.toFixed(2)} MPa</span>
                           </div>
                           <div className="flex justify-between items-center text-sm pt-2 border-t border-ui-borderSubtle">
-                            <span className={results.shearSafe ? "text-txt-primary font-medium" : "text-rose-800 font-medium"}>Stirrup Spacing</span>
-                            <span className={`text-sm font-mono font-bold px-2 py-1 rounded bg-surface-default border ${results.shearSafe ? "border-ui-borderSubtle text-txt-primary" : "border-rose-200 text-rose-800"}`}>{results.providedSvStr}</span>
+                            <span className={results.shearSafe ? "text-txt-primary font-medium" : "text-ui-errorText font-medium"}>Stirrup Spacing</span>
+                            <span className={`text-sm font-mono font-bold px-2 py-1 rounded bg-surface-default border ${results.shearSafe ? "border-ui-borderSubtle text-txt-primary" : "border-ui-errorBorder text-ui-errorText"}`}>{results.providedSvStr}</span>
                           </div>
                            <div className="flex justify-between items-center text-sm pt-2 border-t border-ui-borderSubtle mt-2">
-                            <span className={results.shearSafe ? "text-txt-primary font-medium" : "text-rose-800 font-medium"}>Dev. Length (Ld)</span>
-                            <span className={`text-sm font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-rose-800"}`}>{Math.ceil(results.Ld)} mm</span>
+                            <span className={results.shearSafe ? "text-txt-primary font-medium" : "text-ui-errorText font-medium"}>Dev. Length (Ld)</span>
+                            <span className={`text-sm font-mono font-bold ${results.shearSafe ? "text-txt-primary" : "text-ui-errorText"}`}>{Math.ceil(results.Ld)} mm</span>
                           </div>
                        </div>
                     </div>

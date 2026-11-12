@@ -130,10 +130,10 @@ export function RoofPitchCalculator() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header & Toolbar */}
-      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex items-center gap-4">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orange-100 text-orange-600">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-100 text-accent-800">
               <Triangle size={24} />
             </div>
             <div>
@@ -143,27 +143,27 @@ export function RoofPitchCalculator() {
           </div>
           
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex bg-slate-100 p-1 rounded-xl">
+            <div className="flex bg-surface-hover p-1 rounded-xl">
               <Button
                 onClick={() => setUnitSystem('metric')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Metric (m)
               </Button>
               <Button
                 onClick={() => setUnitSystem('imperial')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Imperial (ft)
               </Button>
             </div>
             
-            <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+            <div className="h-8 w-px bg-surface-active mx-1 hidden sm:block"></div>
             
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-slate-50 transition-colors">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover transition-colors">
               <Printer size={16} /> Print
             </Button>
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-orange-600 border border-orange-700 rounded-lg hover:bg-orange-700 transition-colors shadow-sm">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
               <Download size={16} /> Export BOQ
             </Button>
           </div>
@@ -173,9 +173,9 @@ export function RoofPitchCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Input Parameters */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
             <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
-              <Ruler size={20} className="text-orange-500" />
+              <Ruler size={20} className="text-accent-800" />
               Dimensions
             </h2>
 
@@ -187,7 +187,7 @@ export function RoofPitchCalculator() {
                 step="0.1"
                 value={span}
                 onChange={(e) => setSpan(Math.max(0.1, Number(e.target.value)))}
-                className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
               />
               <p className="text-xs text-txt-tertiary">Total width of the building</p>
             </div>
@@ -200,7 +200,7 @@ export function RoofPitchCalculator() {
                 step="0.1"
                 value={rise}
                 onChange={(e) => setRise(Math.max(0, Number(e.target.value)))}
-                className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
               />
               <p className="text-xs text-txt-tertiary">Vertical height from base to ridge</p>
             </div>
@@ -213,7 +213,7 @@ export function RoofPitchCalculator() {
                 step="0.1"
                 value={overhang}
                 onChange={(e) => setOverhang(Math.max(0, Number(e.target.value)))}
-                className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
               />
               <p className="text-xs text-txt-tertiary">Horizontal eaves extension</p>
             </div>
@@ -226,7 +226,7 @@ export function RoofPitchCalculator() {
                 step="0.1"
                 value={buildingLength}
                 onChange={(e) => setBuildingLength(Math.max(0.1, Number(e.target.value)))}
-                className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
               />
             </div>
           </div>
@@ -234,9 +234,9 @@ export function RoofPitchCalculator() {
 
         {/* Results Panel */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-slate-900 rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
+          <div className="bg-ink rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
             <h2 className="text-xl font-bold flex items-center gap-2 relative z-10">
-              <Calculator size={24} className="text-orange-400" />
+              <Calculator size={24} className="text-accent-400" />
               Roof Geometry Results
             </h2>
 
@@ -244,56 +244,56 @@ export function RoofPitchCalculator() {
             <div className="w-full bg-surface-default/5 rounded-2xl border border-white/10 p-4 mb-4 relative z-10">
               <svg width="100%" viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto drop-shadow-md">
                 {/* Ceiling Joist / Span */}
-                <line x1={leftWall} y1={bottomY} x2={rightWall} y2={bottomY} stroke="#94a3b8" strokeWidth="3" strokeDasharray="4,4" />
+                <line x1={leftWall} y1={bottomY} x2={rightWall} y2={bottomY} stroke="#6B6862" strokeWidth="3" strokeDasharray="4,4" />
                 
                 {/* Walls */}
-                <line x1={leftWall} y1={bottomY} x2={leftWall} y2={bottomY + 30} stroke="#475569" strokeWidth="6" />
-                <line x1={rightWall} y1={bottomY} x2={rightWall} y2={bottomY + 30} stroke="#475569" strokeWidth="6" />
+                <line x1={leftWall} y1={bottomY} x2={leftWall} y2={bottomY + 30} stroke="#6B6862" strokeWidth="6" />
+                <line x1={rightWall} y1={bottomY} x2={rightWall} y2={bottomY + 30} stroke="#6B6862" strokeWidth="6" />
 
                 {/* Overhang extensions */}
-                <line x1={leftEaveX} y1={leftEaveY} x2={leftWall} y2={bottomY} stroke="#f97316" strokeWidth="6" strokeLinecap="round" />
-                <line x1={rightEaveX} y1={rightEaveY} x2={rightWall} y2={bottomY} stroke="#f97316" strokeWidth="6" strokeLinecap="round" />
+                <line x1={leftEaveX} y1={leftEaveY} x2={leftWall} y2={bottomY} stroke="#F2A413" strokeWidth="6" strokeLinecap="round" />
+                <line x1={rightEaveX} y1={rightEaveY} x2={rightWall} y2={bottomY} stroke="#F2A413" strokeWidth="6" strokeLinecap="round" />
 
                 {/* Main Rafters */}
-                <line x1={leftWall} y1={bottomY} x2={cx} y2={topY} stroke="#f97316" strokeWidth="6" strokeLinecap="round" />
-                <line x1={rightWall} y1={bottomY} x2={cx} y2={topY} stroke="#f97316" strokeWidth="6" strokeLinecap="round" />
+                <line x1={leftWall} y1={bottomY} x2={cx} y2={topY} stroke="#F2A413" strokeWidth="6" strokeLinecap="round" />
+                <line x1={rightWall} y1={bottomY} x2={cx} y2={topY} stroke="#F2A413" strokeWidth="6" strokeLinecap="round" />
                 
                 {/* Rise / Center post */}
-                <line x1={cx} y1={bottomY} x2={cx} y2={topY} stroke="#38bdf8" strokeWidth="2" strokeDasharray="4,4" />
+                <line x1={cx} y1={bottomY} x2={cx} y2={topY} stroke="#0F766E" strokeWidth="2" strokeDasharray="4,4" />
                 
                 {/* Angle Arc */}
-                <path d={`M ${leftWall + 25} ${bottomY} A 25 25 0 0 0 ${leftWall + 20} ${bottomY - 12}`} fill="none" stroke="#fbbf24" strokeWidth="2" />
-                <text x={leftWall + 35} y={bottomY - 8} fill="#fbbf24" fontSize="12" fontWeight="bold">{result?.angleDeg.toFixed(1)}°</text>
+                <path d={`M ${leftWall + 25} ${bottomY} A 25 25 0 0 0 ${leftWall + 20} ${bottomY - 12}`} fill="none" stroke="#F2A413" strokeWidth="2" />
+                <text x={leftWall + 35} y={bottomY - 8} fill="#B07006" fontSize="12" fontWeight="bold">{result?.angleDeg.toFixed(1)}°</text>
 
                 {/* Labels */}
-                <text x={cx} y={bottomY + 20} textAnchor="middle" fill="#cbd5e1" fontSize="14" fontWeight="bold">Span: {span} {unitL}</text>
-                <text x={cx + 10} y={bottomY - scaledRise/2} fill="#38bdf8" fontSize="14" fontWeight="bold">Rise: {rise} {unitL}</text>
-                <text x={leftWall - scaledOverhang/2} y={bottomY + 20} textAnchor="middle" fill="#f87171" fontSize="12">OH: {overhang}</text>
-                <text x={cx - scaledSpan/4} y={bottomY - scaledRise/2 - 10} textAnchor="middle" fill="#f97316" fontSize="14" fontWeight="bold">Rafter</text>
+                <text x={cx} y={bottomY + 20} textAnchor="middle" fill="#6B6862" fontSize="14" fontWeight="bold">Span: {span} {unitL}</text>
+                <text x={cx + 10} y={bottomY - scaledRise/2} fill="#0F766E" fontSize="14" fontWeight="bold">Rise: {rise} {unitL}</text>
+                <text x={leftWall - scaledOverhang/2} y={bottomY + 20} textAnchor="middle" fill="#B07006" fontSize="12">OH: {overhang}</text>
+                <text x={cx - scaledSpan/4} y={bottomY - scaledRise/2 - 10} textAnchor="middle" fill="#B07006" fontSize="14" fontWeight="bold">Rafter</text>
               </svg>
             </div>
 
             {result && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 relative z-10">
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                  <div className="text-orange-200 text-xs font-medium mb-1">Slope Angle</div>
+                  <div className="text-accent-200 text-xs font-medium mb-1">Slope Angle</div>
                   <div className="text-xl font-bold">{result.angleDeg.toFixed(2)}°</div>
                 </div>
                 
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                  <div className="text-orange-200 text-xs font-medium mb-1">Pitch</div>
+                  <div className="text-accent-200 text-xs font-medium mb-1">Pitch</div>
                   <div className="text-xl font-bold">{result.pitchPercentage.toFixed(1)}%</div>
-                  <div className="text-xs text-slate-300">{(result.pitchPercentage / 100 * 12).toFixed(1)}:12</div>
+                  <div className="text-xs text-txt-tertiary">{(result.pitchPercentage / 100 * 12).toFixed(1)}:12</div>
                 </div>
 
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                  <div className="text-orange-200 text-xs font-medium mb-1">Rafter Length</div>
+                  <div className="text-accent-200 text-xs font-medium mb-1">Rafter Length</div>
                   <div className="text-xl font-bold">{result.rafterLength.toFixed(2)} <span className="text-xs">{unitL}</span></div>
                 </div>
                 
-                <div className="bg-orange-500/20 rounded-2xl p-4 border border-orange-500/30 backdrop-blur-md">
-                  <div className="text-orange-200 text-xs font-medium mb-1">Total Roof Area</div>
-                  <div className="text-xl font-bold text-orange-400">{result.totalArea.toFixed(2)} <span className="text-xs">{unitA}</span></div>
+                <div className="bg-accent-500/20 rounded-2xl p-4 border border-accent-500/30 backdrop-blur-md">
+                  <div className="text-accent-200 text-xs font-medium mb-1">Total Roof Area</div>
+                  <div className="text-xl font-bold text-accent-400">{result.totalArea.toFixed(2)} <span className="text-xs">{unitA}</span></div>
                 </div>
               </div>
             )}

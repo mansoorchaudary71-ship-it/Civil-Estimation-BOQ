@@ -142,10 +142,10 @@ export function PlywoodEstimator() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header & Toolbar */}
-      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex items-center gap-4">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orange-100 text-orange-600">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-50 text-accent-700">
               <Layers size={24} />
             </div>
             <div>
@@ -155,27 +155,27 @@ export function PlywoodEstimator() {
           </div>
           
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex bg-slate-100 p-1 rounded-xl">
+            <div className="flex bg-surface-hover p-1 rounded-xl">
               <Button
                 onClick={() => setUnitSystem('metric')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Metric (m)
               </Button>
               <Button
                 onClick={() => setUnitSystem('imperial')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
               >
                 Imperial (ft)
               </Button>
             </div>
             
-            <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+            <div className="h-8 w-px bg-surface-active mx-1 hidden sm:block"></div>
             
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-slate-50 transition-colors">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover transition-colors">
               <Printer size={16} /> Print
             </Button>
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-orange-600 border border-orange-700 rounded-lg hover:bg-orange-700 transition-colors shadow-sm">
+            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
               <Download size={16} /> Export BOQ
             </Button>
           </div>
@@ -185,22 +185,22 @@ export function PlywoodEstimator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Input Parameters */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm space-y-6">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2">
-                <Ruler size={20} className="text-orange-500" />
+                <Ruler size={20} className="text-accent-700" />
                 Target Surface Area
               </h2>
-              <div className="flex bg-slate-100 p-1 rounded-xl">
+              <div className="flex bg-surface-hover p-1 rounded-xl">
                 <Button
                   onClick={() => setInputMode('dimensions')}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'dimensions' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'dimensions' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
                 >
                   Dimensions (L × W)
                 </Button>
                 <Button
                   onClick={() => setInputMode('area')}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'area' ? 'bg-surface-default text-txt-primary shadow-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${inputMode === 'area' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
                 >
                   Direct Area
                 </Button>
@@ -216,7 +216,7 @@ export function PlywoodEstimator() {
                     min="0.1"
                     value={length}
                     onChange={(e) => setLength(Math.max(0.1, Number(e.target.value)))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-2">
@@ -226,7 +226,7 @@ export function PlywoodEstimator() {
                     min="0.1"
                     value={width}
                     onChange={(e) => setWidth(Math.max(0.1, Number(e.target.value)))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
                   />
                 </div>
               </div>
@@ -238,14 +238,14 @@ export function PlywoodEstimator() {
                   min="0.1"
                   value={totalArea}
                   onChange={(e) => setTotalArea(Math.max(0.1, Number(e.target.value)))}
-                  className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                  className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
                 />
               </div>
             )}
             
-            <div className="pt-4 border-t border-slate-100">
+            <div className="pt-4 border-t border-border-color">
               <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
-                <Box size={20} className="text-orange-500" />
+                <Box size={20} className="text-accent-700" />
                 Sheet Specifications
               </h2>
               
@@ -255,7 +255,7 @@ export function PlywoodEstimator() {
                   <select 
                     value={sheetSize}
                     onChange={(e) => setSheetSize(e.target.value)}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
                   >
                     {sheetOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
@@ -265,11 +265,11 @@ export function PlywoodEstimator() {
                   <>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-txt-secondary">Custom Length ({unitL})</label>
-                      <input type="number" min="0.1" value={customSheetLength} onChange={(e) => setCustomSheetLength(Math.max(0.1, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-orange-500 outline-none" />
+                      <input type="number" min="0.1" value={customSheetLength} onChange={(e) => setCustomSheetLength(Math.max(0.1, Number(e.target.value)))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-ink outline-none" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-txt-secondary">Custom Width ({unitL})</label>
-                      <input type="number" min="0.1" value={customSheetWidth} onChange={(e) => setCustomSheetWidth(Math.max(0.1, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-orange-500 outline-none" />
+                      <input type="number" min="0.1" value={customSheetWidth} onChange={(e) => setCustomSheetWidth(Math.max(0.1, Number(e.target.value)))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-ink outline-none" />
                     </div>
                   </>
                 )}
@@ -279,7 +279,7 @@ export function PlywoodEstimator() {
                   <select 
                     value={thickness}
                     onChange={(e) => setThickness(Number(e.target.value))}
-                    className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all"
+                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink outline-none transition-all"
                   >
                     <option value={9}>9 mm</option>
                     <option value={12}>12 mm</option>
@@ -291,52 +291,52 @@ export function PlywoodEstimator() {
                 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-txt-secondary">Wastage & Overlap (%)</label>
-                  <input type="number" min="0" value={wastagePercent} onChange={(e) => setWastagePercent(Math.max(0, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-orange-500 outline-none" />
+                  <input type="number" min="0" value={wastagePercent} onChange={(e) => setWastagePercent(Math.max(0, Number(e.target.value)))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-ink outline-none" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
+          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
             <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2 mb-4">
-              <DollarSign size={20} className="text-emerald-500" />
+              <DollarSign size={20} className="text-ui-successText" />
               Economics
             </h2>
             <div className="space-y-2">
               <label className="text-sm font-medium text-txt-secondary">Cost per Plywood Sheet ({currency})</label>
-              <input type="number" min="0" value={costPerSheet} onChange={(e) => setCostPerSheet(Math.max(0, Number(e.target.value)))} className="w-full bg-slate-50 border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-emerald-500 outline-none transition-all" />
+              <input type="number" min="0" value={costPerSheet} onChange={(e) => setCostPerSheet(Math.max(0, Number(e.target.value)))} className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-accent-500 outline-none transition-all" />
             </div>
           </div>
         </div>
 
         {/* Results Panel */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
+          <div className="bg-ink rounded-2xl p-6 shadow-brand-lg text-white space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
               <Layers size={120} />
             </div>
             
             <h2 className="text-xl font-bold flex items-center gap-2 relative z-10">
-              <Calculator size={24} className="text-orange-400" />
+              <Calculator size={24} className="text-accent-400" />
               Material Takeoff
             </h2>
 
             {result && (
               <div className="grid grid-cols-2 gap-4 relative z-10">
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                  <div className="text-orange-200 text-sm font-medium mb-1">Total Sheets</div>
+                  <div className="text-accent-200 text-sm font-medium mb-1">Total Sheets</div>
                   <div className="text-4xl font-black">{result.totalSheets}</div>
-                  <div className="text-xs text-slate-400 mt-1">Rounded up</div>
+                  <div className="text-xs text-txt-tertiary mt-1">Rounded up</div>
                 </div>
                 
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
-                  <div className="text-orange-200 text-sm font-medium mb-1">Gross Area</div>
-                  <div className="text-2xl font-bold">{result.grossAreaRequired.toFixed(2)} <span className="text-sm font-normal text-slate-300">{unitA}</span></div>
-                  <div className="text-xs text-slate-400 mt-1">Inc. {wastagePercent}% waste</div>
+                  <div className="text-accent-200 text-sm font-medium mb-1">Gross Area</div>
+                  <div className="text-2xl font-bold">{result.grossAreaRequired.toFixed(2)} <span className="text-sm font-normal text-txt-tertiary">{unitA}</span></div>
+                  <div className="text-xs text-txt-tertiary mt-1">Inc. {wastagePercent}% waste</div>
                 </div>
                 
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md col-span-2">
-                  <div className="text-orange-200 text-sm font-medium mb-2">Coverage Grid Visualization</div>
+                  <div className="text-accent-200 text-sm font-medium mb-2">Coverage Grid Visualization</div>
                   <div className="w-full h-24 bg-black/30 rounded-xl border border-white/5 overflow-hidden flex items-center justify-center p-2">
                     {/* Visual representation of grid mapping */}
                     <div className="relative w-full h-full flex flex-wrap content-start gap-[1px]">
@@ -354,7 +354,7 @@ export function PlywoodEstimator() {
                               flexGrow: 1,
                               maxWidth: '20%'
                             }}
-                            className={`rounded-sm border border-black/40 ${isPureWaste ? 'bg-red-500/50' : isWaste ? 'bg-orange-400/80' : 'bg-orange-500/80'}`}
+                            className={`rounded-sm border border-black/40 ${isPureWaste ? 'bg-ui-errorText/50' : isWaste ? 'bg-accent-500/80' : 'bg-accent-500/80'}`}
                             title={`Sheet ${i+1}`}
                           />
                         );
@@ -362,10 +362,10 @@ export function PlywoodEstimator() {
                       {result.totalSheets > 200 && <div className="text-xs text-white/50 w-full text-center mt-1">...and {result.totalSheets - 200} more</div>}
                     </div>
                   </div>
-                  <div className="flex gap-4 mt-2 text-xs text-slate-400 justify-center">
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 bg-orange-500/80 rounded-sm"></div> Net</div>
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 bg-orange-400/80 rounded-sm"></div> Cut/Waste</div>
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 bg-red-500/50 rounded-sm"></div> Extra</div>
+                  <div className="flex gap-4 mt-2 text-xs text-txt-tertiary justify-center">
+                    <div className="flex items-center gap-1"><div className="w-2 h-2 bg-accent-500/80 rounded-sm"></div> Net</div>
+                    <div className="flex items-center gap-1"><div className="w-2 h-2 bg-accent-500/80 rounded-sm"></div> Cut/Waste</div>
+                    <div className="flex items-center gap-1"><div className="w-2 h-2 bg-ui-errorText/50 rounded-sm"></div> Extra</div>
                   </div>
                 </div>
               </div>
@@ -373,8 +373,8 @@ export function PlywoodEstimator() {
           </div>
 
           {result && (
-            <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-sm">
-              <h3 className="text-lg font-bold text-txt-primary mb-4 border-b border-slate-100 pb-3">Cost Breakdown</h3>
+            <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
+              <h3 className="text-lg font-bold text-txt-primary mb-4 border-b border-border-color pb-3">Cost Breakdown</h3>
               
               <div className="space-y-3 mb-4">
                 <div className="flex justify-between items-center text-sm">
@@ -383,13 +383,13 @@ export function PlywoodEstimator() {
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-txt-secondary">Total Wastage Area</span>
-                  <span className="font-medium text-rose-600">{result.wastageArea.toFixed(2)} {unitA}</span>
+                  <span className="font-medium text-ui-errorText">{result.wastageArea.toFixed(2)} {unitA}</span>
                 </div>
               </div>
               
               <div className="pt-4 border-t border-ui-borderSubtle flex justify-between items-center">
                 <span className="text-base font-bold text-txt-primary">Total Estimate</span>
-                <span className="text-2xl font-bold text-orange-600">{currency} {result.totalCost.toLocaleString()}</span>
+                <span className="text-2xl font-bold text-accent-700">{currency} {result.totalCost.toLocaleString()}</span>
               </div>
             </div>
           )}

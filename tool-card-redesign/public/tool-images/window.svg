@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" width="400" height="250"><defs><filter id="rel" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" seed="4" result="n"/><feDiffuseLighting in="n" surfaceScale="1.4" diffuseConstant="1" lighting-color="#fff" result="l"><feDistantLight azimuth="230" elevation="55"/></feDiffuseLighting><feComposite in="SourceGraphic" in2="l" operator="arithmetic" k1="1.220774588761456" k2="0" k3="0" k4="0"/></filter><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9d8ea"/><stop offset="1" stop-color="#fbe6bd"/></linearGradient><filter id="bl"><feGaussianBlur stdDeviation="6"/></filter><linearGradient id="beam" x1="0" y1="0" x2="0.2" y2="1"><stop offset="0" stop-color="#fff3cf" stop-opacity="0.6"/><stop offset="1" stop-color="#fff3cf" stop-opacity="0"/></linearGradient><linearGradient id="fr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d9d3c6"/><stop offset="0.5" stop-color="#f5f1e8"/><stop offset="1" stop-color="#b9b2a3"/></linearGradient>
+<linearGradient id="gLight" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.22"/><stop offset="0.55" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="gShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0.5" stop-color="#2a1600" stop-opacity="0"/><stop offset="1" stop-color="#2a1600" stop-opacity="0.38"/></linearGradient>
+<radialGradient id="gVig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#1a0d00" stop-opacity="0.3"/></radialGradient>
+</defs><rect width="400" height="250" fill="#d9c8a6" filter="url(#rel)"/>
+<path d="M118 40L52 250H302L248 40Z" fill="url(#beam)" transform="translate(40 40) skewX(-10)" opacity=".8"/>
+<rect x="108" y="30" width="184" height="168" rx="3" fill="#000" opacity=".3" transform="translate(5 6)" filter="url(#bl)"/>
+<rect x="108" y="30" width="184" height="168" fill="url(#fr)"/><rect x="120" y="42" width="160" height="144" fill="url(#sky)"/>
+<g filter="url(#bl)" fill="#fff" opacity=".85"><ellipse cx="170" cy="84" rx="38" ry="12"/><ellipse cx="240" cy="120" rx="34" ry="10"/><ellipse cx="190" cy="150" rx="40" ry="11"/></g>
+<path d="M120 42H280L196 186H120Z" fill="#fff" opacity=".14"/>
+<rect x="196" y="42" width="8" height="144" fill="url(#fr)"/><rect x="120" y="110" width="160" height="8" fill="url(#fr)"/>
+<rect x="244" y="104" width="4" height="20" rx="2" fill="#885202"/>
+<rect x="98" y="196" width="204" height="14" rx="2" fill="#f3eee2"/><rect x="98" y="196" width="204" height="3" fill="#fff"/><rect x="98" y="210" width="204" height="6" fill="#000" opacity=".22"/>
+<rect width="400" height="250" fill="url(#gLight)"/>
+<rect width="400" height="250" fill="url(#gShade)"/>
+<rect width="400" height="250" fill="#885202" opacity="0.08" style="mix-blend-mode:multiply"/>
+<rect width="400" height="250" fill="url(#gVig)"/></svg>

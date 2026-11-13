@@ -288,6 +288,30 @@ export const ALL_MODULES = [
  difficulty: "Beginner",
  estimatedTime: "~1 min",
  },
+ {
+ id: "marla-converter",
+ title: "Marla / Kanal Area Converter",
+ desc: "Convert Marla, Kanal, sq ft, sq yd, m² and acres — Punjab & KPK marla standards.",
+ category: "Quantity Takeoff & Costing",
+ icon: Map,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Beginner",
+ estimatedTime: "~1 min",
+ },
+ {
+ id: "pakistan-cost-calculator",
+ title: "Pakistan House Cost Calculator",
+ desc: "City-wise house construction cost in PKR by finish level — Lahore, Karachi, Islamabad and more.",
+ category: "Quantity Takeoff & Costing",
+ icon: TrendingUp,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Beginner",
+ estimatedTime: "~2 mins",
+ },
  // 📊 ANALYSIS & TOOLS
  {
  id: "projects",
@@ -368,6 +392,20 @@ export const ALL_MODULES = [
  iconClass: "text-txt-primary opacity-90",
  difficulty: "Beginner",
  estimatedTime: "~2 mins",
+ isPopular: true,
+ },
+ {
+ id: "mix-design",
+ title: "Concrete Mix Design",
+ desc: "Design concrete mixes to IS 10262:2019 and ACI 211.1 — target strength, w/c ratio, cement, sand and aggregate per m³, batch weights and cost.",
+ category: "Structural & Concrete Geometry",
+ icon: Beaker,
+ styleStyle: "solid",
+ colorClass:
+ "bg-gradient-to-br from-accent-500 to-accent-700 text-txt-primary shadow-[0_8px_30px_rgba(242,164,19,0.3)]",
+ iconClass: "text-txt-primary opacity-90",
+ difficulty: "Advanced",
+ estimatedTime: "~10 mins",
  isPopular: true,
  },
  // 📝 RESOURCES
@@ -549,6 +587,42 @@ export const ALL_MODULES = [
  difficulty: "Intermediate",
  estimatedTime: "~4 mins",
  },
+ {
+ id: "plywood-estimator",
+ title: "Plywood Estimator",
+ desc: "Plywood sheet quantity, area and volume for formwork and panelling.",
+ category: "Structural & Concrete Geometry",
+ icon: Layers,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Beginner",
+ estimatedTime: "~2 mins",
+ },
+ {
+ id: "precast-wall",
+ title: "Precast Wall Estimator",
+ desc: "Precast wall panels, posts and concrete for boundary walls.",
+ category: "Structural & Concrete Geometry",
+ icon: Layers,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Intermediate",
+ estimatedTime: "~4 mins",
+ },
+ {
+ id: "roof-calculator",
+ title: "Roof Pitch & Area Calculator",
+ desc: "Calculate slope, rafter length, and total roof surface area.",
+ category: "Structural & Concrete Geometry",
+ icon: Triangle,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Beginner",
+ estimatedTime: "~2 mins",
+ },
 
  // 🌱 SOIL TESTS
  {
@@ -614,6 +688,18 @@ export const ALL_MODULES = [
  estimatedTime: "~2 mins",
  isNew: true,
  },
+ {
+ id: "soil-mechanics-lab",
+ title: "Master Soil Mechanics & Geotech Lab Suite",
+ desc: "Comprehensive portal for geotechnical laboratory testing and analysis.",
+ category: "Geotechnical & Soil Lab Suite",
+ icon: Beaker,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Advanced",
+ estimatedTime: "~10 mins",
+ },
 
  // ⚡ MEP
  {
@@ -628,6 +714,18 @@ export const ALL_MODULES = [
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
  isNew: true,
+ },
+ {
+ id: "infra-mep-engine",
+ title: "Master Infrastructure & MEP Engine",
+ desc: "Solar, water heating, AC and rainwater sizing for infrastructure projects, with BOQ export.",
+ category: "MEP, Energy & Landscaping",
+ icon: Zap,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Advanced",
+ estimatedTime: "~10 mins",
  },
  { id: "solar-water-heater", title: "Solar Water Heater", desc: "Calculate recommended collector area and tank capacity.", category: "MEP, Energy & Landscaping", icon: Sun, styleStyle: "glass", colorClass: "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ", difficulty: "Beginner", estimatedTime: "~3 mins", isNew: true, },
       { id: "solar-roof",
@@ -654,6 +752,18 @@ export const ALL_MODULES = [
  difficulty: "Beginner",
  estimatedTime: "~3 mins",
  isNew: true,
+ },
+ {
+ id: "wastewater-calculator",
+ title: "Wastewater Testing Engine",
+ desc: "Calculate BOD and COD from lab titration data.",
+ category: "MEP, Energy & Landscaping",
+ icon: Droplets,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Intermediate",
+ estimatedTime: "~4 mins",
  },
 
  {
@@ -693,6 +803,18 @@ export const ALL_MODULES = [
  estimatedTime: "~15 mins",
  },
  {
+ id: "pavement-mix",
+ title: "Pavement Mix & Gradation",
+ desc: "Blend aggregates to MoRTH GSB, DBM and SMA gradation envelopes and check every sieve.",
+ category: "Infrastructure & Highway Engineering",
+ icon: Route,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Advanced",
+ estimatedTime: "~10 mins",
+ },
+ {
  id: "earthworks",
  title: "Earthworks & Excavation",
  desc: "Calculate precise cut, fill, and site preparation volumes for varied terrain. Surveyors use this Civil Estimation Pro tool to generate accurate excavation tonnage reports.",
@@ -703,6 +825,18 @@ export const ALL_MODULES = [
  "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
  difficulty: "Intermediate",
  estimatedTime: "~5 mins",
+ },
+ {
+ id: "topsoil-estimator",
+ title: "Topsoil & Landscaping Estimator",
+ desc: "Topsoil volume, weight and cost for levelling, lawns and landscaping.",
+ category: "Infrastructure & Highway Engineering",
+ icon: Shovel,
+ styleStyle: "glass",
+ colorClass:
+ "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ",
+ difficulty: "Beginner",
+ estimatedTime: "~3 mins",
  },
  {
  id: "chainage",
@@ -888,6 +1022,8 @@ interface DashboardProps {
  onOpenSettings?: () => void;
  onOpenAuth?: () => void;
  previousModule?: string | null;
+ /** Dashboard category preselected by a /calculators/<group> URL (App). */
+ initialCategory?: string | null;
 }
 
 export const getCategoryTheme = (category: string, id: string) => {
@@ -1018,12 +1154,18 @@ const ToolsSkeleton = () => (
 export default function Dashboard({
  onSelectModule,
  previousModule,
+ initialCategory,
 }: DashboardProps) {
  const { user } = useAuth();
  const { settings, trackToolUse } = useSettings();
  const { recentTools, addRecentTool } = useRecentTools();
  const [searchTerm, setSearchTerm] = useState("");
- const [activeCategory, setActiveCategory] = useState("All Tools");
+ const [activeCategory, setActiveCategory] = useState(initialCategory ?? "All Tools");
+
+ // A /calculators/<group> URL preselects its category (App passes it down).
+ useEffect(() => {
+   if (initialCategory) setActiveCategory(initialCategory);
+ }, [initialCategory]);
  
  // Hero search box dispatches this; filter the catalogue and scroll to it.
  useEffect(() => {

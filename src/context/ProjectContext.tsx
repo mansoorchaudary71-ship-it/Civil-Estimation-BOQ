@@ -1,6 +1,26 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import {
+  listProjects, createProject as storeCreate, updateProject as storeUpdate,
+  deleteProject as storeDelete, saveVersion as storeSaveVersion,
+  exportProjectJson, importProjectJson,
+  type StoredProject, type StoredEstimate,
+} from '../lib/projectsStore';
+
+/**
+ * ProjectContext — LOCAL-FIRST (G9 §14). Projects live in localStorage
+ * (cep_projects_v1); there is no Firebase, no auth_token and no /api on this
+ * static GitHub Pages site, so an unsigned-in user previously got an empty /
+ * error state. Sharing is by exported JSON file, not by emailed invite.
+ * src/lib/firebase.ts is untouched — it is simply no longer imported here.
+ */
+const LOCAL_OWNER = 'local';
+
+const localAdapter = {
+  getItem: (k: string) => { try { return localStorage.getItem(k); } catch { return null; } },
+  setItem: (k: string, v: string) => { try { localStorage.setItem(k, v); } catch { /* full — in-memory only */ } },
+  removeItem: (k: string) => { try { localStorage.removeItem(k); } catch { /* noop */ } },
+};
 
 export interface ProjectEstimate {
   id: string;
@@ -27,6 +47,7 @@ export interface Project {
   roles: Record<string, 'owner' | 'editor' | 'viewer'>;
   memberEmails?: Record<string, string>;
   estimates: ProjectEstimate[];
+  versions?: Array<{ id: string; name: string; at: number; snapshot: StoredEstimate[] }>;
   createdAt: number;
   updatedAt: number;
 }
@@ -44,210 +65,134 @@ interface ProjectContextType {
   addMember: (projectId: string, email: string, role: 'editor' | 'viewer') => Promise<void>;
   removeMember: (projectId: string, userId: string) => Promise<void>;
   canEditProject: (projectId: string) => boolean;
+  /** Import a project from exported JSON text. Returns true on success. */
+  importProject: (json: string) => Promise<boolean>;
+  /** Exported JSON for one project, or null. */
+  exportProject: (id: string) => string | null;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
+function toProject(sp: StoredProject): Project {
+  return {
+    id: sp.id,
+    name: sp.name,
+    location: sp.location ?? '',
+    type: sp.type ?? 'Residential',
+    startDate: sp.startDate ?? new Date(sp.createdAt).toISOString().split('T')[0],
+    budget: sp.budget,
+    ownerId: LOCAL_OWNER,
+    memberIds: [LOCAL_OWNER],
+    roles: { [LOCAL_OWNER]: 'owner' },
+    memberEmails: {},
+    estimates: sp.estimates.map((e) => ({
+      id: e.id, projectId: sp.id, toolId: '', name: e.name, cost: e.cost,
+      materials: Object.fromEntries((e.materials ?? []).map((m) => [m.name, { quantity: m.quantity, unit: m.unit }])),
+      date: new Date(sp.updatedAt).toISOString(), category: 'General',
+      createdAt: sp.createdAt, updatedAt: sp.updatedAt,
+    })),
+    versions: sp.versions,
+    createdAt: sp.createdAt,
+    updatedAt: sp.updatedAt,
+  };
+}
+
 export function ProjectProvider({ children }: { children: ReactNode }) {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
-  const { user } = useAuth();
-
-  useEffect(() => {
-    const active = localStorage.getItem('civil_active_project');
-    if (active) {
-      setActiveProjectId(active);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (activeProjectId) {
-      localStorage.setItem('civil_active_project', activeProjectId);
-    } else {
-      localStorage.removeItem('civil_active_project');
-    }
-  }, [activeProjectId]);
-
-  const fetchProjects = useCallback(async () => {
-    if (!user) {
-      setProjects([]);
-      return;
-    }
-    const token = localStorage.getItem('auth_token');
-    if (!token) return;
-
-    try {
-      const res = await fetch('/api/projects', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setProjects(data);
-      }
-    } catch (err) {
-      console.error("Error fetching projects", err);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
-
-  const getHeaders = () => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+  const [projects, setProjects] = useState<Project[]>(() => listProjects(localAdapter).map(toProject));
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(() => {
+    try { return localStorage.getItem('civil_active_project'); } catch { return null; }
   });
 
-  const addProject = async (data: Omit<Project, 'id' | 'estimates' | 'ownerId' | 'memberIds' | 'roles' | 'createdAt' | 'updatedAt'>) => {
-    if (!user) return;
+  useEffect(() => {
     try {
-      const res = await fetch('/api/projects', {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(data)
-      });
-      if (res.ok) {
-        const newProject = await res.json();
-        setProjects(prev => [...prev, newProject]);
-        if (!activeProjectId) setActiveProjectId(newProject.id);
-      } else {
-        toast.error("Failed to add project");
-      }
-    } catch (error) {
-      toast.error("Error adding project");
-    }
+      if (activeProjectId) localStorage.setItem('civil_active_project', activeProjectId);
+      else localStorage.removeItem('civil_active_project');
+    } catch { /* noop */ }
+  }, [activeProjectId]);
+
+  const refresh = useCallback(() => {
+    setProjects(listProjects(localAdapter).map(toProject));
+  }, []);
+
+  const addProject = async (data: Omit<Project, 'id' | 'estimates' | 'ownerId' | 'memberIds' | 'roles' | 'createdAt' | 'updatedAt'>) => {
+    const created = storeCreate(localAdapter, {
+      name: data.name, location: data.location, type: data.type,
+      startDate: data.startDate, budget: data.budget,
+    });
+    refresh();
+    if (!activeProjectId) setActiveProjectId(created.id);
+    toast.success(`Project "${data.name}" created — saved on this device.`);
   };
 
   const updateProject = async (id: string, data: Partial<Omit<Project, 'id' | 'estimates' | 'ownerId' | 'createdAt'>>) => {
-    try {
-      const res = await fetch(`/api/projects/${id}`, {
-        method: 'PUT',
-        headers: getHeaders(),
-        body: JSON.stringify(data)
-      });
-      if (res.ok) {
-        const updated = await res.json();
-        setProjects(prev => prev.map(p => p.id === id ? updated : p));
-      } else {
-        toast.error("Failed to update project");
-      }
-    } catch (error) {
-      toast.error("Error updating project");
-    }
+    const updated = storeUpdate(localAdapter, id, {
+      name: data.name, location: data.location, type: data.type,
+      startDate: data.startDate, budget: data.budget,
+    });
+    if (updated) refresh();
+    else toast.error("Failed to update project");
   };
 
   const deleteProject = async (id: string) => {
-    try {
-      const res = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE',
-        headers: getHeaders(),
-      });
-      if (res.ok) {
-        setProjects(prev => prev.filter(p => p.id !== id));
-        if (activeProjectId === id) setActiveProjectId(null);
-      } else {
-        toast.error("Failed to delete project");
-      }
-    } catch (error) {
-      toast.error("Error deleting project");
+    if (storeDelete(localAdapter, id)) {
+      if (activeProjectId === id) setActiveProjectId(null);
+      refresh();
+      toast.success("Project deleted.");
+    } else {
+      toast.error("Failed to delete project");
     }
   };
 
   const saveVersion = async (projectId: string, versionName: string) => {
-    if (!user) return;
-    const projectToClone = projects.find(p => p.id === projectId);
-    if (!projectToClone) return;
-
-    try {
-      const { name, ...rest } = projectToClone;
-      
-      const newProjData = {
-        name: versionName,
-        location: rest.location,
-        type: rest.type,
-        startDate: rest.startDate,
-        budget: rest.budget
-      };
-      
-      const res = await fetch('/api/projects', {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(newProjData)
-      });
-      
-      if (res.ok) {
-        const newProject = await res.json();
-        
-        for (const est of projectToClone.estimates) {
-          const { id, projectId: pId, createdAt, updatedAt, date, ...estRest } = est;
-          await fetch(`/api/projects/${newProject.id}/estimates`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify(estRest)
-          });
-        }
-        await fetchProjects();
-      }
-    } catch (error) {
-      toast.error("Error saving version");
-    }
+    const saved = storeSaveVersion(localAdapter, projectId, versionName);
+    if (saved) { refresh(); toast.success(`Version "${versionName}" saved.`); }
+    else toast.error("Error saving version");
   };
 
   const addEstimateToProject = async (projectId: string, estimate: Omit<ProjectEstimate, 'id' | 'projectId' | 'date' | 'createdAt' | 'updatedAt'>) => {
-    try {
-      const res = await fetch(`/api/projects/${projectId}/estimates`, {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(estimate)
-      });
-      if (res.ok) {
-        const newEst = await res.json();
-        setProjects(prev => prev.map(p => {
-          if (p.id === projectId) {
-            return { ...p, estimates: [...p.estimates, newEst] };
-          }
-          return p;
-        }));
-      }
-    } catch (error) {
-      toast.error("Error adding estimate");
-    }
+    const all = listProjects(localAdapter);
+    const p = all.find((x) => x.id === projectId);
+    if (!p) { toast.error("Project not found"); return; }
+    const now = Date.now();
+    p.estimates.push({
+      id: `est_${now.toString(36)}`,
+      name: estimate.name,
+      cost: estimate.cost,
+      materials: Object.entries(estimate.materials ?? {}).map(([name, v]) => ({ name, quantity: v.quantity, unit: v.unit })),
+    });
+    p.updatedAt = now;
+    storeUpdate(localAdapter, projectId, { estimates: p.estimates, updatedAt: now });
+    refresh();
   };
 
   const deleteEstimate = async (projectId: string, estimateId: string) => {
-    try {
-      const res = await fetch(`/api/projects/${projectId}/estimates/${estimateId}`, {
-        method: 'DELETE',
-        headers: getHeaders(),
-      });
-      if (res.ok) {
-        setProjects(prev => prev.map(p => {
-          if (p.id === projectId) {
-            return { ...p, estimates: p.estimates.filter(e => e.id !== estimateId) };
-          }
-          return p;
-        }));
-      }
-    } catch (error) {
-      toast.error("Error deleting estimate");
-    }
+    const all = listProjects(localAdapter);
+    const p = all.find((x) => x.id === projectId);
+    if (!p) return;
+    storeUpdate(localAdapter, projectId, { estimates: p.estimates.filter((e) => e.id !== estimateId) });
+    refresh();
   };
 
-  const addMember = async (projectId: string, email: string, role: 'editor' | 'viewer') => {
-    // Basic implementation since we're using mock in-memory for users
-    toast.error("Not implemented with JWT mock users");
+  const addMember = async () => {
+    toast.error("No accounts on this site — projects are local-first. Use Share to send the project file instead.");
   };
 
-  const removeMember = async (projectId: string, userId: string) => {
-    toast.error("Not implemented with JWT mock users");
+  const removeMember = async () => {
+    toast.error("No accounts on this site — projects are local-first.");
   };
 
-  const canEditProject = (projectId: string) => {
-    if (!user) return false;
-    const project = projects.find(p => p.id === projectId);
-    if (!project) return false;
-    const role = project.roles[user.uid];
-    return role === 'owner' || role === 'editor';
+  const canEditProject = (_projectId: string) => true; // local-first: the device owner can always edit
+
+  const importProject = async (json: string): Promise<boolean> => {
+    const imported = importProjectJson(localAdapter, json);
+    if (imported) { refresh(); toast.success(`Project "${imported.name}" imported.`); return true; }
+    toast.error("Could not import — that file is not a Civil Estimation Pro project export.");
+    return false;
+  };
+
+  const exportProject = (id: string): string | null => {
+    const p = listProjects(localAdapter).find((x) => x.id === id);
+    return p ? exportProjectJson(p) : null;
   };
 
   return (
@@ -255,7 +200,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
       projects, activeProjectId, setActiveProjectId,
       addProject, updateProject, deleteProject, saveVersion,
       addEstimateToProject, deleteEstimate, addMember, removeMember,
-      canEditProject
+      canEditProject, importProject, exportProject,
     }}>
       {children}
     </ProjectContext.Provider>

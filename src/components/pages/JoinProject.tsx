@@ -4,12 +4,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db, auth, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import TopNavbar from '../TopNavbar';
 import { Users, CheckCircle, XCircle } from 'lucide-react';
 
 
-export default function JoinProject() {
-  const { projectId, shareToken } = useParams();
+export default function JoinProject({ projectId: projectIdProp, shareToken: shareTokenProp }: { projectId?: string; shareToken?: string } = {}) {
+  // App renders no <Routes>, so useParams() is always empty here; App passes
+  // the /join/<projectId>/<shareToken> segments as props instead.
+  const { projectId: projectIdParam, shareToken: shareTokenParam } = useParams();
+  const projectId = projectIdProp ?? projectIdParam;
+  const shareToken = shareTokenProp ?? shareTokenParam;
   const navigate = useNavigate();
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'auth_required'>('loading');
   const [errorMsg, setErrorMsg] = useState('');
@@ -81,7 +84,6 @@ export default function JoinProject() {
 
   return (
     <div className="min-h-screen bg-surface-hover flex flex-col">
-      <TopNavbar />
       <main className="flex-1 max-w-lg w-full mx-auto px-4 py-20 flex flex-col items-center justify-center">
         <div className="w-full bg-surface-default p-8 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-center">
           

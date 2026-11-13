@@ -67,6 +67,9 @@ export const unitsData: Record<Category, Unit[]> = {
     { id: "sft", label: "Square Foot (sq ft)", factor: 0.09290304 },
     { id: "syd", label: "Square Yard (sq yd)", factor: 0.83612736 },
     { id: "ac", label: "Acre (ac)", factor: 4046.8564224 },
+    // Society-standard marla (225 sq ft). The 272.25 revenue marla is NOT
+    // a separate unit here — use the Marla Converter page toggle for it.
+    { id: "marla225", label: "Marla — society (225 sq ft)", factor: 20.903184 },
   ],
   Volume: [
     { id: "cm", label: "Cubic Meter (m³)", factor: 1 },

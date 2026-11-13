@@ -40,16 +40,18 @@ export class ConcreteMortarCalculator {
 
     const cementRatio = this.mixRatio[0] || 0;
     const cementVol = (cementRatio / sumRatio) * dryVol;
-    
+
     // CEMENT_BAG_CONVERSION: In Metric (cubic meters), 1 bag cement (50kg) = 0.0347 cu.m
     const cementVolumePerBag = this.isMetric ? 0.0347 : 1.226;
     const cementBags = Math.ceil(cementVol / cementVolumePerBag);
 
-    // Weight of cement in kg
-    const cementWeightKg = cementBags * 50;
+    // Weight of cement in kg — from the UNROUNDED cement volume, not the
+    // rounded-up bag count (100 bags x 50 kg x 0.5 = 2,500 L is wrong;
+    // 99.86 bags = 2,496 L for the 10x10x0.15, 1:2:4, w/c 0.5 default).
+    const cementKgExact = (cementVol / cementVolumePerBag) * 50;
 
-    // Water amount (Liters = kg of water) = cementWeightKg * wcRatio
-    const waterLiters = cementWeightKg * this.wcRatio;
+    // Water amount (Liters = kg of water) = cementKgExact * wcRatio
+    const waterLiters = cementKgExact * this.wcRatio;
 
     const sandRatio = this.mixRatio[1] || 0;
     const sandVol = (sandRatio / sumRatio) * dryVol;
@@ -59,6 +61,7 @@ export class ConcreteMortarCalculator {
 
     return {
       cementBags,
+      cementKgExact,
       sandVol,
       aggregateVol,
       waterLiters,
@@ -171,9 +174,10 @@ export class BrickworkCalculator {
     
     // MASONRY_BRICK_COUNT
     const baseNumBricks = volBrickWithMortar > 0 ? (netWallVol / volBrickWithMortar) : 0;
-    
-    // Apply 10% standard wastage for bricks
-    const numBricks = Math.ceil(baseNumBricks * (1 + 10 / 100));
+
+    // Wastage comes from the wastagePct parameter the caller passes —
+    // the old hardcoded 1.10 ignored it.
+    const numBricks = Math.ceil(baseNumBricks * (1 + this.wastagePct / 100));
 
     const volOneBrick = bL * bW * bH;
     const totalBrickVol = baseNumBricks * volOneBrick; // Actual bricks space without wastage
@@ -255,17 +259,17 @@ export class SteelCalculator {
     let totalLengthAllBars = numBars * singleBarTotalLength;
     totalLengthAllBars = totalLengthAllBars * (1 + this.wastagePct / 100);
 
-    // Standard formula: D^2 / 162.28 in kg/m, D^2 / 533 in kg/ft
+    // Standard formula: D^2 / 162.28 in kg/m, D^2 / 533 in kg/ft.
+    // DOCUMENTED CONVENTION (G2 fix): bar diameter is ALWAYS entered in
+    // mm, in both systems; only the lengths change unit (m vs ft).
+    // Metric: d^2/162.28 kg/m. Imperial: d^2/533 kg/ft (same mm diameter,
+    // length in feet). The old comment admitted the confusion; the input
+    // label now reads "Bar dia (mm)" in both systems.
     let weightPerUnitLength = 0;
     if (this.isMetric) {
-      weightPerUnitLength = Math.pow(this.barDiameter, 2) / 162.28; 
+      weightPerUnitLength = Math.pow(this.barDiameter, 2) / 162.28;
     } else {
-      // In US standard, bar # represents eighths of an inch. But if barDiameter is in eights or inches, let's assume barDiameter is in eighths? 
-      // If imperial, user inputs bar diameter in eights of inch (e.g. #4 is 4/8") => The formula is (D in eighths)^2 / 2.67 lbs/ft but kg is fine (D in mm)^2/533 for kg/ft
-      // Let's assume diameter is in mm for metric and inches or 'number' for imperial.
-      // D^2 / 533 applies to kg/ft where D is in mm! 
-      // Let's assume input barDiameter is always in mm for the weight formula, which is common.
-      weightPerUnitLength = Math.pow(this.barDiameter, 2) / 533; // kg/ft
+      weightPerUnitLength = Math.pow(this.barDiameter, 2) / 533; // kg/ft, dia in mm
     }
     
     const totalWeightKg = totalLengthAllBars * weightPerUnitLength;

@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "NODE_OPTIONS=--max-old-space-size=4096 vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "postbuild": "node scripts/copy-404.cjs",
+    "test:routes": "tsx src/lib/__tests__/toolRoutes.test.ts",
     "start": "node dist/server.cjs",
     "preview": "vite preview",
     "predeploy": "npm run build",

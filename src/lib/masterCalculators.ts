@@ -364,12 +364,16 @@ export const calculatorsList: CalcItem[] = [
       { id: "H", label: "Wall Height", unit: "L", defaultVal: "3" },
       { id: "openings", label: "Openings Area", unit: "A", defaultVal: "20" },
       { id: "thick", label: "Plaster Thickness (mm)", defaultVal: "12" },
-      { id: "ratio", label: "Sand Ratio (1:X)", defaultVal: "4" }
+      { id: "ratio", label: "Sand Ratio (1:X)", defaultVal: "4" },
+      { id: "deduct", label: "Opening deduction: 0=none (<0.5 m²), 1=one face (0.5–3 m²), 2=both faces (>3 m²) — IS 1200", defaultVal: "1" }
     ],
     compute: (v, shared, isSI) => {
-      // rule PLASTERING_DEDUCTIONS (simpler form based on inputs)
+      // IS 1200: <0.5 m² none, 0.5–3 m² one face, >3 m² both faces (+ jambs).
+      // The openings input is the total opening area; the mode above applies
+      // the rule for the typical opening size. Default 1 = one face.
       const A_gross = v.L * v.H;
-      const A_total = A_gross - v.openings; 
+      const mode = Number.isFinite(v.deduct) ? Math.min(2, Math.max(0, Math.round(v.deduct))) : 1;
+      const A_total = Math.max(0, A_gross - v.openings * mode); 
       const t = v.thick / 1000;
       const v_wet = A_total * t;
       // rule MORTAR_DRY_VOLUME: V_dry = V_wet * 1.33
@@ -529,3 +533,49 @@ export const calculatorsList: CalcItem[] = [
     }
   }
 ];
+
+/**
+ * Unit-safe compute wrapper (G9 §3 fix). The old code passed Imperial
+ * inputs straight into metric formulas (isSI only changed labels), so an
+ * area in sqft was multiplied by metres and cu.ft was treated as m³.
+ * This wrapper converts Imperial inputs to metric, computes in metric
+ * (so the shared chain stays metric), then converts only the displayed
+ * result strings back to Imperial. Shared outputs are never converted.
+ */
+const FT_TO_M = 0.3048;
+const SQFT_TO_M2 = 0.092903;
+const CUFT_TO_M3 = 0.0283168;
+
+function convertResultString(val: string | number, isSI: boolean): string | number {
+  if (isSI || typeof val !== "number" && typeof val !== "string") return val;
+  if (typeof val === "number") return val;
+  const m = val.match(/^(-?[\d.]+)\s*(m³|m²|m)$/);
+  if (!m) return val;
+  const n = parseFloat(m[1]);
+  if (m[2] === "m³") return `${(n * 35.3147).toFixed(2)} cu.ft`;
+  if (m[2] === "m²") return `${(n * 10.7639).toFixed(2)} sqft`;
+  return `${(n / FT_TO_M).toFixed(2)} ft`;
+}
+
+export function computeWithUnits(
+  calc: CalcItem,
+  inputs: Record<string, number>,
+  shared: Record<string, number>,
+  isSI: boolean,
+): { results: Record<string, string | number>; sharedOutputs?: Record<string, number> } {
+  if (isSI) return calc.compute(inputs, shared, true);
+  const metric: Record<string, number> = {};
+  for (const inp of calc.inputs) {
+    const v = inputs[inp.id] ?? 0;
+    if (inp.unit === "L") metric[inp.id] = v * FT_TO_M;
+    else if (inp.unit === "A") metric[inp.id] = v * SQFT_TO_M2;
+    else if (inp.unit === "V") metric[inp.id] = v * CUFT_TO_M3;
+    else metric[inp.id] = v;
+  }
+  const out = calc.compute(metric, shared, true);
+  const results: Record<string, string | number> = {};
+  for (const [k, v] of Object.entries(out.results)) {
+    results[k] = convertResultString(v, false);
+  }
+  return { results, sharedOutputs: out.sharedOutputs };
+}

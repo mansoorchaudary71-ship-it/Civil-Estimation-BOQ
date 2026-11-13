@@ -12,6 +12,8 @@ import {
   Map
 } from 'lucide-react';
 import ToolPageFooter from '../ToolPageFooter';
+import { GlobalFAQ } from '../ui/GlobalFAQ';
+import toast from 'react-hot-toast';
 
 
 type UnitMap = {
@@ -26,6 +28,11 @@ type UnitMap = {
 
 export default function MarlaConverterPage() {
   const [marlaStandard, setMarlaStandard] = useState<"Punjab" | "KPK">("Punjab");
+  const [plotLength, setPlotLength] = useState("");
+  const [plotWidth, setPlotWidth] = useState("");
+  const [fardKanal, setFardKanal] = useState("");
+  const [fardMarla, setFardMarla] = useState("");
+  const [fardSarsai, setFardSarsai] = useState("");
   const [inputValue, setInputValue] = useState<string>("5");
   const [sourceUnit, setSourceUnit] = useState<keyof UnitMap>("Marla");
   const [convertedValues, setConvertedValues] = useState<UnitMap>({
@@ -163,6 +170,39 @@ export default function MarlaConverterPage() {
                </div>
 
                <div className="border-t border-ui-borderSubtle pt-6 relative z-10">
+                 <p className="text-xs uppercase tracking-widest font-bold text-txt-tertiary mb-3">Plot dimensions (L × W, ft)</p>
+                 <div className="flex flex-wrap gap-2 mb-3">
+                   <input type="number" inputMode="decimal" min="0" value={plotLength} onChange={(e) => setPlotLength(e.target.value)} placeholder="Length (ft)" className="w-32 px-3 py-2 bg-surface-default border border-ui-borderSubtle rounded-xl text-sm font-semibold" />
+                   <span className="self-center font-bold">×</span>
+                   <input type="number" inputMode="decimal" min="0" value={plotWidth} onChange={(e) => setPlotWidth(e.target.value)} placeholder="Width (ft)" className="w-32 px-3 py-2 bg-surface-default border border-ui-borderSubtle rounded-xl text-sm font-semibold" />
+                   <Button onClick={() => {
+                     const l = parseFloat(plotLength), w = parseFloat(plotWidth);
+                     if (!isFinite(l) || !isFinite(w) || l <= 0 || w <= 0) { toast.error("Enter a length and width over 0."); return; }
+                     setInputValue(String(l * w)); setSourceUnit("Sq.Ft");
+                     toast.success(`${l} × ${w} ft = ${(l * w).toLocaleString()} sq ft`);
+                   }} className="px-4 py-2 bg-ink text-white rounded-xl text-sm font-bold">Use this plot</Button>
+                 </div>
+                 <p className="text-xs uppercase tracking-widest font-bold text-txt-tertiary mb-3">Fard (Kanal – Marla – Sarsai)</p>
+                 <div className="flex flex-wrap gap-2 mb-3">
+                   <input type="number" inputMode="decimal" min="0" value={fardKanal} onChange={(e) => setFardKanal(e.target.value)} placeholder="Kanal" className="w-24 px-3 py-2 bg-surface-default border border-ui-borderSubtle rounded-xl text-sm font-semibold" />
+                   <input type="number" inputMode="decimal" min="0" value={fardMarla} onChange={(e) => setFardMarla(e.target.value)} placeholder="Marla" className="w-24 px-3 py-2 bg-surface-default border border-ui-borderSubtle rounded-xl text-sm font-semibold" />
+                   <input type="number" inputMode="decimal" min="0" value={fardSarsai} onChange={(e) => setFardSarsai(e.target.value)} placeholder="Sarsai" className="w-24 px-3 py-2 bg-surface-default border border-ui-borderSubtle rounded-xl text-sm font-semibold" />
+                   <Button onClick={() => {
+                     const k = parseFloat(fardKanal) || 0, m = parseFloat(fardMarla) || 0, sr = parseFloat(fardSarsai) || 0;
+                     if (k < 0 || m < 0 || sr < 0 || (k === 0 && m === 0 && sr === 0)) { toast.error("Enter at least one fard value."); return; }
+                     const sqft = (k * 20 + m) * sqftPerMarla + sr * (sqftPerMarla / 9);
+                     setInputValue(String(Math.round(sqft * 100) / 100)); setSourceUnit("Sq.Ft");
+                     toast.success(`${k} Kanal ${m} Marla ${sr} Sarsai = ${sqft.toLocaleString(undefined, { maximumFractionDigits: 2 })} sq ft (1 Marla = 9 Sarsai)`);
+                   }} className="px-4 py-2 bg-ink text-white rounded-xl text-sm font-bold">Use fard size</Button>
+                 </div>
+                 <Button onClick={async () => {
+                   const text = `${inputValue} ${sourceUnit} (${marlaStandard} standard) = ${formatValue(convertedValues["Sq.Ft"])} Sq.Ft · ${formatValue(convertedValues["Marla"])} Marla · ${formatValue(convertedValues["Kanal"])} Kanal · ${formatValue(convertedValues["m²"])} m²`;
+                   try { await navigator.clipboard.writeText(text); toast.success("Conversion copied."); }
+                   catch { toast.error("Clipboard blocked."); }
+                 }} className="px-4 py-2 bg-surface-hover border border-ui-borderSubtle rounded-xl text-sm font-bold">Copy conversion</Button>
+               </div>
+
+               <div className="border-t border-ui-borderSubtle pt-6 relative z-10">
                  <p className="text-xs uppercase tracking-widest font-bold text-txt-tertiary mb-3">Quick Select</p>
                  <div className="flex flex-wrap gap-2">
                     {[
@@ -212,7 +252,7 @@ export default function MarlaConverterPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
             <div>
               <h3 className="text-2xl md:text-3xl font-black text-txt-primary mb-2 tracking-tight">Know your plot size?</h3>
-              <p className="text-txt-primary/70 font-bold max-w-xl">Find out exactly how much it will cost to build your house in Pakistan using live 2025 rates for Lahore, Karachi, or Islamabad.</p>
+              <p className="text-txt-primary/70 font-bold max-w-xl">Find out exactly how much it will cost to build your house in Pakistan using 2026 rates for Lahore, Karachi, or Islamabad.</p>
             </div>
             <div className="w-14 h-14 bg-surface-default rounded-full flex items-center justify-center shrink-0">
                <ArrowRight className="w-6 h-6 text-accent-700" />
@@ -272,13 +312,23 @@ export default function MarlaConverterPage() {
            </div>
         </div>
 
+        <GlobalFAQ
+          moduleId="marla-converter"
+          faqs={[
+            { question: "How many square feet is 1 marla?", answer: "272.25 sq ft under the Punjab revenue standard, or 225 sq ft under the society standard used by most housing societies. Pick the standard above before converting — the same plot differs by about 17%." },
+            { question: "How many marla is 1 kanal?", answer: "20 marla = 1 kanal, under both standards. 1 kanal is 5,445 sq ft (Punjab) or 4,500 sq ft (society)." },
+            { question: "What is a sarsai?", answer: "A sarsai is 1/9 of a marla — 30.25 sq ft (Punjab) or 25 sq ft (society). Revenue records (fard) write land as Kanal – Marla – Sarsai." },
+            { question: "How do I convert a plot's length and width to marla?", answer: "Multiply length × width in feet to get square feet, then divide by 272.25 (Punjab) or 225 (society). The plot-dimension box above does it for you." },
+          ]}
+        />
+
         {/* Section 6: Standard Footer */}
         <ToolPageFooter 
            toolName="Area Plot Converter (Marla, Kanal, Sq.Ft)"
            standards={["Punjab Land Revenue Act 1887", "KPK Local Measurement Laws"]}
            formulaDescription="1 Karam = 5.5 Ft. 1 Marla (Punjab) = 1 Sirsai x 9 = 272.25 Sq.Ft. Metric Conversion: 1 m² = 10.7639 Sq.Ft."
            difficulty="Beginner"
-           lastUpdated="February 2025"
+           lastUpdated="November 2026"
            category="Quantity Estimation"
         />
 

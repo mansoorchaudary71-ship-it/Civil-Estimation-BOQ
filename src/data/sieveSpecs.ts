@@ -191,6 +191,37 @@ export const sieveSpecData: { categories: Category[] } = {
            ]
          }
        ]
+    },
+    {
+       name: "MoRTH GSB / WMM (IRC:37 / MoRTH Cl. 401/406)",
+       gradings: [
+         {
+           name: "GSB Grading I (75 mm max)",
+           sieves: [
+             { size: 75, minPassing: 100, maxPassing: 100 },
+             { size: 53, minPassing: 80, maxPassing: 100 },
+             { size: 26.5, minPassing: 55, maxPassing: 90 },
+             { size: 9.5, minPassing: 35, maxPassing: 65 },
+             { size: 4.75, minPassing: 25, maxPassing: 55 },
+             { size: 2.36, minPassing: 20, maxPassing: 40 },
+             { size: 0.425, minPassing: 10, maxPassing: 25 },
+             { size: 0.075, minPassing: 3, maxPassing: 10 },
+           ]
+         },
+         {
+           name: "WMM (53 mm max)",
+           sieves: [
+             { size: 53, minPassing: 100, maxPassing: 100 },
+             { size: 45, minPassing: 95, maxPassing: 100 },
+             { size: 22.4, minPassing: 60, maxPassing: 80 },
+             { size: 11.2, minPassing: 40, maxPassing: 60 },
+             { size: 4.75, minPassing: 25, maxPassing: 40 },
+             { size: 2.36, minPassing: 15, maxPassing: 30 },
+             { size: 0.6, minPassing: 8, maxPassing: 22 },
+             { size: 0.075, minPassing: 0, maxPassing: 8 },
+           ]
+         }
+       ]
     }
   ]
 };

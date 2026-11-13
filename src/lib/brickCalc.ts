@@ -77,6 +77,24 @@ export const BRICK_PRESETS: BrickPreset[] = [
     note: "Clay bricks in the UAE are mostly imported. Concrete blocks are the common local walling unit.",
   },
   {
+    id: "aac-600",
+    label: "AAC block — 600 × 200 × 150 mm",
+    l: 600,
+    w: 200,
+    h: 150,
+    standard: "AAC block (autoclaved aerated concrete)",
+    note: "Use a 3 mm thin-bed joint and a 150 mm wall thickness with this block. Mortar is wall volume minus block volume, same method as bricks.",
+  },
+  {
+    id: "hollow-400",
+    label: "Hollow concrete block — 400 × 200 × 200 mm",
+    l: 400,
+    w: 200,
+    h: 200,
+    standard: "Hollow concrete block",
+    note: "Use a 10 mm joint and a 200 mm wall thickness with this block. Mortar is wall volume minus block volume, same method as bricks.",
+  },
+  {
     id: "custom",
     label: "Custom size",
     l: 230,
@@ -245,6 +263,41 @@ export function calcBrickwork(inp: BrickInputs): BrickResults {
     totalCost,
     costComplete: brickCost != null && cementCost != null && sandCost != null,
   };
+}
+
+/**
+ * Same engine, driven by a known net wall area instead of length x height.
+ * Used by the finishes workspace, whose room geometry already produced a
+ * net wall area. Mortar is always computed from the PRE-WASTAGE unit count
+ * (wall volume minus unit volume), never from the ceiled/wastage count.
+ */
+export function calcBrickworkFromArea(
+  netAreaM2: number,
+  thicknessMm: number,
+  brick: BrickPreset,
+  opts: {
+    customBrick?: { l: number; w: number; h: number };
+    jointMm?: number;
+    wastagePct?: number;
+    mix?: [number, number];
+    currency?: Currency;
+    rates?: BrickRates;
+  } = {},
+): BrickResults {
+  return calcBrickwork({
+    length: Math.max(0, netAreaM2),
+    height: 1,
+    lengthUnit: "m",
+    thicknessMm,
+    openings: [],
+    brick,
+    customBrick: opts.customBrick,
+    jointMm: opts.jointMm ?? 10,
+    wastagePct: opts.wastagePct ?? 5,
+    mix: opts.mix ?? [1, 4],
+    currency: opts.currency ?? "PKR",
+    rates: opts.rates ?? { brickPer1000: null, cementPerBag: null, sandPerUnit: null },
+  });
 }
 
 /** Default worked example shown on load: 10 ft x 10 ft, 9" wall, 5% wastage. */

@@ -1,16 +1,25 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { pathFromId } from '../lib/toolRoutes';
 
 interface SEOHeadProps {
   toolId: string;
   toolName: string;
   category: string;
   description: string;
+  /**
+   * Explicit canonical path (e.g. "/brick-calculator/lahore"). When omitted
+   * the canonical is the tool's real short-form route, pathFromId(toolId)
+   * — i.e. https://civilestimationpro.com/<toolId>. The old template
+   * /calculators/<toolId> did NOT resolve for short-form ids (resolvePath
+   * only accepts /calculators/<group>/<slug>), so those canonicals 404'd.
+   */
+  canonicalPath?: string;
 }
 
-export default function SEOHead({ toolId, toolName, category, description }: SEOHeadProps) {
+export default function SEOHead({ toolId, toolName, category, description, canonicalPath }: SEOHeadProps) {
   const fullTitle = `${toolName} | Civil Estimation Pro`;
-  const canonicalUrl = `https://civilestimationpro.com/calculators/${toolId}`;
+  const canonicalUrl = `https://civilestimationpro.com${canonicalPath ?? pathFromId(toolId)}`;
 
   const jsonLdData = [
     {

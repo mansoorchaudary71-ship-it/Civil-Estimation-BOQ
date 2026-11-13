@@ -13,14 +13,21 @@ export type ThemeType = 'default' | 'earth' | 'steel' | 'ocean' | 'emerald' | 's
 
 interface ToolHeaderProps {
   id: string;
-  title: string;
+  /** Tool name shown in the H1. `toolName` wins when both are given. */
+  title?: string;
+  toolName?: string;
   themeType?: ThemeType;
   subtitle?: string;
   icon?: React.ElementType;
   onNavigate?: (id: string) => void;
 }
 
-export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: ToolHeaderProps) {
+export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNavigate }: ToolHeaderProps) {
+  // The H1 on every wrapped tool must be the tool's own name — never the
+  // literal brand text (old bug: the print header hard-coded
+  // "Civil Estimation Pro" as the H1). Fall back to the brand only when
+  // no caller passes a name at all.
+  const displayTitle = toolName ?? title ?? "Civil Estimation Pro";
   const { settings, updateSettings } = useSettings();
   const [isFormulaModalOpen, setIsFormulaModalOpen] = useState(false);
   const [showReferences, setShowReferences] = useState(false);
@@ -61,7 +68,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
   
   // Advanced Share Logic
   const getCalculationSummary = () => {
-    let summary = `Estimation Report: ${title}\n`;
+    let summary = `Estimation Report: ${displayTitle}\n`;
     summary += `---------------------------------\n`;
     
     const inputs = document.querySelectorAll('input[type="number"], input[type="text"]');
@@ -100,7 +107,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
       const element = (document.querySelector('.tool-card') || document.body) as HTMLElement;
       const opt = {
         margin: 10,
-        filename: `${title.replace(/\s+/g, '_')}_Estimate.pdf`,
+        filename: `${displayTitle.replace(/\s+/g, '_')}_Estimate.pdf`,
         image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: "portrait" as const }
@@ -122,7 +129,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
       const element = (document.querySelector('.tool-card') || document.body) as HTMLElement;
       const opt = {
         margin: 10,
-        filename: `${title.replace(/\s+/g, '_')}_Estimate.pdf`,
+        filename: `${displayTitle.replace(/\s+/g, '_')}_Estimate.pdf`,
         image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: "portrait" as const }
@@ -145,11 +152,11 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
         toast.loading('Preparing to share...', { id: 'share-toast', position: 'bottom-center' });
         const pdfBlob = await generatePDFBlob();
         if (pdfBlob) {
-          const file = new File([pdfBlob], `${title.replace(/\s+/g, '_')}_Estimate.pdf`, { type: 'application/pdf' });
+          const file = new File([pdfBlob], `${displayTitle.replace(/\s+/g, '_')}_Estimate.pdf`, { type: 'application/pdf' });
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
-              title: title,
-              text: `Check out this estimation for ${title}:`,
+              title: displayTitle,
+              text: `Check out this estimation for ${displayTitle}:`,
               url: currentUrl,
               files: [file]
             });
@@ -165,7 +172,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
       }
     }
     
-    const text = encodeURIComponent(`Check out this estimation calculation for ${title}: ${currentUrl}`);
+    const text = encodeURIComponent(`Check out this estimation calculation for ${displayTitle}: ${currentUrl}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
@@ -177,11 +184,11 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
         toast.loading('Preparing email...', { id: 'email-toast', position: 'bottom-center' });
         const pdfBlob = await generatePDFBlob();
         if (pdfBlob) {
-          const file = new File([pdfBlob], `${title.replace(/\s+/g, '_')}_Estimate.pdf`, { type: 'application/pdf' });
+          const file = new File([pdfBlob], `${displayTitle.replace(/\s+/g, '_')}_Estimate.pdf`, { type: 'application/pdf' });
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
-              title: title,
-              text: `Estimation for ${title}`,
+              title: displayTitle,
+              text: `Estimation for ${displayTitle}`,
               files: [file]
             });
             toast.dismiss('email-toast');
@@ -196,8 +203,8 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
       }
     }
     
-    const subject = encodeURIComponent(`${title} - Estimation Report`);
-    const body = encodeURIComponent(`Here is the calculation report for ${title}.\n\nView it here: ${currentUrl}`);
+    const subject = encodeURIComponent(`${displayTitle} - Estimation Report`);
+    const body = encodeURIComponent(`Here is the calculation report for ${displayTitle}.\n\nView it here: ${currentUrl}`);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
@@ -206,8 +213,8 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
     if (navigator.share) {
       try {
         await navigator.share({
-          title: title,
-          text: `Check out this civil engineering calculation tool: ${title}`,
+          title: displayTitle,
+          text: `Check out this civil engineering calculation tool: ${displayTitle}`,
           url: currentUrl
         });
       } catch (err) {
@@ -222,10 +229,10 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
 
   return (
     <div id="tool-header-top" className="relative -mx-2 sm:-mx-4 md:-mx-8 px-2 sm:px-4 md:px-8 bg-transparent pb-8 flex flex-col gap-6 pt-6">
-      {/* PRINT-ONLY BRANDING HEADER */}
+      {/* PRINT-ONLY BRANDING HEADER — H1 is the tool name, not the brand */}
       <div className="hidden print:flex flex-col w-full border-b-2 border-ink pb-4 mb-4">
-         <h1 className="text-2xl font-bold text-txt-primary m-0 p-0 leading-tight">Civil Estimation Pro</h1>
-         <h2 className="text-lg font-semibold text-txt-secondary m-0 mt-1 p-0 leading-tight">{title}</h2>
+         <p className="text-sm font-semibold text-txt-secondary m-0 p-0 leading-tight">Civil Estimation Pro</p>
+         <h1 className="text-2xl font-bold text-txt-primary m-0 mt-1 p-0 leading-tight">{displayTitle}</h1>
          {subtitle && <p className="text-sm text-txt-tertiary m-0 mt-1 p-0 italic">{subtitle}</p>}
       </div>
 
@@ -240,7 +247,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <motion.h1 layoutId={`title-${id}`} className="text-[22px] md:text-2xl font-semibold text-txt-primary tracking-tight leading-none pt-1">
-                  {title}
+                  {displayTitle}
                 </motion.h1>
                 <div className="group relative flex items-center pt-1">
                   <Button 
@@ -471,7 +478,7 @@ export function ToolHeader({ id, title, subtitle, icon: Icon, onNavigate }: Tool
       <FormulaModal 
         isOpen={isFormulaModalOpen}
         onClose={() => setIsFormulaModalOpen(false)}
-        title={title}
+        title={displayTitle}
         formulaDescription="Calculations follow standardized civil engineering guidelines for material density and proportioning. Specific details can be referenced from structural design codes."
       />
     </div>

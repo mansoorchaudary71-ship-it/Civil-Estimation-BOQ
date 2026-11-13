@@ -16,6 +16,11 @@ import Blog from "./components/pages/Blog";
 import LegalPages from "./components/pages/LegalPages";
 import PricingPage from "./components/pages/PricingPage";
 import BrickCalculatorPage from "./components/pages/BrickCalculatorPage";
+import MixDesignCalculatorPage from "./components/pages/MixDesignCalculatorPage";
+import MarlaConverterPage from "./components/pages/MarlaConverterPage";
+import PakistanCostCalculatorPage from "./components/pages/PakistanCostCalculatorPage";
+import StandardsReferencePage from "./components/StandardsReferencePage";
+import { resolvePath, pathFromId } from "./lib/toolRoutes";
 import Footer from "./components/Footer";
 import SmoothScroll from "./components/ui/SmoothScroll";
 import SkipToContent from "./components/ui/SkipToContent";
@@ -241,6 +246,16 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
     case "brick-calculator":
       return <BrickCalculatorPage />;
 
+    case "mix-design":
+      return <MixDesignCalculatorPage />;
+
+    // Orphan pages (existed only in the dead routes.jsx): full pages, no wrapper.
+    case "marla-converter":
+      return <MarlaConverterPage />;
+
+    case "pakistan-cost-calculator":
+      return <PakistanCostCalculatorPage />;
+
     case "house":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="HouseEstimator"><HouseEstimator /></ModuleWrapper>;
 
@@ -255,6 +270,16 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
 
     case "boq":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="BOQGenerator"><BOQGenerator /></ModuleWrapper>;
+
+    // Resource cards that had no render target (they showed the 404 page):
+    // BOQ templates live inside the BOQ generator; the cost guide is the
+    // Pakistan city-rates page; the standards cards open the standards
+    // reference pre-filtered to the right country.
+    case "boq-templates":
+      return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="BOQGenerator"><BOQGenerator /></ModuleWrapper>;
+
+    case "cost-guide-pakistan":
+      return <PakistanCostCalculatorPage />;
 
     case "takeoff":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="Takeoff"><Takeoff /></ModuleWrapper>;
@@ -420,6 +445,18 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
     case "ventilation-checker":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="VentilationChecker"><VentilationChecker /></ModuleWrapper>;
 
+    case "is-codes-reference":
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="India" />;
+
+    case "morth-irc-specs":
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="India" />;
+
+    case "pakistan-building-codes":
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="Pakistan" />;
+
+    case "uae-construction-standards":
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="UAE" />;
+
     default:
       return (
         <div className="mx-auto w-full max-w-[1024px] px-4 py-24 text-center">
@@ -450,11 +487,14 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
 }
 
 
-/** Pages that are not calculators but are reachable via the URL hash (#/pricing, #/blog ...). */
-const STATIC_PAGES = ["home", "my-estimates", "about", "careers", "contact", "blog", "pricing", "privacy", "terms", "cookies"];
-const idFromPath = (pathname: string) => pathname.replace(/^\/+/, "").split("/")[0] || "home";
-const pathFromId = (id: string) => (id === "home" ? "/" : `/${id}`);
-const isKnownRoute = (id: string) => STATIC_PAGES.includes(id) || ALL_TOOLS.some((t) => t.id === id);
+/** Pages that are not calculators (rendered by the static-page branch below).
+ *  URL -> module mapping lives in src/lib/toolRoutes.ts (single source of
+ *  truth). The old idFromPath() only read the FIRST path segment, so every
+ *  /calculators/<group>/<slug> URL resolved to "home" — that was the
+ *  redirect-to-home bug. */
+const STATIC_PAGES = ["home", "my-estimates", "about", "careers", "contact", "blog", "pricing", "privacy", "terms", "cookies", "standards", "team", "join-project"];
+/** Sentinel id for unknown URLs — renderModule's default case shows the in-app 404 page. */
+const NOT_FOUND_ID = "__not-found__";
 
 export default function App() {
   const { addRecentTool } = useRecentTools();
@@ -463,30 +503,39 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Dashboard category preselected by a /calculators/<group> URL (null = "All Tools").
+  const [dashboardCategory, setDashboardCategory] = useState<string | null>(() => {
+    const path = window.location.pathname !== "/" ? window.location.pathname : (window.location.hash.replace(/^#/, "") || "/");
+    const resolved = resolvePath(path);
+    return resolved.kind === "category" ? resolved.category : null;
+  });
+
   const [activeModule, setActiveModule] = useState<ModuleId>(() => {
-    // Clean URLs (BrowserRouter): read the real path first. Legacy hash links
+    // Clean URLs (BrowserRouter): resolve the real path. Legacy hash links
     // (#/tool-id) still work as a fallback.
     const path = window.location.pathname && window.location.pathname !== "/"
       ? window.location.pathname
       : (window.location.hash.replace(/^#/, "") || "/");
-    if (path.startsWith("/join/") || window.location.hash.startsWith("#/join/")) {
-      return "join-project";
-    }
-    if (path.startsWith("/team") || window.location.hash.startsWith("#/team")) {
-      return "team-collaboration";
-    }
-    const fromUrl = idFromPath(path);
-    return (isKnownRoute(fromUrl) ? fromUrl : "home") as ModuleId;
+    const resolved = resolvePath(path);
+    if (resolved.kind === "not-found") return NOT_FOUND_ID;
+    if (resolved.kind === "category") return "home";
+    return resolved.id as ModuleId;
   });
 
+  // Keep the rendered module in sync with the URL on every navigation
+  // (in-app clicks, back/forward, direct loads and refreshes). Unknown
+  // paths render the in-app 404 page — they never silently show home.
   useEffect(() => {
-    if (location.pathname.startsWith('/join/')) {
-      setActiveModule('join-project');
-    } else if (location.pathname === '/team') {
-      setActiveModule('team-collaboration');
+    const resolved = resolvePath(location.pathname);
+    if (resolved.kind === "category") {
+      setDashboardCategory(resolved.category);
+      setActiveModule("home");
+    } else if (resolved.kind === "not-found") {
+      setDashboardCategory(null);
+      setActiveModule((prev) => (prev === NOT_FOUND_ID ? prev : NOT_FOUND_ID));
     } else {
-      const id = idFromPath(location.pathname);
-      if (isKnownRoute(id)) setActiveModule((prev) => (prev === id ? prev : id));
+      setDashboardCategory(null);
+      setActiveModule((prev) => (prev === resolved.id ? prev : resolved.id));
     }
   }, [location]);
 
@@ -759,6 +808,12 @@ export default function App() {
     }
   };
 
+  // /join/<projectId>/<shareToken> params (useLocation is basename-stripped;
+  // JoinProject's useParams() is empty because App renders no <Routes>).
+  const joinSegments = location.pathname.split("/").filter(Boolean);
+  const joinProjectId = joinSegments[0] === "join" ? joinSegments[1] : undefined;
+  const joinShareToken = joinSegments[0] === "join" ? joinSegments[2] : undefined;
+
   return (
     <SmoothScroll>
       <SkipToContent />
@@ -827,9 +882,12 @@ export default function App() {
                               {STATIC_PAGES.includes(activeModule) ? (
                                                                 <motion.div ref={scrollRef} className="flex-1 flex flex-col relative w-full overflow-visible" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.15 } } }}>
                                   <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex flex-col relative w-full">
-                                    {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule}  onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}
+                                    {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule} initialCategory={dashboardCategory} onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}
                                     {activeModule === "my-estimates" && <RecentEstimates onSelectModule={handleSelectModule} />}
                                     {activeModule === "pricing" && <PricingPage />}
+                                    {activeModule === "standards" && <StandardsReferencePage onNavigate={handleSelectModule} />}
+                                    {activeModule === "team" && <div className="p-8 pt-12"><TeamCollaboration /></div>}
+                                    {activeModule === "join-project" && <JoinProject projectId={joinProjectId} shareToken={joinShareToken} />}
                                     {activeModule === "about" && <div className="p-8 pt-12"><AboutUs /></div>}
                                     {activeModule === "careers" && <div className="p-8 pt-12"><Careers /></div>}
                                     {activeModule === "contact" && <div className="p-8 pt-12"><Contact /></div>}

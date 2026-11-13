@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { getRates } from '../lib/rates';
 
 export interface MarketRates {
   cement: number; // per bag (50kg)
@@ -13,17 +14,28 @@ export interface MarketRates {
   overheadMarkup: number; // percentage
 }
 
+/**
+ * Defaults come from the single shared rate table (src/lib/rates.ts) so
+ * every tool quotes the same numbers. The `??` fallbacks are the old
+ * hardcoded values and are unreachable while the PK table is populated;
+ * they exist only to keep the MarketRates fields non-nullable.
+ * NOTE: the old crush default (250/cft) was a proven ~3x error and is
+ * deliberately NOT the fallback here — PK crush is 90/cft in rates.ts.
+ * Bricks are stored per piece here (23.355 = 23,355 per 1,000, PBS Aug 2026
+ * Lahore); steel is 270/kg (indicative Nov 2026), not the old stale 280.
+ */
+const pkRates = getRates("PK").rates;
 const defaultRates: MarketRates = {
-  cement: 1450,
-  steel: 280,
-  bricks: 18, 
-  sand: 90,
-  crush: 250,
-  tiles: 1200,
-  paint: 300,
-  laborGrey: 500,
-  laborFinish: 600,
-  overheadMarkup: 15,
+  cement: pkRates.cementPerBag ?? 1450,
+  steel: pkRates.steelPerKg ?? 270,
+  bricks: pkRates.bricksPer1000 != null ? pkRates.bricksPer1000 / 1000 : 18,
+  sand: pkRates.sandPerCft ?? 90,
+  crush: pkRates.crushPerCft ?? 90,
+  tiles: pkRates.tilesPerBox ?? 1200,
+  paint: pkRates.paintPerL ?? 300,
+  laborGrey: pkRates.labourGreyPerSqft ?? 500,
+  laborFinish: pkRates.labourFinishPerSqft ?? 600,
+  overheadMarkup: pkRates.overheadMarkupPct ?? 15,
 };
 
 const COMPANY_RATES_STORAGE_KEY = "company_material_rates";

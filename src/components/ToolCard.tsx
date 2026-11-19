@@ -1,31 +1,58 @@
 import React from "react";
-import { Bookmark, BookmarkCheck, ArrowRight, Box, Clock, Flame } from "lucide-react";
+import { Bookmark, BookmarkCheck, ArrowUpRight, Box, Clock, Flame, Sparkles } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
 import { cn } from "../lib/utils";
+import { getToolImage, getShortCategory } from "../lib/toolImages";
 
 /**
- * ToolCard - Dribbble "shot" card: visual thumbnail, quiet meta row, hover reveal, save button.
+ * ToolCard - photo-first card.
  *
- * Fixes vs. previous card
- *  - The whole card was a clickable <div> (not focusable, not a link, no ctrl/cmd-click).
- *    Now the title is a real link with a stretched hit-area (`after:absolute after:inset-0`).
- *  - A full-screen "quick view" modal opened after hovering 500ms. Scrolling past a card
- *    popped a modal over the page. Removed.
- *  - The modal (and card) showed made-up numbers: "Accuracy 98.5%", "Saves 1.2k+", "Usage High"
- *    for every tool, and a fake difficulty derived from `id.length % 3`. The catalogue already has
- *    real `difficulty` and `estimatedTime`; those are used and nothing is invented.
- *  - Button nested in a clickable div, 40px padding, 10px labels, and a shared framer `layoutId`
- *    that fought with the page transition are gone.
+ *  - Soft tinted card with an inset rounded cover image (what the tool is about: bricks, concrete, rebar...).
+ *  - Category badge on the image, three colour-coded pills below (highlight / time / difficulty).
+ *  - Brand colour: #885202.
+ *  - Hover (pointer devices): card lifts and scales slightly, shadow deepens, image zooms gently.
+ *    Honors prefers-reduced-motion.
+ *
+ * Accessibility / behaviour kept from the previous card:
+ *  - The title is a real link with a stretched hit-area (`after:absolute after:inset-0`), so ctrl/cmd-click works.
+ *  - The save button sits above the stretched link.
+ *  - Only real catalogue data is shown (difficulty, estimatedTime, isNew, isPopular) - nothing is invented.
  */
 
-// One amber system for every category (Dribbble has no per-category colours).
-// getCategorySpec keeps its signature for SmartSearch; it always returns this spec.
-const CAT_COLORS: Record<string, { c: string; glow: string }> = {
-  DEFAULT: { c: "#855307", glow: "rgba(242,164,19,0.14)" },
-};
+export const BRAND = "#885202";
 
-// Exported: SmartSearch imports it.
+// getCategorySpec keeps its signature for SmartSearch; it always returns the brand spec.
+const CAT_COLORS: Record<string, { c: string; glow: string }> = {
+  DEFAULT: { c: BRAND, glow: "rgba(136,82,2,0.14)" },
+};
 export const getCategorySpec = (_category: string) => CAT_COLORS["DEFAULT"];
+
+/** 1-3 filled bars, like a signal meter. */
+function LevelBars({ level }: { level: 1 | 2 | 3 }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" className="shrink-0">
+      {[0, 1, 2].map((i) => (
+        <rect
+          key={i}
+          x={1 + i * 4.5}
+          y={9 - i * 3.5}
+          width="3"
+          height={4 + i * 3.5}
+          rx="1"
+          fill="currentColor"
+          opacity={i < level ? 1 : 0.35}
+        />
+      ))}
+    </svg>
+  );
+}
+
+const levelOf = (d?: string): 1 | 2 | 3 => {
+  const v = (d || "").toLowerCase();
+  if (v.startsWith("adv") || v.startsWith("exp")) return 3;
+  if (v.startsWith("int") || v.startsWith("med")) return 2;
+  return 1;
+};
 
 export default function ToolCard({
   mod,
@@ -41,7 +68,6 @@ export default function ToolCard({
   const { settings, updateSettings } = useSettings();
   if (!mod) return null;
 
-  const cfg = getCategorySpec(mod.category);
   const favoriteTools: string[] = settings?.favoriteTools || [];
   const saved = favoriteTools.includes(mod.id);
   const Icon = mod.icon || Box;
@@ -60,37 +86,38 @@ export default function ToolCard({
     onSelect(mod.id, layoutId || `module-${mod.id}`);
   };
 
+  // Hover "pop" only where hover exists (avoids sticky hover on touch screens).
+  const pop =
+    "[@media(hover:hover)]:hover:-translate-y-2 [@media(hover:hover)]:hover:scale-[1.03] [@media(hover:hover)]:hover:z-10 " +
+    "[@media(hover:hover)]:hover:shadow-[0_26px_44px_-14px_rgba(136,82,2,0.50)] " +
+    "focus-within:-translate-y-1 focus-within:shadow-[0_18px_34px_-12px_rgba(136,82,2,0.45)] " +
+    "motion-reduce:transform-none motion-reduce:transition-none";
+
+  const pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[13px] font-semibold leading-none";
+
   return (
     <article
       id={`module-card-${mod.id}`}
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-card border border-ui-borderSubtle bg-surface-default",
-        "transition-[box-shadow,border-color] duration-200 hover:border-ui-borderDefault hover:shadow-brand-md",
-        "focus-within:border-accent-800 focus-within:shadow-brand-md"
+        "group relative flex h-full flex-col rounded-[28px] p-2.5",
+        "border border-[#885202]/15 bg-[#FBF0DC] dark:border-white/10 dark:bg-[#2b1d0e]",
+        "shadow-[0_2px_10px_-4px_rgba(136,82,2,0.25)] will-change-transform",
+        "transition-[transform,box-shadow] duration-300 ease-out",
+        pop
       )}
     >
-      {/* Thumbnail */}
-      <div
-        className="relative flex aspect-[16/9] items-center justify-center overflow-hidden"
-        style={{ background: `linear-gradient(135deg, ${cfg.glow} 0%, transparent 70%)` }}
-      >
-        <span
-          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-default shadow-brand-sm border border-ui-borderSubtle transition-transform duration-300 group-hover:scale-105"
-          style={{ color: cfg.c }}
-        >
-          <Icon size={30} strokeWidth={1.8} aria-hidden="true" />
-        </span>
-
-        <div className="absolute left-3 top-3 flex gap-1.5">
-          {mod.isNew && (
-            <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-bold text-white">New</span>
-          )}
-          {mod.isPopular && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-surface-default px-2.5 py-1 text-xs font-bold text-txt-primary border border-ui-borderSubtle">
-              <Flame className="h-3 w-3 text-accent-700" aria-hidden="true" /> Popular
-            </span>
-          )}
-        </div>
+      {/* Cover image */}
+      <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] bg-[#e9d3a8]">
+        <img
+          src={getToolImage(mod)}
+          alt=""
+          width={400}
+          height={250}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="h-full w-full object-cover transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:scale-110 motion-reduce:transition-none"
+        />
 
         {/* Save - sits above the stretched link */}
         <button
@@ -98,50 +125,67 @@ export default function ToolCard({
           onClick={toggleFavorite}
           aria-pressed={saved}
           aria-label={saved ? `Remove ${mod.title} from saved tools` : `Save ${mod.title}`}
-          className="absolute z-10 right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-surface-default/95 border border-ui-borderSubtle text-txt-secondary hover:text-accent-800 hover:border-accent-800 transition-colors"
+          className="absolute left-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF6E6]/95 text-[#885202] shadow-sm backdrop-blur transition-colors hover:bg-white"
         >
-          {saved ? (
-            <BookmarkCheck size={18} className="text-accent-800" aria-hidden="true" />
-          ) : (
-            <Bookmark size={18} aria-hidden="true" />
-          )}
+          {saved ? <BookmarkCheck size={18} aria-hidden="true" /> : <Bookmark size={18} aria-hidden="true" />}
         </button>
 
-        {/* Hover reveal (pointer devices only; the title link is always available) */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden translate-y-2 items-center justify-end bg-gradient-to-t from-black/35 to-transparent p-3 opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:flex">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-default px-3.5 py-1.5 text-sm font-semibold text-txt-primary">
-            Open tool <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </span>
-        </div>
+        {/* Hover affordance (pointer devices only) */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-3 right-3 hidden h-10 w-10 translate-y-2 items-center justify-center rounded-full bg-[#885202] text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:flex"
+        >
+          <ArrowUpRight size={20} />
+        </span>
+
+        {/* Category badge */}
+        <span className="absolute right-3 top-3 inline-flex max-w-[60%] items-center gap-1.5 rounded-full bg-[#FFF1D6]/95 px-3 py-1.5 text-[13px] font-semibold text-[#6b3f00] shadow-sm backdrop-blur">
+          <Icon size={15} strokeWidth={2.2} aria-hidden="true" className="shrink-0" />
+          <span className="truncate">{getShortCategory(mod.category)}</span>
+        </span>
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-base font-semibold leading-snug text-txt-primary line-clamp-2">
+      <div className="flex flex-1 flex-col px-2.5 pb-2 pt-4">
+        <h3 className="text-[19px] font-bold leading-snug tracking-tight text-[#3a2200] line-clamp-2 dark:text-[#fbeed6]">
           <a
             href={`#/${mod.id}`}
             onClick={open}
-            className="after:absolute after:inset-0 after:content-[''] focus:outline-none"
+            className="after:absolute after:inset-0 after:rounded-[28px] after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-[#885202]"
           >
             {mod.title}
           </a>
         </h3>
-        <p className="mt-1.5 text-sm text-txt-secondary line-clamp-2">{mod.desc || "Engineering calculator."}</p>
+        <p className="mt-1.5 text-[14.5px] leading-snug text-[#6b4a1f] line-clamp-2 dark:text-[#d9c19a]">
+          {mod.desc || "Engineering calculator."}
+        </p>
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-4 text-[13px] text-txt-tertiary">
-          <span className="flex min-w-0 items-center gap-1.5">
-            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: cfg.c }} aria-hidden="true" />
-            <span className="truncate">{mod.category}</span>
-          </span>
-          <span className="flex shrink-0 items-center gap-3">
-            {mod.difficulty && <span>{mod.difficulty}</span>}
-            {mod.estimatedTime && (
-              <span className="inline-flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-                {mod.estimatedTime}
+        <div className="mt-auto pt-4">
+          <div className="flex flex-wrap gap-1.5">
+            {(mod.isPopular || mod.isNew) && (
+              <span className={cn(pill, "bg-[#F4C36A] text-[#3a2200]")}>
+                {mod.isPopular ? (
+                  <Flame size={14} aria-hidden="true" className="shrink-0" />
+                ) : (
+                  <Sparkles size={14} aria-hidden="true" className="shrink-0" />
+                )}
+                {mod.isPopular ? "Popular" : "New"}
               </span>
             )}
-          </span>
+            {mod.estimatedTime && (
+              <span className={cn(pill, "bg-[#E7D2AF] text-[#4d2f00] dark:bg-[#4a3519] dark:text-[#f3dcb0]")}>
+                <Clock size={14} aria-hidden="true" className="shrink-0" />
+                {mod.estimatedTime.replace(/^~\s*/, "")}
+              </span>
+            )}
+            {mod.difficulty && (
+              <span className={cn(pill, "bg-[#885202] text-white")}>
+                <LevelBars level={levelOf(mod.difficulty)} />
+                {mod.difficulty}
+              </span>
+            )}
+          </div>
+
         </div>
       </div>
     </article>

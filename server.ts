@@ -15,7 +15,16 @@ async function startServer() {
   // API routes FIRST
 
   const users = [];
-  const JWT_SECRET = process.env.JWT_SECRET || "civil_estimation_pro_secret_key";
+  // The JWT signing secret MUST come from the environment. A previous
+  // hardcoded value was published in the public GitHub Pages artifact
+  // (dist/server.cjs) and must be treated as compromised — never reuse
+  // it. Generate a fresh long random secret and set JWT_SECRET before
+  // starting the dev server (see .env.example).
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if (!JWT_SECRET) {
+    console.error("FATAL: JWT_SECRET environment variable is not set. Refusing to start: auth tokens cannot be signed securely without it.");
+    process.exit(1);
+  }
 
   // Auth Middleware
   const authenticateToken = (req, res, next) => {
@@ -403,48 +412,36 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
+  // Dev-only stub. Values MUST match src/lib/rates.ts (PK table,
+  // 2026-11-12) so dev and production agree; the old stub returned stale
+  // values (bricks 14,000/1,000, crush 120) that silently downgraded the
+  // good table whenever the client fetched /api/rates in dev.
   app.get("/api/rates", (req, res) => {
     res.json({
       status: "ok",
       data: {
-        cement: 1250,
-        steel: 260,
-        bricks: 14000,
-        sand: 60,
-        crush: 120,
-        laborGrey: 450,
-        laborFinish: 550,
+        cement: 1450,
+        steel: 270,
+        bricks: 23355,
+        sand: 90,
+        crush: 90,
+        laborGrey: 500,
+        laborFinish: 600,
         last_updated: new Date().toISOString()
       }
     });
   });
 
-  app.get("/api/updates/count", (req, res) => {
-    res.json({ success: true, count: 1250 });
-  });
-
-  app.post("/api/updates/subscribe", (req, res) => {
-    res.json({ success: true, message: "Subscribed successfully" });
-  });
-
-  app.post("/api/project/invite", (req, res) => {
-    res.json({ success: true, message: "Invited successfully" });
-  });
+  // NOTE: the dead no-caller stubs that used to live here
+  // (GET /api/updates/count, POST /api/updates/subscribe,
+  // POST /api/project/invite, POST /api/contact, GET /api/blog/posts
+  // and /api/blog/posts/:slug) were deleted 2026-11-20: nothing in src/
+  // called them and each returned a canned success without doing
+  // anything. /api/workspace/gmail/send is kept for now because
+  // SiteProgressTracker still calls it (separate fix in progress).
 
   app.post("/api/workspace/gmail/send", (req, res) => {
     res.json({ success: true, message: "Sent successfully" });
-  });
-
-  app.get("/api/blog/posts", (req, res) => {
-    res.json({ status: "ok", posts: [] });
-  });
-
-  app.get("/api/blog/posts/:slug", (req, res) => {
-    res.json({ status: "ok", post: null });
-  });
-
-  app.post("/api/contact", (req, res) => {
-    res.json({ success: true, message: "Contact request received" });
   });
 
 

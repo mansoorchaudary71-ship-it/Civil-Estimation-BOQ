@@ -59,9 +59,9 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Lahore has some of the lowest brick rates in Pakistan because Punjab has the most kilns. Kilns cluster around Raiwind, Manga Mandi and Multan Road, so transport is short and competition keeps prices down. The calculator below is pre-set with Lahore's indicative rates — enter your wall sizes and your kiln's actual rate to get a firm estimate.",
     localNote:
       "Most Lahore houses are built with Awwal bricks in 9-inch external walls and 4½-inch internal walls. A 5 marla plot in Lahore is 1,125 sq ft (25 × 45 ft) and a 10 marla plot is 2,250 sq ft — the plot-size table on this page uses those sizes.",
-    title: "Brick Calculator Lahore — Bricks, Cement & Cost in PKR | Civil Estimation Pro",
+    title: "Brick Calculator Lahore — PKR Cost | Civil Estimation Pro",
     description:
-      "Free brick calculator for Lahore. Calculate bricks, cement bags, sand and total cost in PKR for any wall — with Lahore's indicative November 2026 rates (PBS survey).",
+      "Free brick calculator for Lahore. Calculate bricks, cement bags, sand and total cost in PKR — with Lahore's indicative November 2026 rates (PBS survey).",
   },
   {
     slug: "karachi",
@@ -79,7 +79,7 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Karachi's brick rates run higher than Lahore's because bricks travel in from interior Sindh and Hub, and fuel and intra-city transport add to the price. Concrete blocks are also common for masonry in Karachi. The calculator below is pre-set with Karachi's indicative rates — replace them with your supplier's quote for an exact figure.",
     localNote:
       "In Karachi, check whether your supplier quotes per 1,000 bricks delivered or ex-kiln — delivery inside the city can add a meaningful amount. Blocks (4\"–8\" hollow) are a genuine alternative here and are priced per piece, not per 1,000.",
-    title: "Brick Calculator Karachi — Bricks, Cement & Cost in PKR | Civil Estimation Pro",
+    title: "Brick Calculator Karachi — PKR Cost | Civil Estimation Pro",
     description:
       "Free brick calculator for Karachi. Calculate bricks, cement bags, sand and total cost in PKR — with Karachi's indicative November 2026 rates (PBS survey).",
   },
@@ -99,7 +99,7 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Islamabad records the highest first-class brick rates in the Pakistan Bureau of Statistics city survey — bricks come from kilns around Taxila and Gujar Khan, and demand from DHA, Bahria Town and Gulberg keeps prices firm. The calculator below is pre-set with Islamabad's indicative rates.",
     localNote:
       "Islamabad houses often use Awwal bricks for external 9-inch walls and Doam for internal work to save money. If your quote looks much lower than the survey figure, check the brick class — Awwal and Doam prices differ by several thousand rupees per 1,000.",
-    title: "Brick Calculator Islamabad — Bricks, Cement & Cost in PKR | Civil Estimation Pro",
+    title: "Brick Calculator Islamabad — PKR | Civil Estimation Pro",
     description:
       "Free brick calculator for Islamabad. Calculate bricks, cement bags, sand and total cost in PKR — with Islamabad's indicative November 2026 rates (PBS survey).",
   },
@@ -119,7 +119,7 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Rawalpindi's brick market runs on the same Taxila and Gujar Khan kilns as Islamabad, so rates track Islamabad closely — the PBS survey puts first-class bricks only slightly below Islamabad's figure. The calculator below is pre-set with Rawalpindi's indicative rates.",
     localNote:
       "Rawalpindi's older city areas often have smaller plots and shared walls, which changes the wall area — measure each wall separately rather than using a plot-size thumb rule.",
-    title: "Brick Calculator Rawalpindi — Bricks, Cement & Cost in PKR | Civil Estimation Pro",
+    title: "Brick Calculator Rawalpindi — PKR | Civil Estimation Pro",
     description:
       "Free brick calculator for Rawalpindi. Calculate bricks, cement bags, sand and total cost in PKR — with Rawalpindi's indicative November 2026 rates (PBS survey).",
   },
@@ -139,9 +139,9 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Delhi builds mostly with red clay bricks (230 × 110 × 70 mm non-modular) and increasingly with fly ash bricks, which are cheaper at ₹4–8 per piece. Note that red-brick kilns face restrictions in the NCR green zones, so fly ash and modular bricks are worth pricing too. The calculator below is pre-set with Delhi's indicative rates in rupees.",
     localNote:
       "Delhi sand is sold per cubic foot — river sand runs about ₹78–90 per cft and M-sand about ₹55–64. GST at 12% applies to most bricks; check whether your quote includes it.",
-    title: "Brick Calculator Delhi — Bricks, Cement & Cost in ₹ | Civil Estimation Pro",
+    title: "Brick Calculator Delhi — INR Cost | Civil Estimation Pro",
     description:
-      "Free brick calculator for Delhi. Calculate bricks, cement bags, sand and total cost in INR — with Delhi's indicative November 2026 rates.",
+      "Free brick calculator for Delhi. Calculate bricks, cement bags, sand and total cost in INR — with Delhi's indicative November 2026 rates and sizes.",
   },
   {
     slug: "mumbai",
@@ -159,9 +159,9 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Mumbai's brick prices sit at the top of the Indian range — longer transport from kilns, higher labour and unloading costs, and constant demand. Fly ash bricks (₹4–8) and AAC blocks are common alternatives in the city. The calculator below is pre-set with Mumbai's indicative rates in rupees.",
     localNote:
       "In Mumbai, river sand is scarce and expensive — most sites use M-sand (about ₹55–64 per cft) or crushed sand. Confirm which sand your quote uses before comparing prices.",
-    title: "Brick Calculator Mumbai — Bricks, Cement & Cost in ₹ | Civil Estimation Pro",
+    title: "Brick Calculator Mumbai — INR Cost | Civil Estimation Pro",
     description:
-      "Free brick calculator for Mumbai. Calculate bricks, cement bags, sand and total cost in INR — with Mumbai's indicative November 2026 rates.",
+      "Free brick calculator for Mumbai. Calculate bricks, cement bags, sand and total cost in INR — with Mumbai's indicative November 2026 rates and sizes.",
   },
   {
     slug: "dubai",
@@ -179,9 +179,9 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Dubai builds mostly with concrete blocks, not clay bricks — the standard walling unit is a hollow concrete block, and clay bricks are largely imported, so their price depends on origin and order size. This calculator uses the UAE clay brick size (215 × 102.5 × 65 mm) for quantities; enter your supplier's brick rate to see the cost, or price the job in blocks using the rates below.",
     localNote:
       "Dubai Municipality and ESMA regulate cement and block quality — ask for the supplier's test certificate. A 4-inch hollow block runs about AED 1.50–2.50, a 6-inch block AED 2.00–3.50 and an 8-inch block AED 2.80–4.50 (2026).",
-    title: "Brick Calculator Dubai — Bricks, Cement & Cost in AED | Civil Estimation Pro",
+    title: "Brick Calculator Dubai — AED Cost | Civil Estimation Pro",
     description:
-      "Free brick calculator for Dubai. Calculate bricks, cement bags and sand in AED — quantities for the UAE clay brick size, with Dubai's indicative 2026 cement and block rates.",
+      "Free brick calculator for Dubai. Calculate bricks, cement bags and sand in AED — quantities for the UAE clay brick size, with 2026 cement and block rates.",
   },
   {
     slug: "abu-dhabi",
@@ -199,9 +199,9 @@ export const CITY_VARIANTS: CityVariant[] = [
       "Abu Dhabi follows the same pattern as Dubai: concrete blocks are the standard walling unit and clay bricks are imported. Cement is slightly dearer here than in Dubai in some quotes, but the difference is small. This calculator gives you exact quantities for the UAE clay brick size — enter your supplier's rate for the cost.",
     localNote:
       "For villas in Abu Dhabi, thermal (insulated) blocks are common for external walls — about AED 4.40 per block (2026). They cost more per unit than a standard hollow block but reduce cooling load.",
-    title: "Brick Calculator Abu Dhabi — Bricks, Cement & Cost in AED | Civil Estimation Pro",
+    title: "Brick Calculator Abu Dhabi — AED | Civil Estimation Pro",
     description:
-      "Free brick calculator for Abu Dhabi. Calculate bricks, cement bags and sand in AED — quantities for the UAE clay brick size, with Abu Dhabi's indicative 2026 cement and block rates.",
+      "Free brick calculator for Abu Dhabi. Calculate bricks, cement bags and sand in AED — quantities for the UAE clay brick size, with 2026 cement and block rates.",
   },
 ];
 
@@ -229,7 +229,7 @@ export const BRICK_TYPE_VARIANTS: BrickTypeVariant[] = [
     bestFor: "Load-bearing walls, foundations, columns, external walls.",
     watchOut:
       "The most faked grade — ask for a kiln sample and measure it. A brick that is soft, under-burnt or irregular is not Awwal whatever the seller calls it.",
-    title: "Awwal Brick Calculator — Quantity & Cost for First-Class Bricks | Civil Estimation Pro",
+    title: "Awwal Brick Calculator — Qty & Cost | Civil Estimation Pro",
     description:
       "Calculate Awwal (first-class) bricks, cement and sand for any wall, with cost in PKR, INR or AED. Includes Awwal rates and what to check before ordering.",
   },
@@ -243,7 +243,7 @@ export const BRICK_TYPE_VARIANTS: BrickTypeVariant[] = [
     bestFor: "Internal partition walls, non-load-bearing work, temporary structures.",
     watchOut:
       "Doam absorbs more water and breaks more easily, so add 10% wastage instead of 5%. Never use Doam for foundations or external load-bearing walls.",
-    title: "Doam Brick Calculator — Quantity & Cost for Second-Class Bricks | Civil Estimation Pro",
+    title: "Doam Brick Calculator — Qty & Cost | Civil Estimation Pro",
     description:
       "Calculate Doam (second-class) bricks, cement and sand for any wall, with cost in PKR, INR or AED. Includes Doam rates and where it is safe to use.",
   },
@@ -257,7 +257,7 @@ export const BRICK_TYPE_VARIANTS: BrickTypeVariant[] = [
     bestFor: "Exposed brickwork, precision work, projects where uniform size matters.",
     watchOut:
       "Machine-made bricks are denser and heavier — check that your design accounts for the extra dead load, and confirm the crushing strength certificate.",
-    title: "Machine-Made Brick Calculator — Quantity & Cost | Civil Estimation Pro",
+    title: "Machine-Made Brick Calculator — Cost | Civil Estimation Pro",
     description:
       "Calculate machine-made bricks, cement and sand for any wall, with cost in PKR, INR or AED. Includes machine-made rates and wastage guidance.",
   },
@@ -271,9 +271,9 @@ export const BRICK_TYPE_VARIANTS: BrickTypeVariant[] = [
     bestFor: "Residential walls up to G+2/G+3 (Class 10+), budget projects, India NCR where kiln bricks are restricted.",
     watchOut:
       "Fly ash bricks need proper curing and a good plaster bond — use a richer mortar (1:4) and hack or key the surface before plastering if the manufacturer recommends it.",
-    title: "Fly Ash Brick Calculator — Quantity & Cost | Civil Estimation Pro",
+    title: "Fly Ash Brick Calculator — Cost | Civil Estimation Pro",
     description:
-      "Calculate fly ash bricks, cement and sand for any wall, with cost in PKR, INR or AED. Includes fly ash rates, sizes (IS 12894) and uses.",
+      "Calculate fly ash bricks, cement and sand for any wall, with cost in PKR, INR or AED. Includes fly ash rates, sizes (IS 12894) and uses, for your wall.",
   },
 ];
 
@@ -316,7 +316,7 @@ export const HOUSE_SIZE_VARIANTS: HouseSizeVariant[] = [
     totalBricks: 39300,
     intro:
       "A 5 marla house (1,125 sq ft plot, 25 × 45 ft) is the most common house size in Lahore, Islamabad and Rawalpindi. The table below breaks the brick count into external walls, internal walls and the boundary wall, so you can see where the bricks go — and the calculator is pre-set for a typical 5 marla external wall if you want to adjust it.",
-    title: "Bricks for a 5 Marla House — Quantity & Cost Calculator | Civil Estimation Pro",
+    title: "Bricks for a 5 Marla House — Cost | Civil Estimation Pro",
     description:
       "How many bricks for a 5 marla house? About 39,300 bricks including boundary wall and 5% wastage. Calculate your exact number with the free brick calculator.",
   },
@@ -333,7 +333,7 @@ export const HOUSE_SIZE_VARIANTS: HouseSizeVariant[] = [
     totalBricks: 47300,
     intro:
       "A 7 marla house (1,575 sq ft plot) sits between the compact 5 marla and the spacious 10 marla. The brick count below assumes a double-storey house with a 7 ft boundary wall — adjust the wall areas in the calculator if your design differs.",
-    title: "Bricks for a 7 Marla House — Quantity & Cost Calculator | Civil Estimation Pro",
+    title: "Bricks for a 7 Marla House — Cost | Civil Estimation Pro",
     description:
       "How many bricks for a 7 marla house? About 47,300 bricks including boundary wall and 5% wastage. Calculate your exact number with the free brick calculator.",
   },
@@ -350,7 +350,7 @@ export const HOUSE_SIZE_VARIANTS: HouseSizeVariant[] = [
     totalBricks: 58300,
     intro:
       "A 10 marla house (2,250 sq ft plot, 35 × 64 ft) is the standard family house in most Pakistani housing societies. The table below shows the brick count split by external walls, internal walls and boundary wall, all with 5% wastage included.",
-    title: "Bricks for a 10 Marla House — Quantity & Cost Calculator | Civil Estimation Pro",
+    title: "Bricks for a 10 Marla House — Cost | Civil Estimation Pro",
     description:
       "How many bricks for a 10 marla house? About 58,300 bricks including boundary wall and 5% wastage. Calculate your exact number with the free brick calculator.",
   },
@@ -367,7 +367,7 @@ export const HOUSE_SIZE_VARIANTS: HouseSizeVariant[] = [
     totalBricks: 82300,
     intro:
       "A 1 kanal house (4,500 sq ft plot, 50 × 90 ft) is the largest standard residential plot in Pakistan. Brick counts vary widely with the design — a kanal house with a basement or a third floor needs far more — so treat the table below as a starting point and calculate from your drawings.",
-    title: "Bricks for a 1 Kanal House — Quantity & Cost Calculator | Civil Estimation Pro",
+    title: "Bricks for a 1 Kanal House — Cost | Civil Estimation Pro",
     description:
       "How many bricks for a 1 kanal house? About 82,300 bricks including boundary wall and 5% wastage. Calculate your exact number with the free brick calculator.",
   },

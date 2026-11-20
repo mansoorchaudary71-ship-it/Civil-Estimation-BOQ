@@ -33,6 +33,13 @@ export const getMappedQty = (item: BOQItem, measurements: Measurement[], scalePx
         } else if (m.type === 'area') {
           val = calculateArea(m.points, scalePxPerUnit);
           val = convertArea(val, fromBase, toBase);
+        } else if (m.type === 'assembly') {
+          // Assembly measurements are a single dropped point with no
+          // line/area geometry; the quantity is the one generateBoq
+          // computed from the assembly inputs (already in the line's
+          // unit — assembly inputs are labelled in metres). Fall back
+          // to it so assembly BOQ lines do not resolve to 0.
+          val = item.qtyOverride || 0;
         }
         totalVal += val;
       }

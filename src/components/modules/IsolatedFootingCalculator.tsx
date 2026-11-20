@@ -2,7 +2,6 @@ import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { Accordion } from "../ui/Accordion";
 import { UniversalTabs } from "../ui/UniversalTabs";
-import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
 import {
   Maximize,
   Box,
@@ -144,15 +143,11 @@ export default function IsolatedFootingCalculator({
     concreteVol = vBase + vSloped;
   }
 
-  const dryVol = concreteVol * CIVIL_CONSTANTS.DRY_CONCRETE_FACTOR; // RULE: CONCRETE_DRY_VOLUME
-
-  // Materials
-  const ratio = mixRatios[mix];
-  const totalRatio = ratio ? ratio.c + ratio.s + ratio.a : 1;
-  const cementM3 = (dryVol * ratio.c) / totalRatio;
-  const cementBags = Math.ceil(cementM3 / CIVIL_CONSTANTS.CEMENT_BAG_VOLUME_M3);
-  const sandCft = ((dryVol * ratio.s) / totalRatio) * CIVIL_CONSTANTS.M3_TO_CFT;
-  const aggCft = ((dryVol * ratio.a) / totalRatio) * CIVIL_CONSTANTS.M3_TO_CFT;
+  // Materials come from the engine (design.materials) — the local
+  // recompute below used to ignore wastage, so this page showed sand
+  // 24.0 cft while the engine cost lines / BOQ showed 25.2 cft. The wet
+  // concrete volume above is still local: it feeds backfill, and it is
+  // the same frustum formula the engine uses (design.concreteVolM3).
 
   // Excavation & Backfilling
   const exL = fL + 2 * ws;
@@ -1194,19 +1189,19 @@ export default function IsolatedFootingCalculator({
                     <div className="grid grid-cols-2 gap-4">
                       <ResultCard
                         title="Cement"
-                        value={cementBags}
+                        value={design.materials.cementBags}
                         unit="bags"
                         variant="primary"
                       />
                       <ResultCard
                         title="Sand"
-                        value={sandCft.toFixed(1)}
+                        value={design.materials.sandCft.toFixed(1)}
                         unit="cft"
                         variant="neutral"
                       />
                       <ResultCard
                         title="Aggregate"
-                        value={aggCft.toFixed(1)}
+                        value={design.materials.aggCft.toFixed(1)}
                         unit="cft"
                         variant="neutral"
                       />

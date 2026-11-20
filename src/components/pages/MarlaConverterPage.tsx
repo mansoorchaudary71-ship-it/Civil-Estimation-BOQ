@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import ToolPageFooter from '../ToolPageFooter';
 import { GlobalFAQ } from '../ui/GlobalFAQ';
+import { SEO } from "../SEO";
+import { getSiteUrl } from "../../seo/siteConfig";
 import toast from 'react-hot-toast';
 
 
@@ -90,6 +92,11 @@ export default function MarlaConverterPage() {
 
   return (
     <div className="min-h-screen bg-surface-default font-sans pb-12">
+      <SEO
+        title="Marla & Kanal Area Converter"
+        description="Convert Marla, Kanal, square feet, square yards, m² and acres with Punjab and KPK marla standards — free plot area converter for Pakistan and India."
+        canonicalUrl={`${getSiteUrl()}/marla-converter`}
+      />
       <div className="max-w-7xl mx-auto px-4 pt-12 md:pt-20 pb-16">
         
         {/* Section 1: H1 SEO Header */}

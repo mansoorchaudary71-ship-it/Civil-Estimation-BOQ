@@ -4,17 +4,10 @@ import PricingBackgroundWrapper from '../PricingBackgroundWrapper';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X, Building2, Zap, ArrowRight, ShieldCheck, HelpCircle, ChevronDown, Sparkles } from 'lucide-react';
 import { GlobalFAQ } from '../ui/GlobalFAQ';
+import { SEO } from "../SEO";
+import { getSiteUrl } from "../../seo/siteConfig";
 import { cn } from "../../lib/utils";
 
-
-// Mock logos for trusted strip
-const LOGOS = [
-  { name: "Acme Corp", url: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg", width: 80 },
-  { name: "Stark Ind", url: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Y_Combinator_logo.svg", width: 120 },
-  { name: "Globex", url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", width: 80 },
-  { name: "Wayne Ent", url: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg", width: 80 },
-  { name: "Initech", url: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg", width: 100 },
-];
 
 const FAQS = [
   {
@@ -56,7 +49,12 @@ export default function PricingPage() {
   return (
     <PricingBackgroundWrapper>
     <div className="min-h-screen bg-surface-default font-sans pb-24 overflow-x-hidden">
-      
+      <SEO
+        title="Construction Estimator Pricing"
+        description="Free calculators for everyone, with Pro plans for PDF exports, cloud saving and team tools — start a 14-day free trial, no credit card required."
+        canonicalUrl={`${getSiteUrl()}/pricing`}
+      />
+
       {/* 14-day Free Trial Banner */}
       <div className="bg-ink dark:bg-ink text-white text-center text-sm font-medium py-2 px-4 shadow-brand-sm">
         Start your 14-day free trial today. <span className="font-bold">No credit card required.</span>
@@ -220,22 +218,6 @@ export default function PricingPage() {
           </motion.div>
         </div>
         
-        {/* Trusted By Strip */}
-        <div className="border-y border-ui-borderSubtle dark:border-ink/50 py-12 mb-24">
-          <p className="text-center text-base font-medium uppercase tracking-widest mb-8">Trusted by teams at</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-            {LOGOS.map((logo, idx) => (
-              <img 
-                key={idx} 
-                src={logo.url} 
-                alt={logo.name} 
-                width={logo.width} 
-                className="h-8 object-contain dark:invert"
-              />
-            ))}
-          </div>
-        </div>
-
         {/* ROI Calculator Widget */}
         <div className="max-w-4xl mx-auto bg-surface-default dark:bg-ink rounded-2xl border border-ui-borderSubtle dark:border-ink shadow-brand-lg overflow-hidden mb-24 flex flex-col md:flex-row">
           <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center bg-surface-default/40">

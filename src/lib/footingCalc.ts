@@ -173,6 +173,9 @@ export function designFooting(input: Partial<FootingInputs> = {}): FootingResult
   const muY = (qu * i.footingLengthM * projY * projY) / 2;
   const astX = astForMu(muX, i.fck, i.fy, i.footingWidthM * 1000, d);
   const astY = astForMu(muY, i.fck, i.fy, i.footingLengthM * 1000, d);
+  if (!isFinite(astX) || !isFinite(astY)) {
+    errors.push("Flexural moment exceeds the limiting moment of resistance (Mu,lim) — deepen the footing or increase the concrete grade; no singly-reinforced steel area exists for this moment.");
+  }
   const astMin = (0.12 / 100) * i.footingWidthM * 1000 * i.totalDepthM * 1000;
   const astXReq = Math.max(astX, astMin);
   const astYReq = Math.max(astY, astMin);

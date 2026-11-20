@@ -41,7 +41,7 @@ export default function PileFoundationCalculator() {
     sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
   }), [pileType, soilType, diameter, length, gamma, cu, phi, fos, totalLoad, rows, cols, spacing, capL, capW, capD, fck, wastage, rates]);
 
-  const summary = `Pile ${pileType} ${soilType} D=${diameter} m L=${length} m: Qb ${results.qbKN} kN, Qs ${results.qsKN} kN, Qu ${results.quKN} kN, Qall ${results.qallKN} kN; piles required ${results.requiredPiles}; group η ${results.groupEta}, group capacity ${results.groupCapacityKN} kN (${results.groupGoverns}); settlement ≈ ${results.settlementMm} mm; concrete ${results.concreteVolM3} m³; steel ${results.totalSteelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
+  const summary = `Pile ${pileType} ${soilType} D=${diameter} m L=${length} m: Qb ${results.qbKN} kN, Qs ${results.qsKN} kN, Qu ${results.quKN} kN, Qall ${results.qallKN} kN; piles required ${results.requiredPiles}; group η ${results.groupEta}, group ultimate ${results.groupUltimateKN} kN, group allowable ${results.groupCapacityKN} kN vs load ${totalLoad} kN (${results.groupCapacityKN >= (Number(totalLoad) || 0) ? "PASS" : "FAIL"}) (${results.groupGoverns}); settlement ≈ ${results.settlementMm} mm; concrete ${results.concreteVolM3} m³; steel ${results.totalSteelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
@@ -106,13 +106,14 @@ export default function PileFoundationCalculator() {
                 <ResultCard title="Piles required" value={String(results.requiredPiles)} unit="nos" variant="neutral" />
               </div>
             </MaterialSummary>
-            <MaterialSummary title="Group Capacity" totalLabel="Group capacity" totalValue={results.groupCapacityKN.toFixed(0)} totalUnit="kN" relatedToolIds={[]}>
+            <MaterialSummary title="Group Capacity" totalLabel="Group allowable capacity" totalValue={results.groupCapacityKN.toFixed(0)} totalUnit="kN" relatedToolIds={[]}>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
                 <ResultCard title="Efficiency η" value={results.groupEta.toFixed(2)} unit="" variant="neutral" />
                 <ResultCard title="Governs" value={results.groupGoverns === "block failure" ? "Block" : "Group"} unit="" variant={results.groupGoverns === "block failure" ? "warning" : "neutral"} />
-                <ResultCard title="Per pile" value={results.groupCapacityPerPileKN.toFixed(0)} unit="kN" variant="neutral" />
+                <ResultCard title="Allowable per pile" value={results.groupCapacityPerPileKN.toFixed(0)} unit="kN" variant="neutral" />
                 <ResultCard title="Settlement ≈" value={results.settlementMm.toFixed(1)} unit="mm" variant="neutral" />
               </div>
+              <p className="text-sm text-txt-secondary mt-3">Group ultimate {results.groupUltimateKN.toFixed(0)} kN · allowable {results.groupCapacityKN.toFixed(0)} kN vs load {Number(totalLoad) || 0} kN — <strong>{results.groupCapacityKN >= (Number(totalLoad) || 0) ? "PASS" : "FAIL"}</strong>.</p>
               {results.blockCapacityKN != null && <p className="text-sm text-txt-secondary mt-3">Block failure capacity: {results.blockCapacityKN.toFixed(0)} kN.</p>}
             </MaterialSummary>
             <MaterialSummary title="Quantities & Cost" totalLabel="Total cost" totalValue={results.totalCost == null ? "—" : results.totalCost.toLocaleString("en-US")} totalUnit={table.currency} relatedToolIds={[]}>

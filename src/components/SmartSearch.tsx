@@ -59,23 +59,35 @@ export default function SmartSearch({ onSelect }: SmartSearchProps) {
     [],
   );
 
+  // Corrupt stored history must not throw in the effect (guarded like the
+  // other localStorage reads in the repo).
+  const readRecentSearches = (): string[] => {
+    try {
+      const parsed: unknown = JSON.parse(
+        localStorage.getItem("smart_search_recent") || "[]",
+      );
+      return Array.isArray(parsed) ? parsed.filter((h): h is string => typeof h === "string") : [];
+    } catch {
+      return [];
+    }
+  };
+
   useEffect(() => {
-    const history = JSON.parse(
-      localStorage.getItem("smart_search_recent") || "[]",
-    );
-    setRecentSearches(history.slice(0, 4));
+    setRecentSearches(readRecentSearches().slice(0, 4));
   }, []);
 
   const saveRecentSearch = (term: string) => {
     if (!term.trim()) return;
-    const history = JSON.parse(
-      localStorage.getItem("smart_search_recent") || "[]",
-    );
+    const history = readRecentSearches();
     const newHistory = [
       term,
       ...history.filter((h: string) => h !== term),
     ].slice(0, 4);
-    localStorage.setItem("smart_search_recent", JSON.stringify(newHistory));
+    try {
+      localStorage.setItem("smart_search_recent", JSON.stringify(newHistory));
+    } catch {
+      // Storage full / unavailable: keep the in-memory list.
+    }
     setRecentSearches(newHistory);
   };
 

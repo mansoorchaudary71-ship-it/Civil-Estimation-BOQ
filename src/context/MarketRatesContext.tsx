@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { getRates } from '../lib/rates';
 
 export interface MarketRates {
@@ -101,33 +101,12 @@ export function MarketRatesProvider({ children }: { children: ReactNode }) {
   });
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetch('/api/rates')
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.status === 'ok' && data.data) {
-           const apiRates = data.data;
-           setMarketRates(prev => ({
-             ...prev,
-             cement: apiRates.cement || prev.cement,
-             steel: apiRates.steel || prev.steel,
-             bricks: apiRates.bricks ? apiRates.bricks / 1000 : prev.bricks, // API returns per 1000 Nos
-             sand: apiRates.sand || prev.sand,
-             crush: apiRates.crush || prev.crush,
-             laborGrey: apiRates.laborGrey || prev.laborGrey,
-             laborFinish: apiRates.laborFinish || prev.laborFinish
-           }));
-           // Format Date nicely
-           const dateStr = new Date(apiRates.last_updated).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-           });
-           setLastUpdated(dateStr);
-        }
-      })
-      .catch(err => console.warn('Failed to fetch automated rates, using defaults.', err));
-  }, []);
+  // Rates come solely from the sourced table in src/lib/rates.ts
+  // (loaded as defaultRates above). There is no rates backend: the old
+  // GET /api/rates fetch was removed because the dev stub returned stale
+  // values (bricks 14/pc vs 23.355, crush 120 vs 90) and silently
+  // overwrote the good table in dev. lastUpdated stays null unless a
+  // future sourced feed sets it.
 
   const updateRate = (key: keyof MarketRates, value: number) => {
     setMarketRates(prev => ({ ...prev, [key]: value }));

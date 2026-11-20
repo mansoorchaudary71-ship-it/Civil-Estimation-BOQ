@@ -2,7 +2,6 @@ import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { Grid2X2, Settings2, Replace, ArrowUp, AlertTriangle } from "lucide-react";
-import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { StyledChart } from "../ui/EstimateVisualizer";
 import { ResultCard } from "../ui/ResultCard";
@@ -223,10 +222,6 @@ export default function SlabEstimator() {
 
   return (
     <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 px-4 md:px-0">
-      <SEO 
-        title="Slab Estimator | EstiPro"
-        description="Calculate concrete volume and steel reinforcement for one-way and two-way reinforced concrete slabs."
-      />
       <ToolGuidedTour steps={SLAB_TOUR_STEPS} tourId="slab-estimator" />
       <div className="mb-8 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         

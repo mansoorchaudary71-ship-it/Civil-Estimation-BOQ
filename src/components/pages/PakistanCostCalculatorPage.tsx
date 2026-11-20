@@ -18,6 +18,8 @@ import ToolPageFooter from '../ToolPageFooter';
 import { pakistanCost, pakistanCostBothStandards, PAK_RATES, RATES_LAST_UPDATED, RATE_SOURCE, type PakCity, type PakTier } from '../../lib/pakistanCost';
 import { MARLA_SQFT, type MarlaStandard } from '../../lib/quickEstimate';
 import { GlobalFAQ } from '../ui/GlobalFAQ';
+import { SEO } from "../SEO";
+import { getSiteUrl } from "../../seo/siteConfig";
 
 
 const TIER_LABELS: Record<PakTier, string> = {
@@ -110,6 +112,18 @@ export default function PakistanCostCalculatorPage() {
 
   return (
     <div className="min-h-screen bg-surface-default font-sans pb-12">
+      {/*
+        One shared title for both routes this page serves
+        (/pakistan-cost-calculator and /cost-guide-pakistan — App renders
+        this same component for both, with no prop to tell them apart).
+        Canonical consolidates the alias (/cost-guide-pakistan) onto the
+        primary route.
+      */}
+      <SEO
+        title="Pakistan House Cost Calculator 2026"
+        description="Estimate house construction cost in PKR with 2026 city rates for Lahore, Karachi, Islamabad, Faisalabad and Multan — grey structure to luxury finish."
+        canonicalUrl={`${getSiteUrl()}/pakistan-cost-calculator`}
+      />
       <div className="max-w-7xl mx-auto px-4 pt-12 md:pt-20 pb-16">
         
         {/* Section 1: H1 SEO Header */}

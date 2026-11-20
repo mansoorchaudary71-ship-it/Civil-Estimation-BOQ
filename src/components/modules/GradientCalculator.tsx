@@ -1,7 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useState, useMemo } from "react";
 import { ArrowRight, Triangle, Activity, CheckCircle2, AlertTriangle, Route } from "lucide-react";
-import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { NumberInput } from "../ui/NumberInput";
 import { verticalCurve, ssdForSpeed } from "../../lib/gradientCalc";
@@ -79,10 +78,6 @@ export default function GradientCalculator() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
-      <SEO 
-        title="Gradient & Slope Interpolation | Civil Estimation Pro" 
-        description="Dynamic slope calculator for road cambers, longitudinal gradients, and vertical curve profiles."
-      />
       <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
          <h2 className="flex items-center gap-2 mb-6 text-xl font-semibold text-txt-primary tracking-tight mb-4">
           <Route className="w-6 h-6 text-ui-successText" />

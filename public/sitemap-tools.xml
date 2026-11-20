@@ -1,229 +1,230 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- HOST: live GitHub Pages project page. civilestimationpro.com does NOT resolve (DNS NXDOMAIN) — flip every loc back to https://civilestimationpro.com when/if DNS is fixed. -->
   <!-- Core Structural Calculators -->
   <url>
-    <loc>https://civilestimationpro.com/rcc-slab-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/rcc-slab-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/column-concrete-estimator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/column-concrete-estimator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/beam-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/beam-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/staircase-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/staircase-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- General Estimation -->
   <url>
-    <loc>https://civilestimationpro.com/house-construction-cost-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/house-construction-cost-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/professional-boq-generator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/professional-boq-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/plan-measure-takeoff</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/plan-measure-takeoff</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/master-quantity-estimator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/master-quantity-estimator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Infrastructure & Earthworks -->
   <url>
-    <loc>https://civilestimationpro.com/road-pavement-estimator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/road-pavement-estimator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/earthworks-excavation-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/earthworks-excavation-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/chainage-volume-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/chainage-volume-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/gradient-slope-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/gradient-slope-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/retaining-wall-estimator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/retaining-wall-estimator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Soil & Materials Lab -->
   <url>
-    <loc>https://civilestimationpro.com/geotechnical-soil-tests-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/geotechnical-soil-tests-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/cbr-test-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/cbr-test-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/master-sieve-analysis-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/master-sieve-analysis-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/aggregate-blending-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/aggregate-blending-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/direct-shear-test-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/direct-shear-test-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/permeability-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/permeability-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/aggregate-tests-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/aggregate-tests-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Materials & Mix Design -->
   <url>
-    <loc>https://civilestimationpro.com/construction-material-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/construction-material-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/concrete-mix-design-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/concrete-mix-design-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/formwork-scaffold-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/formwork-scaffold-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/metal-weight-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/metal-weight-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Reinforcement -->
   <url>
-    <loc>https://civilestimationpro.com/bbs-generator-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/bbs-generator-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/reinforcement-detailing-visualizer</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/reinforcement-detailing-visualizer</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/isolated-footing-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/isolated-footing-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Project Management & MEP -->
   <url>
-    <loc>https://civilestimationpro.com/project-manager-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/project-manager-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/site-progress-tracker</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/site-progress-tracker</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/labour-workforce-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/labour-workforce-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/energy-mep-calculators</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/energy-mep-calculators</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Architecture & Specialized -->
   <url>
-    <loc>https://civilestimationpro.com/solar-roof-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/solar-roof-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/rainwater-harvesting-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/rainwater-harvesting-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/roof-pitch-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/roof-pitch-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/anti-termite-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/anti-termite-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/interiors-finishes-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/interiors-finishes-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Core Math & General -->
   <url>
-    <loc>https://civilestimationpro.com/area-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/area-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/property-area-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/property-area-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/volume-tank-capacity-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/volume-tank-capacity-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/unit-converter-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/unit-converter-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/live-db-rates-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/live-db-rates-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://civilestimationpro.com/ai-assistant-calculator</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/ai-assistant-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>

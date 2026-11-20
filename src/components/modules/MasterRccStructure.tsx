@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { Building2, Grid2X2, Columns, FileSpreadsheet, Layers, AlignVerticalSpaceAround, LayoutDashboard, ArrowUp, Calculator } from "lucide-react";
-import { SEO } from "../SEO";
 
 import { MasterRccCoreBody } from "./MasterRccCore";
 import SlabEstimator from "./SlabEstimator";
@@ -32,16 +31,6 @@ export default function MasterRccStructure({ isEmbedded = false, onNavigate }: M
 
   return (
     <div className={isEmbedded ? "w-full" : "max-w-7xl mx-auto pb-20"}>
-      {!isEmbedded && (
-        <>
-          <SEO 
-            title="Master RCC Estimator | EstiPro"
-            description="Unified hub for all concrete and steel calculations, including slabs, columns, beams, staircases, and Bar Bending Schedules."
-          />
-          
-          
-        </>
-      )}
 
       <div className="flex flex-col gap-4 px-1 md:px-0">
         <UniversalTabs 

@@ -24,7 +24,7 @@
  */
 import {
   astForMu, astProvidedPerM, barAreaMm2, checkRange, costLine,
-  materialsForConcrete, mixRatioForGrade, round, totalCost, type CostLine,
+  materialsForConcrete, mixRatioForGrade, muLimKNm, round, totalCost, type CostLine,
   type FaqItem, type MaterialBreakdown, type MixRatio,
 } from "./structuralShared";
 import { unitWeightKgPerM } from "./steelCalc";
@@ -129,15 +129,27 @@ export function designStaircase(input: Partial<StaircaseInputs> = {}): Staircase
   const cosTheta = t / inclPerStep;
   const selfWt = 25 * (i.waistM / cosTheta + r / 2); // kN/m² of plan
   const load = selfWt + i.finishesKNm2 + i.liveKNm2;
-  const effSpan = totalRun + (isStraight ? 0 : i.landingLengthM / 2);
+  // Effective span is ONE flight's going, not the total run: each flight
+  // of a dog-legged / L / U stair is its own simply-supported waist slab.
+  // The old code summed both flights, inflating Mu ~3x (22.78 vs 7.88
+  // kNm/m for a 5+5 dog-legged stair at the defaults).
+  const flight1Run = i.flight1Steps * t;
+  const flight2Run = i.flight2Steps * t;
+  const designRun = isStraight
+    ? totalRun
+    : (flight1Run > 0 || flight2Run > 0 ? Math.max(flight1Run, flight2Run) : totalRun / 2);
+  const effSpan = designRun + (isStraight ? 0 : i.landingLengthM / 2);
   const mu = (1.5 * load * effSpan * effSpan) / 8; // kNm per m width (factored)
   const d = i.waistM * 1000 - i.coverMm - i.mainDiaMm / 2;
   const astFlex = astForMu(mu, i.fck, i.fy, 1000, d);
   const astMin = (0.12 / 100) * 1000 * i.waistM * 1000;
   const astReq = Math.max(astFlex, astMin);
+  if (!isFinite(astFlex)) {
+    errors.push(`Waist-slab moment Mu = ${round(mu, 1)} kNm/m exceeds the limiting moment Mu,lim = ${round(muLimKNm(i.fck, 1000, d, i.fy), 1)} kNm/m — increase the waist thickness / concrete grade or split the flight.`);
+  }
   const mainBars = Math.ceil((w * 1000 - 2 * i.coverMm) / i.mainSpacingMm) + 1;
   const astProv = astProvidedPerM(i.mainDiaMm, i.mainSpacingMm);
-  if (astProv < astReq) warnings.push(`Main steel provided (${round(astProv)} mm²/m) is below the required ${round(astReq)} mm²/m — reduce the spacing or increase the bar diameter.`);
+  if (isFinite(astFlex) && astProv < astReq) warnings.push(`Main steel provided (${round(astProv)} mm²/m) is below the required ${round(astReq)} mm²/m — reduce the spacing or increase the bar diameter.`);
   const maxSpacing = Math.min(3 * d, 300);
   if (i.mainSpacingMm > maxSpacing) warnings.push(`Main bar spacing ${i.mainSpacingMm} mm exceeds the IS 456 limit min(3d, 300) = ${maxSpacing} mm.`);
   const mainLenM = inclinedLength + 0.3; // + anchorage allowance

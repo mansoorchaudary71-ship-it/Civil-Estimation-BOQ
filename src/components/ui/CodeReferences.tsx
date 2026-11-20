@@ -10,7 +10,9 @@ interface CodeReference {
   description: string;
 }
 
-const TOOL_REFERENCES: Record<string, CodeReference[]> = {
+/** Code references per tool id. Exported so ToolHeader can hide the
+ *  "References" button for tools that have none (only 11 real tools do). */
+export const TOOL_REFERENCES: Record<string, CodeReference[]> = {
   "master-quantity": [
     { id: "1", code: "IS 456:2000", clause: "Clause 26.5.2", description: "Development Length & Reinforcement requirements" },
     { id: "2", code: "SP 34:1987", clause: "Section 4", description: "Detailing of reinforced concrete structures" },

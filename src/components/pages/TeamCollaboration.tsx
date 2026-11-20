@@ -6,6 +6,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { motion } from 'framer-motion';
 import { Users, Link as LinkIcon, Share2, Copy, Check, Shield, Trash2, Crown } from 'lucide-react';
 import TopNavbar from '../TopNavbar';
+import { SEO } from "../SEO";
+import { getSiteUrl } from "../../seo/siteConfig";
 
 
 export default function TeamCollaboration() {
@@ -98,6 +100,11 @@ export default function TeamCollaboration() {
 
   return (
     <div className="min-h-screen bg-surface-hover flex flex-col">
+      <SEO
+        title="Team Collaboration & Sharing"
+        description="Share projects and collaborate with team members — invite viewers and editors, manage roles and keep every estimate in one shared workspace."
+        canonicalUrl={`${getSiteUrl()}/team`}
+      />
       <TopNavbar />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center gap-4 mb-8">

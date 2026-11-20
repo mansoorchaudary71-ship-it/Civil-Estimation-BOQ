@@ -44,11 +44,22 @@ test("defaults (spec §2): total 168.6 m2, effective 44.26 m2 / 476.4 sq ft", ()
   assert.deepEqual(r.errors, []);
 });
 
-test("defaults: plywood 15 sheets, battens 1,191 Rft, props 67", () => {
+test("defaults: plywood 15 sheets, battens 115 Rft, props 67", () => {
   const r = calcFormwork(DEFAULT_ELEMENTS, 4, 5);
   assert.equal(r.plywoodSheets, 15); // ceil(476.4/32)
-  assert.equal(r.battensRft, 1191); // ceil(476.4 x 2.5)
+  assert.equal(r.battensRft, 115); // ceil(476.4 x 0.24) — top of the cited 0.79 Rmt/m2 range (old 2.5 gave 1,191)
   assert.equal(r.steelProps, 67); // ceil(44.26 x 1.5)
+});
+
+test("thumb-check uses the same constants as the main calculation", () => {
+  const r = calcFormwork(DEFAULT_ELEMENTS, 4, 5);
+  // plywood: 476.4/32 = 14.89 (old factor 0.02 per covered sq ft gave 25.8 vs 40.4 for one full set)
+  approx(r.thumbCheck.plywoodSheets, r.effectiveAreaSqFt / 32, 0.01);
+  // battens: same 0.24 rate on the same effective area (old: 51.7 Rft vs 1,191 Rft on one screen)
+  approx(r.thumbCheck.battensRft, r.effectiveAreaSqFt * 0.24, 0.01);
+  assert.ok(Math.abs(r.thumbCheck.battensRft - r.battensRft) <= 1);
+  approx(r.thumbCheck.nailsKg, r.nailsKg, 0.01);
+  approx(r.thumbCheck.oilL, r.shutteringOilL, 0.01);
 });
 
 test("consumables use the total area: nails/wire 0.075 kg/m2, oil 0.065 L/m2", () => {

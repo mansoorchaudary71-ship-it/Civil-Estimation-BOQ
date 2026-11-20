@@ -2,7 +2,6 @@ import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { CopySlash, Settings2, Columns, ArrowUp, AlertTriangle } from "lucide-react";
-import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
@@ -205,10 +204,6 @@ export default function BeamCalculator() {
 
   return (
     <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 px-4 md:px-0">
-      <SEO 
-        title="Comprehensive Beam Calculator | EstiPro"
-        description="Calculate concrete volume and longitudinal/stirrup steel weights for reinforced concrete beams."
-      />
       
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">

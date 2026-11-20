@@ -88,9 +88,9 @@ const ASSEMBLIES = [
       const d = parseFloat(inputs.depth || "0");
       const vol = l * w * d;
       return [
-        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: vol, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "PCC Base", unit: "m³", rate: PCC148_RATE, qtyOverride: l * w * 0.15, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "RCC Foundation", unit: "m³", rate: RCC124_RATE, qtyOverride: l * (w-0.2) * (d-0.15), linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: vol, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "PCC Base", unit: "m³", rate: PCC148_RATE, qtyOverride: l * w * 0.15, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "RCC Foundation", unit: "m³", rate: RCC124_RATE, qtyOverride: l * (w-0.2) * (d-0.15), isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -109,9 +109,9 @@ const ASSEMBLIES = [
       const d = parseFloat(inputs.depth || "0");
       const rd = parseFloat(inputs.rccDepth || "0.4");
       return [
-        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: s * s * d, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "PCC Pad", unit: "m³", rate: PCC148_RATE, qtyOverride: s * s * 0.1, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "RCC Footing", unit: "m³", rate: RCC124_RATE, qtyOverride: (s-0.2) * (s-0.2) * rd, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: s * s * d, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "PCC Pad", unit: "m³", rate: PCC148_RATE, qtyOverride: s * s * 0.1, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "RCC Footing", unit: "m³", rate: RCC124_RATE, qtyOverride: (s-0.2) * (s-0.2) * rd, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -132,8 +132,8 @@ const ASSEMBLIES = [
       const t = parseFloat(inputs.thick || "0");
       const sides = parseFloat(inputs.sides || "2");
       return [
-        { desc: "Brick Masonry", unit: "m³", rate: BRICKWORK_RATE, qtyOverride: l * h * t, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: `Plastering (${sides} side${sides === 1 ? "" : "s"})`, unit: "m²", rate: PLASTER_RATE, qtyOverride: l * h * sides, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Brick Masonry", unit: "m³", rate: BRICKWORK_RATE, qtyOverride: l * h * t, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: `Plastering (${sides} side${sides === 1 ? "" : "s"})`, unit: "m²", rate: PLASTER_RATE, qtyOverride: l * h * sides, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -152,9 +152,9 @@ const ASSEMBLIES = [
       const t = parseFloat(inputs.thick || "0");
       const steelKg = parseFloat(inputs.steelKgM3 || "100");
       return [
-        { desc: "RCC for Slab", unit: "m³", rate: RCC124_RATE, qtyOverride: a * t, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "Steel Reinforcement", unit: "kg", rate: STEEL_RATE, qtyOverride: a * t * steelKg, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "Formwork", unit: "m²", rate: 10.0, qtyOverride: a, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "RCC for Slab", unit: "m³", rate: RCC124_RATE, qtyOverride: a * t, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Steel Reinforcement", unit: "kg", rate: STEEL_RATE, qtyOverride: a * t * steelKg, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Formwork", unit: "m²", rate: 10.0, qtyOverride: a, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -172,9 +172,9 @@ const ASSEMBLIES = [
       const w = parseFloat(inputs.width || "0");
       const area = l * w;
       return [
-        { desc: "Subgrade Preparation", unit: "m²", rate: 5.5, qtyOverride: area, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "Subbase Course", unit: "m³", rate: 35.0, qtyOverride: area * 0.2, linkedMeasurementIds: [id], status: "measured" as const },
-        { desc: "Asphalt Wearing Course", unit: "m³", rate: 25.0, qtyOverride: area * 0.05, linkedMeasurementIds: [id], status: "measured" as const }, // qty is a volume (area x 0.05 m) — was wrongly labelled m²
+        { desc: "Subgrade Preparation", unit: "m²", rate: 5.5, qtyOverride: area, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Subbase Course", unit: "m³", rate: 35.0, qtyOverride: area * 0.2, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Asphalt Wearing Course", unit: "m³", rate: 25.0, qtyOverride: area * 0.05, isManualOverride: true, linkedMeasurementIds: [id], status: "measured" as const }, // qty is a volume (area x 0.05 m) — was wrongly labelled m²
       ];
     },
   },

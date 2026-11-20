@@ -1,18 +1,16 @@
 import { collection, addDoc, getDocs, query, where, documentId, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
-import { db, handleFirestoreError, OperationType } from './firebase';
+import { db, auth, handleFirestoreError, OperationType } from './firebase';
 
-function getUserId() {
-  const token = localStorage.getItem('auth_token');
-  if (token) {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.id;
-    } catch (e) {
-      return null;
-    }
-  }
-  return null;
+/**
+ * The signed-in Firebase user's uid. Firestore rules require
+ * `userId == request.auth.uid`, so this must come from Firebase Auth —
+ * never from the dead JWT `auth_token` in localStorage (Google sign-in
+ * never sets that token, so cloud save could never succeed for it).
+ * Returns null when nobody is signed in.
+ */
+function getUserId(): string | null {
+  return auth.currentUser?.uid ?? null;
 }
 
 

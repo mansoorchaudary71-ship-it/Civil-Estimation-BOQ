@@ -55,3 +55,20 @@ test("dog-legged stairwell size", () => {
   approx(r.stairwellWidthM, 2.5, 0.05);
   assert.ok(r.landingVolM3 > 0);
 });
+
+test("multi-flight span is ONE flight's going + landing/2 (was total run, Mu ~3x high)", () => {
+  const r = designStaircase({ shape: "dog-legged", flight1Steps: 5, flight2Steps: 5, landingCount: 1 });
+  approx(r.effSpanM, 2.0, 0.01); // 5 x 0.28 + 1.2/2 (old code: 3.4)
+  approx(r.muKNmPerM, 7.88, 0.05); // old code: 22.78
+  assert.equal(r.astReqMm2PerM, 180); // minimum steel governs (old code: 456)
+  const uneven = designStaircase({ shape: "l-shaped", flight1Steps: 6, flight2Steps: 4, landingCount: 1 });
+  approx(uneven.effSpanM, 2.28, 0.01); // longer flight 6 x 0.28 + 0.6
+});
+
+test("long straight flight over Mu,lim is a hard error, never a silent NaN", () => {
+  const r = designStaircase({ shape: "straight", steps: 24 });
+  approx(r.muKNmPerM, 89.01, 0.05);
+  assert.ok(!Number.isNaN(r.astReqMm2PerM));
+  assert.ok(r.errors.some((e) => e.includes("exceeds the limiting moment")));
+  assert.ok(r.errors.some((e) => e.includes("51.5")));
+});

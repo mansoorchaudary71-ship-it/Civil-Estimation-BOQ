@@ -5,11 +5,21 @@ export default function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 1.2s transition out
-    const timer = setTimeout(() => {
+    // Hide as soon as the page is actually ready instead of forcing a fixed
+    // delay on every load. On fast/cached loads the document is already
+    // complete, so the splash disappears immediately; on slow loads it waits
+    // for the window load event, with the old 1.2 s cap as a fallback.
+    if (document.readyState === "complete") {
       setIsLoading(false);
-    }, 1200);
-    return () => clearTimeout(timer);
+      return;
+    }
+    const hide = () => setIsLoading(false);
+    const timer = setTimeout(hide, 1200);
+    window.addEventListener("load", hide);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("load", hide);
+    };
   }, []);
 
   return (

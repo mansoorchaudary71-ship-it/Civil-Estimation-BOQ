@@ -24,7 +24,7 @@
  * difference.
  */
 import {
-  astForMu, barAreaMm2, checkRange, costLine, materialsForConcrete,
+  astForMu, astProvidedPerM, barAreaMm2, checkRange, costLine, materialsForConcrete,
   mixRatioForGrade, round, spacingForAst, totalCost, type CostLine,
   type FaqItem, type MaterialBreakdown, type MixRatio,
 } from "./structuralShared";
@@ -182,14 +182,35 @@ export function designRetainingWall(input: Partial<RetainingInputs> = {}, intern
   const stemAstMin = (0.12 / 100) * 1000 * i.stemBottomM * 1000;
   const stemAst = Math.max(stemAstFlex, stemAstMin);
   const stemSpacing = Math.min(spacingForAst(stemAst, i.vertDiaMm), 300);
-  const stemOk = astForMu(stemMu, i.fck, i.fy, 1000, dStem) <= stemAst;
+  // The check that matters: can the steel actually provided at the
+  // designed spacing carry the flexural requirement? (The old check
+  // compared the requirement with max(requirement, minimum), which is
+  // true by construction and could never fail.)
+  const stemAstProvided = astProvidedPerM(i.vertDiaMm, stemSpacing);
+  const stemOk = isFinite(stemAstFlex) && stemAstFlex <= stemAstProvided;
+  if (!isFinite(stemAstFlex)) {
+    errors.push("Stem moment exceeds the limiting moment of resistance (Mu,lim) — deepen the stem or increase the concrete grade; no singly-reinforced steel area exists for this moment.");
+  }
   // Base slab: toe moment from bearing pressure, heel moment from soil weight
   // minus bearing pressure (per m run, factored 1.5).
   const toeMu = 1.5 * ((qMax * i.toeM ** 2) / 2);
-  const heelMu = 1.5 * Math.abs(((wSoil + wSur) * heel) / 2 - ((qMin + ((qMax - qMin) * (i.baseWidthM - heel / 2)) / i.baseWidthM) * heel ** 2) / 2);
+  // Heel moment at the stem face (x = B − heel from the toe). The bearing
+  // pressure varies linearly from qFace at the stem face to qMin at the
+  // heel end, so its moment about the section is the exact integral
+  // ∫q(x)·(x − xFace) dx = heel²·(qFace/6 + qMin/3). The old code used the
+  // pressure at the heel midpoint as if it were uniform over the heel,
+  // understating the moment by ~25% (19.6 vs 26.0 kNm/m at the defaults).
+  const qHeelFace = qMax + ((qMin - qMax) * (i.baseWidthM - heel)) / i.baseWidthM;
+  const heelBearingMu = (heel ** 2) * (qHeelFace / 6 + qMin / 3);
+  const heelMu = 1.5 * Math.abs(((wSoil + wSur) * heel) / 2 - heelBearingMu);
   const dBase = i.baseDepthM * 1000 - i.coverMm - i.vertDiaMm / 2;
-  const toeAst = Math.max(astForMu(toeMu, i.fck, i.fy, 1000, dBase), (0.12 / 100) * 1000 * i.baseDepthM * 1000);
-  const heelAst = Math.max(astForMu(heelMu, i.fck, i.fy, 1000, dBase), (0.12 / 100) * 1000 * i.baseDepthM * 1000);
+  const toeAstFlex = astForMu(toeMu, i.fck, i.fy, 1000, dBase);
+  const heelAstFlex = astForMu(heelMu, i.fck, i.fy, 1000, dBase);
+  if (!isFinite(toeAstFlex) || !isFinite(heelAstFlex)) {
+    errors.push("Base-slab moment exceeds the limiting moment of resistance (Mu,lim) — deepen the base slab or increase the concrete grade; no singly-reinforced steel area exists for this moment.");
+  }
+  const toeAst = Math.max(toeAstFlex, (0.12 / 100) * 1000 * i.baseDepthM * 1000);
+  const heelAst = Math.max(heelAstFlex, (0.12 / 100) * 1000 * i.baseDepthM * 1000);
   // Quantities
   const stemVol = 0.5 * (i.stemTopM + i.stemBottomM) * i.stemHeightM * i.wallLengthM;
   const baseVol = i.baseWidthM * i.baseDepthM * i.wallLengthM;

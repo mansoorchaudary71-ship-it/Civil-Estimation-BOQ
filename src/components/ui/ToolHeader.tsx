@@ -2,7 +2,7 @@ import { Button } from './/Button';
 import React, { useState, useEffect } from 'react';
 import { ClipboardList, Info, Printer, Save, Download, Share2, BookOpen, Menu, Search, ChevronDown, Copy, FileText, Mail, MessageCircle, Smartphone } from 'lucide-react';
 import { useSettings, Currency } from '../../context/SettingsContext';
-import { CodeReferences } from './CodeReferences';
+import { CodeReferences, TOOL_REFERENCES } from './CodeReferences';
 import { FormulaModal } from './FormulaModal';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -28,6 +28,9 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
   // "Civil Estimation Pro" as the H1). Fall back to the brand only when
   // no caller passes a name at all.
   const displayTitle = toolName ?? title ?? "Civil Estimation Pro";
+  /** Only 11 real tools have code references — hide the button entirely
+   *  for the rest instead of toggling an empty section. */
+  const hasReferences = Boolean(TOOL_REFERENCES[id]?.length);
   const { settings, updateSettings } = useSettings();
   const [isFormulaModalOpen, setIsFormulaModalOpen] = useState(false);
   const [showReferences, setShowReferences] = useState(false);
@@ -229,10 +232,11 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
 
   return (
     <div id="tool-header-top" className="relative -mx-2 sm:-mx-4 md:-mx-8 px-2 sm:px-4 md:px-8 bg-transparent pb-8 flex flex-col gap-6 pt-6">
-      {/* PRINT-ONLY BRANDING HEADER — H1 is the tool name, not the brand */}
+      {/* PRINT-ONLY BRANDING HEADER — the tool name is a <p> here: the
+          visible header below already renders the page's single h1. */}
       <div className="hidden print:flex flex-col w-full border-b-2 border-ink pb-4 mb-4">
          <p className="text-sm font-semibold text-txt-secondary m-0 p-0 leading-tight">Civil Estimation Pro</p>
-         <h1 className="text-2xl font-bold text-txt-primary m-0 mt-1 p-0 leading-tight">{displayTitle}</h1>
+         <p className="text-2xl font-bold text-txt-primary m-0 mt-1 p-0 leading-tight">{displayTitle}</p>
          {subtitle && <p className="text-sm text-txt-tertiary m-0 mt-1 p-0 italic">{subtitle}</p>}
       </div>
 
@@ -458,6 +462,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Load Draft</span>
            </Button>
            
+           {hasReferences && (
            <Button 
              onClick={() => setShowReferences(!showReferences)}
              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border transition-colors group ${showReferences ? 'bg-ink text-white border-ink' : 'border-ui-borderStrong text-txt-primary hover:bg-secondary-100'}`}
@@ -465,6 +470,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">References</span>
            </Button>
+           )}
         </div>
         
         {showReferences && (

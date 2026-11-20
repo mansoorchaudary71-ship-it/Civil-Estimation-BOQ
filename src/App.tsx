@@ -2,7 +2,7 @@ import AppDownloadBanner from "./components/ui/AppDownloadBanner";
 
 import { ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TeamCollaboration from "./components/pages/TeamCollaboration";
 import JoinProject from "./components/pages/JoinProject";
@@ -15,10 +15,11 @@ import Contact from "./components/pages/Contact";
 import Blog from "./components/pages/Blog";
 import LegalPages from "./components/pages/LegalPages";
 import PricingPage from "./components/pages/PricingPage";
-import BrickCalculatorPage from "./components/pages/BrickCalculatorPage";
-import MixDesignCalculatorPage from "./components/pages/MixDesignCalculatorPage";
-import MarlaConverterPage from "./components/pages/MarlaConverterPage";
-import PakistanCostCalculatorPage from "./components/pages/PakistanCostCalculatorPage";
+// Full-page tools loaded on demand (see the lazy tool block below).
+const BrickCalculatorPage = lazy(() => import("./components/pages/BrickCalculatorPage"));
+const MixDesignCalculatorPage = lazy(() => import("./components/pages/MixDesignCalculatorPage"));
+const MarlaConverterPage = lazy(() => import("./components/pages/MarlaConverterPage"));
+const PakistanCostCalculatorPage = lazy(() => import("./components/pages/PakistanCostCalculatorPage"));
 import StandardsReferencePage from "./components/StandardsReferencePage";
 import { resolvePath, pathFromId } from "./lib/toolRoutes";
 import Footer from "./components/Footer";
@@ -47,7 +48,7 @@ import { MarketRatesProvider } from "./context/MarketRatesContext";
 import { TakeoffProvider } from "./context/TakeoffContext";
 import { ProjectProvider } from "./context/ProjectContext";
 import { useRecentTools } from "./hooks/useRecentTools";
-import { useAuth } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 
 import { CodeReferences } from "./components/ui/CodeReferences";
@@ -68,73 +69,77 @@ import GlobalSearchModal from "./components/ui/GlobalSearchModal";
 import AuthModal from "./components/auth/AuthModal";
 
 type ModuleId = string;
-import QSWorkflow from "./components/modules/QSWorkflow";
-import MasterFinishesWorkspace from "./components/modules/MasterFinishesWorkspace";
-import QuickRoughEstimation from "./components/modules/QuickRoughEstimation";
-import MasterQuantityEstimator from "./components/modules/MasterQuantityEstimator";
-import HouseEstimator from "./components/modules/HouseEstimator";
-import MaterialTakeoffSheet from "./components/modules/MaterialTakeoffSheet";
-import ConstructionCostSummary from "./components/modules/ConstructionCostSummary";
-import MeasurementSheetCalculator from "./components/modules/MeasurementSheetCalculator";
-import BOQGenerator from "./components/modules/BOQGenerator";
-import Takeoff from "./components/modules/Takeoff";
-import RateAnalysis from "./components/modules/RateAnalysis";
-import FinishesEstimator from "./components/calculators/FinishesEstimator";
-import AreaSpaceCalculator from "./components/modules/AreaSpaceCalculator";
-import VolumeEstimator from "./components/modules/VolumeEstimator";
-import MetalWeightCalculator from "./components/modules/MetalWeightCalculator";
-import UnitConverter from "./components/modules/UnitConverter";
-import AIAssistant from "./components/modules/AIAssistant";
-import MasterRccCore from "./components/modules/MasterRccCore";
-import Calculators from "./components/modules/Calculators";
-import BarBendingSchedule from "./components/modules/BarBendingSchedule";
-import ReinforcementVisualizer from "./components/modules/ReinforcementVisualizer";
-import IsolatedFootingCalculator from "./components/modules/IsolatedFootingCalculator";
-import RetainingWallCalculator from "./components/modules/RetainingWallCalculator";
-import StaircaseCalculator from "./components/modules/StaircaseCalculator";
-import AggregateTestsCalculator from "./components/modules/AggregateTestsCalculator";
-import FormworkEstimator from "./components/modules/FormworkEstimator";
-import RoadPavementEstimator from "./components/modules/RoadPavementEstimator";
-import Earthworks from "./components/modules/Earthworks";
-import ChainageVolume from "./components/modules/ChainageVolume";
-import GradientCalculator from "./components/modules/GradientCalculator";
-import AntiTermiteCalculator from "./components/modules/AntiTermiteCalculator";
-import GeotechnicalCalculator from "./components/modules/GeotechnicalCalculator";
-import CbrTestCalculator from "./components/modules/CbrTestCalculator";
-import MasterSieveAnalysis from "./components/modules/MasterSieveAnalysis";
-import AggregateBlendingCalculator from "./components/modules/AggregateBlendingCalculator";
-import DirectShearTestCalculator from "./components/modules/DirectShearTestCalculator";
-import PermeabilityCalculator from "./components/modules/PermeabilityCalculator";
-import EnergyMepCalculator from "./components/modules/EnergyMepCalculator";
-import SolarRoofCalculator from "./components/modules/SolarRoofCalculator";
-import { SolarWaterHeaterCalculator } from "./components/calculators/SolarWaterHeaterCalculator";
-import { RoofPitchCalculator } from "./components/calculators/RoofPitchCalculator";
-import { TopsoilEstimator } from "./components/calculators/TopsoilEstimator";
-import { WastewaterCalculator } from "./components/calculators/WastewaterCalculator";
-import { PavementMixGradation } from "./components/calculators/PavementMixGradation";
-import RainwaterHarvesting from "./components/modules/RainwaterHarvesting";
-import ProjectManager from "./components/modules/ProjectManager";
-import SiteProgressTracker from "./components/modules/SiteProgressTracker";
-import LabourCalculator from "./components/modules/LabourCalculator";
-import BeamDesignTool from "./components/modules/BeamDesignTool";
-import ColumnDesignTool from "./components/modules/ColumnDesignTool";
-import RaftFoundationDesigner from "./components/modules/RaftFoundationDesigner";
-import WaterTankDesign from "./components/modules/WaterTankDesign";
-import PileFoundationCalculator from "./components/modules/PileFoundationCalculator";
-import PrestressedConcreteEstimator from "./components/modules/PrestressedConcreteEstimator";
-import RoomAreaCalculator from "./components/modules/RoomAreaCalculator";
-import BuildingSetbackCalculator from "./components/modules/BuildingSetbackCalculator";
-import FarFsiCalculator from "./components/modules/FarFsiCalculator";
-import StaircaseDesignReference from "./components/modules/StaircaseDesignReference";
-import DoorWindowSchedule from "./components/modules/DoorWindowSchedule";
-import VentilationChecker from "./components/modules/VentilationChecker";
-import UniversalStructuralGeometryEngine from "./components/modules/UniversalStructuralGeometryEngine";
-import MasterSoilMechanicsLabSuite from "./components/modules/MasterSoilMechanicsLabSuite";
-import MasterInfrastructureMEPEngine from "./components/modules/MasterInfrastructureMEPEngine";
+// Tool modules are loaded on demand with React.lazy so the home page ships a
+// small initial chunk instead of the whole app at once. Dashboard stays eager:
+// it is the landing page. Named-export calculators are adapted to a default
+// export for lazy(). No tool behaviour changes — only how its module loads.
+const QSWorkflow = lazy(() => import("./components/modules/QSWorkflow"));
+const MasterFinishesWorkspace = lazy(() => import("./components/modules/MasterFinishesWorkspace"));
+const QuickRoughEstimation = lazy(() => import("./components/modules/QuickRoughEstimation"));
+const MasterQuantityEstimator = lazy(() => import("./components/modules/MasterQuantityEstimator"));
+const HouseEstimator = lazy(() => import("./components/modules/HouseEstimator"));
+const MaterialTakeoffSheet = lazy(() => import("./components/modules/MaterialTakeoffSheet"));
+const ConstructionCostSummary = lazy(() => import("./components/modules/ConstructionCostSummary"));
+const MeasurementSheetCalculator = lazy(() => import("./components/modules/MeasurementSheetCalculator"));
+const BOQGenerator = lazy(() => import("./components/modules/BOQGenerator"));
+const Takeoff = lazy(() => import("./components/modules/Takeoff"));
+const RateAnalysis = lazy(() => import("./components/modules/RateAnalysis"));
+const FinishesEstimator = lazy(() => import("./components/calculators/FinishesEstimator"));
+const AreaSpaceCalculator = lazy(() => import("./components/modules/AreaSpaceCalculator"));
+const VolumeEstimator = lazy(() => import("./components/modules/VolumeEstimator"));
+const MetalWeightCalculator = lazy(() => import("./components/modules/MetalWeightCalculator"));
+const UnitConverter = lazy(() => import("./components/modules/UnitConverter"));
+const AIAssistant = lazy(() => import("./components/modules/AIAssistant"));
+const MasterRccCore = lazy(() => import("./components/modules/MasterRccCore"));
+const Calculators = lazy(() => import("./components/modules/Calculators"));
+const BarBendingSchedule = lazy(() => import("./components/modules/BarBendingSchedule"));
+const ReinforcementVisualizer = lazy(() => import("./components/modules/ReinforcementVisualizer"));
+const IsolatedFootingCalculator = lazy(() => import("./components/modules/IsolatedFootingCalculator"));
+const RetainingWallCalculator = lazy(() => import("./components/modules/RetainingWallCalculator"));
+const StaircaseCalculator = lazy(() => import("./components/modules/StaircaseCalculator"));
+const AggregateTestsCalculator = lazy(() => import("./components/modules/AggregateTestsCalculator"));
+const FormworkEstimator = lazy(() => import("./components/modules/FormworkEstimator"));
+const RoadPavementEstimator = lazy(() => import("./components/modules/RoadPavementEstimator"));
+const Earthworks = lazy(() => import("./components/modules/Earthworks"));
+const ChainageVolume = lazy(() => import("./components/modules/ChainageVolume"));
+const GradientCalculator = lazy(() => import("./components/modules/GradientCalculator"));
+const AntiTermiteCalculator = lazy(() => import("./components/modules/AntiTermiteCalculator"));
+const GeotechnicalCalculator = lazy(() => import("./components/modules/GeotechnicalCalculator"));
+const CbrTestCalculator = lazy(() => import("./components/modules/CbrTestCalculator"));
+const MasterSieveAnalysis = lazy(() => import("./components/modules/MasterSieveAnalysis"));
+const AggregateBlendingCalculator = lazy(() => import("./components/modules/AggregateBlendingCalculator"));
+const DirectShearTestCalculator = lazy(() => import("./components/modules/DirectShearTestCalculator"));
+const PermeabilityCalculator = lazy(() => import("./components/modules/PermeabilityCalculator"));
+const EnergyMepCalculator = lazy(() => import("./components/modules/EnergyMepCalculator"));
+const SolarRoofCalculator = lazy(() => import("./components/modules/SolarRoofCalculator"));
+const SolarWaterHeaterCalculator = lazy(() => import("./components/calculators/SolarWaterHeaterCalculator").then((m) => ({ default: m.SolarWaterHeaterCalculator })));
+const RoofPitchCalculator = lazy(() => import("./components/calculators/RoofPitchCalculator").then((m) => ({ default: m.RoofPitchCalculator })));
+const TopsoilEstimator = lazy(() => import("./components/calculators/TopsoilEstimator").then((m) => ({ default: m.TopsoilEstimator })));
+const WastewaterCalculator = lazy(() => import("./components/calculators/WastewaterCalculator").then((m) => ({ default: m.WastewaterCalculator })));
+const PavementMixGradation = lazy(() => import("./components/calculators/PavementMixGradation").then((m) => ({ default: m.PavementMixGradation })));
+const RainwaterHarvesting = lazy(() => import("./components/modules/RainwaterHarvesting"));
+const ProjectManager = lazy(() => import("./components/modules/ProjectManager"));
+const SiteProgressTracker = lazy(() => import("./components/modules/SiteProgressTracker"));
+const LabourCalculator = lazy(() => import("./components/modules/LabourCalculator"));
+const BeamDesignTool = lazy(() => import("./components/modules/BeamDesignTool"));
+const ColumnDesignTool = lazy(() => import("./components/modules/ColumnDesignTool"));
+const RaftFoundationDesigner = lazy(() => import("./components/modules/RaftFoundationDesigner"));
+const WaterTankDesign = lazy(() => import("./components/modules/WaterTankDesign"));
+const PileFoundationCalculator = lazy(() => import("./components/modules/PileFoundationCalculator"));
+const PrestressedConcreteEstimator = lazy(() => import("./components/modules/PrestressedConcreteEstimator"));
+const RoomAreaCalculator = lazy(() => import("./components/modules/RoomAreaCalculator"));
+const BuildingSetbackCalculator = lazy(() => import("./components/modules/BuildingSetbackCalculator"));
+const FarFsiCalculator = lazy(() => import("./components/modules/FarFsiCalculator"));
+const StaircaseDesignReference = lazy(() => import("./components/modules/StaircaseDesignReference"));
+const DoorWindowSchedule = lazy(() => import("./components/modules/DoorWindowSchedule"));
+const VentilationChecker = lazy(() => import("./components/modules/VentilationChecker"));
+const UniversalStructuralGeometryEngine = lazy(() => import("./components/modules/UniversalStructuralGeometryEngine"));
+const MasterSoilMechanicsLabSuite = lazy(() => import("./components/modules/MasterSoilMechanicsLabSuite"));
+const MasterInfrastructureMEPEngine = lazy(() => import("./components/modules/MasterInfrastructureMEPEngine"));
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import SEOHead from "./components/SEOHead";
-import { PrecastWallEstimator } from "./components/calculators/PrecastWallEstimator";
-import { PlywoodEstimator } from "./components/calculators/PlywoodEstimator";
+const PrecastWallEstimator = lazy(() => import("./components/calculators/PrecastWallEstimator").then((m) => ({ default: m.PrecastWallEstimator })));
+const PlywoodEstimator = lazy(() => import("./components/calculators/PlywoodEstimator").then((m) => ({ default: m.PlywoodEstimator })));
 
 
 
@@ -230,6 +235,17 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
   );
 };
 
+
+/** Shown while a lazily-loaded tool chunk downloads. */
+function ToolLoadingFallback() {
+  return (
+    <div role="status" aria-label="Loading calculator" className="flex min-h-[50vh] flex-col items-center justify-center gap-4 p-8 text-center">
+      <div className="font-display text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-accent-400 to-accent-500">CEP</div>
+      <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent-200 border-t-accent-500" aria-hidden="true" />
+      <p className="text-sm font-medium text-txt-secondary">Loading calculator&hellip;</p>
+    </div>
+  );
+}
 
 function renderModule(activeModule: string, onNavigate: (id: string) => void) {
   switch (activeModule) {
@@ -799,7 +815,15 @@ export default function App() {
         
     // Track tools that are calculators/modules (not home or pages)
     if (id !== "home" && id !== "about" && id !== "careers" && id !== "contact" && id !== "blog" && id !== "pricing" && id !== "privacy" && id !== "terms" && id !== "cookies") {
-      const existing = JSON.parse(localStorage.getItem('cep_recent_tools') || '[]').find((t: any) => t.id === id);
+      // Corrupt stored JSON must not break navigation (guarded like the
+      // other localStorage reads in the repo).
+      let existing: { id: string; lastInputs?: Record<string, unknown> } | undefined;
+      try {
+        const parsed: unknown = JSON.parse(localStorage.getItem('cep_recent_tools') || '[]');
+        existing = Array.isArray(parsed) ? parsed.find((t: any) => t.id === id) : undefined;
+      } catch {
+        existing = undefined;
+      }
       if (existing) {
         addRecentTool(id, existing.lastInputs);
       } else {
@@ -823,6 +847,7 @@ export default function App() {
       <ScrollProgressBar />
       <BackButton isVisible={activeModule !== "home"} onNavigate={() => handleSelectModule("home")} />
       <ThemeProvider>
+      <AuthProvider>
       <SettingsProvider>
         <HouseSpecsProvider>
           <MarketRatesProvider>
@@ -879,6 +904,7 @@ export default function App() {
 }}
                               className="flex-1 flex flex-col relative w-full"
                             >
+                              <ErrorBoundary onNavigate={handleSelectModule} fallbackModuleId="home">
                               {STATIC_PAGES.includes(activeModule) ? (
                                                                 <motion.div ref={scrollRef} className="flex-1 flex flex-col relative w-full overflow-visible" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.15 } } }}>
                                   <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex flex-col relative w-full">
@@ -904,11 +930,14 @@ export default function App() {
                                 <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex-1 flex flex-col relative w-full bg-transparent">
                                   <div className="w-full flex-1 flex flex-col">
                                     <div className="global-form-card-wrapper w-full flex-1">
-                                      {renderModule(activeModule, handleSelectModule)}
+                                      <Suspense fallback={<ToolLoadingFallback />}>
+                                        {renderModule(activeModule, handleSelectModule)}
+                                      </Suspense>
                                     </div>
                                   </div>
                                 </motion.div>
                               )}
+                              </ErrorBoundary>
                             </motion.div>
                           </AnimatePresence>
                         </motion.div>
@@ -924,6 +953,7 @@ export default function App() {
           </MarketRatesProvider>
         </HouseSpecsProvider>
       </SettingsProvider>
+      </AuthProvider>
       </ThemeProvider>
     </SmoothScroll>
   );

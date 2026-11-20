@@ -27,9 +27,12 @@
  *      /<static-page>                 (about, pricing, blog, standards, ...)
  *  - Unknown paths resolve to { kind: "not-found" } so App renders the
  *    in-app 404 page instead of silently showing home.
- *  - getBasename() detects a GitHub Pages project-page subpath at runtime
- *    (e.g. /Civil-Estimation-BOQ-main) so BrowserRouter works both on the
- *    custom domain (root) and on a project page (subpath) without a rebuild.
+ *  - getBasename() detects the GitHub Pages project-page subpath at runtime
+ *    (the repo name, /Civil-Estimation-BOQ) so BrowserRouter works both on
+ *    the custom domain (root) and on a project page (subpath) without a
+ *    rebuild. Only the repo name is ever treated as a subpath — any other
+ *    first segment is part of the route, so typos 404 instead of rendering
+ *    home.
  *
  * RULE: any new tool must be added to TOOL_IDS (and, for an SEO slug, to
  * SEO_SLUG_TO_ID) and given a renderModule case in App.tsx. The route
@@ -285,14 +288,14 @@ export const COUNTRY_CODES: ReadonlySet<string> = new Set(["pk", "in", "ae", "uk
 
 const TOOL_ID_SET = new Set(TOOL_IDS);
 const STATIC_ID_SET = new Set(STATIC_IDS);
-/** First segments that prove the app is served at the domain root. */
-const KNOWN_FIRST_SEGMENTS = new Set([
-  ...TOOL_IDS,
-  ...STATIC_IDS,
-  "calculators",
-  "tools",
-  "brick-calculator",
-]);
+/**
+ * The GitHub Pages project-page subpath — the repo name. The app is served
+ * at /Civil-Estimation-BOQ/ on mansoorchaudary71-ship-it.github.io and at
+ * the domain root on the custom domain. ONLY this exact first segment is
+ * ever a hosting subpath: any other unknown first segment is part of the
+ * route itself (a typo must 404, not render home — see getBasename).
+ */
+const REPO_BASENAME = "civil-estimation-boq";
 
 export type ResolvedRoute =
   | { kind: "tool"; id: string }
@@ -302,15 +305,21 @@ export type ResolvedRoute =
 
 /**
  * Detect a hosting subpath (GitHub Pages project page, e.g.
- * /Civil-Estimation-BOQ-main). Returns "" on the custom domain / root.
- * The first segment is a subpath only when it is not a route the app knows.
+ * /Civil-Estimation-BOQ). Returns "" on the custom domain / root.
+ *
+ * ONLY the repo name itself is a subpath. The old rule treated ANY
+ * unknown first segment as a subpath, which swallowed real routes on the
+ * custom domain: /brick-calculatr, /dashboard and every legacy-slug URL
+ * (/<slug>-calculator, 42 sitemap URLs) all rendered home (soft 404)
+ * instead of the in-app 404 / their tool. A first segment that is not
+ * the repo name is part of the route, on either host.
  */
 export function getBasename(): string {
   if (typeof window === "undefined") return "";
   const segs = window.location.pathname.split("/").filter(Boolean);
   if (segs.length === 0) return "";
-  if (KNOWN_FIRST_SEGMENTS.has(segs[0].toLowerCase())) return "";
-  return `/${segs[0]}`;
+  if (segs[0].toLowerCase() === REPO_BASENAME) return `/${segs[0]}`;
+  return "";
 }
 
 /** Remove the hosting subpath (if any) from a raw window.location.pathname. */
@@ -341,7 +350,7 @@ export function resolvePath(pathname: string): ResolvedRoute {
 
   // /calculators[/<group>[/<slug>]]  (SEO form)
   if (first === "calculators") {
-    if (segs.length === 1) return { kind: "page", id: "home" };
+    if (segs.length === 1) return { kind: "tool", id: "calculators" };
     if (segs.length === 2) {
       if (second === "standards") return { kind: "page", id: "standards" };
       if (second === "resources") return { kind: "page", id: "home" };

@@ -8,7 +8,6 @@ import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { DetailedCalculationDisplay } from "../ui/DetailedCalculationDisplay";
 import { NumberInput } from "../ui/NumberInput";
-import { SEO } from "../SEO";
 import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
 import { parseNum } from "../../utils/mathHelpers";
 import { CodeTooltip } from "../ui/CodeTooltip";
@@ -435,7 +434,6 @@ export default function StaircaseCalculator() {
 
   return (
     <div className="space-y-6 mt-4">
-      <SEO title="Staircase Calculator" description="Calculate concrete and steel for stairs." />
       <p className="text-sm text-txt-secondary leading-relaxed max-w-4xl">
         Staircase quantities to IS 456 Cl. 33 — the waist slab is designed as an inclined slab,
         so the main bars come from the real bending moment, not a flat 1%-of-volume rule (shown

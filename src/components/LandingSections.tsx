@@ -300,7 +300,7 @@ export function FeatureComparisonSection({
         >
           <Button
             onClick={() => {
-              if (onNavigate) onNavigate("dashboard");
+              if (onNavigate) onNavigate("home");
               window.scrollTo(0, 0);
             }}
             className="inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 bg-ink hover:bg-ink text-white font-medium text-base sm:text-lg rounded-full group shadow-brand-lg shadow-ink/20 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
@@ -314,7 +314,7 @@ export function FeatureComparisonSection({
             </div>
           </Button>
           <div className="text-sm text-txt-tertiary text-center mt-3">
-            No credit card required · Free forever · 55+ tools
+            No credit card required · Free forever · 75+ tools
           </div>
         </motion.div>
       </div>

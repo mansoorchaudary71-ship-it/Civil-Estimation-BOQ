@@ -1,6 +1,17 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { pathFromId } from '../lib/toolRoutes';
+import { GROUP_TO_CATEGORY, pathFromId } from '../lib/toolRoutes';
+import { getSiteUrl } from '../seo/siteConfig';
+
+/**
+ * Dashboard category label -> /calculators/<group> key (the real group
+ * landing URL). Two groups share one label ("Structural & Concrete
+ * Geometry" is both `concrete` and `structural-design`); the first key
+ * wins, which is the group the sitemap lists first.
+ */
+const CATEGORY_TO_GROUP: Record<string, string> = Object.fromEntries(
+  Object.entries(GROUP_TO_CATEGORY).map(([group, category]) => [category, group])
+);
 
 interface SEOHeadProps {
   toolId: string;
@@ -9,17 +20,32 @@ interface SEOHeadProps {
   description: string;
   /**
    * Explicit canonical path (e.g. "/brick-calculator/lahore"). When omitted
-   * the canonical is the tool's real short-form route, pathFromId(toolId)
-   * — i.e. https://civilestimationpro.com/<toolId>. The old template
-   * /calculators/<toolId> did NOT resolve for short-form ids (resolvePath
-   * only accepts /calculators/<group>/<slug>), so those canonicals 404'd.
+   * the canonical is the tool's real short-form route, pathFromId(toolId).
+   * The host is NOT part of this prop: it is derived at runtime from
+   * window.location.origin + getBasename() (see getSiteUrl), so the
+   * canonical points at the host actually serving the page.
    */
   canonicalPath?: string;
 }
 
 export default function SEOHead({ toolId, toolName, category, description, canonicalPath }: SEOHeadProps) {
   const fullTitle = `${toolName} | Civil Estimation Pro`;
-  const canonicalUrl = `https://civilestimationpro.com${canonicalPath ?? pathFromId(toolId)}`;
+  /**
+   * Canonical / OG / JSON-LD base is the runtime host (see getSiteUrl in
+   * src/seo/siteConfig.ts): on the live GitHub Pages project page this is
+   * https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ, and
+   * on the custom domain it becomes civilestimationpro.com once DNS is
+   * fixed. Never hardcode the host here — the custom domain does not
+   * resolve (DNS NXDOMAIN), so a hardcoded canonical points at a dead host.
+   */
+  const siteUrl = getSiteUrl();
+  const canonicalUrl = `${siteUrl}${canonicalPath ?? pathFromId(toolId)}`;
+  // Breadcrumb item 2 must be a real route: the /calculators/<group>
+  // landing for this tool's Dashboard category. The old
+  // /categories/<slug> URL never existed as a route (and its slug kept
+  // raw "&" and "," characters). Categories with no group map to home.
+  const categoryGroup = CATEGORY_TO_GROUP[category];
+  const categoryUrl = categoryGroup ? `${siteUrl}/calculators/${categoryGroup}` : siteUrl;
 
   const jsonLdData = [
     {
@@ -68,13 +94,13 @@ export default function SEOHead({ toolId, toolName, category, description, canon
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://civilestimationpro.com"
+          "item": siteUrl
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": category,
-          "item": `https://civilestimationpro.com/categories/${category.replace(/\s+/g, '-').toLowerCase()}`
+          "item": categoryUrl
         },
         {
           "@type": "ListItem",
@@ -103,7 +129,7 @@ export default function SEOHead({ toolId, toolName, category, description, canon
       
       {/* Dynamic Breadcrumbs rendered to the DOM as well */}
       <nav className="flex items-center space-x-2 text-xs text-txt-tertiary dark:text-txt-tertiary mb-4 overflow-x-auto whitespace-nowrap">
-        <a href="#" className="hover:text-accent-800 transition-colors">Home</a>
+        <a href="/" className="hover:text-accent-800 transition-colors">Home</a>
         <span>›</span>
         <span className="truncate">{category}</span>
         <span>›</span>

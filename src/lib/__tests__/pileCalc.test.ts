@@ -18,6 +18,24 @@ test("Firgelli golden vector: Qb=942, Qs=1178, Qu=2121, Qall=848 kN", () => {
   assert.equal(r.requiredPiles, 6); // ceil(5000/848)
 });
 
+test("group allowable is eta*m*n*Qall and must be compared with the load (defaults FAIL)", () => {
+  const r = designPile();
+  approx(r.groupEta, 0.761, 0.01);
+  approx(r.quKN, 2492, 3); // 1378.37 + 1113.3
+  approx(r.groupUltimateKN, 11377, 5); // 0.761 x 6 x 2491.68 (ultimate, reference only)
+  approx(r.groupCapacityKN, 4552, 5); // 0.761 x 6 x 996.67 — allowable, governs
+  assert.equal(r.groupAllowableKN, r.groupCapacityKN);
+  assert.ok(r.groupCapacityKN < 5000, "allowable 4,552 kN is below the 5,000 kN load");
+  assert.ok(r.warnings.some((w) => w.includes("below the total load")));
+  approx(r.groupCapacityPerPileKN, 759, 2); // allowable per pile
+});
+
+test("a group whose allowable exceeds the load passes with no group warning", () => {
+  const r = designPile({ totalLoadKN: 4000 });
+  assert.ok(r.groupCapacityKN >= 4000);
+  assert.ok(!r.warnings.some((w) => w.includes("below the total load")));
+});
+
 test("Converse-Labarre group efficiency for 2x3 group at 1.5 m spacing", () => {
   const r = designPile({ directSigmaVTipKPa: 120, directNq: 40, directFsKPa: 50 });
   approx(r.groupEta, 0.761, 0.01);

@@ -39,7 +39,7 @@ export default function PlywoodContent() {
         <p>
           For a slab, the beam sides matter as much as the soffit. The secondary beam length is (length ÷ spacing + 1)
           × width, and the primary beam length is (width ÷ spacing + 1) × length. With 3 m spacing on a 10 × 5 m slab,
-          the secondary beams total about 20 m and the primary beams about 15 m, and each beam contributes
+          the secondary beams total about 20 m and the primary beams about 27 m, and each beam contributes
           (2 × depth + width) × length of contact area. Missing the beams understates the plywood by a fifth or more,
           which is why the calculator works them out from the spacing rather than asking you to measure them.
         </p>

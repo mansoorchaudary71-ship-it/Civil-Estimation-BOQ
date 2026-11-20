@@ -34,7 +34,6 @@ import { MaterialSummary } from "../ui/MaterialSummary";
 import { StyledChart } from "../ui/EstimateVisualizer";
 import Brickwork9InchModule from "./Brickwork9InchModule";
 import CountertopModule from "./CountertopModule";
-import { SEO } from "../SEO";
 import { useSettings } from "../../context/SettingsContext";
 import { ToolLayout, ToolLayoutInputs, ToolLayoutResults, ToolSection } from "../ui/ToolLayout";
 import { NumberInput } from "../ui/NumberInput";
@@ -139,13 +138,6 @@ export default function MasterQuantityEstimator({
 
   return (
     <div className="w-full">
-      {!isEmbedded && (
-        <SEO 
-          title="Master Quantity Estimator — 23 Calculators in One | Civil Estimation Pro" 
-          description="23 linked quantity calculators — excavation, PCC, footing, brickwork, slab, plaster and more — with IS 1200 measurement, Imperial/SI units and shared chaining." 
-          canonicalUrl="https://civilestimationpro.com/master-quantity" 
-        />
-      )}
       
       <div className="flex flex-col lg:flex-row gap-8 mb-10">
         {/* Tool Selector Sidebar */}

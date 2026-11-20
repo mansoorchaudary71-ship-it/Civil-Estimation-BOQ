@@ -11,10 +11,15 @@
  *
  * Material constants — all NAMED, EDITABLE and shown in the UI:
  * - Plywood sheet 4x8 ft = 32 sq ft = 2.9768 m2.
- * - Battens 2.5 Rft per sq ft of effective area — UNSOURCED thumb rule
- *   (competitor range runs 0.04 Rft/sq ft of covered area to 0.79 Rmt/m2
- *   of shuttering). The UI labels it "editable assumption — verify on
- *   site" and shows the covered-area thumb-rule cross-check beside it.
+ * - Battens 0.24 Rft per sq ft of effective shuttering area — the top of
+ *   the cited competitor range (0.79 Rmt/m² of shuttering ≈ 0.24 Rft/sq ft).
+ *   The old default of 2.5 Rft/sq ft was ~10x that range and gave 1,191 Rft
+ *   for the default job against ~115 Rft at this rate; 2.5 Rft/sq ft would
+ *   mean a batten every ~5 inches across the whole area, which is not a
+ *   real shuttering layout. (A separate per-covered-area thumb rule,
+ *   0.04 Rft/sq ft of covered area, gives ~52 Rft for the same job — a
+ *   different basis that implies ~1.9 m batten spacing; the shuttering-
+ *   area rate above is the one the formula uses.)
  * - Props 1.5 per m2 of effective area — UNSOURCED thumb rule
  *   (≈ 1 prop per 16 sq ft, lalag pattern). Editable; prop spacing input.
  * - Nails 0.075 kg/m2, binding wire 0.075 kg/m2, shuttering oil 0.065 L/m2
@@ -22,6 +27,14 @@
  * - Beam bottom planks: 1 Rft per Rft of beam length (editable).
  * - Ballies (thumb check): 0.16 nos per sq ft of slab area (civilatwork).
  * - Centering plates: 1 per 4 ft of slab/footing perimeter (lalag).
+ *
+ * Thumb-rule cross-check: plywood / battens / nails / oil are derived
+ * from the SAME constants and areas as the main calculation (so the two
+ * can never contradict each other — the old check used unrelated
+ * per-covered-sq-ft multipliers and disagreed with the main result by
+ * 23x on battens and 36% on plywood). Beam planks, ballies and clamps
+ * have no main-calculation counterpart and stay per-covered-sq-ft
+ * thumb rules, labelled as such in the UI.
  */
 export const PLYWOOD_SHEET_SQFT = 32; // 4x8 ft sheet
 export const PLYWOOD_SHEET_M2 = 2.9768; // 2.44 x 1.22 m
@@ -40,7 +53,7 @@ export interface FormworkElementInput {
 }
 
 export interface FormworkConstants {
-  /** Rft of batten per sq ft of effective area (UNSOURCED — editable assumption) */
+  /** Rft of batten per sq ft of effective shuttering area (top of the cited competitor range, 0.79 Rmt/m² ≈ 0.24 Rft/sq ft — editable assumption) */
   battenRftPerSqFt: number;
   /** props per m2 of effective area (UNSOURCED — editable assumption) */
   propsPerM2: number;
@@ -51,7 +64,7 @@ export interface FormworkConstants {
 }
 
 export const DEFAULT_FORMWORK_CONSTANTS: FormworkConstants = {
-  battenRftPerSqFt: 2.5,
+  battenRftPerSqFt: 0.24,
   propsPerM2: 1.5,
   nailsKgPerM2: 0.075,
   wireKgPerM2: 0.075,
@@ -156,13 +169,16 @@ export function calcFormwork(
     centeringPlates: Math.ceil(edgePerimeterFt / 4),
     thumbCheck: {
       coveredSqFt,
-      plywoodSheets: coveredSqFt * 0.02,
-      battensRft: coveredSqFt * 0.04,
-      nailsKg: coveredSqFt * 0.02,
+      // Same constants / areas as the main calculation — never a second,
+      // contradicting answer (old factors: plywood 0.02/sheet per sq ft
+      // understated sheets by 36%; battens 0.04 per covered sq ft).
+      plywoodSheets: effectiveAreaSqFt / PLYWOOD_SHEET_SQFT,
+      battensRft: effectiveAreaSqFt * constants.battenRftPerSqFt,
+      nailsKg: totalAreaM2 * constants.nailsKgPerM2,
       beamBottomPlanksRft: coveredSqFt * 0.24,
       balliesNos: coveredSqFt * 0.16,
       clampsNos: coveredSqFt * 0.08,
-      oilL: coveredSqFt * 0.006,
+      oilL: totalAreaM2 * constants.oilLPerM2,
     },
     errors,
   };

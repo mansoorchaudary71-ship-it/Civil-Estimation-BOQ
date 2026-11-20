@@ -150,11 +150,16 @@ export function muLimKNm(fck: number, bMm: number, dMm: number, fy: number): num
 /**
  * Tension steel for a moment Mu (kNm) on a section b x d (mm).
  * Returns Ast (mm2) by the exact LSM quadratic; 0 when Mu <= 0.
+ * Returns Infinity when Mu exceeds Mu,lim — the section is overstressed
+ * and no singly-reinforced steel area exists. Callers MUST check
+ * isFinite() and surface "section overstressed — deepen the section"
+ * instead of rendering the value (Infinity, never NaN, so downstream
+ * Math.max / comparisons stay well-defined and fail safe).
  */
 export function astForMu(muKNm: number, fck: number, fy: number, bMm: number, dMm: number): number {
   if (muKNm <= 0 || bMm <= 0 || dMm <= 0) return 0;
   const term = 1 - (4.6 * muKNm * 1e6) / (fck * bMm * dMm * dMm);
-  if (term < 0) return NaN; // Mu exceeds Mu,lim — caller must take the doubly branch
+  if (term < 0) return Infinity; // Mu exceeds Mu,lim — caller must deepen the section / go doubly reinforced
   return (0.5 * fck / fy) * (1 - Math.sqrt(term)) * bMm * dMm;
 }
 

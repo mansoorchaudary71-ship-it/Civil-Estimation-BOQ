@@ -19,6 +19,8 @@ import {
 } from "../lib/estimates";
 import { useAuth } from "../contexts/AuthContext";
 import { ALL_MODULES, getCategoryTheme } from "./Dashboard";
+import { SEO } from "./SEO";
+import { getSiteUrl } from "../seo/siteConfig";
 
 
 interface Estimate {
@@ -249,6 +251,11 @@ export default function RecentEstimates({
 
   return (
     <div className="flex-1 w-full md:max-w-7xl md:mx-auto flex flex-col font-sans pb-12 px-4 md:px-0">
+      <SEO
+        title="My Saved Estimates & Projects"
+        description="Manage your saved construction projects and estimates — reopen calculations, track progress and organise your work in one place, across projects."
+        canonicalUrl={`${getSiteUrl()}/my-estimates`}
+      />
       <div className="mb-8 flex flex-col items-center justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 text-center mt-6">
         <h1 className="md: text-txt-primary dark:text-white flex items-center justify-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-6">
           My Projects

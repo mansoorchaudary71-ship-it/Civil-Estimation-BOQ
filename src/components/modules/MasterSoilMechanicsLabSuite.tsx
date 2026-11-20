@@ -92,8 +92,14 @@ function UcsTab() {
   const [torque, setTorque] = useState<number | "">(15);
   const [vaneD, setVaneD] = useState<number | "">(50);
   const [vaneH, setVaneH] = useState<number | "">(100);
-  const u = dia !== "" && load !== "" && strain !== "" ? ucs(Number(dia), Number(load), Number(strain)) : null;
-  const v = torque !== "" && vaneD !== "" && vaneH !== "" ? vaneShear(Number(torque), Number(vaneD), Number(vaneH)) : null;
+  let u: ReturnType<typeof ucs> | null = null;
+  let ucsError: string | null = null;
+  try { if (dia !== "" && load !== "" && strain !== "") u = ucs(Number(dia), Number(load), Number(strain)); }
+  catch (e) { ucsError = (e as Error).message; }
+  let v: ReturnType<typeof vaneShear> | null = null;
+  let vaneError: string | null = null;
+  try { if (torque !== "" && vaneD !== "" && vaneH !== "") v = vaneShear(Number(torque), Number(vaneD), Number(vaneH)); }
+  catch (e) { vaneError = (e as Error).message; }
   return (
     <div className="space-y-6">
       <div>
@@ -103,6 +109,7 @@ function UcsTab() {
           <Num label="Failure load" unit="N" value={load} onChange={setLoad} />
           <Num label="Axial strain" unit="%" value={strain} onChange={setStrain} />
         </div>
+        {ucsError && <p className="text-sm text-ui-errorText mt-2">{ucsError}</p>}
         {u && <p className="mt-3 text-txt-primary">Ac {u.correctedAreaM2.toFixed(6)} m² · <strong>qu {u.quKpa.toFixed(1)} kPa</strong> · cu {u.cuKpa.toFixed(1)} kPa</p>}
       </div>
       <div className="border-t border-border-color pt-4">
@@ -112,6 +119,7 @@ function UcsTab() {
           <Num label="Vane dia" unit="mm" value={vaneD} onChange={setVaneD} />
           <Num label="Vane height" unit="mm" value={vaneH} onChange={setVaneH} />
         </div>
+        {vaneError && <p className="text-sm text-ui-errorText mt-2">{vaneError}</p>}
         {v && <p className="mt-3 text-txt-primary"><strong>cu {v.cuKpa.toFixed(1)} kPa</strong></p>}
       </div>
     </div>

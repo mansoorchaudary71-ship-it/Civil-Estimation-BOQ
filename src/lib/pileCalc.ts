@@ -123,6 +123,10 @@ export interface PileResult {
   qbKN: number; qsKN: number; quKN: number; qallKN: number;
   requiredPiles: number;
   groupEta: number; groupCapacityKN: number;
+  /** Group ultimate capacity (η·m·n·Qu) — for reference only, never compared with the working load. */
+  groupUltimateKN: number;
+  /** Governing group ALLOWABLE capacity = min(η·m·n·Qall, block failure / FoS). This is the number to compare with the load. */
+  groupAllowableKN: number;
   blockCapacityKN: number | null; groupGoverns: "single-pile group" | "block failure";
   groupCapacityPerPileKN: number;
   settlementMm: number;
@@ -182,7 +186,7 @@ export function designPile(input: Partial<PileInputs> = {}): PileResult {
   const n = i.groupCols;
   const thetaDeg = (Math.atan(i.diameterM / i.spacingM) * 180) / Math.PI;
   const eta = Math.max(0.3, 1 - (thetaDeg / 90) * (((n - 1) * m + (m - 1) * n) / (m * n)));
-  const groupCap = eta * m * n * qu;
+  const groupUltimate = eta * m * n * qu;
   // Block failure (clay): Qu,block = 9·cu·Ab,block + α·cu·Pblock·L
   let blockCap: number | null = null;
   if (i.soilType === "clay") {
@@ -192,8 +196,18 @@ export function designPile(input: Partial<PileInputs> = {}): PileResult {
     const alpha = alphaForCu(cuBase);
     blockCap = 9 * cuBase * blockL * blockW + alpha * cuBase * 2 * (blockL + blockW) * i.lengthM;
   }
-  const groupGoverns = blockCap != null && blockCap < groupCap ? "block failure" : "single-pile group";
-  const groupCapPerPile = Math.min(groupCap, blockCap ?? Infinity) / (m * n);
+  // Group ALLOWABLE capacity governs: the ultimate group capacity divided
+  // by FoS (and in clay the block-failure ultimate divided by FoS). The
+  // old code reported the ultimate group capacity against the working
+  // load, so a failing group looked safe (11,377 kN ultimate vs a
+  // 5,000 kN load at the defaults, while the allowable is only 4,552 kN).
+  const groupAllowable = Math.min(groupUltimate / i.fos, blockCap != null ? blockCap / i.fos : Infinity);
+  const groupCap = groupAllowable;
+  const groupGoverns = blockCap != null && blockCap / i.fos < groupUltimate / i.fos ? "block failure" : "single-pile group";
+  const groupCapPerPile = groupAllowable / (m * n);
+  if (groupAllowable < i.totalLoadKN) {
+    warnings.push(`Group allowable capacity ${round(groupAllowable)} kN is below the total load ${i.totalLoadKN} kN — add piles, lengthen them, or widen the spacing.`);
+  }
   // Settlement: elastic shortening of the pile + soil compression (Vesic approx).
   const ap = ab;
   const ec = 5000 * Math.sqrt(i.fck);
@@ -222,6 +236,7 @@ export function designPile(input: Partial<PileInputs> = {}): PileResult {
     qbKN: round(qb), qsKN: round(qs), quKN: round(qu), qallKN: round(qall),
     requiredPiles,
     groupEta: round(eta, 3), groupCapacityKN: round(groupCap),
+    groupUltimateKN: round(groupUltimate), groupAllowableKN: round(groupAllowable),
     blockCapacityKN: blockCap == null ? null : round(blockCap),
     groupGoverns, groupCapacityPerPileKN: round(groupCapPerPile),
     settlementMm: round(settlement, 1),
@@ -239,7 +254,7 @@ export function designPile(input: Partial<PileInputs> = {}): PileResult {
         : `Qs = Σ β·σ′v·πD·Li (β-method) = ${round(qs)} kN` },
       { label: "Ultimate & allowable", text: `Qu = Qb + Qs = ${round(qu)} kN; Qall = Qu / FoS ${i.fos} = ${round(qall)} kN per pile` },
       { label: "Piles required", text: `n = ceil(${i.totalLoadKN} / ${round(qall)}) = ${requiredPiles} piles` },
-      { label: "Group", text: `Converse–Labarre η = ${round(eta, 3)}; group Qu = ${round(groupCap)} kN${blockCap != null ? `; block failure = ${round(blockCap)} kN — ${groupGoverns} governs` : ""}` },
+      { label: "Group", text: `Converse–Labarre η = ${round(eta, 3)}; group Qu = ${round(groupUltimate)} kN; group allowable = Qu/FoS = ${round(groupAllowable)} kN vs load ${i.totalLoadKN} kN (${groupAllowable >= i.totalLoadKN ? "PASS" : "FAIL"})${blockCap != null ? `; block failure = ${round(blockCap)} kN ultimate (${round(blockCap / i.fos)} kN allowable) — ${groupGoverns} governs` : ""}` },
       { label: "Settlement", text: `Elastic shortening + soil compression ≈ ${round(settlement, 1)} mm (approximate — confirm with a load test for large projects)` },
     ],
   };

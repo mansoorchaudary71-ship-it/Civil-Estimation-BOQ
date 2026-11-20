@@ -1,5 +1,7 @@
 import { Button } from './ui/Button';
 import { GlobalFAQ } from './ui/GlobalFAQ';
+import { SEO } from "./SEO";
+import { getSiteUrl } from "../seo/siteConfig";
 import React, { useState } from "react";
 import { Search, BookOpen, ShieldCheck, ArrowRight, Download, Eye, X } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -73,11 +75,55 @@ export const standardsData: StandardEntry[] = [
   { id: "uae-fire", code: "UAE FLSC 2018", title: "UAE Fire and Life Safety Code", country: "UAE", category: "Safety", description: "Mandatory civil defence requirements for fire protection systems, egress strategies, and facade safety across all Emirates.", toolIds: ["qs-workflow"], toolNames: ["BOQ Generator"], source: "UAE Civil Defence (Ministry of Interior)", year: 2018, lastVerified: LV },
 ];
 
+/**
+ * Per-country SEO for the four routes that render this page
+ * (/is-codes-reference + /morth-irc-specs → India; /pakistan-building-codes
+ * → Pakistan; /uae-construction-standards → UAE). The title/description
+ * come from initialActiveCountry — the route App rendered — not from the
+ * live filter state, so the head tags always match the URL. India has two
+ * routes and no canonical (they cannot be told apart here); Pakistan and
+ * UAE canonicalise to their own route.
+ */
+const SEO_BY_COUNTRY: Record<string, { title: string; description: string; canonicalPath?: string; h1Main: string; h1Accent: string; h1Suffix: string }> = {
+  India: {
+    title: "Indian Standards & Codes Reference",
+    description: "Indian Standard codes and MoRTH/IRC specifications — IS 456, IS 800, IS 10262 and highway specs, with scope, clauses and linked calculators.",
+    h1Main: "Indian",
+    h1Accent: "Standards & Codes",
+    h1Suffix: "",
+  },
+  Pakistan: {
+    title: "Pakistan Building Codes Reference",
+    description: "Building Code of Pakistan, NHA specifications and LDA/DHA bylaws — seismic provisions, zoning rules and approval requirements for building in Pakistan.",
+    canonicalPath: "/pakistan-building-codes",
+    h1Main: "Pakistan",
+    h1Accent: "Building Codes",
+    h1Suffix: "",
+  },
+  UAE: {
+    title: "UAE Construction Standards Reference",
+    description: "Dubai Building Code, Abu Dhabi International Building Code and UAE Fire & Life Safety Code — the construction standards behind our UAE calculators.",
+    canonicalPath: "/uae-construction-standards",
+    h1Main: "UAE",
+    h1Accent: "Construction Standards",
+    h1Suffix: "",
+  },
+  All: {
+    title: "Engineering Standards & Codes Hub",
+    description: "A reference library of civil engineering standards and building codes for India, Pakistan and the UAE — IS codes, MoRTH, BCP and Dubai Municipality.",
+    canonicalPath: "/standards",
+    h1Main: "Engineering",
+    h1Accent: "Standards & Codes",
+    h1Suffix: "Hub",
+  },
+};
+
 export default function StandardsReferencePage({ onNavigate, initialActiveCountry = "All" }: { onNavigate?: (id: string) => void, initialActiveCountry?: string }) {
   const [activeCountry, setActiveCountry] = useState(initialActiveCountry);
   const [searchTerm, setSearchTerm] = useState("");
   const [yearFilter, setYearFilter] = useState<string>("All");
   const [viewPdfUrl, setViewPdfUrl] = useState<string | null>(null);
+  const seo = SEO_BY_COUNTRY[initialActiveCountry] ?? SEO_BY_COUNTRY.All;
 
   const countries = ["All", "India", "Pakistan", "UAE"];
   const years = ["All", ...Array.from(new Set(standardsData.map((s) => s.year).filter((y): y is number => y != null))).sort((a, b) => b - a).map(String)];
@@ -92,6 +138,11 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] font-sans pb-24">
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonicalUrl={seo.canonicalPath ? `${getSiteUrl()}${seo.canonicalPath}` : undefined}
+      />
       {/* Header Section */}
       <div className="bg-[#FAF8F5] border-b border-[#E8E4D9] pt-20 pb-16 px-6 relative overflow-hidden">
         {/* Background glow */}
@@ -100,7 +151,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
         <div className="w-full md:max-w-7xl md:mx-auto flex flex-col items-center text-center relative z-10 px-4 md:px-0">
           <BookOpen className="w-12 h-12 text-[#B39B72] mb-6" />
           <h1 className="md: lg: text-[#4A443B] mb-4 relative text-xl font-semibold text-txt-primary tracking-tight mb-6">
-            Engineering <span className="text-[#B39B72]">Standards & Codes</span> Hub
+            {seo.h1Main} <span className="text-[#B39B72]">{seo.h1Accent}</span>{seo.h1Suffix ? ` ${seo.h1Suffix}` : ""}
           </h1>
           <p className="text-[#8B8476] max-w-2xl mb-10 text-base font-normal text-txt-secondary leading-relaxed">
             A comprehensive reference library of the civil engineering standards, specifications, and building codes powering our estimation tools across key international markets.
@@ -235,7 +286,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
         {/* Bottom CTA */}
         <div className="w-full mt-20 bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 text-center md:max-w-4xl md:mx-auto shadow-brand-sm overflow-hidden">
            <h2 className="md: text-[#4A443B] mb-4 text-xl font-semibold text-txt-primary tracking-tight">Ready to put these standards into practice?</h2>
-           <p className="w-full text-[#8B8476] mb-8 md:max-w-xl md:mx-auto text-base font-normal text-txt-secondary leading-relaxed px-4 md:px-0">Access 55+ professional civil engineering calculators and tools that automatically apply these specific country codes to your estimates.</p>
+           <p className="w-full text-[#8B8476] mb-8 md:max-w-xl md:mx-auto text-base font-normal text-txt-secondary leading-relaxed px-4 md:px-0">Access 75+ professional civil engineering calculators and tools that automatically apply these specific country codes to your estimates.</p>
            <Button onClick={() => {
               if (onNavigate) {
                  onNavigate('home');

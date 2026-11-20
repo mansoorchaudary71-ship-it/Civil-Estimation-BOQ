@@ -6,7 +6,6 @@ import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { temperatureCorrectionFactor } from "../../lib/permeabilityCalc";
-import { SEO } from "../SEO";
 
 
 export default function PermeabilityCalculator() {
@@ -79,10 +78,6 @@ export default function PermeabilityCalculator() {
 
   return (
     <div className="w-full flex flex-col gap-8 animate-in fade-in">
-        <SEO 
-            title="Permeability Coefficient Calculator (k) | Geotechnical Estimator" 
-            description="Process constant head and falling head laboratory data to compute soil permeability with temperature corrections (Darcy's Law)."
-        />
 
         <div className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
             <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-txt-primary dark:text-txt-primary">

@@ -1,7 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useMemo, useState } from 'react';
 import { Zap, Sun, CloudRain, ThermometerSnowflake, Save, AlertTriangle } from 'lucide-react';
-import SEOHead from '../seo/SEOHead';
 import { useBOQ } from '../../context/BOQContext';
 import { NumberInput } from "../ui/NumberInput";
 import { ResultCard } from "../ui/ResultCard";
@@ -37,13 +36,10 @@ export default function MasterInfrastructureMEPEngine() {
     setTimeout(() => setAdded(null), 3000);
   };
 
+  // NOTE: no per-component SEO here on purpose — ModuleWrapper's Helmet
+  // SEOHead owns this route's title/description/canonical. The old
+  // seo/SEOHead usage set document.title directly and raced Helmet.
   return (
-    <SEOHead
-      title="Master Infrastructure & MEP Engine | Solar, Water Heating, AC & Rainwater"
-      description="Solar PV, solar water heater, AC sizing and rainwater harvesting for infrastructure projects — one shared engine per calculation, with BOQ export."
-      toolName="Master Infrastructure & MEP Engine"
-      divisionName="Infrastructure & MEP"
-    >
       <div className="w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-screen">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
@@ -61,7 +57,6 @@ export default function MasterInfrastructureMEPEngine() {
         </div>
 
       </div>
-    </SEOHead>
   );
 }
 

@@ -1,20 +1,17 @@
 import { Button } from '../ui/Button';
 import React, { useState } from 'react';
-import { Mail, MessageSquare, PhoneCall, MapPin, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import toast from 'react-hot-toast';
-
+import { Mail, MessageSquare, PhoneCall, MapPin, CheckCircle, AlertCircle, ShieldCheck } from 'lucide-react';
+import { SEO } from '../SEO';
+import { CONTACT_EMAIL } from '../../seo/siteConfig';
 
 export default function Contact() {
-  const { workspaceToken, signInWithGoogle } = useAuth();
-  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     message: ''
   });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -26,80 +23,46 @@ export default function Contact() {
     return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
+    setStatus('idle');
 
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
       setErrorMessage('Please fill in all fields.');
+      setStatus('error');
       return;
     }
 
     if (!validateEmail(formData.email)) {
       setErrorMessage('Please enter a valid email address.');
+      setStatus('error');
       return;
     }
 
-    if (!workspaceToken) {
-      try {
-        await signInWithGoogle();
-      } catch (err) {
-        return; // sign in failed or cancelled
-      }
-    }
+    // There is no backend mailbox on this static site, so the message is
+    // sent through the visitor's own email app. Nothing is sent from this
+    // page itself: the mailto link below opens the visitor's email client
+    // with the message prefilled, and the visitor presses Send there.
+    const subject = 'General Inquiry via Contact Form';
+    const body = [
+      `From: ${formData.firstName} ${formData.lastName} <${formData.email}>`,
+      '',
+      'Message:',
+      formData.message,
+    ].join('\n');
+    const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    const confirmed = window.confirm("Are you sure you want to send this message via your Gmail account?");
-    if (!confirmed) return;
-
-    setStatus('loading');
-
-    try {
-      // Use the workspaceToken from AuthContext to send the email via Gmail API
-      const token = workspaceToken; // Note: In a real app, you might need to ensure the token is still valid
-      
-      const emailContent = [
-        `To: sales@civilpro.com`,
-        `Subject: General Inquiry via Contact Form`,
-        `Content-Type: text/plain; charset=utf-8`,
-        ``,
-        `From: ${formData.firstName} ${formData.lastName} <${formData.email}>`,
-        `Message:`,
-        `${formData.message}`
-      ].join('\r\n');
-
-      const encodedMessage = btoa(unescape(encodeURIComponent(emailContent)))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
-
-      const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          raw: encodedMessage
-        }),
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        setFormData({ firstName: '', lastName: '', email: '', message: '' });
-      } else {
-        const errorData = await response.json();
-        setStatus('error');
-        setErrorMessage(errorData.error?.message || 'Failed to send message via Gmail.');
-      }
-    } catch (error) {
-      console.error('Submission error:', error);
-      setStatus('error');
-      setErrorMessage('Network error occurred. Please try again later.');
-    }
+    window.location.href = mailtoUrl;
+    setStatus('success');
   };
 
   return (
     <div className="max-w-5xl mx-auto space-y-12 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <SEO
+        title="Contact Us"
+        description="Contact Civil Estimation Pro for help with BOQ calculators, material rates, pricing, or technical support. Send us a message and we will get back to you."
+      />
       <div className="text-center space-y-4">
         <h1 className="text-2xl md:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">
           Get in Touch
@@ -118,7 +81,7 @@ export default function Contact() {
              <div>
                <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Chat to Sales</h3>
                <p className="text-sm text-txt-secondary dark:text-txt-tertiary mb-3">Speak to our friendly team.</p>
-               <a href="mailto:sales@civilpro.com" className="text-base font-medium text-accent-800 dark:text-accent-400 hover:underline">sales@civilpro.com</a>
+               <a href={`mailto:${CONTACT_EMAIL}`} className="text-base font-medium text-accent-800 dark:text-accent-400 hover:underline">{CONTACT_EMAIL}</a>
              </div>
           </div>
 
@@ -150,9 +113,9 @@ export default function Contact() {
         <div className="lg:col-span-2 bg-bg-card rounded-[2.5rem] p-8 md:p-10 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {status === 'success' && (
-              <div className="bg-ui-success border border-ui-successBorder text-ui-successText rounded-2xl p-4 flex items-center gap-3 overflow-hidden">
-                <CheckCircle className="w-5 h-5 text-ui-successText shrink-0" />
-                <p className="font-semibold text-sm">Your message has been sent successfully!</p>
+              <div className="bg-ui-success border border-ui-successBorder text-ui-successText rounded-2xl p-4 flex items-start gap-3 overflow-hidden">
+                <CheckCircle className="w-5 h-5 text-ui-successText shrink-0 mt-0.5" />
+                <p className="font-semibold text-sm">Your email app should now open with your message ready to send. Press Send in your email app to deliver it to {CONTACT_EMAIL} — or email us directly at <a href={`mailto:${CONTACT_EMAIL}`} className="underline">{CONTACT_EMAIL}</a>.</p>
               </div>
             )}
 
@@ -166,62 +129,58 @@ export default function Contact() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2 flex flex-col">
                 <label htmlFor="contact-first-name" className="text-sm font-bold text-txt-primary">First Name <span className="text-ui-errorText" aria-hidden="true">*</span></label>
-                <input id="contact-first-name" 
-                  type="text" 
+                <input id="contact-first-name"
+                  type="text"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  disabled={status === 'loading'}
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
-                  placeholder="e.g. Jane" 
+                  className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium overflow-hidden text-txt-primary"
+                  placeholder="e.g. Jane"
                 />
               </div>
               <div className="space-y-2 flex flex-col">
                 <label htmlFor="contact-last-name" className="text-sm font-bold text-txt-primary">Last Name <span className="text-ui-errorText" aria-hidden="true">*</span></label>
-                <input id="contact-last-name" 
-                  type="text" 
+                <input id="contact-last-name"
+                  type="text"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  disabled={status === 'loading'}
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
-                  placeholder="e.g. Smith" 
+                  className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium overflow-hidden text-txt-primary"
+                  placeholder="e.g. Smith"
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2 flex flex-col">
               <label htmlFor="contact-email" className="text-sm font-bold text-txt-primary">Work Email Address <span className="text-ui-errorText" aria-hidden="true">*</span></label>
-              <input id="contact-email" 
-                type="email" 
+              <input id="contact-email"
+                type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                disabled={status === 'loading'}
                 required
-                className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium disabled:opacity-50 overflow-hidden text-txt-primary" 
-                placeholder="jane@company.com" 
+                className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium overflow-hidden text-txt-primary"
+                placeholder="jane@company.com"
               />
             </div>
             <div className="space-y-2 flex flex-col">
               <label htmlFor="contact-message" className="text-sm font-bold text-txt-primary">How can we help? <span className="text-ui-errorText" aria-hidden="true">*</span></label>
               <textarea id="contact-message"
                 name="message"
-                rows={5} 
+                rows={5}
                 value={formData.message}
                 onChange={handleInputChange}
-                disabled={status === 'loading'}
                 required
-                className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium resize-none disabled:opacity-50 overflow-hidden text-txt-primary" 
-                placeholder="Tell us about your project, team size, or specific features you need..." 
+                className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-accent-800 focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium resize-none overflow-hidden text-txt-primary"
+                placeholder="Tell us about your project, team size, or specific features you need..."
               />
             </div>
             <div className="flex items-start gap-2 mt-2">
               <ShieldCheck className="w-4 h-4 text-ui-successText shrink-0 mt-0.5" />
               <p className="text-xs font-medium text-txt-secondary">
-                Your data is secure and will only be used to respond to your inquiry. Read our <a href="/privacy" className="text-accent-800 hover:underline">Privacy Policy</a>.
+                Your message opens in your own email app — we never see it until you press Send there. Read our <a href="/privacy" className="text-accent-800 hover:underline">Privacy Policy</a>.
               </p>
             </div>
             <Button
@@ -229,11 +188,10 @@ export default function Contact() {
               variant="primary"
               size="lg"
               fullWidth
-              isLoading={status === 'loading'}
-              loadingText="Sending via Gmail..."
               className="mt-4"
             >
-              {workspaceToken ? 'Send Message via Gmail' : 'Sign in with Google to Send'}
+              <Mail className="w-5 h-5 mr-2" />
+              Open Email App to Send
             </Button>
           </form>
         </div>

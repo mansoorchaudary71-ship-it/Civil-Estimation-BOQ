@@ -46,6 +46,7 @@ import { Calculator, Droplets,
  ArrowUpRight,
  Beaker } from "lucide-react";
 import { SEO } from "./SEO";
+import { getSiteUrl } from "../seo/siteConfig";
 import SearchAndFilterBar from "./SearchAndFilterBar";
 import HeroSection from "./HeroSection";
 import SocialProofSection from "./SocialProofSection";
@@ -81,13 +82,13 @@ function formatTimeAgo(timestamp: number) {
 
 export type ModuleId = string;
 export const ALL_MODULES = [
-  { id: "master-finishes", title: "Complete Finishes Workspace", desc: "Bricks, plaster, paint, flooring, countertops, woodwork, and carpet area in one seamless multi-tab interface.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Intermediate", estimatedTime: "~4 mins" },
-  { id: "brick-calculator", title: "Brick Calculator", desc: "Bricks, cement bags, sand and total cost for any wall — with openings, wastage and rates in PKR, INR or AED.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Beginner", estimatedTime: "~2 mins", isPopular: true },
+  { id: "master-finishes", title: "Complete Finishes Workspace", desc: "Estimate bricks, plaster, paint, flooring, countertops, woodwork and carpet in one multi-tab workspace, with quantities and costs worked out per room.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Intermediate", estimatedTime: "~4 mins" },
+  { id: "brick-calculator", title: "Brick Calculator Pakistan & India", desc: "Bricks, cement bags, sand and total cost for any wall in PKR, INR or AED — with openings, wastage, brick types and city rates for Pakistan, India and UAE.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Beginner", estimatedTime: "~2 mins", isPopular: true },
  // 🚀 Guided Workflows
  {
  id: "qs-workflow",
- title: "Guided QS Workflow",
- desc: "Walks users through a complete sequence: Project Setup, Drawings, Substructure, Superstructure, Masonry, Services, BOQ Compilation, and final Report.",
+ title: "Guided Quantity Surveying Workflow",
+ desc: "A step-by-step quantity surveying workflow from project setup and drawings through substructure, superstructure, masonry, services and BOQ compilation.",
  category: "Quantity Takeoff & Costing",
  icon: Activity, BookOpen, FileText,
  styleStyle: "solid",
@@ -100,8 +101,8 @@ export const ALL_MODULES = [
 
  {
  id: "house",
- title: "House Estimator",
- desc: "Calculate complete residential construction costs from excavation to finishing. Contractors benefit by getting an accurate Civil Estimation Pro material breakdown instantly.",
+ title: "House Construction Cost Estimator",
+ desc: "Complete residential construction cost from excavation to finishing in PKR — grey structure, finishes and add-ons by city, plot size and finish level.",
  category: "Quantity Takeoff & Costing",
  icon: Home,
  premium: true,
@@ -114,8 +115,8 @@ export const ALL_MODULES = [
  },
  {
  id: "takeoff",
- title: "Plan Measure",
- desc: "Area & linear extraction.",
+ title: "Plan Measure & Takeoff Tool",
+ desc: "Extract areas and linear measurements from plans and drawings, then turn them into quantities for BOQ, material ordering and cost estimation work.",
  category: "Quantity Takeoff & Costing",
  icon: Ruler,
  styleStyle: "solid",
@@ -128,8 +129,8 @@ export const ALL_MODULES = [
  },
  {
  id: "rates",
- title: "Live DB Rates",
- desc: "Centralized database for local market prices.",
+ title: "Live Construction Material Rates",
+ desc: "Live market rates for cement, steel, bricks, sand, aggregate and labour in PKR — a central rate database your estimates and BOQs draw from every day.",
  category: "Quantity Takeoff & Costing",
  icon: TrendingUp,
  styleStyle: "glass",
@@ -141,8 +142,8 @@ export const ALL_MODULES = [
  },
  {
  id: "ai",
- title: "AI Assistant",
- desc: "Ask anything about construction",
+ title: "AI Assistant for Quantity Estimation",
+ desc: "Ask construction and estimation questions and get rule-based answers on quantities, rates, materials and methods — free to use, no sign-up needed.",
  category: "Quantity Takeoff & Costing",
  icon: Sparkles,
  premium: true,
@@ -157,8 +158,8 @@ export const ALL_MODULES = [
  // 📦 QUANTITY ESTIMATOR
  {
  id: "quick-estimation",
- title: "Quick Rough Estimation",
- desc: "Get a lightning-fast preliminary budget and timeline in under 5 seconds based on simple inputs.",
+ title: "Quick Rough Cost Estimation",
+ desc: "A lightning-fast preliminary budget and timeline in under five seconds from a few simple inputs — a first-pass figure before detailed estimation.",
  category: "Quantity Takeoff & Costing",
  icon: Calculator,
  styleStyle: "solid",
@@ -170,7 +171,7 @@ export const ALL_MODULES = [
  {
  id: "master-quantity",
  title: "Master Quantity & Estimation",
- desc: "23 comprehensive calculators for specialized construction items.",
+ desc: "23 linked quantity calculators for excavation, PCC, footing, brickwork, slab, plaster and more — with IS 1200 measurement and shared chaining.",
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
@@ -182,8 +183,8 @@ export const ALL_MODULES = [
  },
  {
  id: "material-takeoff",
- title: "Material Takeoff Sheet",
- desc: "Auto-calculate cement, sand, aggregate, block, and finishing material quantities based on built-up area and floors.",
+ title: "Material Takeoff Sheet Calculator",
+ desc: "Auto-calculate cement, sand, aggregate, block and finishing material quantities from built-up area and floors, ready for BOQ, ordering and site issue.",
  category: "Quantity Takeoff & Costing",
  icon: Calculator,
  styleStyle: "solid",
@@ -194,8 +195,8 @@ export const ALL_MODULES = [
  },
  {
  id: "cost-summary",
- title: "Cost Summary Sheet",
- desc: "Consolidate structural, finishing, and labour costs into a master cost summary with overhead and contingency calculations.",
+ title: "Construction Cost Summary Sheet",
+ desc: "Consolidate structural, finishing and labour costs into one master cost summary with overhead and contingency, for the whole project in one view.",
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
@@ -207,7 +208,7 @@ export const ALL_MODULES = [
  {
  id: "measurement-sheet",
  title: "Measurement Sheet Calculator",
- desc: "Interactive civil engineering measurement sheet with auto-calculating sections for excavation, PCC, RCC, and finishes.",
+ desc: "Interactive civil engineering measurement sheet with auto-calculating sections for excavation, PCC, RCC and finishes, following standard measurement rules.",
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
@@ -218,8 +219,8 @@ export const ALL_MODULES = [
  },
  {
  id: "boq",
- title: "Professional BOQ Generator",
- desc: "Calculate and format standardized Bills of Quantities for construction projects. Quantity surveyors rely on Civil Estimation Pro to export precise, itemized cost documents.",
+ title: "Professional BOQ Generator Tool",
+ desc: "Calculate and format standardised Bills of Quantities for construction projects, with itemised rates and amounts you can export, print and share.",
  category: "Quantity Takeoff & Costing",
  icon: ClipboardList,
  styleStyle: "solid",
@@ -230,8 +231,8 @@ export const ALL_MODULES = [
  },
  {
  id: "interiors-finishes",
- title: "Interiors & Finishes",
- desc: "Tiles, painting, doors, wood framing, and termite treatments.",
+ title: "Interiors & Finishes Estimator",
+ desc: "Estimate tiles, painting, doors, wood framing and termite treatment quantities and costs for interior finishing work, room by room and floor by floor.",
  category: "Quantity Takeoff & Costing",
  icon: Paintbrush,
  styleStyle: "glass",
@@ -242,8 +243,8 @@ export const ALL_MODULES = [
  },
  {
  id: "area-space-calculator",
- title: "Plot Area Calculator",
- desc: "Calculate dimensional areas, RERA property spaces, plots, and roof material.",
+ title: "Plot & Property Area Calculator",
+ desc: "Calculate dimensional areas, RERA property spaces, plot areas and roof material quantities from lengths, widths and irregular plot shapes, in sq ft and m².",
  category: "Quantity Takeoff & Costing",
  icon: Scaling,
  styleStyle: "glass",
@@ -254,8 +255,8 @@ export const ALL_MODULES = [
  },
  {
  id: "volume-estimator",
- title: "Volume & Tank Capacity",
- desc: "Calculate volumes, tank capacity & surface area.",
+ title: "Volume & Tank Capacity Calculator",
+ desc: "Calculate volumes, water tank capacity and surface area for tanks, pits, rooms and excavations in litres, cubic metres and cubic feet, for tanks and pits.",
  category: "Quantity Takeoff & Costing",
  icon: Container,
  styleStyle: "glass",
@@ -266,8 +267,8 @@ export const ALL_MODULES = [
  },
  {
  id: "metal-weight",
- title: "Metal Weight",
- desc: "Calculate section weights of steel profiles.",
+ title: "Steel & Metal Weight Calculator",
+ desc: "Calculate section weights of steel profiles, bars, plates and pipes from length and size — with standard unit weights per metre for every section.",
  category: "Quantity Takeoff & Costing",
  icon: Anvil,
  styleStyle: "glass",
@@ -278,8 +279,8 @@ export const ALL_MODULES = [
  },
  {
  id: "unit-converter",
- title: "Unit Converter",
- desc: "Convert units across 15 engineering categories.",
+ title: "Civil Engineering Unit Converter",
+ desc: "Convert length, area, volume, weight, pressure and more across 15 engineering unit categories, with metric and imperial units side by side, instantly.",
  category: "Quantity Takeoff & Costing",
  icon: Repeat,
  styleStyle: "glass",
@@ -291,7 +292,7 @@ export const ALL_MODULES = [
  {
  id: "marla-converter",
  title: "Marla / Kanal Area Converter",
- desc: "Convert Marla, Kanal, sq ft, sq yd, m² and acres — Punjab & KPK marla standards.",
+ desc: "Convert Marla, Kanal, square feet, square yards, m² and acres with Punjab and KPK marla standards — the plot-area converter for Pakistan and India.",
  category: "Quantity Takeoff & Costing",
  icon: Map,
  styleStyle: "glass",
@@ -303,7 +304,7 @@ export const ALL_MODULES = [
  {
  id: "pakistan-cost-calculator",
  title: "Pakistan House Cost Calculator",
- desc: "City-wise house construction cost in PKR by finish level — Lahore, Karachi, Islamabad and more.",
+ desc: "City-wise house construction cost in PKR by finish level — Lahore, Karachi, Islamabad, Faisalabad and Multan, from grey structure to luxury finish.",
  category: "Quantity Takeoff & Costing",
  icon: TrendingUp,
  styleStyle: "glass",
@@ -315,8 +316,8 @@ export const ALL_MODULES = [
  // 📊 ANALYSIS & TOOLS
  {
  id: "projects",
- title: "Project Manager",
- desc: "Group calculations by project, view aggregated costs and timelines.",
+ title: "Construction Project Manager",
+ desc: "Group calculations by project, view aggregated costs and timelines, and compare estimates across projects in one organised workspace, costs and dates together.",
  category: "Quantity Takeoff & Costing",
  icon: FolderOpen,
  styleStyle: "solid",
@@ -327,8 +328,8 @@ export const ALL_MODULES = [
  },
  {
  id: "tracker",
- title: "Site Progress Tracker",
- desc: "Track construction timelines, visual Gantt charts, budget burn, and photo updates.",
+ title: "Site Progress Tracker & Gantt",
+ desc: "Track construction timelines with visual Gantt charts, budget burn and photo updates — see how far each activity has progressed on site, day by day.",
  category: "Quantity Takeoff & Costing",
  icon: BarChart,
  styleStyle: "glass",
@@ -340,8 +341,8 @@ export const ALL_MODULES = [
  },
  {
  id: "labour-calculator",
- title: "Labour & Workforce",
- desc: "Calculate labour cost, worker allocation, and daily burn rates for your project.",
+ title: "Labour & Workforce Calculator",
+ desc: "Calculate labour cost, worker allocation and daily burn rates for your project — plan gangs, shifts and manpower against the programme and budget.",
  category: "Quantity Takeoff & Costing",
  icon: Users,
  styleStyle: "glass",
@@ -368,8 +369,8 @@ export const ALL_MODULES = [
       },
       {
         id: "master-rcc",
- title: "Master RCC Estimator",
- desc: "This Civil Estimation Pro tool calculates quantities for slabs, columns, beams, and staircases. Structural engineers benefit from instant concrete and steel volume outputs.",
+ title: "Master RCC Estimator & Steel",
+ desc: "Calculate quantities for slabs, columns, beams and staircases — concrete volumes and steel weights with instant outputs for structural engineers.",
  category: "Structural & Concrete Geometry",
  icon: Building2,
  styleStyle: "solid",
@@ -382,8 +383,8 @@ export const ALL_MODULES = [
  },
  {
  id: "calculators",
- title: "Construction Material",
- desc: "Accurate estimations for concrete, bricks, steel, blocks, mortar.",
+ title: "Construction Material Calculator",
+ desc: "Accurate estimations for concrete, bricks, steel, blocks and mortar in one hub — the material calculator for everyday site quantities and rates.",
  category: "Structural & Concrete Geometry",
  icon: HardHat,
  styleStyle: "solid",
@@ -396,7 +397,7 @@ export const ALL_MODULES = [
  },
  {
  id: "mix-design",
- title: "Concrete Mix Design",
+ title: "Concrete Mix Design Calculator",
  desc: "Design concrete mixes to IS 10262:2019 and ACI 211.1 — target strength, w/c ratio, cement, sand and aggregate per m³, batch weights and cost.",
  category: "Structural & Concrete Geometry",
  icon: Beaker,
@@ -411,8 +412,8 @@ export const ALL_MODULES = [
  // 📝 RESOURCES
  {
  id: "boq-templates",
- title: "BOQ Templates",
- desc: "Downloadable Bill of Quantities templates in Excel format.",
+ title: "BOQ Templates & Excel Downloads",
+ desc: "Downloadable Bill of Quantities templates in Excel format — standard BOQ layouts you can fill in, price and issue for your own projects, in Excel.",
  category: "Quantity Takeoff & Costing",
  icon: FileText,
  styleStyle: "solid",
@@ -424,8 +425,8 @@ export const ALL_MODULES = [
  // ✨ ARCHITECTURAL REFERENCES & SPACE PLANNING
  {
  id: "room-area-calculator",
- title: "Room Area Calculator",
- desc: "Calculate net vs gross area and check NBC/RERA minimum room size compliance.",
+ title: "Room Area & Compliance Calculator",
+ desc: "Calculate net versus gross room area and check NBC and RERA minimum room-size compliance for residential layouts and floor plans, room by room.",
  category: "Masonry, Surfaces & Finishes",
  icon: Square,
  styleStyle: "glass",
@@ -438,7 +439,7 @@ export const ALL_MODULES = [
  {
  id: "building-setback-calculator",
  title: "Building Setback Calculator",
- desc: "Auto-calculate front, rear setbacks, and side margins given plot size and zone.",
+ desc: "Auto-calculate front and rear setbacks and side margins from plot size and zone, and check building lines before you finalise a layout or apply.",
  category: "Masonry, Surfaces & Finishes",
  icon: ArrowRightLeft, ArrowRight,
  styleStyle: "glass",
@@ -450,8 +451,8 @@ export const ALL_MODULES = [
  },
  {
  id: "far-fsi-calculator",
- title: "FAR/FSI Calculator",
- desc: "Determine maximum permissible built-up area and floors based on FAR/FSI allowance.",
+ title: "FAR & FSI Calculator for Plots",
+ desc: "Determine maximum permissible built-up area and floors from the FAR/FSI allowance for your plot — coverage, floors and total built-up area, in one result.",
  category: "Masonry, Surfaces & Finishes",
  icon: Building,
  styleStyle: "glass",
@@ -464,7 +465,7 @@ export const ALL_MODULES = [
  {
  id: "staircase-design-reference",
  title: "Staircase Design Reference",
- desc: "Validate riser-going ergonomics, headroom clearance, and minimum stair widths.",
+ desc: "Validate riser-going ergonomics, headroom clearance and minimum stair widths against standard rules — a design reference for safe, comfortable stairs.",
  category: "Masonry, Surfaces & Finishes",
  icon: Triangle,
  styleStyle: "glass",
@@ -476,8 +477,8 @@ export const ALL_MODULES = [
  },
  {
  id: "door-window-schedule",
- title: "Door & Window Schedule",
- desc: "Generate schedules and calculate required lintel sizes for building openings.",
+ title: "Door & Window Schedule Generator",
+ desc: "Generate door and window schedules and calculate required lintel sizes for building openings — quantities and sizes in one schedule, ready to issue.",
  category: "Masonry, Surfaces & Finishes",
  icon: Layout,
  styleStyle: "glass",
@@ -490,7 +491,7 @@ export const ALL_MODULES = [
  {
  id: "ventilation-checker",
  title: "Ventilation & Lighting Checker",
- desc: "Check if window and ventilation areas meet minimum NBC requirements based on floor area.",
+ desc: "Check whether window and ventilation areas meet minimum NBC requirements for the floor area — daylight and airflow compliance in one check, per room.",
  category: "Masonry, Surfaces & Finishes",
  icon: Sun,
  styleStyle: "glass",
@@ -502,8 +503,8 @@ export const ALL_MODULES = [
  },
  {
  id: "bbs-generator",
- title: "BBS Generator",
- desc: "Calculate core steel reinforcement cutting lengths and bend deductions. Civil engineers use this Civil Estimation Pro generator to output standardized bar schedules.",
+ title: "Bar Bending Schedule Generator",
+ desc: "Calculate steel reinforcement cutting lengths and bend deductions, and output standardised bar bending schedules for slabs, beams and columns.",
  category: "Structural & Concrete Geometry",
  icon: FileSpreadsheet,
  styleStyle: "glass",
@@ -515,7 +516,7 @@ export const ALL_MODULES = [
  {
  id: "reinforcement",
  title: "Reinforcement Detailing Visualizer",
- desc: "Interactive 2D rebar detailing for beams, columns & slabs with IS 456 checks.",
+ desc: "Interactive 2D rebar detailing for beams, columns and slabs with IS 456 checks — see bar layouts, spacing and anchorage before you build, in 2D.",
  category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
@@ -528,7 +529,7 @@ export const ALL_MODULES = [
  {
  id: "isolated-footing",
  title: "Isolated Footing Calculator",
- desc: "Detailed estimations for concrete, steel mesh, excavation and working space.",
+ desc: "Detailed estimations for isolated footings — concrete, steel mesh, excavation and working space, with sizes and quantities for each footing.",
  category: "Structural & Concrete Geometry",
  icon: Box,
  styleStyle: "glass",
@@ -540,8 +541,8 @@ export const ALL_MODULES = [
  },
  {
  id: "retaining-wall",
- title: "Retaining Wall Estimator",
- desc: "Calculate structural stability, concrete volume, and rebar for cantilever walls. Civil Estimation Pro helps engineers output safe material quantities for earth-retaining structures.",
+ title: "Cantilever Retaining Wall Estimator",
+ desc: "Calculate structural stability, concrete volume and rebar for cantilever retaining walls — earth pressure, stability checks and material quantities.",
  category: "Structural & Concrete Geometry",
  icon: ShieldCheck,
  styleStyle: "glass",
@@ -553,8 +554,8 @@ export const ALL_MODULES = [
  },
  {
  id: "staircase-calculator",
- title: "Staircase Calculator",
- desc: "Calculate concrete and steel material for stairs.",
+ title: "Concrete & Steel Staircase Tool",
+ desc: "Calculate concrete and steel material for stairs — waist slab, steps, landing and reinforcement quantities for straight and multi-flight stairs.",
  category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
@@ -565,8 +566,8 @@ export const ALL_MODULES = [
  },
  {
  id: "aggregate-tests",
- title: "Aggregate Tests",
- desc: "Calculate impact, crushing, abrasion values and water absorption.",
+ title: "Aggregate Lab Tests Calculator",
+ desc: "Calculate impact, crushing and abrasion values and water absorption for aggregates — lab test results worked out to IS 2386 methods, with pass/fail limits.",
  category: "Structural & Concrete Geometry",
  icon: Box,
  styleStyle: "glass",
@@ -577,8 +578,8 @@ export const ALL_MODULES = [
  },
  {
  id: "formwork",
- title: "Formwork & Scaffold",
- desc: "Shuttering and scaffolding material computations.",
+ title: "Formwork & Scaffolding Calculator",
+ desc: "Shuttering and scaffolding material computations — plywood, battens, props and area for columns, beams, slabs and walls, with quantities per element.",
  category: "Structural & Concrete Geometry",
  icon: Hammer,
  styleStyle: "glass",
@@ -589,8 +590,8 @@ export const ALL_MODULES = [
  },
  {
  id: "plywood-estimator",
- title: "Plywood Estimator",
- desc: "Plywood sheet quantity, area and volume for formwork and panelling.",
+ title: "Plywood & Formwork Estimator",
+ desc: "Plywood sheet quantity, area and volume for formwork and panelling — sheets to buy with wastage and reuse, worked out from your surfaces and spacing.",
  category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
@@ -601,8 +602,8 @@ export const ALL_MODULES = [
  },
  {
  id: "precast-wall",
- title: "Precast Wall Estimator",
- desc: "Precast wall panels, posts and concrete for boundary walls.",
+ title: "Precast Compound Wall Estimator",
+ desc: "Precast wall panels, posts and concrete for boundary walls — panel counts, post spacing and footing quantities for compound walls, per running metre.",
  category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
@@ -614,7 +615,7 @@ export const ALL_MODULES = [
  {
  id: "roof-calculator",
  title: "Roof Pitch & Area Calculator",
- desc: "Calculate slope, rafter length, and total roof surface area.",
+ desc: "Calculate roof slope, rafter length and total roof surface area — pitch, span and covering quantities for pitched and flat roofs, with hips and valleys.",
  category: "Structural & Concrete Geometry",
  icon: Triangle,
  styleStyle: "glass",
@@ -627,8 +628,8 @@ export const ALL_MODULES = [
  // 🌱 SOIL TESTS
  {
  id: "geotechnical",
- title: "Geotechnical & Soil Tests",
- desc: "Process lab data for water content, Specific Gravity, LL, and CBR.",
+ title: "Geotechnical & Soil Test Calculators",
+ desc: "Process lab data for water content, specific gravity, liquid limit, plastic limit, Proctor compaction and CBR — soil test results in one place.",
  category: "Geotechnical & Soil Lab Suite",
  icon: Cone,
  styleStyle: "glass",
@@ -639,8 +640,8 @@ export const ALL_MODULES = [
  },
  {
  id: "cbr-test",
- title: "CBR Test Calculator",
- desc: "Calculate CBR with smart interactive load-penetration curve plotting.",
+ title: "CBR Test Calculator & Curve Plot",
+ desc: "Calculate California Bearing Ratio with smart interactive load-penetration curve plotting — CBR at 2.5 mm and 5.0 mm penetration with charts.",
  category: "Geotechnical & Soil Lab Suite",
  icon: Activity, BookOpen, FileText,
  styleStyle: "glass",
@@ -652,8 +653,8 @@ export const ALL_MODULES = [
  },
  {
  id: "aggregate-blending",
- title: "Aggregate Blending",
- desc: "Blend 2 to 4 stockpiles to meet target grading specifications.",
+ title: "Aggregate Blending Calculator",
+ desc: "Blend two to four aggregate stockpiles to meet target grading specifications — check every sieve against the required envelope, with blend percentages.",
  category: "Geotechnical & Soil Lab Suite",
  icon: Layers,
  styleStyle: "glass",
@@ -664,8 +665,8 @@ export const ALL_MODULES = [
  },
  {
  id: "direct-shear",
- title: "Direct Shear Test",
- desc: "Calculate cohesion and friction angle using Mohr-Coulomb failure regression.",
+ title: "Direct Shear Test Calculator",
+ desc: "Calculate cohesion and friction angle from direct shear test data using Mohr-Coulomb failure regression — shear strength parameters for design.",
  category: "Geotechnical & Soil Lab Suite",
  icon: Layers,
  styleStyle: "glass",
@@ -677,8 +678,8 @@ export const ALL_MODULES = [
  },
  {
  id: "permeability-test",
- title: "Permeability Calculator",
- desc: "Constant head and falling head permeability testing computation.",
+ title: "Soil Permeability Calculator (k)",
+ desc: "Constant head and falling head permeability testing computation — soil permeability with temperature corrections by Darcy's law, for lab samples.",
  category: "Geotechnical & Soil Lab Suite",
  icon: Droplet,
  styleStyle: "glass",
@@ -690,8 +691,8 @@ export const ALL_MODULES = [
  },
  {
  id: "soil-mechanics-lab",
- title: "Master Soil Mechanics & Geotech Lab Suite",
- desc: "Comprehensive portal for geotechnical laboratory testing and analysis.",
+ title: "Soil Mechanics Lab Test Suite",
+ desc: "Comprehensive portal for geotechnical laboratory testing and analysis — field density, UCS, vane shear, phase relations and free swell, with IS 2720 methods.",
  category: "Geotechnical & Soil Lab Suite",
  icon: Beaker,
  styleStyle: "glass",
@@ -704,8 +705,8 @@ export const ALL_MODULES = [
  // ⚡ MEP
  {
  id: "mep-calculator",
- title: "Energy & MEP Calculators",
- desc: "Estimate solar capacity, water heating, and AC sizing.",
+ title: "Energy & MEP Calculator Suite",
+ desc: "Estimate solar capacity, water heating and AC sizing for buildings — energy, hot water and cooling loads in one MEP calculator, with costs, for any building.",
  category: "MEP, Energy & Landscaping",
  icon: Zap,
  styleStyle: "glass",
@@ -718,7 +719,7 @@ export const ALL_MODULES = [
  {
  id: "infra-mep-engine",
  title: "Master Infrastructure & MEP Engine",
- desc: "Solar, water heating, AC and rainwater sizing for infrastructure projects, with BOQ export.",
+ desc: "Solar, water heating, AC and rainwater sizing for infrastructure projects, with BOQ export — one shared engine per MEP calculation, sized to your inputs.",
  category: "MEP, Energy & Landscaping",
  icon: Zap,
  styleStyle: "glass",
@@ -727,10 +728,10 @@ export const ALL_MODULES = [
  difficulty: "Advanced",
  estimatedTime: "~10 mins",
  },
- { id: "solar-water-heater", title: "Solar Water Heater", desc: "Calculate recommended collector area and tank capacity.", category: "MEP, Energy & Landscaping", icon: Sun, styleStyle: "glass", colorClass: "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ", difficulty: "Beginner", estimatedTime: "~3 mins", isNew: true, },
+ { id: "solar-water-heater", title: "Solar Water Heater Sizing Tool", desc: "Calculate recommended solar collector area and hot-water tank capacity from daily demand, location and sunshine — sized for your household and climate.", category: "MEP, Energy & Landscaping", icon: Sun, styleStyle: "glass", colorClass: "bg-surface-default/80 backdrop-blur-md text-[var(--primary-dark)] ", difficulty: "Beginner", estimatedTime: "~3 mins", isNew: true, },
       { id: "solar-roof",
- title: "Solar Roof Calculator",
- desc: "Estimate required solar system size, panels, and ROI.",
+ title: "Solar Roof System Calculator",
+ desc: "Estimate required solar system size, panel count and payback — rooftop solar capacity, generation and return on investment for your roof, in kW.",
  category: "MEP, Energy & Landscaping",
  icon: Sun,
  styleStyle: "glass",
@@ -742,8 +743,8 @@ export const ALL_MODULES = [
  },
  {
  id: "rainwater-harvesting",
- title: "Rainwater Harvesting",
- desc: "Calculate collectible rainwater volume and recommend tank sizes.",
+ title: "Rainwater Harvesting Calculator",
+ desc: "Calculate collectible rainwater volume from roof area and rainfall, and recommend tank sizes for storage, reuse and groundwater recharge, by roof area.",
  category: "MEP, Energy & Landscaping",
  icon: Droplet,
  styleStyle: "glass",
@@ -755,8 +756,8 @@ export const ALL_MODULES = [
  },
  {
  id: "wastewater-calculator",
- title: "Wastewater Testing Engine",
- desc: "Calculate BOD and COD from lab titration data.",
+ title: "Wastewater BOD & COD Calculator",
+ desc: "Calculate BOD and COD from laboratory titration data — wastewater strength and treatment parameters for environmental compliance checks, from lab data.",
  category: "MEP, Energy & Landscaping",
  icon: Droplets,
  styleStyle: "glass",
@@ -768,8 +769,8 @@ export const ALL_MODULES = [
 
  {
  id: "cost-guide-pakistan",
- title: "Construction Cost Guide Pakistan 2025",
- desc: "Latest material and labor rates overview for 2025.",
+ title: "Pakistan House Cost Guide 2026",
+ desc: "Latest material and labour rates overview for 2026 — city-wise construction costs, rate trends and budgeting guidance for Pakistan, with 2026 rates.",
  category: "Quantity Takeoff & Costing",
  icon: BookOpen,
  styleStyle: "glass",
@@ -780,8 +781,8 @@ export const ALL_MODULES = [
  },
  {
  id: "blog",
- title: "Civil Engineering Blog",
- desc: "Articles, tutorials, and case studies on modern construction.",
+ title: "Civil Engineering Blog & Guides",
+ desc: "Articles, tutorials and case studies on modern construction — estimation methods, site practice and engineering standards explained clearly.",
  category: "Quantity Takeoff & Costing",
  icon: FileText,
  styleStyle: "glass",
@@ -792,8 +793,8 @@ export const ALL_MODULES = [
 // 🛣️ ROAD CONSTRUCTION
  {
  id: "road-pavement",
- title: "Road & Pavement Estimator",
- desc: "Calculate material quantities for flexible and rigid pavement layers. Highway engineers use this Civil Estimation Pro tool to output exact asphalt volumes.",
+ title: "Road & Pavement Estimator Tool",
+ desc: "Calculate material quantities for flexible and rigid pavement layers — asphalt, base and sub-base volumes for highway and road projects, layer by layer.",
  category: "Infrastructure & Highway Engineering",
  icon: Route,
  styleStyle: "glass",
@@ -804,8 +805,8 @@ export const ALL_MODULES = [
  },
  {
  id: "pavement-mix",
- title: "Pavement Mix & Gradation",
- desc: "Blend aggregates to MoRTH GSB, DBM and SMA gradation envelopes and check every sieve.",
+ title: "Pavement Mix & Gradation Calculator",
+ desc: "Blend aggregates to MoRTH GSB, DBM and SMA gradation envelopes and check every sieve — mix proportions that meet the specification, with sieve-by-sieve checks.",
  category: "Infrastructure & Highway Engineering",
  icon: Route,
  styleStyle: "glass",
@@ -816,8 +817,8 @@ export const ALL_MODULES = [
  },
  {
  id: "earthworks",
- title: "Earthworks & Excavation",
- desc: "Calculate precise cut, fill, and site preparation volumes for varied terrain. Surveyors use this Civil Estimation Pro tool to generate accurate excavation tonnage reports.",
+ title: "Earthworks & Excavation Calculator",
+ desc: "Calculate cut, fill and site preparation volumes for varied terrain — excavation quantities, haulage and tonnage for earthworks projects, by soil type.",
  category: "Infrastructure & Highway Engineering",
  icon: Shovel,
  styleStyle: "glass",
@@ -829,7 +830,7 @@ export const ALL_MODULES = [
  {
  id: "topsoil-estimator",
  title: "Topsoil & Landscaping Estimator",
- desc: "Topsoil volume, weight and cost for levelling, lawns and landscaping.",
+ desc: "Topsoil volume, weight and cost for levelling, lawns and landscaping — quantities for garden beds, turf and site grading work, by area and depth.",
  category: "Infrastructure & Highway Engineering",
  icon: Shovel,
  styleStyle: "glass",
@@ -840,8 +841,8 @@ export const ALL_MODULES = [
  },
  {
  id: "chainage",
- title: "Chainage Volume",
- desc: "Road highway chainage extraction calculations.",
+ title: "Road Chainage Volume Calculator",
+ desc: "Road and highway chainage extraction calculations — volumes between chainages from cross-sections along the road alignment, with cut and fill in m³.",
  category: "Infrastructure & Highway Engineering",
  icon: Map,
  styleStyle: "glass",
@@ -852,8 +853,8 @@ export const ALL_MODULES = [
  },
  {
  id: "gradient-calculator",
- title: "Gradient & Slope",
- desc: "Dynamic bidirectional slope and elevation calculator.",
+ title: "Road Gradient & Slope Calculator",
+ desc: "Dynamic bidirectional slope and elevation calculator for road cambers, longitudinal gradients and vertical curve profiles, with SSD checks included.",
  category: "Infrastructure & Highway Engineering",
  icon: Maximize2,
  styleStyle: "glass",
@@ -864,8 +865,8 @@ export const ALL_MODULES = [
  },
  {
  id: "anti-termite",
- title: "Anti-Termite Calculator",
- desc: "Calculate pre-construction termite chemical emulsion and concentrate requirements.",
+ title: "Anti-Termite Treatment Calculator",
+ desc: "Calculate pre-construction termite chemical emulsion and concentrate requirements — treatment quantities for slabs, soil and masonry, by area.",
  category: "Infrastructure & Highway Engineering",
  icon: Bug,
  styleStyle: "glass",
@@ -878,8 +879,8 @@ export const ALL_MODULES = [
 
  {
  id: "master-sieve",
- title: "Master Sieve Analysis",
- desc: "Dynamic gradation validator driven by specification databases.",
+ title: "Master Sieve Analysis Calculator",
+ desc: "Dynamic gradation validator driven by specification databases — sieve analysis results checked against IS, MoRTH and ASTM envelopes, with grading curves.",
  category: "Infrastructure & Highway Engineering",
  icon: LineChart,
  styleStyle: "glass",
@@ -891,8 +892,8 @@ export const ALL_MODULES = [
  // 📚 STANDARDS
  {
  id: "is-codes-reference",
- title: "IS Codes Reference",
- desc: "Comprehensive database of Indian Standard codes for civil engineering.",
+ title: "Indian Standards Codes Reference",
+ desc: "Comprehensive database of Indian Standard codes for civil engineering — IS 456, IS 800, IS 10262 and more, with clauses and scope, searchable by code.",
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
@@ -902,8 +903,8 @@ export const ALL_MODULES = [
  },
  {
  id: "morth-irc-specs",
- title: "MORTH/IRC Specifications",
- desc: "Ministry of Road Transport and Highways & Indian Roads Congress specs.",
+ title: "MoRTH & IRC Specifications Guide",
+ desc: "Ministry of Road Transport and Highways and Indian Roads Congress specifications — road, bridge and pavement standards in one reference, with editions.",
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
@@ -913,8 +914,8 @@ export const ALL_MODULES = [
  },
  {
  id: "pakistan-building-codes",
- title: "Pakistan Building Codes",
- desc: "Building Code of Pakistan (BCP) requirements and guidelines.",
+ title: "Pakistan Building Codes Reference",
+ desc: "Building Code of Pakistan (BCP) requirements and guidelines — seismic provisions, bylaws and approval rules for construction in Pakistan, by authority.",
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
@@ -924,8 +925,8 @@ export const ALL_MODULES = [
  },
  {
  id: "uae-construction-standards",
- title: "UAE Construction Standards",
- desc: "Dubai Municipality and Abu Dhabi building codes and regulations.",
+ title: "UAE Construction Standards Guide",
+ desc: "Dubai Municipality and Abu Dhabi building codes and regulations — UAE construction standards, fire safety and building requirements, by emirate.",
  category: "Structural & Concrete Geometry",
  icon: BookOpen,
  styleStyle: "glass",
@@ -937,8 +938,8 @@ export const ALL_MODULES = [
  // 🏢 STRUCTURAL DESIGN
  {
  id: "beam-design",
- title: "Beam Design Tool",
- desc: "Limit State Method including deflection, shear design, and anchorage per IS 456:2000.",
+ title: "RCC Beam Design Tool (IS 456)",
+ desc: "Limit State Method beam design including deflection, shear design and anchorage per IS 456:2000 — singly and doubly reinforced beams, with detailing.",
  category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
@@ -950,8 +951,8 @@ export const ALL_MODULES = [
  },
  {
  id: "column-design",
- title: "Column Design Tool",
- desc: "Short/slender check and axial + biaxial bending capacity per IS 456 & 13920.",
+ title: "RCC Column Design Calculator",
+ desc: "Short and slender column check with axial plus biaxial bending capacity per IS 456 and IS 13920 — design and detailing in one tool, with interaction diagrams.",
  category: "Structural & Concrete Geometry",
  icon: Building2,
  styleStyle: "glass",
@@ -963,8 +964,8 @@ export const ALL_MODULES = [
  },
  {
  id: "raft-foundation",
- title: "Raft Foundation Designer",
- desc: "Design raft thickness, reinforcement, and check settlement per IS 2950.",
+ title: "Raft Foundation Design Calculator",
+ desc: "Design raft thickness and reinforcement and check settlement per IS 2950 — mat foundation design for columns on weak soils, in one workflow.",
  category: "Structural & Concrete Geometry",
  icon: Grid2X2,
  styleStyle: "glass",
@@ -976,8 +977,8 @@ export const ALL_MODULES = [
  },
  {
  id: "water-tank-design",
- title: "Water Tank Design",
- desc: "Crack width checks for overhead/underground tanks per IS 3370.",
+ title: "Water Tank Design Calculator",
+ desc: "Crack width checks for overhead and underground water tanks per IS 3370 — design liquid-retaining structures that stay watertight, above or below ground.",
  category: "Structural & Concrete Geometry",
  icon: Waves,
  styleStyle: "glass",
@@ -990,7 +991,7 @@ export const ALL_MODULES = [
  {
  id: "pile-foundation",
  title: "Pile Foundation Calculator",
- desc: "Friction & end bearing pile capacity, group efficiency per IS 2911.",
+ desc: "Friction and end bearing pile capacity with group efficiency per IS 2911 — single piles and pile groups for buildings and bridges, with safe capacities.",
  category: "Structural & Concrete Geometry",
  icon: Pickaxe,
  styleStyle: "glass",
@@ -1003,7 +1004,7 @@ export const ALL_MODULES = [
  {
  id: "prestressed-concrete",
  title: "Pre-stressed Concrete Estimator",
- desc: "Tendon layout and prestress losses per IS 1343:2012.",
+ desc: "Tendon layout and prestress losses per IS 1343:2012 — prestressed beam design with serviceability and ultimate checks, per IS 1343:2012, in one place.",
  category: "Structural & Concrete Geometry",
  icon: Layers,
  styleStyle: "glass",
@@ -1326,9 +1327,9 @@ export default function Dashboard({
     </div>
     <div className="relative z-10 flex flex-col w-full">
  <SEO
- title="Dashboard"
- description="Civil Estimation Pro: Advanced estimators for live construction rate analysis, house estimating, and comprehensive BOQ calculators."
- canonicalUrl="https://civilestimationpro.com"
+ title="BOQ & Construction Cost Calculators"
+ description="Civil Estimation Pro: free construction quantity, BOQ and cost estimation calculators for concrete, steel, masonry, finishes, earthworks and more."
+ canonicalUrl={getSiteUrl()}
  />
 
  {!user ? (
@@ -1358,14 +1359,13 @@ export default function Dashboard({
  </div>
  <ScrollReveal><SocialProofSection /></ScrollReveal>
  <ScrollReveal yOffset={30}><HowItWorksSection /></ScrollReveal>
- <ScrollReveal yOffset={30}><FeatureComparisonSection /></ScrollReveal>
+ <ScrollReveal yOffset={30}><FeatureComparisonSection onNavigate={handleSelect} /></ScrollReveal>
  </div>
  ) : (
  <>
  <div className="flex-shrink-0 h-[30vh] lg:h-[35vh] w-full flex flex-col justify-end px-6 xl:px-12 pb-8 relative overflow-hidden bg-surface-default">
  <div className="w-full md:max-w-[1400px] md:mx-auto z-10 flex flex-col items-start gap-1 px-4 md:px-0">
- <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-txt-primary tracking-tight">Civil Estimation</h1>
- <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-accent-800 tracking-tight mb-2">Pro.</h1>
+ <h1 className="leading-tight text-3xl md:text-4xl lg:text-5xl font-bold text-txt-primary tracking-tight mb-2">Civil Estimation <span className="text-accent-800">Pro.</span></h1>
  <p className="md: max-w-lg mb-2 text-base font-normal text-txt-secondary leading-relaxed">Welcome back, {user.displayName?.split(' ')[0] || 'Engineer'}.</p>
  </div>
  </div>

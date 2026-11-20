@@ -1,5 +1,5 @@
 import { Button } from '../ui/Button';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Clock, User, ArrowLeft, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -17,8 +17,77 @@ interface BlogPost {
   content?: string;
 }
 
+// Blog posts are built from the local markdown files in content/blog/ at
+// build time. There is no blog backend on this static site: the old
+// GET /api/blog/posts fetch 404d on GitHub Pages (and the dev stub
+// returned []), so the page was permanently empty even though the
+// markdown files already existed.
+const rawPosts = import.meta.glob('../../../content/blog/*.md', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+
+/**
+ * Minimal frontmatter parser (--- delimited `key: "value"` lines).
+ * Returns null when the file has no parseable frontmatter at all.
+ */
+function parseFrontmatter(raw: string): { data: Record<string, string>; body: string } | null {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!match) return null;
+  const data: Record<string, string> = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const colon = line.indexOf(':');
+    if (colon === -1) continue;
+    const key = line.slice(0, colon).trim();
+    let value = line.slice(colon + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    if (key) data[key] = value;
+  }
+  return { data, body: match[2] };
+}
+
+/** First real paragraph of the body, used only when no excerpt is given. Heading-only paragraphs are skipped so the excerpt is not just the title repeated. */
+function excerptFromBody(body: string): string {
+  const paragraph = body
+    .split(/\r?\n\r?\n/)
+    .map(p => p.replace(/[*_`>\[\]()]/g, '').trim())
+    .find(p => p.length > 0 && !/^#{1,6}\s/.test(p));
+  if (!paragraph) return '';
+  return paragraph.length > 160 ? `${paragraph.slice(0, 157).trimEnd()}…` : paragraph;
+}
+
+function loadPosts(): BlogPost[] {
+  const posts: BlogPost[] = [];
+  for (const [path, raw] of Object.entries(rawPosts)) {
+    const slug = path.split('/').pop()?.replace(/\.md$/, '') ?? '';
+    const parsed = parseFrontmatter(raw);
+    // Never invent metadata: a post without a parseable title or a valid
+    // date is skipped instead of being listed with made-up values.
+    if (!parsed || !parsed.data.title || !parsed.data.date || Number.isNaN(Date.parse(parsed.data.date))) {
+      console.warn(`Blog: skipping ${slug || path} — missing or unparseable title/date in frontmatter.`);
+      continue;
+    }
+    posts.push({
+      slug,
+      title: parsed.data.title,
+      date: parsed.data.date,
+      excerpt: parsed.data.excerpt || excerptFromBody(parsed.body),
+      author: parsed.data.author || 'Civil Estimation Pro',
+      category: parsed.data.category || 'Engineering',
+      image: parsed.data.image || '',
+      content: parsed.body,
+    });
+  }
+  // Newest first.
+  posts.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  return posts;
+}
+
 export default function Blog() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const posts = useMemo(loadPosts, []);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -28,50 +97,24 @@ export default function Blog() {
       const hash = window.location.hash;
       if (hash.startsWith('#/blog/')) {
         const slug = hash.replace('#/blog/', '');
-        fetchPost(slug);
+        const post = posts.find(p => p.slug === slug);
+        if (post) {
+          setSelectedPost(post);
+        } else {
+          setSelectedPost(null);
+          window.location.hash = '#/blog';
+        }
       } else {
         setSelectedPost(null);
-        fetchPosts();
       }
+      setLoading(false);
     };
 
     window.addEventListener('hashchange', handleHashChange);
     handleHashChange(); // Initial check
 
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  const fetchPosts = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/blog/posts');
-      const data = await res.json();
-      setPosts(data.posts || []);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchPost = async (slug: string) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/blog/posts/${slug}`);
-      if (res.ok) {
-        const data = await res.json();
-        setSelectedPost(data.post);
-      } else {
-        setSelectedPost(null);
-        window.location.hash = '#/blog';
-      }
-    } catch (e) {
-      console.error(e);
-      window.location.hash = '#/blog';
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [posts]);
 
   if (loading) {
     return (
@@ -84,12 +127,12 @@ export default function Blog() {
   if (selectedPost) {
     return (
       <div className="max-w-4xl mx-auto space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <SEO 
-          title={`${selectedPost.title} | Civil Estimation Pro Blog`} 
-          description={selectedPost.excerpt} 
+        <SEO
+          title={`${selectedPost.title} | Civil Estimation Pro Blog`}
+          description={selectedPost.excerpt}
         />
-        
-        <Button 
+
+        <Button
           onClick={() => window.location.hash = '#/blog'}
           className="flex items-center gap-2 text-base font-medium hover:text-accent-800 transition-colors"
         >
@@ -98,16 +141,18 @@ export default function Blog() {
         </Button>
 
         <article className="bg-bg-card rounded-2xl border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm overflow-hidden">
-          <div className="w-full h-64 md:h-96 overflow-hidden">
-            <img 
-              src={selectedPost.image} 
-              alt={selectedPost.title} 
-              title={selectedPost.title}
-              className="w-full h-full object-cover" 
-              loading="lazy"
-            />
-          </div>
-          
+          {selectedPost.image && (
+            <div className="w-full h-64 md:h-96 overflow-hidden">
+              <img
+                src={selectedPost.image}
+                alt={selectedPost.title}
+                title={selectedPost.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          )}
+
           <div className="p-8 md:p-12">
             <div className="flex items-center gap-4 mb-6">
               <span className="bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-400 px-3 py-1 rounded-full text-base font-medium tracking-wide uppercase">
@@ -145,9 +190,9 @@ export default function Blog() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-12 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <SEO 
-        title="Blog | Civil Estimation Pro" 
-        description="Insights, updates, and engineering tutorials from our experts." 
+      <SEO
+        title="Blog | Civil Estimation Pro"
+        description="Insights, updates, and engineering tutorials from our experts."
       />
       <div className="text-center space-y-4">
         <h1 className="text-2xl md:text-xl font-semibold text-txt-primary dark:text-white tracking-tight">
@@ -161,23 +206,25 @@ export default function Blog() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.length === 0 ? (
           <div className="col-span-full text-center py-12 text-txt-tertiary">
-            No posts found. Add some markdown files to the content/blog directory.
+            No posts published yet. Check back soon.
           </div>
         ) : (
           posts.map(post => (
-            <article 
-              key={post.slug} 
+            <article
+              key={post.slug}
               onClick={() => window.location.hash = `#/blog/${post.slug}`}
               className="bg-bg-card rounded-2xl border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm overflow-hidden flex flex-col group cursor-pointer hover:shadow-brand-lg transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="h-48 overflow-hidden relative">
-                 <img src={post.image} alt={post.title} title={post.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                 <div className="absolute top-4 left-4">
-                   <span className="bg-surface-default/90 dark:bg-ink/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-base font-medium text-txt-primary dark:text-white shadow-brand-sm">
-                     {post.category}
-                   </span>
-                 </div>
-              </div>
+              {post.image && (
+                <div className="h-48 overflow-hidden relative">
+                   <img src={post.image} alt={post.title} title={post.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                   <div className="absolute top-4 left-4">
+                     <span className="bg-surface-default/90 dark:bg-ink/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-base font-medium text-txt-primary dark:text-white shadow-brand-sm">
+                       {post.category}
+                     </span>
+                   </div>
+                </div>
+              )}
               <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-xl font-bold text-txt-primary dark:text-white mb-3 leading-tight group-hover:text-accent-800 dark:group-hover:text-accent-400 transition-colors">
                   {post.title}
@@ -185,7 +232,7 @@ export default function Blog() {
                 <p className="text-txt-tertiary text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
                   {post.excerpt}
                 </p>
-                
+
                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-ui-borderSubtle dark:border-ink-600/50">
                   <div className="flex items-center gap-2 text-sm font-medium text-txt-secondary dark:text-txt-tertiary">
                     <div className="w-6 h-6 rounded-full bg-surface-active dark:bg-ink flex items-center justify-center">

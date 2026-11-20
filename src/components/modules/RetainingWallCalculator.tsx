@@ -1,6 +1,5 @@
 import { Button } from '../ui/Button';
 import React, { useState } from "react";
-import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
 import {
   ShieldCheck,
   TrendingDown,
@@ -166,18 +165,14 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
     sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
   });
 
-  // Concrete BOQ
+  // Concrete BOQ — volumes are local (same formula as the engine); the
+  // material quantities come from the engine (design.materials), which
+  // applies wastage. The local recompute used to ignore wastage, so the
+  // "Cement Bags" card showed 170 bags while the engine cost lines /
+  // BOQ showed 178 on the same page.
   const stemVol = (0.5 * (st + sb) * h) * l;
   const baseVol = (b * bd) * l;
   const totalConcrete = stemVol + baseVol;
-  const dryVol = totalConcrete * CIVIL_CONSTANTS.DRY_CONCRETE_FACTOR;
-  
-  const ratio = mixRatios[mix];
-  const totalRatio = ratio ? (ratio.c + ratio.s + ratio.a) : 1;
-  const cementM3 = (dryVol * ratio.c) / totalRatio;
-  const cementBags = Math.ceil(cementM3 / CIVIL_CONSTANTS.CEMENT_BAG_VOLUME_M3);
-  const sandCft = ((dryVol * ratio.s) / totalRatio) * CIVIL_CONSTANTS.M3_TO_CFT;
-  const aggCft = ((dryVol * ratio.a) / totalRatio) * CIVIL_CONSTANTS.M3_TO_CFT;
 
   // Steel BOQ
   // Verticals in stem
@@ -489,8 +484,8 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                     <div className="grid grid-cols-2 gap-3">
                       <ResultCard title="Stem Volume" value={stemVol.toFixed(2)} unit="m³" variant="neutral" />
                       <ResultCard title="Base Volume" value={baseVol.toFixed(2)} unit="m³" variant="neutral" />
-                      <ResultCard title="Cement Bags" value={cementBags} unit="bags" variant="primary" />
-                      <ResultCard title="Sand/Agg" value={`${sandCft.toFixed(0)} / ${aggCft.toFixed(0)}`} unit="cft" variant="neutral" />
+                      <ResultCard title="Cement Bags" value={design.materials.cementBags} unit="bags" variant="primary" />
+                      <ResultCard title="Sand/Agg" value={`${design.materials.sandCft.toFixed(0)} / ${design.materials.aggCft.toFixed(0)}`} unit="cft" variant="neutral" />
                     </div>
                   </div>
 

@@ -20,8 +20,12 @@ function sitemapPaths(): string[] {
   const out: string[] = [];
   for (const f of fs.readdirSync(path.join(ROOT, "public")).filter((x) => x.startsWith("sitemap") && x.endsWith(".xml"))) {
     const xml = fs.readFileSync(path.join(ROOT, "public", f), "utf8");
-    for (const m of xml.matchAll(/<loc>(https:\/\/civilestimationpro\.com)?([^<]*)<\/loc>/g)) {
-      out.push(m[2] || "/");
+    for (const m of xml.matchAll(/<loc>([^<]*)<\/loc>/g)) {
+      // Strip the origin (either host) and the project-page subpath prefix,
+      // leaving the path resolvePath() expects. Wave 1-D rewrote sitemap hosts
+      // from civilestimationpro.com to the live github.io project page.
+      const p = m[1].replace(/^https?:\/\/[^/]+/, "").replace(/^\/Civil-Estimation-BOQ/i, "");
+      out.push(p || "/");
     }
   }
   return [...new Set(out)];
@@ -58,7 +62,7 @@ test("category URLs land on the Dashboard with that category", () => {
   for (const [group, category] of Object.entries(GROUP_TO_CATEGORY)) {
     assert.deepEqual(resolvePath(`/calculators/${group}`), { kind: "category", id: "home", category });
   }
-  assert.deepEqual(resolvePath("/calculators"), { kind: "page", id: "home" });
+  assert.deepEqual(resolvePath("/calculators"), { kind: "tool", id: "calculators" }); // Wave 1-D fix (pillar 5): bare /calculators renders the Calculators hub tool, not home
   assert.deepEqual(resolvePath("/calculators/standards"), { kind: "page", id: "standards" });
 });
 
@@ -115,7 +119,7 @@ test("every sitemap URL resolves to something real", () => {
   for (const p of paths) {
     const r = resolvePath(p);
     if (r.kind === "not-found") bad.push(p);
-    if (r.kind === "page" && r.id === "home" && !["/", "/calculators", "/calculators/resources", "/pk/", "/in/", "/ae/", "/uk/"].includes(p)) {
+    if (r.kind === "page" && r.id === "home" && !["/", "/calculators/resources", "/pk", "/in", "/ae", "/uk"].includes(p)) {
       bad.push(`${p} (fell back to home)`);
     }
   }

@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- HOST: live GitHub Pages project page. civilestimationpro.com does NOT resolve (DNS NXDOMAIN) — flip every loc back to https://civilestimationpro.com when/if DNS is fixed. -->
   <!-- Blog listing page -->
   <url>
-    <loc>https://civilestimationpro.com/blog</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- Example blog posts -->
-  <url>
-    <loc>https://civilestimationpro.com/blog/how-to-calculate-rcc-slab-materials</loc>
-    <changefreq>never</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://civilestimationpro.com/blog/understanding-cbr-test-results-civil-engineering</loc>
-    <changefreq>never</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- More blog posts would follow here -->
 </urlset>

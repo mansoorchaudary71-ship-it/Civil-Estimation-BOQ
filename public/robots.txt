@@ -1,17 +1,15 @@
 User-agent: *
 Allow: /
-Disallow: /dashboard/
-Disallow: /history/
+# /api/ is the only Disallow with a referent (Blog's /api/blog/posts fetch);
+# /dashboard/, /history/ and /admin/ are not routes and were removed, as was
+# the blanket Disallow: /*?* (it blocked the legacy ?/ restore URLs) and the
+# Google-ignored Crawl-delay: 5.
 Disallow: /api/
-Disallow: /admin/
-Disallow: /*?*
 
-# Crawl delay to prevent server overload
-Crawl-delay: 5
-
-# Sitemaps
-Sitemap: https://civilestimationpro.com/sitemap.xml
-Sitemap: https://civilestimationpro.com/sitemap-tools.xml
-Sitemap: https://civilestimationpro.com/sitemap-blog.xml
-Sitemap: https://civilestimationpro.com/sitemap-categories.xml
-Sitemap: https://civilestimationpro.com/sitemap-images.xml
+# Sitemaps — live GitHub Pages project-page host. civilestimationpro.com does
+# NOT resolve (DNS NXDOMAIN): flip these back to https://civilestimationpro.com/...
+# when/if DNS is fixed (same flip as public/sitemap*.xml).
+Sitemap: https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/sitemap.xml
+Sitemap: https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/sitemap-tools.xml
+Sitemap: https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/sitemap-blog.xml
+Sitemap: https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/sitemap-categories.xml

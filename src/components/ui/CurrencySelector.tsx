@@ -59,11 +59,18 @@ export function CurrencySelector() {
                   onClick={() => {
                     updateSettings({ currency: curr.code });
                     setIsOpen(false);
-                    // Also save to localStorage exactly
-                    const saved = localStorage.getItem('app-settings');
-                    const parsed = saved ? JSON.parse(saved) : {};
-                    parsed.currency = curr.code;
-                    localStorage.setItem('app-settings', JSON.stringify(parsed));
+                    // Also save to localStorage exactly (corrupt stored
+                    // settings must not throw on a currency change).
+                    try {
+                      const saved = localStorage.getItem('app-settings');
+                      const parsed: Record<string, unknown> = saved ? JSON.parse(saved) : {};
+                      const settingsObj = (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
+                      settingsObj.currency = curr.code;
+                      localStorage.setItem('app-settings', JSON.stringify(settingsObj));
+                    } catch {
+                      // Storage unavailable or corrupt: updateSettings above
+                      // already applied the change in memory.
+                    }
                   }}
                   className={`px-4 py-2.5 flex items-center justify-between hover:bg-surface-hover/80 transition-colors ${
                     isSelected ? 'bg-accent-50 dark:bg-accent-900/20' : ''

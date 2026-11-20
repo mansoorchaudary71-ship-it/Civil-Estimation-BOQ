@@ -5,6 +5,8 @@ import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db, auth, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Users, CheckCircle, XCircle } from 'lucide-react';
+import { SEO } from "../SEO";
+import { getSiteUrl } from "../../seo/siteConfig";
 
 
 export default function JoinProject({ projectId: projectIdProp, shareToken: shareTokenProp }: { projectId?: string; shareToken?: string } = {}) {
@@ -84,6 +86,11 @@ export default function JoinProject({ projectId: projectIdProp, shareToken: shar
 
   return (
     <div className="min-h-screen bg-surface-hover flex flex-col">
+      <SEO
+        title="Join a Shared Project Team"
+        description="Accept a project invite and join a shared workspace — view and edit estimates with your team once the invite link is verified and your membership is confirmed."
+        canonicalUrl={`${getSiteUrl()}/join-project`}
+      />
       <main className="flex-1 max-w-lg w-full mx-auto px-4 py-20 flex flex-col items-center justify-center">
         <div className="w-full bg-surface-default p-8 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-center">
           

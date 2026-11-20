@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer, initializeFirestore, setLogLevel } from 'firebase/firestore';
+import { getFirestore, initializeFirestore, setLogLevel } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 // Suppress Firestore offline connection warnings which are benign
@@ -64,22 +64,6 @@ export const logoutGoogle = async () => {
   await auth.signOut();
   cachedAccessToken = null;
 };
-
-async function testConnection() {
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-  } catch (error) {
-    if(error instanceof Error && (error.message.includes('the client is offline') || error.message.includes('unavailable') || error.message.includes('The operation could not be completed'))) {
-      // Intentionally silent for offline environments
-    } else if (error instanceof Error && (error.message.includes('Missing or insufficient permissions') || error.message.includes('permission'))) {
-      // This means the connection succeeded but the rules denied access, which is fine
-    } else {
-      // Only log truly unexpected errors
-      console.error("Firebase connection test failed:", error);
-    }
-  }
-}
-testConnection();
 
 export enum OperationType {
   CREATE = 'create',

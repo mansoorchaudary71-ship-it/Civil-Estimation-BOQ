@@ -1,18 +1,18 @@
 /**
  * Concrete Mix Design page — CalculatorPageShell pattern (brick page).
- * H1, meta, FAQ JSON-LD, HowTo, BreadcrumbList, hreflang, 1,200+ words
+ * H1, meta, FAQ JSON-LD, HowTo, BreadcrumbList, 1,200+ words
  * of original content, worked M25 example, tables, trial-mix disclaimer.
  */
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import CalculatorPageShell from "../../seo/CalculatorPageShell";
-import { SITE_URL, ORGANIZATION_JSON_LD } from "../../seo/siteConfig";
+import { getSiteUrl, getOrganizationJsonLd } from "../../seo/siteConfig";
 import MixDesignCalculator from "../calculators/MixDesignCalculator";
 import { MIX_DESIGN_FAQS, DURABILITY, WATER_TABLE_IS, CA_FRACTION_IS } from "../../lib/mixDesignCalc";
 
-const TITLE = "Concrete Mix Design Calculator (IS 10262:2019) | Civil Estimation Pro";
+const TITLE = "Concrete Mix Design Calculator | Civil Estimation Pro";
 const DESCRIPTION =
-  "Design concrete mixes to IS 10262:2019 and ACI 211.1. Target strength, w/c ratio, cement, sand, aggregate and water per m³, batch weights for 0.5 m³ and 1 m³, and cost in PKR, INR, AED or USD.";
+  "Design concrete mixes to IS 10262:2019 and ACI 211.1 — target strength, w/c ratio, cement, sand and aggregate per m³, and cost in PKR, INR, AED or USD.";
 const KEYWORDS = [
   "concrete mix design calculator",
   "IS 10262 mix design",
@@ -39,7 +39,7 @@ function buildJsonLd() {
     name: "Concrete Mix Design Calculator",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Web",
-    url: `${SITE_URL}/mix-design`,
+    url: `${getSiteUrl()}/mix-design`,
     description: DESCRIPTION,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList: [
@@ -77,20 +77,13 @@ function buildJsonLd() {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Calculators", item: `${SITE_URL}/calculators` },
+      { "@type": "ListItem", position: 1, name: "Home", item: getSiteUrl() },
+      { "@type": "ListItem", position: 2, name: "Calculators", item: `${getSiteUrl()}/calculators` },
       { "@type": "ListItem", position: 3, name: "Concrete Mix Design Calculator" },
     ],
   };
-  return [webApp, faqPage, howTo, breadcrumb, ORGANIZATION_JSON_LD];
+  return [webApp, faqPage, howTo, breadcrumb, getOrganizationJsonLd()];
 }
-
-const HREFLANG = [
-  { lang: "en-PK", href: `${SITE_URL}/mix-design` },
-  { lang: "en-IN", href: `${SITE_URL}/mix-design` },
-  { lang: "en-AE", href: `${SITE_URL}/mix-design` },
-  { lang: "x-default", href: `${SITE_URL}/mix-design` },
-];
 
 export default function MixDesignCalculatorPage() {
   const location = useLocation();
@@ -102,9 +95,8 @@ export default function MixDesignCalculatorPage() {
     <CalculatorPageShell
       title={TITLE}
       description={DESCRIPTION}
-      canonical={`${SITE_URL}/mix-design`}
+      canonical={`${getSiteUrl()}/mix-design`}
       keywords={KEYWORDS}
-      hreflang={HREFLANG}
       jsonLd={buildJsonLd()}
       breadcrumbs={[
         { label: "Home", href: "/" },

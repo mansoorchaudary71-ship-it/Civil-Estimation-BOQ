@@ -423,7 +423,7 @@ function ProjectCompare({ p1, p2, onBack }: { p1: Project, p2: Project, onBack: 
        </Button>
        <div className="flex flex-wrap gap-2">
          <span className="text-sm font-semibold text-txt-secondary self-center">Open for this project:</span>
-         <a href="/boq-generator" className="px-4 py-2 bg-accent-50 text-accent-800 rounded-full text-sm font-bold hover:bg-accent-100">BOQ Generator</a>
+         <a href="/boq" className="px-4 py-2 bg-accent-50 text-accent-800 rounded-full text-sm font-bold hover:bg-accent-100">BOQ Generator</a>
          <a href="/plan-measure-takeoff" className="px-4 py-2 bg-accent-50 text-accent-800 rounded-full text-sm font-bold hover:bg-accent-100">Takeoff</a>
          <a href="/site-progress-tracker" className="px-4 py-2 bg-accent-50 text-accent-800 rounded-full text-sm font-bold hover:bg-accent-100">Site Progress Tracker</a>
        </div>

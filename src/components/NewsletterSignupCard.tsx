@@ -1,15 +1,18 @@
 import { Button } from "./ui/Button";
 import React, { useState, useEffect } from 'react';
-import { Mail, AlertCircle, CheckCircle2, Lock, ShieldCheck, Check, Loader2, ArrowRight } from 'lucide-react';
+import { Mail, AlertCircle, MailCheck, Lock, ShieldCheck, Check, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { CONTACT_EMAIL } from '../seo/siteConfig';
 
 export default function NewsletterSignupCard() {
   const [email, setEmail] = useState("");
-  const [honeypot, setHoneypot] = useState("");
   const [error, setError] = useState("");
   const [isTouched, setIsTouched] = useState(false);
-  const [isSubscribing, setIsSubscribing] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  // Set only after the visitor's email app has been opened. This is NOT a
+  // "you are subscribed" confirmation: there is no subscriber list and no
+  // email is sent from this page. The subscription only happens when the
+  // visitor presses Send in their own email app.
+  const [mailtoOpened, setMailtoOpened] = useState(false);
   
   const controls = useAnimation();
 
@@ -30,10 +33,8 @@ export default function NewsletterSignupCard() {
     setError(validateEmail(email));
   };
 
-  const handleSubscribe = async (e: React.FormEvent) => {
+  const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (honeypot) return;
 
     const validationError = validateEmail(email);
     if (validationError) {
@@ -45,14 +46,16 @@ export default function NewsletterSignupCard() {
       });
       return;
     }
-    
-    setIsSubscribing(true);
-    setTimeout(() => {
-      setIsSubscribing(false);
-      setIsSuccess(true);
-      setEmail("");
-      setIsTouched(false);
-    }, 1200);
+
+    // Honest subscribe path: there is no subscriber list or backend for
+    // this site, so nothing is sent from this page. Open the visitor's
+    // own email app with a prefilled subscribe request addressed to the
+    // site contact email; the visitor completes the subscription by
+    // pressing Send there.
+    const subject = 'Subscribe to the Civil Estimation Pro newsletter';
+    const body = `Please subscribe ${email} to the Civil Estimation Pro weekly newsletter (BOQ templates, cost trends and estimation techniques).`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setMailtoOpened(true);
   };
 
   const features = [
@@ -112,42 +115,31 @@ export default function NewsletterSignupCard() {
         <div className="w-full max-w-md">
           <div className="bg-surface-default/80 dark:bg-ink/80 backdrop-blur-xl border border-ui-borderSubtle/80 dark:border-ink-600/50 p-6 md:p-8 rounded-2xl shadow-brand-lg shadow-border-color/40 dark:shadow-none">
             <AnimatePresence mode="wait">
-              {isSuccess ? (
-                <motion.div 
-                  key="success"
+              {mailtoOpened ? (
+                <motion.div
+                  key="mailto-opened"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex flex-col items-center text-center py-6"
                 >
-                  <div className="w-16 h-16 bg-ui-success dark:bg-ui-successText/20 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle2 className="w-8 h-8 text-ui-successText dark:text-ui-successText" strokeWidth={2.5} />
+                  <div className="w-16 h-16 bg-accent-50 dark:bg-accent-500/10 rounded-full flex items-center justify-center mb-4">
+                    <MailCheck className="w-8 h-8 text-accent-700 dark:text-accent-400" strokeWidth={2.5} />
                   </div>
-                  <h4 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">You're on the list!</h4>
+                  <h4 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">Almost there</h4>
                   <p className="text-txt-secondary text-base font-medium mb-6">
-                    Check your inbox for confirmation and your first exclusive resource.
+                    Your email app should now open with a subscribe request for <span className="font-bold text-txt-primary dark:text-white">{email}</span>. Press Send in your email app to complete your subscription — nothing is sent until you do.
                   </p>
-                  <Button variant="ghost" size="sm" onClick={() => setIsSuccess(false)}>Subscribe another email</Button>
+                  <Button variant="ghost" size="sm" onClick={() => { setMailtoOpened(false); setEmail(""); setIsTouched(false); }}>Subscribe another email</Button>
                 </motion.div>
               ) : (
-                <motion.form 
+                <motion.form
                   key="form"
-                  onSubmit={handleSubscribe} 
+                  onSubmit={handleSubscribe}
                   className="w-full flex flex-col gap-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  <input 
-                    type="text"
-                    name="customer_company"
-                    value={honeypot}
-                    onChange={(e) => setHoneypot(e.target.value)}
-                    style={{ display: 'none' }}
-                    tabIndex={-1}
-                    autoComplete="off"
-                    aria-hidden="true"
-                  />
-                  
                   <div className="flex flex-col gap-1.5 w-full">
                     <label htmlFor="newsletter-email" className="text-sm font-bold text-txt-primary ml-1">Work Email Address <span className="text-ui-errorText" aria-hidden="true">*</span></label>
                     <div className="relative group w-full">
@@ -188,13 +180,15 @@ export default function NewsletterSignupCard() {
   variant="premium"
   size="lg"
   fullWidth
-  isLoading={isSubscribing}
-  loadingText="Subscribing..."
   rightIcon={<ArrowRight className="w-4 h-4" />}
   className="mt-2"
 >
   Get Free Weekly Insights
 </Button>
+
+                  <p className="text-center text-xs font-medium text-txt-tertiary dark:text-txt-tertiary">
+                    This opens your email app with a prefilled subscribe request to {CONTACT_EMAIL} — press Send there to subscribe.
+                  </p>
 
                   <div className="flex items-center justify-center gap-4 mt-2 text-xs font-semibold text-txt-tertiary dark:text-txt-tertiary uppercase tracking-wider">
                     <div className="flex items-center gap-1">

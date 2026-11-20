@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { Route, Layers, Droplet, Waves, Send, Settings2 } from "lucide-react";
-import { SEO } from "../SEO";
 import RoadEstimator from "./RoadEstimator";
 import RigidPavementEstimator from "./RigidPavementEstimator";
 import AsphaltPavingCalculator from "./AsphaltPavingCalculator";
@@ -38,10 +37,6 @@ export default function RoadPavementEstimator({ onNavigate }: { onNavigate?: (id
 
   return (
     <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-      <SEO 
-        title="Road & Pavement Estimator | EstiPro"
-        description="Comprehensive tool for flexible, rigid, and asphalt pavement calculations."
-      />
       
       <div className="mb-6 md:mb-8 px-4 md:px-0 flex flex-col md:flex-row md:items-start justify-between gap-4">
         

@@ -1,7 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
-import { SEO } from "../SEO";
 import { useGlobalSettings } from "../../context/SettingsContext";
 import { Droplet, Layers, Beaker, ArrowDownToLine, Flame, Download } from "lucide-react";
 import { useEstimateProcessing } from "../../hooks/useEstimateProcessing";
@@ -168,10 +167,6 @@ export default function GeotechnicalCalculator() {
 
   return (
     <div className="w-full h-full bg-transparent text-txt-primary p-6 md:p-8">
-      <SEO 
-        title="Geotechnical & Soil Test Calculators" 
-        description="Calculate soil mechanics properties like water content, specific gravity, sieve analysis, liquid limit, and CBR." 
-      />
       
       <div className="w-full md:max-w-7xl md:mx-auto px-4 md:px-0">
         <p className="text-base font-normal text-txt-secondary leading-relaxed mb-6">Free soil test calculator: water content, specific gravity, liquid limit, plastic limit, Proctor OMC and CBR per IS 2720 — with worked formulas and PDF report.</p>

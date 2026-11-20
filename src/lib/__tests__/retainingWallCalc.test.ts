@@ -51,6 +51,26 @@ test("base steel is now designed (toe + heel Ast, not 'added later')", () => {
   assert.ok(r.totalSteelKg > r.stemSteelKg);
 });
 
+test("heel moment integrates the trapezoidal bearing pressure (was ~25% under)", () => {
+  const r = designRetainingWall();
+  // Hand-check at defaults: qFace at stem face (x=1.3 m) = 54.1 kPa, qMin = 51.0 kPa;
+  // heel bearing moment = 1.7²·(54.1/6 + 51.0/3) = 75.2 kNm/m; soil weight moment
+  // = 108.8·0.85 = 92.5 kNm/m; heel Mu = 1.5·|92.5 − 75.2| ≈ 25.9 kNm/m (old code: 19.6).
+  approx(r.heelMuKNmPerM, 25.9, 0.5);
+  approx(r.toeMuKNmPerM, 34.3, 0.5);
+});
+
+test("stemOk compares required steel with steel actually provided (over-limit stem FAILS)", () => {
+  const ok = designRetainingWall();
+  assert.equal(ok.stemOk, true);
+  const over = designRetainingWall({ stemHeightM: 8, stemBottomM: 0.2, surchargeKNm2: 50, phiDeg: 20 });
+  assert.equal(over.stemOk, false);
+  assert.ok(over.errors.some((e) => e.includes("Stem moment exceeds")));
+  assert.ok(!Number.isNaN(over.stemAstMm2PerM));
+  assert.ok(!Number.isNaN(over.toeAstMm2PerM));
+  assert.ok(!Number.isNaN(over.heelAstMm2PerM));
+});
+
 test("Ka for phi=30 is 1/3; solve-for-B returns a passing width <= 3.0 m", () => {
   assert.equal(kaFor(30), 1 / 3);
   const r = designRetainingWall();

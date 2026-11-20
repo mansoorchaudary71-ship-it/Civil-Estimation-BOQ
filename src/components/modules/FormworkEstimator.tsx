@@ -159,7 +159,6 @@ export default function FormworkEstimator() {
   const [repetitionFactor, setRepetitionFactor] = useState<number>(4);
   const [customRep, setCustomRep] = useState<string>("");
   const [wastagePct, setWastagePct] = useState<number>(5);
-  const [plywoodReuse, setPlywoodReuse] = useState<string>("1");
   const [propSpacing, setPropSpacing] = useState<string>("");
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(true);
   const [showCost, setShowCost] = useState(false);
@@ -221,8 +220,11 @@ export default function FormworkEstimator() {
     return calcFormwork(engineEls, repetitionFactor, wastagePct, constants);
   }, [elements, repetitionFactor, wastagePct, propSpacing, isMetric]);
 
-  const reuse = Math.max(1, parseFloat(plywoodReuse) || 1);
-  const plywoodToBuy = Math.ceil(results.plywoodSheets / reuse);
+  // Plywood reuse IS the repetition factor above (one set of sheets serves
+  // several pours). There is no separate plywood-reuse divisor: dividing
+  // again told users to buy 8 sheets for a 15-sheet set, which cannot
+  // shutter even one pour.
+  const plywoodToBuy = results.plywoodSheets;
 
   const rateNum = (v: string) => {
     const n = parseFloat(v);
@@ -243,7 +245,7 @@ export default function FormworkEstimator() {
     "Formwork / Shuttering Estimate — Civil Estimation Pro",
     `Total formwork area: ${results.totalAreaM2.toFixed(2)} m² (${results.totalAreaSqFt.toFixed(1)} sq ft)`,
     `Effective area (÷${repetitionFactor} reuse, +${wastagePct}% wastage): ${results.effectiveAreaM2.toFixed(2)} m² (${results.effectiveAreaSqFt.toFixed(1)} sq ft)`,
-    `Plywood sheets (4'x8'): ${results.plywoodSheets} (buy ${plywoodToBuy} with ${reuse}x plywood reuse)`,
+    `Plywood sheets (4'x8'): ${results.plywoodSheets} (buy ${plywoodToBuy}; reuse is already in the repetition factor)`,
     `Wooden battens: ${results.battensRft} Rft`,
     `Steel props: ${results.steelProps} pcs`,
     `Nails: ${results.nailsKg.toFixed(2)} kg · Binding wire: ${results.bindingWireKg.toFixed(2)} kg · Shuttering oil: ${results.shutteringOilL.toFixed(2)} L`,
@@ -300,7 +302,7 @@ export default function FormworkEstimator() {
 
 
         <p className="text-base text-txt-secondary leading-relaxed max-w-3xl">
-          Estimate shuttering material for columns, beams, slabs and footings: plywood sheets, wooden battens, steel props and consumables, with a repetition factor for reuse, wastage, and a thumb-rule cross-check. Areas follow the standard rules — column 2(L+W)×H, beam (2D+W)×L, slab soffit plus edges — and the 2.5 Rft/sq ft batten and 1.5 props/m² figures are labelled, editable assumptions rather than code values.
+          Estimate shuttering material for columns, beams, slabs and footings: plywood sheets, wooden battens, steel props and consumables, with a repetition factor for reuse, wastage, and a thumb-rule cross-check. Areas follow the standard rules — column 2(L+W)×H, beam (2D+W)×L, slab soffit plus edges — and the 0.24 Rft/sq ft batten (top of the cited competitor range) and 1.5 props/m² figures are labelled, editable assumptions rather than code values.
         </p>
 
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
@@ -406,32 +408,18 @@ export default function FormworkEstimator() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-bold text-txt-secondary block mb-2">
-                        Plywood reuse (×)
-                      </label>
-                      <input
-                        type="number" inputMode="decimal" min="1" step="1"
-                        value={plywoodReuse}
-                        onChange={(e) => setPlywoodReuse(e.target.value)}
-                        className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-primary outline-none focus:ring-2 focus:ring-accent-500 text-base"
-                      />
-                      <p className="text-xs text-txt-tertiary mt-1">Sheets are often re-used more times than the full shuttering set. Buy {plywoodToBuy} sheets.</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-bold text-txt-secondary block mb-2">
-                        Prop spacing (m) — optional
-                      </label>
-                      <input
-                        type="number" inputMode="decimal" min="0.3" step="0.05"
-                        placeholder="e.g. 0.9"
-                        value={propSpacing}
-                        onChange={(e) => setPropSpacing(e.target.value)}
-                        className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-primary outline-none focus:ring-2 focus:ring-accent-500 text-base"
-                      />
-                      <p className="text-xs text-txt-tertiary mt-1">Blank = 1.5 props/m² (unsourced assumption — edit it).</p>
-                    </div>
+                  <div>
+                    <label className="text-sm font-bold text-txt-secondary block mb-2">
+                      Prop spacing (m) — optional
+                    </label>
+                    <input
+                      type="number" inputMode="decimal" min="0.3" step="0.05"
+                      placeholder="e.g. 0.9"
+                      value={propSpacing}
+                      onChange={(e) => setPropSpacing(e.target.value)}
+                      className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-primary outline-none focus:ring-2 focus:ring-accent-500 text-base"
+                    />
+                    <p className="text-xs text-txt-tertiary mt-1">Blank = 1.5 props/m² (unsourced assumption — edit it).</p>
                   </div>
                 </div>
               )}
@@ -463,7 +451,7 @@ export default function FormworkEstimator() {
                 variant="warning"
               />
               <p className="text-xs text-txt-tertiary -mt-2 mb-2">
-                {results.plywoodSheets} sheets before {reuse}x plywood reuse · 1 sheet = 32 sq ft.
+                1 sheet = 32 sq ft. Reuse is already in the repetition factor above — buy the full set.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <ResultCard
@@ -495,14 +483,14 @@ export default function FormworkEstimator() {
 
               <div className="mt-6 pt-6 border-t border-ui-borderSubtle/50">
                 <div className="mb-3 text-sm font-bold tracking-tight text-txt-tertiary uppercase tracking-[0.15em]">
-                  Thumb-rule cross-check (per covered sq ft)
+                  Thumb-rule cross-check
                 </div>
                 <p className="text-xs text-txt-tertiary mb-3">
-                  Covered area {results.thumbCheck.coveredSqFt.toFixed(1)} sq ft (slab soffits). Thumb rules are a rough site check, not a substitute for the area calculation above.
+                  Covered area {results.thumbCheck.coveredSqFt.toFixed(1)} sq ft (slab soffits). Plywood, battens, nails and oil use the same constants as the main calculation above; beam planks, ballies and clamps are per-covered-sq-ft thumb rules — a rough site check, not a substitute for the area calculation.
                 </p>
                 <dl className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm">
-                  <div className="flex justify-between"><dt className="text-txt-secondary">Plywood</dt><dd className="font-semibold">{results.thumbCheck.plywoodSheets} sheets</dd></div>
-                  <div className="flex justify-between"><dt className="text-txt-secondary">Battens</dt><dd className="font-semibold">{results.thumbCheck.battensRft} Rft</dd></div>
+                  <div className="flex justify-between"><dt className="text-txt-secondary">Plywood</dt><dd className="font-semibold">{results.thumbCheck.plywoodSheets.toFixed(1)} sheets</dd></div>
+                  <div className="flex justify-between"><dt className="text-txt-secondary">Battens</dt><dd className="font-semibold">{results.thumbCheck.battensRft.toFixed(1)} Rft</dd></div>
                   <div className="flex justify-between"><dt className="text-txt-secondary">Nails</dt><dd className="font-semibold">{results.thumbCheck.nailsKg.toFixed(2)} kg</dd></div>
                   <div className="flex justify-between"><dt className="text-txt-secondary">Beam planks</dt><dd className="font-semibold">{results.thumbCheck.beamBottomPlanksRft.toFixed(1)} Rft</dd></div>
                   <div className="flex justify-between"><dt className="text-txt-secondary">Ballies</dt><dd className="font-semibold">{results.thumbCheck.balliesNos} nos</dd></div>
@@ -518,7 +506,7 @@ export default function FormworkEstimator() {
                 <ul className="text-sm text-txt-secondary space-y-1.5 list-disc pl-5">
                   <li>Column: 2 × (L + W) × H · Beam: (2 × D + W) × L · Slab: L × W + 2 × (L + W) × thickness · Footing: 2 × (L + W) × depth.</li>
                   <li>Effective area = total area ÷ repetition factor × (1 + wastage%).</li>
-                  <li>Plywood: ⌈effective sq ft ÷ 32⌉ (4&apos;×8&apos; sheet). Battens: effective sq ft × 2.5 Rft — <b>unsourced assumption, editable</b>. Props: ⌈effective m² × 1.5⌉ — <b>unsourced assumption, editable</b> (or 1 ÷ spacing² when you enter a prop spacing).</li>
+                  <li>Plywood: ⌈effective sq ft ÷ 32⌉ (4&apos;×8&apos; sheet) — one set serves all repetitions, no separate plywood-reuse divisor. Battens: effective sq ft × 0.24 Rft — <b>top of the cited competitor range (0.79 Rmt/m²), editable</b>. Props: ⌈effective m² × 1.5⌉ — <b>unsourced assumption, editable</b> (or 1 ÷ spacing² when you enter a prop spacing).</li>
                   <li>Consumables: nails 0.075 kg/m², binding wire 0.075 kg/m², shuttering oil 0.065 L/m²; beam bottom planks 1 Rft per Rft of beam; centering plates ⌈slab/footing perimeter (ft) ÷ 4⌉.</li>
                 </ul>
               </div>
@@ -658,7 +646,7 @@ export default function FormworkEstimator() {
         calculatorId="formwork_estimator_v1"
         estimationName="Formwork Calculation"
         currentInputs={{
-          elements, repetitionFactor, wastagePct, plywoodReuse, propSpacing, rates
+          elements, repetitionFactor, wastagePct, propSpacing, rates
         }}
         currentResults={{
           totalArea: results.totalAreaM2.toFixed(2),
@@ -671,7 +659,6 @@ export default function FormworkEstimator() {
           if (inputs.elements && Array.isArray(inputs.elements)) setElements(inputs.elements);
           if (inputs.repetitionFactor !== undefined) setRepetitionFactor(inputs.repetitionFactor);
           if (inputs.wastagePct !== undefined) setWastagePct(inputs.wastagePct);
-          if (inputs.plywoodReuse !== undefined) setPlywoodReuse(String(inputs.plywoodReuse));
           if (inputs.propSpacing !== undefined) setPropSpacing(String(inputs.propSpacing));
           if (inputs.rates) setRates(inputs.rates);
         }}

@@ -8,16 +8,24 @@ import "jspdf-autotable";
 import { CalculationHistory } from '../ui/CalculationHistory';
 import { useSettings } from '../../context/SettingsContext';
 import { CurrencySelector } from '../ui/CurrencySelector';
-import { CostTrendChart } from "./CostTrendChart";
+import { useAutoSave } from "../../hooks/useAutoSave";
+import { costSummary, type CostLine } from "../../lib/costSummary";
 import { CostBreakdownChart } from "./CostBreakdownChart";
 import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 
+// Line items are qty x rate rows (engine: src/lib/costSummary). The defaults
+// below are EXAMPLE figures, labelled as such — they are not computed
+// quantities. Replace them with your own quantities/rates, or import
+// quantities from the Material Takeoff / BOQ tools.
 interface CostItem {
   id: string;
   name: string;
-  amount: number;
+  qty: number;
+  unit: string;
+  rate: number;
 }
+const itemAmount = (item: CostItem) => item.qty * item.rate;
 
 const COLORS = ["#F2A413", "#F2A413", "#1F1D1A", "#0F766E", "#B07006", "#1F1D1A"];
 
@@ -27,55 +35,64 @@ const ConstructionCostSummary: React.FC = () => {
   
   // Grey Structure Items
   const [greyStructure, setGreyStructure] = useState<CostItem[]>([
-    { id: "gs1", name: "Foundation & Earthworks", amount: 450000 },
-    { id: "gs2", name: "Columns & Beams", amount: 800000 },
-    { id: "gs3", name: "RCC Slabs", amount: 1200000 },
-    { id: "gs4", name: "Brick Masonry", amount: 600000 },
+    { id: "gs1", name: "Foundation & Earthworks (example)", qty: 1, unit: "LS", rate: 450000 },
+    { id: "gs2", name: "Columns & Beams (example)", qty: 1, unit: "LS", rate: 800000 },
+    { id: "gs3", name: "RCC Slabs (example)", qty: 1, unit: "LS", rate: 1200000 },
+    { id: "gs4", name: "Brick Masonry (example)", qty: 1, unit: "LS", rate: 600000 },
   ]);
 
   // Finishing Items
   const [finishing, setFinishing] = useState<CostItem[]>([
-    { id: "f1", name: "Floor & Wall Tiles", amount: 500000 },
-    { id: "f2", name: "Paint Work", amount: 250000 },
-    { id: "f3", name: "Doors & Windows", amount: 400000 },
-    { id: "f4", name: "Plastering", amount: 300000 },
+    { id: "f1", name: "Floor & Wall Tiles (example)", qty: 1, unit: "LS", rate: 500000 },
+    { id: "f2", name: "Paint Work (example)", qty: 1, unit: "LS", rate: 250000 },
+    { id: "f3", name: "Doors & Windows (example)", qty: 1, unit: "LS", rate: 400000 },
+    { id: "f4", name: "Plastering (example)", qty: 1, unit: "LS", rate: 300000 },
   ]);
 
   // Labour Items
   const [labour, setLabour] = useState<CostItem[]>([
-    { id: "l1", name: "Skilled Labour (Masons, Carpenters)", amount: 800000 },
-    { id: "l2", name: "Unskilled Labour (Helpers)", amount: 400000 },
+    { id: "l1", name: "Skilled Labour (example)", qty: 1, unit: "LS", rate: 800000 },
+    { id: "l2", name: "Unskilled Labour (example)", qty: 1, unit: "LS", rate: 400000 },
   ]);
 
   // Percentages
   const [overheadProfitPct, setOverheadProfitPct] = useState<number>(15);
   const [contingencyPct, setContingencyPct] = useState<number>(5);
+  // GST/VAT: explicit, default 0 — never silently omitted or added.
+  // Label by region: Sales Tax (PK) 18% standard, GST (IN) 18%, VAT (UAE) 5%.
+  const [taxPct, setTaxPct] = useState<number>(0);
+  const [taxLabel, setTaxLabel] = useState<string>("Sales Tax (PK)");
 
   const { formatCurrency, convertAmount, convertAmountToRaw, settings } = useSettings();
 
-  const updateItem = (category: "grey" | "finish" | "labour", id: string, amount: string) => {
-    const value = parseFloat(amount);
-    const baseValue = isNaN(value) ? 0 : convertAmountToRaw(value);
-    
-    if (category === "grey") {
-      setGreyStructure(prev => prev.map(item => item.id === id ? { ...item, amount: baseValue } : item));
-    } else if (category === "finish") {
-      setFinishing(prev => prev.map(item => item.id === id ? { ...item, amount: baseValue } : item));
-    } else if (category === "labour") {
-      setLabour(prev => prev.map(item => item.id === id ? { ...item, amount: baseValue } : item));
-    }
+  const updateItem = (category: "grey" | "finish" | "labour", id: string, field: "qty" | "rate", value: string) => {
+    const parsed = parseFloat(value);
+    const num = isNaN(parsed) ? 0 : Math.max(0, convertAmountToRaw(parsed));
+    const apply = (list: CostItem[]) => list.map((item) => (item.id === id ? { ...item, [field]: num } : item));
+    if (category === "grey") setGreyStructure(apply);
+    else if (category === "finish") setFinishing(apply);
+    else setLabour(apply);
   };
 
-  const greyTotal = greyStructure.reduce((sum, item) => sum + item.amount, 0);
-  const finishTotal = finishing.reduce((sum, item) => sum + item.amount, 0);
-  const labourTotal = labour.reduce((sum, item) => sum + item.amount, 0);
-  
-  const subTotal = greyTotal + finishTotal + labourTotal;
-  const overheadProfitAmount = (subTotal * overheadProfitPct) / 100;
-  const contingencyAmount = (subTotal * contingencyPct) / 100;
-  
-  const grandTotal = subTotal + overheadProfitAmount + contingencyAmount;
-  const costPerSqFt = totalArea > 0 ? grandTotal / totalArea : 0;
+  useAutoSave("cost-summary", { totalArea, greyStructure, finishing, labour, overheadProfitPct, contingencyPct, taxPct, taxLabel },
+    { totalArea: setTotalArea, greyStructure: setGreyStructure, finishing: setFinishing, labour: setLabour, overheadProfitPct: setOverheadProfitPct, contingencyPct: setContingencyPct, taxPct: setTaxPct, taxLabel: setTaxLabel });
+
+  const toEngineLines = (list: CostItem[], category: CostLine["category"]): CostLine[] =>
+    list.map((i) => ({ id: i.id, category, label: i.name, qty: i.qty, unit: i.unit, rate: i.rate }));
+  const summary = costSummary({
+    areaSqft: totalArea,
+    lines: [...toEngineLines(greyStructure, "grey"), ...toEngineLines(finishing, "finish"), ...toEngineLines(labour, "labour")],
+    overheadPct: overheadProfitPct, contingencyPct, taxPct, taxLabel,
+  });
+  const greyTotal = summary.greyTotal;
+  const finishTotal = summary.finishTotal;
+  const labourTotal = summary.labourTotal;
+  const subTotal = summary.subtotal;
+  const overheadProfitAmount = summary.overhead;
+  const contingencyAmount = summary.contingency;
+  const taxAmount = summary.tax;
+  const grandTotal = summary.grandTotal;
+  const costPerSqFt = summary.costPerSqft;
 
   const materialTotal = greyTotal + finishTotal;
   const otherTotal = overheadProfitAmount + contingencyAmount;
@@ -90,7 +107,7 @@ const ConstructionCostSummary: React.FC = () => {
     const doc = new (jsPDF as any)();
     
     doc.setFontSize(20);
-    doc.setTextColor(88, 28, 135); // Purple 900
+    doc.setTextColor(31, 29, 26); // ink (Dribbble-amber system — was legacy purple)
     doc.text("Construction Cost Summary", 14, 22);
     
     doc.setFontSize(12);
@@ -105,20 +122,20 @@ const ConstructionCostSummary: React.FC = () => {
       doc.setTextColor(30);
       doc.text(title, 14, currentY);
       
-      const tableData = data.map(item => [item.name, formatCurrency(item.amount, false)]);
+      const tableData = data.map(item => [item.name, `${item.qty} ${item.unit} x ${formatCurrency(item.rate, false)}`, formatCurrency(itemAmount(item), false)]);
       tableData.push(["Subtotal", formatCurrency(total, false)]);
 
       (doc as any).autoTable({
         startY: currentY + 5,
-        head: [['Item Description', 'Cost']],
+        head: [['Item Description', 'Qty x Rate', 'Cost']],
         body: tableData,
         theme: 'striped',
-        headStyles: { fillColor: [139, 92, 246] }, // Purple 500
+        headStyles: { fillColor: [242, 164, 19] }, // amber #F2A413
         columnStyles: { 1: { halign: 'right' } },
         didParseCell: (data: any) => {
           if (data.row.index === tableData.length - 1) {
             data.cell.styles.fontStyle = 'bold';
-            data.cell.styles.textColor = [88, 28, 135];
+            data.cell.styles.textColor = [31, 29, 26];
           }
         }
       });
@@ -131,11 +148,11 @@ const ConstructionCostSummary: React.FC = () => {
     generateTable("3. Labour Cost", labour, labourTotal);
 
     // Final Summary Box
-    doc.setFillColor(243, 232, 255); // Purple 50
+    doc.setFillColor(255, 251, 235); // amber-50
     doc.rect(14, currentY, 182, 50, 'F');
     
     doc.setFontSize(14);
-    doc.setTextColor(88, 28, 135);
+    doc.setTextColor(31, 29, 26);
     doc.text("Final Cost Summary", 20, currentY + 10);
     
     doc.setFontSize(12);
@@ -143,10 +160,11 @@ const ConstructionCostSummary: React.FC = () => {
     doc.text(`Base Subtotal: ${formatCurrency(subTotal, false)}`, 20, currentY + 22);
     doc.text(`Overhead & Profit (${overheadProfitPct}%): ${formatCurrency(overheadProfitAmount, false)}`, 20, currentY + 30);
     doc.text(`Contingency (${contingencyPct}%): ${formatCurrency(contingencyAmount, false)}`, 20, currentY + 38);
+    doc.text(`${taxLabel} (${taxPct}%): ${formatCurrency(taxAmount, false)}`, 20, currentY + 46);
     
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text(`Grand Total: ${formatCurrency(grandTotal, false)}`, 20, currentY + 48);
+    doc.text(`Grand Total: ${formatCurrency(grandTotal, false)}`, 20, currentY + 56);
 
     doc.save("construction-cost-summary.pdf");
   };
@@ -162,14 +180,11 @@ const ConstructionCostSummary: React.FC = () => {
           {greyStructure.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
               <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
-              <div className="relative w-40">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
-                <input
-                  type="number" inputMode="decimal"
-                  value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
-                  onChange={(e) => updateItem("grey", item.id, e.target.value)}
-                  className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-xl py-2 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white"
-                />
+                            <div className="flex items-center gap-2">
+                <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("grey", item.id, "qty", e.target.value)} className="w-20 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Quantity" />
+                <span className="text-xs text-txt-tertiary">{item.unit} ×</span>
+                <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("grey", item.id, "rate", e.target.value)} className="w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Rate" />
+                <span className="font-semibold text-txt-primary w-28 text-right">{formatCurrency(itemAmount(item))}</span>
               </div>
             </div>
           ))}
@@ -188,14 +203,11 @@ const ConstructionCostSummary: React.FC = () => {
           {finishing.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
               <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
-              <div className="relative w-40">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
-                <input
-                  type="number" inputMode="decimal"
-                  value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
-                  onChange={(e) => updateItem("finish", item.id, e.target.value)}
-                  className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-xl py-2 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white"
-                />
+                            <div className="flex items-center gap-2">
+                <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("finish", item.id, "qty", e.target.value)} className="w-20 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Quantity" />
+                <span className="text-xs text-txt-tertiary">{item.unit} ×</span>
+                <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("finish", item.id, "rate", e.target.value)} className="w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Rate" />
+                <span className="font-semibold text-txt-primary w-28 text-right">{formatCurrency(itemAmount(item))}</span>
               </div>
             </div>
           ))}
@@ -214,14 +226,11 @@ const ConstructionCostSummary: React.FC = () => {
           {labour.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
               <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
-              <div className="relative w-40">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
-                <input
-                  type="number" inputMode="decimal"
-                  value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
-                  onChange={(e) => updateItem("labour", item.id, e.target.value)}
-                  className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-xl py-2 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white"
-                />
+                            <div className="flex items-center gap-2">
+                <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("labour", item.id, "qty", e.target.value)} className="w-20 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Quantity" />
+                <span className="text-xs text-txt-tertiary">{item.unit} ×</span>
+                <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("labour", item.id, "rate", e.target.value)} className="w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Rate" />
+                <span className="font-semibold text-txt-primary w-28 text-right">{formatCurrency(itemAmount(item))}</span>
               </div>
             </div>
           ))}
@@ -269,6 +278,19 @@ const ConstructionCostSummary: React.FC = () => {
               className="w-full h-2 bg-surface-active rounded-full appearance-none cursor-pointer accent-accent-600"
             />
           </div>
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{taxLabel} (%)</label>
+              <span className="bg-surface-default dark:bg-ink px-3 py-1 rounded-lg text-accent-800 dark:text-accent-400 font-bold border border-ui-borderSubtle dark:border-ink-600">{taxPct}%</span>
+            </div>
+            <input type="range" min="0" max="25" step="1" value={taxPct} onChange={(e) => setTaxPct(parseInt(e.target.value))} className="w-full h-2 bg-surface-active rounded-full appearance-none cursor-pointer accent-accent-600" />
+            <div className="flex gap-2 mt-2">
+              {["Sales Tax (PK)", "GST (IN)", "VAT (UAE)"].map((l) => (
+                <button key={l} onClick={() => { setTaxLabel(l); setTaxPct(l === "VAT (UAE)" ? 5 : 18); }} className={`px-2 py-1 rounded-full text-xs font-bold ${taxLabel === l ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>{l}</button>
+              ))}
+            </div>
+            <p className="text-xs text-txt-tertiary mt-1">PK sales tax is 18% standard, IN GST 18%, UAE VAT 5% — the rate is labelled by region, never presented as universal.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -298,14 +320,11 @@ const ConstructionCostSummary: React.FC = () => {
                 )}
                 <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
                 <td className="py-3 px-6 text-right">
-                  <div className="relative inline-block w-32">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
-                    <input
-                      type="number" inputMode="decimal"
-                      value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
-                      onChange={(e) => updateItem("grey", item.id, e.target.value)}
-                      className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white transition-all"
-                    />
+                                    <div className="flex items-center gap-2 justify-end">
+                    <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("grey", item.id, "qty", e.target.value)} className="w-16 border rounded-lg py-1.5 px-2 text-right" title="Quantity" />
+                    <span className="text-xs text-txt-tertiary">×</span>
+                    <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("grey", item.id, "rate", e.target.value)} className="w-28 border rounded-lg py-1.5 px-2 text-right" title="Rate" />
+                    <span className="font-semibold w-24 text-right">{formatCurrency(itemAmount(item))}</span>
                   </div>
                 </td>
               </tr>
@@ -320,14 +339,11 @@ const ConstructionCostSummary: React.FC = () => {
                 )}
                 <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
                 <td className="py-3 px-6 text-right">
-                  <div className="relative inline-block w-32">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
-                    <input
-                      type="number" inputMode="decimal"
-                      value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
-                      onChange={(e) => updateItem("finish", item.id, e.target.value)}
-                      className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white transition-all"
-                    />
+                                    <div className="flex items-center gap-2 justify-end">
+                    <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("finish", item.id, "qty", e.target.value)} className="w-16 border rounded-lg py-1.5 px-2 text-right" title="Quantity" />
+                    <span className="text-xs text-txt-tertiary">×</span>
+                    <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("finish", item.id, "rate", e.target.value)} className="w-28 border rounded-lg py-1.5 px-2 text-right" title="Rate" />
+                    <span className="font-semibold w-24 text-right">{formatCurrency(itemAmount(item))}</span>
                   </div>
                 </td>
               </tr>
@@ -342,14 +358,11 @@ const ConstructionCostSummary: React.FC = () => {
                 )}
                 <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
                 <td className="py-3 px-6 text-right">
-                  <div className="relative inline-block w-32">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-tertiary" />
-                    <input
-                      type="number" inputMode="decimal"
-                      value={convertAmount(item.amount) === 0 ? '' : Number(convertAmount(item.amount).toFixed(2))}
-                      onChange={(e) => updateItem("labour", item.id, e.target.value)}
-                      className="w-full bg-surface-default dark:bg-ink border border-ui-borderDefault dark:border-ink-600 rounded-lg py-1.5 pl-9 pr-3 text-right focus:border-ink focus:ring-1 focus:ring-accent-500 outline-none text-txt-primary dark:text-white transition-all"
-                    />
+                                    <div className="flex items-center gap-2 justify-end">
+                    <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("labour", item.id, "qty", e.target.value)} className="w-16 border rounded-lg py-1.5 px-2 text-right" title="Quantity" />
+                    <span className="text-xs text-txt-tertiary">×</span>
+                    <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("labour", item.id, "rate", e.target.value)} className="w-28 border rounded-lg py-1.5 px-2 text-right" title="Rate" />
+                    <span className="font-semibold w-24 text-right">{formatCurrency(itemAmount(item))}</span>
                   </div>
                 </td>
               </tr>
@@ -398,8 +411,9 @@ const ConstructionCostSummary: React.FC = () => {
     <div className="max-w-7xl mx-auto space-y-6 pb-24 relative">
       <div className="flex justify-between items-end gap-4 flex-wrap mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">Construction Cost Summary</h2>
-          <p className="text-txt-tertiary dark:text-txt-tertiary">Estimate total material and labor costs for your project.</p>
+          <h1 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">Construction Cost Summary</h1>
+          <p className="text-txt-tertiary dark:text-txt-tertiary">Each line is quantity × rate. The pre-filled lines are <strong>example figures</strong> — replace them with your quantities from the Material Takeoff or BOQ tools.</p>
+          {(!isFinite(totalArea) || totalArea <= 0) && <p className="text-sm font-semibold text-red-600 mt-1">Area must be greater than 0.</p>}
         </div>
         
         <div className="flex items-center gap-3">
@@ -474,6 +488,10 @@ const ConstructionCostSummary: React.FC = () => {
                 <span className="text-accent-200 font-medium">Contingency ({contingencyPct}%)</span>
                 <span className="font-semibold text-white">{formatCurrency(contingencyAmount)}</span>
               </div>
+              <div className="flex justify-between items-center border-b border-ink/50 pb-3">
+                <span className="text-accent-200 font-medium">{taxLabel} ({taxPct}%)</span>
+                <span className="font-semibold text-white">{formatCurrency(taxAmount)}</span>
+              </div>
             </div>
 
             <div className="pt-2">
@@ -496,11 +514,9 @@ const ConstructionCostSummary: React.FC = () => {
         </div>
       </div>
       
-      <div className="mt-8">
-        <CostTrendChart />
-      </div>
+      <p className="mt-8 text-sm text-txt-tertiary">Cost trend is not shown: the history this chart read was always empty (no real past calculations were saved). Use the per-line quantities above and the BOQ Generator for comparable estimates.</p>
       
-      <CalculationHistory calculatorId="constructioncostsummary_tool" currentInputs={{}} />
+      <CalculationHistory calculatorId="constructioncostsummary_tool" currentInputs={{ totalArea, overheadProfitPct, contingencyPct, taxPct }} currentResults={{ grandTotal, costPerSqFt }} />
 
       {/* View Toggle Floating Action Button */}
       <motion.button

@@ -15,6 +15,7 @@ import { ResultCard } from "../ui/ResultCard";
 import { useSettings } from "../../context/SettingsContext";
 import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
 import { CalculationHistory } from "../ui/CalculationHistory";
+import { gridCellVolumes } from "../../lib/gridEarthworkCalc";
 export default function GridEarthworkEstimator() {
   const { settings, formatCurrency, convertAmount, convertAmountToRaw } =
     useSettings();
@@ -40,6 +41,22 @@ export default function GridEarthworkEstimator() {
     existing: "100.4",
     proposed: "100.0",
   });
+  // Multi-cell grid (borrow-pit): cut and fill are summed SEPARATELY per cell,
+  // so a grid straddling zero no longer cancels cut against fill (old bug).
+  const [multiSpacing, setMultiSpacing] = useState<string>("10");
+  const [multiExisting, setMultiExisting] = useState<string>("101 101 99 99\n101 101 99 99\n101 101 99 99");
+  const [multiProposed, setMultiProposed] = useState<string>("100 100 100 100\n100 100 100 100\n100 100 100 100");
+  const parseGrid = (text: string): number[][] | null => {
+    const rows = text.trim().split("\n").map((r) => r.trim().split(/\s+/).map(Number));
+    if (rows.length < 2 || rows.some((r) => r.length < 2 || r.some((v) => !isFinite(v)))) return null;
+    if (rows.some((r) => r.length !== rows[0].length)) return null;
+    return rows;
+  };
+  const multiExistingGrid = parseGrid(multiExisting);
+  const multiProposedGrid = parseGrid(multiProposed);
+  const multiResult = multiExistingGrid && multiProposedGrid && multiExistingGrid.length === multiProposedGrid.length && multiExistingGrid[0].length === multiProposedGrid[0].length
+    ? gridCellVolumes(multiExistingGrid, multiProposedGrid, parseFloat(multiSpacing) || 0)
+    : null;
   const L = parseFloat(gridLength) || 0;
   const W = parseFloat(gridWidth) || 0;
   const area = L * W;
@@ -306,6 +323,28 @@ export default function GridEarthworkEstimator() {
                  </MaterialSummary>
           </section>
         </div>
+      </div>
+      <div className="w-full bg-surface-default p-4 sm:p-6 rounded-2xl border border-ui-borderSubtle shadow-brand-sm mt-8">
+        <h3 className="text-xl font-bold text-txt-primary mb-2">Multi-cell grid (borrow-pit method)</h3>
+        <p className="text-sm text-txt-secondary mb-4">Paste elevations as rows of space-separated numbers (existing and proposed must have the same shape). Cut and fill are summed separately per cell — corners straddling zero no longer cancel each other out.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <label className="block text-sm font-medium text-txt-secondary">Grid spacing (m)
+            <input type="number" inputMode="decimal" value={multiSpacing} onChange={(e) => setMultiSpacing(e.target.value)} className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-2xl font-bold" />
+          </label>
+          <label className="block text-sm font-medium text-txt-secondary">Existing elevations (m)
+            <textarea rows={3} value={multiExisting} onChange={(e) => setMultiExisting(e.target.value)} className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-2xl font-mono" />
+          </label>
+          <label className="block text-sm font-medium text-txt-secondary">Proposed elevations (m)
+            <textarea rows={3} value={multiProposed} onChange={(e) => setMultiProposed(e.target.value)} className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-2xl font-mono" />
+          </label>
+        </div>
+        {multiResult ? (
+          <div className="grid grid-cols-3 gap-4 mt-4 text-center">
+            <div><div className="text-xs uppercase font-bold text-txt-tertiary">Cut</div><div className="text-2xl font-bold">{multiResult.cutM3.toFixed(1)} m³</div></div>
+            <div><div className="text-xs uppercase font-bold text-txt-tertiary">Fill</div><div className="text-2xl font-bold">{multiResult.fillM3.toFixed(1)} m³</div></div>
+            <div><div className="text-xs uppercase font-bold text-txt-tertiary">Net (cut − fill)</div><div className="text-2xl font-bold">{multiResult.netM3.toFixed(1)} m³</div></div>
+          </div>
+        ) : (<p className="text-sm text-ui-errorText mt-4">Enter two grids of the same shape (at least 2×2, numbers only).</p>)}
       </div>
       <CalculationHistory
         calculatorId="grid_earthwork_v1"

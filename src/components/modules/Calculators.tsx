@@ -33,24 +33,18 @@ import MasterQuantityEstimator from "./MasterQuantityEstimator";
 import { useAuth } from "../../contexts/AuthContext";
 import Brickwork9InchModule from "./Brickwork9InchModule";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from "recharts";
-import { SEO } from "../SEO";
 import { CodeTooltip } from "../ui/CodeTooltip";
+import { jsPDF } from "jspdf";
+import { Check, Printer, FileText, Share2 } from "lucide-react";
 
 
 export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }: { forcedTab?: "master" | "concrete" | "bricks" | "blocks" | "plaster" | "bricks-blocks" | "steel"; hideHeader?: boolean } = {}) {
   const { formatCurrency, currentUnit, setCurrentUnit, currentCurrency } = useGlobalSettings();
   const { user } = useAuth();
   const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
-  
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Construction Material Estimator",
-    "applicationCategory": "BusinessApplication",
-    "description": "Calculate exact material requirements like cement, sand, and aggregate for brickwork, plaster, and concrete.",
-    "operatingSystem": "All"
-  };
-  
+
+  // NOTE: the old <SEO> import and `schema` const were dead code (never
+  // rendered) — deleted. The ModuleWrapper already emits SEOHead.
   const isSI = currentUnit === "Metric";
   const unitFt = isSI ? "m" : "ft";
   const unitIn = isSI ? "cm" : "in";
@@ -66,6 +60,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
     { id: "water", label: "Water", icon: Droplet },
   ] as const;
   const [showCost, setShowCost] = useState(false);
+  // PLACEHOLDER rates — unsourced, no unit/date attached to the old values.
+  // They are editable below and labelled "placeholder — enter your rate";
+  // a cost line with no rate entered shows "—", never a made-up price.
   const [rates, setRates] = useState({
     cement: 1200,
     sand: 60,
@@ -75,6 +72,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
     bricks: 15,
     blocks: 50,
   });
+  const [costEdited, setCostEdited] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
   const fullTabs = [
     ...tabs,
     { id: "cement", label: "Cement", icon: Box },
@@ -492,7 +492,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
           <div>
             <div className="flex justify-between items-center">
               <label className="uppercase text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center">
-                Mix Ratio
+                Mix Ratio — nominal (IS 456 Table 9, up to M20 only)
                <CodeTooltip standard="IS" code="456:2000" description="Nominal mix proportions for ordinary concrete (Table 9)." /></span></label>
               <span className="text-sm font-medium text-ui-successText bg-ui-success px-1.5 py-0.5 rounded">
                 Standard: {concreteType === 'slab' || concreteType === 'column' ? 'M20' : 'M15/M20'}
@@ -510,6 +510,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               <option value="1:1.5:3">1:1.5:3 (M20)</option>
               <option value="1:1:2">1:1:2 (M25)</option>
             </select>
+            {cMix === "1:1:2" && (
+              <p className="text-xs text-accent-800 mt-2">1:1:2 is a nominal M25 mix — nominal mixes are only valid up to M20 (IS 456 Table 9). For a designed M25 mix, use the <a href="/mix-design" className="underline">mix-design calculator (IS 10262 / ACI 211.1)</a>.</p>
+            )}
           </div>
           <div>
             <label className="uppercase text-sm font-medium text-txt-secondary mb-1 block">
@@ -523,6 +526,9 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               onChange={(e) => setCWcRatio(e.target.value)}
               className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 font-medium text-sm transition-all shadow-brand-sm"
             /></>
+            {(parseNum(cWcRatio) < 0.40 || parseNum(cWcRatio) > 0.60) && parseNum(cWcRatio) > 0 && (
+              <p className="text-xs text-accent-800 mt-2">w/c {cWcRatio} is outside the usual 0.40–0.60 range for ordinary concrete — check the mix design. Durability (IS 456 Table 5) may govern instead.</p>
+            )}
           </div>
         </div>
       </div>
@@ -888,7 +894,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
     );
     const res = calc.calculate();
     currentExportInputs = {
-      "Bar Diameter": `${sDia} mm/in#`,
+      "Bar Diameter": `${sDia} mm`,
       "Span/Length": `${sSpan} ${unitFt}`,
       Spacing: `${sSpace} mm/in`,
       "Standard Bar Length": `${sBarL} ${unitFt}`,
@@ -919,7 +925,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="uppercase text-sm font-medium text-txt-secondary mb-1 block"><span className="flex items-center gap-1">
-              Bar Dia (mm/in#)
+              Bar Dia (mm) — always mm, in both unit systems
              <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label>
             <><label htmlFor="a11y-input-159" className="sr-only">Input</label>
 <input id="a11y-input-159"
@@ -1369,6 +1375,62 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
     setCart([...cart, item]);
     setElementName("");
   };
+
+  // ---- Cost (wired to the rates state that previously had no UI) ----
+  // Rate units follow the displayed quantity: cement /bag, sand & aggregate
+  // /unitVol (m³ or ft³ as shown), water /L, steel /kg, bricks /1,000,
+  // blocks /each. Rates are placeholders — enter your own.
+  const costForItem = (item: {
+    cementBags?: number; sandVol?: number; aggregateVol?: number;
+    waterLiters?: number; steelKg?: number; bricksCount?: number; blocksCount?: number;
+  }) => {
+    const lines = [
+      { label: "Cement", amount: item.cementBags != null ? item.cementBags * rates.cement : null },
+      { label: "Sand", amount: item.sandVol != null ? item.sandVol * rates.sand : null },
+      { label: "Aggregate", amount: item.aggregateVol != null ? item.aggregateVol * rates.aggregate : null },
+      { label: "Water", amount: item.waterLiters != null ? item.waterLiters * rates.water : null },
+      { label: "Steel", amount: item.steelKg != null ? item.steelKg * rates.steel : null },
+      { label: "Bricks", amount: item.bricksCount != null ? (item.bricksCount / 1000) * rates.bricks : null },
+      { label: "Blocks", amount: item.blocksCount != null ? item.blocksCount * rates.blocks : null },
+    ].filter((l): l is { label: string; amount: number } => l.amount != null && l.amount > 0);
+    return { lines, total: lines.reduce((s, l) => s + l.amount, 0) };
+  };
+  const cartCostTotal = cart.reduce((s, it) => s + costForItem(it).total, 0);
+
+  // ---- Export of the current tab's results (was computed, never shown) ----
+  // CartItem carries no `title` — the display name is the same one addToCart
+  // uses for the cart item's `name` (user-entered element name, else type).
+  const currentItemTitle = currentCartItem
+    ? (elementName || `${currentCartItem.type} Element`)
+    : "Estimate";
+  const exportText = () => Object.entries(currentExportData).map(([k, v]) => `${k}: ${v}`).join("\n");
+  const printResults = () => window.print();
+  const copyResults = async () => {
+    try { await navigator.clipboard.writeText(exportText()); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ }
+  };
+  const shareResults = async () => {
+    if (!currentCartItem) return;
+    const text = `${currentItemTitle}\n${exportText()}`;
+    if (navigator.share) { try { await navigator.share({ title: currentItemTitle, text }); } catch { /* dismissed */ } }
+    else { await copyResults(); setShared(true); setTimeout(() => setShared(false), 2000); }
+  };
+  const downloadResultsPdf = () => {
+    if (!currentCartItem) return;
+    const doc = new jsPDF();
+    doc.setFontSize(14);
+    doc.text(`${currentItemTitle} — Estimate`, 14, 16);
+    let y = 26;
+    doc.setFontSize(11);
+    Object.entries(currentExportData).forEach(([k, v]) => {
+      doc.text(`${k}: ${String(v)}`, 14, y);
+      y += 7;
+    });
+    if (showCost) {
+      y += 4;
+      doc.text(`Estimated cost: ${formatCurrency(costForItem(currentCartItem).total, false)}`, 14, y);
+    }
+    doc.save("estimate.pdf");
+  };
   const removeFromCart = (id: string) => {
     setCart(cart.filter((item) => item.id !== id));
   };
@@ -1571,6 +1633,94 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
           </div>
        )}
        {isBatchMode && isBatchSupported ? renderBatchModeFor(activeTab) : content}
+
+       {/* Results + cost + export — the hub used to compute currentExportData
+           but never displayed it, and the rates state had no UI at all. */}
+       {!isBatchMode && Object.keys(currentExportData).length > 0 && (
+         <div className="mt-6 bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 shadow-brand-sm">
+           <h3 className="text-lg font-bold text-txt-primary mb-3">{currentItemTitle} — Results</h3>
+           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
+             {Object.entries(currentExportData).map(([k, v]) => (
+               <div key={k} className="flex justify-between gap-4 border-b border-ui-borderSubtle/50 pb-1.5">
+                 <dt className="text-sm text-txt-secondary">{k}</dt>
+                 <dd className="text-sm font-semibold text-txt-primary text-right">{String(v)}</dd>
+               </div>
+             ))}
+           </dl>
+
+           <div className="flex flex-wrap gap-2 mt-4">
+             <Button onClick={copyResults} className="flex items-center gap-2 px-4 py-2 bg-txt-primary text-surface-default text-sm font-semibold rounded-full hover:opacity-90">
+               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} {copied ? "Copied" : "Copy results"}
+             </Button>
+             <Button onClick={shareResults} className="flex items-center gap-2 px-4 py-2 bg-accent-50 text-accent-800 text-sm font-semibold rounded-full hover:bg-accent-100">
+               <Share2 className="w-4 h-4" /> {shared ? "Copied (share unavailable)" : "Share"}
+             </Button>
+             <Button onClick={printResults} className="flex items-center gap-2 px-4 py-2 bg-accent-50 text-accent-800 text-sm font-semibold rounded-full hover:bg-accent-100">
+               <Printer className="w-4 h-4" /> Print
+             </Button>
+             <Button onClick={downloadResultsPdf} className="flex items-center gap-2 px-4 py-2 bg-accent-50 text-accent-800 text-sm font-semibold rounded-full hover:bg-accent-100">
+               <FileText className="w-4 h-4" /> Download PDF
+             </Button>
+             <Button onClick={() => setShowCost((v) => !v)} className="flex items-center gap-2 px-4 py-2 bg-accent-50 text-accent-800 text-sm font-semibold rounded-full hover:bg-accent-100">
+               {showCost ? "Hide cost" : "Show cost"}
+             </Button>
+           </div>
+
+           {showCost && (
+             <div className="mt-5 pt-4 border-t border-ui-borderSubtle/50">
+               <p className="text-xs text-txt-tertiary mb-3">
+                 Rates are placeholders — enter your own. Currency {currentCurrency}. Cement /bag, sand &amp; aggregate /{unitVol}, water /L, steel /kg, bricks /1,000, blocks /each.
+               </p>
+               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+                 {([
+                   ["cement", "Cement /bag"],
+                   ["sand", `Sand /${unitVol}`],
+                   ["aggregate", `Aggregate /${unitVol}`],
+                   ["water", "Water /L"],
+                   ["steel", "Steel /kg"],
+                   ["bricks", "Bricks /1,000"],
+                   ["blocks", "Blocks /each"],
+                 ] as const).map(([key, label]) => (
+                   <label key={key} className="text-xs font-bold text-txt-secondary block">
+                     {label}
+                     <input
+                       type="number" inputMode="decimal"
+                       value={rates[key]}
+                       onChange={(e) => { setRates({ ...rates, [key]: parseFloat(e.target.value) || 0 }); setCostEdited(true); }}
+                       className="mt-1 w-full bg-transparent border border-ui-borderSubtle text-txt-primary rounded-2xl px-3 py-2 font-medium text-sm"
+                     />
+                   </label>
+                 ))}
+               </div>
+               {!costEdited && (
+                 <p className="text-xs text-accent-800 mt-2">These are placeholder rates, not market prices — edit them before quoting.</p>
+               )}
+               <dl className="mt-4 space-y-1.5">
+                 {costForItem(currentCartItem ?? {}).lines.map((l) => (
+                   <div key={l.label} className="flex justify-between text-sm">
+                     <dt className="text-txt-secondary">{l.label}</dt>
+                     <dd className="font-semibold text-txt-primary">{formatCurrency(l.amount, false)}</dd>
+                   </div>
+                 ))}
+                 <div className="flex justify-between text-base font-bold border-t border-ui-borderSubtle pt-2">
+                   <dt>Estimated cost</dt>
+                   <dd>{formatCurrency(costForItem(currentCartItem ?? {}).total, false)}</dd>
+                 </div>
+               </dl>
+             </div>
+           )}
+         </div>
+       )}
+
+       {cart.length > 0 && (
+         <div className="mt-6 bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 shadow-brand-sm">
+           <h3 className="text-lg font-bold text-txt-primary mb-2">Cart totals</h3>
+           <p className="text-sm text-txt-secondary">
+             Cement {totalCement.toFixed(0)} bags · Sand {totalSand.toFixed(2)} {unitVol} · Aggregate {totalAgg.toFixed(2)} {unitVol} · Water {totalWater.toFixed(0)} L
+             {showCost && ` · Estimated cost ${formatCurrency(cartCostTotal, false)}`}
+           </p>
+         </div>
+       )}
     </div>
   </div>
   );

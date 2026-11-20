@@ -74,10 +74,10 @@ export default function AggregateBlendingCalculator() {
             size: s.size,
             minPassing: s.minPassing,
             maxPassing: s.maxPassing,
-            binA: 100, // Default to 100 to show something on the graph initially
-            binB: 100,
-            binC: 100,
-            binD: 100,
+            binA: 0, // Empty by default — all-100% defaults drew a misleading flat line
+            binB: 0,
+            binC: 0,
+            binD: 0,
           }))
         );
       }

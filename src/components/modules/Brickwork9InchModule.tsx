@@ -38,7 +38,7 @@ export default function Brickwork9InchModule({ hideHistory = false }: { hideHist
   const [mixRatioPreset, setMixRatioPreset] = useState<string>("1:4");
   const [cementRatio, setCementRatio] = useState<string>("1");
   const [sandRatio, setSandRatio] = useState<string>("4");
-  const [includeWastage, setIncludeWastage] = useState<boolean>(true);
+  const [wastagePct, setWastagePct] = useState<string>("10"); // default 10% (preserves old toggle behaviour)
 
   React.useEffect(() => {
     if (isSI) {
@@ -76,24 +76,22 @@ export default function Brickwork9InchModule({ hideHistory = false }: { hideHist
       (brick.h + MORTAR_THICKNESS);
     /* Volume of 1 brick without mortar */ const brickVolWithoutMortar =
       brick.l * brick.w * brick.h;
-    /* Number of bricks */ let noOfBricks = netVolume / brickVolWithMortar;
-    if (includeWastage) {
-      noOfBricks = noOfBricks * 1.1; /* 10% wastage for bricks  */
-    }
-    noOfBricks = Math.ceil(noOfBricks);
-    /* Total volume of bricks without mortar */ const volumeOfBricks =
-      noOfBricks * brickVolWithoutMortar;
+    /* Number of bricks before wastage — mortar MUST be computed from
+       this count, not from the ceiled/wastage-inflated count (old bug:
+       on a 10x10 ft wall wet mortar came out 0.360 m3 instead of 0.553 m3). */
+    const noOfBricksBeforeWastage = netVolume / brickVolWithMortar;
+    const wasteFactor = 1 + Math.max(0, Math.min(50, parseFloat(wastagePct) || 0)) / 100;
+    let noOfBricks = Math.ceil(noOfBricksBeforeWastage * wasteFactor);
+    /* Total volume of bricks without mortar — from the PRE-WASTAGE count */
+    const volumeOfBricks = noOfBricksBeforeWastage * brickVolWithoutMortar;
     /* Wet mortar volume */ let wetMortarVol = netVolume - volumeOfBricks;
     if (wetMortarVol < 0) wetMortarVol = 0;
     
     // Frog filling allowance (adds approx 15% extra mortar per brick)
     wetMortarVol = wetMortarVol * 1.15;
 
-    /* fallback // Dry mortar volume (approx 33% more) */ let dryMortarVol =
-      wetMortarVol * 1.33;
-    if (includeWastage) {
-      dryMortarVol = dryMortarVol * 1.1; /* 10% wastage for mortar */
-    }
+    /* Dry mortar volume (approx 33% more), with the same wastage % */
+    const dryMortarVol = wetMortarVol * 1.33 * wasteFactor;
     const cRatio = parseFloat(cementRatio) || 1;
     const sRatio = parseFloat(sandRatio) || 4;
     const totalRatio = cRatio + sRatio;
@@ -117,7 +115,7 @@ export default function Brickwork9InchModule({ hideHistory = false }: { hideHist
       sandM3,
       isSI
     };
-  }, [wallLength, wallHeight, deductions, brickType, cementRatio, sandRatio, includeWastage, isSI]);
+  }, [wallLength, wallHeight, deductions, brickType, cementRatio, sandRatio, wastagePct, isSI]);
   const explanationOpts = useMemo(() => {
     let l = parseFloat(wallLength) || 0;
     let h = parseFloat(wallHeight) || 0;
@@ -324,29 +322,18 @@ export default function Brickwork9InchModule({ hideHistory = false }: { hideHist
                   </div>
                 </div>
 
-              <div className="mt-8 flex items-center gap-3">
-                <label className="relative flex cursor-pointer items-center rounded-full p-1 hover:bg-accent-50 transition-colors text-sm font-medium text-txt-secondary mb-1 block">
-                  <><label htmlFor="a11y-input-127" className="sr-only">Input</label>
-<input id="a11y-input-127"
-                    type="checkbox"
-                    className="peer cursor-pointer appearance-none rounded-2xl border-2 border-ui-borderSubtle dark:border-ink-600 transition-all checked:border-accent-800 checked:bg-ink w-6 h-6 ml-1 text-base font-normal overflow-hidden"
-                    checked={includeWastage}
-                    onChange={(e) => setIncludeWastage(e.target.checked)}
-                  /></>
-                  <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-txt-primary opacity-0 transition-opacity peer-checked:opacity-100 ml-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" strokeWidth="1">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                    </svg>
-                  </div>
-                </label>
-                <div className="flex flex-col cursor-pointer select-none" onClick={() => setIncludeWastage(!includeWastage)}>
-                  <span className="text-base font-medium">
-                    Include 10% Wastage
-                  </span>
-                  <span className="text-sm font-medium text-txt-tertiary">
-                    Adds extra margin for bricks & mortar
-                  </span>
-                </div>
+              <div className="mt-8 flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-txt-secondary">Wastage (%)</label>
+                <input
+                  type="number"
+                  min={0}
+                  max={50}
+                  step="any"
+                  value={wastagePct}
+                  onChange={(e) => setWastagePct(e.target.value)}
+                  className="w-full bg-bg-card/80 border border-ui-borderSubtle rounded-full px-5 py-3 font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500"
+                />
+                <span className="text-sm text-txt-tertiary">Applied to bricks and mortar. Default 10%.</span>
               </div>
             </section>
           </div>
@@ -404,7 +391,7 @@ export default function Brickwork9InchModule({ hideHistory = false }: { hideHist
       {!hideHistory && (
         <CalculationHistory
           calculatorId="brickwork_9inch_v1"
-          currentInputs={{ brickType, wallLength, wallHeight, deductions, mixRatioPreset, cementRatio, sandRatio, includeWastage }}
+          currentInputs={{ brickType, wallLength, wallHeight, deductions, mixRatioPreset, cementRatio, sandRatio, wastagePct }}
           currentResults={{ noOfBricks: results.noOfBricks, cementBags: results.cementBags, sandCft: results.sandCft }}
           summaryGeneration={(inputs, res) => `9in Brickwork Area ${inputs.wallLength}x${inputs.wallHeight}`}
           explanation={explanationOpts}
@@ -416,7 +403,8 @@ export default function Brickwork9InchModule({ hideHistory = false }: { hideHist
             if (inputs.mixRatioPreset !== undefined) setMixRatioPreset(inputs.mixRatioPreset);
             if (inputs.cementRatio !== undefined) setCementRatio(inputs.cementRatio);
             if (inputs.sandRatio !== undefined) setSandRatio(inputs.sandRatio);
-            if (inputs.includeWastage !== undefined) setIncludeWastage(inputs.includeWastage);
+            if (inputs.wastagePct !== undefined) setWastagePct(String(inputs.wastagePct));
+            else if (inputs.includeWastage !== undefined) setWastagePct(inputs.includeWastage ? "10" : "0");
           }}
         />
       )}

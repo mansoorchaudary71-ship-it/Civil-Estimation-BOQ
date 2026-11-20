@@ -16,6 +16,9 @@ import { useSettings } from "../../context/SettingsContext";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { useGlobalPrint } from "../../hooks/useGlobalPrint";
 import { generateProfessionalPDF } from "../../utils/pdfGenerator";
+import { LABOUR_PALETTE, calcLabourSummary } from "../../lib/labourCalc";
+import { useRates } from "../../lib/useRates";
+import { useAutoSave } from "../../hooks/useAutoSave";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 
@@ -48,6 +51,8 @@ const commonTasks = [
 
 export default function LabourCalculator() {
   const { settings, formatCurrency } = useSettings();
+  const { rates: pkRates, table: rateTable } = useRates("PK");
+  const [contingencyPct, setContingencyPct] = useState<number>(10);
   const [tasks, setTasks] = useState<LabourTask[]>([
     { 
       id: uuidv4(), 
@@ -64,6 +69,8 @@ export default function LabourCalculator() {
       isUnskilledDriven: false
     }
   ]);
+
+  useAutoSave("labour-calculator", { tasks, contingencyPct }, { tasks: setTasks, contingencyPct: setContingencyPct });
 
   const handleAddTask = () => {
     setTasks([...tasks, { 
@@ -148,7 +155,7 @@ export default function LabourCalculator() {
     const chartData = tasks.map(t => ({
       label: t.name,
       value: calculateTaskCost(t).total,
-      color: `#${Math.floor(Math.random()*16777215).toString(16)}`
+      color: LABOUR_PALETTE[tasks.indexOf(t) % LABOUR_PALETTE.length]
     }));
 
     return {
@@ -164,6 +171,35 @@ export default function LabourCalculator() {
       chartData,
       grandTotal: totalCost
     };
+  };
+
+  // Contingency-adjusted totals from the shared engine (IS 7272 outputs).
+  const engineSummary = calcLabourSummary(
+    tasks.map((t) => ({
+      id: t.id, name: t.name, qty: t.qty, unit: t.unit,
+      outputPerWorker: t.outputPerWorker,
+      keyWorkers: t.isUnskilledDriven ? 0 : t.skilledCount,
+      helpers: t.unskilledCount,
+      masonWage: t.skilledWage, helperWage: t.unskilledWage,
+    })),
+    contingencyPct,
+  );
+
+  const handleExportCSV = () => {
+    const rows = [["Task", "Qty", "Unit", "Days (with contingency)", "Daily burn", "Total cost"]];
+    engineSummary.results.forEach((r) => {
+      const t = tasks.find((x) => x.id === r.id);
+      rows.push([r.name, String(t?.qty ?? ""), t?.unit ?? "", String(r.daysWithContingency), String(r.dailyBurn), String(r.totalCostWithContingency)]);
+    });
+    rows.push(["TOTAL (with contingency)", "", "", String(engineSummary.sequentialDays), "", String(engineSummary.totalCostWithContingency)]);
+    const csv = rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "labour-estimate.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast.success("CSV exported");
   };
 
   useGlobalPrint(getPrintData);
@@ -385,6 +421,17 @@ export default function LabourCalculator() {
                    <p className="text-sm text-txt-secondary mt-0.5">Max Workforce Required</p>
                 </div>
               </div>
+            </div>
+
+            <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 gap-3 overflow-hidden">
+              <h3 className="font-bold text-txt-primary text-sm mb-2">Contingency &amp; weather allowance</h3>
+              <label className="text-sm text-txt-secondary flex items-center gap-2">
+                Contingency %
+                <input type="number" min={0} max={50} value={contingencyPct} onChange={(e) => setContingencyPct(Math.max(0, Math.min(50, Number(e.target.value) || 0)))} className="w-20 px-2 py-1 border rounded-full" />
+              </label>
+              <p className="text-sm text-txt-secondary mt-2">With {contingencyPct}% contingency: <strong>{engineSummary.sequentialDays} days</strong> sequential, <strong>{formatCurrency(engineSummary.totalCostWithContingency)}</strong> total (before contingency: {formatCurrency(engineSummary.totalCost)}). Weather, overtime and weekend working are covered by this allowance — raise it for monsoon / winter work.</p>
+              <p className="text-sm text-txt-tertiary mt-2">Wages from the CEP rate table ({rateTable.lastUpdated}): mason Rs {pkRates.labourMasonPerDay ?? "—"}/day, helper Rs {pkRates.labourHelperPerDay ?? "—"}/day — indicative, edit per city. Output rates follow IS 7272 Pt 1 (brickwork 1.25 m³/mason-day, plaster 10 m²/day).</p>
+              <Button onClick={handleExportCSV} className="mt-3 px-4 py-2 rounded-full bg-ink text-white text-sm font-bold">Export CSV</Button>
             </div>
 
             <div className="bg-accent-50 border border-accent-100 rounded-2xl p-4 sm:p-6 gap-3 overflow-hidden">

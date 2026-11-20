@@ -2,14 +2,15 @@ import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects, Project } from '../../context/ProjectContext';
-import { auth } from '../../lib/firebase';
+import toast from 'react-hot-toast';
 import { Plus, FolderOpen, Calendar, MapPin, Building, Share2, Printer, ChevronRight, BarChart3, AlertCircle, Upload, Play, FileText, ArrowRight, Home, Route, Save, X, Check } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 import { CalculationHistory } from '../ui/CalculationHistory';
 
 
+
 export default function ProjectManager() {
-  const { projects, activeProjectId, setActiveProjectId, addProject, deleteProject } = useProjects();
+  const { projects, activeProjectId, setActiveProjectId, addProject, deleteProject, importProject, exportProject } = useProjects();
   const [view, setView] = useState<'list' | 'detail' | 'compare'>('list');
   const [viewedProjectId, setViewedProjectId] = useState<string | null>(null);
   const [compareIds, setCompareIds] = useState<[string | null, string | null]>([null, null]);
@@ -86,7 +87,8 @@ export default function ProjectManager() {
              </div>
              Project Manager
           </h2>
-          <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">Manage and group your calculations by project.</p>
+          <h1 className="sr-only">Project Manager — group calculations by project</h1>
+          <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">Manage and group your calculations by project. Projects are saved on this device (local-first) — no account or internet needed. Share a project by sending its file; the other person imports it.</p>
         </div>
         <div className="flex gap-2">
            {compareIds[0] && compareIds[1] && (
@@ -256,9 +258,11 @@ export default function ProjectManager() {
                    <label className="cursor-pointer inline-flex w-[80%] items-center justify-center gap-2 px-6 py-4 bg-ink hover:bg-accent-400 text-white rounded-2xl transition shadow-brand-sm hover:shadow-brand-sm text-sm font-medium text-txt-secondary mb-1 block overflow-hidden">
                       <Upload className="w-5 h-5" /> Select File to Import
                       <><label htmlFor="a11y-input-381" className="sr-only">Input</label>
-<input id="a11y-input-381" type="file" className="hidden text-base font-normal rounded-full" accept=".json,.csv" onChange={(e) => {
+<input id="a11y-input-381" type="file" className="hidden text-base font-normal rounded-full" accept=".json" onChange={async (e) => {
                          if (e.target.files && e.target.files.length > 0) {
-                            alert("Import functionality would process: " + e.target.files[0].name + " here. (Feature coming soon)");
+                            const text = await e.target.files[0].text();
+                            await importProject(text);
+                            e.target.value = "";
                          }
                       }} /></>
                    </label>
@@ -360,6 +364,16 @@ export default function ProjectManager() {
                    </Button>
                  </div>
                  
+                 <Button
+                   onClick={() => {
+                     if (window.confirm(`Delete project "${proj.name}"? This removes all its saved estimates and cannot be undone.`)) {
+                       deleteProject(proj.id);
+                     }
+                   }}
+                   className="w-full py-2 text-base font-medium rounded-2xl transition-colors border border-ui-errorBorder text-ui-errorText hover:bg-ui-error"
+                 >
+                   Delete Project
+                 </Button>
                  <Button 
                    onClick={() => toggleCompareSelect(proj.id)}
                    className={`w-full py-2 text-base font-medium rounded-2xl transition-colors border ${isCompare ? 'bg-ui-success text-ui-successText border-ui-successBorder   ' : 'bg-transparent text-txt-tertiary border-ui-borderSubtle hover:border-ui-borderDefault  :'}`}
@@ -407,6 +421,12 @@ function ProjectCompare({ p1, p2, onBack }: { p1: Project, p2: Project, onBack: 
        <Button onClick={onBack} className="flex items-center gap-2 text-txt-tertiary hover:text-accent-800 transition text-base font-semibold rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
           <ChevronRight className="w-5 h-5 rotate-180" /> Back to Projects
        </Button>
+       <div className="flex flex-wrap gap-2">
+         <span className="text-sm font-semibold text-txt-secondary self-center">Open for this project:</span>
+         <a href="/boq-generator" className="px-4 py-2 bg-accent-50 text-accent-800 rounded-full text-sm font-bold hover:bg-accent-100">BOQ Generator</a>
+         <a href="/plan-measure-takeoff" className="px-4 py-2 bg-accent-50 text-accent-800 rounded-full text-sm font-bold hover:bg-accent-100">Takeoff</a>
+         <a href="/site-progress-tracker" className="px-4 py-2 bg-accent-50 text-accent-800 rounded-full text-sm font-bold hover:bg-accent-100">Site Progress Tracker</a>
+       </div>
        
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start responsive-tool-grid">
          
@@ -464,13 +484,12 @@ function ProjectCompare({ p1, p2, onBack }: { p1: Project, p2: Project, onBack: 
   );
 }
 function ProjectDetail({ project, onBack }: { project: Project, onBack: () => void }) {
-  const { deleteEstimate, updateProject, addMember, removeMember, saveVersion } = useProjects();
+  const { deleteEstimate, updateProject, addMember, removeMember, saveVersion, exportProject } = useProjects();
   const [inflationRate, setInflationRate] = useState<number>(0);
   const [wasteFactor, setWasteFactor] = useState<number>(0);
   const [budget, setBudget] = useState<number>(project.budget || 0);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteStatus, setInviteStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [shareCopied, setShareCopied] = useState(false);
 
   const handleSaveVersion = async () => {
     const versionName = prompt("Enter a name for this version snapshot (e.g., 'Option A', 'v2'):", `${project.name} - Version`);
@@ -480,10 +499,10 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
     }
   };
 
-  const uid = auth.currentUser?.uid;
-  const userRole = uid ? project.roles[uid] : 'viewer';
-  const canEdit = userRole === 'owner' || userRole === 'editor';
-  const canManageMembers = userRole === 'owner';
+  // Local-first: there are no accounts or roles on this site — the device
+  // owner can always edit; member management does not exist.
+  const canEdit = true;
+  const canManageMembers = false;
 
   const costMultiplier = 1 + (inflationRate / 100);
   const qtyMultiplier = 1 + (wasteFactor / 100);
@@ -519,43 +538,32 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
   }));
   const COLORS = ['#F2A413', '#1F1D1A', '#B07006', '#6B6862', '#0F766E', '#F2A413'];
 
-  const handleExportPDF = () => {
-    alert("Exporting full project PDF...");
+  const handleExportProject = () => {
+    const json = exportProject(project.id);
+    if (!json) { toast.error("Could not export this project."); return; }
+    const blob = new Blob([json], { type: "application/json" });
+    const aEl = document.createElement("a");
+    aEl.href = URL.createObjectURL(blob);
+    aEl.download = `${project.name.replace(/\s+/g, "_")}.cep-project.json`;
+    aEl.click();
+    URL.revokeObjectURL(aEl.href);
+    toast.success("Project file downloaded — send it to anyone; they import it in Project Manager.");
   };
 
   const handleShare = () => {
     setIsShareModalOpen(true);
   };
 
-  const handleSendInvite = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inviteEmail) return;
-
-    setInviteStatus("sending");
+  const handleCopyProjectJson = async () => {
+    const json = exportProject(project.id);
+    if (!json) { toast.error("Could not export this project."); return; }
     try {
-      const url = `${window.location.origin}/project?id=${project.id}&share=true`;
-      const res = await fetch("/api/project/invite", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: inviteEmail,
-          projectName: project.name,
-          inviteLink: url
-        })
-      });
-
-      if (!res.ok) throw new Error("Failed to send");
-      
-      setInviteStatus("success");
-      setTimeout(() => {
-        setIsShareModalOpen(false);
-        setInviteStatus("idle");
-        setInviteEmail("");
-      }, 2000);
-    } catch (err) {
-      console.error(err);
-      setInviteStatus("error");
-      setTimeout(() => setInviteStatus("idle"), 3000);
+      await navigator.clipboard.writeText(json);
+      setShareCopied(true);
+      toast.success("Project file copied — paste it into a message or file; the recipient imports it in Project Manager.");
+      setTimeout(() => setShareCopied(false), 2500);
+    } catch {
+      toast.error("Clipboard blocked — use Download instead.");
     }
   };
 
@@ -636,7 +644,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                       <Button onClick={handleShare} className="w-full p-3 bg-surface-default/50 hover:bg-surface-default/80 text-txt-secondary rounded-full transition shadow-brand-sm backdrop-blur-md text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 overflow-hidden" title="Share Project">
                          <Share2 className="w-5 h-5" />
                       </Button>
-                      <Button onClick={handleExportPDF} className="p-3 bg-accent-50/50 hover:bg-accent-100/60 text-accent-800 rounded-full transition shadow-brand-sm backdrop-blur-md text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5" title="Export PDF">
+                      <Button onClick={handleExportProject} className="p-3 bg-accent-50/50 hover:bg-accent-100/60 text-accent-800 rounded-full transition shadow-brand-sm backdrop-blur-md text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5" title="Export project file (JSON)">
                          <Printer className="w-5 h-5" />
                       </Button>
                    </div>
@@ -971,7 +979,8 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
       <CalculationHistory
         calculatorId="project_manager"
         estimationName="Project Summary"
-        currentInputs={{}}
+        currentInputs={{ projectId: project.id, estimates: project.estimates.length }}
+        currentResults={{ totalCost }}
       />
 
       <AnimatePresence>
@@ -1001,47 +1010,19 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-txt-primary">Share Project</h2>
-                  <p className="text-sm text-txt-tertiary">Invite collaborators via email</p>
+                  <p className="text-sm text-txt-tertiary">Send the project file — no email invite</p>
                 </div>
               </div>
 
-              <form onSubmit={handleSendInvite} className="space-y-4">
-                <div className="space-y-1.5 flex flex-col">
-                  <label htmlFor="invite-email" className="text-sm font-bold text-txt-primary dark:text-txt-tertiary ml-1">
-                    Email Address <span className="text-ui-errorText" aria-hidden="true">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    id="invite-email"
-                    value={inviteEmail}
-                    onChange={(e) => setInviteEmail(e.target.value)}
-                    placeholder="colleague@company.com"
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-surface-default border-2 border-ui-borderSubtle dark:border-ink-600 focus:border-ink focus:ring-4 focus:ring-accent-500/10 outline-none transition-all font-medium text-txt-primary placeholder:text-txt-tertiary"
-                    disabled={inviteStatus === "sending" || inviteStatus === "success"}
-                  />
-                </div>
-                
-                <Button
-                  type="submit"
-                  variant="primary"
-                  fullWidth
-                  size="lg"
-                  disabled={inviteStatus === "sending" || inviteStatus === "success"}
-                  isLoading={inviteStatus === "sending"}
-                  loadingText="Sending Invite..."
-                  className="w-full py-3 px-4 bg-ink hover:bg-ink-700 text-white font-semibold rounded-xl shadow-brand-lg shadow-accent-200 transition-all active:scale-95 disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-2"
-                >
-                  {inviteStatus === "success" ? (
-                    <span className="flex items-center gap-2">
-                      <Check className="w-4 h-4" />
-                      Invite Sent
-                    </span>
-                  ) : (
-                    'Send Invitation'
-                  )}
+              <div className="space-y-4">
+                <p className="text-sm text-txt-secondary">This site has no accounts, so there is no email invite. Share the project as a file instead — the other person opens Project Manager and imports it.</p>
+                <Button onClick={handleCopyProjectJson} className="w-full py-3 px-4 bg-ink hover:bg-ink-700 text-white font-semibold rounded-xl shadow-brand-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                  {shareCopied ? (<><Check className="w-4 h-4" /> Copied</>) : "Copy project file (JSON)"}
                 </Button>
-              </form>
+                <Button onClick={() => { handleExportProject(); setIsShareModalOpen(false); }} className="w-full py-3 px-4 bg-surface-hover font-semibold rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2">
+                  Download .json file
+                </Button>
+              </div>
             </motion.div>
           </motion.div>
         )}

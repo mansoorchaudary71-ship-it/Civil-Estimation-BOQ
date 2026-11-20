@@ -23,6 +23,7 @@ export default function StaircaseDesignReference() {
   const [headroom, setHeadroom] = useState<number | "">(2.2); // m
   const [landingDepth, setLandingDepth] = useState<number | "">(1.5); // m
   const [occupancy, setOccupancy] = useState<OccupancyType>("Commercial");
+  const [handrail, setHandrail] = useState<number | "">(900); // mm
 
   const results = useMemo(() => {
     const H = Number(totalHeight) || 0;
@@ -38,9 +39,21 @@ export default function StaircaseDesignReference() {
     const actualRiser = numberOfRisers > 0 ? (H * 1000) / numberOfRisers : 0;
     const numberOfTreads = Math.max(0, numberOfRisers - 1);
 
-    // Ergonomics Check: 2R + G = 600-640mm
+    // Ergonomics Check: 2R + G = 600-650 mm (NBC/Blondel; the 600-640 mm variant is noted in the FAQ).
     const ergoValue = (2 * actualRiser) + G;
-    const isErgonomic = ergoValue >= 600 && ergoValue <= 640;
+    const isErgonomic = ergoValue >= 600 && ergoValue <= 650;
+
+    // Run, stairwell size and flight split (NBC 2016 Part 4: max 12 risers/flight
+    // residential, 15 commercial).
+    const totalRunM = (numberOfTreads * G) / 1000;
+    const maxRisersPerFlight = occupancy === "Residential" ? 12 : 15;
+    const flightsNeeded = numberOfRisers > 0 ? Math.ceil(numberOfRisers / maxRisersPerFlight) : 0;
+    const risersPerFlight = flightsNeeded > 0 ? Math.ceil(numberOfRisers / flightsNeeded) : 0;
+    const stairwellStraightM = totalRunM + Ld; // straight flight + landing
+    const stairwellDogLegW = 2 * W + 0.1;
+    const stairwellDogLegL = totalRunM / 2 + Ld;
+    const handrailMm = Number(handrail) || 0;
+    const handrailOk = handrailMm >= 800 && handrailMm <= 900;
 
     // Code Compliance Checks
     const widthSafe = W >= specs.minWidth;
@@ -65,9 +78,12 @@ export default function StaircaseDesignReference() {
       headroomSafe,
       landingSafe,
       isFullyCompliant,
+      totalRunM, maxRisersPerFlight, flightsNeeded, risersPerFlight,
+      stairwellStraightM, stairwellDogLegW, stairwellDogLegL,
+      handrailMm, handrailOk,
       specs
     };
-  }, [totalHeight, riser, going, width, headroom, landingDepth, occupancy]);
+  }, [totalHeight, riser, going, width, headroom, landingDepth, occupancy, handrail]);
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">
@@ -112,8 +128,10 @@ export default function StaircaseDesignReference() {
                   <div className="grid grid-cols-2 gap-4">
                     <NumberInput label="Stair Width" unit="m" value={width} onChange={setWidth} />
                     <NumberInput label="Landing Depth" unit="m" value={landingDepth} onChange={setLandingDepth} />
+                    <NumberInput label="Handrail Height" unit="mm" value={handrail} onChange={setHandrail} />
                   </div>
                 </div>
+                <p className="text-xs text-txt-tertiary leading-relaxed">Reference only — no cost is calculated here. Dimensions per NBC 2016 Part 3 Table 5 (stair widths, risers, goings) and Part 4 (flights, handrails, headroom). The residential minimum width of 1.0 m used here is stricter than NBC's 0.9 m. Nosing: a 25 mm nosing projection is usual on treads; the going is measured clear of the nosing.</p>
             </div>
 
             <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col flex flex-col gap-6">
@@ -140,7 +158,30 @@ export default function StaircaseDesignReference() {
                             unit="NBC Specs" 
                             variant={results.isFullyCompliant ? "primary" : "warning"} 
                         />
+                        <ResultCard title="Total Run" value={results.totalRunM.toFixed(2)} unit="m" variant="neutral" />
+                        <ResultCard title="Stairwell (straight)" value={`${results.stairwellStraightM.toFixed(2)} × ${Number(width).toFixed(2)}`} unit="m" variant="neutral" />
+                        <ResultCard title="Stairwell (dog-legged)" value={`${results.stairwellDogLegL.toFixed(2)} × ${results.stairwellDogLegW.toFixed(2)}`} unit="m" variant="neutral" />
+                        <ResultCard title="Flights needed" value={`${results.flightsNeeded} × ${results.risersPerFlight}`} unit={`risers (max ${results.maxRisersPerFlight}/flight)`} variant={results.flightsNeeded <= 2 ? "neutral" : "warning"} />
+                        <ResultCard title="Handrail" value={results.handrailMm.toFixed(0)} unit={results.handrailOk ? "mm — OK (800–900)" : "mm — must be 800–900"} variant={results.handrailOk ? "neutral" : "warning"} />
                     </div>
+                    <p className="text-sm text-txt-secondary mt-4">
+                      {results.flightsNeeded > 1
+                        ? `Split the ${results.numberOfRisers} risers into ${results.flightsNeeded} flights of about ${results.risersPerFlight} risers with a landing between — no flight may exceed ${results.maxRisersPerFlight} risers (NBC 2016 Part 4).`
+                        : `One flight of ${results.numberOfRisers} risers is within the ${results.maxRisersPerFlight}-riser limit for ${occupancy.toLowerCase()} stairs (NBC 2016 Part 4).`}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        localStorage.setItem("stair_rise", ((results.actualRiser || 0) / 1000).toFixed(3));
+                        localStorage.setItem("stair_tread", ((Number(going) || 0) / 1000).toFixed(3));
+                        localStorage.setItem("stair_stairWidth", (Number(width) || 0).toString());
+                        localStorage.setItem("stair_numSteps", String(results.numberOfRisers));
+                        window.location.assign("/staircase-calculator");
+                      }}
+                      className="mt-4 text-sm font-bold px-4 py-2 bg-ink text-white rounded-full hover:opacity-90"
+                    >
+                      Send to Staircase Calculator →
+                    </button>
                 </MaterialSummary>
 
                 <div className="bg-surface-hover border border-border-color rounded-2xl p-4 sm:p-6 overflow-hidden">
@@ -220,6 +261,7 @@ export default function StaircaseDesignReference() {
         </div>
        </div>
     
+
       <CalculationHistory 
         calculatorId="staircase_design_reference" 
         currentInputs={{ totalHeight, riser, going, width, headroom, landingDepth, occupancy }} 

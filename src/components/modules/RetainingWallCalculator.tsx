@@ -20,6 +20,10 @@ import { FieldTooltip } from "../ui/FieldTooltip";
 
 import { ToolLayout, ToolLayoutInputs, ToolLayoutResults, ToolSection } from "../ui/ToolLayout";
 import { CodeTooltip } from "../ui/CodeTooltip";
+import { useRates } from "../../lib/useRates";
+import { formatRate } from "../../lib/rates";
+import { designRetainingWall } from "../../lib/retainingWallCalc";
+import { CalcSteps, EngineNotices, StructuralExportBar } from "../ui/StructuralExportBar";
 
 
 function InputGroup({ label, children, colSpan = 1 }: { label: React.ReactNode; children: React.ReactNode, colSpan?: number }) {
@@ -44,12 +48,12 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
   // Dimensions
   const [wallH, setWallH] = useState("3.0"); // Height of stem
   const [wallL, setWallL] = useState("10.0"); // Length of wall
-  const [baseW, setBaseW] = useState("2.5"); // Base width
+  const [baseW, setBaseW] = useState("3.0"); // Base width
   const [baseD, setBaseD] = useState("0.4"); // Base thickness
   
   const [stemWTop, setStemWTop] = useState("0.2"); // Stem width top
   const [stemWBot, setStemWBot] = useState("0.4"); // Stem width bottom
-  const [toeProj, setToeProj] = useState("0.7"); // Toe projection
+  const [toeProj, setToeProj] = useState("0.9"); // Toe projection
 
   // Soil Properties
   const [soilDens, setSoilDens] = useState("18"); // gamma kN/m3
@@ -66,6 +70,16 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
   const [vertSpace, setVertSpace] = useState("150");
   const [horizDia, setHorizDia] = useState("10");
   const [horizSpace, setHorizSpace] = useState("200");
+  const [fck, setFck] = useState("25");
+  const [fy, setFy] = useState("500");
+  const [cover, setCover] = useState("40");
+  const [passive, setPassive] = useState(false);
+  const [passiveDepth, setPassiveDepth] = useState("1.0");
+  const [shearKey, setShearKey] = useState(false);
+  const [shearKeyDepth, setShearKeyDepth] = useState("0.5");
+  const [backfillSlope, setBackfillSlope] = useState("0");
+  const [seismicKh, setSeismicKh] = useState("0");
+  const [wastage, setWastage] = useState("5");
   
   const h = parseFloat(wallH) || 0;
   const l = parseFloat(wallL) || 0;
@@ -131,6 +145,27 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
   const isOverturnSafe = FS_overturn >= 2.0;
   const isBearingSafe = q_max <= max_sbc && q_min >= 0 && e <= b / 6;
 
+  const { rates, setRate, table } = useRates();
+  // Engine design (IS 456) — stability + stem/base flexural steel + cost.
+  const design = designRetainingWall({
+    stemHeightM: h, wallLengthM: l, baseWidthM: b, baseDepthM: bd,
+    stemTopM: st, stemBottomM: sb, toeM: tp,
+    gammaKNm3: parseFloat(soilDens) || 0, phiDeg: parseFloat(phiAngle) || 0,
+    surchargeKNm2: parseFloat(surcharge) || 0, mu: parseFloat(frictionCoeff) || 0,
+    sbcKNm2: max_sbc, fck: parseFloat(fck) || 25, fy: parseFloat(fy) || 500,
+    coverMm: parseFloat(cover) || 40,
+    vertDiaMm: parseFloat(vertDia) || 0, vertSpacingMm: parseFloat(vertSpace) || 0,
+    horizDiaMm: parseFloat(horizDia) || 0, horizSpacingMm: parseFloat(horizSpace) || 0,
+    mix: mixRatios[mix] ?? { c: 1, s: 1.5, a: 3 },
+    passivePressure: passive, passiveDepthM: parseFloat(passiveDepth) || 0,
+    shearKey, shearKeyDepthM: parseFloat(shearKeyDepth) || 0,
+    backfillSlopeDeg: parseFloat(backfillSlope) || 0,
+    seismicKh: parseFloat(seismicKh) || 0,
+    wastagePct: parseFloat(wastage) || 0,
+    cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg,
+    sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
+  });
+
   // Concrete BOQ
   const stemVol = (0.5 * (st + sb) * h) * l;
   const baseVol = (b * bd) * l;
@@ -159,25 +194,42 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
   const hLen = l;
   const hWeight = (Math.pow(hD, 2) / 162.28) * hLen * hBars * 2; 
   
-  const totalSteel = vWeight + hWeight; // Rough approx for stem only. Base added later.
+  const stemSteelKg = vWeight + hWeight;
+  const totalSteel = design.totalSteelKg; // Engine: stem + base steel, both designed.
 
   const sendToBOQ = () => {
     const items = [
       {
         id: Math.random().toString(36).substr(2, 9),
         division: "03 - Concrete",
-        description: `RCC Retaining Wall (Length: ${wallL}m, Height: ${wallH}m)`,
-        unit: "m³",
-        quantity: totalConcrete,
-        rate: 0
+        description: `Cement for retaining wall (${mix})`,
+        unit: "bags",
+        quantity: design.materials.cementBags,
+        rate: rates.cementPerBag ?? 0
+      },
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        division: "03 - Concrete",
+        description: `Sand for retaining wall concrete`,
+        unit: "cft",
+        quantity: design.materials.sandCft,
+        rate: rates.sandPerCft ?? 0
+      },
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        division: "03 - Concrete",
+        description: `Aggregate for retaining wall concrete`,
+        unit: "cft",
+        quantity: design.materials.aggCft,
+        rate: rates.crushPerCft ?? 0
       },
       {
         id: Math.random().toString(36).substr(2, 9),
         division: "05 - Metals",
-        description: `Steel Reinforcement for Retaining Wall`,
+        description: `Steel Reinforcement for Retaining Wall (stem ${design.stemSteelKg.toFixed(0)} kg + base ${design.baseSteelKg.toFixed(0)} kg)`,
         unit: "kg",
         quantity: totalSteel,
-        rate: 0
+        rate: rates.steelPerKg ?? 0
       },
     ];
     window.dispatchEvent(new CustomEvent('fill-boq', { detail: items }));
@@ -199,6 +251,14 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
       )}
       
       {/* Structural Layout Wrapper - Reusable across tools */}
+      <p className="text-sm text-txt-secondary leading-relaxed max-w-4xl">
+        Cantilever retaining wall to IS 456:2000 — Rankine active pressure Ka = (1 − sin φ)/(1 + sin φ),
+        sliding FS ≥ 1.5, overturning FS ≥ 2.0, bearing within the middle third. The old defaults
+        (base 2.5 m, toe 0.7 m) failed sliding at FS 1.49 with no remedy; the defaults are now base
+        3.0 m and toe 0.9 m, and the tool solves for the minimum base width that passes sliding.
+        Stem and base steel are both designed — the base is no longer "added later".
+      </p>
+      <EngineNotices errors={design.errors} warnings={design.warnings} />
       <ToolLayout>
         {/* Left Column - Inputs */}
         <ToolLayoutInputs>
@@ -281,6 +341,67 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                 </select>
               </InputGroup>
             </div>
+          </ToolSection>
+
+          {/* Stability Options Section */}
+          <ToolSection title="Stability Options & Design" number={4} color="amber">
+            <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
+              <InputGroup label="Concrete grade (fck) — MPa">
+                <select className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle px-4 py-3" value={fck} onChange={(e) => setFck(e.target.value)}>
+                  {[20, 25, 30, 35, 40].map((g) => (<option key={g} value={g}>M{g}</option>))}
+                </select>
+              </InputGroup>
+              <InputGroup label="Steel grade (fy) — MPa">
+                <select className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle px-4 py-3" value={fy} onChange={(e) => setFy(e.target.value)}>
+                  {[250, 415, 500].map((g) => (<option key={g} value={g}>Fe{g}</option>))}
+                </select>
+              </InputGroup>
+              <InputGroup label="Clear cover (mm)">
+                <input type="number" inputMode="decimal" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={cover} onChange={(e) => setCover(e.target.value)} />
+              </InputGroup>
+              <InputGroup label="Backfill slope (deg)">
+                <input type="number" inputMode="decimal" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={backfillSlope} onChange={(e) => setBackfillSlope(e.target.value)} />
+              </InputGroup>
+              <InputGroup label="Seismic kh (IS 1893)">
+                <input type="number" inputMode="decimal" step="0.01" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={seismicKh} onChange={(e) => setSeismicKh(e.target.value)} />
+              </InputGroup>
+              <InputGroup label="Wastage (%)">
+                <input type="number" inputMode="decimal" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={wastage} onChange={(e) => setWastage(e.target.value)} />
+              </InputGroup>
+              <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                <input type="checkbox" checked={passive} onChange={(e) => setPassive(e.target.checked)} className="w-5 h-5 rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500" />
+                Include passive pressure in front of toe
+              </label>
+              {passive && (
+                <InputGroup label="Passive depth (m)">
+                  <input type="number" inputMode="decimal" step="0.1" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={passiveDepth} onChange={(e) => setPassiveDepth(e.target.value)} />
+                </InputGroup>
+              )}
+              <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                <input type="checkbox" checked={shearKey} onChange={(e) => setShearKey(e.target.checked)} className="w-5 h-5 rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500" />
+                Add shear key under base
+              </label>
+              {shearKey && (
+                <InputGroup label="Shear key depth (m)">
+                  <input type="number" inputMode="decimal" step="0.1" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={shearKeyDepth} onChange={(e) => setShearKeyDepth(e.target.value)} />
+                </InputGroup>
+              )}
+              <InputGroup label={`Cement (${table.currency}/bag)`}>
+                <input type="number" inputMode="decimal" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={rates.cementPerBag ?? ""} onChange={(e) => setRate("cementPerBag", e.target.value === "" ? null : Number(e.target.value))} />
+              </InputGroup>
+              <InputGroup label={`Steel (${table.currency}/kg)`}>
+                <input type="number" inputMode="decimal" className="w-full bg-surface-default rounded-full border border-ui-borderSubtle px-4 py-3" value={rates.steelPerKg ?? ""} onChange={(e) => setRate("steelPerKg", e.target.value === "" ? null : Number(e.target.value))} />
+              </InputGroup>
+            </div>
+            {design.suggestions.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {design.suggestions.map((sg, i) => (
+                  <p key={i} className="text-sm text-txt-secondary bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 py-2">{sg}</p>
+                ))}
+                <p className="text-sm text-txt-secondary">Minimum base width for FS_slide ≥ 1.5: <strong>{design.minBaseWidthM.toFixed(2)} m</strong> (current {b.toFixed(2)} m).</p>
+                <Button onClick={() => setBaseW(design.minBaseWidthM.toFixed(2))} className="text-sm font-medium px-4 py-2 bg-ink text-white rounded-full hover:opacity-90">Apply minimum base width</Button>
+              </div>
+            )}
           </ToolSection>
 
         </ToolLayoutInputs>
@@ -376,7 +497,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                   <div>
                     <h4 className="font-bold text-txt-primary dark:text-txt-primary flex items-center gap-2 mb-3 text-sm uppercase tracking-wider">
                       <ArrowDownToLine className="w-4 h-4 text-ui-errorText" />
-                      Steel (Stem Only)
+                      Steel — Stem + Base (Designed)
                     </h4>
                     
                     <div className="grid grid-cols-2 gap-3 mb-3">
@@ -398,17 +519,47 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                       </InputGroup>
                     </div>
 
-                    <div className="bg-ui-error dark:bg-ui-error/20 border border-ui-errorBorder dark:border-ui-errorBorder/30 rounded-2xl overflow-hidden shadow-brand-sm">
-                      <div className="p-4 flex justify-between items-center">
-                        <span className="font-bold text-txt-secondary dark:text-txt-tertiary">Stem Steel Weight</span>
-                        <span className="text-xl font-bold tabular-nums tracking-tight text-ui-errorText dark:text-ui-errorText">{totalSteel.toFixed(1)} kg</span>
+                    <div className="bg-surface-hover border border-ui-borderSubtle rounded-2xl overflow-hidden shadow-brand-sm">
+                      <div className="p-4 flex justify-between items-center border-b border-ui-borderSubtle">
+                        <span className="font-bold text-txt-secondary">Stem Steel</span>
+                        <span className="text-xl font-bold tabular-nums tracking-tight text-txt-primary">{stemSteelKg.toFixed(1)} kg</span>
                       </div>
+                      <div className="p-4 flex justify-between items-center border-b border-ui-borderSubtle">
+                        <span className="font-bold text-txt-secondary">Base Steel (designed)</span>
+                        <span className="text-xl font-bold tabular-nums tracking-tight text-txt-primary">{design.baseSteelKg.toFixed(1)} kg</span>
+                      </div>
+                      <div className="p-4 flex justify-between items-center">
+                        <span className="font-bold text-txt-secondary">Total Steel</span>
+                        <span className="text-xl font-bold tabular-nums tracking-tight text-txt-primary">{totalSteel.toFixed(1)} kg</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mt-3">
+                      <ResultCard title="Stem Mu (factored)" value={design.stemMuKNmPerM.toFixed(1)} unit="kNm/m" variant="neutral" />
+                      <ResultCard title="Stem Ast" value={design.stemAstMm2PerM.toFixed(0)} unit="mm²/m" variant={design.stemOk ? "neutral" : "warning"} />
+                      <ResultCard title="Toe Mu / Ast" value={`${design.toeMuKNmPerM.toFixed(1)} / ${design.toeAstMm2PerM.toFixed(0)}`} unit="kNm/m · mm²/m" variant="neutral" />
+                      <ResultCard title="Heel Mu / Ast" value={`${design.heelMuKNmPerM.toFixed(1)} / ${design.heelAstMm2PerM.toFixed(0)}`} unit="kNm/m · mm²/m" variant="neutral" />
+                      <ResultCard title="Total cost" value={design.totalCost == null ? "—" : design.totalCost.toLocaleString("en-US")} unit={table.currency} variant="neutral" />
+                      <ResultCard title="Ka / Kp" value={`${design.ka.toFixed(3)} / ${design.kp.toFixed(2)}`} unit="" variant="neutral" />
+                    </div>
+                    <div className="mt-3 space-y-1 text-sm">
+                      {design.costLines.map((l) => (
+                        <div key={l.label} className="flex justify-between"><span className="text-txt-secondary">{l.label}</span><span className="font-mono">{l.amount == null ? "—" : `${formatRate(l.rate, table.currency)} × ${l.qty.toFixed(1)} = ${l.amount.toLocaleString("en-US")}`}</span></div>
+                      ))}
                     </div>
                   </div>
                 </div>
               </MaterialSummary>
             </div>
-            
+            <StructuralExportBar title="Retaining Wall (IS 456)" summaryText={`Retaining wall H=${h} m, L=${l} m, base ${b} m; FS sliding ${design.fsSliding.toFixed(2)} (≥1.5 ${design.slidingOk ? "PASS" : "FAIL"}), FS overturning ${design.fsOverturning.toFixed(2)} (≥2.0), qmax ${design.qMaxKPa.toFixed(1)} kPa; stem Ast ${design.stemAstMm2PerM.toFixed(0)} mm²/m; concrete ${totalConcrete.toFixed(2)} m³, steel ${totalSteel.toFixed(1)} kg (stem ${design.stemSteelKg.toFixed(0)} + base ${design.baseSteelKg.toFixed(0)}).`}
+              boqItems={[
+                { description: `Cement for retaining wall (${mix})`, quantity: design.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
+                { description: "Sand for retaining wall concrete", quantity: design.materials.sandCft, unit: "cft", rate: rates.sandPerCft ?? 0 },
+                { description: "Aggregate for retaining wall concrete", quantity: design.materials.aggCft, unit: "cft", rate: rates.crushPerCft ?? 0 },
+                { description: "Steel reinforcement (stem + base)", quantity: totalSteel, unit: "kg", rate: rates.steelPerKg ?? 0 },
+              ]}
+              totalAmount={design.totalCost} />
+            <CalcSteps steps={design.steps} />
+
         </ToolLayoutResults>
       </ToolLayout>
       

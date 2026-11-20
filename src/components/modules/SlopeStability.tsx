@@ -10,6 +10,8 @@ export default function SlopeStability() {
   const [unitWeight, setUnitWeight] = useState("18");
   const [slopeHeight, setSlopeHeight] = useState("10");
   const [slopeAngle, setSlopeAngle] = useState("30");
+  const [slipDepth, setSlipDepth] = useState("10"); // z, m (defaults to slope height)
+  const [porePressureRatio, setPorePressureRatio] = useState("0"); // ru
   
   const calculateFOS = () => {
     const c = parseFloat(cohesion);
@@ -32,17 +34,17 @@ export default function SlopeStability() {
     const phiRad = (phi * Math.PI) / 180;
     const betaRad = (beta * Math.PI) / 180;
 
-    // VERY simplified Factor of Safety for illustrative circular failure approximation
-    // FOS = (c + gamma * z * cos^2(beta) * tan(phi)) / (gamma * z * sin(beta) * cos(beta))
-    // we use a generalized height instead of z.
-    const drivingForce = gamma * h * Math.sin(betaRad) * Math.cos(betaRad);
+    // Infinite-slope (planar) screening ONLY — this is NOT Bishop's method
+    // (true Bishop needs slip-circle slicing + iteration). No invented factor:
+    // FoS = [c + gamma*z*cos^2(beta)*(1-ru)*tan(phi)] / [gamma*z*sin(beta)*cos(beta)]
+    // Worked defaults (c=20, phi=25, gamma=18, z=H=10, beta=30, ru=0): FoS = 1.06, not 1.44.
+    const z = parseFloat(slipDepth);
+    const ru = parseFloat(porePressureRatio);
+    if (isNaN(z) || z <= 0 || isNaN(ru) || ru < 0 || ru >= 1) return null;
+    const drivingForce = gamma * z * Math.sin(betaRad) * Math.cos(betaRad);
     if (drivingForce === 0) return { fos: "99.99", status: "Stable", color: "text-ui-successText" };
-    
-    const resistingForce = c + gamma * h * Math.pow(Math.cos(betaRad), 2) * Math.tan(phiRad);
-    
-    // Adjusting roughly to match circular typical results (which are often ~1.2 to 1.5 times this simplified formula)
-    const factorAdjustment = 1.35;
-    const fos = Math.max(0, (resistingForce / drivingForce) * factorAdjustment);
+    const resistingForce = c + gamma * z * Math.pow(Math.cos(betaRad), 2) * (1 - ru) * Math.tan(phiRad);
+    const fos = Math.max(0, resistingForce / drivingForce);
     
     let status = "Stable";
     let color = "text-ui-successText";
@@ -64,10 +66,10 @@ export default function SlopeStability() {
       <div className="mb-8">
         <h2 className="text-3xl font-bold tabular-nums tracking-tight text-txt-primary flex items-center gap-3 mb-2">
           <ShieldAlert className="w-8 h-8 text-accent-700" />
-          Slope Stability (Bishop Simplified)
+          Infinite Slope Stability — Screening Only (not Bishop)
         </h2>
         <p className="text-txt-secondary font-medium max-w-2xl">
-          Estimate the Factor of Safety (FOS) against circular failure for slopes using a simplified evaluation.
+          Screening-only infinite-slope Factor of Safety. This is NOT a Bishop circular-slip analysis — use slope-stability software for design.
         </p>
       </div>
 
@@ -134,6 +136,23 @@ export default function SlopeStability() {
                 /></>
               </div>
             </div>
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border-color mt-4">
+              <div>
+                <label className="text-xs font-bold text-txt-tertiary uppercase">Slip-plane depth (z) [m]</label>
+                <input id="a11y-input-503" type="number" inputMode="decimal" value={slipDepth}
+                  onChange={(e) => setSlipDepth(e.target.value)}
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-mono"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-txt-tertiary uppercase">Pore-pressure ratio (ru) [0–0.9]</label>
+                <input id="a11y-input-504" type="number" inputMode="decimal" value={porePressureRatio}
+                  onChange={(e) => setPorePressureRatio(e.target.value)}
+                  className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-mono"
+                />
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-txt-secondary">Infinite-slope screening only: FoS = [c + γ·z·cos²β·(1−ru)·tanφ] / [γ·z·sinβ·cosβ]. No Bishop analysis — use slope-stability software for design. Defaults give FoS 1.06 (Marginal).</p>
           </div>
         </div>
 

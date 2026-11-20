@@ -4,6 +4,7 @@ import { ArrowRight, Triangle, Activity, CheckCircle2, AlertTriangle, Route } fr
 import { SEO } from "../SEO";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { NumberInput } from "../ui/NumberInput";
+import { verticalCurve, ssdForSpeed } from "../../lib/gradientCalc";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 
@@ -26,6 +27,7 @@ export default function GradientCalculator() {
   const [g1, setG1] = useState<number | "">(3.0); // %
   const [g2, setG2] = useState<number | "">(-2.0); // %
   const [designSpeed, setDesignSpeed] = useState<number | "">(80); // km/h
+  const [ssdOverride, setSsdOverride] = useState<number | "">(""); // m (blank = SSD table by speed)
 
   const longitudinalResults = useMemo(() => {
     const ch1 = Number(startChainage) || 0;
@@ -60,32 +62,19 @@ export default function GradientCalculator() {
     return { edgeElev, drop, ratioStr };
   }, [centerElevation, roadWidth, camberSlope]);
 
+  // Correct AASHTO/IRC metric forms (old K = V^2/280 and V^2/180 were invented):
+  // crest L = A*S^2/658, sag L = A*S^2/(120+3.5S), K = L/A.
   const vcResults = useMemo(() => {
     const grade1 = Number(g1) || 0;
     const grade2 = Number(g2) || 0;
     const v = Number(designSpeed) || 0;
-
-    const A = Math.abs(grade1 - grade2); // Algebraic difference
-    const type = grade1 > grade2 ? "Crest" : "Sag";
-
-    // simplified K-values based on standard highway design (AASHTO approximations)
-    // Crest: K = V^2 / 395 approx
-    // Sag: K = V^2 / 120 approx
-    
-    let K = 0;
-    if (v <= 0) K = 0;
-    else if (type === "Crest") K = Math.max(1, (v * v) / (100 * 2.8)); // Basic approximation for Crest stopping sight distance
-    else K = Math.max(1, (v * v) / (120 * 1.5)); // Basic approximation for Sag headlight sight distance
-
-    let Lm = K * A;
-    if (A < 0.5) Lm = 0; // minimal grade change doesn't strictly need a curve
-    
-    // Check minimum length (often V or 0.6V)
-    const minLengthAesthetic = 0.6 * v;
-    let actualL = Math.max(Lm, minLengthAesthetic, 20); // enforce absolute min 20m
-
-    return { A, type, K, requiredLength: actualL };
-  }, [g1, g2, designSpeed]);
+    try {
+      const vc = verticalCurve(grade1, grade2, v, ssdOverride === "" ? undefined : Number(ssdOverride));
+      return { A: vc.aPct, type: vc.type, K: vc.k, requiredLength: vc.lengthM, ssd: vc.ssdM, branch: vc.branch, drainageFlag: vc.drainageFlag };
+    } catch {
+      return { A: Math.abs(grade1 - grade2), type: grade1 > grade2 ? "Crest" : "Sag", K: 0, requiredLength: 0, ssd: ssdForSpeed(v || 80), branch: "Check inputs (grade <= 12%, speed 20-120 km/h).", drainageFlag: false };
+    }
+  }, [g1, g2, designSpeed, ssdOverride]);
 
 
   return (
@@ -99,6 +88,7 @@ export default function GradientCalculator() {
           <Route className="w-6 h-6 text-ui-successText" />
           Highway Gradient & Slope Engineering
         </h2>
+        <p className="text-base font-normal text-txt-secondary leading-relaxed mb-6">Free gradient calculator: longitudinal gradient, camber/crossfall and vertical curves — crest L = A x S squared / 658, sag L = A x S squared / (120+3.5S), K = L/A.</p>
 
         <div className="flex bg-surface-hover p-1 rounded-2xl mb-6 overflow-x-auto hide-scrollbar">
             <Button 
@@ -163,6 +153,7 @@ export default function GradientCalculator() {
                             <NumberInput label="Grade 2 (g2)" unit="%" value={g2} onChange={setG2} />
                             <div className="col-span-2">
                                <NumberInput label="Design Speed (V)" unit="km/h" value={designSpeed} onChange={setDesignSpeed} />
+                               <NumberInput label="Stopping Sight Distance (SSD) — blank = table value" unit="m" value={ssdOverride} onChange={setSsdOverride} />
                             </div>
                         </div>
                         <p className="mt-4 text-base font-normal text-txt-secondary leading-relaxed">
@@ -234,7 +225,8 @@ export default function GradientCalculator() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
                             <ResultCard title="Curve Type" value={vcResults.type} unit="Curve" variant={vcResults.type === "Crest" ? "info" : "primary"} />
                             <ResultCard title="Algebraic Diff (A)" value={vcResults.A.toFixed(1)} unit="%" variant="neutral" />
-                            <ResultCard title="K-Value (Approx)" value={vcResults.K.toFixed(1)} unit="" variant="neutral" />
+                            <ResultCard title="K-Value" value={vcResults.K.toFixed(1)} unit="m/%" variant="neutral" />
+                            <ResultCard title="Stopping Sight Distance" value={vcResults.ssd.toFixed(0)} unit="m" variant="neutral" />
                         </div>
                         
                         <div className="mt-6 flex flex-col gap-3">

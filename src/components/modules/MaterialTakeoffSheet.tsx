@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import { Calculator, ClipboardCopy, Building, Layers, Settings, ChevronRight } from "lucide-react";
 import { CalculationHistory } from '../ui/CalculationHistory';
-import { GenericExportButtons } from "../ui/GenericExportButtons";
+import { sendToBoq } from "../../lib/boq";
+import { useRates } from "../../lib/useRates";
+import toast from "react-hot-toast";
 
 
 type QualityType = "standard" | "premium" | "luxury";
@@ -24,8 +26,8 @@ const THUMB_RULES = {
   plasterCement: 0.10, // bags per sqft
   rccSand: 0.50, // cft per sqft
   pccSand: 0.15, // cft per sqft
-  plasterSand: 0.50, // cft per sqft
-  rccAggregate: 1.00, // cft per sqft
+  plasterSand: 0.85, // cft per sqft — was 0.50, below the published 1.2–1.8 total range
+  rccAggregate: 1.05, // cft per sqft (total aggregate 1.35 with PCC 0.30)
   pccAggregate: 0.30, // cft per sqft
   steel: 3.5, // kg per sqft
   bricks: 10, // nos per sqft
@@ -36,7 +38,9 @@ const THUMB_RULES = {
 };
 
 const MaterialTakeoffSheet: React.FC = () => {
+  const { rates: pkRates, table: rateTable } = useRates("PK");
   const [area, setArea] = useState<number>(1000);
+  const [boqSent, setBoqSent] = useState(false);
   const [floors, setFloors] = useState<number>(1);
   const [quality, setQuality] = useState<QualityType>("standard");
 
@@ -58,6 +62,21 @@ const MaterialTakeoffSheet: React.FC = () => {
   ]);
 
   const [grandTotal, setGrandTotal] = useState<number>(0);
+  // Rates are sourced from the dated CEP rate table (rates.ts), not hardcoded.
+  // Applied once on mount; the Rate column stays editable per row.
+  const ratesApplied = React.useRef(false);
+  useEffect(() => {
+    if (ratesApplied.current) return;
+    ratesApplied.current = true;
+    const byId: Record<string, number | null> = {
+      cm_rcc: pkRates.cementPerBag, cm_pcc: pkRates.cementPerBag, cm_pls: pkRates.cementPerBag,
+      sn_rcc: pkRates.sandPerCft, sn_pcc: pkRates.sandPerCft, sn_pls: pkRates.sandPerCft,
+      ag_rcc: pkRates.crushPerCft, ag_pcc: pkRates.crushPerCft,
+      br_blk: pkRates.bricksPer1000 != null ? pkRates.bricksPer1000 / 1000 : null,
+      st_reb: pkRates.steelPerKg, pt_int: pkRates.paintPerL, pt_ext: pkRates.paintPerL,
+    };
+    setItems((prev) => prev.map((it) => (byId[it.id] != null ? { ...it, rate: byId[it.id] as number, amount: it.quantity * (byId[it.id] as number) } : it)));
+  }, [pkRates]);
 
   useEffect(() => {
     calculateTakeoff();
@@ -127,22 +146,24 @@ const MaterialTakeoffSheet: React.FC = () => {
   };
 
   const copyToBOQ = () => {
-    // In a real app, this would use a global state or export to a CSV/clipboard that the BOQ Generator can read.
-    // For now we'll simulate it with a clipboard copy of tab-separated values.
+    // Real handoff: the BOQ Generator reads these lines from the shared
+    // inbox (localStorage cep_boq_inbox_v1) and offers to load them.
+    sendToBoq(items.map((i) => ({ description: i.name, unit: i.unit, quantity: i.quantity, rate: i.rate, source: "Material Takeoff Sheet" })));
     const textData = items.map(i => `${i.name}\t${i.quantity}\t${i.unit}\t${i.rate}\t${i.amount}`).join("\n");
-    const header = `Material Name\tQuantity\tUnit\tRate\tAmount\n`;
-    navigator.clipboard.writeText(header + textData);
-    alert("Takeoff data copied to clipboard! You can paste this directly into Excel or the BOQ Generator.");
+    navigator.clipboard.writeText(`Material Name\tQuantity\tUnit\tRate\tAmount\n` + textData).catch(() => undefined);
+    setBoqSent(true);
+    toast.success("Sent to BOQ — open the BOQ Generator and load the takeoff lines. A TSV copy is also on your clipboard.");
   };
 
+  const pkRulesSand = () => pkRates.sandPerCft ?? "—";
   return (
     <div className="tool-card p-4 md:p-8 flex flex-col w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
             <Building className="w-6 h-6 text-accent-800" />
             Material Takeoff Sheet
-          </h2>
+          </h1>
           <p className="text-txt-tertiary mt-1">
             Auto-calculate building material quantities based on area, floors, and finishes.
           </p>
@@ -207,6 +228,14 @@ const MaterialTakeoffSheet: React.FC = () => {
         </div>
       </div>
 
+      {(!isFinite(area) || area <= 0 || !isFinite(floors) || floors < 1) && (
+        <p className="mb-4 text-sm font-semibold text-red-600">Enter a built-up area greater than 0 and at least 1 floor.</p>
+      )}
+      <p className="mb-4 text-sm text-txt-tertiary">
+        Rates from the CEP rate table ({rateTable.lastUpdated}): cement Rs {pkRates.cementPerBag ?? "—"}/bag, sand Rs {pkRulesSand()}/cft, crush Rs {pkRates.crushPerCft ?? "—"}/cft, bricks Rs {pkRates.bricksPer1000 ?? "—"}/1,000, steel Rs {pkRates.steelPerKg ?? "—"}/kg, paint Rs {pkRates.paintPerL ?? "—"}/L — indicative, edit any rate in the table. Quantities use thumb rules (cement 0.40 bags/sqft, steel 3.5 kg/sqft, bricks 10/sqft on 9&quot; outer + 4.5&quot; inner walls, sand 1.5 cft/sqft, aggregate 1.35 cft/sqft) with 5% bricks / 10% tiles / 2% cement / 3% steel wastage to add at ordering.
+      </p>
+      {boqSent && <p className="mb-4 text-sm font-semibold text-emerald-700">Takeoff sent to the BOQ Generator — open BOQ to load it.</p>}
+
       {/* Output Table */}
       <div className="overflow-x-auto w-full border border-ui-borderSubtle rounded-2xl">
         <table className="w-full text-left">
@@ -256,7 +285,7 @@ const MaterialTakeoffSheet: React.FC = () => {
         </table>
       </div>
     
-      <CalculationHistory calculatorId="materialtakeoffsheet_tool" currentInputs={{}} />
+      <CalculationHistory calculatorId="materialtakeoffsheet_tool" currentInputs={{ area, floors, quality }} currentResults={{ grandTotal }} />
 </div>
   );
 };

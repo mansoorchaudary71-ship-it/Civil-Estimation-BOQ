@@ -5,14 +5,16 @@ import { cn } from "../../lib/utils";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
+import { ASPHALT_MIXES, type AsphaltMix } from "../../lib/asphaltCalc";
 
 type Tab = "asphalt" | "prime" | "tack";
 
-export default function AsphaltPavingCalculator() {
+export default function AsphaltPavingCalculator({ designStandard }: { designStandard?: string }) {
   const [activeTab, setActiveTab] = useState<Tab>("asphalt");
 
   return (
     <div className="w-full text-txt-primary font-sans md:p-4">
+      {designStandard && (<p className="text-sm text-txt-secondary px-4 md:px-0">Design standard: <strong className="text-txt-primary">{designStandard}</strong> — asphalt quantities use MoRTH densities (BC 2355 / DBM 2370 / BM 2160 kg/m³).</p>)}
       <div className="w-full md:max-w-7xl md:mx-auto pb-4 px-4 md:px-0">
       <div className="flex overflow-x-auto pb-4 gap-2 mb-8 p-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <UniversalTabs tabs={[{id: "asphalt", label: "Asphalt", icon: <Layers className="w-5 h-5" />}]} activeTab={activeTab === "asphalt" ? "asphalt" : ""} onTabChange={() => setActiveTab("asphalt")} />
@@ -35,9 +37,11 @@ export default function AsphaltPavingCalculator() {
 // --- Calculators ---
 
 function AsphaltCalculator() {
-  const [length, setLength] = useState<number | "">("");
-  const [width, setWidth] = useState<number | "">("");
-  const [thickness, setThickness] = useState<number | "">("");
+  const [length, setLength] = useState<number | "">(100);
+  const [width, setWidth] = useState<number | "">(7);
+  const [thickness, setThickness] = useState<number | "">(50);
+  const [mix, setMix] = useState<AsphaltMix>("BC");
+  const [wastagePct, setWastagePct] = useState<number | "">(10);
   
   // Use meters/cm by default for calculations
   const [lengthUnit, setLengthUnit] = useState<"m" | "ft">("m");
@@ -63,14 +67,20 @@ function AsphaltCalculator() {
     // Volume in cubic meters = length(m) * width(m) * thickness(m)
     const volume = l * w * (t / 1000);
     
-    // Standard asphalt compacted density is approx 2320 kg/m³ or 2.32 tons/m³
-    const density = 2320; 
+    // MoRTH density by mix (BC 2355 / DBM 2370 / BM 2160 kg/m³); wastage
+    // default 10% (5% simple rectangle / 15% hand-laid); loose volume +20%.
+    const density = ASPHALT_MIXES[mix].densityKgM3;
     const kg = volume * density;
     const tons = kg / 1000;
+    const wastage = Number(wastagePct) || 0;
+    const orderTons = Math.ceil(tons * (1 + wastage / 100) * 2) / 2; // round up to nearest 0.5 t
 
     return {
       tons: tons.toFixed(2),
+      orderTons: orderTons.toFixed(2),
       volume: volume.toFixed(2),
+      looseVolume: (volume * 1.2).toFixed(2),
+      bitumenTons: (tons * (ASPHALT_MIXES[mix].bitumenPct / 100)).toFixed(2),
       area: (l * w).toFixed(2)
     };
   };

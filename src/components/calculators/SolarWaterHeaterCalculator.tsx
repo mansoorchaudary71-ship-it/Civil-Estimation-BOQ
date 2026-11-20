@@ -1,346 +1,194 @@
 import { Button } from '../ui/Button';
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Sun, Users, Thermometer, Droplets, Battery, Zap, DollarSign, Calculator, Settings, AlertCircle, Info } from 'lucide-react';
-import { FormulaAccordion, FormulaStep } from '../ui/FormulaAccordion';
+import React, { useMemo, useState } from 'react';
+import { Sun, AlertCircle, Copy, Printer, Download, Check } from 'lucide-react';
+import { FormulaAccordion } from '../ui/FormulaAccordion';
+import { NumberInput } from '../ui/NumberInput';
+import { ResultCard } from '../ui/ResultCard';
+import { MaterialSummary } from '../ui/MaterialSummary';
+import { CalculationHistory } from '../ui/CalculationHistory';
+import { exportBOQToPDF } from '../../lib/pdfExport';
+import {
+  SOLAR_COLLECTOR_TYPES,
+  calcSolarWaterHeater,
+  validateSolarWaterHeaterInputs,
+  type SolarCollectorType,
+} from '../../lib/solarWaterHeaterCalc';
 
 
 type UnitSystem = 'metric' | 'imperial';
-
-interface CalculationResult {
-  totalDemand: number;
-  collectorArea: number;
-  tankCapacity: number;
-  annualSavings: number;
-}
+const CUR_SYMBOLS: Record<string, string> = { PKR: "Rs", INR: "₹", AED: "AED" };
+const INLET_PRESETS: Record<string, number> = { Lahore: 18, Karachi: 22, Islamabad: 12, Dubai: 24, Delhi: 16 };
+const RADIATION_PRESETS: Record<string, number> = { Lahore: 5.0, Karachi: 5.6, Islamabad: 5.0, Dubai: 6.2, Delhi: 5.2 };
 
 export function SolarWaterHeaterCalculator() {
   const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
-  
-  // Inputs
   const [occupants, setOccupants] = useState<number>(4);
-  const [usagePerPerson, setUsagePerPerson] = useState<number>(40); // LPD
-  const [solarRadiation, setSolarRadiation] = useState<number>(5.0); // Medium
-  const [targetTemp, setTargetTemp] = useState<number>(60); // C
-  const [inletTemp, setInletTemp] = useState<number>(15); // C
-  const [efficiency, setEfficiency] = useState<number>(50); // %
-  const [energyCost, setEnergyCost] = useState<number>(0.15); // $ / kWh
+  const [usagePerPerson, setUsagePerPerson] = useState<number>(50);
+  const [solarRadiation, setSolarRadiation] = useState<number>(5.0);
+  const [targetTemp, setTargetTemp] = useState<number>(60);
+  const [inletTemp, setInletTemp] = useState<number>(15);
+  const [collectorType, setCollectorType] = useState<SolarCollectorType>('flatPlate');
+  const [efficiency, setEfficiency] = useState<number>(50);
+  const [solarFraction, setSolarFraction] = useState<number>(0.6);
+  const [energyCost, setEnergyCost] = useState<number>(50);
+  const [currency, setCurrency] = useState("PKR");
+  const [ratePerM2, setRatePerM2] = useState<number | "">("");
+  const [tankCostPerLitre, setTankCostPerLitre] = useState<number | "">("");
+  const [copied, setCopied] = useState(false);
 
-  const [result, setResult] = useState<CalculationResult>({
-    totalDemand: 0,
-    collectorArea: 0,
-    tankCapacity: 0,
-    annualSavings: 0,
-  });
+  const { result, errors } = useMemo(() => {
+    try {
+      const inp = {
+        people: Number(occupants),
+        usePerPersonL: Number(usagePerPerson),
+        targetTempC: Number(targetTemp),
+        inletTempC: Number(inletTemp),
+        radiationKwhPerM2PerDay: Number(solarRadiation),
+        collectorType,
+        efficiencyPct: Number(efficiency),
+        solarFraction: Number(solarFraction),
+        energyCostPerKwh: Number(energyCost),
+        ratePerM2Collector: ratePerM2 === "" ? undefined : Number(ratePerM2),
+        tankCostPerLitre: tankCostPerLitre === "" ? undefined : Number(tankCostPerLitre),
+      };
+      const errs = validateSolarWaterHeaterInputs(inp);
+      if (errs.length > 0) return { result: null, errors: errs };
+      return { result: calcSolarWaterHeater(inp), errors: [] as string[] };
+    } catch (e) {
+      return { result: null, errors: [(e as Error).message] };
+    }
+  }, [occupants, usagePerPerson, targetTemp, inletTemp, solarRadiation, collectorType, efficiency, solarFraction, energyCost, ratePerM2, tankCostPerLitre]);
 
-  useEffect(() => {
-    // Math
-    const demandLPD = occupants * usagePerPerson;
-    
-    // Q = m * c * dT
-    // m = demandLPD (since 1L water = 1kg)
-    // c = 4.184 kJ/kgC
-    // dT = targetTemp - inletTemp
-    const deltaT = targetTemp - inletTemp;
-    const energyRequiredKJ = demandLPD * 4.184 * deltaT;
-    const energyRequiredKWh = energyRequiredKJ / 3600;
-    
-    // Collector Area = Q / (Irradiance * Efficiency)
-    const effFactor = efficiency / 100;
-    const areaM2 = energyRequiredKWh / (solarRadiation * effFactor);
-    
-    // Tank Capacity (Rule of thumb: 1.5x daily demand)
-    const tankLiters = demandLPD * 1.5;
-    
-    // Annual Savings
-    const dailySavings = energyRequiredKWh * energyCost;
-    const annualSavings = dailySavings * 365;
+  const sym = CUR_SYMBOLS[currency] ?? "Rs";
+  const fmt = (v: number | null | undefined) => (v == null || !isFinite(v) ? "—" : `${sym} ${Math.round(v).toLocaleString("en-US")}`);
+  const collector = SOLAR_COLLECTOR_TYPES[collectorType];
 
-    setResult({
-      totalDemand: demandLPD,
-      collectorArea: areaM2 > 0 ? areaM2 : 0,
-      tankCapacity: tankLiters > 0 ? tankLiters : 0,
-      annualSavings: annualSavings > 0 ? annualSavings : 0
+  const summaryText = result
+    ? `Solar water heater — ${occupants} people, ${result.demandLPerDay} L/day\nCollector area ${result.collectorAreaM2.toFixed(2)} m² (${result.panels} x 2 m² panels, ${result.installedAreaM2} m² installed)\nTank ${result.tankL} L; backup energy ${result.backupKwhPerDay.toFixed(2)} kWh/day\nAnnual saving ${fmt(result.annualSavings)}; system cost ${fmt(result.systemCost)}; payback ${result.paybackYears?.toFixed(1) ?? "—"} years`
+    : "";
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(summaryText); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ }
+  };
+  const handlePdf = () => {
+    if (!result) return;
+    exportBOQToPDF({
+      projectName: "Solar Water Heater",
+      date: new Date().toLocaleDateString(),
+      items: [
+        { description: `Collector (${collector.label})`, quantity: result.collectorAreaM2, unit: "m²", rate: ratePerM2 === "" ? collector.ratePerM2 : Number(ratePerM2), amount: result.collectorCost },
+        { description: "Storage tank", quantity: result.tankL, unit: "L", rate: tankCostPerLitre === "" ? 800 : Number(tankCostPerLitre), amount: result.tankCost },
+        { description: "Installation", quantity: 1, unit: "lot", rate: result.installationCost, amount: result.installationCost },
+      ],
+      totalAmount: result.systemCost,
     });
-  }, [occupants, usagePerPerson, solarRadiation, targetTemp, inletTemp, efficiency, energyCost]);
+  };
+  const applyCity = (city: string) => {
+    if (INLET_PRESETS[city] != null) setInletTemp(INLET_PRESETS[city]);
+    if (RADIATION_PRESETS[city] != null) setSolarRadiation(RADIATION_PRESETS[city]);
+  };
+  const applyCollector = (t: SolarCollectorType) => {
+    setCollectorType(t);
+    setEfficiency(SOLAR_COLLECTOR_TYPES[t].efficiencyPct);
+  };
 
-  const convertLtoGal = (l: number) => l * 0.264172;
-  const convertM2toSqFt = (m: number) => m * 10.7639;
-  const convertCtoF = (c: number) => (c * 9/5) + 32;
-
-  const displayTemp = (c: number) => unitSystem === 'metric' ? `${c.toFixed(1)}°C` : `${convertCtoF(c).toFixed(1)}°F`;
-  const displayVolume = (l: number) => unitSystem === 'metric' ? `${l.toLocaleString(undefined, {maximumFractionDigits: 0})} L` : `${convertLtoGal(l).toLocaleString(undefined, {maximumFractionDigits: 0})} Gal`;
-  const displayArea = (m: number) => unitSystem === 'metric' ? `${m.toFixed(2)} m²` : `${convertM2toSqFt(m).toFixed(2)} sq ft`;
+  const demandL = unitSystem === 'imperial' && result ? result.demandLPerDay * 0.264172 : result?.demandLPerDay;
+  const tankL = unitSystem === 'imperial' && result ? result.tankL * 0.264172 : result?.tankL;
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 md:p-8 shadow-brand-sm">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-6 shadow-brand-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-100 text-accent-800 mb-4">
-              <Sun size={24} />
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-txt-primary mb-2">Solar Water Heater Sizing</h1>
-            <p className="text-txt-secondary">Calculate recommended collector area and tank capacity based on hot water demand.</p>
+            <h2 className="text-xl font-bold text-txt-primary flex items-center gap-2"><Sun className="text-accent-700" /> Solar Water Heater Calculator</h2>
+            <p className="text-sm text-txt-secondary mt-1">Collector area, tank size, system cost and payback — in {currency}, not hardcoded USD. Hot-water demand is 50 L/person/day.</p>
           </div>
-          
-          <div className="flex bg-surface-hover p-1 rounded-xl">
-            <Button
-              onClick={() => setUnitSystem('metric')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'metric' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
-            >
-              Metric
-            </Button>
-            <Button
-              onClick={() => setUnitSystem('imperial')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${unitSystem === 'imperial' ? 'bg-surface-default text-txt-primary shadow-brand-sm' : 'text-txt-secondary hover:text-txt-primary'}`}
-            >
-              Imperial
-            </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => setUnitSystem('metric')} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${unitSystem === 'metric' ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>Metric</Button>
+            <Button onClick={() => setUnitSystem('imperial')} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${unitSystem === 'imperial' ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>Imperial</Button>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          <Button onClick={handleCopy} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover">{copied ? <Check size={16} /> : <Copy size={16} />} {copied ? "Copied" : "Copy results"}</Button>
+          <Button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover"><Printer size={16} /> Print</Button>
+          <Button onClick={handlePdf} disabled={!result} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700"><Download size={16} /> Download PDF</Button>
+        </div>
+
+        {errors.length > 0 && (
+          <div className="mb-6 bg-ui-error border border-ui-errorBorder rounded-2xl p-4 text-sm text-ui-errorText flex gap-2"><AlertCircle className="w-4 h-4 shrink-0 mt-0.5" /><div>{errors.map((e) => <p key={e}>{e}</p>)}</div></div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">City preset (sets inlet temperature &amp; radiation)</label>
+              <select onChange={(e) => applyCity(e.target.value)} defaultValue="" className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                <option value="" disabled>Choose a city…</option>
+                {Object.keys(INLET_PRESETS).map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <NumberInput label="Number of People" value={occupants} onChange={(v) => setOccupants(v === "" ? 0 : v)} />
+            <NumberInput label="Hot Water Use per Person" unit="L/day" value={usagePerPerson} onChange={(v) => setUsagePerPerson(v === "" ? 0 : v)} />
+            <div className="grid grid-cols-2 gap-4">
+              <NumberInput label="Target Temperature" unit="°C" value={targetTemp} onChange={(v) => setTargetTemp(v === "" ? 0 : v)} />
+              <NumberInput label="Inlet Water Temperature" unit="°C" value={inletTemp} onChange={(v) => setInletTemp(v === "" ? 0 : v)} />
+            </div>
+            <NumberInput label="Solar Radiation" unit="kWh/m²/day" value={solarRadiation} onChange={(v) => setSolarRadiation(v === "" ? 0 : v)} />
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">Collector Type</label>
+              <select value={collectorType} onChange={(e) => applyCollector(e.target.value as SolarCollectorType)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                <option value="flatPlate">Flat-plate (selective) — ~50% efficiency</option>
+                <option value="evacuatedTube">Evacuated tube — ~65% efficiency</option>
+              </select>
+              <p className="text-xs text-txt-tertiary mt-2">{collector.note}</p>
+            </div>
+            <NumberInput label="Collector Efficiency" unit="%" value={efficiency} onChange={(v) => setEfficiency(v === "" ? 0 : v)} />
+            <NumberInput label="Solar Fraction" unit="0.3–0.9" value={solarFraction} onChange={(v) => setSolarFraction(v === "" ? 0 : v)} />
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">Currency</label>
+              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                <option value="PKR">PKR</option><option value="INR">INR</option><option value="AED">AED</option>
+              </select>
+            </div>
+            <NumberInput label={`Energy Cost per kWh (${sym})`} unit={sym} value={energyCost} onChange={(v) => setEnergyCost(v === "" ? 0 : v)} />
+            <NumberInput label={`Collector Rate per m² (${sym}) — blank = ${collector.ratePerM2}`} unit={sym} value={ratePerM2} onChange={setRatePerM2} />
+            <NumberInput label={`Tank Cost per Litre (${sym}) — blank = 800`} unit={sym} value={tankCostPerLitre} onChange={setTankCostPerLitre} />
+          </div>
+
+          <div className="space-y-6">
+            {result ? (
+              <MaterialSummary title="Solar Water Heater Results" totalLabel="System Cost" totalValue={fmt(result.systemCost)} totalUnit="" relatedToolIds={[]}>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <ResultCard title="Daily Demand" value={demandL?.toFixed(0) ?? "—"} unit={unitSystem === 'imperial' ? "gal/day" : "L/day"} variant="neutral" />
+                  <ResultCard title="Collector Area" value={result.collectorAreaM2.toFixed(2)} unit="m²" variant="primary" />
+                  <ResultCard title="Panels (2 m² each)" value={result.panels} unit={`= ${result.installedAreaM2} m²`} variant="neutral" />
+                  <ResultCard title="Tank Size" value={tankL?.toFixed(0) ?? "—"} unit={unitSystem === 'imperial' ? "gal" : "L"} variant="primary" />
+                  <ResultCard title="Heat Needed" value={result.energyKwhPerDay.toFixed(2)} unit="kWh/day" variant="info" />
+                  <ResultCard title="Backup Energy" value={result.backupKwhPerDay.toFixed(2)} unit="kWh/day" variant="warning" />
+                  <ResultCard title="Annual Saving" value={fmt(result.annualSavings)} unit="/ year" variant="success" />
+                  <ResultCard title="Payback" value={result.paybackYears?.toFixed(1) ?? "—"} unit="years" variant="primary" />
+                </div>
+                <div className="mt-4 bg-accent-50 border border-accent-200 p-4 rounded-2xl text-sm space-y-1">
+                  <div className="flex justify-between"><span className="text-txt-secondary">Collector cost</span><span className="font-mono font-bold">{fmt(result.collectorCost)}</span></div>
+                  <div className="flex justify-between"><span className="text-txt-secondary">Tank cost ({result.tankL} L)</span><span className="font-mono font-bold">{fmt(result.tankCost)}</span></div>
+                  <div className="flex justify-between"><span className="text-txt-secondary">Installation (10%)</span><span className="font-mono font-bold">{fmt(result.installationCost)}</span></div>
+                  <div className="flex justify-between"><span className="text-txt-secondary">Solar energy per year</span><span className="font-mono font-bold">{result.annualSolarKwh.toFixed(0)} kWh</span></div>
+                </div>
+              </MaterialSummary>
+            ) : (
+              <div className="p-6 rounded-2xl bg-surface-default border border-ui-borderSubtle text-txt-tertiary text-sm">Enter valid inputs to see the sizing.</div>
+            )}
+            {result && <FormulaAccordion steps={result.steps.map((s, i) => ({ id: i + 1, label: `Step ${i + 1}`, theoretical: "Q = m·c·ΔT", applied: s }))} />}
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Input Parameters */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
-            <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2">
-              <Settings size={20} className="text-accent-800" />
-              Basic Parameters
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Occupants */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
-                  <Users size={16} className="text-txt-tertiary" />
-                  Number of Occupants
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min="1"
-                    value={occupants}
-                    onChange={(e) => setOccupants(Math.max(1, Number(e.target.value)))}
-                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink transition-all outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Usage per person */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
-                  <Droplets size={16} className="text-txt-tertiary" />
-                  Usage per Person (Liters/day)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min="10"
-                    value={usagePerPerson}
-                    onChange={(e) => setUsagePerPerson(Math.max(10, Number(e.target.value)))}
-                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink transition-all outline-none"
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-txt-tertiary text-sm">
-                    LPD
-                  </div>
-                </div>
-                <p className="text-xs text-txt-tertiary">Typical: 30-50 LPD per person</p>
-              </div>
-
-              {/* Solar Radiation */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
-                  <Sun size={16} className="text-txt-tertiary" />
-                  Solar Radiation (kWh/m²/day)
-                </label>
-                <select
-                  value={solarRadiation}
-                  onChange={(e) => setSolarRadiation(Number(e.target.value))}
-                  className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink transition-all outline-none appearance-none"
-                >
-                  <option value={3.5}>Low Exposure (3.5 kWh/m²/day)</option>
-                  <option value={5.0}>Medium Exposure (5.0 kWh/m²/day)</option>
-                  <option value={6.5}>High Exposure (6.5 kWh/m²/day)</option>
-                </select>
-              </div>
-
-              {/* Target Temp */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-txt-secondary flex items-center gap-2">
-                  <Thermometer size={16} className="text-txt-tertiary" />
-                  Target Water Temp (°C)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min="40"
-                    max="90"
-                    value={targetTemp}
-                    onChange={(e) => setTargetTemp(Number(e.target.value))}
-                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink transition-all outline-none"
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-txt-tertiary text-sm">
-                    °C
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Advanced Parameters */}
-          <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm space-y-6">
-            <h2 className="text-lg font-bold text-txt-primary flex items-center gap-2">
-              <Zap size={20} className="text-accent-800" />
-              Advanced & Economics
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Inlet Temp */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-txt-secondary">Cold Inlet Temp (°C)</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={inletTemp}
-                    onChange={(e) => setInletTemp(Number(e.target.value))}
-                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink transition-all outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Efficiency */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-txt-secondary">System Efficiency (%)</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min="10"
-                    max="100"
-                    value={efficiency}
-                    onChange={(e) => setEfficiency(Number(e.target.value))}
-                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink transition-all outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Energy Cost */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-txt-secondary">Energy Cost ($/kWh)</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={energyCost}
-                    onChange={(e) => setEnergyCost(Number(e.target.value))}
-                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-ink transition-all outline-none"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Results Panel */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-gradient-to-br from-ink to-ink rounded-2xl p-6 shadow-brand-lg text-white space-y-6">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <Calculator size={24} className="text-accent-200" />
-              Sizing Results
-            </h2>
-
-            <div className="space-y-4">
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/20">
-                <div className="flex items-center gap-3 mb-1">
-                  <Droplets size={18} className="text-accent-200" />
-                  <span className="text-accent-100 font-medium">Daily Hot Water Demand</span>
-                </div>
-                <div className="text-3xl font-bold">
-                  {displayVolume(result.totalDemand)}
-                  <span className="text-lg font-normal text-accent-200 ml-1">/ day</span>
-                </div>
-              </div>
-
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/20">
-                <div className="flex items-center gap-3 mb-1">
-                  <Sun size={18} className="text-accent-200" />
-                  <span className="text-accent-100 font-medium">Req. Collector Area</span>
-                </div>
-                <div className="text-3xl font-bold text-accent-50">
-                  {displayArea(result.collectorArea)}
-                </div>
-              </div>
-
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/20">
-                <div className="flex items-center gap-3 mb-1">
-                  <Battery size={18} className="text-accent-200" />
-                  <span className="text-accent-100 font-medium">Recommended Tank</span>
-                </div>
-                <div className="text-3xl font-bold text-accent-50">
-                  {displayVolume(result.tankCapacity)}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Economics Card */}
-          <div className="bg-ui-success rounded-2xl border border-ui-successBorder p-6 shadow-brand-sm">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-ui-success text-ui-successText flex items-center justify-center flex-shrink-0">
-                <DollarSign size={24} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-ui-successText mb-1">Estimated Savings</h3>
-                <p className="text-sm text-ui-successText mb-3">Annual energy savings based on your inputs and energy cost.</p>
-                <div className="text-3xl font-bold text-ui-successText">
-                  ${result.annualSavings.toLocaleString(undefined, {maximumFractionDigits: 0})}
-                  <span className="text-lg text-ui-successText font-normal"> / year</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          
-          <FormulaAccordion 
-            steps={[
-              {
-                id: 1,
-                label: "1. Daily Hot Water Demand (Volume)",
-                theoretical: "Demand (LPD) = Occupants × Usage per Person",
-                applied: `Demand = ${occupants} × ${usagePerPerson} = ${result.totalDemand.toLocaleString()} L/day`
-              },
-              {
-                id: 2,
-                label: "2. Energy Required (Q)",
-                theoretical: "Q (kJ) = m × c × ΔT\nQ (kWh) = Q (kJ) / 3600\nWhere:\nm = Mass of water (Demand in kg, 1L ≈ 1kg)\nc = Specific heat capacity (4.184 kJ/kg°C)\nΔT = Target Temp - Cold Inlet Temp",
-                applied: `ΔT = ${targetTemp}°C - ${inletTemp}°C = ${targetTemp - inletTemp}°C\nQ = ${result.totalDemand} kg × 4.184 × ${targetTemp - inletTemp}\nQ = ${(result.totalDemand * 4.184 * (targetTemp - inletTemp)).toLocaleString(undefined, {maximumFractionDigits: 1})} kJ\nQ = ${((result.totalDemand * 4.184 * (targetTemp - inletTemp)) / 3600).toLocaleString(undefined, {maximumFractionDigits: 2})} kWh`
-              },
-              {
-                id: 3,
-                label: "3. Solar Collector Area",
-                theoretical: "Area (m²) = Q (kWh) / (Solar Radiation × System Efficiency)",
-                applied: `Area = ${((result.totalDemand * 4.184 * (targetTemp - inletTemp)) / 3600).toLocaleString(undefined, {maximumFractionDigits: 2})} / (${solarRadiation} × ${efficiency / 100})\nArea = ${result.collectorArea.toFixed(2)} m²`
-              },
-              {
-                id: 4,
-                label: "4. Recommended Tank Capacity",
-                theoretical: "Tank Size = Daily Demand × 1.5\n(Rule of thumb for thermal storage)",
-                applied: `Tank Size = ${result.totalDemand} × 1.5 = ${result.tankCapacity.toLocaleString()} L`
-              }
-            ]} 
-          />
-
-          <div className="bg-surface-hover rounded-2xl p-4 border border-ui-borderSubtle flex gap-3 text-sm text-txt-secondary">
-            <Info size={20} className="text-txt-tertiary flex-shrink-0" />
-            <p>
-              Calculations assume a standard specific heat of water (4.184 kJ/kg°C) and generic flat-plate/evacuated tube solar collector efficiencies. Actual sizing may vary based on specific manufacturer specs and local climate nuances.
-            </p>
-          </div>
-        </div>
+      <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 text-sm text-txt-secondary">
+        Planning estimate only — not a substitute for a licensed engineer. Rates are indicative (Nov 2026) — confirm collector and tank prices with your supplier. On freezing nights and in hard-water areas, follow the manufacturer&apos;s freeze and scaling guidance.
       </div>
+      <CalculationHistory calculatorId="solar_water_heater" currentInputs={{ occupants, usagePerPerson, targetTemp, inletTemp, solarRadiation, efficiency, solarFraction, energyCost }} currentResults={result ? { collectorAreaM2: result.collectorAreaM2, tankL: result.tankL, systemCost: result.systemCost } : {}} />
     </div>
   );
 }
+
+export default SolarWaterHeaterCalculator;

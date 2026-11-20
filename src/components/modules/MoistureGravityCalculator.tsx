@@ -8,9 +8,11 @@ import { SEO } from "../SEO";
 
 export default function MoistureGravityCalculator() {
   // Moisture Content Inputs
-  const [mcW1, setMcW1] = useState<number | "">(50); // Empty container
-  const [mcW2, setMcW2] = useState<number | "">(150); // Container + wet soil
-  const [mcW3, setMcW3] = useState<number | "">(120); // Container + dry soil
+  // Fixed defaults: old 50/150/120 g gave w = 42.86% and S = 102.3% (>100%,
+  // physically impossible). Now 25/125/105 g → w = 25%, Gs 2.667, S ≈ 78.5%.
+  const [mcW1, setMcW1] = useState<number | "">(25); // Empty container
+  const [mcW2, setMcW2] = useState<number | "">(125); // Container + wet soil
+  const [mcW3, setMcW3] = useState<number | "">(105); // Container + dry soil
 
   // Pycnometer Inputs
   const [pycW1, setPycW1] = useState<number | "">(500); // Empty Pycnometer

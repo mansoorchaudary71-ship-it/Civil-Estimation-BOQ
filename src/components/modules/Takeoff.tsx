@@ -39,7 +39,37 @@ import {
   formatDualMeasurement,
   convertLength,
 } from "../../../src/utils/measurements";
-import { useTakeoff } from "../../../src/context/TakeoffContext";
+import { useTakeoff, SAMPLE_BOQ } from "../../../src/context/TakeoffContext";
+import { getRates } from "../../lib/rates";
+import { analyseMix, MIXES } from "../../lib/rateAnalysis";
+import { generatePDFReport, generateExcelReport, getMappedQty } from "../../utils/reports";
+import toast from "react-hot-toast";
+
+/**
+ * Assembly rates priced from the dated PK rate table (2026-11-12) via the
+ * CPWD rate-analysis engine — material + 1% water + 15% CPOH, labour
+ * excluded, so verify before tendering. Steel comes straight from rates.ts
+ * (270 PKR/kg). Excavation / formwork / road-course rates have NO source in
+ * rates.ts, so the old example values are kept and labelled as examples in
+ * the export bar — they are not market rates.
+ */
+const PK_TABLE = getRates("PK");
+const PK_IN = {
+  cementPerBag: PK_TABLE.rates.cementPerBag ?? 1450,
+  sandPerCft: PK_TABLE.rates.sandPerCft ?? 90,
+  crushPerCft: PK_TABLE.rates.crushPerCft ?? 90,
+  steelPerKg: PK_TABLE.rates.steelPerKg ?? 270,
+  labour: 0,
+  equipment: 0,
+};
+const PCC148_RATE = Math.round(analyseMix(MIXES.find((m) => m.id === "pcc148")!, PK_IN).finalRate);
+const RCC124_RATE = Math.round(analyseMix(MIXES.find((m) => m.id === "rcc124")!, { ...PK_IN, steelKgPerM3: 100 }).finalRate);
+const BRICKWORK_RATE = Math.round(
+  analyseMix(MIXES.find((m) => m.id === "brickwork14")!, PK_IN).finalRate
+  + 500 * ((PK_TABLE.rates.bricksPer1000 ?? 23355) / 1000), // ~500 bricks per m³
+);
+const PLASTER_RATE = Math.round(analyseMix(MIXES.find((m) => m.id === "plaster14")!, PK_IN).finalRate / 10);
+const STEEL_RATE = PK_TABLE.rates.steelPerKg ?? 270;
 
 const ASSEMBLIES = [
   {
@@ -58,9 +88,9 @@ const ASSEMBLIES = [
       const d = parseFloat(inputs.depth || "0");
       const vol = l * w * d;
       return [
-        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: vol, linkedMeasurementIds: [id] },
-        { desc: "PCC Base", unit: "m³", rate: 85.0, qtyOverride: l * w * 0.15, linkedMeasurementIds: [id] },
-        { desc: "RCC Foundation", unit: "m³", rate: 140.0, qtyOverride: l * (w-0.2) * (d-0.15), linkedMeasurementIds: [id] },
+        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: vol, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "PCC Base", unit: "m³", rate: PCC148_RATE, qtyOverride: l * w * 0.15, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "RCC Foundation", unit: "m³", rate: RCC124_RATE, qtyOverride: l * (w-0.2) * (d-0.15), linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -72,14 +102,16 @@ const ASSEMBLIES = [
     inputs: [
       { key: "side", label: "Side (m)", type: "number", placeholder: "e.g. 1.2" },
       { key: "depth", label: "Depth (m)", type: "number", placeholder: "e.g. 1.5" },
+      { key: "rccDepth", label: "RCC Depth (m)", type: "number", placeholder: "e.g. 0.4" },
     ],
     generateBoq: (id: string, inputs: any) => {
       const s = parseFloat(inputs.side || "0");
       const d = parseFloat(inputs.depth || "0");
+      const rd = parseFloat(inputs.rccDepth || "0.4");
       return [
-        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: s * s * d, linkedMeasurementIds: [id] },
-        { desc: "PCC Pad", unit: "m³", rate: 85.0, qtyOverride: s * s * 0.1, linkedMeasurementIds: [id] },
-        { desc: "RCC Footing", unit: "m³", rate: 140.0, qtyOverride: (s-0.2) * (s-0.2) * 0.4, linkedMeasurementIds: [id] },
+        { desc: "Excavation", unit: "m³", rate: 12.5, qtyOverride: s * s * d, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "PCC Pad", unit: "m³", rate: PCC148_RATE, qtyOverride: s * s * 0.1, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "RCC Footing", unit: "m³", rate: RCC124_RATE, qtyOverride: (s-0.2) * (s-0.2) * rd, linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -92,14 +124,16 @@ const ASSEMBLIES = [
       { key: "length", label: "Length (m)", type: "number", placeholder: "e.g. 5" },
       { key: "height", label: "Height (m)", type: "number", placeholder: "e.g. 3" },
       { key: "thick", label: "Thickness (m)", type: "number", placeholder: "e.g. 0.23" },
+      { key: "sides", label: "Plaster sides (1 or 2)", type: "number", placeholder: "e.g. 2" },
     ],
     generateBoq: (id: string, inputs: any) => {
       const l = parseFloat(inputs.length || "0");
       const h = parseFloat(inputs.height || "0");
       const t = parseFloat(inputs.thick || "0");
+      const sides = parseFloat(inputs.sides || "2");
       return [
-        { desc: "Brick Masonry", unit: "m³", rate: 110.0, qtyOverride: l * h * t, linkedMeasurementIds: [id] },
-        { desc: "Plastering (2 sides)", unit: "m²", rate: 15.0, qtyOverride: l * h * 2, linkedMeasurementIds: [id] },
+        { desc: "Brick Masonry", unit: "m³", rate: BRICKWORK_RATE, qtyOverride: l * h * t, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: `Plastering (${sides} side${sides === 1 ? "" : "s"})`, unit: "m²", rate: PLASTER_RATE, qtyOverride: l * h * sides, linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -111,14 +145,16 @@ const ASSEMBLIES = [
     inputs: [
       { key: "area", label: "Area (m²)", type: "number", placeholder: "e.g. 20" },
       { key: "thick", label: "Thickness (m)", type: "number", placeholder: "e.g. 0.15" },
+      { key: "steelKgM3", label: "Steel (kg/m³, 80–120)", type: "number", placeholder: "e.g. 100" },
     ],
     generateBoq: (id: string, inputs: any) => {
       const a = parseFloat(inputs.area || "0");
       const t = parseFloat(inputs.thick || "0");
+      const steelKg = parseFloat(inputs.steelKgM3 || "100");
       return [
-        { desc: "RCC for Slab", unit: "m³", rate: 150.0, qtyOverride: a * t, linkedMeasurementIds: [id] },
-        { desc: "Steel Reinforcement", unit: "kg", rate: 1.2, qtyOverride: a * t * 100, linkedMeasurementIds: [id] },
-        { desc: "Formwork", unit: "m²", rate: 10.0, qtyOverride: a, linkedMeasurementIds: [id] },
+        { desc: "RCC for Slab", unit: "m³", rate: RCC124_RATE, qtyOverride: a * t, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Steel Reinforcement", unit: "kg", rate: STEEL_RATE, qtyOverride: a * t * steelKg, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Formwork", unit: "m²", rate: 10.0, qtyOverride: a, linkedMeasurementIds: [id], status: "measured" as const },
       ];
     },
   },
@@ -136,9 +172,9 @@ const ASSEMBLIES = [
       const w = parseFloat(inputs.width || "0");
       const area = l * w;
       return [
-        { desc: "Subgrade Preparation", unit: "m²", rate: 5.5, qtyOverride: area, linkedMeasurementIds: [id] },
-        { desc: "Subbase Course", unit: "m³", rate: 35.0, qtyOverride: area * 0.2, linkedMeasurementIds: [id] },
-        { desc: "Asphalt Wearing Course", unit: "m²", rate: 25.0, qtyOverride: area * 0.05, linkedMeasurementIds: [id] },
+        { desc: "Subgrade Preparation", unit: "m²", rate: 5.5, qtyOverride: area, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Subbase Course", unit: "m³", rate: 35.0, qtyOverride: area * 0.2, linkedMeasurementIds: [id], status: "measured" as const },
+        { desc: "Asphalt Wearing Course", unit: "m³", rate: 25.0, qtyOverride: area * 0.05, linkedMeasurementIds: [id], status: "measured" as const }, // qty is a volume (area x 0.05 m) — was wrongly labelled m²
       ];
     },
   },
@@ -159,6 +195,10 @@ export default function Takeoff() {
     unitName,
     setUnitName,
     addBoqItems,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
   } = useTakeoff();
   useEffect(() => {
     const isGlobalMetric = currentUnit === "Metric";
@@ -476,6 +516,32 @@ export default function Takeoff() {
     if (!assemblyPrompt) return;
     const asmDef = ASSEMBLIES.find((a) => a.id === assemblyPrompt.assemblyId);
     if (!asmDef) return;
+    // Validate every input: dimensions must be present and > 0, and the
+    // RCC footing offsets must stay positive (w - 0.2, d - 0.15): the 0.2 m
+    // is the column/footing allowance and 0.15 m is the PCC bed, so a strip
+    // narrower than 0.2 m or shallower than 0.15 m has no RCC volume at all.
+    for (const inp of asmDef.inputs) {
+      const v = parseFloat(assemblyPrompt.inputs[inp.key] ?? "");
+      if (!isFinite(v) || v <= 0) { toast.error(`Enter a valid ${inp.label} (must be over 0).`); return; }
+    }
+    if (asmDef.id === "asm-foundation") {
+      const w = parseFloat(assemblyPrompt.inputs.width);
+      const d = parseFloat(assemblyPrompt.inputs.depth);
+      if (w <= 0.2) { toast.error("Foundation width must be over 0.2 m — the RCC volume is (w − 0.2 m column allowance) × (d − 0.15 m PCC bed)."); return; }
+      if (d <= 0.15) { toast.error("Foundation depth must be over 0.15 m — the 0.15 m PCC bed sits below the RCC."); return; }
+    }
+    if (asmDef.id === "asm-colpad") {
+      const s = parseFloat(assemblyPrompt.inputs.side);
+      if (s <= 0.2) { toast.error("Column pad side must be over 0.2 m (RCC is (side − 0.2 m)² × depth)."); return; }
+    }
+    if (asmDef.id === "asm-brickwall") {
+      const sides = parseFloat(assemblyPrompt.inputs.sides);
+      if (sides !== 1 && sides !== 2) { toast.error("Plaster sides must be 1 or 2."); return; }
+    }
+    if (asmDef.id === "asm-slab") {
+      const steelKg = parseFloat(assemblyPrompt.inputs.steelKgM3);
+      if (steelKg < 80 || steelKg > 120) { toast.error("Slab steel must be 80–120 kg/m³."); return; }
+    }
     const measurementId = crypto.randomUUID();
     const meta = { ...assemblyPrompt.inputs, assemblyId: asmDef.id };
     /* Add measurement marker */ const newMeasurement: Measurement = {
@@ -965,9 +1031,11 @@ export default function Takeoff() {
                     <Button
                       onClick={() => {
                         const realVal = parseFloat(scaleInputValue);
-                        if (realVal > 0) {
+                        if (realVal > 0 && scalePrompt.pxLen > 0) {
                           setScalePxPerUnit(scalePrompt.pxLen / realVal);
                           setUnitName(scaleInputUnit || "units");
+                        } else {
+                          toast.error("Draw a longer scale line and enter a real-world length over 0 — a zero scale makes every measurement divide by zero.");
                         }
                         setScalePrompt({ visible: false, pxLen: 0 });
                         setMode("select");
@@ -1276,10 +1344,50 @@ export default function Takeoff() {
         </div>
       )}
       
+      <div className="mt-4 bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 shadow-brand-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-bold text-txt-primary mr-2">
+            BOQ: {boqItems.length} item(s) · PKR {boqItems.reduce((sum, it) => sum + getMappedQty(it, measurements, scalePxPerUnit, unitName) * it.rate, 0).toLocaleString('en-US', { maximumFractionDigits: 0 })}
+          </span>
+          <Button onClick={undo} disabled={!canUndo} className="px-3 py-1.5 bg-surface-hover rounded-full text-xs font-bold disabled:opacity-40">Undo</Button>
+          <Button onClick={redo} disabled={!canRedo} className="px-3 py-1.5 bg-surface-hover rounded-full text-xs font-bold disabled:opacity-40">Redo</Button>
+          <Button onClick={() => { addBoqItems(SAMPLE_BOQ); toast.success("Sample BOQ loaded — marked SAMPLE, replace it with your own measurements."); }} className="px-3 py-1.5 bg-surface-hover rounded-full text-xs font-bold">Load sample BOQ</Button>
+          <Button onClick={() => {
+            const lines = [["Item", "Description", "Unit", "Qty", "Rate (PKR)", "Amount (PKR)", "Status", "Sheet"]];
+            boqItems.forEach((it) => {
+              const q = getMappedQty(it, measurements, scalePxPerUnit, unitName);
+              lines.push([it.id, it.desc, it.unit, q.toFixed(2), String(it.rate), (q * it.rate).toFixed(2), it.status ?? "assumed", it.sheetRef ?? ""]);
+            });
+            const csv = lines.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+            const blob = new Blob([csv], { type: "text/csv" });
+            const aEl = document.createElement("a");
+            aEl.href = URL.createObjectURL(blob);
+            aEl.download = "takeoff-boq.csv";
+            aEl.click();
+            URL.revokeObjectURL(aEl.href);
+            toast.success("Takeoff BOQ CSV downloaded");
+          }} className="px-3 py-1.5 bg-surface-hover rounded-full text-xs font-bold">Export CSV</Button>
+          <Button onClick={async () => {
+            try {
+              await generatePDFReport(boqItems, measurements, scalePxPerUnit, unitName, { projectName: filename, projectId: "", clientName: "", siteLocation: "", date: new Date().toLocaleDateString() }, "PKR ");
+              toast.success("Takeoff BOQ PDF downloaded");
+            } catch (e) { console.error(e); toast.error("PDF export failed"); }
+          }} className="px-3 py-1.5 bg-ink text-white rounded-full text-xs font-bold">Export PDF</Button>
+          <Button onClick={async () => {
+            try {
+              await generateExcelReport(boqItems, measurements, scalePxPerUnit, unitName, { projectName: filename, projectId: "", clientName: "", siteLocation: "", date: new Date().toLocaleDateString() }, "PKR ");
+              toast.success("Takeoff BOQ Excel downloaded");
+            } catch (e) { console.error(e); toast.error("Excel export failed"); }
+          }} className="px-3 py-1.5 bg-surface-hover rounded-full text-xs font-bold">Export Excel</Button>
+        </div>
+        <p className="text-xs text-txt-tertiary mt-2">
+          Rates: PCC/RCC/brickwork/plaster/steel priced from the dated PK table ({PK_TABLE.lastUpdated}, {PK_TABLE.source}) via rate analysis (material + 1% water + 15% CPOH, labour excluded). Excavation, formwork and road-course rates are example values — verify against your market before tendering. Work is saved on this device (localStorage) and restores on reload.
+        </p>
+      </div>
       <CalculationHistory
         calculatorId="takeoff"
-        currentInputs={{}}
-        currentResults={{}}
+        currentInputs={{ measurements: measurements.length, boqItems: boqItems.length, scale: scalePxPerUnit, unit: unitName }}
+        currentResults={{ total: boqItems.reduce((sum, it) => sum + getMappedQty(it, measurements, scalePxPerUnit, unitName) * it.rate, 0) }}
         onRestore={() => {}}
       />
     </div>

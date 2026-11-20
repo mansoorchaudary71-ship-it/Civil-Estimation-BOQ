@@ -12,6 +12,7 @@ import {
   Save,
 } from "lucide-react";
 import { useMarketRates, MarketRates } from "../../context/MarketRatesContext";
+import { analyseMix, MIXES } from "../../lib/rateAnalysis";
 import { useSettings } from "../../context/SettingsContext";
 import {
   BarChart,
@@ -29,6 +30,8 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 import { useAuth } from "../../contexts/AuthContext";
 export default function RateAnalysis() {
   const { rates, updateRate } = useMarketRates();
+  const [mixId, setMixId] = useState("pcc124");
+  const [steelKgPerM3, setSteelKgPerM3] = useState(100);
   const { settings, convertAmount, convertAmountToRaw, formatCurrency } =
     useSettings();
   const { user } = useAuth();
@@ -40,41 +43,42 @@ export default function RateAnalysis() {
       updateRate(key, val);
     }
   };
-  /* Composite Calculation: 1 m3 of 1:2:4 Concrete */ const compositeCalc =
-    useMemo(() => {
-      const dryVol = CIVIL_CONSTANTS.DRY_CONCRETE_FACTOR;
-      /* m3 */ const sumRatio = 1 + 2 + 4;
-      /* Cement Component (1 part) */ const cementVol = (1 / sumRatio) * dryVol;
-      /* m3 */ const cementBags = cementVol / CIVIL_CONSTANTS.CEMENT_BAG_VOLUME_M3;
-      /* approx 6.34 // Sand Component (2 parts) */ const sandVol =
-        (2 / sumRatio) * dryVol;
-      /* m3 */ const sandCft = sandVol * CIVIL_CONSTANTS.M3_TO_CFT;
-      /* approx 15.54 cft // Crush Component (4 parts) */ const crushVol =
-        (4 / sumRatio) * dryVol;
-      /* m3 */ const crushCft = crushVol * CIVIL_CONSTANTS.M3_TO_CFT;
-      /* approx 31.08 cft */ const costCement = cementBags * rates.cement;
-      const costSand = sandCft * rates.sand;
-      const costCrush = crushCft * rates.crush;
-      /* Assumed fixed rates for labor and tools for mixing/pouring 1m3 */ const costLabor = 1500;
-      const costEquipment = 800;
-      const primeCost =
-        costCement + costSand + costCrush + costLabor + costEquipment;
-      const overheadCost = primeCost * (rates.overheadMarkup / 100);
-      const finalRate = primeCost + overheadCost;
-      return {
-        cementBags,
-        costCement,
-        sandCft,
-        costSand,
-        crushCft,
-        costCrush,
-        costLabor,
-        costEquipment,
-        primeCost,
-        overheadCost,
-        finalRate,
-      };
-    }, [rates]);
+  /* CPWD rate analysis via the shared engine (src/lib/rateAnalysis).
+     The old crush default of 250/cft was ~3x market; rates now come from
+     rates.ts via MarketRatesContext (crush 90/cft). The 1:2:4 path has no
+     steel — it is PCC, not RCC; RCC mixes add steel at an editable kg/m³.
+     CPWD: +1% water charges, then +15% CPOH on (prime + water). */
+  const selectedMix = MIXES.find((m) => m.id === mixId) ?? MIXES[0];
+  const compositeCalc = useMemo(() => {
+    const r = analyseMix(selectedMix, {
+      cementPerBag: rates.cement,
+      sandPerCft: rates.sand,
+      crushPerCft: rates.crush,
+      steelPerKg: rates.steel,
+      labour: 1500,
+      equipment: 800,
+      steelKgPerM3,
+      waterPct: 1,
+      cpohPct: rates.overheadMarkup,
+    });
+    return {
+      cementBags: r.cementBags,
+      costCement: r.cementCost,
+      sandCft: r.sandCft,
+      costSand: r.sandCost,
+      crushCft: r.crushCft,
+      costCrush: r.crushCost,
+      steelKg: r.steelKg,
+      costSteel: r.steelCost,
+      costLabor: 1500,
+      costEquipment: 800,
+      primeCost: r.primeCost,
+      waterCost: r.waterCost,
+      overheadCost: r.cpohCost,
+      finalRate: r.finalRate,
+      notes: r.notes,
+    };
+  }, [rates, selectedMix, steelKgPerM3]);
   return (
     <div className="w-full h-full bg-transparent text-txt-primary font-sans p-6 md:p-8">
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-24">
@@ -250,8 +254,22 @@ export default function RateAnalysis() {
                     1.0 m³ Concrete
                   </h4>
                   <p className="text-accent-400/80 font-mono text-sm mt-1 mb-4 border-b border-border-color pb-4">
-                    Mix Ratio 1:2:4 | 1.54 Dry Vol
+                    {selectedMix.label} — CPWD sheet (dry vol ×{selectedMix.dryFactor})
                   </p>
+                  <div className="mb-4 flex flex-wrap gap-3 items-center">
+                    <label className="text-sm font-semibold text-txt-primary">Item
+                      <select value={mixId} onChange={(e) => setMixId(e.target.value)} className="ml-2 bg-surface-default text-txt-primary rounded-full px-3 py-2 text-sm font-bold">
+                        {MIXES.map((m) => (<option key={m.id} value={m.id}>{m.label}</option>))}
+                      </select>
+                    </label>
+                    {mixId.startsWith("rcc") && (
+                      <label className="text-sm font-semibold text-txt-primary">Steel kg/m³
+                        <input type="number" min={80} max={120} value={steelKgPerM3} onChange={(e) => setSteelKgPerM3(Math.max(80, Math.min(120, Number(e.target.value) || 100)))} className="ml-2 w-20 bg-surface-default text-txt-primary rounded-full px-3 py-2 text-sm font-bold" />
+                      </label>
+                    )}
+                  </div>
+                  <p className="text-xs text-txt-tertiary mb-4">{selectedMix.id.startsWith("rcc") ? "RCC — steel included at the editable kg/m³ above (default 100, range 80–120)." : "No steel in this item — this is PCC / mortar, not RCC. CPWD reference for 1:2:4: 6.4 bags cement, 0.445 m³ sand, 0.89 m³ aggregate per m³."}</p>
+                  <p className="text-xs text-txt-tertiary mb-4">Crush is Rs {rates.crush}/cft from the dated rate table — the old 250/cft default was ~3× market and inflated this rate by ~35%.</p>
                   <div className="h-48 w-full mb-6 relative">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
@@ -371,6 +389,12 @@ export default function RateAnalysis() {
                         {formatCurrency(compositeCalc.costCrush)}
                       </span>
                     </div>
+                    {compositeCalc.steelKg > 0 && (
+                      <div className="flex justify-between items-center group">
+                        <span className="text-txt-secondary group-hover:text-txt-tertiary transition-colors">Steel ({compositeCalc.steelKg.toFixed(1)} kg @ {steelKgPerM3} kg/m³)</span>
+                        <span className="font-bold text-txt-inverse">{formatCurrency(compositeCalc.costSteel)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center text-txt-secondary pt-2 border-t border-white/5">
                       <span>Labor & Equipment</span>
                       <span>
@@ -389,12 +413,12 @@ export default function RateAnalysis() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm font-medium text-txt-tertiary">
-                    <span>
-                      Overhead & Profit ({rates.overheadMarkup}%)
-                    </span>
-                    <span className="font-mono text-ui-successText">
-                      +{formatCurrency(compositeCalc.overheadCost)}
-                    </span>
+                    <span>Water charges (CPWD 1% of prime)</span>
+                    <span className="font-mono">+{formatCurrency(compositeCalc.waterCost)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm font-medium text-txt-tertiary">
+                    <span>Overhead &amp; Profit / CPOH ({rates.overheadMarkup}%)</span>
+                    <span className="font-mono text-ui-successText">+{formatCurrency(compositeCalc.overheadCost)}</span>
                   </div>
                   <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary backdrop-blur-md rounded-2xl px-4 py-3 border border-border-color mt-4 flex items-center justify-between overflow-hidden">
                     <span className="text-xs sm:text-base font-medium tracking-tight uppercase tracking-[0.15em] text-txt-tertiary">

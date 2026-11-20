@@ -5,10 +5,11 @@ import StandardEarthworks from "./EarthworksBase";
 import ChainageVolumeEstimator from "./ChainageVolume";
 import GridEarthworkEstimator from "./GridEarthwork";
 import SlopeStability from "./SlopeStability"; // We will create this
+import TrenchExcavationEstimator from "./TrenchExcavation";
 import { CalculationHistory } from '../ui/CalculationHistory';
 
 
-type HubTab = "general" | "chainage" | "grid" | "slope";
+type HubTab = "general" | "chainage" | "grid" | "slope" | "trench";
 
 export default function EarthworksEstimator() {
   const [activeTab, setActiveTab] = useState<HubTab>("general");
@@ -19,6 +20,7 @@ export default function EarthworksEstimator() {
     { id: "chainage", label: "Road Chainage & Mass Haul", icon: Route },
     { id: "grid", label: "Grid Method", icon: Grid },
     { id: "slope", label: "Slope Stability", icon: ShieldAlert },
+    { id: "trench", label: "Trench Excavation", icon: Mountain },
   ];
 
   return (
@@ -61,10 +63,12 @@ export default function EarthworksEstimator() {
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto">
         <div className="w-full p-4 md:p-0 md:max-w-7xl md:mx-auto">
+          <p className="text-base font-normal text-txt-secondary leading-relaxed mb-6">Free earthworks calculator: prismoidal and average-end-area volumes, multi-cell grid (borrow-pit) volumes, trench excavation and infinite-slope screening.</p>
           {activeTab === "general" && <StandardEarthworks />}
           {activeTab === "chainage" && <ChainageVolumeEstimator />}
           {activeTab === "grid" && <GridEarthworkEstimator />}
           {activeTab === "slope" && <SlopeStability />}
+          {activeTab === "trench" && <TrenchExcavationEstimator />}
         </div>
       </div>
     

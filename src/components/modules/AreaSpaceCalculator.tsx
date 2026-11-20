@@ -1,616 +1,403 @@
-import { Button } from '../ui/Button';
-import React, { useState, useMemo } from "react";
-import { useGlobalSettings, MeasurementSystem } from "../../context/SettingsContext";
-import { useUnitChange, useConvertedState } from "../../hooks/useUnitChange";
+import React, { useMemo, useState } from "react";
+import { jsPDF } from "jspdf";
+import { Button } from "../ui/Button";
+import { FormulaAccordion, type FormulaStep } from "../ui/FormulaAccordion";
 import {
-  Square, Triangle, Circle, Layers, Ruler, Map as MapIcon, Home, Compass, RectangleHorizontal, Hexagon, Type, CornerDownRight, Calculator, PaintBucket, Plus, Trash2, ShieldCheck
-} from "lucide-react";
-import { GlobalFAQ } from "../ui/GlobalFAQ";
-import { UniversalTabs } from "../ui/UniversalTabs";
-import { DetailedCalculationDisplay } from "../ui/DetailedCalculationDisplay";
-import toast from 'react-hot-toast';
-import { useRecentTools } from "../../hooks/useRecentTools";
-import { CodeTooltip } from "../ui/CodeTooltip";
+  calcShape, calcPlot, calcProperty, calcPlasterDeduction, calcRoof, convertArea,
+  type ShapeKind,
+} from "../../lib/areaSpaceCalc";
+import { useBOQ } from "../../context/BOQContext";
+import { Ruler, Check, Copy, Download, Printer, Share2, Plus, Trash2 } from "lucide-react";
 
+type Unit = "m" | "ft";
+const FT = 3.28084;
+const inputCls = "w-full bg-surface-hover border border-ui-borderSubtle px-4 py-3 rounded-xl focus:ring-2 focus:ring-accent-500 outline-none";
+const labelCls = "text-sm font-medium text-txt-secondary";
+
+
+type Tab = "shape" | "plot" | "property" | "plaster" | "roof";
+const TABS: { id: Tab; label: string }[] = [
+  { id: "shape", label: "2D Shapes" },
+  { id: "plot", label: "Triangulation" },
+  { id: "property", label: "RERA Areas" },
+  { id: "plaster", label: "Plaster / Paint Deductions" },
+  { id: "roof", label: "Roof Pitch" },
+];
 
 export default function AreaSpaceCalculator() {
-  const { addRecentTool } = useRecentTools();
-  const { currentUnit } = useGlobalSettings();
-  
-  useUnitChange((newUnit: MeasurementSystem) => {
-    toast.success(`Automatically recalculated area inputs to ${newUnit === 'SI' ? 'Metric' : 'Imperial'} format.`, { icon: '🔄', id: 'area_recalc_toast' });
-  });
+  const { addItem } = useBOQ();
+  const [unit, setUnit] = useState<Unit>("m");
+  const [activeTab, setActiveTab] = useState<Tab>("shape");
+  const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
 
-  const isMetric = currentUnit === "Metric";
-  const uLen = isMetric ? "m" : "ft";
-  const uArea = isMetric ? "m²" : "sq.ft";
-
-  const [activeTab, setActiveTab] = useState<"shape" | "property" | "plot" | "roof" | "plaster">("shape");
-
-  // --- Tab 1: Shape Calculator ---
-  const [shapeType, setShapeType] = useState("rectangle");
-  const [shapeParams, setShapeParams] = useConvertedState<Record<string, number>>({
-    length: 5, width: 4, radius: 3, base: 4, height: 3, sideA: 5, sideB: 7, sideC: 4,
-    l1: 5, l2: 3, w1: 2, w2: 2, tTop: 6, tLegWidth: 2, tTotalHeight: 5, tTopThickness: 1,
-  }, 'length');
-
-  React.useEffect(() => {
-    const handleRestore = (e: any) => {
-      if (e.detail.id === 'area' && e.detail.inputs) {
-        if (e.detail.inputs.shapeType) setShapeType(e.detail.inputs.shapeType);
-        if (e.detail.inputs.shapeParams) setShapeParams(e.detail.inputs.shapeParams);
-      }
-    };
-    window.addEventListener('restore-calculation-inputs', handleRestore);
-    return () => window.removeEventListener('restore-calculation-inputs', handleRestore);
-  }, [setShapeParams]);
-  const [polygonCoords, setPolygonCoords] = useState<{ x: number; y: number }[]>([
+  // Shape tab
+  const [shapeType, setShapeType] = useState<ShapeKind>("rectangle");
+  const [sLen, setSLen] = useState("5");
+  const [sWid, setSWid] = useState("4");
+  const [sRad, setSRad] = useState("3");
+  const [sA, setSA] = useState("5");
+  const [sB, setSB] = useState("7");
+  const [sC, setSC] = useState("4");
+  const [sH, setSH] = useState("3");
+  const [lOverallL, setLOverallL] = useState("5");
+  const [lOverallW, setLOverallW] = useState("3");
+  const [lArm1, setLArm1] = useState("2");
+  const [lArm2, setLArm2] = useState("2");
+  const [tTop, setTTop] = useState("6");
+  const [tThick, setTThick] = useState("1");
+  const [tLeg, setTLeg] = useState("2");
+  const [tHeight, setTHeight] = useState("5");
+  const [polygon, setPolygon] = useState<{ x: number; y: number }[]>([
     { x: 0, y: 0 }, { x: 5, y: 0 }, { x: 4, y: 4 }, { x: 1, y: 3 },
   ]);
+  // Plot tab
+  const [plotN, setPlotN] = useState("30");
+  const [plotS, setPlotS] = useState("30");
+  const [plotE, setPlotE] = useState("40");
+  const [plotW, setPlotW] = useState("40");
+  const [plotD, setPlotD] = useState("50");
+  // Property tab
+  const [propCarpet, setPropCarpet] = useState("100");
+  const [propInt, setPropInt] = useState("10");
+  const [propExt, setPropExt] = useState("5");
+  const [propBalcony, setPropBalcony] = useState("10");
+  const [propCommon, setPropCommon] = useState("20");
+  // Plaster tab
+  const [wallLen, setWallLen] = useState("5");
+  const [wallHt, setWallHt] = useState("3");
+  const [faces, setFaces] = useState<1 | 2>(1);
+  const [jambDepth, setJambDepth] = useState("0.2");
+  const [openings, setOpenings] = useState<{ id: string; w: string; h: string; count: string }[]>([
+    { id: "o1", w: "1", h: "2", count: "1" },
+  ]);
+  // Roof tab
+  const [roofFloor, setRoofFloor] = useState("150");
+  const [roofPitch, setRoofPitch] = useState("30");
+  const [roofOverhang, setRoofOverhang] = useState("0.6");
+  const [roofPerim, setRoofPerim] = useState("50");
 
-  const handleShapeParam = (key: string, val: number) => setShapeParams((prev) => ({ ...prev, [key]: val }));
+  const toM = (v: number) => (unit === "ft" ? v * 0.3048 : v);
+  const toM2 = (v: number) => (unit === "ft" ? v * 0.092903 : v);
+  const areaOut = (m2: number) => (unit === "ft" ? m2 * 10.7639 : m2);
+  const uLen = unit === "m" ? "m" : "ft";
+  const uArea = unit === "m" ? "m²" : "sq ft";
 
-  const calculateShape = () => {
-    let area = 0, perimeter = 0;
-    addRecentTool('area', { shapeType, shapeParams });
-    const p = shapeParams;
-    switch (shapeType) {
-      case "rectangle":
-        area = p.length * p.width;
-        perimeter = 2 * (p.length + p.width);
-        break;
-      case "square":
-        area = p.length * p.length;
-        perimeter = 4 * p.length;
-        break;
-      case "circle":
-        area = Math.PI * p.radius * p.radius;
-        perimeter = 2 * Math.PI * p.radius;
-        break;
-      case "triangle":
-        const s = (p.sideA + p.sideB + p.sideC) / 2;
-        area = Math.sqrt(Math.max(0, s * (s - p.sideA) * (s - p.sideB) * (s - p.sideC)));
-        perimeter = p.sideA + p.sideB + p.sideC;
-        break;
-      case "trapezoid":
-        area = ((p.sideA + p.sideB) / 2) * p.height;
-        const leg = Math.sqrt(Math.pow(Math.abs(p.sideB - p.sideA) / 2, 2) + Math.pow(p.height, 2));
-        perimeter = p.sideA + p.sideB + 2 * leg;
-        break;
-      case "l-shape":
-        area = p.l1 * p.w1 + (p.l2 - p.w1) * p.w2;
-        perimeter = 2 * p.l1 + 2 * p.l2;
-        break;
-      case "t-shape":
-        area = p.tTop * p.tTopThickness + (p.tTotalHeight - p.tTopThickness) * p.tLegWidth;
-        perimeter = 2 * p.tTop + 2 * p.tTotalHeight;
-        break;
-      case "polygon":
-        let sum = 0, perim = 0;
-        const n = polygonCoords.length;
-        if (n >= 3) {
-          for (let i = 0; i < n; i++) {
-            const current = polygonCoords[i];
-            const next = polygonCoords[(i + 1) % n];
-            sum += current.x * next.y - next.x * current.y;
-            perim += Math.hypot(next.x - current.x, next.y - current.y);
-          }
-          area = Math.abs(sum) / 2;
-          perimeter = perim;
-        }
-        break;
-    }
-    return { area, perimeter };
+  const shape = useMemo(() => calcShape(shapeType, {
+    lengthM: toM(parseFloat(sLen) || 0), widthM: toM(parseFloat(sWid) || 0),
+    radiusM: toM(parseFloat(sRad) || 0), sideAM: toM(parseFloat(sA) || 0),
+    sideBM: toM(parseFloat(sB) || 0), sideCM: toM(parseFloat(sC) || 0),
+    heightM: toM(parseFloat(sH) || 0),
+    overallLengthM: toM(parseFloat(lOverallL) || 0), overallWidthM: toM(parseFloat(lOverallW) || 0),
+    arm1M: toM(parseFloat(lArm1) || 0), arm2M: toM(parseFloat(lArm2) || 0),
+    topWidthM: toM(parseFloat(tTop) || 0), topThicknessM: toM(parseFloat(tThick) || 0),
+    legWidthM: toM(parseFloat(tLeg) || 0), totalHeightM: toM(parseFloat(tHeight) || 0),
+    polygon: polygon.map((p) => ({ x: toM(p.x), y: toM(p.y) })),
+  }), [shapeType, sLen, sWid, sRad, sA, sB, sC, sH, lOverallL, lOverallW, lArm1, lArm2, tTop, tThick, tLeg, tHeight, polygon, unit]);
+
+  const plot = useMemo(() => calcPlot({
+    northM: toM(parseFloat(plotN) || 0), southM: toM(parseFloat(plotS) || 0),
+    eastM: toM(parseFloat(plotE) || 0), westM: toM(parseFloat(plotW) || 0),
+    diagonalM: toM(parseFloat(plotD) || 0),
+  }), [plotN, plotS, plotE, plotW, plotD, unit]);
+
+  const property = useMemo(() => calcProperty({
+    carpetM2: toM2(parseFloat(propCarpet) || 0),
+    internalWallsPct: parseFloat(propInt) || 0,
+    externalWallsPct: parseFloat(propExt) || 0,
+    balconyM2: toM2(parseFloat(propBalcony) || 0),
+    commonAreaPct: parseFloat(propCommon) || 0,
+  }), [propCarpet, propInt, propExt, propBalcony, propCommon, unit]);
+
+  const plaster = useMemo(() => calcPlasterDeduction({
+    wallLengthM: toM(parseFloat(wallLen) || 0), wallHeightM: toM(parseFloat(wallHt) || 0),
+    faces,
+    openings: openings.map((o, i) => ({
+      id: o.id, kind: "door" as const,
+      widthM: toM(parseFloat(o.w) || 0), heightM: toM(parseFloat(o.h) || 0),
+      count: parseInt(o.count, 10) || 0,
+    })),
+    jambDepthM: toM(parseFloat(jambDepth) || 0), lengthUnit: unit,
+  }), [wallLen, wallHt, faces, openings, jambDepth, unit]);
+
+  const roof = useMemo(() => calcRoof({
+    floorAreaM2: toM2(parseFloat(roofFloor) || 0),
+    pitchDegrees: parseFloat(roofPitch) || 0,
+    overhangM: toM(parseFloat(roofOverhang) || 0),
+    perimeterM: toM(parseFloat(roofPerim) || 0),
+  }), [roofFloor, roofPitch, roofOverhang, roofPerim, unit]);
+  const roofErrors = parseFloat(roofPitch) < 0 || parseFloat(roofPitch) >= 90 ? ["Roof pitch must be between 0° and 89°."] : [];
+
+  const switchUnit = (u: Unit) => {
+    if (u === unit) return;
+    const f = u === "ft" ? FT : 1 / FT;
+    const conv = (setter: (v: string) => void, v: string) => {
+      const n = parseFloat(v);
+      if (isFinite(n)) setter(String(+(n * f).toFixed(3)));
+    };
+    const convA = (setter: (v: string) => void, v: string) => {
+      const n = parseFloat(v);
+      if (isFinite(n)) setter(String(+(n * f * f).toFixed(2)));
+    };
+    [setSLen, setSWid, setSRad, setSA, setSB, setSC, setSH, setLOverallL, setLOverallW, setLArm1, setLArm2, setTTop, setTThick, setTLeg, setTHeight, setPlotN, setPlotS, setPlotE, setPlotW, setPlotD, setWallLen, setWallHt, setJambDepth, setRoofOverhang, setRoofPerim].forEach((s, i) => {
+      const vals = [sLen, sWid, sRad, sA, sB, sC, sH, lOverallL, lOverallW, lArm1, lArm2, tTop, tThick, tLeg, tHeight, plotN, plotS, plotE, plotW, plotD, wallLen, wallHt, jambDepth, roofOverhang, roofPerim];
+      conv(s, vals[i]);
+    });
+    convA(setRoofFloor, roofFloor); convA(setPropCarpet, propCarpet); convA(setPropBalcony, propBalcony);
+    setPolygon(polygon.map((p) => ({ x: +(p.x * f).toFixed(2), y: +(p.y * f).toFixed(2) })));
+    setOpenings(openings.map((o) => ({ ...o, w: String(+(parseFloat(o.w) * f).toFixed(2)), h: String(+(parseFloat(o.h) * f).toFixed(2)) })));
+    setUnit(u);
   };
-  const shapeData = calculateShape();
 
-  // --- Tab 2: Property Area ---
-  const [propParams, setPropParams] = useConvertedState({
-    carpetReq: 100, internalWallsPerc: 10, externalWallsPerc: 5, balconyArea: 10, commonAreaPerc: 20,
-  });
-  const handlePropParam = (key: string, val: number) => setPropParams((prev) => ({ ...prev, [key]: val }));
+  const currentAreaM2 =
+    activeTab === "shape" ? shape.areaM2
+    : activeTab === "plot" ? plot.totalM2 ?? 0
+    : activeTab === "property" ? property.superBuiltUpM2
+    : activeTab === "plaster" ? plaster.netAreaM2
+    : roof.trueAreaM2;
+  const conv = convertArea(currentAreaM2);
 
-  const propertyCalc = useMemo(() => {
-    const traditionalCarpet = propParams.carpetReq;
-    const reraCarpetArea = traditionalCarpet + traditionalCarpet * (propParams.internalWallsPerc / 100);
-    const plinthArea = reraCarpetArea + traditionalCarpet * (propParams.externalWallsPerc / 100);
-    const builtUpArea = plinthArea + propParams.balconyArea;
-    const superBuiltUpArea = builtUpArea + builtUpArea * (propParams.commonAreaPerc / 100);
-    return { traditionalCarpet, reraCarpetArea, plinthArea, builtUpArea, superBuiltUpArea };
-  }, [propParams]);
+  const summaryText = () => [
+    "Area calculation — Civil Estimation Pro",
+    activeTab === "shape" ? `Shape ${shapeType}: area ${shape.areaM2.toFixed(2)} m², perimeter ${shape.perimeterM.toFixed(2)} m` : "",
+    activeTab === "plot" ? `Plot: ${plot.totalM2 != null ? plot.totalM2.toFixed(2) : "—"} m² (triangles ${plot.area1M2?.toFixed(2) ?? "—"} + ${plot.area2M2?.toFixed(2) ?? "—"}), perimeter ${plot.perimeterM.toFixed(2)} m` : "",
+    activeTab === "property" ? `RERA: carpet ${property.traditionalCarpetM2.toFixed(2)} → RERA ${property.reraCarpetM2.toFixed(2)} → plinth ${property.plinthM2.toFixed(2)} → built-up ${property.builtUpM2.toFixed(2)} → super built-up ${property.superBuiltUpM2.toFixed(2)} m²` : "",
+    activeTab === "plaster" ? `Plaster area: gross ${plaster.grossAreaM2.toFixed(2)} − deductions ${plaster.totalDeductionM2.toFixed(2)} + jambs ${plaster.jambsM2.toFixed(2)} = net ${plaster.netAreaM2.toFixed(2)} m²` : "",
+    activeTab === "roof" ? `Roof: horizontal ${roof.horizontalAreaM2.toFixed(2)} m², true ${roof.trueAreaM2.toFixed(2)} m² (multiplier ${roof.pitchMultiplier.toFixed(3)}, pitch ${roof.pitchRatio})` : "",
+    `Conversions: ${conv.sqft.toFixed(2)} sq ft · ${conv.sqyd.toFixed(2)} sq yd · ${conv.marla.toFixed(3)} marla · ${conv.kanal.toFixed(4)} kanal`,
+  ].filter(Boolean).join("\n");
 
-  // --- Tab 3: Plot Measurement ---
-  const [plotBounds, setPlotBounds] = useConvertedState({ n: 30, s: 30, e: 40, w: 40, d: 50 }, "length");
-  const boundsArea = useMemo(() => {
-    const { n, s, e, w, d } = plotBounds;
-    const s1 = (n + e + d) / 2;
-    const area1 = Math.sqrt(Math.max(0, s1 * (s1 - n) * (s1 - e) * (s1 - d)));
-    const s2 = (s + w + d) / 2;
-    const area2 = Math.sqrt(Math.max(0, s2 * (s2 - s) * (s2 - w) * (s2 - d)));
-    return { area1, area2, total: area1 + area2, perimeter: n + s + e + w };
-  }, [plotBounds]);
+  const handleCopy = async () => { try { await navigator.clipboard.writeText(summaryText()); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ } };
+  const handleShare = async () => {
+    const text = summaryText();
+    if (navigator.share) { try { await navigator.share({ title: "Area calculation — Civil Estimation Pro", text }); setShared(true); setTimeout(() => setShared(false), 2000); return; } catch { /* cancelled */ } }
+    await handleCopy(); setShared(true); setTimeout(() => setShared(false), 2000);
+  };
+  const handlePdf = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16); doc.text("Area Calculation — Civil Estimation Pro", 14, 18);
+    doc.setFontSize(10); doc.text(`Calculated ${new Date().toLocaleDateString("en-GB")}`, 14, 26);
+    let y = 38; doc.setFontSize(11);
+    for (const line of summaryText().split("\n")) { doc.text(line, 14, y, { maxWidth: 180 }); y += 8; }
+    doc.save("area-calculation-civil-estimation-pro.pdf");
+  };
+  const handleGenerateBOQ = () => {
+    addItem({ name: `Plaster / paint area (${activeTab})`, quantity: +currentAreaM2.toFixed(2), unit: "m²", rate: 0, category: "Finishes" });
+  };
 
-  // --- Tab 4: Roof Area ---
-  const [roofParams, setRoofParams] = useConvertedState({ floorArea: 150, pitchAngle: 30, overhang: 0.6, perimeterLength: 50 }, { floorArea: "area", pitchAngle: "none", overhang: "length", perimeterLength: "length" });
-  const roofCalc = useMemo(() => {
-    const overhangArea = roofParams.perimeterLength * roofParams.overhang;
-    const totalHorizontalArea = roofParams.floorArea + overhangArea;
-    const pitchRad = (roofParams.pitchAngle * Math.PI) / 180;
-    const trueRoofArea = totalHorizontalArea / Math.cos(pitchRad);
-    return { totalHorizontalArea, trueRoofArea };
-  }, [roofParams]);
+  const steps: FormulaStep[] = [
+    { id: 1, label: "Shape", theoretical: "Rectangle L×W; circle πr²; triangle Heron; trapezoid (a+b)/2×h; L-shape = overall L×arm1 + (overall W−arm1)×arm2, perimeter 2×(overall L+overall W); polygon shoelace", applied: `Area = ${shape.areaM2.toFixed(2)} m²; perimeter = ${shape.perimeterM.toFixed(2)} m` },
+    { id: 2, label: "Plot triangulation", theoretical: "Split the plot on the diagonal into two triangles; Heron: s=(a+b+c)/2, area=√(s(s−a)(s−b)(s−c))", applied: plot.totalM2 != null ? `Triangles ${plot.area1M2!.toFixed(2)} + ${plot.area2M2!.toFixed(2)} = ${plot.totalM2.toFixed(2)} m²` : (plot.error ?? "Invalid diagonal") },
+    { id: 3, label: "Plaster deductions (IS 1200)", theoretical: "<0.5 m²: no deduction; 0.5–3 m²: deduct the FULL opening area once (one face); >3 m²: deduct both faces + jambs (2h+w)×jamb depth", applied: `Gross ${plaster.grossAreaM2.toFixed(2)} − ${plaster.totalDeductionM2.toFixed(2)} + ${plaster.jambsM2.toFixed(2)} = net ${plaster.netAreaM2.toFixed(2)} m²` },
+    { id: 4, label: "Roof pitch", theoretical: "True area = (floor area + perimeter × overhang) ÷ cos(pitch)", applied: `Horizontal ${roof.horizontalAreaM2.toFixed(2)} m² ÷ cos(${roofPitch}°) = ${roof.trueAreaM2.toFixed(2)} m² (×${roof.pitchMultiplier.toFixed(3)}, pitch ${roof.pitchRatio})` },
+  ];
 
-  // --- Tab 5: Plaster & Paint Deductions ---
-  const [wallLen, setWallLen] = useConvertedState<number>(5, "length");
-  const [wallHt, setWallHt] = useConvertedState<number>(3, "length");
-  const [bothFaces, setBothFaces] = useState(false);
-  const [jambDepth, setJambDepth] = useConvertedState<number>(0.2, "length");
-  const [openings, setOpenings] = useConvertedState<any[]>([{ w: 1, h: 2, count: 1 }], "length");
-
-  const plasterCalc = useMemo(() => {
-    let grossArea = wallLen * wallHt;
-    if (bothFaces) grossArea *= 2;
-
-    let totalDeduction = 0;
-    let jambAddition = 0;
-
-    let steps = [];
-
-    steps.push({
-      stepName: "1. Gross Wall Area",
-      equation: bothFaces ? "A_gross = (Length × Height) × 2" : "A_gross = Length × Height",
-      variables: [ { name: "Length", value: wallLen, unit: uLen }, { name: "Height", value: wallHt, unit: uLen } ],
-// Replace them all using exact exact string.
-      substitution: bothFaces ? `A_gross = (${wallLen} × ${wallHt}) × 2` : `A_gross = ${wallLen} × ${wallHt}`,
-      result: parseFloat(grossArea.toFixed(4)),
-      resultUnit: uArea,
-      resultColor: "slate"
-    });
-
-    openings.forEach((op, idx) => {
-      const area = op.w * op.h;
-      const totalOpArea = area * op.count;
-      let deduct = 0;
-      let add = 0;
-      let ruleApplied = "";
-
-      if (area < 0.5) {
-        deduct = 0;
-        ruleApplied = "< 0.5 sq.m (No deduction)";
-      } else if (area <= 3.0) {
-        deduct = bothFaces ? totalOpArea : (totalOpArea / 2);
-        ruleApplied = bothFaces ? "0.5 to 3 sq.m (Deduct 1 face only for both side plaster)" : "0.5 to 3 sq.m (Deduct 50% for single side plaster measurement)";
-      } else {
-        deduct = bothFaces ? totalOpArea * 2 : totalOpArea;
-        ruleApplied = "> 3 sq.m (Deduct entirely, add jambs)";
-        add = (2 * op.h + op.w) * jambDepth * op.count;
-      }
-      totalDeduction += deduct;
-      jambAddition += add;
-
-      steps.push({
-        stepName: `Opening ${idx + 1} Deduction`,
-        equation: ruleApplied,
-        insight: `Width: ${op.w}${uLen}, Height: ${op.h}${uLen}, Count: ${op.count}`,
-        variables: [ { name: "Total Op Area", value: totalOpArea, unit: uArea } ],
-        substitution: `Deduct: ${deduct.toFixed(2)} ${uArea}` + (add > 0 ? `, Add Jambs: ${add.toFixed(2)} ${uArea}` : ""),
-        result: parseFloat((add - deduct).toFixed(4)),
-        resultUnit: uArea,
-        resultColor: "rose"
-      });
-    });
-
-    const netArea = grossArea - totalDeduction + jambAddition;
-
-    steps.push({
-      stepName: "Net Plastering/Paint Area",
-      equation: "A_net = A_gross - Deductions + Jambs",
-      variables: [
-        { name: "Gross", value: grossArea.toFixed(2), unit: uArea },
-        { name: "Deductions", value: totalDeduction.toFixed(2), unit: uArea },
-        { name: "Jambs", value: jambAddition.toFixed(2), unit: uArea }
-      ],
-      substitution: `A_net = ${grossArea.toFixed(2)} - ${totalDeduction.toFixed(2)} + ${jambAddition.toFixed(2)}`,
-      result: parseFloat(netArea.toFixed(4)),
-      resultUnit: uArea,
-      resultColor: "emerald"
-    });
-
-    return { grossArea, totalDeduction, jambAddition, netArea, steps };
-  }, [wallLen, wallHt, bothFaces, openings, jambDepth, uLen, uArea]);
+  const NumField = ({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) => (
+    <div className="space-y-2"><label className={labelCls}>{label}</label><input type="number" min="0" step="any" value={value} onChange={(e) => onChange(e.target.value)} className={inputCls} /></div>
+  );
+  const ConvTable = () => (
+    <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
+      <h3 className="text-lg font-bold mb-4">Conversions</h3>
+      {[
+        ["m²", conv.m2.toFixed(2)],
+        ["sq ft", conv.sqft.toFixed(2)],
+        ["sq yd", conv.sqyd.toFixed(2)],
+        ["marla", conv.marla.toFixed(3)],
+        ["kanal", conv.kanal.toFixed(4)],
+      ].map(([u, v]) => (
+        <div key={u} className="flex justify-between py-2 border-b border-ui-borderSubtle last:border-0 text-sm">
+          <span className="text-txt-secondary">{u}</span><span className="font-bold">{v}</span>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
-    <div className="w-full md:max-w-7xl md:mx-auto space-y-6 animate-in fade-in duration-500 pb-[120px] px-4 md:px-0">
-      <div className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-brand-sm overflow-hidden">
-        <h1 className="tabular-nums flex items-center gap-3 mb-2 text-xl font-semibold text-txt-primary tracking-tight mb-6">
-          <div className="p-3 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
-            <Ruler className="w-8 h-8" />
+    <div className="w-full md:max-w-7xl md:mx-auto space-y-6 px-4 md:px-0">
+      <p className="text-base text-txt-secondary leading-relaxed px-4 md:px-0">Geometric triangulation, the RERA area ladder, roof pitch multipliers and IS 1200 opening deductions — with marla and kanal conversions on every tab and a BOQ handoff for the result.</p>
+      <div className="w-full bg-surface-default/80 rounded-2xl border border-white/20 p-4 sm:p-6 shadow-brand-sm">
+        <div className="flex flex-wrap justify-between items-center gap-4">
+          <h1 className="flex items-center gap-3 text-xl font-semibold text-txt-primary"><div className="p-3 bg-accent-50 text-accent-800 rounded-2xl"><Ruler className="w-8 h-8" /></div> Plot Area Calculator — Irregular Land, RERA &amp; IS Code Compliant</h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex bg-surface-hover p-1 rounded-xl">
+              {(["m", "ft"] as const).map((u) => (
+                <Button key={u} onClick={() => switchUnit(u)} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${unit === u ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-secondary"}`}>{u === "m" ? "Metric (m)" : "Feet (ft)"}</Button>
+              ))}
+            </div>
+            <Button onClick={handleCopy} className="flex items-center gap-2 px-3 py-1.5 text-sm border border-ui-borderSubtle rounded-lg">{copied ? <Check size={16} /> : <Copy size={16} />} {copied ? "Copied" : "Copy"}</Button>
+            <Button onClick={handleShare} className="flex items-center gap-2 px-3 py-1.5 text-sm border border-ui-borderSubtle rounded-lg"><Share2 size={16} /> {shared ? "Shared / copied" : "Share"}</Button>
+            <Button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-1.5 text-sm border border-ui-borderSubtle rounded-lg"><Printer size={16} /> Print</Button>
+            <Button onClick={handlePdf} className="flex items-center gap-2 px-3 py-1.5 text-sm text-white bg-ink rounded-lg"><Download size={16} /> PDF</Button>
+            <Button onClick={handleGenerateBOQ} className="flex items-center gap-2 px-3 py-1.5 text-sm text-white bg-ink rounded-lg"><Download size={16} /> Generate BOQ</Button>
           </div>
-          Plot Area Calculator — Irregular Land, RERA & IS Code Compliant
-        </h1>
-        <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">
-          Professional standard area computation with geometric triangulation, RERA matrices, roof pitch multi-factor, and IS Code opening deductions.
-        </p>
+        </div>
+        <p className="mt-2 text-base text-txt-secondary leading-relaxed">Geometric triangulation, RERA area ladder, roof pitch multiplier and IS 1200 opening deductions — with marla/kanal conversions on every tab.</p>
       </div>
 
-      {/* TABS */}
-      <div className="-mx-2 sm:-mx-4 px-2 sm:px-4 pb-4 md:mx-0 md:px-0">
-        <UniversalTabs
-          tabs={[
-            { id: "shape", label: "2D Shapes", icon: <Square className="w-5 h-5" /> },
-            { id: "plot", label: "Triangulation", icon: <MapIcon className="w-5 h-5" /> },
-            { id: "property", label: "RERA Areas", icon: <Home className="w-5 h-5" /> },
-            { id: "plaster", label: "Plaster / Paint Deductions", icon: <PaintBucket className="w-5 h-5" /> },
-            { id: "roof", label: "Roof Pitch", icon: <Layers className="w-5 h-5" /> }
-          ]}
-          activeTab={activeTab}
-          onTabChange={(id) => setActiveTab(id as any)}
-        />
+      <div className="flex flex-wrap gap-2">
+        {TABS.map((t) => (
+          <Button key={t.id} onClick={() => setActiveTab(t.id)} className={`px-4 py-2.5 rounded-lg text-sm font-semibold ${activeTab === t.id ? "bg-ink text-white" : "bg-surface-default border border-ui-borderSubtle text-txt-secondary"}`}>{t.label}</Button>
+        ))}
       </div>
 
-      <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
-        <div className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
-          {/* TAB 1: SHAPES */}
+      <div className="flex flex-wrap gap-6 items-start">
+        <div className="flex-1 min-w-[min(100%,380px)] space-y-6">
           {activeTab === "shape" && (
-            <div className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
-              <h3 className="mb-6 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
-                <Square className="w-5 h-5 text-accent-800" /> 2D Shape Calculator
-              </h3>
-              <div className="mb-6 overflow-x-auto pb-2 flex gap-2">
-                <select value={shapeType} onChange={(e) => setShapeType(e.target.value)} className="w-full sm:w-auto px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-xl font-bold text-txt-primary focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500">
-                  <option value="rectangle">Rectangle</option>
-                  <option value="square">Square</option>
-                  <option value="triangle">Triangle</option>
-                  <option value="circle">Circle</option>
-                  <option value="trapezoid">Trapezoid</option>
-                  <option value="l-shape">L-Shape</option>
-                  <option value="t-shape">T-Shape</option>
-                  <option value="polygon">Irregular Polygon</option>
+            <div className="bg-surface-default/80 rounded-2xl border border-white/20 p-6 shadow-brand-sm space-y-6">
+              <h3 className="text-lg font-medium">2D Shape Calculator</h3>
+              <div><label className={labelCls}>Shape</label>
+                <select value={shapeType} onChange={(e) => setShapeType(e.target.value as ShapeKind)} className={inputCls}>
+                  <option value="rectangle">Rectangle</option><option value="square">Square</option><option value="circle">Circle</option>
+                  <option value="triangle">Triangle (Heron)</option><option value="trapezoid">Trapezoid</option>
+                  <option value="l-shape">L-shape</option><option value="t-shape">T-shape</option><option value="polygon">Polygon (vertices)</option>
                 </select>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                {shapeType === "rectangle" && (
-                  <>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Length ({uLen})</label><><label htmlFor="a11y-input-51" className="sr-only">Input</label>
-<input id="a11y-input-51" type="number" inputMode="decimal" value={shapeParams.length} onChange={(e) => handleShapeParam("length", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Width ({uLen})</label><><label htmlFor="a11y-input-52" className="sr-only">Input</label>
-<input id="a11y-input-52" type="number" inputMode="decimal" value={shapeParams.width} onChange={(e) => handleShapeParam("width", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                  </>
-                )}
-                {shapeType === "square" && (
-                  <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Side Length ({uLen})</label><><label htmlFor="a11y-input-53" className="sr-only">Input</label>
-<input id="a11y-input-53" type="number" inputMode="decimal" value={shapeParams.length} onChange={(e) => handleShapeParam("length", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                )}
-                {shapeType === "circle" && (
-                  <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Radius ({uLen})</label><><label htmlFor="a11y-input-54" className="sr-only">Input</label>
-<input id="a11y-input-54" type="number" inputMode="decimal" value={shapeParams.radius} onChange={(e) => handleShapeParam("radius", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                )}
-                {shapeType === "triangle" && (
-                  <>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Side A ({uLen})</label><><label htmlFor="a11y-input-55" className="sr-only">Input</label>
-<input id="a11y-input-55" type="number" inputMode="decimal" value={shapeParams.sideA} onChange={(e) => handleShapeParam("sideA", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Side B ({uLen})</label><><label htmlFor="a11y-input-56" className="sr-only">Input</label>
-<input id="a11y-input-56" type="number" inputMode="decimal" value={shapeParams.sideB} onChange={(e) => handleShapeParam("sideB", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Side C ({uLen})</label><><label htmlFor="a11y-input-57" className="sr-only">Input</label>
-<input id="a11y-input-57" type="number" inputMode="decimal" value={shapeParams.sideC} onChange={(e) => handleShapeParam("sideC", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                  </>
-                )}
-                {shapeType === "trapezoid" && (
-                  <>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Parallel Side A ({uLen})</label><><label htmlFor="a11y-input-58" className="sr-only">Input</label>
-<input id="a11y-input-58" type="number" inputMode="decimal" value={shapeParams.sideA} onChange={(e) => handleShapeParam("sideA", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Parallel Side B ({uLen})</label><><label htmlFor="a11y-input-59" className="sr-only">Input</label>
-<input id="a11y-input-59" type="number" inputMode="decimal" value={shapeParams.sideB} onChange={(e) => handleShapeParam("sideB", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                    <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Height distance ({uLen})</label><><label htmlFor="a11y-input-60" className="sr-only">Input</label>
-<input id="a11y-input-60" type="number" inputMode="decimal" value={shapeParams.height} onChange={(e) => handleShapeParam("height", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                  </>
-                )}
+              <div className="grid grid-cols-2 gap-4">
+                {shapeType === "rectangle" && (<><NumField label={`Length (${uLen})`} value={sLen} onChange={setSLen} /><NumField label={`Width (${uLen})`} value={sWid} onChange={setSWid} /></>)}
+                {shapeType === "square" && <NumField label={`Side (${uLen})`} value={sLen} onChange={setSLen} />}
+                {shapeType === "circle" && <NumField label={`Radius (${uLen})`} value={sRad} onChange={setSRad} />}
+                {shapeType === "triangle" && (<><NumField label={`Side A (${uLen})`} value={sA} onChange={setSA} /><NumField label={`Side B (${uLen})`} value={sB} onChange={setSB} /><NumField label={`Side C (${uLen})`} value={sC} onChange={setSC} /></>)}
+                {shapeType === "trapezoid" && (<><NumField label={`Top base (${uLen})`} value={sA} onChange={setSA} /><NumField label={`Bottom base (${uLen})`} value={sB} onChange={setSB} /><NumField label={`Height (${uLen})`} value={sH} onChange={setSH} /></>)}
+                {shapeType === "l-shape" && (<>
+                  <NumField label={`Overall length (${uLen})`} value={lOverallL} onChange={setLOverallL} />
+                  <NumField label={`Overall width (${uLen})`} value={lOverallW} onChange={setLOverallW} />
+                  <NumField label={`Arm 1 width (${uLen})`} value={lArm1} onChange={setLArm1} />
+                  <NumField label={`Arm 2 width (${uLen})`} value={lArm2} onChange={setLArm2} />
+                </>)}
+                {shapeType === "t-shape" && (<>
+                  <NumField label={`Top width (${uLen})`} value={tTop} onChange={setTTop} />
+                  <NumField label={`Top thickness (${uLen})`} value={tThick} onChange={setTThick} />
+                  <NumField label={`Leg width (${uLen})`} value={tLeg} onChange={setTLeg} />
+                  <NumField label={`Total height (${uLen})`} value={tHeight} onChange={setTHeight} />
+                </>)}
                 {shapeType === "polygon" && (
-                  <div className="col-span-1 md:col-span-2">
-                    <label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Polygon Coordinates (x,y in {uLen})</label>
-                    <div className="space-y-2">
-                      {polygonCoords.map((coord, idx) => (
-                        <div key={idx} className="flex gap-2">
-                          <><label htmlFor="a11y-input-61" className="sr-only">X</label>
-<input id="a11y-input-61" type="number" inputMode="decimal" value={coord.x} onChange={(e) => { const newC = [...polygonCoords]; newC[idx].x = +e.target.value; setPolygonCoords(newC); }} className="w-1/2 px-4 py-2 bg-surface-hover border border-ui-borderSubtle rounded-full" placeholder="X" /></>
-                          <><label htmlFor="a11y-input-62" className="sr-only">Y</label>
-<input id="a11y-input-62" type="number" inputMode="decimal" value={coord.y} onChange={(e) => { const newC = [...polygonCoords]; newC[idx].y = +e.target.value; setPolygonCoords(newC); }} className="w-1/2 px-4 py-2 bg-surface-hover border border-ui-borderSubtle rounded-full" placeholder="Y" /></>
-                          <Button aria-label="Delete" onClick={() => setPolygonCoords(polygonCoords.filter((_, i) => i !== idx))} className="px-3 bg-ui-error text-ui-errorText rounded-full font-bold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"><Trash2 className="w-4 h-4" /></Button>
-                        </div>
-                      ))}
-                      <Button onClick={() => setPolygonCoords([...polygonCoords, { x: 0, y: 0 }])} className="w-full py-3 bg-accent-50 text-accent-800 font-bold rounded-full mt-2 flex justify-center items-center gap-2 border border-accent-200 transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"><Plus className="w-4 h-4" /> Add Vertex</Button>
-                    </div>
+                  <div className="col-span-2 space-y-2">
+                    <label className={labelCls}>Vertices (x, y in {uLen})</label>
+                    {polygon.map((p, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <input type="number" step="any" value={p.x} onChange={(e) => setPolygon(polygon.map((q, j) => j === i ? { ...q, x: parseFloat(e.target.value) || 0 } : q))} className={inputCls} aria-label={`Vertex ${i + 1} x`} />
+                        <input type="number" step="any" value={p.y} onChange={(e) => setPolygon(polygon.map((q, j) => j === i ? { ...q, y: parseFloat(e.target.value) || 0 } : q))} className={inputCls} aria-label={`Vertex ${i + 1} y`} />
+                        <Button onClick={() => setPolygon(polygon.filter((_, j) => j !== i))} className="text-ui-errorText px-2"><Trash2 size={16} /></Button>
+                      </div>
+                    ))}
+                    <Button onClick={() => setPolygon([...polygon, { x: 0, y: 0 }])} className="flex items-center gap-1 text-accent-800 text-sm font-semibold"><Plus size={16} /> Add vertex</Button>
                   </div>
                 )}
               </div>
+              <p className="text-lg font-bold">Area: {areaOut(shape.areaM2).toFixed(2)} {uArea} · Perimeter: {shape.perimeterM.toFixed(2)} {uLen === "m" ? "m" : "ft"}</p>
             </div>
           )}
 
-          {/* TAB 2: PLOT MEASUREMENT */}
           {activeTab === "plot" && (
-            <div className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
-              <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-                <MapIcon className="w-5 h-5 text-ui-successText" /> Calculate Irregular Plot Area Using Geometric Triangulation
-              </h2>
-              <p className="mb-6 text-base font-normal text-txt-secondary leading-relaxed">
-                Calculates the exact area of irregular plots by dividing them into two triangles with a measured diagonal.
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                <div><label className="block uppercase mb-2 text-sm font-medium text-txt-secondary mb-1">North Side ({uLen})</label><><label htmlFor="a11y-input-63" className="sr-only">Input</label>
-<input id="a11y-input-63" type="number" inputMode="decimal" value={plotBounds.n} onChange={(e) => setPlotBounds({ ...plotBounds, n: +e.target.value })} className="w-full px-4 py-2.5 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary focus:ring-ui-successText" /></></div>
-                <div><label className="block uppercase mb-2 text-sm font-medium text-txt-secondary mb-1">South Side ({uLen})</label><><label htmlFor="a11y-input-64" className="sr-only">Input</label>
-<input id="a11y-input-64" type="number" inputMode="decimal" value={plotBounds.s} onChange={(e) => setPlotBounds({ ...plotBounds, s: +e.target.value })} className="w-full px-4 py-2.5 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary focus:ring-ui-successText" /></></div>
-                <div><label className="block uppercase mb-2 text-sm font-medium text-txt-secondary mb-1">East Side ({uLen})</label><><label htmlFor="a11y-input-65" className="sr-only">Input</label>
-<input id="a11y-input-65" type="number" inputMode="decimal" value={plotBounds.e} onChange={(e) => setPlotBounds({ ...plotBounds, e: +e.target.value })} className="w-full px-4 py-2.5 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary focus:ring-ui-successText" /></></div>
-                <div><label className="block uppercase mb-2 text-sm font-medium text-txt-secondary mb-1">West Side ({uLen})</label><><label htmlFor="a11y-input-66" className="sr-only">Input</label>
-<input id="a11y-input-66" type="number" inputMode="decimal" value={plotBounds.w} onChange={(e) => setPlotBounds({ ...plotBounds, w: +e.target.value })} className="w-full px-4 py-2.5 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary focus:ring-ui-successText" /></></div>
-                <div className="col-span-2 md:col-span-1"><label className="block uppercase mb-2 text-accent-800 text-sm font-medium text-txt-secondary mb-1"><span className="flex items-center gap-1">Diagonal NW-SE ({uLen}) <CodeTooltip standard="IS" code="1786:2008" description="Standard diameters for high strength deformed steel bars." /></span></label><><label htmlFor="a11y-input-67" className="sr-only">Input</label>
-<input id="a11y-input-67" type="number" inputMode="decimal" value={plotBounds.d} onChange={(e) => setPlotBounds({ ...plotBounds, d: +e.target.value })} className="w-full px-4 py-2.5 bg-accent-50 border border-accent-200 rounded-full text-accent-900 focus:ring-accent-500" /></></div>
+            <div className="bg-surface-default/80 rounded-2xl border border-white/20 p-6 shadow-brand-sm space-y-6">
+              <h3 className="text-lg font-medium">Plot Triangulation (Heron)</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <NumField label={`North boundary (${uLen})`} value={plotN} onChange={setPlotN} />
+                <NumField label={`South boundary (${uLen})`} value={plotS} onChange={setPlotS} />
+                <NumField label={`East boundary (${uLen})`} value={plotE} onChange={setPlotE} />
+                <NumField label={`West boundary (${uLen})`} value={plotW} onChange={setPlotW} />
+                <NumField label={`Diagonal (${uLen})`} value={plotD} onChange={setPlotD} />
               </div>
+              {plot.error ? (
+                <p className="text-sm text-ui-errorText bg-ui-error border border-ui-errorBorder rounded-xl px-4 py-2">{plot.error}</p>
+              ) : (
+                <p className="text-lg font-bold">Plot area: {areaOut(plot.totalM2 ?? 0).toFixed(2)} {uArea} (triangles {areaOut(plot.area1M2 ?? 0).toFixed(2)} + {areaOut(plot.area2M2 ?? 0).toFixed(2)}) · Perimeter: {plot.perimeterM.toFixed(2)} {uLen}</p>
+              )}
             </div>
           )}
 
-          {/* TAB 3: PROPERTY RERA */}
           {activeTab === "property" && (
-            <div className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
-              <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-                <Home className="w-5 h-5 text-accent-800" /> RERA Carpet Area Calculator (NBC/RERA Compliant)
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Net Carpet Area ({uArea})</label><><label htmlFor="a11y-input-68" className="sr-only">Input</label>
-<input id="a11y-input-68" type="number" inputMode="decimal" value={propParams.carpetReq} onChange={(e) => handlePropParam("carpetReq", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Internal Partition Walls (%)</label><><label htmlFor="a11y-input-69" className="sr-only">Input</label>
-<input id="a11y-input-69" type="number" inputMode="decimal" value={propParams.internalWallsPerc} onChange={(e) => handlePropParam("internalWallsPerc", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">External Walls (%)</label><><label htmlFor="a11y-input-70" className="sr-only">Input</label>
-<input id="a11y-input-70" type="number" inputMode="decimal" value={propParams.externalWallsPerc} onChange={(e) => handlePropParam("externalWallsPerc", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Balcony/Terrace ({uArea})</label><><label htmlFor="a11y-input-71" className="sr-only">Input</label>
-<input id="a11y-input-71" type="number" inputMode="decimal" value={propParams.balconyArea} onChange={(e) => handlePropParam("balconyArea", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Common Spaces Share (%)</label><><label htmlFor="a11y-input-72" className="sr-only">Input</label>
-<input id="a11y-input-72" type="number" inputMode="decimal" value={propParams.commonAreaPerc} onChange={(e) => handlePropParam("commonAreaPerc", +e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
+            <div className="bg-surface-default/80 rounded-2xl border border-white/20 p-6 shadow-brand-sm space-y-6">
+              <h3 className="text-lg font-medium">RERA Area Ladder</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <NumField label={`Carpet area (${uArea})`} value={propCarpet} onChange={setPropCarpet} />
+                <NumField label="Internal walls (%)" value={propInt} onChange={setPropInt} />
+                <NumField label="External walls (%)" value={propExt} onChange={setPropExt} />
+                <NumField label={`Balcony area (${uArea})`} value={propBalcony} onChange={setPropBalcony} />
+                <NumField label="Common area (%)" value={propCommon} onChange={setPropCommon} />
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between"><span>RERA carpet</span><strong>{areaOut(property.reraCarpetM2).toFixed(2)} {uArea}</strong></div>
+                <div className="flex justify-between"><span>Plinth</span><strong>{areaOut(property.plinthM2).toFixed(2)} {uArea}</strong></div>
+                <div className="flex justify-between"><span>Built-up</span><strong>{areaOut(property.builtUpM2).toFixed(2)} {uArea}</strong></div>
+                <div className="flex justify-between"><span>Super built-up (loading {property.loadingFactorPct.toFixed(1)}%)</span><strong>{areaOut(property.superBuiltUpM2).toFixed(2)} {uArea}</strong></div>
               </div>
             </div>
           )}
 
-          {/* TAB 4: PLASTER DEDUCTIONS */}
           {activeTab === "plaster" && (
-            <div className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
-              <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-                <PaintBucket className="w-5 h-5 text-ui-errorText" /> IS Code Opening Deductions for Accurate Net Area
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Wall Length ({uLen})</label><><label htmlFor="a11y-input-73" className="sr-only">Input</label>
-<input id="a11y-input-73" type="number" inputMode="decimal" value={wallLen} onChange={(e) => setWallLen(+e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Wall Height ({uLen})</label><><label htmlFor="a11y-input-74" className="sr-only">Input</label>
-<input id="a11y-input-74" type="number" inputMode="decimal" value={wallHt} onChange={(e) => setWallHt(+e.target.value)} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div className="col-span-2 md:col-span-1 flex flex-col justify-center">
-                  <label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Faces Plastered</label>
-                  <select value={bothFaces ? "2" : "1"} onChange={(e) => setBothFaces(e.target.value === "2")} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-2xl text-txt-primary focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-ui-errorText">
-                    <option value="1">Single Face</option>
-                    <option value="2">Both Faces</option>
+            <div className="bg-surface-default/80 rounded-2xl border border-white/20 p-6 shadow-brand-sm space-y-6">
+              <h3 className="text-lg font-medium">Plaster / Paint Deductions (IS 1200)</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <NumField label={`Wall length (${uLen})`} value={wallLen} onChange={setWallLen} />
+                <NumField label={`Wall height (${uLen})`} value={wallHt} onChange={setWallHt} />
+                <div><label className={labelCls}>Faces</label>
+                  <select value={faces} onChange={(e) => setFaces(Number(e.target.value) as 1 | 2)} className={inputCls}>
+                    <option value={1}>Single face</option><option value={2}>Both faces</option>
                   </select>
                 </div>
+                <NumField label={`Jamb depth (${uLen})`} value={jambDepth} onChange={setJambDepth} />
               </div>
-              <div className="mb-6">
-                <label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Jamb Depth ({uLen}) <span className="font-normal text-txt-tertiary">(For large openings {'>3'}sq.m)</span></label>
-                <><label htmlFor="a11y-input-75" className="sr-only">Input</label>
-<input id="a11y-input-75" type="number" inputMode="decimal" value={jambDepth} onChange={(e) => setJambDepth(+e.target.value)} className="w-full md:w-1/3 px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></>
-              </div>
-
-              <hr className="my-6 border-ui-borderSubtle" />
-              
-              <h4 className="mb-4 text-lg font-medium text-txt-primary">Openings (Doors / Windows)</h4>
-              <div className="space-y-3">
-                {openings.map((op, idx) => (
-                  <div key={idx} className="flex flex-wrap md:flex-nowrap gap-3 items-end">
-                    <div className="w-[45%] md:w-auto flex-1"><label className="block mb-1 text-sm font-medium text-txt-secondary">Width ({uLen})</label><><label htmlFor="a11y-input-76" className="sr-only">Input</label>
-<input id="a11y-input-76" type="number" inputMode="decimal" value={op.w} onChange={(e) => { const newOp = [...openings]; newOp[idx].w = +e.target.value; setOpenings(newOp); }} className="w-full px-3 py-2.5 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary focus:ring-ui-errorText" /></></div>
-                    <div className="w-[45%] md:w-auto flex-1"><label className="block mb-1 text-sm font-medium text-txt-secondary">Height ({uLen})</label><><label htmlFor="a11y-input-77" className="sr-only">Input</label>
-<input id="a11y-input-77" type="number" inputMode="decimal" value={op.h} onChange={(e) => { const newOp = [...openings]; newOp[idx].h = +e.target.value; setOpenings(newOp); }} className="w-full px-3 py-2.5 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary focus:ring-ui-errorText" /></></div>
-                    <div className="w-auto flex-1"><label className="block mb-1 text-sm font-medium text-txt-secondary">Count</label><><label htmlFor="a11y-input-78" className="sr-only">Input</label>
-<input id="a11y-input-78" type="number" inputMode="decimal" value={op.count} onChange={(e) => { const newOp = [...openings]; newOp[idx].count = Math.max(1, parseInt(e.target.value) || 1); setOpenings(newOp); }} className="w-full px-3 py-2.5 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary focus:ring-ui-errorText" /></></div>
-                    <Button aria-label="Delete" onClick={() => setOpenings(openings.filter((_, i) => i !== idx))} className="px-3 py-3 bg-ui-error text-ui-errorText rounded-full font-bold hover:bg-ui-error transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"><Trash2 className="w-5 h-5" /></Button>
+              <div className="space-y-2">
+                <label className={labelCls}>Openings</label>
+                {openings.map((o) => (
+                  <div key={o.id} className="flex gap-2 items-center">
+                    <input type="number" min="0" step="any" value={o.w} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, w: e.target.value } : x))} className={inputCls} aria-label="Opening width" />
+                    <span>×</span>
+                    <input type="number" min="0" step="any" value={o.h} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, h: e.target.value } : x))} className={inputCls} aria-label="Opening height" />
+                    <input type="number" min="1" step="1" value={o.count} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, count: e.target.value } : x))} className="w-16 bg-surface-hover border border-ui-borderSubtle px-2 py-2 rounded-xl" aria-label="Opening count" />
+                    <span className="text-sm text-txt-tertiary">{plaster.perOpening[openings.indexOf(o)]?.rule ?? ""}</span>
+                    <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-ui-errorText px-2"><Trash2 size={16} /></Button>
                   </div>
                 ))}
-                <Button onClick={() => setOpenings([...openings, { w: 1, h: 2, count: 1 }])} className="w-full py-3 bg-ui-error text-ui-errorText font-bold rounded-full mt-2 flex justify-center items-center gap-2 hover:bg-ui-error transition border border-ui-errorBorder transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"><Plus className="w-5 h-5" /> Add Opening</Button>
+                <Button onClick={() => setOpenings([...openings, { id: `o${Date.now()}`, w: "1", h: "2", count: "1" }])} className="flex items-center gap-1 text-accent-800 text-sm font-semibold"><Plus size={16} /> Add opening</Button>
               </div>
+              <p className="text-lg font-bold">Net plaster area: {areaOut(plaster.netAreaM2).toFixed(2)} {uArea} (gross {areaOut(plaster.grossAreaM2).toFixed(2)} − deductions {areaOut(plaster.totalDeductionM2).toFixed(2)} + jambs {areaOut(plaster.jambsM2).toFixed(2)})</p>
+              <p className="text-xs text-txt-tertiary">Fixed bug: a single-face 0.5–3 m² opening now deducts the FULL opening area (the old code deducted half — e.g. 13.05 m² instead of the correct 11.10 m² on the worked example).</p>
             </div>
           )}
 
-          {/* TAB 5: ROOF PITCH */}
           {activeTab === "roof" && (
-            <div className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
-              <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">
-                <Layers className="w-5 h-5 text-accent-800" /> Roof Pitch Area with Multi-Factor Correction
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Horizontal Area ({uArea})</label><><label htmlFor="a11y-input-79" className="sr-only">Input</label>
-<input id="a11y-input-79" type="number" inputMode="decimal" value={roofParams.floorArea} onChange={(e) => setRoofParams({ ...roofParams, floorArea: +e.target.value })} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Roof Pitch Angle (°)</label><><label htmlFor="a11y-input-80" className="sr-only">Input</label>
-<input id="a11y-input-80" type="number" inputMode="decimal" value={roofParams.pitchAngle} onChange={(e) => setRoofParams({ ...roofParams, pitchAngle: +e.target.value })} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Roof Overhang ({uLen})</label><><label htmlFor="a11y-input-81" className="sr-only">Input</label>
-<input id="a11y-input-81" type="number" inputMode="decimal" value={roofParams.overhang} onChange={(e) => setRoofParams({ ...roofParams, overhang: +e.target.value })} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
-                <div><label className="block mb-2 text-sm font-medium text-txt-secondary mb-1">Eaves Perimeter / Length ({uLen})</label><><label htmlFor="a11y-input-82" className="sr-only">Input</label>
-<input id="a11y-input-82" type="number" inputMode="decimal" value={roofParams.perimeterLength} onChange={(e) => setRoofParams({ ...roofParams, perimeterLength: +e.target.value })} className="w-full px-4 py-3 bg-surface-hover border border-ui-borderSubtle rounded-full text-txt-primary" /></></div>
+            <div className="bg-surface-default/80 rounded-2xl border border-white/20 p-6 shadow-brand-sm space-y-6">
+              <h3 className="text-lg font-medium">Roof Pitch Area</h3>
+              {roofErrors.map((e) => <p key={e} className="text-sm text-ui-errorText bg-ui-error border border-ui-errorBorder rounded-xl px-4 py-2">{e}</p>)}
+              <div className="grid grid-cols-2 gap-4">
+                <NumField label={`Floor area (${uArea})`} value={roofFloor} onChange={setRoofFloor} />
+                <NumField label="Pitch angle (°)" value={roofPitch} onChange={setRoofPitch} />
+                <NumField label={`Overhang (${uLen})`} value={roofOverhang} onChange={setRoofOverhang} />
+                <NumField label={`Eaves perimeter (${uLen})`} value={roofPerim} onChange={setRoofPerim} />
               </div>
+              <p className="text-lg font-bold">True roof area: {areaOut(roof.trueAreaM2).toFixed(2)} {uArea} (horizontal {areaOut(roof.horizontalAreaM2).toFixed(2)} · multiplier {roof.pitchMultiplier.toFixed(3)} · pitch {roof.pitchRatio})</p>
             </div>
           )}
         </div>
-
-        {/* RESULTS PANEL (RIGHT) */}
-        <div className="flex-1 min-w-[min(100%,350px)] lg:max-w-[500px] w-full shrink-0 space-y-6">
-          <div className="w-full bg-surface-default/90 backdrop-blur-xl border border-white/20 p-4 sm:p-8 rounded-2xl shadow-brand-sm sticky top-6 overflow-hidden">
-            <h3 className="tabular-nums mb-6 flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
-              <Calculator className="w-5 h-5 text-accent-800" /> Calculation Results
-            </h3>
-
-            {activeTab === "shape" && (
-              <div className="space-y-4">
-                <div className="p-4 bg-accent-50 rounded-2xl border border-accent-100 shadow-brand-sm text-accent-900 overflow-hidden">
-                  <p className="text-accent-800 uppercase tracking-widest mb-1 text-base font-normal text-txt-secondary leading-relaxed">Total Net Area</p>
-                  <p className="text-2xl font-black tabular-nums tracking-tight text-base font-normal text-txt-secondary leading-relaxed">
-                    {shapeData.area.toFixed(2)} <span className="text-xl font-medium opacity-60">{uArea}</span>
-                  </p>
-                </div>
-                <div className="p-4 bg-surface-hover rounded-2xl border border-border-color shadow-brand-sm text-txt-primary overflow-hidden">
-                  <p className="uppercase tracking-widest mb-1 text-base font-normal text-txt-secondary leading-relaxed">Perimeter</p>
-                  <p className="text-base font-normal text-txt-secondary leading-relaxed">
-                    {shapeData.perimeter.toFixed(2)} <span className="text-base opacity-50">{uLen}</span>
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "plot" && (
-              <div className="space-y-4">
-                <div className="p-4 bg-ui-success rounded-2xl border border-ui-successBorder text-ui-successText shadow-brand-sm overflow-hidden">
-                  <p className="text-ui-successText uppercase tracking-widest mb-1 text-base font-normal text-txt-secondary leading-relaxed">Triangulated Land Area</p>
-                  <p className="text-2xl font-black tabular-nums tracking-tight text-base font-normal text-txt-secondary leading-relaxed">
-                    {Number.isNaN(boundsArea.total) ? "Invalid" : boundsArea.total.toFixed(2)} <span className="text-xl opacity-60 font-medium">{uArea}</span>
-                  </p>
-                  <div className="mt-4 pt-4 border-t border-ui-successBorder/50 text-sm font-medium opacity-80 grid gap-2">
-                    <p className="flex justify-between text-base font-normal text-txt-secondary leading-relaxed"><span>Sub-triangle 1 (North):</span> <span>{Number.isNaN(boundsArea.area1) ? "-" : boundsArea.area1.toFixed(2)} {uArea}</span></p>
-                    <p className="flex justify-between text-base font-normal text-txt-secondary leading-relaxed"><span>Sub-triangle 2 (South):</span> <span>{Number.isNaN(boundsArea.area2) ? "-" : boundsArea.area2.toFixed(2)} {uArea}</span></p>
-                  </div>
-                </div>
-                <div className="p-4 bg-surface-hover rounded-2xl border border-border-color text-txt-primary shadow-brand-sm overflow-hidden">
-                  <p className="uppercase tracking-widest mb-1 text-base font-normal text-txt-secondary leading-relaxed">Outer Perimeter</p>
-                  <p className="text-base font-normal text-txt-secondary leading-relaxed">{boundsArea.perimeter.toFixed(2)} <span className="text-base opacity-50">{uLen}</span></p>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "property" && (
-              <div className="space-y-3">
-                <div className="p-5 bg-accent-50 rounded-2xl border border-accent-100 mb-4 shadow-brand-sm overflow-hidden">
-                  <p className="text-accent-800 uppercase tracking-widest mb-1 text-base font-normal text-txt-secondary leading-relaxed">RERA Carpet Area</p>
-                  <p className="text-2xl font-black tabular-nums tracking-tight text-accent-800 text-base font-normal text-txt-secondary leading-relaxed">
-                    {propertyCalc.reraCarpetArea.toFixed(2)} <span className="text-xl font-medium opacity-60">{uArea}</span>
-                  </p>
-                  <div className="mt-3 pt-3 border-t border-accent-200/50 text-sm text-accent-800 font-semibold leading-relaxed">
-                    Legally defined space encompassing net usable area + internal partition walls (Excludes balconies/external walls).
-                  </div>
-                </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-border-color text-txt-primary font-medium">
-                  <span className="text-sm text-txt-secondary">Trad. Carpet Area</span>
-                  <span className="font-bold">{propertyCalc.traditionalCarpet.toFixed(2)} {uArea}</span>
-                </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-border-color text-txt-primary font-medium">
-                  <span className="text-sm text-txt-secondary flex flex-col"><span>Plinth Area</span><span className="text-sm text-txt-secondary">IS 3861 bounds</span></span>
-                  <span className="font-bold">{propertyCalc.plinthArea.toFixed(2)} {uArea}</span>
-                </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-border-color text-txt-primary font-medium">
-                  <span className="text-sm text-txt-secondary">Built-Up Area</span>
-                  <span className="font-bold text-accent-800">{propertyCalc.builtUpArea.toFixed(2)} {uArea}</span>
-                </div>
-                <div className="flex justify-between items-center py-2.5 text-txt-primary font-medium">
-                  <span className="text-sm text-txt-secondary">Super Built-Up</span>
-                  <span className="font-bold text-ui-successText">{propertyCalc.superBuiltUpArea.toFixed(2)} {uArea}</span>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "roof" && (
-              <div className="space-y-4">
-                <div className="p-5 bg-accent-50 rounded-2xl border border-accent-100 text-accent-900 shadow-brand-sm overflow-hidden">
-                  <p className="text-accent-800 uppercase tracking-widest mb-1 text-base font-normal text-txt-secondary leading-relaxed">True Sloped Roof Area</p>
-                  <p className="text-2xl font-black tabular-nums tracking-tight text-base font-normal text-txt-secondary leading-relaxed">
-                    {roofCalc.trueRoofArea.toFixed(2)} <span className="text-xl opacity-60 font-medium">{uArea}</span>
-                  </p>
-                  <div className="mt-4 pt-4 border-t border-accent-200/50 text-sm opacity-80 grid gap-2 font-medium">
-                    <p className="flex justify-between text-base font-normal text-txt-secondary leading-relaxed"><span>Base + Overhangs:</span> <span>{roofCalc.totalHorizontalArea.toFixed(2)} {uArea}</span></p>
-                    <p className="flex justify-between text-accent-800 text-base font-normal text-txt-secondary leading-relaxed"><span>Pitch Multiplier (Secant):</span> <span>{(1 / Math.cos((roofParams.pitchAngle * Math.PI) / 180)).toFixed(3)}x</span></p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "plaster" && (
-              <div className="space-y-4">
-                <div className="p-5 bg-ui-error rounded-2xl border border-ui-errorBorder text-ui-errorText shadow-brand-sm overflow-hidden">
-                  <p className="text-ui-errorText uppercase tracking-widest mb-1 text-base font-normal text-txt-secondary leading-relaxed">Net Plastering Area</p>
-                  <p className="text-2xl font-black tabular-nums tracking-tight text-base font-normal text-txt-secondary leading-relaxed">
-                    {plasterCalc.netArea.toFixed(2)} <span className="text-xl opacity-60 font-medium">{uArea}</span>
-                  </p>
-                  <div className="mt-4 pt-4 border-t border-ui-errorBorder/50 text-sm font-medium grid gap-2 text-ui-errorText/80">
-                      <p className="flex justify-between text-base font-normal text-txt-secondary leading-relaxed"><span>Wall Gross Area:</span> <span>{plasterCalc.grossArea.toFixed(2)} {uArea}</span></p>
-                      <p className="flex justify-between text-ui-errorText text-base font-normal text-txt-secondary leading-relaxed"><span>Opening Deductions:</span> <span>- {plasterCalc.totalDeduction.toFixed(2)} {uArea}</span></p>
-                      <p className="flex justify-between text-base font-normal text-txt-secondary leading-relaxed"><span>Jambs Added:</span> <span>+ {plasterCalc.jambAddition.toFixed(2)} {uArea}</span></p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* CTA BOQ Banner */}
-            <div className="mt-6 p-5 rounded-2xl bg-gradient-to-br from-ink to-ink shadow-brand-md text-txt-primary">
-              <h4 className="flex items-center gap-2 mb-2 text-lg font-medium text-txt-primary mb-4">
-                📄 Turn this calculation into a full BOQ
-              </h4>
-              <p className="text-accent-100 mb-4 text-base font-normal text-txt-secondary leading-relaxed">
-                Your area is ready. Generate material quantities and cost summary in 3 clicks.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Button className="w-full flex-1 px-4 py-2 bg-surface-default text-accent-800 hover:bg-surface-hover rounded-full transition duration-200 shadow-brand-sm truncate text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 overflow-hidden">
-                  Generate BOQ Now →
-                </Button>
-                <Button className="px-4 py-2 bg-ink border border-accent-400 hover:bg-ink-700 text-white rounded-full transition duration-200 flex items-center justify-center text-base font-semibold transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
-                  Save Result
-                </Button>
-              </div>
-            </div>
-
-          </div>
-        </div>
+        <div className="w-full lg:w-80 shrink-0"><ConvTable /></div>
       </div>
 
-      {activeTab === "plaster" && plasterCalc.steps.length > 0 && (
-        <div className="mt-8">
-            <h3 className="mb-4 text-lg font-medium text-txt-primary">IS 1200 Deduction Proof</h3>
-            <DetailedCalculationDisplay steps={plasterCalc.steps as any} />
-        </div>
-      )}
-
-      {/* SEO SECTIONS */}
-      <div className="mt-16 space-y-12">
-        <section className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-brand-sm overflow-hidden">
-          <h2 className="mb-4 text-xl font-semibold text-txt-primary tracking-tight">How to Use the Plot Area Calculator</h2>
-          <div className="text-txt-secondary space-y-4">
-            <p>1. <strong>Select your module:</strong> Choose between Triangulation, RERA Property Area, or Roof Pitch.</p>
-            <p>2. <strong>Input dimensions:</strong> Enter values in your preferred unit system (Metric or Imperial) which can be set in the global settings.</p>
-            <p>3. <strong>For Irregular Plots:</strong> Input all 4 edges and 1 diagonal length. The calculator uses geometric triangulation automatically.</p>
-            <p>4. <strong>Review results:</strong> Instantly check Net Area, Built-Up calculations, and Deductions dynamically generated on the side panel.</p>
-          </div>
+      <article className="prose prose-lg max-w-none text-txt-secondary space-y-6 mt-10">
+        <section>
+          <h2 className="text-2xl font-bold text-txt-primary">Five tabs, one area</h2>
+          <p>
+            The calculator has five tabs. Shapes covers rectangles, squares, circles, triangles by Heron&rsquo;s
+            formula, trapezoids, L-shapes, T-shapes and polygons by the shoelace formula — with visible inputs for
+            the L-shape arms and the T-shape top and leg, so you never have to guess which dimension goes where.
+            Triangulation measures an irregular plot from its four sides and a diagonal. RERA walks the carpet to
+            super built-up ladder. Plaster deductions applies IS 1200 opening rules. Roof pitch turns a floor area
+            and a pitch angle into a true sloped area. Every tab shows the result in m², sq ft, sq yd, marla and kanal.
+          </p>
         </section>
-
-        <section className="w-full bg-surface-default/80 backdrop-blur-xl border border-white/20 p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-brand-sm overflow-hidden">
-          <h2 className="mb-4 text-xl font-semibold text-txt-primary tracking-tight">Methodology & Engineering Standards</h2>
-          <div className="text-txt-secondary space-y-4">
-            <p>Our <strong>Plot Area Calculator</strong> strictly adheres to the following industry guidelines:</p>
-            <ul className="list-disc pl-5 space-y-2">
-              <li><strong>IS 1200 (Part 1, 4, 12):</strong> Rules for deduction of openings in plastering and masonry work. For plastering, no deductions are made for openings under 0.5 sq.m.</li>
-              <li><strong>IS 3861:</strong> Method of measurement for plinth, carpet, and rentable areas of buildings.</li>
-              <li><strong>RERA / NBC:</strong> Standard matrix computation for deriving Carpet, Built-Up, and Super Built-Up areas based on proportional allocations of common spaces.</li>
-              <li><strong>Geometric Surveying:</strong> Triangulation calculation based on Heron’s principle ensures 100% mathematical validity for non-orthogonal property boundaries.</li>
-            </ul>
-          </div>
+        <section>
+          <h2 className="text-2xl font-bold text-txt-primary">The plaster deduction that was wrong</h2>
+          <p>
+            The old version of this tool deducted half the opening area for a single-face opening in the 0.5–3 m²
+            band. IS 1200 says the full opening area is deducted on one face. On the worked example — a 15 m² wall
+            with 2.1 m² and 1.8 m² of openings, single face — the old code returned 13.05 m² and the correct net area
+            is 11.10 m², a 17.6% overstatement. The fix is in the engine and in this calculator: the middle band
+            deducts the full opening, once.
+          </p>
         </section>
-        <section className="bg-surface-hover border border-ui-borderSubtle p-6 md:p-8 rounded-2xl shadow-brand-sm">
-          <div className="flex items-start gap-4 flex-wrap">
-            <div className="p-3 bg-accent-100 text-accent-800 rounded-full">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="mb-1 text-lg font-medium text-txt-primary mb-4">Expert Reviewed</h3>
-              <div className="text-sm text-txt-secondary space-y-1">
-                <p><strong>Reviewed by:</strong> Civil Estimation Pro Engineering Team</p>
-                <p><strong>Qualifications:</strong> B.Tech Civil Engineering · 8 years in QS practice</p>
-                <p><strong>Last reviewed:</strong> June 2025</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
+      </article>
+      <FormulaAccordion steps={steps} />
     </div>
   );
 }

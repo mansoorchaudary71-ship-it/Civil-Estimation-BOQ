@@ -3,7 +3,7 @@ import { UniversalTabs } from "../ui/UniversalTabs";
 import { Building2, Grid2X2, Columns, FileSpreadsheet, Layers, AlignVerticalSpaceAround, LayoutDashboard, ArrowUp, Calculator } from "lucide-react";
 import { SEO } from "../SEO";
 
-import MasterRccCore from "./MasterRccCore";
+import { MasterRccCoreBody } from "./MasterRccCore";
 import SlabEstimator from "./SlabEstimator";
 import ColumnEstimator from "./ColumnEstimator";
 import BeamCalculator from "./BeamCalculator";
@@ -52,7 +52,7 @@ export default function MasterRccStructure({ isEmbedded = false, onNavigate }: M
 
         {/* Content Area */}
         <div className="animate-in fade-in slide-in-from-right-2 duration-300">
-          {activeTab === "master" && <MasterRccCore />}
+          {activeTab === "master" && <MasterRccCoreBody />}
           {activeTab === "slab" && <SlabEstimator />}
           {activeTab === "column" && <ColumnEstimator />}
           {activeTab === "beam" && <BeamCalculator />}

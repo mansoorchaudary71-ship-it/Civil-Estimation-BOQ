@@ -6,9 +6,9 @@ import { ComposedChart, Line, Scatter, XAxis, YAxis, CartesianGrid, Tooltip as R
 import { useEstimateProcessing } from "../../hooks/useEstimateProcessing";
 import { ProcessingSkeleton } from "../ui/ProcessingSkeleton";
 import { CalculationHistory } from "../ui/CalculationHistory";
+import { directShearFit, terzaghiSbc } from "../../lib/directShearCalc";
 import { SoilReportHeader } from "../ui/SoilReportHeader";
 import { SoilReportDetails, generateGeotechReportPDF } from "../../utils/soilReports";
-import { GlobalFAQ } from "../ui/GlobalFAQ";
 
 
 export default function DirectShearTestCalculator() {
@@ -163,17 +163,25 @@ export default function DirectShearTestCalculator() {
       soilType = "Cohesionless soil (e.g. Sand)";
     }
     
-    // Very rough safe bearing capacity estimate (Terzaghi shallow foundation approx for demo)
-    const factorOfSafety = 3;
-    const Nc = 5.14 * Math.exp(estimateData.angleOfFriction * Math.PI / 180 * 2) * Math.tan(45 + estimateData.angleOfFriction/2); // simplification
-    const sbc = ((estimateData.cohesion * 15 /* roughly Nc */) + (18 /* gamma approx */ * 1 /* depth */ * 10 /* Nq */)) / factorOfSafety; 
-    
-    const interpretationText = `c = ${estimateData.cohesion.toFixed(1)} kPa, φ = ${estimateData.angleOfFriction.toFixed(1)}° — Soil classification: ${soilType}.\nSafe bearing capacity estimate (Terzaghi approx): ${Math.round(sbc)} kN/m²`;
+    // Labelled Terzaghi estimate with REAL phi-derived Nc/Nq/Ngamma
+    // (old PDF used a fabricated c*15 + 18*1*10 formula with Nc computed and never used).
+    // Assumptions stated in the PDF: gamma = 18 kN/m3, Df = 1.0 m, B = 1.5 m, FoS = 3.
+    // This is an ESTIMATE only — never a design bearing capacity.
+    const shearPoints = testData.filter((d) => d.normalStress > 0).map((d) => ({ normalKpa: d.normalStress, shearKpa: d.shearStress }));
+    const fit = shearPoints.length >= 3 ? directShearFit(shearPoints) : null;
+    const sbcCalc = fit ? terzaghiSbc(Math.max(0, fit.cohesionKpa), fit.phiDeg, 18, 1.0, 1.5, 3) : null;
+    const sbc = sbcCalc ? sbcCalc.sbcKpa : 0;
+    const r2Text = fit ? `R² = ${fit.r2.toFixed(3)}${fit.r2 < 0.95 ? " (< 0.95 — repeat the test)" : ""}. ` : "";
+    const sbcText = sbcCalc
+      ? `Labelled Terzaghi estimate only (gamma 18 kN/m³, Df 1.0 m, B 1.5 m, FoS 3; Nc ${sbcCalc.factors.nc.toFixed(1)}, Nq ${sbcCalc.factors.nq.toFixed(1)}, Nγ ${sbcCalc.factors.ngamma.toFixed(1)}): SBC ≈ ${Math.round(sbc)} kN/m² — NOT a design bearing capacity.`
+      : "Bearing capacity not computed (need ≥3 points).";
+    const interpretationText = `c = ${estimateData.cohesion.toFixed(1)} kPa, φ = ${estimateData.angleOfFriction.toFixed(1)}° — Soil classification: ${soilType}. ${r2Text}\n${sbcText}`;
     
     const results = [
       { label: "Cohesion (c)", value: `${estimateData.cohesion.toFixed(2)} kPa` },
       { label: "Angle of Internal Friction (φ)", value: `${estimateData.angleOfFriction.toFixed(2)} °` },
-      { label: "Failure Envelope Equation", value: estimateData.eq }
+      { label: "Failure Envelope Equation", value: estimateData.eq },
+      ...(fit ? [{ label: "R² of envelope fit", value: fit.r2.toFixed(3) }] : []),
     ];
     testData.forEach((td, i) => {
         results.push({ label: `Sample ${i+1} Normal Stress`, value: `${td.normalStress} kPa` });

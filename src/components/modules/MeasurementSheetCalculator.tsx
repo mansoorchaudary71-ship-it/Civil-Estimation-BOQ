@@ -4,6 +4,11 @@ import { Plus, Trash2, Download, Section } from "lucide-react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { CalculationHistory } from '../ui/CalculationHistory';
+import { measureRow, validateMeasureRow, type MeasureKind } from "../../lib/measurementSheet";
+import { sendToBoq } from "../../lib/boq";
+import { useAutoSave } from "../../hooks/useAutoSave";
+import { useRates } from "../../lib/useRates";
+import toast from "react-hot-toast";
 import { GenericExportButtons } from "../ui/GenericExportButtons";
 
 
@@ -21,7 +26,10 @@ type MeasurementRow = {
   width: string;
   heightDepth: string;
   nos: string;
-  result: number;
+  rate: string;
+  /** null = incomplete row (missing dimensions) — never a computed number */
+  result: number | null;
+  hint: string | null;
 };
 
 type TabType = 
@@ -41,8 +49,16 @@ const TAB_TITLES: Record<TabType, string> = {
   tiles: "Floor & Wall Tiles",
 };
 
+const TAB_KIND: Record<TabType, MeasureKind> = {
+  excavation: "volume", pcc: "volume", rcc: "volume", masonry: "volume",
+  plaster: "area", tiles: "area",
+};
+const TAB_UNIT_LABEL: Record<MeasureKind, string> = { volume: "m³", area: "m²", length: "m" };
+
 const MeasurementSheetCalculator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>("excavation");
+  const [unit, setUnit] = useState<"m" | "ft">("m");
+  const { rates: pkRates, table: rateTable } = useRates("PK");
   
   const generateEmptyRow = (): MeasurementRow => ({
     id: Math.random().toString(36).substring(7),
@@ -52,7 +68,9 @@ const MeasurementSheetCalculator: React.FC = () => {
     width: "",
     heightDepth: "",
     nos: "1",
-    result: 0,
+    rate: "",
+    result: null,
+    hint: null,
   });
 
   const [sheets, setSheets] = useState<Record<TabType, MeasurementRow[]>>({
@@ -65,32 +83,26 @@ const MeasurementSheetCalculator: React.FC = () => {
   });
 
   const handleRowChange = (tab: TabType, id: string, field: keyof MeasurementRow, value: string) => {
-    if (["length", "width", "heightDepth", "nos"].includes(field as string)) {
+    if (["length", "width", "heightDepth", "nos", "rate"].includes(field as string)) {
       if (value !== "" && isNaN(Number(value))) return;
-      if (field === "nos" && value !== "" && Number(value) < 0) return;
+      if ((field === "nos" || field === "rate") && value !== "" && Number(value) < 0) return;
     }
 
     setSheets(prev => {
       const newTabState = prev[tab].map(row => {
         if (row.id === id) {
           const updatedRow = { ...row, [field]: value };
-          
-          // Auto-calculate result
-          const l = parseFloat(updatedRow.length) || 1; // If empty, we can treat it as 1 for multiplication if other values exist, but it's better to treat as 0 if we want strict. Let's do strict but allow empty length to not fail if we only need area vs volume.
-          // Wait, actually, if length is empty, should we treat it as 0? Standard M-Sheet: L * W * D * N. If a dimension is empty, it shouldn't nullify if it's not applicable (like area calculation has no depth).
-          // Usually: Nos * (L || 1) * (W || 1) * (D || 1) but if all are empty it's 0.
-          const lVal = parseFloat(updatedRow.length);
-          const wVal = parseFloat(updatedRow.width);
-          const dVal = parseFloat(updatedRow.heightDepth);
-          const nVal = parseFloat(updatedRow.nos) || 1;
-
-          let res = nVal;
-          let hasInputs = false;
-          if (!isNaN(lVal)) { res *= lVal; hasInputs = true; }
-          if (!isNaN(wVal)) { res *= wVal; hasInputs = true; }
-          if (!isNaN(dVal)) { res *= dVal; hasInputs = true; }
-          
-          updatedRow.result = hasInputs ? res : 0;
+          // Engine (src/lib/measurementSheet): a row is INCOMPLETE until it
+          // has enough dimensions (3 for volume, 2 for area). The old code
+          // treated a missing dimension as 1, so L-only = 10 was "computed".
+          const num = (v: string) => (v === "" ? null : Number(v));
+          const r = measureRow(
+            { nos: num(updatedRow.nos), length: num(updatedRow.length), width: num(updatedRow.width), depth: num(updatedRow.heightDepth), rate: num(updatedRow.rate) },
+            TAB_KIND[tab],
+            unit,
+          );
+          updatedRow.result = r.qty;
+          updatedRow.hint = r.hint;
           return updatedRow;
         }
         return row;
@@ -114,7 +126,46 @@ const MeasurementSheetCalculator: React.FC = () => {
   };
 
   const getSubtotal = (tab: TabType) => {
-    return sheets[tab].reduce((sum, row) => sum + (row.result || 0), 0);
+    return sheets[tab].reduce((sum, row) => sum + (row.result ?? 0), 0);
+  };
+  const getAmountTotal = (tab: TabType) => {
+    return sheets[tab].reduce((sum, row) => {
+      const rate = row.rate === "" ? null : Number(row.rate);
+      return sum + ((row.result ?? 0) * (rate ?? 0));
+    }, 0);
+  };
+  const incompleteCount = (tab: TabType) => sheets[tab].filter((r) => r.hint).length;
+
+  useAutoSave("measurement-sheet", { sheets, activeTab, unit },
+    { sheets: setSheets, activeTab: setActiveTab, unit: setUnit });
+
+  const sendActiveTabToBoq = () => {
+    const rows = sheets[activeTab].filter((r) => r.result != null && r.description.trim() !== "");
+    if (rows.length === 0) { toast.error("No complete rows to send — finish the dimensions first."); return; }
+    sendToBoq(rows.map((r) => ({
+      description: r.description, unit: TAB_UNIT_LABEL[TAB_KIND[activeTab]],
+      quantity: r.result as number, rate: r.rate === "" ? null : Number(r.rate),
+      source: `Measurement Sheet (${TAB_TITLES[activeTab]})`,
+    })));
+    toast.success(`${rows.length} row(s) sent to the BOQ Generator — open BOQ to load them.`);
+  };
+
+  const exportCsv = () => {
+    const lines = [["Tab", "Item No", "Description", "Nos", "L", "W", "H/D", `Qty (${unit})`, "Rate", "Amount"]];
+    (Object.keys(TAB_TITLES) as TabType[]).forEach((t) => {
+      sheets[t].forEach((r) => {
+        const rate = r.rate === "" ? 0 : Number(r.rate);
+        lines.push([TAB_TITLES[t], r.itemNo, r.description, r.nos, r.length, r.width, r.heightDepth, r.result == null ? "incomplete" : String(r.result), String(rate), String((r.result ?? 0) * rate)]);
+      });
+    });
+    const csv = lines.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const aEl = document.createElement("a");
+    aEl.href = URL.createObjectURL(blob);
+    aEl.download = "measurement-sheet.csv";
+    aEl.click();
+    URL.revokeObjectURL(aEl.href);
+    toast.success("Measurement sheet CSV downloaded");
   };
 
   const exportPDF = () => {
@@ -128,9 +179,9 @@ const MeasurementSheetCalculator: React.FC = () => {
       const t = tabKey as TabType;
       const rows = sheets[t];
       
-      // Skip empty tabs (with result 0)
+      // Skip empty tabs (no complete rows)
       const subtotal = getSubtotal(t);
-      if (subtotal === 0 && rows.length === 1 && !rows[0].description) return;
+      if (rows.every((r) => r.result == null) && rows.length === 1 && !rows[0].description) return;
 
       doc.setFontSize(14);
       doc.text(TAB_TITLES[t], 14, currentY);
@@ -143,17 +194,19 @@ const MeasurementSheetCalculator: React.FC = () => {
         r.length,
         r.width,
         r.heightDepth,
-        r.result.toFixed(2)
+        r.result == null ? "— incomplete" : r.result.toFixed(2),
+        r.rate,
+        r.result == null || r.rate === "" ? "—" : ((r.result * Number(r.rate)).toFixed(2)),
       ]);
-      
-      tableData.push(["", "SUBTOTAL", "", "", "", "", subtotal.toFixed(2)]);
+
+      tableData.push(["", "SUBTOTAL", "", "", "", "", subtotal.toFixed(2), "", getAmountTotal(t).toFixed(2)]);
 
       doc.autoTable({
         startY: currentY,
-        head: [["Item No", "Description", "Nos", "L", "W", "H/D", "Qty/Area"]],
+        head: [["Item No", "Description", "Nos", "L", "W", "H/D", "Qty/Area", "Rate", "Amount"]],
         body: tableData,
         theme: "grid",
-        headStyles: { fillColor: [88, 28, 135] }, // Purple-900 
+        headStyles: { fillColor: [242, 164, 19] }, // amber #F2A413 (was legacy purple) 
       });
 
       currentY = doc.lastAutoTable.finalY + 15;
@@ -166,20 +219,31 @@ const MeasurementSheetCalculator: React.FC = () => {
     <div className="tool-card p-4 md:p-8 flex flex-col w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
             <Section className="w-6 h-6 text-accent-800" />
             Measurement Sheet
-          </h2>
+          </h1>
           <p className="text-txt-tertiary mt-1">
-            Calculate quantities dynamically for various construction items.
+            Nos × L × W × D quantities per IS 1200. A row with missing dimensions is flagged incomplete — never silently computed. Plaster openings use the IS 1200 rule (under 0.5 m² none, 0.5–3 m² one face, over 3 m² both faces).
           </p>
+          <div className="flex gap-2 mt-3">
+            <span className="text-sm font-semibold text-txt-secondary self-center">Units:</span>
+            {(["m", "ft"] as const).map((u) => (
+              <Button key={u} onClick={() => setUnit(u)} className={`px-3 py-1.5 rounded-full text-xs font-bold ${unit === u ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>{u === "m" ? "Metres (m / m² / m³)" : "Feet (ft / sqft / cu.ft)"}</Button>
+            ))}
+          </div>
         </div>
-        <Button onClick={exportPDF}
-          className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors whitespace-nowrap active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-        >
-          <Download className="w-4 h-4" />
-          Export PDF
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={exportPDF} className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors whitespace-nowrap">
+            <Download className="w-4 h-4" /> Export PDF
+          </Button>
+          <Button onClick={exportCsv} className="flex items-center gap-2 bg-surface-hover px-5 py-2.5 rounded-full font-medium transition-colors whitespace-nowrap">
+            <Download className="w-4 h-4" /> Export CSV
+          </Button>
+          <Button onClick={sendActiveTabToBoq} className="flex items-center gap-2 bg-accent-500 text-ink px-5 py-2.5 rounded-full font-bold transition-colors whitespace-nowrap">
+            Send to BOQ
+          </Button>
+        </div>
       </div>
 
       {/* TABS */}
@@ -210,7 +274,9 @@ const MeasurementSheetCalculator: React.FC = () => {
               <th className="p-3 font-semibold w-24">L</th>
               <th className="p-3 font-semibold w-24">W</th>
               <th className="p-3 font-semibold w-24">H/D</th>
-              <th className="p-3 font-semibold w-32 border-l border-accent-200">Total</th>
+              <th className="p-3 font-semibold w-32 border-l border-accent-200">Total ({TAB_UNIT_LABEL[TAB_KIND[activeTab]]})</th>
+              <th className="p-3 font-semibold w-24">Rate</th>
+              <th className="p-3 font-semibold w-28">Amount</th>
               <th className="p-3 font-semibold rounded-tr-xl w-16"></th>
             </tr>
           </thead>
@@ -275,9 +341,16 @@ const MeasurementSheetCalculator: React.FC = () => {
                   /></>
                 </td>
                 <td className="p-2 border-l border-border-color bg-surface-hover border-b-0 font-medium text-txt-primary">
-                  <div className="w-full text-right px-2">
-                    {row.result > 0 ? row.result.toFixed(2) : "-"}
+                  <div className="w-full text-right px-2" title={row.hint ?? undefined}>
+                    {row.result == null ? <span className="text-amber-700 font-bold">— incomplete</span> : row.result.toFixed(2)}
                   </div>
+                  {row.hint && <div className="text-xs text-amber-700 px-2">{row.hint}</div>}
+                </td>
+                <td className="p-2">
+                  <input type="number" inputMode="decimal" value={row.rate} onChange={(e) => handleRowChange(activeTab, row.id, "rate", e.target.value)} className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-ink outline-none text-center" placeholder="—" />
+                </td>
+                <td className="p-2 text-right font-semibold">
+                  {row.result == null || row.rate === "" ? "—" : (row.result * Number(row.rate)).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                 </td>
                 <td className="p-2 text-center">
                   <Button
@@ -294,10 +367,14 @@ const MeasurementSheetCalculator: React.FC = () => {
           <tfoot>
             <tr className="border-t-2 border-accent-200">
               <td colSpan={6} className="p-4 text-right font-bold text-txt-secondary">
-                SUBTOTAL
+                SUBTOTAL {incompleteCount(activeTab) > 0 ? `(${incompleteCount(activeTab)} incomplete row(s) excluded)` : ""}
               </td>
               <td className="p-4 text-right font-bold text-accent-800 bg-accent-50">
                 {getSubtotal(activeTab).toFixed(2)}
+              </td>
+              <td></td>
+              <td className="p-4 text-right font-bold text-accent-800 bg-accent-50">
+                {getAmountTotal(activeTab).toLocaleString(undefined, { maximumFractionDigits: 2 })}
               </td>
               <td></td>
             </tr>
@@ -305,6 +382,9 @@ const MeasurementSheetCalculator: React.FC = () => {
         </table>
       </div>
 
+      {activeTab === "plaster" && (
+        <p className="mt-4 text-sm text-txt-tertiary">Plaster opening deductions (IS 1200): openings under 0.5 m² — no deduction; 0.5–3 m² — deduct one face; over 3 m² — deduct both faces and add jambs, soffits and sills. Enter the net area per row after applying the rule.</p>
+      )}
       <div className="mt-4 flex justify-start">
         <Button
           onClick={() => addRow(activeTab)}
@@ -316,7 +396,7 @@ const MeasurementSheetCalculator: React.FC = () => {
       </div>
 
     
-      <CalculationHistory calculatorId="measurementsheetcalculator_tool" currentInputs={{}} />
+      <CalculationHistory calculatorId="measurementsheetcalculator_tool" currentInputs={{ activeTab, unit }} currentResults={{ subtotal: getSubtotal(activeTab) }} />
 </div>
   );
 };

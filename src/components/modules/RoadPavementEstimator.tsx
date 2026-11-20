@@ -67,6 +67,8 @@ export default function RoadPavementEstimator({ onNavigate }: { onNavigate?: (id
         </div>
       </div>
 
+      <p className="text-base font-normal text-txt-secondary leading-relaxed mb-6">Free road and pavement calculator: flexible pavement layers (GSB/WMM/DBM/BC), rigid pavement quantities, and asphalt tonnage with MoRTH densities.</p>
+
       <UniversalTabs 
           tabs={tabs.map(t => ({ id: t.id, label: t.label, icon: t.icon ? <t.icon className="w-5 h-5" /> : undefined }))} 
           activeTab={activeTab} 
@@ -75,9 +77,9 @@ export default function RoadPavementEstimator({ onNavigate }: { onNavigate?: (id
 
       <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="mt-2">
-          {activeTab === "flexible" && <RoadEstimator />}
-          {activeTab === "rigid" && <RigidPavementEstimator />}
-          {activeTab === "asphalt" && <AsphaltPavingCalculator />}
+          {activeTab === "flexible" && <RoadEstimator designStandard={designStandard} />}
+          {activeTab === "rigid" && <RigidPavementEstimator designStandard={designStandard} />}
+          {activeTab === "asphalt" && <AsphaltPavingCalculator designStandard={designStandard} />}
           {activeTab === "sewerage" && <SewerageEstimator />}
         </div>
       </div>

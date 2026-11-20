@@ -79,7 +79,9 @@ export default function GeotechnicalCalculator() {
       "Water Content (w)": `${w.toFixed(2)}%`,
     };
     
-    const classification = w > 50 ? "High Plasticity" : w > 35 ? "Medium Plasticity" : "Low Plasticity";
+    // Plasticity CANNOT be labelled from water content alone (IS 1498) —
+    // it needs LL and PL (PI = LL − PL). Show the water content only.
+    const classification = "Plasticity needs LL/PL — see Atterberg tab (PI = LL − PL)";
     interpretationText = `Result: ${w.toFixed(1)}% — Classification per IS 1498: [${classification}] soil (assumptive correlation).`;
     
   } else if (activeTab === "specific-gravity") {
@@ -172,6 +174,7 @@ export default function GeotechnicalCalculator() {
       />
       
       <div className="w-full md:max-w-7xl md:mx-auto px-4 md:px-0">
+        <p className="text-base font-normal text-txt-secondary leading-relaxed mb-6">Free soil test calculator: water content, specific gravity, liquid limit, plastic limit, Proctor OMC and CBR per IS 2720 — with worked formulas and PDF report.</p>
 
         {/* Tab Navigation */}
         <UniversalTabs 

@@ -222,19 +222,37 @@ export default function ChainageVolumeEstimator() {
     const shrunkenFill = totalFill * (1 - shrink / 100);
     const finalNet = bulkedCut - shrunkenFill;
 
+    // Simpson's 1/3 rule is only valid with equal spacing + an odd station
+    // count — the old tool silently used d = totalL/2 on unequal spacing.
+    let simpsonError: string | null = null;
+    let sortWarning: string | null = null;
+    if (method === "simpson") {
+      const chs = processedStations.map((st) => st.ch);
+      if (chs.length < 3 || chs.length % 2 === 0) simpsonError = "Simpson's rule needs an odd number of stations (≥3) — switch to Trapezoidal or add/remove a station.";
+      else {
+        const spacings = chs.slice(1).map((c, i) => c - chs[i]);
+        if (spacings.some((sp) => Math.abs(sp - spacings[0]) > 1e-9)) simpsonError = "Simpson's rule needs equal station spacing — switch to Trapezoidal or re-space the stations.";
+      }
+    }
+    if (stations.some((st, i) => i > 0 && parseChainage(st.chainage) < parseChainage(stations[i - 1].chainage))) {
+      sortWarning = "Chainages were entered out of order — stations are sorted for the calculation.";
+    }
     return {
       segments,
       totalCut,
       totalFill,
       bulkedCut,
       shrunkenFill,
-      finalNet
+      finalNet,
+      simpsonError,
+      sortWarning,
     };
   }, [stations, formationWidth, cutSlope, fillSlope, method, swellFactor, shrinkFactor]);
 
   return (
     <div className="w-full flex justify-center animate-in fade-in py-6">
       <div className="w-full max-w-6xl space-y-8">
+        <p className="text-base font-normal text-txt-secondary leading-relaxed">Free chainage volume calculator: cut and fill volumes by trapezoidal or Simpson's rule, bulked/shrunken balance, mass-haul curve and cost.</p>
         
         <div className="flex flex-wrap gap-6 sm:gap-8 w-full items-start">
           <section className="flex-1 min-w-[min(100%,380px)] w-full flex flex-col space-y-6">
@@ -300,6 +318,9 @@ export default function ChainageVolumeEstimator() {
                         <option value="trapezoidal">Trapezoidal Rule</option>
                         <option value="simpson">Simpson's (1/3) Rule</option>
                     </select>
+                    {results.simpsonError && (<p className="text-sm text-ui-errorText font-medium mt-2">{results.simpsonError}</p>)}
+                    {results.sortWarning && (<p className="text-sm text-accent-800 font-medium mt-2">{results.sortWarning}</p>)}
+                    <p className="text-xs text-txt-tertiary mt-2">Chainage accepts km+m notation, e.g. 1+200 = 1200 m.</p>
                     <Button onClick={addStation}
                       className="flex items-center gap-2 px-4 py-2 bg-accent-100 text-accent-800 hover:bg-accent-200 rounded-full transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                     >

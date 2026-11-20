@@ -142,11 +142,27 @@ export default function MasterSieveAnalysis() {
   const cu = (d60 !== null && d10 !== null && d10 > 0) ? (d60 / d10) : null;
   const cc = (d60 !== null && d30 !== null && d10 !== null && d10 > 0) ? ((d30 * d30) / (d60 * d10)) : null;
 
+  // USCS — gravel-vs-sand decided FIRST, then the well-graded test.
+  // (Old code tested the GW branch before SW, so SW could never be returned.)
   let uscs = "Unknown";
+  const fmSizes = [4.75, 2.36, 1.18, 0.6, 0.3, 0.15];
+  const fm = sieveData.length > 0 && totalWeight !== "" ? fmSizes.reduce((acc, sz) => {
+      const row = sieveData.find((r) => Math.abs(r.size - sz) < 0.001);
+      return acc + (row ? row.cumulativePercentRetained : 0);
+  }, 0) / 100 : null;
+  const sumRetainedG = sieveData.reduce((a, r) => a + (typeof r.weightRetained === "number" ? r.weightRetained : 0), 0);
+  const sumCheckWarning = totalWeight !== "" && Math.abs(((sumRetainedG) / Number(totalWeight)) * 100 - 100) > 2
+      ? `Retained weights sum to ${sumRetainedG} g vs total ${totalWeight} g — check the weights (pan weight not included).` : null;
   if (sieveData.length > 0 && totalWeight !== "" && cu !== null && cc !== null) {
-      if (cu >= 4 && cc >= 1 && cc <= 3) uscs = "GW (Well-graded gravel)";
-      else if (cu >= 6 && cc >= 1 && cc <= 3) uscs = "SW (Well-graded sand)";
-      else uscs = "GP/SP (Poorly graded soil)";
+      const row475 = sieveData.find((r) => Math.abs(r.size - 4.75) < 0.001);
+      const coarseRetainedPct = row475 ? row475.cumulativePercentRetained : 0;
+      const finesPct = sieveData.length ? sieveData[sieveData.length - 1].percentPassing : 0;
+      const isGravel = (100 - finesPct) > 0 && coarseRetainedPct / (100 - finesPct) > 0.5;
+      const wellGraded = isGravel ? (cu >= 4 && cc >= 1 && cc <= 3) : (cu >= 6 && cc >= 1 && cc <= 3);
+      const base = isGravel ? (wellGraded ? "GW" : "GP") : (wellGraded ? "SW" : "SP");
+      uscs = finesPct < 5 ? `${base} (${wellGraded ? "Well-graded" : "Poorly graded"} ${isGravel ? "gravel" : "sand"})`
+          : finesPct <= 12 ? `${base}-SM/${base}-SC (dual symbol, 5-12% fines — needs Atterberg limits)`
+          : `${isGravel ? "GM/GC" : "SM/SC"} (>12% fines — classify by A-line, needs LL/PL)`;
   }
 
   const handleSave = async () => {
@@ -164,7 +180,9 @@ export default function MasterSieveAnalysis() {
       { label: "D60", value: d60 ? `${d60.toFixed(3)} mm` : 'N/A' },
       { label: "Cu", value: cu ? cu.toFixed(2) : 'N/A' },
       { label: "Cc", value: cc ? cc.toFixed(2) : 'N/A' },
-      { label: "USCS Estimate", value: uscs }
+      { label: "Fineness Modulus (FM)", value: fm !== null ? fm.toFixed(2) : 'N/A' },
+      { label: "USCS Estimate", value: uscs },
+      ...(sumCheckWarning ? [{ label: "Weight check", value: sumCheckWarning }] : [])
     ];
 
     await generateGeotechReportPDF(`Sieve Analysis (${selectedGrading})`, reportDetails, results, interpretationText);

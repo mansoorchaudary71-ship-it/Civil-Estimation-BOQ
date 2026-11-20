@@ -9,7 +9,7 @@ import { SEO } from "../SEO";
 import { CodeTooltip } from "../ui/CodeTooltip";
 
 
-export default function RoadEstimator() {
+export default function RoadEstimator({ designStandard }: { designStandard?: string }) {
   const { settings } = useSettings();
 
   // Geometry
@@ -198,6 +198,7 @@ export default function RoadEstimator() {
 
   return (
     <div className="w-full flex flex-col gap-8 animate-in fade-in">
+        {designStandard && (<p className="text-sm text-txt-secondary">Design standard: <strong className="text-txt-primary">{designStandard}</strong> — flexible-pavement quantities use IRC:37-2018 / MoRTH layer practice; thickness is guidance, not a design.</p>)}
         <div className="w-full bg-surface-default dark:bg-ink border border-ui-borderSubtle dark:border-ink p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-2 text-txt-primary dark:text-txt-primary">

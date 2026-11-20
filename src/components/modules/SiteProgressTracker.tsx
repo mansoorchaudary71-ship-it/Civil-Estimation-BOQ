@@ -6,6 +6,9 @@ import { Calendar, CheckCircle, Image as ImageIcon, Link, BarChart as BarChartIc
 import { generateProgressPDF, exportToMSProject, exportToCSV } from "../../utils/projectReports";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, BarChart, Bar, LineChart, Line, ComposedChart } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
+import { calcEvm, forecastDelayDays, sCurvePoints } from "../../lib/evm";
+import { useSettings } from "../../context/SettingsContext";
+import toast from "react-hot-toast";
 
 interface Phase {
   id: string;
@@ -20,7 +23,8 @@ interface Phase {
   photos: string[];
 }
 
-const DEFAULT_PHASES: Phase[] = [
+/** Sample project — loaded ONLY via the "Load sample project" button and labelled SAMPLE. Never seeded silently. */
+const SAMPLE_PHASES: Phase[] = [
   { id: '1', name: 'Foundation', startDate: '2024-06-01', endDate: '2024-06-15', progress: 100, budget: 15000, actualCost: 14500, workersPlanned: 10, workersActual: 10, photos: [] },
   { id: '2', name: 'Structure', startDate: '2024-06-16', endDate: '2024-07-20', progress: 60, budget: 35000, actualCost: 22000, workersPlanned: 20, workersActual: 18, photos: [] },
   { id: '3', name: 'Roof', startDate: '2024-07-21', endDate: '2024-08-05', progress: 0, budget: 12000, actualCost: 0, workersPlanned: 8, workersActual: 0, photos: [] },
@@ -36,6 +40,15 @@ import html2canvas from 'html2canvas';
 
 export default function SiteProgressTracker() {
   const [phases, setPhases] = useState<Phase[]>([]);
+  const [statusDate, setStatusDate] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [isSample, setIsSample] = useState(false);
+  const [trendLog, setTrendLog] = useState<Array<{ date: string; cpi: number; spi: number }>>(() => {
+    try { const raw = localStorage.getItem("site_progress_trend"); return raw ? JSON.parse(raw) : []; } catch { return []; }
+  });
+  const [baseline, setBaseline] = useState<{ at: string; points: Array<{ date: string; pv: number }> } | null>(() => {
+    try { const raw = localStorage.getItem("site_progress_baseline"); return raw ? JSON.parse(raw) : null; } catch { return null; }
+  });
+  const { settings, formatCurrency } = useSettings();
   const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
   const [isClientDemo, setIsClientDemo] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
@@ -46,23 +59,54 @@ export default function SiteProgressTracker() {
     const saved = localStorage.getItem('site_progress_data');
     if (saved) {
       try {
-         setPhases(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setPhases(Array.isArray(parsed) ? parsed : []);
+        setIsSample(localStorage.getItem('site_progress_sample') === '1');
       } catch (e) {
-         setPhases(DEFAULT_PHASES);
+        setPhases([]);
       }
-    } else {
-      // Setup some dynamic dates relative to today for demo
-      const today = new Date();
-      const demoPhases = DEFAULT_PHASES.map((p, i) => {
-         const start = new Date(today);
-         start.setDate(today.getDate() + (i * 15) - 30); // start 30 days ago
-         const end = new Date(start);
-         end.setDate(start.getDate() + 14);
-         return { ...p, startDate: start.toISOString().split('T')[0], endDate: end.toISOString().split('T')[0] };
-      });
-      setPhases(demoPhases);
     }
+    // No saved data -> empty state. Nothing is seeded as if real.
   }, []);
+
+  const loadSample = () => {
+    const today = new Date();
+    const sample = SAMPLE_PHASES.map((ph, i) => {
+      const start = new Date(today);
+      start.setDate(today.getDate() + (i * 15) - 30);
+      const end = new Date(start);
+      end.setDate(start.getDate() + 14);
+      return { ...ph, startDate: start.toISOString().split('T')[0], endDate: end.toISOString().split('T')[0] };
+    });
+    setPhases(sample);
+    setIsSample(true);
+    localStorage.setItem('site_progress_sample', '1');
+    toast.success("Sample project loaded — labelled SAMPLE. Replace it with your own phases.");
+  };
+
+  const addPhase = () => {
+    const start = new Date(statusDate);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 14);
+    const np: Phase = {
+      id: `ph_${Date.now().toString(36)}`, name: `Phase ${phases.length + 1}`,
+      startDate: start.toISOString().split('T')[0], endDate: end.toISOString().split('T')[0],
+      progress: 0, budget: 0, actualCost: 0, workersPlanned: 0, workersActual: 0, photos: [],
+    };
+    setPhases([...phases, np]);
+    setIsSample(false);
+    localStorage.removeItem('site_progress_sample');
+  };
+
+  const freezeBaseline = () => {
+    if (phases.length === 0) { toast.error("Add phases first — there is nothing to freeze."); return; }
+    const pts = sCurvePoints(phases.map((ph) => ({ start: ph.startDate, end: ph.endDate, budget: ph.budget, progress: ph.progress, actualCost: ph.actualCost })), statusDate)
+      .map((pt) => ({ date: pt.date, pv: pt.pv }));
+    const b = { at: statusDate, points: pts };
+    try { localStorage.setItem('site_progress_baseline', JSON.stringify(b)); } catch { /* noop */ }
+    setBaseline(b);
+    toast.success(`Baseline frozen at ${statusDate} — future S-curves compare against it.`);
+  };
 
   useEffect(() => {
     if (phases.length > 0) {
@@ -90,76 +134,78 @@ export default function SiteProgressTracker() {
     await generateProgressPDF(phases, metrics, sCurveImg, histogramImg);
   };
 
-  // Calculations
+  // Calculations — EVM engine (src/lib/evm), as of the status date (not "today").
   const metrics = useMemo(() => {
-    if (phases.length === 0) return { overallProgress: 0, totalBudget: 0, totalCost: 0, daysAheadBehind: 0, SPI: 1, CPI: 1, expectedProgress: 0 };
-    
+    const empty = { overallProgress: 0, totalBudget: 0, totalCost: 0, daysAheadBehind: 0, SPI: 1, CPI: 1, expectedProgress: 0, EV: 0, PV: 0, AC: 0, CV: 0, SV: 0, eacCpi: 0, eacAtypical: 0, eacCpiSpi: 0, etc: 0, vac: 0, tcpi: 0, status: "No phases yet" };
+    if (phases.length === 0) return empty;
+
     let totalBudget = 0;
     let totalCost = 0;
-    let EV = 0; // Earned Value (totalProgressWeight)
-    let PV = 0; // Planned Value (expectedWeight)
-    
-    const today = new Date().getTime();
+    let EV = 0;
+    let PV = 0;
+
+    const at = new Date(statusDate).getTime();
 
     phases.forEach(p => {
       totalBudget += p.budget;
       totalCost += p.actualCost;
       EV += (p.progress / 100) * p.budget;
-      
+
       const s = new Date(p.startDate).getTime();
       const e = new Date(p.endDate).getTime();
-      
+
       let expectedPct = 0;
-      if (today >= e) expectedPct = 100;
-      else if (today > s && e > s) {
-         expectedPct = ((today - s) / (e - s)) * 100;
+      if (at >= e) expectedPct = 100;
+      else if (at > s && e > s) {
+         expectedPct = ((at - s) / (e - s)) * 100;
       }
       PV += (expectedPct / 100) * p.budget;
     });
 
+    const evm = calcEvm({ bac: totalBudget, ev: EV, pv: PV, ac: totalCost });
     const overallProgress = totalBudget > 0 ? (EV / totalBudget) * 100 : 0;
     const expectedProgress = totalBudget > 0 ? (PV / totalBudget) * 100 : 0;
-    const SPI = PV > 0 ? (EV / PV) : 1;
-    const CPI = totalCost > 0 ? (EV / totalCost) : 1;
-    const CV = EV - totalCost;
-    const SV = EV - PV;
-    
-    // Simple days estimation (1% progress = ~X days). Hacky but visually effective.
-    const progressDiff = overallProgress - expectedProgress;
-    const projectDuration = phases.length > 0 ? (new Date(phases[phases.length-1].endDate).getTime() - new Date(phases[0].startDate).getTime()) / (1000*60*60*24) : 0;
-    const daysAheadBehind = Math.round((progressDiff / 100) * projectDuration);
+    // Remaining planned days from the status date to the last phase end.
+    const lastEnd = Math.max(...phases.map((p) => new Date(p.endDate).getTime()));
+    const remainingDays = Math.max(0, Math.round((lastEnd - at) / (1000 * 60 * 60 * 24)));
+    const daysAheadBehind = -forecastDelayDays(evm.spi, remainingDays); // negative delay = ahead
 
-    return { overallProgress, expectedProgress, totalBudget, totalCost, daysAheadBehind, SPI, CPI, EV, PV, AC: totalCost, CV, SV };
-  }, [phases]);
+    return {
+      overallProgress, expectedProgress, totalBudget, totalCost, daysAheadBehind,
+      SPI: evm.spi, CPI: evm.cpi, EV, PV, AC: totalCost, CV: evm.cv, SV: evm.sv,
+      eacCpi: evm.eacCpi, eacAtypical: evm.eacAtypical, eacCpiSpi: evm.eacCpiSpi,
+      etc: evm.etc, vac: evm.vac, tcpi: evm.tcpi, status: evm.status,
+    };
+  }, [phases, statusDate]);
 
+  // CPI / SPI trend log (one entry per status date, kept in localStorage).
+  useEffect(() => {
+    if (phases.length === 0) return;
+    try {
+      const raw = localStorage.getItem('site_progress_trend');
+      const log: Array<{ date: string; cpi: number; spi: number }> = raw ? JSON.parse(raw) : [];
+      const entry = { date: statusDate, cpi: Math.round(metrics.CPI * 100) / 100, spi: Math.round(metrics.SPI * 100) / 100 };
+      const next = [...log.filter((e) => e.date !== statusDate), entry].slice(-30);
+      localStorage.setItem('site_progress_trend', JSON.stringify(next));
+      setTrendLog(next);
+    } catch { /* noop */ }
+  }, [phases, statusDate]);
+
+  // S-curve by DAILY interpolation (src/lib/evm), not phase sequence.
   const chartData = useMemo(() => {
     if (phases.length === 0) return [];
-    
-    // For a simplified S-Curve, we'll plot cumulatively by phase sequence instead of strict daily timeline interpolation
-    // to give a clear view.
-    let cumPV = 0;
-    let cumEV = 0;
-    let cumAC = 0;
-    
-    return phases.map((p, i) => {
-        const pv = p.budget;
-        const ev = (p.progress / 100) * p.budget;
-        const ac = p.actualCost;
-        
-        cumPV += pv;
-        cumEV += ev;
-        cumAC += ac;
-        
-        return {
-           name: p.name,
-           PlannedValue: Math.round(cumPV),
-           EarnedValue: Math.round(cumEV),
-           ActualCost: Math.round(cumAC),
-           WorkersPlanned: p.workersPlanned || 0,
-           WorkersActual: p.workersActual || 0
-        };
-    });
-  }, [phases]);
+    const baselineByDate = new Map((baseline?.points ?? []).map((pt) => [pt.date, pt.pv]));
+    return sCurvePoints(
+      phases.map((p) => ({ start: p.startDate, end: p.endDate, budget: p.budget, progress: p.progress, actualCost: p.actualCost })),
+      statusDate,
+    ).map((pt) => ({
+      name: pt.date,
+      PlannedValue: pt.pv,
+      EarnedValue: pt.ev,
+      ActualCost: pt.ac,
+      BaselinePV: baselineByDate.get(pt.date),
+    }));
+  }, [phases, statusDate, baseline]);
 
   const notifications = useMemo(() => {
      let notifs: string[] = [];
@@ -274,10 +320,13 @@ export default function SiteProgressTracker() {
     reader.readAsDataURL(file);
   };
 
-  const handleShare = () => {
-     setIsClientDemo(true);
-     setTimeout(() => setIsClientDemo(false), 5000); // Reset after 5s just for demo
-     alert('Shareable link copied to clipboard! (Demo feature)');
+  const handleShare = async () => {
+     try {
+       await navigator.clipboard.writeText(window.location.href);
+       toast.success("Link copied to clipboard.");
+     } catch {
+       toast.error("Clipboard blocked — copy the address from your browser instead.");
+     }
   };
 
   const activePhase = phases.find(p => p.id === selectedPhase);
@@ -286,13 +335,20 @@ export default function SiteProgressTracker() {
     <div className="w-full md:max-w-7xl md:mx-auto space-y-6 animate-in fade-in duration-500 pb-[120px] px-4 md:px-0">
        <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-brand-sm overflow-hidden">
          <div>
-           <h2 className="tabular-nums flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
+           <h1 className="tabular-nums flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
               <div className="p-3 bg-ui-success text-ui-successText rounded-2xl overflow-hidden">
                 <BarChartIcon className="w-8 h-8" />
               </div>
               Site Progress Tracker
-           </h2>
-           <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">Track timelines, budgets, and visual progress.</p>
+           </h1>
+           <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">Track timelines, budgets, and visual progress with Earned Value (EVM). All values are as of the status date below.</p>
+           <div className="flex flex-wrap items-center gap-2 mt-3">
+             <label className="text-sm font-bold text-txt-secondary">Status date:</label>
+             <input type="date" value={statusDate} onChange={(e) => setStatusDate(e.target.value)} className="px-3 py-1.5 bg-surface-default border border-ui-borderSubtle rounded-full text-sm font-semibold" />
+             <Button onClick={addPhase} className="px-3 py-1.5 bg-ink text-white rounded-full text-xs font-bold">Add phase</Button>
+             <Button onClick={freezeBaseline} className="px-3 py-1.5 bg-surface-hover rounded-full text-xs font-bold">Freeze baseline</Button>
+             {baseline && <span className="text-xs text-txt-tertiary">Baseline frozen at {baseline.at} — use Freeze baseline again to re-baseline.</span>}
+           </div>
          </div>
          <div className="flex flex-wrap gap-2">
             <Button onClick={() => exportToCSV(phases)} className="w-full bg-surface-default hover:bg-surface-hover text-txt-secondary border border-ui-borderSubtle px-4 py-2.5 rounded-full font-bold transition flex items-center gap-2 text-sm transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm overflow-hidden">
@@ -310,6 +366,21 @@ export default function SiteProgressTracker() {
          </div>
        </div>
 
+       {phases.length === 0 && (
+          <div className="bg-surface-default border border-dashed border-ui-borderSubtle rounded-2xl p-4 sm:p-8 text-center">
+            <h3 className="text-lg font-semibold text-txt-primary">No phases yet</h3>
+            <p className="text-sm text-txt-secondary mt-1">Add your own phases, or load the labelled sample project to see how the tracker works. Nothing is pre-filled with invented budgets.</p>
+            <div className="flex flex-wrap justify-center gap-2 mt-4">
+              <Button onClick={loadSample} className="px-5 py-2.5 bg-ink text-white rounded-full text-sm font-bold">Load sample project</Button>
+              <Button onClick={addPhase} className="px-5 py-2.5 bg-surface-hover rounded-full text-sm font-bold">Add your first phase</Button>
+            </div>
+          </div>
+       )}
+       {isSample && phases.length > 0 && (
+          <div className="bg-accent-50 border border-accent-200 rounded-2xl p-3 text-sm font-bold text-accent-800">
+            SAMPLE project — dates are relative to today and budgets are illustrative. Replace the phases with your own numbers.
+          </div>
+       )}
        {isClientDemo && (
           <div className="bg-ink text-white p-3 text-center rounded-2xl font-bold text-sm mb-4 animate-pulse overflow-hidden">
              Client View Active - Read Only Mode
@@ -336,13 +407,13 @@ export default function SiteProgressTracker() {
                    <p className="uppercase tracking-wider mb-2 relative z-10 text-base font-normal text-txt-secondary leading-relaxed">Cost & Burn <span className="text-accent-800 ml-1 font-bold">(CPI: {metrics.CPI.toFixed(2)})</span></p>
                    <div className="flex items-end gap-2 relative z-10 w-full justify-between">
                      <div className="flex items-end gap-2">
-                       <h3 className="tabular-nums leading-none text-lg font-medium text-txt-primary mb-4">${(metrics.totalCost / 1000).toFixed(1)}k</h3>
-                       <span className="text-sm font-bold text-txt-tertiary mb-1">Earned: ${( (metrics.EV || 0) / 1000).toFixed(1)}k</span>
+                       <h3 className="tabular-nums leading-none text-lg font-medium text-txt-primary mb-4">{formatCurrency(metrics.totalCost)}</h3>
+                       <span className="text-sm font-bold text-txt-tertiary mb-1">Earned: {formatCurrency(metrics.EV || 0)}</span>
                      </div>
                    </div>
                    <div className="w-full mt-3 relative z-10 flex items-center justify-between">
                      <p className={`text-xs font-bold ${(metrics.CV || 0) >= 0 ? 'text-ui-successText' : 'text-ui-errorText'}`}>
-                        {(metrics.CV || 0) >= 0 ? `Cost Variance: +$${(metrics.CV || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}` : `Cost Variance: -$${(Math.abs(metrics.CV || 0)).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
+                        {(metrics.CV || 0) >= 0 ? `Cost Variance: +${formatCurrency(metrics.CV || 0)}` : `Cost Variance: -${formatCurrency(Math.abs(metrics.CV || 0))}`}
                      </p>
                    </div>
                 </div>
@@ -359,9 +430,34 @@ export default function SiteProgressTracker() {
                       )}
                    </div>
                    <p className={`text-xs font-bold mt-3 relative z-10 ${(metrics.SV || 0) >= 0 ? 'text-ui-successText' : 'text-ui-errorText'}`}>
-                      {(metrics.SV || 0) >= 0 ? `Schedule Variance: +$${(metrics.SV || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}` : `Schedule Variance: -$${(Math.abs(metrics.SV || 0)).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
+                      {(metrics.SV || 0) >= 0 ? `Schedule Variance: +${formatCurrency(metrics.SV || 0)}` : `Schedule Variance: -${formatCurrency(Math.abs(metrics.SV || 0))}`}
                    </p>
                 </div>
+             </div>
+
+             <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-brand-sm p-4 sm:p-6">
+                <h3 className="text-lg font-medium text-txt-primary mb-1">Earned Value Forecast</h3>
+                <p className="text-sm text-txt-secondary mb-4">{metrics.status} — as of {statusDate}.</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">EAC (CPI method)</p><p className="font-bold text-txt-primary">{formatCurrency(metrics.eacCpi)}</p></div>
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">EAC (atypical)</p><p className="font-bold text-txt-primary">{formatCurrency(metrics.eacAtypical)}</p></div>
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">EAC (CPI × SPI)</p><p className="font-bold text-txt-primary">{formatCurrency(metrics.eacCpiSpi)}</p></div>
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">ETC / VAC</p><p className="font-bold text-txt-primary">{formatCurrency(metrics.etc)} / {formatCurrency(metrics.vac)}</p></div>
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">TCPI</p><p className="font-bold text-txt-primary">{metrics.tcpi.toFixed(2)}</p></div>
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">BAC</p><p className="font-bold text-txt-primary">{formatCurrency(metrics.totalBudget)}</p></div>
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">EV / PV / AC</p><p className="font-bold text-txt-primary">{formatCurrency(metrics.EV || 0)} / {formatCurrency(metrics.PV || 0)} / {formatCurrency(metrics.AC || 0)}</p></div>
+                  <div><p className="text-txt-tertiary uppercase tracking-wider text-xs">Currency</p><p className="font-bold text-txt-primary">{settings.currency}</p></div>
+                </div>
+                {trendLog.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-xs font-bold uppercase tracking-wider text-txt-tertiary mb-1">CPI / SPI trend (latest {Math.min(trendLog.length, 10)})</p>
+                    <div className="flex flex-wrap gap-2">
+                      {trendLog.slice(-10).map((t) => (
+                        <span key={t.date} className="text-xs font-mono bg-surface-hover border border-ui-borderSubtle rounded-full px-2.5 py-1">{t.date}: CPI {t.cpi.toFixed(2)} · SPI {t.spi.toFixed(2)}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
              </div>
 
              {notifications.length > 0 && (
@@ -406,12 +502,13 @@ export default function SiteProgressTracker() {
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" strokeOpacity={0.5} />
                           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B6862' }} />
-                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B6862' }} tickFormatter={(v) => `$${v/1000}k`} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B6862' }} tickFormatter={(v) => `${settings.currency} ${(v/1000).toFixed(0)}k`} />
                           <RechartsTooltip 
                             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                           />
                           <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                           <Area type="monotone" dataKey="PlannedValue" name="Planned Value (PV)" stroke="#6B6862" strokeWidth={2} fillOpacity={1} fill="url(#colorPV)" />
+                          {baseline && <Area type="monotone" dataKey="BaselinePV" name="Baseline PV" stroke="#1F1D1A" strokeWidth={2} strokeDasharray="6 4" fillOpacity={0} />}
                           <Area type="monotone" dataKey="EarnedValue" name="Earned Value (EV)" stroke="#F2A413" strokeWidth={3} fillOpacity={1} fill="url(#colorEV)" />
                           <Area type="monotone" dataKey="ActualCost" name="Actual Cost (AC)" stroke="#B07006" strokeWidth={2} fillOpacity={1} fill="url(#colorAC)" />
                         </AreaChart>
@@ -639,8 +736,8 @@ export default function SiteProgressTracker() {
     
       <CalculationHistory
         calculatorId="siteprogresstracker"
-        currentInputs={{}}
-        currentResults={{}}
+        currentInputs={{ phases: phases.length, statusDate }}
+        currentResults={{ overallProgress: metrics.overallProgress, spi: metrics.SPI, cpi: metrics.CPI, eac: metrics.eacCpi }}
         estimationName="Site Progress Tracker"
       />
 </div>

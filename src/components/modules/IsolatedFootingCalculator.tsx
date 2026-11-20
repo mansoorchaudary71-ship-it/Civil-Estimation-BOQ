@@ -21,6 +21,10 @@ import { MaterialSummary } from "../ui/MaterialSummary";
 import { FieldTooltip } from "../ui/FieldTooltip";
 import { NumberInput } from "../ui/NumberInput";
 import { CodeTooltip } from "../ui/CodeTooltip";
+import { useRates } from "../../lib/useRates";
+import { formatRate } from "../../lib/rates";
+import { designFooting } from "../../lib/footingCalc";
+import { CalcSteps, EngineNotices, StructuralExportBar } from "../ui/StructuralExportBar";
 
 
 const mixRatios: Record<string, { c: number; s: number; a: number }> = {
@@ -86,9 +90,15 @@ export default function IsolatedFootingCalculator({
   const [clearCover, setClearCover] = useState("50");
   const [hasTopMesh, setHasTopMesh] = useState(false);
   const [diaX, setDiaX] = useState("12");
-  const [spacingX, setSpacingX] = useState("150");
+  const [spacingX, setSpacingX] = useState("115");
   const [diaY, setDiaY] = useState("12");
-  const [spacingY, setSpacingY] = useState("150");
+  const [spacingY, setSpacingY] = useState("115");
+  const [fck, setFck] = useState("25");
+  const [fy, setFy] = useState("500");
+  const [momentX, setMomentX] = useState("0");
+  const [momentY, setMomentY] = useState("0");
+  const [autoDesign, setAutoDesign] = useState(true);
+  const [wastage, setWastage] = useState("5");
 
   const [diaXTop, setDiaXTop] = useState("10");
   const [spacingXTop, setSpacingXTop] = useState("200");
@@ -153,11 +163,34 @@ export default function IsolatedFootingCalculator({
     excavationVol - concreteVol - cL * cW * Math.max(0, exD - totalD),
   );
 
+  const { rates, setRate, table } = useRates();
+
+  // Structural design (IS 456) — punching / one-way shear / flexure / Ast.
+  const design = designFooting({
+    footingLengthM: fL, footingWidthM: fW, totalDepthM: totalD,
+    baseDepthM: footingType === "rectangular" ? totalD : fD1,
+    topLengthM: parseFloat(topL) || 0, topWidthM: parseFloat(topW) || 0, footingType: footingType as "rectangular" | "sloped" | "stepped",
+    columnLengthM: cL, columnWidthM: cW,
+    workingLoadKN: parseFloat(workingLoad) || 0,
+    safetyFactor: parseFloat(safetyFactor) || 1.5,
+    sbcKNm2: parseFloat(sbc) || 0,
+    fck: parseFloat(fck) || 25, fy: parseFloat(fy) || 500,
+    momentXKNm: parseFloat(momentX) || 0, momentYKNm: parseFloat(momentY) || 0,
+    coverMm: cover, barDiaMm: parseFloat(diaX) || 12,
+    autoDesign, manualSpacingMm: parseFloat(spacingX) || 115,
+    mix: mixRatios[mix] ?? { c: 1, s: 1.5, a: 3 },
+    wastagePct: parseFloat(wastage) || 0,
+    workingSpaceM: ws, excavationDepthM: parseFloat(excavationDepth) || 0,
+    cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg,
+    sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
+  });
+  const effSpacingX = design.spacingXMm;
+  const effSpacingY = design.spacingYMm;
+
   // Steel Reinforcement
   // Length Direction (bars placed along Width)
   const dX = parseFloat(diaX) || 0;
-  const sX = parseFloat(spacingX) || 150;
-  const barsX = Math.ceil((fW * 1000 - 2 * cover) / sX) + 1; // RULE: REBAR_SPACING_COUNT
+  const barsX = Math.ceil((fW * 1000 - 2 * cover) / effSpacingX) + 1; // RULE: REBAR_SPACING_COUNT
 
   // hook length based on bottom step depth for sloped/stepped, or total depth for rect
   const edgeD = footingType === "rectangular" ? fD : Math.max(fD1, 0.15);
@@ -167,8 +200,7 @@ export default function IsolatedFootingCalculator({
 
   // Width Direction (bars placed along Length)
   const dY = parseFloat(diaY) || 0;
-  const sY = parseFloat(spacingY) || 150;
-  const barsY = Math.ceil((fL * 1000 - 2 * cover) / sY) + 1;
+  const barsY = Math.ceil((fL * 1000 - 2 * cover) / effSpacingY) + 1;
   const cutLengthY = fW * 1000 - 2 * cover + 2 * hookL;
   const wtY = (Math.pow(dY, 2) / 162.28) * (cutLengthY / 1000) * barsY;
 
@@ -249,18 +281,34 @@ export default function IsolatedFootingCalculator({
       {
         id: Math.random().toString(36).substr(2, 9),
         division: "03 - Concrete",
-        description: `RCC Isolated Footing (${footingL}x${footingW}m, D=${totalD.toFixed(2)}m) - ${footingType}`,
-        unit: "m³",
-        quantity: concreteVol,
-        rate: 0,
+        description: `Cement for isolated footing (${footingL}x${footingW}m, ${mix})`,
+        unit: "bags",
+        quantity: design.materials.cementBags,
+        rate: rates.cementPerBag ?? 0,
+      },
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        division: "03 - Concrete",
+        description: `Sand for isolated footing concrete`,
+        unit: "cft",
+        quantity: design.materials.sandCft,
+        rate: rates.sandPerCft ?? 0,
+      },
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        division: "03 - Concrete",
+        description: `Aggregate for isolated footing concrete`,
+        unit: "cft",
+        quantity: design.materials.aggCft,
+        rate: rates.crushPerCft ?? 0,
       },
       {
         id: Math.random().toString(36).substr(2, 9),
         division: "05 - Metals",
-        description: `Steel Reinforcement for Footing`,
+        description: `Steel Reinforcement for Footing (${diaX} mm @ ${effSpacingX} mm c/c)`,
         unit: "kg",
         quantity: totalSteel,
-        rate: 0,
+        rate: rates.steelPerKg ?? 0,
       },
       {
         id: Math.random().toString(36).substr(2, 9),
@@ -314,6 +362,16 @@ export default function IsolatedFootingCalculator({
 
         <div className="bg-bg-card rounded-2xl shadow-brand-md border border-ui-borderSubtle dark:border-ink-600 overflow-hidden">
           <div className="p-6 md:p-8 space-y-8">
+            <p className="text-sm text-txt-secondary leading-relaxed">
+              Design and estimate an isolated footing to IS 456:2000 — bearing check, two-way
+              (punching) shear at d/2 from the column face, one-way shear at d, and flexural
+              steel at the column face. Enter the working column load and moments; the tool
+              factors the load (Pu = 1.5 × working load), checks shear, and sizes the bottom
+              mesh. Formulae: qᵤ = Pu / A · Mu = qᵤ·B·(projection)²/2 · Ast from the limit-state
+              moment equation with Ast,min = 0.12% of b·D. Rates are Pakistan market rates
+              (editable below); India / UAE rates are shown as — until you enter them.
+            </p>
+            <EngineNotices errors={design.errors} warnings={design.warnings} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 responsive-tool-grid">
               {/* Inputs */}
               <div className="space-y-6">
@@ -698,6 +756,52 @@ export default function IsolatedFootingCalculator({
                 </div>
               </Accordion>
             </div>
+                <Accordion title="Structural Design (IS 456)">
+                  <div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <InputGroup label="Concrete grade (fck) — MPa">
+                        <select className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={fck} onChange={(e) => setFck(e.target.value)}>
+                          {[20, 25, 30, 35, 40].map((g) => (<option key={g} value={g}>M{g}</option>))}
+                        </select>
+                      </InputGroup>
+                      <InputGroup label="Steel grade (fy) — MPa">
+                        <select className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={fy} onChange={(e) => setFy(e.target.value)}>
+                          {[250, 415, 500].map((g) => (<option key={g} value={g}>Fe{g}</option>))}
+                        </select>
+                      </InputGroup>
+                      <InputGroup label="Moment about X (kNm)">
+                        <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={momentX} onChange={(val) => setMomentX(val.toString())} />
+                      </InputGroup>
+                      <InputGroup label="Moment about Y (kNm)">
+                        <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={momentY} onChange={(val) => setMomentY(val.toString())} />
+                      </InputGroup>
+                      <InputGroup label="Wastage (%)">
+                        <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={wastage} onChange={(val) => setWastage(val.toString())} />
+                      </InputGroup>
+                      <div className="flex items-end pb-1">
+                        <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-txt-primary">
+                          <input type="checkbox" checked={autoDesign} onChange={(e) => setAutoDesign(e.target.checked)} className="w-5 h-5 rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500" />
+                          Auto-design spacing from required Ast
+                        </label>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                      <InputGroup label={`Cement (${table.currency}/bag)`}>
+                        <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={rates.cementPerBag ?? ""} onChange={(v) => setRate("cementPerBag", v === "" ? null : Number(v))} />
+                      </InputGroup>
+                      <InputGroup label={`Steel (${table.currency}/kg)`}>
+                        <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={rates.steelPerKg ?? ""} onChange={(v) => setRate("steelPerKg", v === "" ? null : Number(v))} />
+                      </InputGroup>
+                      <InputGroup label={`Sand (${table.currency}/cft)`}>
+                        <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={rates.sandPerCft ?? ""} onChange={(v) => setRate("sandPerCft", v === "" ? null : Number(v))} />
+                      </InputGroup>
+                      <InputGroup label={`Aggregate (${table.currency}/cft)`}>
+                        <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={rates.crushPerCft ?? ""} onChange={(v) => setRate("crushPerCft", v === "" ? null : Number(v))} />
+                      </InputGroup>
+                    </div>
+                    <p className="text-xs text-txt-tertiary mt-3">Effective depth d = {design.dMm} mm (D − cover − φ/2). Auto-design derives spacing from Ast,req so the mesh can never be under-designed by a stale default — the old 12 mm @ 150 mm default (1,696 mm²) is replaced by 12 mm @ 115 mm with auto-design on.</p>
+                  </div>
+                </Accordion>
               {/* Drawing & SBC Status */}
               <div>
                 <div
@@ -1009,6 +1113,40 @@ export default function IsolatedFootingCalculator({
                   </svg>
                 </div>
               </div>
+            </div>
+
+            {/* Structural design results */}
+            <div className="pt-8 border-t border-ui-borderSubtle dark:border-ink-600 mt-6">
+              <MaterialSummary title="Structural Design (IS 456)" totalLabel="Design cost (materials)" totalValue={design.totalCost == null ? "—" : design.totalCost.toLocaleString("en-US")} totalUnit={table.currency} relatedToolIds={[]}>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+                  <ResultCard title="Factored load Pu" value={design.puKN.toFixed(0)} unit="kN" variant="neutral" />
+                  <ResultCard title="Bearing pressure qu" value={design.quKNm2.toFixed(0)} unit="kN/m²" variant="neutral" />
+                  <ResultCard title="Punching τv" value={design.punchingTauVMpa.toFixed(2)} unit="MPa" variant={design.punchingOk ? "neutral" : "warning"} />
+                  <ResultCard title="Punching allowable" value={design.punchingAllowMpa.toFixed(2)} unit="MPa" variant="neutral" />
+                  <ResultCard title="One-way τv" value={design.oneWayTauVMpa.toFixed(2)} unit="MPa" variant={design.oneWayOk ? "neutral" : "warning"} />
+                  <ResultCard title="One-way allowable" value={design.oneWayAllowMpa.toFixed(2)} unit="MPa" variant="neutral" />
+                  <ResultCard title="Mu (X / Y)" value={`${design.muXKNm.toFixed(0)} / ${design.muYKNm.toFixed(0)}`} unit="kNm" variant="neutral" />
+                  <ResultCard title="Ast req (X / Y)" value={`${design.astXReqMm2.toFixed(0)} / ${design.astYReqMm2.toFixed(0)}`} unit="mm²" variant="neutral" />
+                  <ResultCard title="Ast provided (X)" value={design.astXProvidedMm2.toFixed(0)} unit="mm²" variant={design.flexureOk ? "neutral" : "warning"} />
+                  <ResultCard title="Spacing X / Y" value={`${design.spacingXMm} / ${design.spacingYMm}`} unit="mm" variant="neutral" />
+                  <ResultCard title="Development length Ld" value={design.ldMm.toFixed(0)} unit="mm" variant="neutral" />
+                  <ResultCard title="Verdict" value={design.punchingOk && design.oneWayOk && design.flexureOk && design.bearingOk ? "SAFE" : "CHECK"} unit="" variant={design.punchingOk && design.oneWayOk && design.flexureOk && design.bearingOk ? "primary" : "warning"} />
+                </div>
+                <div className="mt-4 space-y-1 text-sm">
+                  {design.costLines.map((l) => (
+                    <div key={l.label} className="flex justify-between"><span className="text-txt-secondary">{l.label}</span><span className="font-mono">{l.amount == null ? "—" : `${formatRate(l.rate, table.currency)} × ${l.qty.toFixed(1)} = ${l.amount.toLocaleString("en-US")}`}</span></div>
+                  ))}
+                </div>
+              </MaterialSummary>
+              <StructuralExportBar title="Isolated Footing (IS 456)" summaryText={`Isolated footing ${fL}×${fW} m, D=${totalD.toFixed(2)} m (${footingType}); Pu=${design.puKN.toFixed(0)} kN, qu=${design.quKNm2.toFixed(0)} kN/m²; punching τv=${design.punchingTauVMpa.toFixed(2)} MPa ≤ ${design.punchingAllowMpa.toFixed(2)} (${design.punchingOk ? "PASS" : "FAIL"}); one-way τv=${design.oneWayTauVMpa.toFixed(2)} MPa (${design.oneWayOk ? "PASS" : "FAIL"}); Ast req ${design.astXReqMm2.toFixed(0)} mm², provided ${design.astXProvidedMm2.toFixed(0)} mm² @ ${design.spacingXMm} mm (${design.flexureOk ? "PASS" : "FAIL"}); concrete ${concreteVol.toFixed(2)} m³, steel ${totalSteel.toFixed(1)} kg.`}
+                boqItems={[
+                  { description: `Cement for isolated footing (${mix})`, quantity: design.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
+                  { description: "Sand for footing concrete", quantity: design.materials.sandCft, unit: "cft", rate: rates.sandPerCft ?? 0 },
+                  { description: "Aggregate for footing concrete", quantity: design.materials.aggCft, unit: "cft", rate: rates.crushPerCft ?? 0 },
+                  { description: `Steel reinforcement (${diaX} mm @ ${effSpacingX} mm c/c)`, quantity: totalSteel, unit: "kg", rate: rates.steelPerKg ?? 0 },
+                ]}
+                totalAmount={design.totalCost} />
+              <CalcSteps steps={design.steps} />
             </div>
 
             {/* Results */}

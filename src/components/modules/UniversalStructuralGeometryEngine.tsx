@@ -3,25 +3,39 @@ import React, { useState } from 'react';
 import { useBOQ } from '../../context/BOQContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Square, Circle, CircleDashed, AlignJustify, Baseline, Triangle, Save , AlertTriangle} from 'lucide-react';
+import { useRates } from '../../lib/useRates';
+import { formatRate } from '../../lib/rates';
+import { calcRectangular, calcCircular, calcTube, calcPrecast, calcRoof, calcTrapFooting, calcStaircaseTab } from '../../lib/geometryCalc';
+import { CalcSteps, EngineNotices, StructuralExportBar } from '../ui/StructuralExportBar';
 
 
 export default function UniversalStructuralGeometryEngine() {
   const { addItem } = useBOQ();
+  const { rates, setRate, table } = useRates();
   const [activeTab, setActiveTab] = useState('rectangular');
+  const [formedOnGround, setFormedOnGround] = useState(true);
+  const [fck, setFck] = useState(25);
+  const [wastage, setWastage] = useState(5);
 
   const [inputs, setInputs] = useState({
     // Rectangular
     rectL: 3, rectW: 0.3, rectD: 0.4, rectRebarCount: 4, rectStirrupSpacing: 0.15,
+    rectMainDia: 12, rectStirrupDia: 8, rectCover: 25,
     // Circular
     circDia: 0.4, circH: 3, circRebarCount: 6, circTiePitch: 0.15,
+    circMainDia: 12, circTieDia: 8, circCover: 25,
     // Tube
     tubeOD: 1, tubeID: 0.8, tubeL: 5,
     // Precast
     wallL: 30, wallTotalH: 2.4, panelH: 0.3, panelThick: 0.05, postSpacing: 3,
+    postSize: 0.15, footingSize: 0.45, footingDepth: 0.6,
     // Staircase
-    stairSteps: 10, stairRise: 0.15, stairGoing: 0.25, stairWidth: 1.2, stairWaist: 0.15,
+    stairSteps: 10, stairRise: 0.17, stairGoing: 0.28, stairWidth: 1.2, stairWaist: 0.15,
+    stairMainDia: 12, stairMainSpacing: 150, stairDistDia: 10, stairDistSpacing: 200, stairCover: 20,
     // Roof
-    roofSpan: 8, roofRise: 2, roofRun: 12
+    roofSpan: 8, roofRise: 2, roofRun: 12, roofPurlinSpacing: 1.2, roofBattenSpacing: 0.6, roofSheetWidth: 1.0,
+    // Trapezoidal footing
+    trapL: 2.2, trapW: 2.2, trapD1: 0.2, trapL2: 0.6, trapW2: 0.6, trapD2: 0.3
   });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,102 +80,76 @@ export default function UniversalStructuralGeometryEngine() {
   const currentWarnings = getValidations();
 
 
-  // Calculations
+  // Calculations — all delegated to src/lib/geometryCalc.ts (pure functions).
+  // Bar sizes are inputs now (the old code hardcoded 12 mm main / 8 mm stirrups,
+  // 0.888 / 0.395 kg/m); stirrup length uses stirrupLengthDetailed (IS 2502) as canonical.
+  const geoRates = { cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg, sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft };
   const calculateRectangular = () => {
-    const vol = inputs.rectL * inputs.rectW * inputs.rectD;
-    const formwork = 2 * inputs.rectL * (inputs.rectW + inputs.rectD); // assuming 4 sides or standard
-    const rebarLen = inputs.rectL * inputs.rectRebarCount;
-    const mainSteel = rebarLen * 0.888; // assuming 12mm approx
-    const stirrupCount = Math.ceil(inputs.rectL / inputs.rectStirrupSpacing) + 1;
-    const stirrupLen = 2 * (inputs.rectW + inputs.rectD - 0.1) * stirrupCount;
-    const stirrupSteel = stirrupLen * 0.395; // 8mm approx
-    return { vol, formwork, totalSteel: mainSteel + stirrupSteel, plywood: calcPlywood(formwork), battens: calcBattens(formwork) };
+    const r = calcRectangular({ lengthM: inputs.rectL, widthM: inputs.rectW, depthM: inputs.rectD, mainDiaMm: inputs.rectMainDia, mainBarCount: inputs.rectRebarCount, stirrupDiaMm: inputs.rectStirrupDia, stirrupSpacingM: inputs.rectStirrupSpacing, coverMm: inputs.rectCover, formedOnGround, fck, wastagePct: wastage }, geoRates);
+    return { vol: r.volM3, formwork: r.formworkM2, formworkAll: r.formworkAllSidesM2, totalSteel: r.totalSteelKg, mainSteel: r.mainSteelKg, stirrupSteel: r.stirrupSteelKg, plywood: calcPlywood(r.formworkM2), battens: calcBattens(r.formworkM2), materials: r.materials, costLines: r.costLines, totalCost: r.totalCost, steps: r.steps, errors: r.errors, warnings: r.warnings };
   };
 
   const calculateCircular = () => {
-    const radius = inputs.circDia / 2;
-    const vol = Math.PI * radius * radius * inputs.circH;
-    const formwork = Math.PI * inputs.circDia * inputs.circH;
-    const mainSteel = inputs.circRebarCount * inputs.circH * 0.888; // 12mm
-    const spiralLen = Math.sqrt(Math.pow(Math.PI * (inputs.circDia - 0.08), 2) + Math.pow(inputs.circTiePitch, 2)) * (inputs.circH / inputs.circTiePitch);
-    const spiralSteel = spiralLen * 0.395; // 8mm
-    return { vol, formwork, totalSteel: mainSteel + spiralSteel, plywood: calcPlywood(formwork), battens: calcBattens(formwork) };
+    const r = calcCircular({ diaM: inputs.circDia, heightM: inputs.circH, mainDiaMm: inputs.circMainDia, mainBarCount: inputs.circRebarCount, tieDiaMm: inputs.circTieDia, tiePitchM: inputs.circTiePitch, coverMm: inputs.circCover, fck, wastagePct: wastage }, geoRates);
+    return { vol: r.volM3, formwork: r.formworkM2, totalSteel: r.totalSteelKg, mainSteel: r.mainSteelKg, stirrupSteel: r.stirrupSteelKg, plywood: calcPlywood(r.formworkM2), battens: calcBattens(r.formworkM2), materials: r.materials, costLines: r.costLines, totalCost: r.totalCost, steps: r.steps, errors: r.errors, warnings: r.warnings };
   };
 
   const calculateTube = () => {
-    const rO = inputs.tubeOD / 2;
-    const rI = inputs.tubeID / 2;
-    const vol = Math.PI * (rO * rO - rI * rI) * inputs.tubeL;
-    const weight = vol * 2400; // standard concrete density
-    const formwork = Math.PI * (inputs.tubeOD + inputs.tubeID) * inputs.tubeL;
-    return { vol, weight, formwork, plywood: calcPlywood(formwork), battens: calcBattens(formwork) };
+    const r = calcTube({ odM: inputs.tubeOD, idM: inputs.tubeID, lengthM: inputs.tubeL, fck, wastagePct: wastage }, geoRates);
+    return { vol: r.volM3, weight: r.weightKg ?? 0, formwork: r.formworkM2, plywood: calcPlywood(r.formworkM2), battens: calcBattens(r.formworkM2), materials: r.materials, costLines: r.costLines, totalCost: r.totalCost, steps: r.steps, errors: r.errors, warnings: r.warnings };
   };
 
   const calculatePrecast = () => {
-    const postCount = Math.ceil(inputs.wallL / inputs.postSpacing) + 1;
-    const panelsPerSpan = Math.ceil(inputs.wallTotalH / inputs.panelH);
-    const totalPanels = panelsPerSpan * (postCount - 1);
-    const panelVol = (inputs.postSpacing - 0.1) * inputs.panelH * inputs.panelThick * totalPanels;
-    const postVol = postCount * 0.15 * 0.15 * (inputs.wallTotalH); // Post volume above ground
-    const footingVol = postCount * 0.45 * 0.45 * 0.6; // 450x450x600mm footing for each post
-    return { totalPanels, postCount, totalVol: panelVol + postVol + footingVol, footingVol };
+    const r = calcPrecast({ wallLengthM: inputs.wallL, wallHeightM: inputs.wallTotalH, panelHeightM: inputs.panelH, panelThickM: inputs.panelThick, postSpacingM: inputs.postSpacing, postSizeM: inputs.postSize, footingSizeM: inputs.footingSize, footingDepthM: inputs.footingDepth, fck, wastagePct: wastage }, geoRates);
+    return { totalPanels: r.extra?.totalPanels ?? 0, postCount: r.extra?.postCount ?? 0, totalVol: r.volM3, footingVol: r.extra?.footingVol ?? 0, materials: r.materials, costLines: r.costLines, totalCost: r.totalCost, steps: r.steps, errors: r.errors, warnings: r.warnings };
   };
 
   const calculateStaircase = () => {
-    const stepVol = 0.5 * inputs.stairRise * inputs.stairGoing * inputs.stairWidth * inputs.stairSteps;
-    const waistLength = Math.sqrt(Math.pow(inputs.stairSteps * inputs.stairRise, 2) + Math.pow(inputs.stairSteps * inputs.stairGoing, 2));
-    const waistVol = waistLength * inputs.stairWidth * inputs.stairWaist;
-    const vol = stepVol + waistVol;
-    const formwork = (inputs.stairSteps * inputs.stairGoing * inputs.stairWidth) + (inputs.stairSteps * inputs.stairRise * inputs.stairWidth) + (waistLength * inputs.stairWidth);
-    const steel = vol * 120; // empirical 120kg/m3
-    return { vol, formwork, steel, plywood: calcPlywood(formwork), battens: calcBattens(formwork) };
+    // Delegates to the staircase engine: DESIGNED steel (IS 456 Cl. 33).
+    // Resolves the old inconsistency — this tab used a flat 120 kg/m³ while the
+    // Staircase Calculator used 1% (= 78.5 kg/m³); same flight gave two answers.
+    // Designed steel is now the single value in both places; the 1% rule is a cross-check.
+    const r = calcStaircaseTab({ shape: "straight", steps: inputs.stairSteps, riseM: inputs.stairRise, treadM: inputs.stairGoing, widthM: inputs.stairWidth, waistM: inputs.stairWaist, mainDiaMm: inputs.stairMainDia, mainSpacingMm: inputs.stairMainSpacing, distDiaMm: inputs.stairDistDia, distSpacingMm: inputs.stairDistSpacing, coverMm: inputs.stairCover, fck, wastagePct: wastage, cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg, sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft });
+    return { vol: r.wetVolM3, formwork: r.formworkM2, steel: r.designedSteelKg, onePctKg: r.onePctRuleKg, mainBars: r.mainBars, distBars: r.distBars, plywood: calcPlywood(r.formworkM2), battens: calcBattens(r.formworkM2), materials: r.materials, costLines: r.costLines, totalCost: r.totalCost, steps: r.steps, errors: r.errors, warnings: r.warnings };
   };
 
   const calculateRoof = () => {
-    const runHalf = inputs.roofSpan / 2;
-    const rafterLength = Math.sqrt(Math.pow(runHalf, 2) + Math.pow(inputs.roofRise, 2));
-    const angleDeg = Math.atan(inputs.roofRise / runHalf) * (180 / Math.PI);
-    const pitchRatio = (inputs.roofRise / runHalf) * 12; // x in 12
-    const area = 2 * rafterLength * inputs.roofRun; // both sides
-    return { rafterLength, angleDeg, pitchRatio, area, plywood: calcPlywood(area), battens: calcBattens(area) };
+    const r = calcRoof({ spanM: inputs.roofSpan, riseM: inputs.roofRise, runM: inputs.roofRun, purlinSpacingM: inputs.roofPurlinSpacing, battenSpacingM: inputs.roofBattenSpacing, sheetWidthM: inputs.roofSheetWidth });
+    return { rafterLength: r.rafterM, angleDeg: r.pitchDeg, pitchRatio: (inputs.roofRise / (inputs.roofSpan / 2)) * 12, area: r.areaM2, purlinsM: r.purlinsM, battensM: r.battensM, sheets: r.sheets, plywood: r.sheets, battens: Math.ceil(r.battensM), errors: r.errors };
   };
 
+  const calculateTrapFooting = () => {
+    const r = calcTrapFooting({ baseLengthM: inputs.trapL, baseWidthM: inputs.trapW, baseDepthM: inputs.trapD1, topLengthM: inputs.trapL2, topWidthM: inputs.trapW2, slopeDepthM: inputs.trapD2, fck, wastagePct: wastage }, geoRates);
+    return { vol: r.volM3, formwork: r.formworkM2, materials: r.materials, costLines: r.costLines, totalCost: r.totalCost, steps: r.steps, errors: r.errors, warnings: r.warnings };
+  };
+
+  // Active-tab result (for cost / export / steps display below the grid).
+  const activeResult: any = activeTab === 'rectangular' ? calculateRectangular()
+    : activeTab === 'circular' ? calculateCircular()
+    : activeTab === 'tube' ? calculateTube()
+    : activeTab === 'precast' ? calculatePrecast()
+    : activeTab === 'staircase' ? calculateStaircase()
+    : activeTab === 'roof' ? calculateRoof()
+    : calculateTrapFooting();
+
   const syncToBOQ = () => {
-    if (activeTab === 'rectangular') {
-      const res = calculateRectangular();
-      addItem({ name: 'Rectangular Concrete', quantity: res.vol, unit: 'm³', rate: 12000, category: 'Concrete' });
-      addItem({ name: 'Formwork Area', quantity: res.formwork, unit: 'm²', rate: 500, category: 'Formwork' });
-      addItem({ name: 'Formwork Plywood', quantity: res.plywood, unit: 'Nos', rate: 3000, category: 'Formwork' });
-      addItem({ name: 'Formwork Battens', quantity: res.battens, unit: 'm', rate: 150, category: 'Formwork' });
-      addItem({ name: 'Steel Reinforcement', quantity: res.totalSteel, unit: 'kg', rate: 260, category: 'Steel' });
-    } else if (activeTab === 'circular') {
-      const res = calculateCircular();
-      addItem({ name: 'Circular Concrete', quantity: res.vol, unit: 'm³', rate: 13000, category: 'Concrete' });
-      addItem({ name: 'Formwork Area', quantity: res.formwork, unit: 'm²', rate: 600, category: 'Formwork' });
-      addItem({ name: 'Formwork Plywood', quantity: res.plywood, unit: 'Nos', rate: 3000, category: 'Formwork' });
-      addItem({ name: 'Formwork Battens', quantity: res.battens, unit: 'm', rate: 150, category: 'Formwork' });
-      addItem({ name: 'Steel Reinforcement', quantity: res.totalSteel, unit: 'kg', rate: 260, category: 'Steel' });
-    } else if (activeTab === 'tube') {
-      const res = calculateTube();
-      addItem({ name: 'Precast Concrete Tube', quantity: res.vol, unit: 'm³', rate: 15000, category: 'Concrete' });
-      addItem({ name: 'Formwork Area', quantity: res.formwork, unit: 'm²', rate: 500, category: 'Formwork' });
-    } else if (activeTab === 'precast') {
-      const res = calculatePrecast();
-      addItem({ name: 'Precast Panels', quantity: res.totalPanels, unit: 'Nos', rate: 2000, category: 'Concrete' });
-      addItem({ name: 'Precast Posts', quantity: res.postCount, unit: 'Nos', rate: 3000, category: 'Concrete' });
-      addItem({ name: 'Foundation Concrete', quantity: res.footingVol, unit: 'm³', rate: 11000, category: 'Concrete' });
-    } else if (activeTab === 'staircase') {
-      const res = calculateStaircase();
-      addItem({ name: 'Staircase Concrete', quantity: res.vol, unit: 'm³', rate: 12500, category: 'Concrete' });
-      addItem({ name: 'Staircase Steel', quantity: res.steel, unit: 'kg', rate: 260, category: 'Steel' });
-      addItem({ name: 'Staircase Formwork', quantity: res.formwork, unit: 'm²', rate: 550, category: 'Formwork' });
-      addItem({ name: 'Formwork Plywood', quantity: res.plywood, unit: 'Nos', rate: 3000, category: 'Formwork' });
-      addItem({ name: 'Formwork Battens', quantity: res.battens, unit: 'm', rate: 150, category: 'Formwork' });
-    } else if (activeTab === 'roof') {
-      const res = calculateRoof();
-      addItem({ name: 'Sloped Roofing Surface', quantity: res.area, unit: 'm²', rate: 1500, category: 'Finishes' });
-      addItem({ name: 'Roofing Plywood', quantity: res.plywood, unit: 'Nos', rate: 3500, category: 'Finishes' });
-      addItem({ name: 'Roofing Battens', quantity: res.battens, unit: 'm', rate: 200, category: 'Finishes' });
+    // Real PK rates from useRates — the old hardcoded rates (12000/m³, 260/kg…) are gone.
+    const res: any = activeResult;
+    if (res.materials) {
+      addItem({ name: 'Cement', quantity: res.materials.cementBags, unit: 'bags', rate: rates.cementPerBag ?? 0, category: 'Concrete' });
+      addItem({ name: 'Sand', quantity: res.materials.sandCft, unit: 'cft', rate: rates.sandPerCft ?? 0, category: 'Concrete' });
+      addItem({ name: 'Aggregate', quantity: res.materials.aggCft, unit: 'cft', rate: rates.crushPerCft ?? 0, category: 'Concrete' });
+    }
+    const steelKg = res.totalSteel ?? res.steel;
+    if (steelKg) addItem({ name: 'Steel Reinforcement', quantity: steelKg, unit: 'kg', rate: rates.steelPerKg ?? 0, category: 'Steel' });
+    if (res.formwork) addItem({ name: 'Formwork Area', quantity: res.formwork, unit: 'm²', rate: 0, category: 'Formwork' });
+    if (activeTab === 'precast') {
+      addItem({ name: 'Precast Panels', quantity: res.totalPanels, unit: 'Nos', rate: 0, category: 'Concrete' });
+      addItem({ name: 'Precast Posts', quantity: res.postCount, unit: 'Nos', rate: 0, category: 'Concrete' });
+    }
+    if (activeTab === 'roof') {
+      addItem({ name: 'Sloped Roofing Surface', quantity: res.area, unit: 'm²', rate: 0, category: 'Finishes' });
+      addItem({ name: 'Roofing Sheets', quantity: res.sheets, unit: 'Nos', rate: 0, category: 'Finishes' });
     }
   };
 
@@ -171,7 +159,8 @@ export default function UniversalStructuralGeometryEngine() {
     { id: 'tube', name: 'Concrete Tube', icon: <CircleDashed size={16} /> },
     { id: 'precast', name: 'Precast Wall', icon: <AlignJustify size={16} /> },
     { id: 'staircase', name: 'Staircase', icon: <Baseline size={16} /> },
-    { id: 'roof', name: 'Roof Pitch', icon: <Triangle size={16} /> }
+    { id: 'roof', name: 'Roof Pitch', icon: <Triangle size={16} /> },
+    { id: 'trapfooting', name: 'Trap. Footing', icon: <Square size={16} /> }
   ];
 
   return (
@@ -180,6 +169,15 @@ export default function UniversalStructuralGeometryEngine() {
         <div>
           <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Universal Structural Geometry</h1>
           <p className="text-txt-tertiary dark:text-txt-tertiary mt-1">Unified engine for complex shapes, formwork, steel, and concrete volumes.</p>
+          <p className="text-sm text-txt-secondary mt-2 max-w-3xl">Volumes, formwork, bar schedules and material cost for beams, columns, tubes, precast walls, stairs, roofs and trapezoidal footings. Bar sizes are inputs (no more hardcoded 12/8 mm); stirrup length follows IS 2502 (detailed); a ground beam counts side formwork only — the bottom is formed on the ground. Staircase steel is designed (IS 456 Cl. 33), not the old flat 120 kg/m³.</p>
+          <div className="flex flex-wrap gap-3 mt-3 text-sm">
+            <label className="flex items-center gap-2 font-medium"><input type="checkbox" checked={formedOnGround} onChange={(e) => setFormedOnGround(e.target.checked)} className="w-4 h-4 rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500" /> Beam formed on ground (no bottom formwork)</label>
+            <label className="flex items-center gap-2 font-medium">fck <select value={fck} onChange={(e) => setFck(Number(e.target.value))} className="bg-surface-default border border-ui-borderSubtle rounded-lg px-2 py-1">{[20, 25, 30, 35, 40].map((g) => (<option key={g} value={g}>M{g}</option>))}</select></label>
+            <label className="flex items-center gap-2 font-medium">Wastage <input type="number" value={wastage} onChange={(e) => setWastage(Number(e.target.value) || 0)} className="w-16 bg-surface-default border border-ui-borderSubtle rounded-lg px-2 py-1" /> %</label>
+            <label className="flex items-center gap-2 font-medium">Cement ({table.currency}/bag) <input type="number" value={rates.cementPerBag ?? ""} onChange={(e) => setRate("cementPerBag", e.target.value === "" ? null : Number(e.target.value))} className="w-20 bg-surface-default border border-ui-borderSubtle rounded-lg px-2 py-1" /></label>
+            <label className="flex items-center gap-2 font-medium">Steel ({table.currency}/kg) <input type="number" value={rates.steelPerKg ?? ""} onChange={(e) => setRate("steelPerKg", e.target.value === "" ? null : Number(e.target.value))} className="w-20 bg-surface-default border border-ui-borderSubtle rounded-lg px-2 py-1" /></label>
+          </div>
+          <EngineNotices errors={activeResult.errors ?? []} warnings={[...(activeResult.warnings ?? []), ...currentWarnings]} />
         </div>
         <Button 
           onClick={syncToBOQ}
@@ -224,6 +222,9 @@ export default function UniversalStructuralGeometryEngine() {
                   <InputGroup label="Depth [m]" name="rectD" value={inputs.rectD} onChange={handleInput} />
                   <InputGroup label="Main Rebar Count" name="rectRebarCount" value={inputs.rectRebarCount} onChange={handleInput} />
                   <InputGroup label="Stirrup Spacing c/c [m]" name="rectStirrupSpacing" value={inputs.rectStirrupSpacing} onChange={handleInput} />
+                  <InputGroup label="Main Bar Dia [mm]" name="rectMainDia" value={inputs.rectMainDia} onChange={handleInput} />
+                  <InputGroup label="Stirrup Dia [mm]" name="rectStirrupDia" value={inputs.rectStirrupDia} onChange={handleInput} />
+                  <InputGroup label="Clear Cover [mm]" name="rectCover" value={inputs.rectCover} onChange={handleInput} />
                 </>
               )}
 
@@ -233,6 +234,9 @@ export default function UniversalStructuralGeometryEngine() {
                   <InputGroup label="Height / Length [m]" name="circH" value={inputs.circH} onChange={handleInput} />
                   <InputGroup label="Main Rebar Count" name="circRebarCount" value={inputs.circRebarCount} onChange={handleInput} />
                   <InputGroup label="Spiral Tie Pitch [m]" name="circTiePitch" value={inputs.circTiePitch} onChange={handleInput} />
+                  <InputGroup label="Main Bar Dia [mm]" name="circMainDia" value={inputs.circMainDia} onChange={handleInput} />
+                  <InputGroup label="Tie Dia [mm]" name="circTieDia" value={inputs.circTieDia} onChange={handleInput} />
+                  <InputGroup label="Clear Cover [mm]" name="circCover" value={inputs.circCover} onChange={handleInput} />
                 </>
               )}
 
@@ -251,6 +255,9 @@ export default function UniversalStructuralGeometryEngine() {
                   <InputGroup label="Panel Height [m]" name="panelH" value={inputs.panelH} onChange={handleInput} />
                   <InputGroup label="Panel Thickness [m]" name="panelThick" value={inputs.panelThick} onChange={handleInput} />
                   <InputGroup label="Post Spacing c/c [m]" name="postSpacing" value={inputs.postSpacing} onChange={handleInput} />
+                  <InputGroup label="Post Size [m]" name="postSize" value={inputs.postSize} onChange={handleInput} />
+                  <InputGroup label="Footing Size [m]" name="footingSize" value={inputs.footingSize} onChange={handleInput} />
+                  <InputGroup label="Footing Depth [m]" name="footingDepth" value={inputs.footingDepth} onChange={handleInput} />
                 </>
               )}
 
@@ -261,6 +268,22 @@ export default function UniversalStructuralGeometryEngine() {
                   <InputGroup label="Step Going [m]" name="stairGoing" value={inputs.stairGoing} onChange={handleInput} />
                   <InputGroup label="Stair Width [m]" name="stairWidth" value={inputs.stairWidth} onChange={handleInput} />
                   <InputGroup label="Waist Slab Thick [m]" name="stairWaist" value={inputs.stairWaist} onChange={handleInput} />
+                  <InputGroup label="Main Bar Dia [mm]" name="stairMainDia" value={inputs.stairMainDia} onChange={handleInput} />
+                  <InputGroup label="Main Spacing [mm]" name="stairMainSpacing" value={inputs.stairMainSpacing} onChange={handleInput} />
+                  <InputGroup label="Dist. Bar Dia [mm]" name="stairDistDia" value={inputs.stairDistDia} onChange={handleInput} />
+                  <InputGroup label="Dist. Spacing [mm]" name="stairDistSpacing" value={inputs.stairDistSpacing} onChange={handleInput} />
+                  <InputGroup label="Clear Cover [mm]" name="stairCover" value={inputs.stairCover} onChange={handleInput} />
+                </>
+              )}
+
+              {activeTab === 'trapfooting' && (
+                <>
+                  <InputGroup label="Base Length [m]" name="trapL" value={inputs.trapL} onChange={handleInput} />
+                  <InputGroup label="Base Width [m]" name="trapW" value={inputs.trapW} onChange={handleInput} />
+                  <InputGroup label="Base Depth [m]" name="trapD1" value={inputs.trapD1} onChange={handleInput} />
+                  <InputGroup label="Top Length [m]" name="trapL2" value={inputs.trapL2} onChange={handleInput} />
+                  <InputGroup label="Top Width [m]" name="trapW2" value={inputs.trapW2} onChange={handleInput} />
+                  <InputGroup label="Slope Depth [m]" name="trapD2" value={inputs.trapD2} onChange={handleInput} />
                 </>
               )}
 
@@ -269,6 +292,9 @@ export default function UniversalStructuralGeometryEngine() {
                   <InputGroup label="Total Span [m]" name="roofSpan" value={inputs.roofSpan} onChange={handleInput} />
                   <InputGroup label="Roof Rise [m]" name="roofRise" value={inputs.roofRise} onChange={handleInput} />
                   <InputGroup label="Roof Run (Building Length) [m]" name="roofRun" value={inputs.roofRun} onChange={handleInput} />
+                  <InputGroup label="Purlin Spacing [m]" name="roofPurlinSpacing" value={inputs.roofPurlinSpacing} onChange={handleInput} />
+                  <InputGroup label="Batten Spacing [m]" name="roofBattenSpacing" value={inputs.roofBattenSpacing} onChange={handleInput} />
+                  <InputGroup label="Sheet Width [m]" name="roofSheetWidth" value={inputs.roofSheetWidth} onChange={handleInput} />
                 </>
               )}
             </motion.div>
@@ -349,7 +375,9 @@ export default function UniversalStructuralGeometryEngine() {
                   <>
                     <ResultRow label="Total Concrete Vol" value={res.vol} unit="m³" />
                     <ResultRow label="Formwork Area" value={res.formwork} unit="m²" />
-                    <ResultRow label="Estimated Steel" value={res.steel} unit="kg" />
+                    <ResultRow label="Designed Steel" value={res.steel} unit="kg" />
+                    <ResultRow label="1% rule (cross-check)" value={res.onePctKg} unit="kg" />
+                    <ResultRow label="Main / Dist. Bars" value={res.mainBars} unit={`+ ${res.distBars} dist.`} />
                   </>
                 );
               })()}
@@ -361,10 +389,29 @@ export default function UniversalStructuralGeometryEngine() {
                     <ResultRow label="Pitch Angle" value={res.angleDeg} unit="°" />
                     <ResultRow label="Pitch Ratio" value={res.pitchRatio} unit=":12" />
                     <ResultRow label="Sloped Area" value={res.area} unit="m²" />
-                    <ResultRow label="Roofing Plywood" value={res.plywood} unit="Nos" />
+                    <ResultRow label="Purlins" value={res.purlinsM} unit="m" />
+                    <ResultRow label="Battens" value={res.battensM} unit="m" />
+                    <ResultRow label="Roofing Sheets" value={res.sheets} unit="Nos" />
                   </>
                 );
               })()}
+              {activeTab === 'trapfooting' && (() => {
+                const res = calculateTrapFooting();
+                return (
+                  <>
+                    <ResultRow label="Concrete Volume" value={res.vol} unit="m³" />
+                    <ResultRow label="Formwork Area" value={res.formwork} unit="m²" />
+                    <ResultRow label="Cement" value={res.materials.cementBags} unit="bags" />
+                  </>
+                );
+              })()}
+              {activeResult.costLines && (
+                <>
+                  <ResultRow label="Cement" value={activeResult.materials?.cementBags ?? 0} unit="bags" />
+                  <ResultRow label="Sand / Aggregate" value={activeResult.materials?.sandCft ?? 0} unit={`cft / ${(activeResult.materials?.aggCft ?? 0).toFixed(0)} cft`} />
+                  <ResultRow label="Total Cost" value={activeResult.totalCost ?? 0} unit={table.currency} />
+                </>
+              )}
             </div>
           </div>
 
@@ -386,11 +433,34 @@ export default function UniversalStructuralGeometryEngine() {
                   {activeTab === 'precast' && <PrecastWallSVG totalH={inputs.wallTotalH} panelH={inputs.panelH} />}
                   {activeTab === 'staircase' && <StaircaseSVG rise={inputs.stairRise} going={inputs.stairGoing} />}
                   {activeTab === 'roof' && <RoofPitchSVG rise={inputs.roofRise} span={inputs.roofSpan} />}
+                  {activeTab === 'trapfooting' && <RectangularSVG w={inputs.trapW} d={inputs.trapD1 + inputs.trapD2} />}
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="mb-16 space-y-6">
+        {activeResult.costLines && (
+          <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle p-6">
+            <h3 className="font-bold text-txt-primary mb-3">Materials &amp; Cost</h3>
+            <div className="space-y-1 text-sm">
+              {activeResult.costLines.map((l: any) => (
+                <div key={l.label} className="flex justify-between"><span className="text-txt-secondary">{l.label}</span><span className="font-mono">{l.amount == null ? "—" : `${formatRate(l.rate, table.currency)} × ${l.qty.toFixed(1)} = ${l.amount.toLocaleString("en-US")}`}</span></div>
+              ))}
+            </div>
+          </div>
+        )}
+        <StructuralExportBar title={`Universal Structural Geometry — ${activeTab}`} summaryText={`Universal geometry (${activeTab}): volume ${activeResult.vol?.toFixed?.(2) ?? activeResult.totalVol?.toFixed?.(2) ?? "—"} m³, formwork ${activeResult.formwork?.toFixed?.(2) ?? "—"} m², steel ${activeResult.totalSteel?.toFixed?.(1) ?? activeResult.steel?.toFixed?.(1) ?? "—"} kg, cost ${activeResult.totalCost == null ? "—" : activeResult.totalCost.toLocaleString("en-US")} ${table.currency}.`}
+          boqItems={activeResult.materials ? [
+            { description: "Cement", quantity: activeResult.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
+            { description: "Sand", quantity: activeResult.materials.sandCft, unit: "cft", rate: rates.sandPerCft ?? 0 },
+            { description: "Aggregate", quantity: activeResult.materials.aggCft, unit: "cft", rate: rates.crushPerCft ?? 0 },
+            ...(activeResult.totalSteel || activeResult.steel ? [{ description: "Steel reinforcement", quantity: activeResult.totalSteel ?? activeResult.steel, unit: "kg", rate: rates.steelPerKg ?? 0 }] : []),
+          ] : []}
+          totalAmount={activeResult.totalCost ?? null} />
+        {activeResult.steps && <CalcSteps steps={activeResult.steps} />}
       </div>
     </div>
   );

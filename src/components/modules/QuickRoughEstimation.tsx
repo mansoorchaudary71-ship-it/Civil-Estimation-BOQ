@@ -7,10 +7,12 @@ import { useRecentTools } from "../../hooks/useRecentTools";
 import { CalculationHistory } from '../ui/CalculationHistory';
 import ThumbRuleDistributionEngine from '../ui/ThumbRuleDistributionEngine';
 import FormulaTransparencyCard from '../ui/FormulaTransparencyCard';
+import { quickEstimate, QUICK_RATES, CITY_MULTIPLIERS, RATES_LAST_UPDATED, RATE_SOURCE, type QuickType, type QuickCity, type MarlaStandard } from "../../lib/quickEstimate";
+import { useRates } from "../../lib/useRates";
 
 
-type ConstructionType = "grey" | "standard" | "premium";
-type LocationType = "lahore" | "karachi" | "islamabad" | "other";
+type ConstructionType = QuickType;
+type LocationType = QuickCity;
 
 export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id: string) => void }) {
   const { settings, formatCurrency } = useSettings();
@@ -18,106 +20,34 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
   
   const [areaInput, setAreaInput] = useState<number>(5);
   const [areaUnit, setAreaUnit] = useState<"marla" | "sqft">("marla");
+  const [marlaStandard, setMarlaStandard] = useState<MarlaStandard>("society225");
   const [floors, setFloors] = useState<number>(1);
   const [constType, setConstType] = useState<ConstructionType>("standard");
   const [location, setLocation] = useState<LocationType>("lahore");
+  const [basement, setBasement] = useState<boolean>(false);
+  const { table: rateTable } = useRates("PK");
+  const validationError = !isFinite(areaInput) || areaInput <= 0 ? "Area must be greater than 0." : floors < 1 || floors > 10 ? "Floors must be between 1 and 10." : null;
 
-  // Conversions & calculations
-  // 1 Marla = 225 sqft (standard in Pakistan)
-  const sqftArea = areaUnit === "marla" ? areaInput * 225 : areaInput;
-  const totalSqft = sqftArea * floors;
-
-  // Base rates per sqft (PKR usually)
-  const greyRate = 2200;
-  const finishStandardRate = 1800;
-  const finishPremiumRate = 3000;
-
-  const locMultiplier = useMemo(() => {
-    switch (location) {
-      case "islamabad": return 1.10;
-      case "karachi": return 1.05;
-      case "lahore": return 1.00;
-      default: return 1.00;
-    }
-  }, [location]);
-
-  // Save to history on change
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      addRecentTool('quick-estimation', { areaInput, areaUnit, floors, constType, location });
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [areaInput, areaUnit, floors, constType, location]);
-
-  // Restore from history
-  React.useEffect(() => {
-    const handleRestore = (e: any) => {
-      if (e.detail.id === 'quick-estimation' && e.detail.inputs) {
-        const { areaInput, areaUnit, floors, constType, location } = e.detail.inputs;
-        if (areaInput !== undefined) setAreaInput(areaInput);
-        if (areaUnit) setAreaUnit(areaUnit);
-        if (floors !== undefined) setFloors(floors);
-        if (constType) setConstType(constType);
-        if (location) setLocation(location);
-      }
-    };
-    window.addEventListener('restore-calculation-inputs', handleRestore);
-    return () => window.removeEventListener('restore-calculation-inputs', handleRestore);
-  }, []);
-
+  // Engine (src/lib/quickEstimate): rates re-sourced to 2026 (grey Rs 3,000/sqft
+  // Lahore base; the old 2,200 was stale/low). The chart split sums to 100% —
+  // the old code added labour (25% of total) on top of grey + finish (125%).
   const results = useMemo(() => {
-    if (totalSqft <= 0) return null;
+    if (validationError) return null;
+    return quickEstimate({
+      area: areaInput,
+      unit: areaUnit,
+      marla: marlaStandard,
+      floors,
+      type: constType,
+      city: location,
+      basement,
+    });
+  }, [areaInput, areaUnit, marlaStandard, floors, constType, location, basement, validationError]);
+  const totalSqft = results ? results.coveredSqft : 0;
+  const sqftArea = results ? results.plotSqft : 0;
 
-    let totalRate = greyRate;
-    let greyCost = totalSqft * greyRate * locMultiplier;
-    let finishCost = 0;
-
-    if (constType === "standard") {
-      totalRate += finishStandardRate;
-      finishCost = totalSqft * finishStandardRate * locMultiplier;
-    } else if (constType === "premium") {
-      totalRate += finishPremiumRate;
-      finishCost = totalSqft * finishPremiumRate * locMultiplier;
-    }
-
-    const totalCost = totalSqft * totalRate * locMultiplier;
-    
-    // Ranges
-    const minCost = totalCost * 0.95;
-    const maxCost = totalCost * 1.05;
-
-    // Timeline estimate
-    let timelineMin = 4;
-    let timelineMax = 6;
-    if (totalSqft > 2000 && totalSqft <= 4000) { timelineMin = 5; timelineMax = 8; }
-    else if (totalSqft > 4000 && totalSqft <= 8000) { timelineMin = 7; timelineMax = 12; }
-    else if (totalSqft > 8000) { timelineMin = 10; timelineMax = 18; }
-    if (floors > 1) { timelineMin += (floors - 1); timelineMax += (floors - 1); }
-
-    // Rough material breakdown based on grey cost + some finishing
-    // 25% steel, 15% cement, 20% bricks, 25% labour roughly for structural
-    const labourCost = totalCost * 0.25; 
-    const matTotal = totalCost - labourCost;
-    
-    const cementCost = greyCost * 0.15 + (finishCost * 0.05);
-    const steelCost = greyCost * 0.25;
-    const bricksCost = greyCost * 0.20;
-    const sandAggCost = greyCost * 0.15;
-    const tilesPaintCost = finishCost * 0.40;
-
-    return {
-      minCost, maxCost, totalCost, greyCost, finishCost, labourCost,
-      cementCost, steelCost, bricksCost, sandAggCost, tilesPaintCost,
-      timeline: `${timelineMin} - ${timelineMax} months`,
-      costPerSqft: totalRate * locMultiplier
-    };
-  }, [totalSqft, constType, locMultiplier]);
-
-  const chartData = results ? [
-    { name: 'Grey Structure', value: results.greyCost },
-    { name: 'Finishing', value: results.finishCost },
-    { name: 'Labour', value: results.labourCost },
-  ] : [];
+  // Chart comes from the engine: grey + finishing + labour shares sum to 100% of the total.
+  const chartData = results ? results.chart : [];
 
   const CHART_COLORS = ['#1F1D1A', '#0F766E', '#F2A413'];
 
@@ -178,6 +108,19 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
               </div>
             </div>
 
+            {areaUnit === "marla" && (
+              <div>
+                <label className="block text-sm font-semibold text-txt-secondary mb-2">Marla standard</label>
+                <div className="flex gap-2">
+                  <Button onClick={() => setMarlaStandard("society225")} className={`px-3 py-2 rounded-full text-xs font-bold ${marlaStandard === "society225" ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>225 sqft — society / DHA / Bahria</Button>
+                  <Button onClick={() => setMarlaStandard("revenue272")} className={`px-3 py-2 rounded-full text-xs font-bold ${marlaStandard === "revenue272" ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>272.25 sqft — Punjab revenue</Button>
+                </div>
+                <p className="text-xs text-txt-tertiary mt-1">Same plot, different marla = ~17% cost swing. Check your plot papers.</p>
+              </div>
+            )}
+            <label className="flex items-center gap-2 text-sm font-semibold text-txt-secondary">
+              <input type="checkbox" checked={basement} onChange={(e) => setBasement(e.target.checked)} /> Include basement (one extra floor of area)
+            </label>
             <div>
               <label className="block text-sm font-semibold text-txt-secondary mb-2">Number of Floors</label>
               <div className="relative">
@@ -218,6 +161,13 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                   <div className="font-bold text-sm rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Premium / Luxury</div>
                   <div className="text-xs opacity-70 mt-0.5">High-end imported finishes</div>
                 </Button>
+                <Button
+                  onClick={() => setConstType("luxury")}
+                  className={`p-3 rounded-2xl border-2 text-left transition-all ${constType === "luxury" ? 'border-ink bg-accent-50  text-accent-800 ' : 'border-ui-borderSubtle text-txt-secondary  hover:border-ui-borderDefault'}`}
+                >
+                  <div className="font-bold text-sm rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Luxury</div>
+                  <div className="text-xs opacity-70 mt-0.5">Imported stone, smart home, premium MEP</div>
+                </Button>
               </div>
             </div>
 
@@ -232,6 +182,9 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                   <option value="lahore">Lahore</option>
                   <option value="karachi">Karachi (+5%)</option>
                   <option value="islamabad">Islamabad (+10%)</option>
+                  <option value="faisalabad">Faisalabad (−5%)</option>
+                  <option value="multan">Multan (−5%)</option>
+                  <option value="rawalpindi">Rawalpindi (+5%)</option>
                   <option value="other">Other</option>
                 </select>
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-txt-tertiary" />
@@ -268,7 +221,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                       Total: {totalSqft.toLocaleString()} sq.ft
                     </div>
                     <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary px-3 py-1.5 rounded-2xl text-txt-secondary overflow-hidden">
-                      {settings.currency} {results.costPerSqft.toLocaleString(undefined, { maximumFractionDigits: 0 })} / sq.ft
+                      {settings.currency} {results.ratePerSqft.toLocaleString(undefined, { maximumFractionDigits: 0 })} / sq.ft
                     </div>
                   </div>
                 </div>
@@ -300,7 +253,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                           contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                         />
                         <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={32}>
-                          {chartData.map((entry, index) => (
+                          {chartData.map((entry: { name: string; value: number }, index: number) => (
                             <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                           ))}
                         </Bar>
@@ -316,28 +269,28 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                     <div className="flex justify-between items-center p-3 rounded-2xl bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-full w-3 h-3 rounded-full bg-surface-default/70 backdrop-blur-md border border-white/20 shadow-brand-sm overflow-hidden" /> <span className="font-semibold text-txt-secondary">Steel / Rebar</span></div>
                       <div className="flex flex-col items-end gap-1">
-                        <div className="font-bold text-txt-primary">{formatCurrency(results.steelCost)}</div>
+                        <div className="font-bold text-txt-primary">{results.materials.steelKgMin.toLocaleString()}–{results.materials.steelKgMax.toLocaleString()} kg</div>
                         <Button onClick={() => onNavigate && onNavigate("steel_calculator")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact weight <ArrowRight size={10} /></Button>
                       </div>
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-2xl bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-secondary-400" /> <span className="font-semibold text-txt-secondary">Cement</span></div>
                       <div className="flex flex-col items-end gap-1">
-                        <div className="font-bold text-txt-primary">{formatCurrency(results.cementCost)}</div>
+                        <div className="font-bold text-txt-primary">{results.materials.cementBagsMin.toLocaleString()}–{results.materials.cementBagsMax.toLocaleString()} bags</div>
                         <Button onClick={() => onNavigate && onNavigate("volume")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact bags <ArrowRight size={10} /></Button>
                       </div>
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-2xl bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-ink" /> <span className="font-semibold text-txt-secondary">Bricks / Blocks</span></div>
                       <div className="flex flex-col items-end gap-1">
-                        <div className="font-bold text-txt-primary">{formatCurrency(results.bricksCost)}</div>
+                        <div className="font-bold text-txt-primary">{results.materials.bricksMin.toLocaleString()}–{results.materials.bricksMax.toLocaleString()} nos</div>
                         <Button onClick={() => onNavigate && onNavigate("wall_estimator")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact bricks <ArrowRight size={10} /></Button>
                       </div>
                     </div>
                     {constType !== "grey" && (
                       <div className="flex justify-between items-center p-3 rounded-2xl bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                         <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-ink" /> <span className="font-semibold text-txt-secondary">Tiles, Paint & Finishes</span></div>
-                        <div className="font-bold text-txt-primary">{formatCurrency(results.tilesPaintCost)}</div>
+                        <div className="font-bold text-txt-primary">{formatCurrency(results.finishCost)}</div>
                       </div>
                     )}
                   </div>
@@ -360,8 +313,8 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                 title="Thumb-Rule Calculation Logic"
                 formulas={[
                   { name: "Total Built-Up Area", formula: "Area x Floors", variables: { Area: sqftArea, Floors: floors }, result: `${totalSqft} sq.ft` },
-                  { name: "Min Budget", formula: "Total Area x Min Rate / sq.ft", variables: { Area: totalSqft, Rate: results.costPerSqft - (results.costPerSqft * 0.05) }, result: formatCurrency(results.minCost) },
-                  { name: "Max Budget", formula: "Total Area x Max Rate / sq.ft", variables: { Area: totalSqft, Rate: results.costPerSqft + (results.costPerSqft * 0.05) }, result: formatCurrency(results.maxCost) }
+                  { name: "Min Budget", formula: "Total Area x Min Rate / sq.ft", variables: { Area: totalSqft, Rate: results.ratePerSqft - (results.ratePerSqft * 0.05) }, result: formatCurrency(results.minCost) },
+                  { name: "Max Budget", formula: "Total Area x Max Rate / sq.ft", variables: { Area: totalSqft, Rate: results.ratePerSqft + (results.ratePerSqft * 0.05) }, result: formatCurrency(results.maxCost) }
                 ]}
               />
             </>
@@ -374,7 +327,11 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
 
       </div>
     
-      <CalculationHistory calculatorId="quickroughestimation_tool" currentInputs={{}} />
+      <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 text-sm text-txt-secondary">
+        Rates: grey Rs {QUICK_RATES[constType].grey.toLocaleString()}/sqft + finish Rs {QUICK_RATES[constType].finish.toLocaleString()}/sqft (Lahore base, {RATES_LAST_UPDATED}; {RATE_SOURCE}). City multiplier {CITY_MULTIPLIERS[location].label} ×{CITY_MULTIPLIERS[location].multiplier}. {areaUnit === "marla" ? `Marla standard: ${marlaStandard === "society225" ? "225 sqft (society/DHA/Bahria)" : "272.25 sqft (Punjab revenue)"} — the other standard changes this estimate by ~17%.` : ""}
+        {validationError && <span className="block text-red-600 font-semibold mt-1">{validationError}</span>}
+      </div>
+      <CalculationHistory calculatorId="quickroughestimation_tool" currentInputs={{ areaInput, areaUnit, marlaStandard, floors, constType, location, basement }} currentResults={results ? { totalCost: results.totalCost } : undefined} />
 </div>
   );
 }

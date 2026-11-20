@@ -39,7 +39,8 @@ import { useSettings } from "../../context/SettingsContext";
 import { ToolLayout, ToolLayoutInputs, ToolLayoutResults, ToolSection } from "../ui/ToolLayout";
 import { NumberInput } from "../ui/NumberInput";
 
-import { calculatorsList, CalcItem } from "../../lib/masterCalculators";
+import { calculatorsList, CalcItem, computeWithUnits } from "../../lib/masterCalculators";
+import { useRates } from "../../lib/useRates";
 
 
 export default function MasterQuantityEstimator({
@@ -49,6 +50,7 @@ export default function MasterQuantityEstimator({
 }) {
   const { user } = useAuth();
   const { settings } = useSettings();
+  const { rates: pkRates, table: rateTable } = useRates("PK");
   const isSI = settings.measurement === "SI";
   const unitL = isSI ? "m" : "ft";
   const unitA = isSI ? "m²" : "sq.ft";
@@ -100,7 +102,7 @@ export default function MasterQuantityEstimator({
       parsedInputs[k] = isNaN(parseFloat(rawInputs[k])) ? 0 : parseFloat(rawInputs[k]);
     });
     
-    const computed = activeCalculator.compute(parsedInputs, sharedState, isSI);
+    const computed = computeWithUnits(activeCalculator, parsedInputs, sharedState, isSI);
     currentResults = computed.results;
   }
   
@@ -117,7 +119,7 @@ export default function MasterQuantityEstimator({
         parsed[k] = isNaN(parseFloat(raw[k])) ? 0 : parseFloat(raw[k]);
       });
       
-      const computed = calc.compute(parsed, newShared, isSI);
+      const computed = computeWithUnits(calc, parsed, newShared, isSI);
       if (computed.sharedOutputs) {
         Object.entries(computed.sharedOutputs).forEach(([k, v]) => {
           if (newShared[k] !== v) {
@@ -139,8 +141,8 @@ export default function MasterQuantityEstimator({
     <div className="w-full">
       {!isEmbedded && (
         <SEO 
-          title="Master Quantity Estimator" 
-          description="Comprehensive construction quantity estimator. Unified state across models." 
+          title="Master Quantity Estimator — 23 Calculators in One | Civil Estimation Pro" 
+          description="23 linked quantity calculators — excavation, PCC, footing, brickwork, slab, plaster and more — with IS 1200 measurement, Imperial/SI units and shared chaining." 
           canonicalUrl="https://civilestimationpro.com/master-quantity" 
         />
       )}
@@ -267,6 +269,16 @@ export default function MasterQuantityEstimator({
                             variant="neutral"
                           />
                         ))}
+                      </div>
+                      {Object.values(calcInputs[activeCalc] ?? {}).some((v) => v !== "" && !(parseFloat(v as string) > 0)) && (
+                        <p className="mt-4 text-sm font-semibold text-amber-700">Check inputs: every dimension must be greater than 0 — blank or zero values are not silently treated as 0.</p>
+                      )}
+                      <p className="mt-4 text-sm text-txt-tertiary">
+                        {isSI ? "Metric (SI) mode — all computation in metres." : "Imperial mode — your ft / sqft inputs are converted to metric for computation and results are converted back, so Imperial and SI give the same physical quantities."}
+                        {" "}Plaster openings use the IS 1200 rule (see the deduction input). Rates: cement {pkRates.cementPerBag ? `Rs ${pkRates.cementPerBag}/bag` : "—"}, steel {pkRates.steelPerKg ? `Rs ${pkRates.steelPerKg}/kg` : "—"} ({rateTable.lastUpdated}).
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-3">
+                        <Button onClick={() => setSharedState({})} className="px-4 py-2 rounded-full bg-ink text-white text-sm font-bold">Reset shared chain</Button>
                       </div>
                     </MaterialSummary>
                   </ToolSection>

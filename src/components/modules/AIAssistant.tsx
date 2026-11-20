@@ -4,8 +4,9 @@ import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
 import { Sparkles, Send, Loader2, Bot , Mic, MicOff} from "lucide-react";
 import Markdown from "react-markdown";
 import { cn } from "../../lib/utils";
-import { processAIEstimate } from "../../lib/gemini";
+import { localEstimateFromText } from "../../lib/aiEstimate";
 import { CalculationHistory } from "../ui/CalculationHistory";
+
 
 
 interface Message {
@@ -46,11 +47,12 @@ export default function AIAssistant() {
     {
       role: "model",
       content:
-        "Hello! I am your AI-powered Civil Engineering Estimator. Describe your project requirements (e.g., 'Estimate materials for a 10x10 room with a 10ft ceiling'), and I will provide a preliminary cost and material breakdown using NLP extraction.",
+        "Hello! I am a rule-based local estimator — not an AI chatbot and I use no API key. Describe your project (e.g. '5 marla house in Lahore, G+1, standard finish') and I will parse the dimensions and give a first-pass cost and material estimate from fixed formulas and the dated rate table.",
     },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [lastEstimate, setLastEstimate] = useState<{ total: number; covered: number } | null>(null);
 
   const [isListening, setIsListening] = useState(false);
   const [recognitionInstance, setRecognitionInstance] = useState<any>(null);
@@ -102,37 +104,40 @@ export default function AIAssistant() {
     }
   };
 
-  const handleSend = async () => {
+  // Rule-based local estimation: parse dimensions from the text, run the
+  // local quantity/cost engines. No network, no key, no AI model.
+  const handleSend = () => {
     if (!input.trim() || isLoading) return;
     const userMessage = input.trim();
     setInput("");
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setIsLoading(true);
-    try {
-      const content = await processAIEstimate(userMessage);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "model",
-          content:
-            content || "I was unable to generate an estimate at this time.",
-          isStreaming: true,
-        },
-      ]);
-    } catch (error) {
-      console.error(error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "model",
-          content:
-            "Error executing estimation. Please check your API key configuration and try again.",
-          isStreaming: true,
-        },
-      ]);
-    } finally {
+    // Keep the streaming animation; the answer itself is computed locally.
+    setTimeout(() => {
+      const result = localEstimateFromText(userMessage);
+      let content: string;
+      if ("error" in result) {
+        content = result.error;
+      } else {
+        setLastEstimate({ total: result.totalCost, covered: result.coveredSqft });
+        content = [
+          result.summary,
+          "",
+          `**Estimated cost: PKR ${result.totalCost.toLocaleString()}** (range PKR ${result.minCost.toLocaleString()} – PKR ${result.maxCost.toLocaleString()})`,
+          "",
+          "**Materials (thumb-rule quantities):**",
+          `- Cement: ${result.materials.cementBags.toLocaleString()} bags`,
+          `- Steel: ${result.materials.steelKg.toLocaleString()} kg`,
+          `- Bricks: ${result.materials.bricks.toLocaleString()} nos`,
+          "",
+          `*${result.method}*`,
+          "",
+          `*${result.disclaimer}*`,
+        ].join("\n");
+      }
+      setMessages((prev) => [...prev, { role: "model", content, isStreaming: true }]);
       setIsLoading(false);
-    }
+    }, 150);
   };
 
   const handleStreamingComplete = (index: number) => {
@@ -157,16 +162,16 @@ export default function AIAssistant() {
               <Sparkles className="w-5 h-5 text-white" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
-              <h2 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-ink to-ink-500">
-                AI Estimator
-              </h2>
-              <span className="text-xs font-semibold text-accent-800 uppercase tracking-wider mt-0.5">Premium Copilot</span>
+              <h1 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-ink to-ink-500">
+                Rule-Based Estimator
+              </h1>
+              <span className="text-xs font-semibold text-accent-800 uppercase tracking-wider mt-0.5">Rule-based · Not AI · No API key</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="px-3 py-1 bg-accent-50 text-accent-800 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 border border-accent-100">
               <span className="w-1.5 h-1.5 bg-ink rounded-full animate-pulse" />
-              Online
+              Local
             </div>
           </div>
         </div>
@@ -232,7 +237,7 @@ export default function AIAssistant() {
                       handleSend();
                     }
                   }}
-                  placeholder="Ask about cost optimization or estimation..."
+                  placeholder="e.g. 5 marla house in Lahore, G+1, standard finish"
                   className="w-full bg-transparent border-none py-2 outline-none text-[15px] text-txt-primary placeholder:text-txt-tertiary resize-none min-h-[40px] max-h-[120px] shadow-none"
                   rows={1}
                 />
@@ -259,14 +264,15 @@ export default function AIAssistant() {
              </div>
           </div>
           <div className="text-center mt-4 text-xs text-txt-tertiary font-bold uppercase tracking-[0.2em]">
-            AI generated estimates are preliminary. Always confirm with a certified QS.
+            Rule-based estimates are preliminary. Always confirm with a certified QS.
           </div>
         </div>
       </div>
       <CalculationHistory
         calculatorId="ai_assistant"
         estimationName="AI Assistant Chat"
-        currentInputs={{}}
+        currentInputs={{ messages: messages.length }}
+        currentResults={lastEstimate ?? {}}
       />
     </div>
   );

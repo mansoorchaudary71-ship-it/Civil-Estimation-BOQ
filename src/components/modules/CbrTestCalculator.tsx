@@ -16,7 +16,7 @@ import { CodeTooltip } from "../ui/CodeTooltip";
 export default function CbrTestCalculator() {
   const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
 
-  const [minSpec, setMinSpec] = useState("15");
+  const [minSpec, setMinSpec] = useState("8"); // IRC:37 subgrade — 15% is base-course territory, not subgrade
   const [reportDetails, setReportDetails] = useState<SoilReportDetails>({
     projectName: "Highway Rehabilitation Phase 2",
     clientName: "Department of Transportation",
@@ -90,12 +90,16 @@ export default function CbrTestCalculator() {
     }
 
     let originOffset = 0;
+    let originCapped = false;
     if (maxSlope > 0) {
       const xIntercept = tangentPoint.penetration - (tangentPoint.load / maxSlope);
       // Generally origin shift is only considered valid if it's small (e.g. < 2.0 mm)
       // and positive. A negative x-intercept implies convex upwards normally initially.
       if (xIntercept > 0) {
-        originOffset = xIntercept;
+        // Cap at 2.0 mm per the method note; a larger intercept means the
+        // specimen was not seated — re-seat it instead of applying the shift.
+        originOffset = Math.min(xIntercept, 2.0);
+        originCapped = xIntercept > 2.0;
       }
     }
 
@@ -121,7 +125,10 @@ export default function CbrTestCalculator() {
 
     const cbr25 = (load25 / 1370) * 100;
     const cbr50 = (load50 / 2055) * 100;
-    const finalCbr = Math.max(cbr25, cbr50);
+    // IS 2720 Pt 16: report the 2.5 mm value; if 5.0 mm is higher, repeat the
+    // test — never silently take the max.
+    const finalCbr = cbr25;
+    const repeatTest = cbr50 > cbr25;
     const requiredMin = parseFloat(minSpec) || 0;
 
     let soilClass = "Poor";
@@ -140,7 +147,11 @@ export default function CbrTestCalculator() {
       load25,
       load50,
       requiredMin,
-      originOffset
+      originOffset,
+      originCapped,
+      repeatTest,
+      mrHeukelom: 17.6 * Math.pow(finalCbr, 0.64),
+      mrAashto: 10 * finalCbr,
     };
   }, [hasData, testData, minSpec]);
 

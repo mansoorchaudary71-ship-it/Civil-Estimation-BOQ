@@ -1,231 +1,181 @@
-import React, { useState } from "react";
-import { 
-  CloudRain, 
-  Droplet, 
-  Sprout, 
-  Wallet,
-  Settings,
-  CircleDollarSign
-} from "lucide-react";
-import { GlobalSettingsToggle } from "../ui/GlobalSettingsToggle";
-import { useSettings } from "../../context/SettingsContext";
+import React, { useMemo, useState } from "react";
+import { CloudRain, Droplet, AlertTriangle, Copy, Printer, Download, Check } from "lucide-react";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { ResultCard } from "../ui/ResultCard";
+import { MaterialSummary } from "../ui/MaterialSummary";
+import { NumberInput } from "../ui/NumberInput";
+import { FormulaAccordion } from "../ui/FormulaAccordion";
+import { Button } from "../ui/Button";
+import { exportBOQToPDF } from "../../lib/pdfExport";
+import {
+  RAINWATER_ROOF_LABELS,
+  calcRainwater,
+  validateRainwaterInputs,
+  type RainwaterRoofType,
+} from "../../lib/rainwaterCalc";
+import { RAINFALL_MM_BY_CITY, type MepCity } from "../../lib/mepConstants";
+
+
+const CUR_SYMBOLS: Record<string, string> = { PKR: "Rs", INR: "₹", AED: "AED" };
+const CITIES = Object.keys(RAINFALL_MM_BY_CITY) as MepCity[];
 
 export default function RainwaterHarvesting() {
-  const { settings, formatCurrency } = useSettings();
-  
-  const [roofArea, setRoofArea] = useState("100");
-  const [areaUnit, setAreaUnit] = useState("sqm");
-  const [rainfall, setRainfall] = useState("800");
-  const [coefficient, setCoefficient] = useState("0.85");
-  const [muniWaterCost, setMuniWaterCost] = useState("2.5"); // per m3
-  const [setupCost, setSetupCost] = useState("1500");
+  const [roofArea, setRoofArea] = useState<number | "">(100);
+  const [areaUnit, setAreaUnit] = useState<"sqm" | "sqft">("sqm");
+  const [city, setCity] = useState<MepCity>("Lahore");
+  const [rainfall, setRainfall] = useState<number | "">(628);
+  const [roofType, setRoofType] = useState<RainwaterRoofType>("concreteTiles");
+  const [people, setPeople] = useState<number | "">(4);
+  const [usePerPerson, setUsePerPerson] = useState<number | "">(50);
+  const [dryDays, setDryDays] = useState<number | "">(21);
+  const [filterEff, setFilterEff] = useState<number | "">(90);
+  const [firstFlushEvents, setFirstFlushEvents] = useState<number | "">(0);
+  const [waterCost, setWaterCost] = useState<number | "">(150);
+  const [tankRate, setTankRate] = useState<number | "">(35);
+  const [fixedCost, setFixedCost] = useState<number | "">(75000);
+  const [currency, setCurrency] = useState("PKR");
+  const [copied, setCopied] = useState(false);
 
-  const area = parseFloat(roofArea) || 0;
-  const areaSqm = areaUnit === "sqft" ? area / 10.7639 : area;
-  
-  const pRainfall = parseFloat(rainfall) || 0;
-  const pCoeff = parseFloat(coefficient) || 0.85;
-  
-  // Annual Collectible Volume in cubic meters
-  const annualVolM3 = areaSqm * (pRainfall / 1000) * pCoeff;
-  const annualVolLiters = annualVolM3 * 1000;
-  
-  // Recommend a tank size (roughly representing 1 month of rain or peak storm capture)
-  // We'll approximate 8% of annual yield
-  const recommendedTankM3 = annualVolM3 * 0.08;
-  const recommendedTankLiters = recommendedTankM3 * 1000;
-  
-  // Financial Savings
-  const pWaterCost = parseFloat(muniWaterCost) || 0;
-  const pSetupCost = parseFloat(setupCost) || 0;
-  const annualSavings = annualVolM3 * pWaterCost;
-  
-  const paybackPeriod = annualSavings > 0 ? (pSetupCost / annualSavings) : 0;
-  
-  // CO2 savings - approximate 0.6 kg CO2 per cubic meter of municipal water supplied
-  const co2Savings = annualVolM3 * 0.6;
+  const { result, errors } = useMemo(() => {
+    try {
+      const areaM2 = areaUnit === "sqft" ? Number(roofArea) * 0.092903 : Number(roofArea);
+      const inp = {
+        roofAreaM2: areaM2,
+        rainfallMm: Number(rainfall),
+        city,
+        roofType,
+        filterEfficiency: (Number(filterEff) || 90) / 100,
+        firstFlushEventsPerYear: Number(firstFlushEvents) || 0,
+        people: Number(people),
+        usePerPersonLPerDay: Number(usePerPerson),
+        dryDays: Number(dryDays),
+        waterCostPerM3: Number(waterCost),
+        tankRatePerLitre: Number(tankRate),
+        fixedSystemCost: Number(fixedCost),
+      };
+      const errs = validateRainwaterInputs(inp);
+      if (errs.length > 0) return { result: null, errors: errs };
+      return { result: calcRainwater(inp), errors: [] as string[] };
+    } catch (e) {
+      return { result: null, errors: [(e as Error).message] };
+    }
+  }, [roofArea, areaUnit, city, rainfall, roofType, people, usePerPerson, dryDays, filterEff, firstFlushEvents, waterCost, tankRate, fixedCost]);
+
+  const sym = CUR_SYMBOLS[currency] ?? "Rs";
+  const fmt = (v: number | null | undefined) => (v == null || !isFinite(v) ? "—" : `${sym} ${Math.round(v).toLocaleString("en-US")}`);
+
+  const summaryText = result
+    ? `Rainwater harvesting — ${roofArea} ${areaUnit}, ${city} ${result.rainfallMm} mm\nAnnual yield ${result.yieldLPerYear.toFixed(0)} L; demand ${result.demandLPerYear.toFixed(0)} L; coverage ${result.coveragePct.toFixed(0)}%\nTank ${result.tankL.toLocaleString("en-US")} L (${result.tankLengthM.toFixed(2)} m x ${result.tankWidthM.toFixed(2)} m x ${result.tankDepthM} m); days of supply ${result.daysOfSupply.toFixed(0)}\nAnnual saving ${fmt(result.annualSavings)}; system cost ${fmt(result.systemCost)}; payback ${result.paybackYears?.toFixed(1) ?? "—"} years`
+    : "";
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(summaryText); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ }
+  };
+  const handlePdf = () => {
+    if (!result) return;
+    exportBOQToPDF({
+      projectName: "Rainwater Harvesting",
+      date: new Date().toLocaleDateString(),
+      items: [
+        { description: `Storage tank (${result.tankL} L)`, quantity: result.tankL, unit: "L", rate: Number(tankRate), amount: result.tankCost },
+        { description: "Gutter, filter and pump (lump sum)", quantity: 1, unit: "lot", rate: Number(fixedCost), amount: Number(fixedCost) },
+      ],
+      totalAmount: result.systemCost,
+    });
+  };
+  const applyCity = (c: MepCity) => { setCity(c); setRainfall(RAINFALL_MM_BY_CITY[c]); };
 
   return (
-    <div className="w-full h-full bg-transparent text-txt-primary dark:text-white p-6 md:p-8">
-      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          
-          <GlobalSettingsToggle align="left" showCurrency={true} />
+    <div className="w-full max-w-7xl mx-auto space-y-6">
+      <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-6 shadow-brand-sm">
+        <h2 className="text-xl font-bold text-txt-primary flex items-center gap-2 mb-2"><CloudRain className="text-accent-700" /> Rainwater Harvesting Calculator</h2>
+        <p className="text-sm text-txt-secondary mb-6">Roof yield, demand, and tank size by the BS 8515 5% rule plus dry-spell cover — with city rainfall presets, first-flush, gutter sizing and tank dimensions.</p>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          <Button onClick={handleCopy} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover">{copied ? <Check size={16} /> : <Copy size={16} />} {copied ? "Copied" : "Copy results"}</Button>
+          <Button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover"><Printer size={16} /> Print</Button>
+          <Button onClick={handlePdf} disabled={!result} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700"><Download size={16} /> Download PDF</Button>
         </div>
-        
-        <div className="bg-bg-card rounded-2xl shadow-brand-sm border border-ui-borderSubtle dark:border-ink-600 overflow-hidden">
-          <div className="p-6 md:p-8 space-y-8">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-              {/* Inputs */}
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-lg mb-4 text-txt-primary border-b border-border-color pb-2">Catchment Details</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-base font-medium">Roof Area</label>
-                      <div className="flex">
-                        <><label htmlFor="a11y-input-408" className="sr-only">Input</label>
-<input id="a11y-input-408" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle rounded-l-xl px-4 py-3 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#0F766E]/50 min-h-[44px]" value={roofArea} onChange={(e) => setRoofArea(e.target.value)} /></>
-                        <select className="bg-surface-hover border border-l-0 border-ui-borderSubtle rounded-r-xl px-2 py-3 outline-none" value={areaUnit} onChange={(e) => setAreaUnit(e.target.value)}>
-                          <option value="sqm">m²</option>
-                          <option value="sqft">sq.ft</option>
-                        </select>
-                      </div>
-                    </div>
-                    
-                    <div className="flex flex-col gap-2">
-                      <label className="text-base font-medium">Ann. Rainfall (mm)</label>
-                      <><label htmlFor="a11y-input-409" className="sr-only">Input</label>
-<input id="a11y-input-409" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle rounded-full px-4 py-3 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#0F766E]/50 min-h-[44px]" value={rainfall} onChange={(e) => setRainfall(e.target.value)} /></>
-                    </div>
 
-                    <div className="flex flex-col gap-2 col-span-2">
-                      <label className="text-base font-medium">Runoff Coefficient</label>
-                      <select className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle rounded-2xl px-4 py-3 focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#0F766E]/50 overflow-hidden" value={coefficient} onChange={(e) => setCoefficient(e.target.value)}>
-                        <option value="0.90">Metal / Corrugated Roof (0.90)</option>
-                        <option value="0.85">Concrete / Tiles (0.85)</option>
-                        <option value="0.80">Asphalt Shingles (0.80)</option>
-                        <option value="0.60">Flat Gravel Roof (0.60)</option>
-                        <option value="0.20">Green Roof (0.20)</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+        {errors.length > 0 && (
+          <div className="mb-6 bg-ui-error border border-ui-errorBorder rounded-2xl p-4 text-sm text-ui-errorText">{errors.map((e) => <p key={e}>{e}</p>)}</div>
+        )}
 
-                <div>
-                  <h3 className="font-bold text-lg mb-4 text-txt-primary border-b border-border-color pb-2">Financials</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-base font-medium flex items-center gap-1">Water Cost (/{`m³`})</label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-3.5 text-txt-tertiary text-sm font-medium">{settings.currency.substring(0,1)}</span>
-                        <><label htmlFor="a11y-input-410" className="sr-only">Input</label>
-<input id="a11y-input-410" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle rounded-full pl-8 pr-4 py-3 focus:ring-2 focus:ring-accent-500 min-h-[44px]" value={muniWaterCost} onChange={(e) => setMuniWaterCost(e.target.value)} /></>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-base font-medium">Est. Setup Cost</label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-3.5 text-txt-tertiary text-sm font-medium">{settings.currency.substring(0,1)}</span>
-                        <><label htmlFor="a11y-input-411" className="sr-only">Input</label>
-<input id="a11y-input-411" type="number" inputMode="decimal" className="w-full bg-surface-default dark:bg-ink rounded-full border border-ui-borderSubtle shadow-brand-sm text-txt-primary border border-ui-borderSubtle rounded-full pl-8 pr-4 py-3 focus:ring-2 focus:ring-accent-500 min-h-[44px]" value={setupCost} onChange={(e) => setSetupCost(e.target.value)} /></>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Schematic Diagram */}
-              <div className="bg-surface-hover border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center min-h-[300px] shadow-brand-sm relative overflow-hidden">
-                <h4 className="font-bold text-txt-tertiary uppercase tracking-wider text-sm mb-4">System Schematic</h4>
-                <svg width="280" height="240" viewBox="0 0 280 240" className="max-w-full drop-shadow-sm">
-                  {/* Rain */}
-                  <g stroke="#0F766E" strokeWidth="2" strokeDasharray="4 4" opacity="0.6">
-                    <line x1="60" y1="20" x2="50" y2="50" />
-                    <line x1="100" y1="15" x2="90" y2="45" />
-                    <line x1="140" y1="25" x2="130" y2="55" />
-                  </g>
-                  {/* Cloud */}
-                  <path d="M70,40 a20,20 0 0,1 40,0 a30,30 0 0,1 50,0 a20,20 0 0,1 -10,35 h-70 a15,15 0 0,1 -10,-35" fill="rgba(148, 163, 184, 0.2)" stroke="#6B6862" strokeWidth="2"/>
-
-                  {/* House / Roof */}
-                  <polygon points="20,110 100,50 180,110" fill="#F4F2EE" stroke="#6B6862" strokeWidth="3" strokeLinejoin="round" />
-                  <rect x="35" y="110" width="130" height="90" fill="#ffffff" stroke="#6B6862" strokeWidth="2" />
-                  
-                  {/* Gutter */}
-                  <path d="M 15 110 L 185 110" stroke="#0F766E" strokeWidth="4" strokeLinecap="round" />
-                  
-                  {/* Downpipe */}
-                  <path d="M 175 110 L 175 180 L 195 180" fill="none" stroke="#0F766E" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                  
-                  {/* Filter box */}
-                  <rect x="195" y="170" width="20" height="20" fill="#E7E4DE" stroke="#6B6862" strokeWidth="2" rx="2" />
-                  <path d="M 215 180 L 230 180 L 230 150" fill="none" stroke="#0F766E" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                  
-                  {/* Tank */}
-                  <rect x="220" y="100" width="45" height="100" fill="#F4F2EE" stroke="#1F1D1A" strokeWidth="3" rx="4" />
-                  <path d="M 220 120 L 265 120 M 220 140 L 265 140 M 220 160 L 265 160 M 220 180 L 265 180" stroke="#6B6862" strokeWidth="1" strokeDasharray="3 3"/>
-                  <rect x="220" y="160" width="45" height="40" fill="#0F766E" opacity="0.3" />
-                  
-                  {/* Tap */}
-                  <circle cx="230" cy="180" r="3" fill="#1F1D1A" />
-                  <path d="M 230 180 L 210 180 L 210 185" fill="none" stroke="#1F1D1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  
-                  {/* Labels */}
-                  <text x="100" y="90" fontSize="10" fill="#6B6862" textAnchor="middle" fontWeight="bold">Catchment</text>
-                  <text x="242" y="150" fontSize="10" fill="#6B6862" textAnchor="middle" fontWeight="bold" transform="rotate(-90 242 150)">Storage</text>
-                </svg>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-5">
+            <div className="flex gap-4 items-end">
+              <div className="flex-1"><NumberInput label="Roof Area" value={roofArea} onChange={setRoofArea} requirePositive /></div>
+              <select value={areaUnit} onChange={(e) => setAreaUnit(e.target.value as "sqm" | "sqft")} className="h-[46px] bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 text-txt-secondary font-bold outline-none">
+                <option value="sqm">m²</option><option value="sqft">sq ft</option>
+              </select>
             </div>
-
-            {/* Results */}
-            <div className="pt-6 border-t border-border-color">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-accent-50 border border-accent-100 rounded-2xl p-4 overflow-hidden">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Droplet className="w-5 h-5 text-accent-700" />
-                    <h3 className="text-base font-medium text-accent-800 uppercase tracking-tight">Annual Yield</h3>
-                  </div>
-                  <div className="mt-1">
-                    <span className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-accent-800">{annualVolLiters.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-                    <span className="text-sm text-accent-800 ml-1 font-semibold">Liters/yr</span>
-                  </div>
-                  <div className="text-sm text-accent-800/70 font-medium mt-0.5">({annualVolM3.toFixed(1)} cubic meters)</div>
-                </div>
-
-                <div className="bg-accent-50 border border-accent-100 rounded-2xl p-4 overflow-hidden">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Settings className="w-5 h-5 text-accent-800" />
-                    <h3 className="text-base font-medium text-accent-800 uppercase tracking-tight">Rec. Tank</h3>
-                  </div>
-                  <div className="mt-1">
-                    <span className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-accent-800">{recommendedTankLiters.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-                    <span className="text-sm text-accent-800 ml-1 font-semibold">Liters</span>
-                  </div>
-                  <div className="text-sm text-accent-800/70 font-medium mt-0.5">({recommendedTankM3.toFixed(1)} cubic meters)</div>
-                </div>
-
-                <div className="bg-ui-success border border-ui-successBorder rounded-2xl p-4 overflow-hidden">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Wallet className="w-5 h-5 text-ui-successText" />
-                    <h3 className="text-base font-medium text-ui-successText uppercase tracking-tight">Payback</h3>
-                  </div>
-                  <div className="mt-1">
-                    <span className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-ui-successText">{paybackPeriod.toFixed(1)}</span>
-                    <span className="text-sm text-ui-successText ml-1 font-semibold">Years</span>
-                  </div>
-                  <div className="text-sm text-ui-successText/70 font-medium mt-0.5">Saves {formatCurrency(annualSavings)}/yr</div>
-                </div>
-
-                <div className="bg-ui-error border border-ui-errorBorder rounded-2xl p-4 overflow-hidden">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sprout className="w-5 h-5 text-ui-errorText" />
-                    <h3 className="text-base font-medium text-ui-errorText uppercase tracking-tight">CO2 Offset</h3>
-                  </div>
-                  <div className="mt-1">
-                    <span className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-ui-errorText">{co2Savings.toFixed(1)}</span>
-                    <span className="text-sm text-ui-errorText ml-1 font-semibold">kg CO₂e/yr</span>
-                  </div>
-                  <div className="text-sm text-ui-errorText/70 font-medium mt-0.5">Vs. pumped water</div>
-                </div>
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">City (rainfall preset)</label>
+              <select value={city} onChange={(e) => applyCity(e.target.value as MepCity)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                {CITIES.map((c) => <option key={c} value={c}>{c} — {RAINFALL_MM_BY_CITY[c]} mm/yr</option>)}
+              </select>
             </div>
+            <NumberInput label="Annual Rainfall" unit="mm/yr" value={rainfall} onChange={setRainfall} />
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">Roof Type (runoff coefficient)</label>
+              <select value={roofType} onChange={(e) => setRoofType(e.target.value as RainwaterRoofType)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                {(Object.keys(RAINWATER_ROOF_LABELS) as RainwaterRoofType[]).map((k) => <option key={k} value={k}>{RAINWATER_ROOF_LABELS[k]}</option>)}
+              </select>
+            </div>
+            <NumberInput label="People Using the Water" value={people} onChange={setPeople} />
+            <NumberInput label="Non-Potable Use per Person" unit="L/day" value={usePerPerson} onChange={setUsePerPerson} />
+            <NumberInput label="Dry-Spell Days to Cover" unit="days" value={dryDays} onChange={setDryDays} />
+            <NumberInput label="Filter Efficiency" unit="%" value={filterEff} onChange={setFilterEff} />
+            <NumberInput label="First-Flush Events per Year (0 = no deduction)" value={firstFlushEvents} onChange={setFirstFlushEvents} />
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">Currency</label>
+              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                <option value="PKR">PKR</option><option value="INR">INR</option><option value="AED">AED</option>
+              </select>
+            </div>
+            <NumberInput label={`Water Cost per m³ (${sym})`} unit={sym} value={waterCost} onChange={setWaterCost} />
+            <NumberInput label={`Tank Rate per Litre (${sym})`} unit={sym} value={tankRate} onChange={setTankRate} />
+            <NumberInput label={`Gutter / Filter / Pump Lump Sum (${sym})`} unit={sym} value={fixedCost} onChange={setFixedCost} />
+          </div>
+
+          <div className="space-y-6">
+            {result ? (
+              <MaterialSummary title="Rainwater Harvesting Results" totalLabel="Recommended Tank" totalValue={result.tankL.toLocaleString("en-US")} totalUnit="Liters" relatedToolIds={[]}>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <ResultCard title="Annual Yield" value={result.yieldLPerYear.toFixed(0)} unit="L/yr" variant="primary" />
+                  <ResultCard title="Annual Demand" value={result.demandLPerYear.toFixed(0)} unit="L/yr" variant="neutral" />
+                  <ResultCard title="Demand Coverage" value={result.coveragePct.toFixed(0)} unit="%" variant="success" />
+                  <ResultCard title="Days of Supply" value={result.daysOfSupply.toFixed(0)} unit="days" variant="info" />
+                  <ResultCard title="Tank by 5% Rule" value={result.tankBy5PctRuleL.toFixed(0)} unit="L" variant="neutral" />
+                  <ResultCard title="Tank by Dry Spell" value={result.tankByDrySpellL.toFixed(0)} unit="L" variant="neutral" />
+                  <ResultCard title="Annual Saving" value={fmt(result.annualSavings)} unit="/ year" variant="success" />
+                  <ResultCard title="Payback" value={result.paybackYears?.toFixed(1) ?? "—"} unit="years" variant="warning" />
+                </div>
+                <div className="mt-4 bg-accent-50 border border-accent-200 p-4 rounded-2xl text-sm space-y-1">
+                  <div className="flex justify-between"><span className="text-txt-secondary">Tank dimensions (L × W × D)</span><span className="font-mono font-bold">{result.tankLengthM.toFixed(2)} × {result.tankWidthM.toFixed(2)} × {result.tankDepthM} m</span></div>
+                  <div className="flex justify-between"><span className="text-txt-secondary">Gutter / downpipes</span><span className="font-mono font-bold">{result.gutterSizeMm} mm, {result.downpipes} downpipe(s)</span></div>
+                  {result.firstFlushLPerYear > 0 && <div className="flex justify-between"><span className="text-txt-secondary">First-flush loss</span><span className="font-mono font-bold">{result.firstFlushLPerYear.toFixed(0)} L/yr</span></div>}
+                  <div className="flex justify-between"><span className="text-txt-secondary">System cost</span><span className="font-mono font-bold">{fmt(result.systemCost)}</span></div>
+                  <div className="flex justify-between"><span className="text-txt-secondary">Monthly yield (even spread — see note)</span><span className="font-mono font-bold">{result.monthlyYieldL[0].toFixed(0)} L/mo</span></div>
+                </div>
+                {result.warnings.map((w) => (
+                  <p key={w.slice(0, 40)} className="mt-3 flex gap-2 text-xs leading-relaxed bg-accent-50 border border-accent-200 rounded-xl p-3 text-txt-secondary">
+                    <AlertTriangle className="w-4 h-4 shrink-0 text-accent-800" /> {w}
+                  </p>
+                ))}
+              </MaterialSummary>
+            ) : (
+              <div className="p-6 rounded-2xl bg-surface-default border border-ui-borderSubtle text-txt-tertiary text-sm">Enter valid inputs to see the rainwater sizing.</div>
+            )}
+            {result && <FormulaAccordion steps={result.steps.map((s, i) => ({ id: i + 1, label: `Step ${i + 1}`, theoretical: "V = area × rainfall × coefficient", applied: s }))} />}
+            <p className="text-xs text-txt-tertiary">Monthly balance assumes rainfall spread evenly over the year. For a real monthly balance, replace it with monthly PMD/IMD rainfall for your district — monsoon months will overflow and dry months will run short.</p>
           </div>
         </div>
       </div>
-      <CalculationHistory
-        calculatorId="rainwater"
-        estimationName="Rainwater Estimate"
-        currentInputs={{ roofArea, rainfall }}
-        currentResults={{ annualVolLiters }}
-        summaryGeneration={(inputs, res) => `Yield: ${Math.round(res.annualVolLiters).toLocaleString()} L`}
-        onRestore={(savedInputs) => {
-          if (savedInputs.roofArea) setRoofArea(savedInputs.roofArea);
-          if (savedInputs.rainfall) setRainfall(savedInputs.rainfall);
-        }}
-      />
+
+      <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 text-sm text-txt-secondary">
+        Planning estimate only — not a substitute for a licensed engineer. Rainfall figures are long-term city averages; verify with PMD/IMD before sizing a tank.
+      </div>
+      <CalculationHistory calculatorId="rainwater_harvesting" currentInputs={{ roofArea, rainfall, roofType, people, dryDays }} currentResults={result ? { yieldLPerYear: result.yieldLPerYear, tankL: result.tankL, systemCost: result.systemCost } : {}} />
     </div>
   );
 }

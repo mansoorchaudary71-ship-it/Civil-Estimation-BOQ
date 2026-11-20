@@ -109,6 +109,7 @@ const QUICK_PAIRS: Partial<Record<Category, { label: string, from: string, to: s
   ],
   Area: [
     { label: "m² ↔ sq ft", from: "sm", to: "sft" },
+    { label: "Marla ↔ sq ft", from: "marla225", to: "sft" },
     { label: "Acre ↔ Hectare", from: "ac", to: "ha" },
   ],
   Volume: [
@@ -117,6 +118,7 @@ const QUICK_PAIRS: Partial<Record<Category, { label: string, from: string, to: s
   ],
   Mass: [
     { label: "kg ↔ lb", from: "kg", to: "lb" },
+    { label: "kg ↔ Ton", from: "kg", to: "t" },
     { label: "Ton ↔ lb", from: "t", to: "lb" },
   ],
   "Pressure & Stress": [

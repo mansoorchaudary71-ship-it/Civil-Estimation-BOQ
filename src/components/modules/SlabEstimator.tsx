@@ -8,6 +8,9 @@ import { StyledChart } from "../ui/EstimateVisualizer";
 import { ResultCard } from "../ui/ResultCard";
 import { SmartSuggestionBadge } from "../ui/SmartSuggestionBadge";
 import { MaterialSummary } from "../ui/MaterialSummary";
+import { useGlobalSettings } from "../../context/SettingsContext";
+import { useRates } from "../../lib/useRates";
+import { calcSlab, calcRccMaterials } from "../../lib/rccCalc";
 
 import { FieldTooltip } from "../ui/FieldTooltip";
 import { NumberInput } from "../ui/NumberInput";
@@ -37,10 +40,14 @@ const SLAB_TOUR_STEPS: TourStep[] = [
 ];
 
 export default function SlabEstimator() {
+  const { formatCurrency, currentCurrency } = useGlobalSettings();
+  const { rates: tableRates } = useRates();
   const [slabType, setSlabType] = useState<"one-way" | "two-way">("two-way");
   const [isPrecast, setIsPrecast] = useState(false);
   const [concreteDensity, setConcreteDensity] = useState("2400");
   const [riggingRadius, setRiggingRadius] = useState("5");
+  const [wastage, setWastage] = useState("5");
+  const [errors, setErrors] = useState<string[]>([]);
   
   const [ly, setLy] = useState("5"); // Long Span (meters)
   const [lx, setLx] = useState("4"); // Short Span (meters)
@@ -52,21 +59,22 @@ export default function SlabEstimator() {
   const [mainSpacing, setMainSpacing] = useState("150"); // mm
   const [distSpacing, setDistSpacing] = useState("150"); // mm
 
-  useAutoSave('slab-estimator', 
-    { slabType, isPrecast, concreteDensity, riggingRadius, ly, lx, thickness, clearCover, mainDia, distDia, mainSpacing, distSpacing }, 
-    { 
-      slabType: setSlabType, 
-      isPrecast: setIsPrecast, 
-      concreteDensity: setConcreteDensity, 
-      riggingRadius: setRiggingRadius, 
-      ly: setLy, 
-      lx: setLx, 
-      thickness: setThickness, 
-      clearCover: setClearCover, 
-      mainDia: setMainDia, 
-      distDia: setDistDia, 
-      mainSpacing: setMainSpacing, 
-      distSpacing: setDistSpacing 
+  useAutoSave('slab-estimator',
+    { slabType, isPrecast, concreteDensity, riggingRadius, wastage, ly, lx, thickness, clearCover, mainDia, distDia, mainSpacing, distSpacing },
+    {
+      slabType: setSlabType,
+      isPrecast: setIsPrecast,
+      concreteDensity: setConcreteDensity,
+      riggingRadius: setRiggingRadius,
+      wastage: setWastage,
+      ly: setLy,
+      lx: setLx,
+      thickness: setThickness,
+      clearCover: setClearCover,
+      mainDia: setMainDia,
+      distDia: setDistDia,
+      mainSpacing: setMainSpacing,
+      distSpacing: setDistSpacing
     }
   );
 
@@ -79,10 +87,23 @@ export default function SlabEstimator() {
     longBarsCount: number;
     longBarsTotalLength: number;
     totalSteelWeight: number;
+    totalSteelWeightWithWastage: number;
     elementWeightKg: number;
     craneCapacityTonnes: number;
+    loadMomentTm: number;
+    lyLxRatio: number;
+    oneWayWarning: boolean;
+    cementBagsOrder: number;
+    sandM3: number;
+    aggregateM3: number;
+    waterLiters: number;
+    steelCost: number | null;
+    concreteCost: number | null;
   } | null>(null);
 
+  // Shared engine (src/lib/rccCalc.ts) — the crank, crane and bar-count
+  // maths live there, not in this component, so MasterRccCore and this
+  // tool can never diverge again.
   const calculateSlab = () => {
     const l_y = parseFloat(ly);
     const l_x = parseFloat(lx);
@@ -94,77 +115,59 @@ export default function SlabEstimator() {
     const c = parseFloat(clearCover);
     const density = parseFloat(concreteDensity) || 2400;
     const radius = parseFloat(riggingRadius) || 5;
+    const waste = parseFloat(wastage) || 0;
 
-    if (
-      isNaN(l_y) || isNaN(l_x) || isNaN(t) || isNaN(ds) || 
-      isNaN(dl) || isNaN(ss) || isNaN(sl) || isNaN(c) ||
-      l_y <= 0 || l_x <= 0 || t <= 0 || ss <= 0 || sl <= 0
-    ) {
+    const r = calcSlab({
+      slabType,
+      lyM: l_y,
+      lxM: l_x,
+      thicknessMm: t,
+      coverMm: c,
+      mainDiaMm: ds,
+      distDiaMm: dl,
+      mainSpacingMm: ss,
+      distSpacingMm: sl,
+      densityKgM3: density,
+      riggingRadiusM: radius,
+      wastagePct: waste,
+    });
+    // calcSlab returns NaN-heavy output on garbage input; surface the
+    // field-level errors instead of silently keeping stale results.
+    if (r.errors.length > 0 || !(l_y > 0) || !(l_x > 0) || !(t > 0)) {
+      setErrors(r.errors.length > 0 ? r.errors : ["Long span, short span and thickness must all be greater than 0."]);
+      setResults(null);
       return;
     }
+    setErrors([]);
 
-    // Concrete Volume
-    const concreteVolumeWet = l_x * l_y * (t / 1000);
-    const concreteVolumeDry = concreteVolumeWet * 1.54; // RULE: CONCRETE_DRY_VOLUME
-
-    // Precast Calculations
-    const elementWeightKg = concreteVolumeWet * density;
-    const craneCapacityTonnes = (elementWeightKg * 1.5 * radius) / 1000;
-
-    // Dimensions in mm
-    const lx_mm = l_x * 1000;
-    const ly_mm = l_y * 1000;
-
-    let shortBarsCount = 0;
-    let shortBarsTotalLength = 0;
-    let longBarsCount = 0;
-    let longBarsTotalLength = 0;
-
-    if (slabType === "two-way") {
-      const h_short = t - 2 * c;
-      const h_long = t - 2 * c - ds; 
-
-      // Short Span Bars (Parallel to lx, spread along ly)
-      shortBarsCount = Math.ceil(ly_mm / ss) + 1; 
-      const shortBarCutLength = lx_mm - 2 * c + 0.42 * h_short;
-      shortBarsTotalLength = (shortBarsCount * shortBarCutLength) / 1000; 
-
-      // Long Span Bars (Parallel to ly, spread along lx)
-      longBarsCount = Math.ceil(lx_mm / sl) + 1; 
-      const longBarCutLength = ly_mm - 2 * c + 0.42 * Math.max(0, h_long);
-      longBarsTotalLength = (longBarsCount * longBarCutLength) / 1000;
-    } else {
-      // One-Way Slab
-      // Main Bars (Parallel to lx, spread along ly)
-      shortBarsCount = Math.ceil(ly_mm / ss) + 1; 
-      const mainBarCutLength = lx_mm - 2 * c;
-      shortBarsTotalLength = (shortBarsCount * mainBarCutLength) / 1000;
-
-      // Distribution Bars (Parallel to ly, spread along lx)
-      longBarsCount = Math.ceil(lx_mm / sl) + 1; 
-      const distBarCutLength = ly_mm - 2 * c;
-      longBarsTotalLength = (longBarsCount * distBarCutLength) / 1000;
-    }
-
-    // Steel Weight Calculation
-    const shortUnitWeight = Math.pow(ds, 2) / 162.28;
-    const longUnitWeight = Math.pow(dl, 2) / 162.28;
-
-    const shortTotalWeight = shortUnitWeight * shortBarsTotalLength;
-    const longTotalWeight = longUnitWeight * longBarsTotalLength;
-    const totalSteelWeight = shortTotalWeight + longTotalWeight;
-
+    // Material split (nominal M20 1:1.5:3 — for M25+ use /mix-design).
+    const mat = calcRccMaterials(r.wetVolumeM3, "M20", waste);
+    const steelRate = tableRates.steelPerKg;
+    const cementRate = tableRates.cementPerBag;
     setResults({
       type: slabType,
-      concreteVolumeWet,
-      concreteVolumeDry,
-      shortBarsCount,
-      shortBarsTotalLength,
-      longBarsCount,
-      longBarsTotalLength,
-      totalSteelWeight,
-      elementWeightKg,
-      craneCapacityTonnes,
+      concreteVolumeWet: r.wetVolumeM3,
+      concreteVolumeDry: r.dryVolumeM3,
+      shortBarsCount: r.shortBarsCount,
+      shortBarsTotalLength: r.shortBarsTotalLengthM,
+      longBarsCount: r.longBarsCount,
+      longBarsTotalLength: r.longBarsTotalLengthM,
+      totalSteelWeight: r.totalSteelKg,
+      totalSteelWeightWithWastage: r.totalSteelKgWithWastage,
+      elementWeightKg: r.elementWeightKg,
+      // Capacity = weight x 1.5 / 1000 (10.80 t for the defaults).
+      // Load moment = capacity x radius (54.0 t·m) — a SEPARATE number,
+      // not the capacity. The old code showed 54.0 as the capacity.
+      craneCapacityTonnes: r.craneCapacityT,
+      loadMomentTm: r.loadMomentTm,
+      lyLxRatio: r.lyLxRatio,
+      oneWayWarning: r.oneWayWarning,
+      cementBagsOrder: mat.cementBagsOrder,
+      sandM3: mat.sandM3,
+      aggregateM3: mat.aggregateM3,
+      waterLiters: mat.waterLiters,
+      steelCost: steelRate != null ? r.totalSteelKgWithWastage * steelRate : null,
+      concreteCost: cementRate != null ? mat.cementBagsOrder * cementRate : null,
     });
   };
 
@@ -323,6 +326,36 @@ export default function SlabEstimator() {
               </InputGroup>
             </div>
 
+            {errors.length > 0 && (
+              <div className="bg-ui-error border border-ui-errorBorder rounded-2xl p-4" role="alert">
+                <p className="font-bold text-ui-errorText">Check your inputs</p>
+                <ul className="list-disc pl-5 mt-2 text-sm text-ui-errorText space-y-1">
+                  {errors.map((e, i) => (<li key={i}>{e}</li>))}
+                </ul>
+              </div>
+            )}
+
+            {results?.oneWayWarning && (
+              <div className="bg-accent-50 border border-accent-200 rounded-2xl p-4">
+                <p className="text-sm text-accent-800">ly/lx = {results.lyLxRatio.toFixed(2)} — above 2, so this slab behaves as a one-way slab. Switch the type to One-Way, or shorten the long span.</p>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-4">
+              <InputGroup label="Wastage % (0–15)">
+                <NumberInput
+                  value={wastage}
+                  onChange={(v) => setWastage(v.toString())}
+                  unit="%"
+                  className="w-full bg-surface-hover border border-ui-borderSubtle rounded-2xl shadow-brand-sm transition-all text-txt-primary overflow-hidden"
+                />
+              </InputGroup>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold text-txt-secondary">Material split</label>
+                <p className="text-xs text-txt-tertiary leading-relaxed">Nominal M20 (1:1.5:3) with {wastage}% wastage. For M25+ use the <a href="/mix-design" className="text-accent-800 underline">mix-design calculator</a>.</p>
+              </div>
+            </div>
+
             {isPrecast && (
               <div className="animate-in fade-in slide-in-from-top-2 duration-300 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-ui-success/50 p-4 rounded-2xl border border-ui-successBorder mt-4 overflow-hidden">
                 <InputGroup label="Concrete Density (kg/m³)">
@@ -439,6 +472,11 @@ export default function SlabEstimator() {
                           <span className="text-xs sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Min. Crane Capacity</span>
                           <span className="text-xl md:text-2xl font-bold tabular-nums tracking-tight text-ui-successText">{results.craneCapacityTonnes.toFixed(2)}<span className="text-sm font-medium ml-1 text-ui-successText/80">Tons</span></span>
                         </div>
+                        <div className="w-full bg-surface-default/60 p-4 rounded-2xl border border-ui-successBorder overflow-hidden col-span-2">
+                          <span className="text-xs sm:text-xs font-bold text-txt-tertiary uppercase tracking-wider block mb-1">Load Moment (separate from capacity)</span>
+                          <span className="text-xl md:text-2xl font-bold tabular-nums tracking-tight text-txt-primary">{results.loadMomentTm.toFixed(1)}<span className="text-sm font-medium ml-1 text-txt-tertiary">t·m</span></span>
+                          <span className="block text-xs text-txt-tertiary mt-1">Capacity {results.craneCapacityTonnes.toFixed(2)} t × {riggingRadius} m radius. The old tool showed this 54.0 t·m figure as the crane capacity — it is the moment, not the capacity.</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -463,6 +501,13 @@ export default function SlabEstimator() {
                   badge={results.type === "one-way" ? "One-Way Slab" : "Two-Way Slab"}
                 />
                 <ResultCard
+                  title="Steel (with wastage)"
+                  value={results.totalSteelWeightWithWastage.toFixed(2)}
+                  unit="kg"
+                  variant="neutral"
+                  description={`Includes ${wastage}% wastage${results.steelCost != null ? ` · ${formatCurrency(results.steelCost, false)}` : ""}`}
+                />
+                <ResultCard
                   title={results.type === "one-way" ? "Main Bars" : "Short Span Bars"}
                   value={results.shortBarsCount}
                   unit="bars"
@@ -476,6 +521,19 @@ export default function SlabEstimator() {
                   description={`${results.longBarsTotalLength.toFixed(1)}m total length`}
                   variant="neutral"
                 />
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-ui-borderSubtle/50">
+                <div className="mb-4 text-xs sm:text-xs font-bold tracking-tight text-txt-tertiary uppercase tracking-[0.15em]">
+                  Material Split — M20 (1:1.5:3), {wastage}% wastage
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <ResultCard title="Cement" value={String(results.cementBagsOrder)} unit="bags" variant="neutral" description={results.concreteCost != null ? formatCurrency(results.concreteCost, false) : "Rate not entered"} />
+                  <ResultCard title="Sand" value={results.sandM3.toFixed(2)} unit="m³" variant="neutral" />
+                  <ResultCard title="Aggregate" value={results.aggregateM3.toFixed(2)} unit="m³" variant="neutral" />
+                  <ResultCard title="Water" value={results.waterLiters.toFixed(0)} unit="L" variant="neutral" description="From unrounded cement mass × w/c" />
+                </div>
+                <p className="text-xs text-txt-tertiary mt-3">Rates: PK defaults from the shared rate table ({currentCurrency}); IN/AE show “—” until you enter a rate. For M25 and above, use the <a href="/mix-design" className="text-accent-800 underline">mix-design calculator</a> — nominal mixes are only allowed up to M20.</p>
               </div>
 
               <div className="mt-8 pt-6 border-t border-ui-borderSubtle/50">
@@ -499,8 +557,8 @@ export default function SlabEstimator() {
                  <p className="text-xs flex gap-2">
                     <span className="text-accent-800 font-bold">ℹ</span>
                     <span className="text-txt-secondary leading-relaxed">
-                      {results.type === "two-way" 
-                        ? "Includes an assumption for alternate bent-up (cranked) bars contributing an additional average of 0.42d extra length per bar."
+                      {results.type === "two-way"
+                        ? "Cranked (bent-up) bars are every OTHER bar only, with a 0.42 × d allowance, where d = D − (cover + φ/2) is the effective depth — not the full thickness. The old version added 0.42 × (t − 2 × cover) to every bar and overstated the steel."
                         : "Main bars span across the shorter dimension (lx). Distribution bars span across the longer dimension (ly)."}
                     </span>
                  </p>
@@ -517,7 +575,7 @@ export default function SlabEstimator() {
       
       <CalculationHistory
         calculatorId="slab_estimator"
-        currentInputs={{ type: slabType, ly, lx, thickness, clearCover, mainDia, distDia, mainSpacing, distSpacing }}
+        currentInputs={{ type: slabType, ly, lx, thickness, clearCover, mainDia, distDia, mainSpacing, distSpacing, wastage }}
         currentResults={results ? {
           "Concrete Dry Vol": `${results.concreteVolumeDry.toFixed(2)} m³`,
           "Total Steel Wt": `${results.totalSteelWeight.toFixed(2)} kg`
@@ -532,6 +590,7 @@ export default function SlabEstimator() {
           setDistDia(inputs.distDia || "10");
           setMainSpacing(inputs.mainSpacing || "150");
           setDistSpacing(inputs.distSpacing || "150");
+          if (inputs.wastage) setWastage(inputs.wastage);
         }}
         estimationName="Slab"
       />

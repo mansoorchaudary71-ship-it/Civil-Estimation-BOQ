@@ -5,6 +5,7 @@ import { NumberInput } from "../ui/NumberInput";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { CalculationHistory } from "../ui/CalculationHistory";
+import { temperatureCorrectionFactor } from "../../lib/permeabilityCalc";
 import { SEO } from "../SEO";
 
 
@@ -27,21 +28,10 @@ export default function PermeabilityCalculator() {
   const [headFinal, setHeadFinal] = useState<number | "">(50); // cm
   const [timeFalling, setTimeFalling] = useState<number | "">(120); // sec
 
-  // Approximate viscosity of water relative to 20°C. 
-  // R_t = Viscosity at T / Viscosity at 20°C
-  // An empirical formula for viscosity ratio of water: 
-  // R_t ≈ 2.24 / (1 + 0.033 * T + 0.00022 * T^2)  [very rough approx]
-  // A better simpler widely used table fit for 10-30C:
-  // Rt(T) = exp(-0.024 * (T - 20)) as a generic approximation, 
-  // or let's use a standard lookup table interpolated.
-  const getTemperatureCorrectionFactor = (T: number) => {
-    // Dynamic Viscosity of water at 20C is ~1.002 mPa.s
-    // Simple interpolation formula for viscosity correction factor Rt:
-    // Rt = viscosity_T / viscosity_20
-    // Using an approximation: Rt = 1 - 0.023*(T - 20) + 0.0002*(T - 20)^2
-    const deltaT = T - 20;
-    return 1 - 0.023 * deltaT + 0.0002 * Math.pow(deltaT, 2);
-  };
+  // ASTM D2434/D5084 viscosity-ratio table, linearly interpolated
+  // (10 °C 1.301, 15 °C 1.135, 20 °C 1.000, 25 °C 0.890, 30 °C 0.797).
+  // The old polynomial was ~4% low at 10 °C.
+  const getTemperatureCorrectionFactor = temperatureCorrectionFactor;
 
   const results = useMemo(() => {
     let k = 0;

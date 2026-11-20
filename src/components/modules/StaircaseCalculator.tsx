@@ -12,6 +12,10 @@ import { SEO } from "../SEO";
 import { CIVIL_CONSTANTS } from "../../utils/unitConverter";
 import { parseNum } from "../../utils/mathHelpers";
 import { CodeTooltip } from "../ui/CodeTooltip";
+import { useRates } from "../../lib/useRates";
+import { formatRate } from "../../lib/rates";
+import { designStaircase } from "../../lib/staircaseCalc";
+import { CalcSteps, EngineNotices, StructuralExportBar } from "../ui/StructuralExportBar";
 
 const StaircaseVisualizer = ({ rise, tread, numSteps, uLen }: { rise: number, tread: number, numSteps: number, uLen: string }) => {
   const r = rise > 0 ? rise : 0.15;
@@ -81,6 +85,7 @@ const StaircaseVisualizer = ({ rise, tread, numSteps, uLen }: { rise: number, tr
 
 export default function StaircaseCalculator() {
   const { currentUnit } = useGlobalSettings();
+  const { rates, setRate, table } = useRates();
   const isSI = currentUnit === "Metric";
   const uLen = isSI ? "m" : "ft";
   const uMm = isSI ? "mm" : "in";
@@ -90,8 +95,8 @@ export default function StaircaseCalculator() {
   const [numSteps, setNumSteps] = useState(() => localStorage.getItem("stair_numSteps") || "10");
   const [flight1Steps, setFlight1Steps] = useState(() => localStorage.getItem("stair_flight1Steps") || "5");
   const [flight2Steps, setFlight2Steps] = useState(() => localStorage.getItem("stair_flight2Steps") || "5");
-  const [rise, setRise] = useState(() => localStorage.getItem("stair_rise") || "0.15");
-  const [tread, setTread] = useState(() => localStorage.getItem("stair_tread") || "0.25");
+  const [rise, setRise] = useState(() => localStorage.getItem("stair_rise") || "0.17");
+  const [tread, setTread] = useState(() => localStorage.getItem("stair_tread") || "0.28");
   const [stairWidth, setStairWidth] = useState(() => localStorage.getItem("stair_stairWidth") || "1.2");
   const [waistThickness, setWaistThickness] = useState(() => localStorage.getItem("stair_waistThickness") || "0.15");
   const [landingLength, setLandingLength] = useState(() => localStorage.getItem("stair_landingLength") || "1.2");
@@ -153,6 +158,7 @@ export default function StaircaseCalculator() {
     let lWidth = parseNum(landingWidth) || 0;
     const was = parseNum(wastage) || 0;
 
+    let stairEngine: ReturnType<typeof designStaircase> | null = null;
     if (r > 0 && t > 0 && w > 0 && stepsCount > 0) {
       if (!isSI && uLen === "ft") {
         r = r * 0.3048;
@@ -306,34 +312,76 @@ export default function StaircaseCalculator() {
         resultColor: "orange"
       });
 
-      // Steel = Total concrete volume × 1% × 7850 kg/m³
-      // Rebar steel estimation is typically 0.8% - 1.2% for stairs. Let's use 1% on total volume including landing.
-      steelKg = totalConcreteVol * 0.01 * 7850;
+      // Steel — DESIGNED from the waist-slab moment (IS 456 Cl. 33), not the flat
+      // 1%-of-volume rule. The 1% figure is shown only as a cross-check.
+      const fckNum = parseInt((concreteGrade.match(/M(\d+)/) || ["", "20"])[1], 10) || 20;
+      const landingCount = landings.length > 0 ? landings.length : (isStraight ? 0 : 1);
+      stairEngine = designStaircase({
+        shape: isStraight ? "straight" : (stairShape === "L-Shape" ? "l-shaped" : "u-shaped"),
+        steps: stepsCount, flight1Steps: parseNum(flight1Steps) || 0, flight2Steps: parseNum(flight2Steps) || 0,
+        riseM: r, treadM: t, widthM: w, waistM: waist,
+        landingLengthM: lLength, landingWidthM: lWidth, landingCount,
+        floorHeightM: 0, fck: fckNum, fy: 500,
+        mainDiaMm: parseNum(mainBarDia) || 12, mainSpacingMm: parseNum(mainBarSpacing) || 150,
+        distDiaMm: parseNum(distBarDia) || 10, distSpacingMm: parseNum(distBarSpacing) || 200,
+        coverMm: parseNum(clearCover) || 20,
+        mix: { c: cPart, s: sPart, a: aPart }, wastagePct: was,
+        cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg,
+        sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
+      });
+      steelKg = stairEngine.designedSteelKg;
       steps.push({
-        stepName: !isStraight ? "9. Steel Requirement" : "8. Steel Requirement",
-        equation: "Steel (kg) = Total Wet Volume × 1% × 7850",
-        insight: "Assuming roughly 1% reinforcement weight per cubic meter of concrete by volume.",
+        stepName: !isStraight ? "9. Steel Requirement (designed)" : "8. Steel Requirement (designed)",
+        equation: "Main bars from waist-slab Mu (IS 456 Cl. 33) + 0.12% distribution steel",
+        insight: `Designed steel ${stairEngine.designedSteelKg.toFixed(1)} kg (${stairEngine.mainBars} main bars ${mainBarDia} mm @ ${mainBarSpacing} mm = ${stairEngine.astProvidedMm2PerM} mm²/m vs ${stairEngine.astReqMm2PerM} mm²/m required; distribution ${stairEngine.distBars} bars). The old 1% rule would give ${stairEngine.onePctRuleKg.toFixed(1)} kg — cross-check only.`,
         variables: [
-          { name: "Total Wet Vol", value: totalConcreteVol.toFixed(4), unit: "m³" }
+          { name: "Mu (waist)", value: stairEngine.muKNmPerM, unit: "kNm/m" },
+          { name: "Ast req", value: stairEngine.astReqMm2PerM, unit: "mm²/m" },
+          { name: "Formwork", value: stairEngine.formworkM2, unit: "m²" }
         ],
-        substitution: `Steel = ${totalConcreteVol.toFixed(4)} × 0.01 × 7850`,
+        substitution: `Steel = main ${stairEngine.mainSteelKg.toFixed(1)} kg + distribution ${stairEngine.distSteelKg.toFixed(1)} kg`,
         result: parseFloat(steelKg.toFixed(2)),
         resultUnit: "kg",
         resultColor: "emerald"
       });
+      steps.push({
+        stepName: !isStraight ? "10. Formwork" : "9. Formwork",
+        equation: "A = L_incl × W + steps × R × W (+ landing soffit)",
+        insight: `Stairwell ${stairEngine.stairwellWidthM} m × ${stairEngine.stairwellLengthM} m; total run ${stairEngine.totalRunM} m.`,
+        variables: [{ name: "Formwork", value: stairEngine.formworkM2, unit: "m²" }],
+        substitution: `Formwork = ${stairEngine.formworkM2} m² (${stairEngine.plywoodSheets} plywood sheets, ${stairEngine.battensM} m battens)`,
+        result: stairEngine.formworkM2,
+        resultUnit: "m²",
+        resultColor: "blue"
+      });
     }
     
+    const engineOut = stairEngine;
     return {
       res: {
         cementBags,
         sandCft: parseFloat(sandCft.toFixed(2)),
         aggCft: parseFloat(aggCft.toFixed(2)),
         totalWetVolume: wetVol,
-        totalSteelWeight: steelKg + (steelKg * was) / 100
+        totalSteelWeight: steelKg + (steelKg * was) / 100,
+        formworkM2: engineOut ? engineOut.formworkM2 : 0,
+        mainBars: engineOut ? engineOut.mainBars : 0,
+        distBars: engineOut ? engineOut.distBars : 0,
+        astReq: engineOut ? engineOut.astReqMm2PerM : 0,
+        astProvided: engineOut ? engineOut.astProvidedMm2PerM : 0,
+        totalRunM: engineOut ? engineOut.totalRunM : 0,
+        stairwellW: engineOut ? engineOut.stairwellWidthM : 0,
+        stairwellL: engineOut ? engineOut.stairwellLengthM : 0,
+        onePctKg: engineOut ? engineOut.onePctRuleKg : 0,
+        totalCost: engineOut ? engineOut.totalCost : null,
+        costLines: engineOut ? engineOut.costLines : [],
+        engineSteps: engineOut ? engineOut.steps : [],
+        engineErrors: engineOut ? engineOut.errors : [],
+        engineWarnings: engineOut ? engineOut.warnings : [],
       },
       calcSteps: steps
     };
-  }, [stairShape, numSteps, flight1Steps, flight2Steps, rise, tread, stairWidth, waistThickness, landingLength, landingWidth, mainBarDia, mainBarSpacing, distBarDia, distBarSpacing, clearCover, concreteGrade, wastage, isSI, uLen]);
+  }, [stairShape, numSteps, flight1Steps, flight2Steps, rise, tread, stairWidth, waistThickness, landingLength, landingWidth, mainBarDia, mainBarSpacing, distBarDia, distBarSpacing, clearCover, concreteGrade, wastage, isSI, uLen, landings, rates]);
 
   const InputGroup = ({ label, children }: { label: React.ReactNode, children: React.ReactNode }) => (
     <div>
@@ -351,8 +399,8 @@ export default function StaircaseCalculator() {
     const rMm = isSI ? rVal * 1000 : rVal * 304.8;
     const tMm = isSI ? tVal * 1000 : tVal * 304.8;
     const formula = (2 * rMm) + tMm;
-    if (formula < 600 || formula > 640) {
-      warningText = `Warning: 2R + T = ${Math.round(formula)}mm — outside 600-640mm ideal range. Suggest R=150mm, T=300mm.`;
+    if (formula < 600 || formula > 650) {
+      warningText = `Warning: 2R + T = ${Math.round(formula)}mm — outside the 600–650 mm comfort band (NBC/Blondel; the 600–640 mm variant is noted in the FAQ). Suggest R=170 mm, T=280 mm (2R+T = 620 mm).`;
     }
   }
 
@@ -388,6 +436,13 @@ export default function StaircaseCalculator() {
   return (
     <div className="space-y-6 mt-4">
       <SEO title="Staircase Calculator" description="Calculate concrete and steel for stairs." />
+      <p className="text-sm text-txt-secondary leading-relaxed max-w-4xl">
+        Staircase quantities to IS 456 Cl. 33 — the waist slab is designed as an inclined slab,
+        so the main bars come from the real bending moment, not a flat 1%-of-volume rule (shown
+        only as a cross-check). Comfort rule 2R+T = 600–650 mm (NBC/Blondel): the defaults are
+        now R = 170 mm, T = 280 mm (620 mm). Formwork, stairwell size and cost are included.
+      </p>
+      <EngineNotices errors={res.engineErrors} warnings={res.engineWarnings} />
       {portalTarget && createPortal(dropdownElement, portalTarget)}
       <div className="w-full bg-surface-hover/50 rounded-2xl overflow-hidden">
         <div className="p-6 md:p-8">
@@ -452,6 +507,32 @@ export default function StaircaseCalculator() {
                   <NumberInput value={wastage} onChange={(val) => setWastage(val.toString())} placeholder="e.g. 5" className="w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-2xl font-semibold shadow-brand-sm transition-all overflow-hidden" />
                 </InputGroup>
               </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <InputGroup label="Main Bar Dia (mm)">
+                  <select value={mainBarDia} onChange={(e) => setMainBarDia(e.target.value)} className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary rounded-2xl px-5 py-3.5 font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 shadow-brand-sm">
+                    {[10, 12, 16, 20].map((d) => (<option key={d} value={d}>{d}</option>))}
+                  </select>
+                </InputGroup>
+                <InputGroup label="Main Spacing (mm)">
+                  <NumberInput value={mainBarSpacing} onChange={(val) => setMainBarSpacing(val.toString())} className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary rounded-2xl font-semibold shadow-brand-sm" />
+                </InputGroup>
+                <InputGroup label="Cover (mm)">
+                  <NumberInput value={clearCover} onChange={(val) => setClearCover(val.toString())} className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary rounded-2xl font-semibold shadow-brand-sm" />
+                </InputGroup>
+                <InputGroup label="Dist. Bar Dia (mm)">
+                  <select value={distBarDia} onChange={(e) => setDistBarDia(e.target.value)} className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary rounded-2xl px-5 py-3.5 font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500 shadow-brand-sm">
+                    {[8, 10, 12].map((d) => (<option key={d} value={d}>{d}</option>))}
+                  </select>
+                </InputGroup>
+                <InputGroup label="Dist. Spacing (mm)">
+                  <NumberInput value={distBarSpacing} onChange={(val) => setDistBarSpacing(val.toString())} className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary rounded-2xl font-semibold shadow-brand-sm" />
+                </InputGroup>
+                <InputGroup label={`Steel (${table.currency}/kg)`}>
+                  <NumberInput value={rates.steelPerKg ?? ""} onChange={(v) => setRate("steelPerKg", v === "" ? null : Number(v))} className="w-full bg-surface-default border border-ui-borderSubtle text-txt-primary rounded-2xl font-semibold shadow-brand-sm" />
+                </InputGroup>
+              </div>
+              <p className="text-xs text-txt-tertiary">Main steel is now designed from the waist-slab moment (IS 456 Cl. 33) — the bar size and spacing above drive real bar counts. {landings.length > 0 ? `${landings.length} saved landing(s) counted in the landing volume.` : "No saved landings — a dog-legged stair counts one mid landing."}</p>
               
               {warningText && (
                 <div className="p-4 bg-accent-50 border border-accent-200 text-accent-800 rounded-2xl text-base font-normal flex items-start gap-3 overflow-hidden">
@@ -489,8 +570,29 @@ export default function StaircaseCalculator() {
                      unit="CFT"
                      variant="neutral"
                    />
+                   <ResultCard title="Formwork" value={res.formworkM2} unit="m²" variant="neutral" />
+                   <ResultCard title="Main bars" value={res.mainBars} unit="bars" variant="neutral" />
+                   <ResultCard title="Ast req / provided" value={`${res.astReq} / ${res.astProvided}`} unit="mm²/m" variant={res.astProvided >= res.astReq ? "neutral" : "warning"} />
+                   <ResultCard title="Total run" value={res.totalRunM} unit="m" variant="neutral" />
+                   <ResultCard title="Stairwell" value={`${res.stairwellW} × ${res.stairwellL}`} unit="m" variant="neutral" />
+                   <ResultCard title="Total cost" value={res.totalCost == null ? "—" : res.totalCost.toLocaleString("en-US")} unit={table.currency} variant="neutral" />
+                 </div>
+                 <div className="mt-4 space-y-1 text-sm">
+                   {res.costLines.map((l: any) => (
+                     <div key={l.label} className="flex justify-between"><span className="text-txt-secondary">{l.label}</span><span className="font-mono">{l.amount == null ? "—" : `${formatRate(l.rate, table.currency)} × ${l.qty.toFixed(1)} = ${l.amount.toLocaleString("en-US")}`}</span></div>
+                   ))}
+                   <p className="text-xs text-txt-tertiary pt-1">1% rule cross-check: {res.onePctKg.toFixed(1)} kg — designed steel above is what to order.</p>
                  </div>
                </MaterialSummary>
+               <StructuralExportBar title="Staircase Calculator (IS 456 Cl. 33)" summaryText={`Staircase ${stairShape}: ${res.totalWetVolume.toFixed(2)} m³ concrete, designed steel ${res.totalSteelWeight.toFixed(1)} kg (${res.mainBars} main bars, ${res.distBars} distribution bars), formwork ${res.formworkM2} m², stairwell ${res.stairwellW} × ${res.stairwellL} m, 2R+T ${((parseFloat(rise) || 0) * 2 + (parseFloat(tread) || 0)) * (isSI ? 1000 : 304.8) > 0 ? Math.round(((parseFloat(rise) || 0) * 2 + (parseFloat(tread) || 0)) * (isSI ? 1000 : 304.8)) : 0} mm.`}
+                 boqItems={[
+                   { description: `Cement for staircase (${concreteGrade})`, quantity: res.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
+                   { description: "Sand for staircase concrete", quantity: res.sandCft, unit: "cft", rate: rates.sandPerCft ?? 0 },
+                   { description: "Aggregate for staircase concrete", quantity: res.aggCft, unit: "cft", rate: rates.crushPerCft ?? 0 },
+                   { description: "Steel reinforcement (designed)", quantity: res.totalSteelWeight, unit: "kg", rate: rates.steelPerKg ?? 0 },
+                 ]}
+                 totalAmount={res.totalCost} />
+               <CalcSteps steps={res.engineSteps} />
             </div>
           </div>
         </div>

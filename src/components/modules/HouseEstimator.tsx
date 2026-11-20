@@ -520,6 +520,16 @@ export default function HouseEstimator() {
     return parseFloat(geoState.coveredAreaSqft) || 0;
   }, [geoState.coveredAreaSqft]);
   const builtUpArea = coveredAreaSqft * geoState.stories;
+  // Validation: plot must be over 0, stories 1-10, room height 8-15 ft.
+  const validationErrors = useMemo(() => {
+    const errs: string[] = [];
+    const plot = parseFloat(geoState.plotSizeValue);
+    if (!isFinite(plot) || plot <= 0) errs.push("Plot size must be over 0.");
+    if (geoState.stories < 1 || geoState.stories > 10) errs.push("Stories must be between 1 and 10.");
+    const h = parseFloat(geoState.roomHeight);
+    if (!isFinite(h) || h < 8 || h > 15) errs.push("Room height must be between 8 and 15 ft.");
+    return errs;
+  }, [geoState.plotSizeValue, geoState.stories, geoState.roomHeight]);
   const estimates = useMemo(() => {
     let steelSeismicMultiplier = 1;
     let concreteSeismicMultiplier = 1;
@@ -593,12 +603,15 @@ export default function HouseEstimator() {
     /* 5. Plastering */ const plasterArea =
       totalWallLength * (roomHeight * stories) * 2 * openingDeduction;
     const plasterWetVol = plasterArea * (0.5 / 12);
-    const plasterDryVol = plasterWetVol * 1.27;
+    const plasterDryVol = plasterWetVol * 1.33; // dry-mortar factor 1.33 (was 1.27 — under-counted plaster cement ~5%)
     const cementPlaster = (1 / 5) * plasterDryVol;
     const sandPlaster = (4 / 5) * plasterDryVol;
-    /* Totals */ const cementBagsTotal = Math.ceil(
-      (cementBw + cementRcc + cementPlaster) / 1.25,
-    );
+    /* Totals — bags are ordered per part, so each part is ceiled separately
+       (124 brickwork + 248 RCC + 54 plaster = 426 bags; cement uses 1.25 cft/bag
+       by convention here, exact 1.226 cft/bag). */ const cementBagsTotal =
+      Math.ceil(cementBw / 1.25) +
+      Math.ceil(cementRcc / 1.25) +
+      Math.ceil(cementPlaster / 1.25);
     const sandCftTotal = Math.ceil(sandBw + sandRcc + sandPlaster);
     const crushCftTotal = Math.ceil(crushRcc);
     const steelKg = Math.ceil(steelKgResult);
@@ -1109,7 +1122,7 @@ export default function HouseEstimator() {
                       onClick={() =>
                         dispatch({
                           type: "SET_STORIES",
-                          payload: geoState.stories + 1,
+                          payload: Math.min(10, geoState.stories + 1),
                         })
                       }
                       className="w-10 h-10 rounded-full bg-surface-hover text-txt-secondary font-bold hover:bg-surface-active flex items-center justify-center transition-all duration-300 active:scale-95 hover:-translate-y-0.5"
@@ -1120,6 +1133,11 @@ export default function HouseEstimator() {
                 </div>
               </div>
 
+              {validationErrors.length > 0 && (
+                <div className="bg-ui-error/50 border border-ui-errorBorder rounded-2xl p-4 text-sm font-semibold text-ui-errorText">
+                  {validationErrors.map((e) => (<p key={e}>{e}</p>))}
+                </div>
+              )}
               {/* Finish Quality */}
               <div className="pt-4 border-t border-border-color space-y-4">
                 <div className="flex items-center gap-2 mb-2">
@@ -2325,6 +2343,17 @@ export default function HouseEstimator() {
           { name: "Total Cost", formula: "Grey Structure + Finishing", variables: { Grey: formatCurrency(estimates.totalGrey), Finishing: formatCurrency(estimates.totalFinishing) }, result: formatCurrency(estimates.totalCost) }
         ]}
       />
+      <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 text-sm text-txt-secondary">
+        <h3 className="font-bold text-txt-primary mb-2">Assumptions — indicative, verify with your contractor</h3>
+        <ul className="list-disc ml-5 space-y-1">
+          <li>Finish multipliers on the labour rate: Standard ×1, Premium ×1.6, Luxury ×2.5 (house style benchmarks, Nov 2026 — not a published standard).</li>
+          <li>MEP at 20% of the finishing rate, +5% per extra washroom and +5% per kitchen.</li>
+          <li>Termite treatment Rs 12/sqft, polythene sheet Rs 8/sqft, underground water tank Rs 150,000 lump sum (indicative market rates, Nov 2026).</li>
+          <li>Plaster dry volume uses the 1.33 rule; cement is converted at 1.25 cft/bag (exact 1.226 cft/bag — the difference is under 2%).</li>
+          <li>Material rates come from the dated CEP rate table (Nov 2026); steel 270 PKR/kg, cement 1,450 PKR/bag, bricks 23,355 PKR/1,000 (PBS Aug 2026, Lahore).</li>
+          <li>BOQ export: the grey-structure and finishing tables download as CSV files (Export CSV buttons above). There is no Excel export.</li>
+        </ul>
+      </div>
       <CalculationHistory
         calculatorId="house_estimator_v1"
         estimationName="Complete House Estimator"

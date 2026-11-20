@@ -1,5 +1,9 @@
 import { Button } from '../ui/Button';
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { qtyFromDimensions, billableQty, lineAmount, isUnpriced, boqTotals, taxLabelForRegion, readBoqInbox, clearBoqInbox, type BoqLine } from "../../lib/boq";
+import { getRates } from "../../lib/rates";
+import { useAutoSave } from "../../hooks/useAutoSave";
+import toast from "react-hot-toast";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { useMarketRates } from "../../context/MarketRatesContext";
@@ -24,12 +28,28 @@ import { useSettings } from "../../context/SettingsContext";
 
 interface BOQItem {
   id: string;
+  code?: string;
   division: string;
   description: string;
   unit: string;
+  /** Nos x L x W x D measurement (ported from AdvancedBoqGenerator) — when
+   *  present and quantity is not manually overridden, quantity = product. */
+  nos?: number | null;
+  length?: number | null;
+  width?: number | null;
+  depth?: number | null;
   quantity: number;
+  quantityManual?: boolean;
   rate: number;
+  wastagePct?: number;
 }
+
+const toBoqLine = (i: BOQItem): BoqLine => ({
+  id: i.id, code: i.code, division: i.division, description: i.description,
+  unit: i.unit, nos: i.nos, length: i.length, width: i.width, depth: i.depth,
+  quantity: i.quantity, quantityManual: i.quantityManual, rate: i.rate,
+  wastagePct: i.wastagePct,
+});
 
 const MEASUREMENT_STANDARDS = [
   "IS 1200 (Indian)",
@@ -52,7 +72,23 @@ const DEFAULT_DIVISIONS = [
   "16 - Electrical",
 ];
 
+const PK_RATES = getRates("PK").rates;
 const STANDARD_TEMPLATES: Record<string, BOQItem[]> = {
+  "5-Marla House (PK)": [
+    { id: "t5-1", code: "2.1", division: "Earthwork", description: "Excavation in foundation trenches, all soils", unit: "m³", quantity: 42, rate: 450 },
+    { id: "t5-2", code: "4.1.3", division: "Concrete", description: "PCC 1:4:8 in foundation", unit: "m³", quantity: 4.5, rate: 14500 },
+    { id: "t5-3", code: "5.1.2", division: "Concrete", description: "RCC 1:2:4 in foundations, beams and slab", unit: "m³", quantity: 38, rate: 28500 },
+    { id: "t5-4", code: "5.3", division: "Concrete", description: "Steel reinforcement, deformed bars", unit: "kg", quantity: 3800, rate: PK_RATES.steelPerKg ?? 270 },
+    { id: "t5-5", code: "6.1", division: "Masonry", description: "Brickwork 9 in, cement mortar 1:4", unit: "m³", quantity: 52, rate: 24500 },
+    { id: "t5-6", code: "13.1", division: "Finishing", description: "Plaster 12 mm, cement mortar 1:6", unit: "m²", quantity: 620, rate: 320 },
+  ],
+  "Boundary Wall": [
+    { id: "tw-1", code: "2.1", division: "Earthwork", description: "Excavation in foundation trenches", unit: "m³", quantity: 18, rate: 450 },
+    { id: "tw-2", code: "4.1.3", division: "Concrete", description: "PCC 1:4:8 in foundation", unit: "m³", quantity: 3.2, rate: 14500 },
+    { id: "tw-3", code: "6.1", division: "Masonry", description: "Brickwork 9 in, cement mortar 1:4", unit: "m³", quantity: 28, rate: 24500 },
+    { id: "tw-4", code: "13.1", division: "Finishing", description: "Plaster 12 mm, cement mortar 1:6", unit: "m²", quantity: 260, rate: 320 },
+    { id: "tw-5", code: "13.2", division: "Finishing", description: "Paint, 2 coats emulsion", unit: "m²", quantity: 260, rate: 180 },
+  ],
   "Residential Building": [
     { id: "1", division: "02 - Site Work & Earthwork", description: "Excavation for foundation", unit: "m³", quantity: 120, rate: 15 },
     { id: "2", division: "03 - Concrete", description: "PCC (1:4:8) for foundation bed", unit: "m³", quantity: 15, rate: 85 },
@@ -95,6 +131,9 @@ export default function BOQGenerator() {
   const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
   const [contingencyPct, setContingencyPct] = useState(5);
   const [gstPct, setGstPct] = useState(18);
+  const [taxRegion, setTaxRegion] = useState<"PK" | "IN" | "AE">("PK");
+  const [view, setView] = useState<"boq" | "templates">("boq");
+  const [inboxLines, setInboxLines] = useState<ReturnType<typeof readBoqInbox>>([]);
   const [projectName, setProjectName] = useState("Untitled Project BOQ");
   const [measurementStandard, setMeasurementStandard] = useState(MEASUREMENT_STANDARDS[0]);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
@@ -135,13 +174,34 @@ export default function BOQGenerator() {
   };
 
   useEffect(() => {
-    setItems((prevItems) => 
+    setItems((prevItems) =>
       prevItems.map(item => ({
         ...item,
         quantity: Number(item.quantity.toFixed(decimals))
       }))
     );
   }, [decimals]);
+
+  useAutoSave("boq", { items, projectName, contingencyPct, gstPct, measurementStandard, taxRegion },
+    { items: setItems, projectName: setProjectName, contingencyPct: setContingencyPct, gstPct: setGstPct, measurementStandard: setMeasurementStandard, taxRegion: setTaxRegion });
+
+  // BOQ inbox: lines sent from Material Takeoff / Measurement Sheet
+  useEffect(() => {
+    const lines = readBoqInbox();
+    if (lines.length > 0) setInboxLines(lines);
+  }, []);
+
+  const loadInbox = () => {
+    setItems((prev) => [...prev, ...inboxLines.map((l) => ({
+      id: Math.random().toString(36).substr(2, 9),
+      division: l.source?.includes("Takeoff") ? "Takeoff" : "Measurement",
+      description: l.description, unit: l.unit, quantity: l.quantity,
+      rate: l.rate ?? 0,
+    }))]);
+    clearBoqInbox();
+    setInboxLines([]);
+    toast.success(`${inboxLines.length} line(s) loaded from the BOQ inbox.`);
+  };
 
   useEffect(() => {
     const handleFillBOQ = (e: CustomEvent<BOQItem[]>) => {
@@ -177,11 +237,15 @@ export default function BOQGenerator() {
   const handleAddItem = () => {
     const newItem: BOQItem = {
       id: Math.random().toString(36).substr(2, 9),
+      code: "",
       division: DEFAULT_DIVISIONS[0],
       description: "",
       unit: "m³",
+      nos: null, length: null, width: null, depth: null,
       quantity: 0,
+      quantityManual: false,
       rate: 0,
+      wastagePct: 0,
     };
     setItems([...items, newItem]);
   };
@@ -189,12 +253,19 @@ export default function BOQGenerator() {
   const handleUpdateItem = (
     id: string,
     field: keyof BOQItem,
-    value: string | number,
+    value: string | number | null,
   ) => {
     setItems(
-      items.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item,
-      ),
+      items.map((item) => {
+        if (item.id !== id) return item;
+        const next = { ...item, [field]: value } as BOQItem;
+        if (field === "quantity") next.quantityManual = true;
+        if (["nos", "length", "width", "depth"].includes(field as string) && !next.quantityManual) {
+          const q = qtyFromDimensions(next);
+          if (q != null) next.quantity = q;
+        }
+        return next;
+      }),
     );
   };
 
@@ -234,24 +305,20 @@ export default function BOQGenerator() {
       );
   }, [items]);
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.quantity * item.rate,
-    0,
-  );
-  const contingencyAmount = subtotal * (contingencyPct / 100);
-  const taxableAmount = subtotal + contingencyAmount;
-  const gstAmount = taxableAmount * (gstPct / 100);
-  const grandTotal = taxableAmount + gstAmount;
+  const { subtotal, contingency: contingencyAmount, taxable: taxableAmount, tax: gstAmount, grandTotal, unpricedCount } = boqTotals(items.map(toBoqLine), contingencyPct, gstPct);
+  const taxInfo = taxLabelForRegion(taxRegion);
+  const pkTable = getRates("PK");
 
   const exportCSV = () => {
-    let csv = "Division,Description,Unit,Quantity,Rate,Amount\n";
+    let csv = "Code,Division,Description,Unit,Nos,L,W,D,Quantity,Rate,Amount\n";
     items.forEach((item) => {
-      csv += `"${item.division}","${item.description.replace(/"/g, '""')}","${item.unit}",${item.quantity.toFixed(decimals)},${item.rate.toFixed(2)},${(item.quantity * item.rate).toFixed(2)}\n`;
+      const amt = lineAmount(toBoqLine(item));
+      csv += `"${item.code ?? ""}","${item.division}","${item.description.replace(/"/g, '""')}",${item.unit},${item.nos ?? ""},${item.length ?? ""},${item.width ?? ""},${item.depth ?? ""},${billableQty(toBoqLine(item)).toFixed(decimals)},${item.rate.toFixed(2)},${amt == null ? "UNPRICED" : amt.toFixed(2)}\n`;
     });
-    csv += `\nSubtotal,,,,,${subtotal.toFixed(2)}\n`;
-    csv += `Contingency (${contingencyPct}%),,,,,${contingencyAmount.toFixed(2)}\n`;
-    csv += `GST (${gstPct}%),,,,,${gstAmount.toFixed(2)}\n`;
-    csv += `Grand Total,,,,,${grandTotal.toFixed(2)}\n`;
+    csv += `\nSubtotal,,,,,,,,,${subtotal.toFixed(2)}\n`;
+    csv += `Contingency (${contingencyPct}%),,,,,,,,,${contingencyAmount.toFixed(2)}\n`;
+    csv += `${taxInfo.label} (${gstPct}%),,,,,,,,,${gstAmount.toFixed(2)}\n`;
+    csv += `Grand Total,,,,,,,,,${grandTotal.toFixed(2)}\n`;
 
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -259,6 +326,21 @@ export default function BOQGenerator() {
     link.download = `${projectName.replace(/\s+/g, "_")}_BOQ.csv`;
     link.href = url;
     link.click();
+  };
+
+  /** Rate-free tender export: quantities only, no rates — for pricing by bidders. */
+  const exportTenderCSV = () => {
+    let csv = "Code,Division,Description,Unit,Quantity\n";
+    items.forEach((item) => {
+      csv += `"${item.code ?? ""}","${item.division}","${item.description.replace(/"/g, '""')}",${item.unit},${billableQty(toBoqLine(item)).toFixed(decimals)}\n`;
+    });
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = `${projectName.replace(/\s+/g, "_")}_Tender_RateFree.csv`;
+    link.href = url;
+    link.click();
+    toast.success("Rate-free tender CSV exported");
   };
 
   const triggerExportModal = (type: "all" | "selected") => {
@@ -335,6 +417,7 @@ export default function BOQGenerator() {
               >
                 {MEASUREMENT_STANDARDS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
+              <span className="text-xs text-txt-tertiary">Label only — the standard does not change the math yet.</span>
             </div>
           </div>
           <div className="flex flex-wrap justify-end gap-2">
@@ -355,12 +438,17 @@ export default function BOQGenerator() {
             <Button onClick={syncRates}
               className="flex items-center gap-2 px-4 py-2 bg-accent-50 text-accent-800 hover:bg-accent-100 rounded-full transition-colors border border-accent-200 text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
             >
-              <RefreshCw className="w-4 h-4" /> Sync DB Rates
+              <RefreshCw className="w-4 h-4" /> Sync Rates (PK table {pkTable.lastUpdated})
             </Button>
             <Button onClick={exportCSV}
               className="flex items-center gap-2 px-4 py-2 bg-ui-success text-ui-successText hover:bg-ui-success rounded-full transition-colors border border-ui-successBorder text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
             >
               <FileSpreadsheet className="w-4 h-4" /> CSV
+            </Button>
+            <Button onClick={exportTenderCSV}
+              className="flex items-center gap-2 px-4 py-2 bg-surface-hover text-txt-secondary hover:bg-surface-active rounded-full transition-colors border border-ui-borderSubtle text-base font-semibold"
+            >
+              <FileSpreadsheet className="w-4 h-4" /> Tender (rate-free)
             </Button>
             <Button onClick={exportExcel}
               className="flex items-center gap-2 px-4 py-2 bg-ui-success text-ui-successText hover:bg-ui-success rounded-full transition-colors border border-ui-successBorder text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
@@ -385,6 +473,35 @@ export default function BOQGenerator() {
         </div>
       </div>
 
+      {inboxLines.length > 0 && (
+        <div className="flex flex-wrap items-center gap-3 bg-accent-50 border border-accent-200 rounded-2xl p-4">
+          <span className="text-sm font-semibold text-accent-800">{inboxLines.length} line(s) waiting in the BOQ inbox (sent from Material Takeoff / Measurement Sheet).</span>
+          <Button onClick={loadInbox} className="px-4 py-2 bg-ink text-white rounded-full text-sm font-bold">Load inbox lines</Button>
+          <Button onClick={() => { clearBoqInbox(); setInboxLines([]); }} className="px-4 py-2 bg-surface-hover rounded-full text-sm font-semibold">Discard</Button>
+        </div>
+      )}
+      <div className="flex gap-2">
+        {(["boq", "templates"] as const).map((v) => (
+          <Button key={v} onClick={() => setView(v)} className={`px-4 py-2 rounded-full text-sm font-bold ${view === v ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>
+            {v === "boq" ? "BOQ Items" : "Template Gallery"}
+          </Button>
+        ))}
+      </div>
+      {view === "templates" ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Object.entries(STANDARD_TEMPLATES).map(([name, tItems]) => {
+            const total = tItems.reduce((sum, i) => sum + i.quantity * i.rate, 0);
+            return (
+              <div key={name} className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 shadow-brand-sm">
+                <h3 className="text-lg font-semibold text-txt-primary">{name}</h3>
+                <p className="text-sm text-txt-tertiary mt-1">{tItems.length} items · sample total {settings.currency} {total.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
+                <p className="text-xs text-txt-tertiary mt-1">Rates are example rates from the dated PK table ({pkTable.lastUpdated}) — edit per your market before tendering.</p>
+                <Button onClick={() => { loadTemplate(name); setView("boq"); }} className="mt-4 px-4 py-2 bg-ink text-white rounded-full text-sm font-bold">Load this template</Button>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
         <div className="lg:col-span-3 space-y-6">
           <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-brand-sm overflow-hidden">
@@ -491,6 +608,13 @@ export default function BOQGenerator() {
                               </select>
                             </td>
                             <td className="p-2 align-top">
+                              <input
+                                type="text"
+                                value={item.code ?? ""}
+                                onChange={(e) => handleUpdateItem(item.id, "code", e.target.value)}
+                                placeholder="Item code (e.g. 5.1.2)"
+                                className="w-full p-1.5 mb-1 bg-transparent text-xs rounded outline-none border border-transparent focus:border-accent-300 focus:bg-surface-default transition-all"
+                              />
                               <textarea
                                 value={item.description}
                                 onChange={(e) =>
@@ -544,14 +668,34 @@ export default function BOQGenerator() {
                                   className="w-full p-2 bg-transparent text-sm text-right font-bold rounded outline-none border border-transparent focus:border-accent-300 focus:bg-surface-default transition-all rounded-full"
                                 /></>
                                 <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-1 w-max max-w-[200px] px-2 py-1 bg-surface-default text-txt-primary text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-center font-normal whitespace-nowrap shadow-xl overflow-hidden">
-                                  Qty = L × W × D 
+                                  Qty = Nos × L × W × D
                                   <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></span>
                                 </span>
+                              </div>
+                              <div className="flex gap-1 mt-1">
+                                {(["nos", "length", "width", "depth"] as const).map((f) => (
+                                  <input key={f} type="number" inputMode="decimal" min="0" step="any"
+                                    value={item[f] == null ? "" : item[f]}
+                                    placeholder={f === "nos" ? "Nos" : f === "length" ? "L" : f === "width" ? "W" : "D"}
+                                    onChange={(e) => { const v = parseFloat(e.target.value); handleUpdateItem(item.id, f, isNaN(v) ? null : Math.max(0, v)); }}
+                                    className="w-1/4 min-w-0 p-1 bg-transparent text-xs text-center rounded outline-none border border-ui-borderSubtle focus:border-accent-300"
+                                  />
+                                ))}
+                              </div>
+                              <div className="flex items-center gap-1 mt-1 text-xs">
+                                <span className="text-txt-tertiary">Wastage</span>
+                                <input type="number" inputMode="decimal" min="0" step="any"
+                                  value={item.wastagePct == null || item.wastagePct === 0 ? "" : item.wastagePct}
+                                  placeholder="0"
+                                  onChange={(e) => { const v = parseFloat(e.target.value); handleUpdateItem(item.id, "wastagePct", isNaN(v) ? 0 : Math.max(0, v)); }}
+                                  className="w-14 p-1 bg-transparent text-xs text-center rounded outline-none border border-ui-borderSubtle focus:border-accent-300"
+                                />
+                                <span className="text-txt-tertiary">%{item.quantityManual ? " · manual qty" : ""}</span>
                               </div>
                             </td>
                             <td className="p-2 align-top text-right">
                               <div className="flex items-center group relative">
-                                <span className="text-txt-secondary ml-2">$</span>
+                                <span className="text-txt-secondary ml-2 text-xs">{settings.currency}</span>
                                 <><label htmlFor="a11y-input-96" className="sr-only">Input</label>
 <input id="a11y-input-96"
                                   type="number" inputMode="decimal"
@@ -581,7 +725,7 @@ export default function BOQGenerator() {
                             </td>
                             <td className="p-4 align-top text-right font-semibold tabular-nums tracking-tight text-txt-primary tabular-nums">
                               <div className="group relative inline-block">
-                                {(item.quantity * item.rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {(() => { const amt = lineAmount(toBoqLine(item)); return amt == null ? <span className="text-amber-700 font-bold">— unpriced</span> : amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); })()}
                                 <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-1 w-max max-w-[200px] px-2 py-1 bg-surface-default text-txt-primary text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-center font-normal whitespace-nowrap shadow-xl overflow-hidden">
                                   Value = Qty × Rate
                                   <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></span>
@@ -678,9 +822,18 @@ export default function BOQGenerator() {
                     ${taxableAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
+                <div className="flex gap-1 mb-2">
+                  {(["PK", "IN", "AE"] as const).map((r) => (
+                    <Button key={r} onClick={() => { setTaxRegion(r); setGstPct(taxLabelForRegion(r).defaultPct); }} className={`px-2.5 py-1 rounded-full text-xs font-bold ${taxRegion === r ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>{r}</Button>
+                  ))}
+                </div>
+                {unpricedCount > 0 && (
+                  <p className="text-xs font-bold text-amber-700 bg-accent-50 border border-accent-200 rounded-full px-3 py-1.5">{unpricedCount} unpriced line(s) — rate 0 is shown as a warning, never silently counted as 0.</p>
+                )}
+                <p className="text-xs text-txt-tertiary">Template rates sourced from the dated PK table ({pkTable.lastUpdated}, {pkTable.source}).</p>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-txt-tertiary flex items-center gap-1">
-                    GST/VAT <Percent className="w-3 h-3" />
+                    {taxInfo.label} <Percent className="w-3 h-3" />
                   </span>
                   <div className="flex items-center gap-2 group relative">
                     <><label htmlFor="a11y-input-98" className="sr-only">Input</label>
@@ -708,7 +861,7 @@ export default function BOQGenerator() {
                       })}
                     </span>
                     <span className="pointer-events-none absolute right-0 bottom-full mb-2 w-max max-w-[250px] px-2 py-1 bg-surface-default text-txt-primary text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-center font-normal whitespace-nowrap shadow-xl overflow-hidden">
-                      Tax = Taxable Amount × Tax %
+                      Tax = Taxable Amount × Tax % — {taxInfo.note}
                       <span className="absolute top-full right-8 border-4 border-transparent border-t-slate-800"></span>
                     </span>
                   </div>
@@ -758,11 +911,11 @@ export default function BOQGenerator() {
           </MaterialSummary>
         </div>
       </div>
-    
+      )}
       <CalculationHistory
         calculatorId="boqgenerator"
-        currentInputs={{}}
-        currentResults={{}}
+        currentInputs={{ projectName, items: items.length, contingencyPct, gstPct, measurementStandard, taxRegion }}
+        currentResults={{ subtotal, grandTotal, unpricedCount }}
         estimationName="B O Q Generator"
       />
 

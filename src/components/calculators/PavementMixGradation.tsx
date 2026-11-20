@@ -1,157 +1,159 @@
 import { Button } from '../ui/Button';
-import React, { useState, useEffect } from 'react';
-import { Layers, Activity, AlertTriangle, CheckCircle, SlidersHorizontal, Download, Printer, Plus } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, ReferenceArea } from 'recharts';
+import React, { useState, useMemo } from 'react';
+import { Layers, Activity, AlertTriangle, CheckCircle, SlidersHorizontal, Download, Printer, FileText, Copy, Check, Wand2 } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts';
+import { jsPDF } from "jspdf";
+import {
+  SIEVE_SIZES,
+  PRESET_LABELS,
+  PRESET_BITUMEN,
+  DEFAULT_STOCKPILES,
+  DEFAULT_PROPORTIONS,
+  blend,
+  checkAgainstSpec,
+  overallPass,
+  rmseVsBandMid,
+  solveProportions,
+  JMF_TOLERANCE,
+  calcMixQuantities,
+  validateStockpiles,
+  validateProportions,
+  type MixPreset,
+  type Proportions,
+  type Stockpiles,
+} from '../../lib/pavementMixCalc';
 
+// Client-side only: the old component POSTed to /api/tools/pavement-gradation,
+// which does not exist on static GitHub Pages — the chart was always 0% and
+// the table still said PASS. All blending now runs in this file via the
+// engine (src/lib/pavementMixCalc.ts). Envelopes are MoRTH, verbatim.
 
-type MixPreset = 'gsb-i' | 'dbm-1' | 'sma';
-
-// Standard sieve sizes (mm)
-const sieveSizes = [75, 53, 26.5, 19, 9.5, 4.75, 2.36, 0.3, 0.075];
-
-// Example specification envelopes
-const specifications = {
-  'gsb-i': [
-    { sieve: 75, min: 100, max: 100 },
-    { sieve: 53, min: 80, max: 100 },
-    { sieve: 26.5, min: 55, max: 90 },
-    { sieve: 19, min: null, max: null },
-    { sieve: 9.5, min: 35, max: 65 },
-    { sieve: 4.75, min: 25, max: 50 },
-    { sieve: 2.36, min: null, max: null },
-    { sieve: 0.3, min: null, max: null },
-    { sieve: 0.075, min: 0, max: 10 }, // 75µm
-  ],
-  'dbm-1': [
-    { sieve: 75, min: null, max: null },
-    { sieve: 53, min: null, max: null },
-    { sieve: 26.5, min: 100, max: 100 },
-    { sieve: 19, min: 90, max: 100 },
-    { sieve: 9.5, min: 56, max: 80 },
-    { sieve: 4.75, min: 29, max: 59 },
-    { sieve: 2.36, min: 19, max: 45 },
-    { sieve: 0.3, min: 5, max: 17 },
-    { sieve: 0.075, min: 1, max: 7 },
-  ],
-  'sma': [
-    { sieve: 75, min: null, max: null },
-    { sieve: 53, min: null, max: null },
-    { sieve: 26.5, min: null, max: null },
-    { sieve: 19, min: 100, max: 100 },
-    { sieve: 9.5, min: 50, max: 75 },
-    { sieve: 4.75, min: 20, max: 28 },
-    { sieve: 2.36, min: 16, max: 24 },
-    { sieve: 0.3, min: 12, max: 16 },
-    { sieve: 0.075, min: 8, max: 12 },
-  ]
-};
-
-// Initial aggregate data (mock)
-const initialAggregates = {
-  aggA: [100, 100, 100, 85, 30, 5, 0, 0, 0], // Coarse
-  aggB: [100, 100, 100, 100, 95, 45, 10, 0, 0], // Intermediate
-  aggC: [100, 100, 100, 100, 100, 100, 95, 45, 15], // Fine/Dust
+const PRESET_IDS = Object.keys(PRESET_LABELS) as MixPreset[];
+const PILE_KEYS = ["aggA", "aggB", "aggC", "filler"] as const;
+const PILE_LABELS: Record<typeof PILE_KEYS[number], string> = {
+  aggA: "Agg A (Coarse)",
+  aggB: "Agg B (Intermediate)",
+  aggC: "Agg C (Fine/Dust)",
+  filler: "Filler",
 };
 
 export function PavementMixGradation() {
   const [preset, setPreset] = useState<MixPreset>('dbm-1');
-  
-  // Proportions in %
-  const [propA, setPropA] = useState<number>(40);
-  const [propB, setPropB] = useState<number>(30);
-  // propC is implicitly 100 - (propA + propB)
-  const propC = Math.max(0, 100 - (propA + propB));
-  
-  const [dynamicSieves, setDynamicSieves] = useState<number[]>([...sieveSizes]);
-  const [dynamicSpecs, setDynamicSpecs] = useState<any>(JSON.parse(JSON.stringify(specifications)));
-  const [newSieve, setNewSieve] = useState<string>('');
+  const [props, setProps] = useState<Proportions>({ ...DEFAULT_PROPORTIONS });
+  const [stockpiles, setStockpiles] = useState<Stockpiles>({
+    aggA: [...DEFAULT_STOCKPILES.aggA],
+    aggB: [...DEFAULT_STOCKPILES.aggB],
+    aggC: [...DEFAULT_STOCKPILES.aggC],
+    filler: [...DEFAULT_STOCKPILES.filler],
+  });
+  const [bitumenPct, setBitumenPct] = useState<string>(String(PRESET_BITUMEN["dbm-1"].typical));
+  const [bitumenEdited, setBitumenEdited] = useState(false);
+  const [areaM2, setAreaM2] = useState<string>("");
+  const [thicknessMm, setThicknessMm] = useState<string>("50");
+  const [copied, setCopied] = useState(false);
 
-  const handleAddSieve = () => {
-    const val = parseFloat(newSieve);
-    if (!isNaN(val) && val > 0 && !dynamicSieves.includes(val)) {
-      setDynamicSieves([...dynamicSieves, val]);
-      
-      // Add default 100% passing for new sieve
-      setAggA([...aggA, 100]);
-      setAggB([...aggB, 100]);
-      setAggC([...aggC, 100]);
-      
-      // Add default null specs
-      const newSpecs = { ...dynamicSpecs };
-      Object.keys(newSpecs).forEach(p => {
-        newSpecs[p as MixPreset] = [...newSpecs[p as MixPreset], { sieve: val, min: null, max: null }];
-      });
-      setDynamicSpecs(newSpecs);
-      setNewSieve('');
-    }
+  // ---- Engine (one source of truth; same rows feed chart + table) ----
+  const blended = useMemo(() => blend(props, stockpiles), [props, stockpiles]);
+  const checks = useMemo(() => checkAgainstSpec(blended, preset), [blended, preset]);
+  const allPass = useMemo(() => overallPass(checks), [checks]);
+  const rmse = useMemo(() => rmseVsBandMid(blended, preset), [blended, preset]);
+  const errors = useMemo(
+    () => [...validateStockpiles(stockpiles), ...validateProportions(props)],
+    [stockpiles, props],
+  );
+  const quantities = useMemo(() => {
+    const area = parseFloat(areaM2);
+    const thick = parseFloat(thicknessMm);
+    const bit = parseFloat(bitumenPct);
+    if (!(area > 0) || !(thick > 0)) return null;
+    return calcMixQuantities(area, thick, Number.isFinite(bit) ? bit : 0, props);
+  }, [areaM2, thicknessMm, bitumenPct, props]);
+
+  // Proportions always sum to 100: A and B are sliders, filler is a slider,
+  // C is the remainder (shown, not a slider).
+  const setPropA = (v: number) => {
+    const a = Math.min(Math.max(0, v), 100 - props.filler);
+    const b = Math.min(props.aggB, 100 - props.filler - a);
+    setProps({ ...props, aggA: a, aggB: b, aggC: 100 - props.filler - a - b });
+  };
+  const setPropB = (v: number) => {
+    const b = Math.min(Math.max(0, v), 100 - props.filler - props.aggA);
+    setProps({ ...props, aggB: b, aggC: 100 - props.filler - props.aggA - b });
+  };
+  const setFiller = (v: number) => {
+    const f = Math.min(Math.max(0, v), 10);
+    const a = Math.min(props.aggA, 100 - f);
+    const b = Math.min(props.aggB, 100 - f - a);
+    setProps({ ...props, filler: f, aggA: a, aggB: b, aggC: 100 - f - a - b });
+  };
+  const setPresetAndBitumen = (p: MixPreset) => {
+    setPreset(p);
+    if (!bitumenEdited) setBitumenPct(String(PRESET_BITUMEN[p].typical));
+  };
+  const autoBlend = () => {
+    const solved = solveProportions(stockpiles, preset, props.filler);
+    setProps(solved.proportions);
+  };
+  const updateStockpile = (key: typeof PILE_KEYS[number], i: number, v: string) => {
+    const n = parseFloat(v);
+    setStockpiles((prev) => {
+      const next = { ...prev, [key]: [...prev[key]] };
+      next[key][i] = Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 0;
+      return next;
+    });
   };
 
-  const [aggA, setAggA] = useState<number[]>([...initialAggregates.aggA]);
-  const [aggB, setAggB] = useState<number[]>([...initialAggregates.aggB]);
-  const [aggC, setAggC] = useState<number[]>([...initialAggregates.aggC]);
+  // One canonical row order (descending sieve size) for chart AND table.
+  const chartData = checks.map((c) => ({
+    sieve: c.sieve,
+    blended: c.blended,
+    min: c.min,
+    max: c.max,
+    status: c.status,
+  }));
 
-  const [result, setResult] = useState<any>(null);
+  const summaryText = () => [
+    `Pavement Mix & Aggregate Gradation — ${PRESET_LABELS[preset]}`,
+    `Proportions: A ${props.aggA}% · B ${props.aggB}% · C ${props.aggC}% · Filler ${props.filler}%`,
+    `Overall: ${allPass ? "PASS" : "FAIL"} · RMSE vs band mid: ${rmse.toFixed(2)} percentage points`,
+    ...checks.map((c) =>
+      `${c.sieve} mm: ${c.blended.toFixed(1)}% (spec ${c.min ?? "—"}–${c.max ?? "—"}) ${c.status === null ? "—" : c.status.toUpperCase()}`,
+    ),
+    preset !== "gsb-i" ? `Bitumen content: ${bitumenPct}% (MoRTH minimum ${PRESET_BITUMEN[preset].min}%)` : "GSB — unbound, no bitumen.",
+    quantities
+      ? `Mix for ${areaM2} m² × ${thicknessMm} mm: ${quantities.totalTonnes.toFixed(1)} t total · bitumen ${quantities.bitumenKg.toFixed(0)} kg · filler ${quantities.fillerKg.toFixed(0)} kg · A ${quantities.aggTonnes.aggA.toFixed(1)} t · B ${quantities.aggTonnes.aggB.toFixed(1)} t · C ${quantities.aggTonnes.aggC.toFixed(1)} t`
+      : "",
+    "Disclaimer: planning estimate only — confirm the job mix formula with your laboratory and the project specifications.",
+  ].filter(Boolean).join("\n");
 
-  // Re-adjust slider if sum exceeds 100
-  const handlePropAChange = (val: number) => {
-    if (val + propB > 100) {
-      setPropB(100 - val);
-    }
-    setPropA(val);
+  const copyResults = async () => {
+    try { await navigator.clipboard.writeText(summaryText()); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ }
   };
-  
-  const handlePropBChange = (val: number) => {
-    if (val + propA > 100) {
-      setPropA(100 - val);
-    }
-    setPropB(val);
+  const downloadCsv = () => {
+    const header = "Sieve (mm),Blended % passing,Lower bound,Upper bound,Status\n";
+    const body = checks.map((c) => `${c.sieve},${c.blended.toFixed(1)},${c.min ?? ""},${c.max ?? ""},${c.status ?? "—"}`).join("\n");
+    const blob = new Blob([header + body], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `pavement-mix-${preset}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
   };
-
-  useEffect(() => {
-    const fetchGradation = async () => {
-      try {
-        const specs = dynamicSpecs[preset];
-        const res = await fetch('/api/tools/pavement-gradation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            propA: propA / 100,
-            propB: propB / 100,
-            propC: propC / 100,
-            aggA,
-            aggB,
-            aggC,
-            specs
-          })
-        });
-        const data = await res.json();
-        setResult(data);
-      } catch (err) {
-        console.error("Gradation API failed", err);
-      }
-    };
-    
-    fetchGradation();
-  }, [preset, propA, propB, propC, aggA, aggB, aggC]);
-
-  // Format data for Recharts
-  const chartData = dynamicSieves.map((sieve, index) => {
-    const spec = dynamicSpecs[preset][index];
-    const blended = result?.blended[index]?.blendedValue ?? 0;
-    
-    // For semi-log plotting, recharts handles scale='log' natively on XAxis
-    // if domain is properly set and all values are > 0.
-    // Sieve size 0 is not allowed for log scale, our min is 0.075.
-    
-    return {
-      sieve,
-      sieveLog: Math.log10(sieve), // Alternative if native log is buggy
-      blended,
-      min: spec.min !== null ? spec.min : null,
-      max: spec.max !== null ? spec.max : null,
-      status: result?.blended[index]?.status || 'pass'
-    };
-  }).filter(d => d.sieve > 0).sort((a, b) => a.sieve - b.sieve); // Sort ascending for line chart
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+    const lines = summaryText().split("\n");
+    doc.setFontSize(16);
+    doc.text("Pavement Mix & Aggregate Gradation", 14, 18);
+    doc.setFontSize(10);
+    doc.text(`Calculated ${new Date().toLocaleDateString("en-GB")} · Civil Estimation Pro`, 14, 26);
+    let y = 38;
+    doc.setFontSize(11);
+    for (const line of lines.slice(1)) {
+      doc.text(line, 14, y, { maxWidth: 180 });
+      y += 8;
+    }
+    doc.save(`pavement-mix-${preset}.pdf`);
+  };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -179,30 +181,48 @@ export function PavementMixGradation() {
               <Layers size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-txt-primary">Aggregate Blending Suite</h1>
-              <p className="text-txt-secondary text-sm">Blend aggregate proportions and verify against standard specifications.</p>
+              <h1 className="text-2xl font-bold text-txt-primary">Pavement Mix &amp; Aggregate Gradation Calculator (MoRTH GSB / DBM / SMA)</h1>
+              <p className="text-txt-secondary text-sm">Blend aggregate proportions and verify against MoRTH specification envelopes. All blending runs in your browser — no server.</p>
             </div>
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-3">
-            <select 
-              value={preset} 
-              onChange={(e) => setPreset(e.target.value as MixPreset)}
+            <select
+              value={preset}
+              onChange={(e) => setPresetAndBitumen(e.target.value as MixPreset)}
               className="bg-surface-hover border border-ui-borderSubtle text-txt-primary text-sm rounded-lg focus:ring-accent-500 focus:border-ink block px-4 py-2 font-medium"
             >
-              <option value="gsb-i">GSB Grade I</option>
-              <option value="dbm-1">DBM Grade 1</option>
-              <option value="sma">Stone Matrix Asphalt (SMA)</option>
+              {PRESET_IDS.map((p) => (
+                <option key={p} value={p}>{PRESET_LABELS[p]}</option>
+              ))}
             </select>
-            
+
             <div className="h-8 w-px bg-surface-active mx-1 hidden sm:block"></div>
-            
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
-              <Download size={16} /> Export
+
+            <Button onClick={downloadCsv} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
+              <Download size={16} /> Export CSV
+            </Button>
+            <Button onClick={downloadPdf} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
+              <FileText size={16} /> PDF
+            </Button>
+            <Button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-primary bg-surface-hover border border-ui-borderSubtle rounded-lg hover:bg-surface-active transition-colors shadow-brand-sm">
+              <Printer size={16} /> Print
+            </Button>
+            <Button onClick={copyResults} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-primary bg-surface-hover border border-ui-borderSubtle rounded-lg hover:bg-surface-active transition-colors shadow-brand-sm">
+              {copied ? <Check size={16} /> : <Copy size={16} />} {copied ? "Copied" : "Copy"}
             </Button>
           </div>
         </div>
       </div>
+
+      {errors.length > 0 && (
+        <div className="bg-ui-error border border-ui-errorBorder rounded-2xl p-4" role="alert">
+          <p className="font-bold text-ui-errorText">Check your inputs</p>
+          <ul className="list-disc pl-5 mt-2 text-sm text-ui-errorText space-y-1">
+            {errors.map((e, i) => (<li key={i}>{e}</li>))}
+          </ul>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Sliders and Status */}
@@ -212,18 +232,18 @@ export function PavementMixGradation() {
               <SlidersHorizontal size={20} className="text-accent-800" />
               Blending Proportions
             </h2>
-            
+
             <div className="space-y-6">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm font-medium text-txt-secondary">
                   <span>Aggregate A (Coarse)</span>
-                  <span>{propA}%</span>
+                  <span>{props.aggA}%</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="0" max="100" 
-                  value={propA} 
-                  onChange={(e) => handlePropAChange(Number(e.target.value))}
+                <input
+                  type="range"
+                  min="0" max="100"
+                  value={props.aggA}
+                  onChange={(e) => setPropA(Number(e.target.value))}
                   className="w-full h-2 bg-surface-active rounded-lg appearance-none cursor-pointer accent-accent-600"
                 />
               </div>
@@ -231,54 +251,122 @@ export function PavementMixGradation() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm font-medium text-txt-secondary">
                   <span>Aggregate B (Intermediate)</span>
-                  <span>{propB}%</span>
+                  <span>{props.aggB}%</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="0" max="100" 
-                  value={propB} 
-                  onChange={(e) => handlePropBChange(Number(e.target.value))}
+                <input
+                  type="range"
+                  min="0" max="100"
+                  value={props.aggB}
+                  onChange={(e) => setPropB(Number(e.target.value))}
                   className="w-full h-2 bg-surface-active rounded-lg appearance-none cursor-pointer accent-accent-600"
                 />
               </div>
 
               <div className="space-y-2 opacity-70">
                 <div className="flex justify-between text-sm font-medium text-txt-secondary">
-                  <span>Aggregate C (Fine/Dust)</span>
-                  <span>{propC}%</span>
+                  <span>Aggregate C (Fine/Dust) — remainder</span>
+                  <span>{props.aggC}%</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="0" max="100" 
-                  value={propC} 
+                <input
+                  type="range"
+                  min="0" max="100"
+                  value={props.aggC}
                   readOnly
                   className="w-full h-2 bg-surface-active rounded-lg appearance-none cursor-not-allowed accent-accent-600"
                 />
               </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm font-medium text-txt-secondary">
+                  <span>Filler (mineral)</span>
+                  <span>{props.filler}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0" max="10" step="1"
+                  value={props.filler}
+                  onChange={(e) => setFiller(Number(e.target.value))}
+                  className="w-full h-2 bg-surface-active rounded-lg appearance-none cursor-pointer accent-accent-600"
+                />
+                <p className="text-xs text-txt-tertiary">Filler is the 4th bin (0–10%). Proportions always sum to 100%.</p>
+              </div>
             </div>
 
+            <Button onClick={autoBlend} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-accent-50 text-accent-800 text-sm font-semibold rounded-full hover:bg-accent-100">
+              <Wand2 size={16} /> Auto-blend (best fit to the spec envelope)
+            </Button>
+
             {/* Status Display */}
-            {result && (
-              <div className={`mt-6 p-4 rounded-2xl border flex items-start gap-3 ${result.allPass ? 'bg-ui-success border-ui-successBorder' : 'bg-ui-error border-ui-errorBorder'}`}>
-                {result.allPass ? <CheckCircle size={24} className="text-ui-successText flex-shrink-0" /> : <AlertTriangle size={24} className="text-ui-errorText flex-shrink-0" />}
-                <div>
-                  <h3 className={`text-sm font-bold ${result.allPass ? 'text-ui-successText' : 'text-ui-errorText'}`}>
-                    {result.allPass ? 'Mix Passes Specifications' : 'Mix Fails Specifications'}
-                  </h3>
-                  <p className={`text-xs mt-1 ${result.allPass ? 'text-ui-successText' : 'text-ui-errorText'}`}>
-                    {result.allPass 
-                      ? 'The blended aggregate falls within the upper and lower bounds for all specified sieve sizes.' 
-                      : 'Adjust the proportions. The blend is outside the specification envelope for one or more sieve sizes.'}
-                  </p>
-                </div>
+            <div className={`mt-6 p-4 rounded-2xl border flex items-start gap-3 ${allPass ? 'bg-ui-success border-ui-successBorder' : 'bg-ui-error border-ui-errorBorder'}`}>
+              {allPass ? <CheckCircle size={24} className="text-ui-successText flex-shrink-0" /> : <AlertTriangle size={24} className="text-ui-errorText flex-shrink-0" />}
+              <div>
+                <h3 className={`text-sm font-bold ${allPass ? 'text-ui-successText' : 'text-ui-errorText'}`}>
+                  {allPass ? 'Mix Passes Specifications' : 'Mix Fails Specifications'}
+                </h3>
+                <p className={`text-xs mt-1 ${allPass ? 'text-ui-successText' : 'text-ui-errorText'}`}>
+                  {allPass
+                    ? 'The blended aggregate falls within the upper and lower bounds for all specified sieve sizes.'
+                    : 'Adjust the proportions. The blend is outside the specification envelope for one or more sieve sizes.'}
+                </p>
+                <p className="text-xs mt-2 text-txt-secondary">RMSE vs band mid: {rmse.toFixed(2)} percentage points (lower is closer to the middle of every band).</p>
               </div>
+            </div>
+
+            {/* Bitumen + quantities */}
+            {preset !== "gsb-i" ? (
+              <div className="space-y-4 pt-2 border-t border-ui-borderSubtle">
+                <div>
+                  <label className="text-sm font-bold text-txt-secondary block mb-1">Bitumen content (% of mix)</label>
+                  <input
+                    type="number" inputMode="decimal" min="0" step="0.1"
+                    value={bitumenPct}
+                    onChange={(e) => { setBitumenPct(e.target.value); setBitumenEdited(true); }}
+                    className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-primary outline-none focus:ring-2 focus:ring-accent-500 text-base"
+                  />
+                  <p className="text-xs text-txt-tertiary mt-1">MoRTH minimum {PRESET_BITUMEN[preset].min}% · typical {PRESET_BITUMEN[preset].typical}% for {PRESET_LABELS[preset].split(" (")[0]}.</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-sm font-bold text-txt-secondary block mb-1">Area (m²)</label>
+                    <input
+                      type="number" inputMode="decimal" min="0"
+                      placeholder="e.g. 1000"
+                      value={areaM2}
+                      onChange={(e) => setAreaM2(e.target.value)}
+                      className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-primary outline-none focus:ring-2 focus:ring-accent-500 text-base"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-bold text-txt-secondary block mb-1">Layer thickness (mm)</label>
+                    <input
+                      type="number" inputMode="decimal" min="0"
+                      value={thicknessMm}
+                      onChange={(e) => setThicknessMm(e.target.value)}
+                      className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl px-3 py-2.5 text-txt-primary outline-none focus:ring-2 focus:ring-accent-500 text-base"
+                    />
+                  </div>
+                </div>
+                {quantities && (
+                  <dl className="text-sm space-y-1.5">
+                    <div className="flex justify-between"><dt className="text-txt-secondary">Total mix</dt><dd className="font-bold">{quantities.totalTonnes.toFixed(1)} t</dd></div>
+                    <div className="flex justify-between"><dt className="text-txt-secondary">Bitumen</dt><dd className="font-bold">{quantities.bitumenKg.toFixed(0)} kg</dd></div>
+                    <div className="flex justify-between"><dt className="text-txt-secondary">Filler</dt><dd className="font-bold">{quantities.fillerKg.toFixed(0)} kg</dd></div>
+                    <div className="flex justify-between"><dt className="text-txt-secondary">Agg A</dt><dd className="font-bold">{quantities.aggTonnes.aggA.toFixed(1)} t</dd></div>
+                    <div className="flex justify-between"><dt className="text-txt-secondary">Agg B</dt><dd className="font-bold">{quantities.aggTonnes.aggB.toFixed(1)} t</dd></div>
+                    <div className="flex justify-between"><dt className="text-txt-secondary">Agg C</dt><dd className="font-bold">{quantities.aggTonnes.aggC.toFixed(1)} t</dd></div>
+                    <p className="text-xs text-txt-tertiary pt-1">Density 2.35 t/m³ (compacted). Enter an area to see quantities.</p>
+                  </dl>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-txt-secondary pt-2 border-t border-ui-borderSubtle">GSB is an unbound granular base — no bitumen content applies.</p>
             )}
           </div>
-          
+
           <div className="bg-surface-hover border border-ui-borderSubtle p-4 rounded-2xl flex gap-3 text-sm text-txt-secondary">
             <Activity size={20} className="text-txt-tertiary flex-shrink-0" />
             <p>
-              Chart uses a logarithmic scale for sieve sizes as per standard highway engineering practices (0.45 power curve approximate viewing).
+              The chart uses a logarithmic sieve axis, as in standard highway gradation charts. Sieve sizes are the fixed MoRTH set — no custom sieves, so the stockpile grid, the spec envelope and the table can never drift out of alignment.
             </p>
           </div>
         </div>
@@ -290,7 +378,7 @@ export function PavementMixGradation() {
               <Activity size={20} className="text-accent-800" />
               Gradation Curve
             </h2>
-            
+
             <div className="flex-1 w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
@@ -298,52 +386,52 @@ export function PavementMixGradation() {
                   margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#E7E4DE" vertical={true} horizontal={true} />
-                  <XAxis 
-                    dataKey="sieve" 
-                    type="number" 
-                    scale="log" 
-                    domain={[0.075, 75]} 
+                  <XAxis
+                    dataKey="sieve"
+                    type="number"
+                    scale="log"
+                    domain={[0.075, 75]}
                     tickFormatter={(val) => val.toString()}
                     label={{ value: 'Sieve Size (mm) [Log Scale]', position: 'insideBottom', offset: -10 }}
                     stroke="#6B6862"
                   />
-                  <YAxis 
-                    domain={[0, 100]} 
+                  <YAxis
+                    domain={[0, 100]}
                     label={{ value: 'Percent Passing (%)', angle: -90, position: 'insideLeft' }}
                     stroke="#6B6862"
                   />
                   <RechartsTooltip content={<CustomTooltip />} />
                   <Legend verticalAlign="top" height={36} />
-                  
+
                   {/* Min Spec Line */}
-                  <Line 
-                    type="monotone" 
-                    dataKey="min" 
-                    name="Lower Spec" 
-                    stroke="#1F1D1A" 
-                    strokeWidth={2} 
-                    strokeDasharray="5 5" 
+                  <Line
+                    type="monotone"
+                    dataKey="min"
+                    name="Lower Spec"
+                    stroke="#1F1D1A"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
                     connectNulls
                     dot={false}
                   />
                   {/* Max Spec Line */}
-                  <Line 
-                    type="monotone" 
-                    dataKey="max" 
-                    name="Upper Spec" 
-                    stroke="#B07006" 
-                    strokeWidth={2} 
-                    strokeDasharray="5 5" 
+                  <Line
+                    type="monotone"
+                    dataKey="max"
+                    name="Upper Spec"
+                    stroke="#B07006"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
                     connectNulls
                     dot={false}
                   />
                   {/* Blended Line */}
-                  <Line 
-                    type="monotone" 
-                    dataKey="blended" 
-                    name="Blended Mix" 
-                    stroke="#F2A413" 
-                    strokeWidth={3} 
+                  <Line
+                    type="monotone"
+                    dataKey="blended"
+                    name="Blended Mix"
+                    stroke="#F2A413"
+                    strokeWidth={3}
                     dot={{ r: 4, strokeWidth: 2, fill: '#fff' }}
                     activeDot={{ r: 6 }}
                     isAnimationActive={true}
@@ -354,7 +442,43 @@ export function PavementMixGradation() {
               </ResponsiveContainer>
             </div>
           </div>
-          
+
+          {/* Stockpile gradings */}
+          <div className="bg-surface-default rounded-2xl p-6 shadow-brand-sm border border-ui-borderSubtle">
+            <h3 className="text-lg font-bold text-txt-primary mb-1">Stockpile gradings — % passing each sieve</h3>
+            <p className="text-sm text-txt-secondary mb-4">Edit any cell. % passing must not rise as the sieve gets finer (the validator flags it above).</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm whitespace-nowrap">
+                <thead>
+                  <tr className="border-b border-ui-borderSubtle text-txt-tertiary">
+                    <th className="pb-3 px-2 font-medium">Sieve (mm)</th>
+                    {PILE_KEYS.map((k) => (
+                      <th key={k} className="pb-3 px-2 font-medium">{PILE_LABELS[k]}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {SIEVE_SIZES.map((sieve, i) => (
+                    <tr key={sieve} className="border-b border-ui-borderSubtle/50 last:border-0">
+                      <td className="py-2 px-2 font-medium text-txt-primary">{sieve}</td>
+                      {PILE_KEYS.map((k) => (
+                        <td key={k} className="py-2 px-2">
+                          <input
+                            type="number" inputMode="decimal" min="0" max="100" step="1"
+                            aria-label={`${PILE_LABELS[k]} % passing ${sieve} mm`}
+                            value={stockpiles[k][i]}
+                            onChange={(e) => updateStockpile(k, i, e.target.value)}
+                            className="w-20 bg-surface-hover border border-ui-borderSubtle rounded-lg px-2 py-1.5 text-txt-primary text-sm outline-none focus:ring-2 focus:ring-accent-500"
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div className="bg-ink rounded-2xl p-6 shadow-xl text-white">
             <h3 className="text-sm font-bold text-txt-tertiary mb-4 uppercase tracking-wider">Calculation Table</h3>
             <div className="overflow-x-auto">
@@ -369,8 +493,8 @@ export function PavementMixGradation() {
                   </tr>
                 </thead>
                 <tbody>
-                  {chartData.sort((a, b) => b.sieve - a.sieve).map((row, i) => (
-                    <tr key={i} className="border-b border-white/5 last:border-0 hover:bg-surface-default/5 transition-colors">
+                  {chartData.map((row) => (
+                    <tr key={row.sieve} className="border-b border-white/5 last:border-0 hover:bg-surface-default/5 transition-colors">
                       <td className="py-3 px-2 font-medium text-txt-inverse">{row.sieve}</td>
                       <td className="py-3 px-2 text-txt-tertiary">
                         {row.min !== null ? row.min : '-'}
@@ -380,8 +504,8 @@ export function PavementMixGradation() {
                         {row.max !== null ? row.max : '-'}
                       </td>
                       <td className="py-3 px-2">
-                        {row.min === null ? (
-                          <span className="text-txt-tertiary">-</span>
+                        {row.status === null ? (
+                          <span className="text-txt-tertiary">—</span>
                         ) : row.status === 'pass' ? (
                           <span className="inline-flex items-center gap-1 text-ui-successText bg-ui-successText/10 px-2 py-0.5 rounded text-xs font-bold">
                             PASS
@@ -397,24 +521,38 @@ export function PavementMixGradation() {
                 </tbody>
               </table>
             </div>
-            
-            <div className="mt-6 pt-6 border-t border-white/10 flex items-end gap-3 max-w-sm">
-               <div className="flex-1">
-                 <label className="block text-xs font-medium text-txt-tertiary mb-1">Add Custom Sieve (mm)</label>
-                 <input 
-                   type="number"
-                   value={newSieve}
-                   onChange={(e) => setNewSieve(e.target.value)}
-                   placeholder="e.g. 12.5"
-                   className="w-full bg-surface-default/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent-500"
-                 />
-               </div>
-               <Button 
-                 onClick={handleAddSieve}
-                 className="flex items-center justify-center gap-2 px-4 py-2 bg-ink hover:bg-ink-700 text-white text-sm font-medium rounded-lg transition-colors h-[38px]"
-               >
-                 <Plus size={16} /> Add Sieve
-               </Button>
+          </div>
+
+          {/* JMF tolerances */}
+          <div className="bg-surface-default rounded-2xl p-6 shadow-brand-sm border border-ui-borderSubtle">
+            <h3 className="text-lg font-bold text-txt-primary mb-1">Job Mix Formula (JMF) — target &amp; tolerance</h3>
+            <p className="text-sm text-txt-secondary mb-4">The blended curve is the JMF target. MoRTH tolerances are the allowed deviation from it during production.</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm whitespace-nowrap">
+                <thead>
+                  <tr className="border-b border-ui-borderSubtle text-txt-tertiary">
+                    <th className="pb-3 px-2 font-medium">Sieve (mm)</th>
+                    <th className="pb-3 px-2 font-medium">JMF target</th>
+                    <th className="pb-3 px-2 font-medium">Tolerance (±pp)</th>
+                    <th className="pb-3 px-2 font-medium">Allowed range</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {chartData.map((row) => {
+                    const tol = JMF_TOLERANCE[row.sieve];
+                    return (
+                      <tr key={row.sieve} className="border-b border-ui-borderSubtle/50 last:border-0">
+                        <td className="py-2 px-2 font-medium text-txt-primary">{row.sieve}</td>
+                        <td className="py-2 px-2 font-bold text-txt-primary">{row.blended.toFixed(1)}%</td>
+                        <td className="py-2 px-2 text-txt-secondary">{tol != null ? `±${tol}` : "—"}</td>
+                        <td className="py-2 px-2 text-txt-secondary">
+                          {tol != null ? `${Math.max(0, row.blended - tol).toFixed(1)}% – ${Math.min(100, row.blended + tol).toFixed(1)}%` : "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

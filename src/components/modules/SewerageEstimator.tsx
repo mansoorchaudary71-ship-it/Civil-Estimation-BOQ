@@ -1,1155 +1,337 @@
 import { Button } from '../ui/Button';
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Waves,
   Ruler,
   CircleDashed,
   ArrowDownRight,
   AlignVerticalJustifyStart,
-  ArrowRight,
   ChevronDown,
-  Plus,
   Droplet,
   AlertTriangle,
   Layers,
+  Copy,
+  Printer,
+  Download,
+  Check,
 } from "lucide-react";
 import { useTakeoff } from "../../context/TakeoffContext";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
-
+import { NumberInput } from "../ui/NumberInput";
+import { FormulaAccordion } from "../ui/FormulaAccordion";
+import { GlobalFAQ } from "../ui/GlobalFAQ";
 import ManholeModule, { ManholeResults } from "./ManholeModule";
+import {
+  calcBeddingVolume,
+  calcDesignFlow,
+  calcManning,
+  calcSeptic,
+  calcTrenchVolume,
+  selectSewerPipe,
+  type SewerPipeMaterial,
+} from "../../lib/sewerageCalc";
+import { MANNING_N } from "../../lib/mepConstants";
+
+export const SEWERAGE_FAQS = [
+  { question: "What is self-cleansing velocity?", answer: "The minimum flow velocity that keeps solids moving instead of settling in the pipe — 0.6 m/s for sanitary sewers. This calculator reports the minimum slope that achieves 0.6 m/s for your pipe size and material (for a 300 mm concrete pipe at 1:200 the velocity is 0.97 m/s, and the minimum slope is about 1 in 520)." },
+  { question: "How is a sewer pipe sized?", answer: "Design flow first: population × wastewater per person (default 120 L/day) × peak factor (3.0 under 1,000 people). Then pick the smallest standard diameter whose full-bore Manning capacity carries that flow at a velocity of 0.6–2.5 m/s. Capacity alone is not enough — a pipe that is too flat will silt up." },
+  { question: "What is the minimum septic tank size?", answer: "IS 2470 minimums: 1,000 litres liquid volume, 0.75 m minimum width, 1.0 m minimum liquid depth, plus 0.3 m freeboard, with length about twice the width. A 5-person house calculates to 900 L, so the 1,000 L minimum applies — this calculator enforces it." },
+  { question: "Soak pit vs dispersion trench?", answer: "Both dispose of septic effluent into the soil. A soak pit is a 1.2–1.5 m diameter pit 3–4 m deep (deeper pits are split into several); a dispersion trench is a long shallow trench (about 1.0 m deep × 0.6 m wide). Trenches suit high water tables and flat sites; pits suit deep, permeable soil. This calculator sizes both." },
+  { question: "When does sewerage design need a licensed engineer?", answer: "Always for a real installation. Pipe gradients, invert levels, manhole spacing, structural bedding class and septic/soak-pit siting depend on ground conditions, water table and local by-laws. This tool is a planning estimate — get the design checked and approved before building." },
+  { question: "What is Manning's n?", answer: "The roughness coefficient in Manning's equation. Typical values: uPVC/HDPE 0.009, concrete 0.013, cast iron 0.014, clay 0.015. A rougher pipe (higher n) flows slower at the same slope, so it needs a steeper gradient or a larger diameter." },
+];
+
+const CUR_SYMBOLS: Record<string, string> = { PKR: "Rs", INR: "₹", AED: "AED" };
 
 export default function SewerageEstimator() {
-  const { boqItems, addBoqItem, updateBoqItem } = useTakeoff();
-  const [openSection, setOpenSection] = useState<string>("manhole");
+  const { addBoqItems } = useTakeoff();
+  const [openSection, setOpenSection] = useState<string>("hydraulics");
   const [mhResults, setMhResults] = useState<ManholeResults | null>(null);
-  /* Trench State */ const [trenchLength, setTrenchLength] =
-    useState<string>("100");
-  const [trenchWidth, setTrenchWidth] = useState<string>("1.5");
-  const [trenchDepth, setTrenchDepth] = useState<string>("2.5");
-  const [trenchProfile, setTrenchProfile] = useState<"vertical" | "sloped">(
-    "vertical",
-  );
-  const [trenchSlopeRatio, setTrenchSlopeRatio] = useState<string>("0.5");
-  /* Horizontal : 1 Vertical // Backfill Calculation State */ const [
-    pipeOuterDiameter,
-    setPipeOuterDiameter,
-  ] = useState<string>("0.4");
-  /* m */ const [beddingDepth, setBeddingDepth] = useState<string>("0.2");
-  /* m // Invert Level State */ const [startIL, setStartIL] =
-    useState<string>("100");
-  /* m */ const [ilLength, setIlLength] = useState<string>("50");
-  /* m */ const [ilGradient, setIlGradient] = useState<string>("200");
-  /* 1 in 200 // Pipe Sections State */ const [pipeLength, setPipeLength] =
-    useState<string>("100");
-  const [pipeSectionLen, setPipeSectionLen] = useState<string>("2.5");
-  /* standard 2.5m RCC pipe // Hydraulic Flow State */ const [
-    flowDia,
-    setFlowDia,
-  ] = useState<string>("0.3");
-  /* m */ const [flowGradient, setFlowGradient] = useState<string>("200");
-  /* 1 in X */ const [flowMaterial, setFlowMaterial] = useState<
-    "pvc" | "concrete" | "cast_iron" | "clay"
-  >("concrete");
-  /* Pipe Bedding State */ const [beddingCalcLength, setBeddingCalcLength] =
-    useState<string>("100");
-  const [beddingCalcWidth, setBeddingCalcWidth] = useState<string>("1.5");
-  const [beddingCalcPipeOD, setBeddingCalcPipeOD] = useState<string>("0.4");
-  const [beddingType, setBeddingType] = useState<
-    "classA" | "classB" | "classC"
-  >("classB");
-  const [beddingUnderPipe, setBeddingUnderPipe] = useState<string>("0.15");
-  const [beddingHaunchHeight, setBeddingHaunchHeight] = useState<string>("0.2");
-  /* Septic System State */ const [septicUsers, setSepticUsers] =
-    useState<string>("5");
-  const [septicDemand, setSepticDemand] = useState<string>("120");
-  const [septicPercolation, setSepticPercolation] = useState<string>("30");
-  const toggleSection = (id: string) => {
-    setOpenSection(openSection === id ? "" : id);
+  const [copied, setCopied] = useState(false);
+  const [boqAdded, setBoqAdded] = useState(false);
+
+  // Design flow + hydraulics
+  const [population, setPopulation] = useState<number | "">(100);
+  const [litresPerPerson, setLitresPerPerson] = useState<number | "">(120);
+  const [flowDia, setFlowDia] = useState<number | "">(0.3);
+  const [flowGradient, setFlowGradient] = useState<number | "">(200);
+  const [flowMaterial, setFlowMaterial] = useState<SewerPipeMaterial>("concrete");
+  // Trench
+  const [trenchLength, setTrenchLength] = useState<number | "">(100);
+  const [trenchWidth, setTrenchWidth] = useState<number | "">(1.5);
+  const [trenchDepth, setTrenchDepth] = useState<number | "">(2.5);
+  const [trenchSloped, setTrenchSloped] = useState(false);
+  const [trenchSlopeRatio, setTrenchSlopeRatio] = useState<number | "">(0.5);
+  const [pipeOuterDia, setPipeOuterDia] = useState<number | "">(0.4);
+  const [beddingDepth, setBeddingDepth] = useState<number | "">(0.2);
+  // Invert levels
+  const [startIL, setStartIL] = useState<number | "">(100);
+  const [ilLength, setIlLength] = useState<number | "">(50);
+  const [ilGradient, setIlGradient] = useState<number | "">(200);
+  // Pipe sections
+  const [pipeLength, setPipeLength] = useState<number | "">(100);
+  const [pipeSectionLen, setPipeSectionLen] = useState<number | "">(2.5);
+  // Bedding
+  const [beddingType, setBeddingType] = useState<"classA" | "classB" | "classC">("classB");
+  const [beddingUnderPipe, setBeddingUnderPipe] = useState<number | "">(0.15);
+  const [beddingHaunch, setBeddingHaunch] = useState<number | "">(0.2);
+  // Septic
+  const [septicUsers, setSepticUsers] = useState<number | "">(5);
+  const [septicDemand, setSepticDemand] = useState<number | "">(120);
+  const [septicPercolation, setSepticPercolation] = useState<number | "">(30);
+  // Cost rates
+  const [currency, setCurrency] = useState("PKR");
+  const [excavationRate, setExcavationRate] = useState<number | "">("");
+  const [pipeRatePerM, setPipeRatePerM] = useState<number | "">("");
+  const [manholeRate, setManholeRate] = useState<number | "">("");
+  const [septicRatePerM3, setSepticRatePerM3] = useState<number | "">("");
+  const [soakPitRate, setSoakPitRate] = useState<number | "">("");
+
+  const calc = useMemo(() => {
+    try {
+      const manning = calcManning({ diameterM: Number(flowDia), gradient1InX: Number(flowGradient), material: flowMaterial });
+      const designFlow = calcDesignFlow({ population: Number(population), litresPerPersonPerDay: Number(litresPerPerson) });
+      const selection = selectSewerPipe({ population: Number(population), litresPerPersonPerDay: Number(litresPerPerson), gradient1InX: Number(flowGradient), material: flowMaterial });
+      const trench = calcTrenchVolume(Number(trenchLength), Number(trenchWidth), Number(trenchDepth), trenchSloped, Number(trenchSlopeRatio) || 0.5);
+      const pipeVol = Math.PI * Math.pow(Number(pipeOuterDia) / 2, 2) * Number(trenchLength);
+      const beddingVol = calcBeddingVolume(Number(trenchLength), Number(trenchWidth), Number(pipeOuterDia), Number(beddingUnderPipe), Number(beddingHaunch));
+      const netBackfill = Math.max(0, trench.volumeM3 - pipeVol - beddingVol);
+      const drop = Number(ilGradient) > 0 ? Number(ilLength) / Number(ilGradient) : 0;
+      const pipeCount = Number(pipeSectionLen) > 0 ? Math.ceil(Number(pipeLength) / Number(pipeSectionLen)) : 0;
+      const septic = calcSeptic({
+        users: Number(septicUsers),
+        litresPerPersonPerDay: Number(septicDemand),
+        percolationLoadingRate: Number(septicPercolation),
+      });
+      return { manning, designFlow, selection, trench, pipeVol, beddingVol, netBackfill, endIL: Number(startIL) - drop, drop, pipeCount, septic, errors: [] as string[] };
+    } catch (e) {
+      return { manning: null, designFlow: null, selection: null, trench: null, pipeVol: 0, beddingVol: 0, netBackfill: 0, endIL: 0, drop: 0, pipeCount: 0, septic: null, errors: [(e as Error).message] };
+    }
+  }, [population, litresPerPerson, flowDia, flowGradient, flowMaterial, trenchLength, trenchWidth, trenchDepth, trenchSloped, trenchSlopeRatio, pipeOuterDia, beddingUnderPipe, beddingHaunch, startIL, ilLength, ilGradient, pipeLength, pipeSectionLen, septicUsers, septicDemand, septicPercolation]);
+
+  const sym = CUR_SYMBOLS[currency] ?? "Rs";
+  const fmt = (v: number | null | undefined) => (v == null || !isFinite(v) ? "—" : `${sym} ${Math.round(v).toLocaleString("en-US")}`);
+  const r = (v: number | "" | null | undefined) => (v == null || v === "" ? null : Number(v));
+
+  const costLines = useMemo(() => {
+    if (!calc.septic) return [];
+    const exc = r(excavationRate);
+    const pipe = r(pipeRatePerM);
+    const mh = r(manholeRate);
+    const sep = r(septicRatePerM3);
+    const soak = r(soakPitRate);
+    const lines = [
+      { desc: "Trench excavation", unit: "m³", rate: exc, qty: calc.trench?.volumeM3 ?? 0 },
+      { desc: `Sewer pipe (${calc.selection?.selectedDiameterMm ?? "—"} mm)`, unit: "m", rate: pipe, qty: Number(pipeLength) || 0 },
+      { desc: "Septic tank (RCC)", unit: "m³", rate: sep, qty: (calc.septic.liquidVolumeL / 1000) },
+      { desc: "Soak pit", unit: "nos", rate: soak, qty: calc.septic.soakPits },
+      ...(mhResults ? [{ desc: "Manhole", unit: "nos", rate: mh, qty: 1 }] : []),
+    ];
+    return lines.map((l) => ({ ...l, amount: l.rate != null ? l.rate * l.qty : null }));
+  }, [calc, excavationRate, pipeRatePerM, manholeRate, septicRatePerM3, soakPitRate, pipeLength, mhResults]);
+  const costTotal = costLines.some((l) => l.amount != null) ? costLines.reduce((s, l) => s + (l.amount ?? 0), 0) : null;
+
+  const summaryText = calc.manning && calc.septic
+    ? `Sewerage design\nDesign flow ${calc.designFlow?.designFlowLPerS.toFixed(2)} L/s (population ${population})\nPipe ${calc.selection?.selectedDiameterMm ?? "—"} mm — capacity ${calc.selection?.capacityLPerS?.toFixed(1) ?? "—"} L/s, velocity ${calc.manning.velocityMs.toFixed(3)} m/s, min slope 1 in ${calc.manning.minSlopeForSelfCleansing1InX.toFixed(0)}\nSeptic tank ${calc.septic.lengthM.toFixed(2)} m x ${calc.septic.widthM.toFixed(2)} m x ${calc.septic.totalDepthM.toFixed(2)} m (${calc.septic.liquidVolumeL.toFixed(0)} L liquid)${calc.septic.minimumApplied ? " — IS 2470 minimum applied" : ""}\nSoak pits: ${calc.septic.soakPits} x ${calc.septic.soakPitDiameterM} m dia x ${calc.septic.soakPitDepthPerPitM.toFixed(2)} m deep\nTrench ${calc.trench?.volumeM3.toFixed(1)} m³; pipes ${calc.pipeCount} nos\n${costTotal != null ? `Estimated cost ${fmt(costTotal)}` : "Cost: enter rates to price this job."}`
+    : "";
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(summaryText); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ }
   };
-  /* Calculations */ const tL = parseFloat(trenchLength) || 0;
-  const tW = parseFloat(trenchWidth) || 0;
-  const tD = parseFloat(trenchDepth) || 0;
-  const tSlope = parseFloat(trenchSlopeRatio) || 0;
-  const pipeOD = parseFloat(pipeOuterDiameter) || 0;
-  const bedD = parseFloat(beddingDepth) || 0;
-  /* Trench Excavation */ let topWidth = tW;
-  if (trenchProfile === "sloped") {
-    topWidth = tW + 2 * (tSlope * tD);
-  }
-  const trenchVol = ((tW + topWidth) / 2) * tD * tL;
-  /* Pipe Displacement Volume */ const pipeVol =
-    Math.PI * Math.pow(pipeOD / 2, 2) * tL;
-  /* Bedding Volume */ let topBeddingWidth = tW;
-  if (trenchProfile === "sloped") {
-    topBeddingWidth = tW + 2 * (tSlope * bedD);
-  }
-  const beddingVol = ((tW + topBeddingWidth) / 2) * bedD * tL;
-  /* Net Backfill Volume */ const netBackfillVol = Math.max(
-    0,
-    trenchVol - pipeVol - beddingVol,
-  );
-  const sIL = parseFloat(startIL) || 0;
-  const iL = parseFloat(ilLength) || 0;
-  const iG = parseFloat(ilGradient) || 1;
-  /* prevent divide by zero */ const drop = iG > 0 ? iL / iG : 0;
-  const endIL = sIL - drop;
-  const pL = parseFloat(pipeLength) || 0;
-  const pS = parseFloat(pipeSectionLen) || 1;
-  const pipeCount = pS > 0 ? Math.ceil(pL / pS) : 0;
-  /* Hydraulic Flow Calculations */ const fD = parseFloat(flowDia) || 0;
-  const fG = parseFloat(flowGradient) || 1;
-  let n = 0.013;
-  /* default concrete */ if (flowMaterial === "pvc") n = 0.009;
-  else if (flowMaterial === "cast_iron") n = 0.014;
-  else if (flowMaterial === "clay") n = 0.015;
-  const hydraulicRadius = fD > 0 ? fD / 4 : 0;
-  const slope = fG > 0 ? 1 / fG : 0;
-  const flowVelocity =
-    n > 0 && fD > 0 && fG > 0
-      ? (1 / n) * Math.pow(hydraulicRadius, 2 / 3) * Math.pow(slope, 1 / 2)
-      : 0;
-  const flowArea = Math.PI * Math.pow(fD / 2, 2);
-  const dischargeCapacityM3 = flowArea * flowVelocity;
-  /* m3/s */ const dischargeCapacityL = dischargeCapacityM3 * 1000;
-  /* L/s // Structural Pipe Bedding Calculations */ const calcBedLength =
-    parseFloat(beddingCalcLength) || 0;
-  const calcBedWidth = parseFloat(beddingCalcWidth) || 0;
-  const calcBedPipeOD = parseFloat(beddingCalcPipeOD) || 0;
-  const calcBedUnder = parseFloat(beddingUnderPipe) || 0;
-  const calcBedHaunch = parseFloat(beddingHaunchHeight) || 0;
-  let bedPipeDisplaced = 0;
-  if (calcBedPipeOD > 0) {
-    const R = calcBedPipeOD / 2;
-    const h = Math.min(Math.max(calcBedHaunch, 0), calcBedPipeOD);
-    /* clamp haunch height */ if (h >= calcBedPipeOD) {
-      bedPipeDisplaced = Math.PI * R * R;
-    } else if (h > 0) {
-      const d = Math.abs(R - h);
-      const theta = 2 * Math.acos(d / R);
-      const segmentArea = ((R * R) / 2) * (theta - Math.sin(theta));
-      if (h <= R) {
-        bedPipeDisplaced = segmentArea;
-      } else {
-        bedPipeDisplaced = Math.PI * R * R - segmentArea;
-      }
-    }
-  }
-  /* Cross-sectional area = Trench Width * Total Depth - Pipe DisplacedArea */ const totalBedDepth =
-    calcBedUnder + Math.min(calcBedPipeOD, Math.max(0, calcBedHaunch));
-  const bedCrossSection = Math.max(
-    0,
-    calcBedWidth * totalBedDepth - bedPipeDisplaced,
-  );
-  const beddingCalculatedVol = bedCrossSection * calcBedLength;
-  const beddingWeightTons =
-    beddingType === "classB" || beddingType === "classC"
-      ? beddingCalculatedVol * 1.6
-      : 0;
-  /* 1600 kg/m3 = 1.6 t/m3 // Septic System Calculations */ const sUsers =
-    parseFloat(septicUsers) || 0;
-  const sDemand = parseFloat(septicDemand) || 0;
-  const sPerc = parseFloat(septicPercolation) || 1;
-  /* L/m2/day */ const dailyFlowLiters = sUsers * sDemand;
-  const dailyFlowM3 = dailyFlowLiters / 1000;
-  /* Volume: 24h retention + sludge (assume ~40L per user per year for 2 years = 80L/user) */ const sludgeVolLiters =
-    sUsers * 80;
-  const septicTotalVolM3 = (dailyFlowLiters + sludgeVolLiters) / 1000;
-  /* Dimensions (L = 2W) => 2W^2 * D = V -> W = sqrt(V / 2D) */ const septicDepth =
-    Math.max(1, Math.min(2.5, Math.pow(septicTotalVolM3, 1 / 3)));
-  /* dynamic depth between 1m and 2.5m */ const septicWidth =
-    septicTotalVolM3 > 0 ? Math.sqrt(septicTotalVolM3 / (2 * septicDepth)) : 0;
-  const septicLength = septicWidth * 2;
-  const soakageAreaRequired = dailyFlowLiters / (sPerc > 0 ? sPerc : 1);
-  const soakageDepth = Math.max(1.5, septicDepth + 0.5);
-  /* soakage pit slightly deeper than tank */ const soakageDia =
-    soakageAreaRequired > 0
-      ? soakageAreaRequired / (Math.PI * soakageDepth)
-      : 0;
-  const handleAddPipesToBOQ = () => {
-    if (pipeCount <= 0) return;
-    const descStr = `Sewerage RCC Pipe (${pipeSectionLen}m sections)`;
-    const existing = boqItems.find((item) => item.desc === descStr);
-    if (existing) {
-      if (existing.qtyOverride !== pipeCount) {
-        updateBoqItem(existing.id, { qtyOverride: pipeCount });
-      }
-    } else {
-      /* Also clean up any other length so they don't stack up */ const otherExisting =
-        boqItems.find((item) => item.desc.startsWith("Sewerage RCC Pipe"));
-      if (otherExisting) {
-        updateBoqItem(otherExisting.id, {
-          qtyOverride: pipeCount,
-          desc: descStr,
-        });
-      } else {
-        addBoqItem({
-          desc: descStr,
-          unit: "nos",
-          rate: 2500,
-          qtyOverride: pipeCount,
-        });
-      }
-    }
+  const handleExport = () => {
+    const blob = new Blob([summaryText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "sewerage-results.txt"; a.click();
+    URL.revokeObjectURL(url);
   };
-  useEffect(() => {
-    if (pipeCount > 0) {
-      const timeout = setTimeout(() => {
-        handleAddPipesToBOQ();
-      }, 500);
-      return () => clearTimeout(timeout);
-    }
-  }, [pipeCount, pipeSectionLen]);
+  const handleAddAllToBoq = () => {
+    const items = costLines
+      .filter((l) => l.rate != null && l.qty > 0)
+      .map((l) => ({ desc: l.desc, unit: l.unit, rate: l.rate as number, qtyOverride: l.qty }));
+    if (calc.pipeCount > 0) items.push({ desc: `Sewerage RCC Pipe (${pipeSectionLen}m sections)`, unit: "nos", rate: 2500, qtyOverride: calc.pipeCount });
+    if (items.length === 0) return;
+    addBoqItems(items);
+    setBoqAdded(true);
+    setTimeout(() => setBoqAdded(false), 3000);
+  };
+
+  const toggleSection = (id: string) => setOpenSection(openSection === id ? "" : id);
+  const Section = ({ id, title, icon, children }: { id: string; title: string; icon: React.ReactNode; children: React.ReactNode }) => (
+    <div className="w-full bg-surface-default rounded-[1.5rem] shadow-brand-sm border border-border-color overflow-hidden">
+      <Button onClick={() => toggleSection(id)} className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">{icon}</div>
+          <h2 className="text-xl font-bold text-txt-primary">{title}</h2>
+        </div>
+        <ChevronDown className={`w-5 h-5 text-txt-secondary transition-transform duration-300 ${openSection === id ? "rotate-180" : ""}`} />
+      </Button>
+      {openSection === id && <div className="px-6 pb-6 border-t border-border-color pt-4">{children}</div>}
+    </div>
+  );
+
   return (
     <div className="w-full text-txt-primary font-sans md:p-4">
-      <div className="w-full md:max-w-7xl md:mx-auto space-y-8 px-4 md:px-0">
-        <div className="space-y-4">
-          {/* Manhole Material Accordion */}
-          <div className="w-full bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden">
-            <Button
-              onClick={() => toggleSection("manhole")}
-              className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
-                  <CircleDashed className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-bold text-txt-primary">
-                  Manhole Calculator
-                </h2>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-txt-secondary  transition-transform duration-300 ${openSection === "manhole" ? "rotate-180" : ""}`}
-              />
-            </Button>
-            <div
-              className={`transition-all duration-500 ease-in-out ${openSection === "manhole" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
-            >
-              <div className="border-t border-border-color bg-surface-default flex">
-                <ManholeModule onStateChange={setMhResults} />
-              </div>
-            </div>
-          </div>
-          {/* Trench Excavation Accordion */}
-          <div className="w-full bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden">
-            <Button
-              onClick={() => toggleSection("trench")}
-              className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
-                  <AlignVerticalJustifyStart className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-bold text-txt-primary">
-                  Trench Excavation
-                </h2>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-txt-secondary  transition-transform duration-300 ${openSection === "trench" ? "rotate-180" : ""}`}
-              />
-            </Button>
-            <div
-              className={`transition-all duration-500 ease-in-out ${openSection === "trench" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
-            >
-              <div className="px-6 pb-6 border-t border-border-color pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
-                  <div className="grid grid-cols-2 gap-4 h-fit">
-                    <div className="col-span-2">
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Length (m)
-                      </label>
-                      <><label htmlFor="a11y-input-469" className="sr-only">Input</label>
-<input id="a11y-input-469" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={trenchLength}
-                        onChange={(e) => setTrenchLength(e.target.value)}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Bottom Width (m)
-                      </label>
-                      <><label htmlFor="a11y-input-470" className="sr-only">Input</label>
-<input id="a11y-input-470" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={trenchWidth}
-                        onChange={(e) => setTrenchWidth(e.target.value)}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Depth (m)
-                      </label>
-                      <><label htmlFor="a11y-input-471" className="sr-only">Input</label>
-<input id="a11y-input-471" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={trenchDepth}
-                        onChange={(e) => setTrenchDepth(e.target.value)}
-                      /></>
-                    </div>
-                    <div className="col-span-2 mt-2 border-t border-border-color pt-4">
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Trench Profile
-                      </label>
-                      <div className="flex bg-surface-hover p-1 rounded-2xl mb-4 overflow-hidden">
-                        <Button
-                          className={`flex-1 py-2 text-base font-medium rounded-2xl transition-all ${trenchProfile === "vertical" ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-secondary  hover:text-txt-secondary"}`}
-                          onClick={() => setTrenchProfile("vertical")}
-                        >
-                          Vertical
-                        </Button>
-                        <Button
-                          className={`flex-1 py-2 text-base font-medium rounded-2xl transition-all ${trenchProfile === "sloped" ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-secondary  hover:text-txt-secondary"}`}
-                          onClick={() => setTrenchProfile("sloped")}
-                        >
-                          Sloped/Trapezoidal
-                        </Button>
-                      </div>
-                    </div>
-                    {trenchProfile === "sloped" && (
-                      <div className="col-span-2 -mt-2 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
-                        <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                          Side Slope (1 Vertical : X Horizontal)
-                        </label>
-                        <div className="flex items-center gap-3 w-full bg-surface-default/50 border border-border-color rounded-2xl px-4 py-3 focus-within:ring-2 focus-within:ring-accent-500/50 transition-shadow overflow-hidden">
-                          <span className="text-txt-secondary font-semibold text-sm whitespace-nowrap">1 V :</span>
-                          <><label htmlFor="a11y-input-472" className="sr-only">e.g. 0.5</label>
-<input id="a11y-input-472" type="number" inputMode="decimal"
-                            step="0.1"
-                            className="w-full bg-transparent text-txt-primary focus:outline-none -ml-1 text-sm md:text-base font-semibold min-h-[44px] rounded-full"
-                            placeholder="e.g. 0.5"
-                            value={trenchSlopeRatio}
-                            onChange={(e) => setTrenchSlopeRatio(e.target.value)}
-                          /></>
-                          <span className="text-txt-secondary font-semibold text-sm whitespace-nowrap">H</span>
-                        </div>
-                      </div>
-                    )}
-                    <div className="col-span-2 mt-2 border-t border-border-color pt-4">
-                      <h3 className="text-base font-medium mb-3">
-                        Backfill Parameters
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                            Pipe Outer Dia (m)
-                          </label>
-                          <><label htmlFor="a11y-input-473" className="sr-only">Input</label>
-<input id="a11y-input-473" type="number" inputMode="decimal"
-                            className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                            value={pipeOuterDiameter}
-                            onChange={(e) =>
-                              setPipeOuterDiameter(e.target.value)
-                            }
-                          /></>
-                        </div>
-                        <div>
-                          <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                            Bedding Depth (m)
-                          </label>
-                          <><label htmlFor="a11y-input-474" className="sr-only">Input</label>
-<input id="a11y-input-474" type="number" inputMode="decimal"
-                            className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                            value={beddingDepth}
-                            onChange={(e) => setBeddingDepth(e.target.value)}
-                          /></>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 backdrop-blur-md border border-ui-borderSubtle/60 shadow-brand-sm [0_4px_20px_rgba(31,29,26,0.15)] flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-brand-md[0_8px_30px_rgba(31,29,26,0.2)] w-full overflow-hidden group">
-                    <h3 className="text-accent-800 font-bold border-b border-accent-200 pb-2">
-                      Excavation & Backfill
-                    </h3>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-accent-800 font-medium">
-                        Total Excavation Vol
-                      </span>
-                      <span className="text-accent-900 font-bold text-xl">
-                        {trenchVol.toFixed(2)} m³
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-accent-800 font-medium">
-                        Pipe Displacement Vol
-                      </span>
-                      <span className="text-accent-900 font-bold">
-                        {pipeVol.toFixed(2)} m³
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-accent-800 font-medium">
-                        Bedding Volume
-                      </span>
-                      <span className="text-accent-900 font-bold">
-                        {beddingVol.toFixed(2)} m³
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm border-t border-accent-200 pt-3 mt-2">
-                      <span className="text-accent-800 font-bold text-base">
-                        Net Backfill Volume
-                      </span>
-                      <span className="text-accent-900 font-bold tabular-nums tracking-tight text-2xl whitespace-nowrap">
-                        {netBackfillVol.toFixed(2)} m³
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Trench Cross-Section Diagram */}
-                <div className="w-full mt-8 bg-surface-default border border-border-color rounded-[1.5rem] p-4 sm:p-6 flex flex-col items-center shadow-brand-sm overflow-hidden">
-                  <h3 className="text-base font-medium uppercase tracking-wider mb-6 flex items-center gap-2">
-                    <AlignVerticalJustifyStart className="w-4 h-4" />
-                    Trench Cross Section Profile
-                  </h3>
-                  
-                  <div className="w-full max-w-lg relative">
-                    <svg viewBox="0 0 500 300" className="w-full h-auto drop-shadow-md">
-                      <defs>
-                        <pattern id="soil" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                          <circle cx="2" cy="2" r="1" fill="#d4af37" opacity="0.3" />
-                          <circle cx="10" cy="10" r="1.5" fill="#8b4513" opacity="0.2" />
-                          <circle cx="18" cy="4" r="0.8" fill="#a0522d" opacity="0.4" />
-                        </pattern>
-                        <pattern id="bedding" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                          <circle cx="2" cy="2" r="1" fill="#6B6862" />
-                          <circle cx="8" cy="6" r="1.5" fill="#6B6862" />
-                          <circle cx="4" cy="8" r="0.8" fill="#6B6862" />
-                        </pattern>
-                        <pattern id="backfill" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
-                          <line x1="0" y1="0" x2="16" y2="16" stroke="#B07006" strokeWidth="1" opacity="0.2" />
-                          <line x1="16" y1="0" x2="0" y2="16" stroke="#B07006" strokeWidth="1" opacity="0.2" />
-                        </pattern>
-                      </defs>
-
-                      {/* Ground level line */}
-                      <line x1="20" y1="40" x2="480" y2="40" stroke="#1F1D1A" strokeWidth="4" strokeLinecap="round" />
-                      <line x1="20" y1="44" x2="480" y2="44" stroke="#6B6862" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-                      
-                      {(() => {
-                        const isSloped = trenchProfile === "sloped";
-                        const wBot = parseFloat(trenchWidth) || 1.5;
-                        const d = parseFloat(trenchDepth) || 2.5;
-                        const s = parseFloat(trenchSlopeRatio) || 0.5;
-                        const wTop = isSloped ? wBot + 2 * (d * s) : wBot;
-                        const pipeD = parseFloat(pipeOuterDiameter) || 0.5;
-                        const bedD = parseFloat(beddingDepth) || 0.15;
-
-                        // Diagram scaling bounds
-                        const svgWidth = 500;
-                        const svgHeight = 300;
-                        const yTop = 40;
-                        const yBot = 260; // diagram trench bottom
-                        const h = yBot - yTop;
-
-                        const maxWDraw = 360;
-                        const wRatio = wTop > 0 ? maxWDraw / wTop : 1;
-                        
-                        const drawTopW = maxWDraw;
-                        const drawBotW = wBot * wRatio;
-
-                        const x1 = (svgWidth - drawTopW) / 2; // Top Left
-                        const x2 = x1 + drawTopW; // Top Right
-                        const x4 = (svgWidth - drawBotW) / 2; // Bottom Left
-                        const x3 = x4 + drawBotW; // Bottom Right
-
-                        // Pipe scaling
-                        const depthRatio = h / d;
-                        const pDiaDraw = pipeD * depthRatio;
-                        const bDiaDraw = bedD * depthRatio;
-                        
-                        // Pipe center X and Y
-                        const pCX = svgWidth / 2;
-                        const pCY = yBot - bDiaDraw - (pDiaDraw / 2);
-
-                        return (
-                          <>
-                            {/* The Trench Hole (Backfill color) */}
-                            <polygon 
-                              points={`${x1},${yTop} ${x2},${yTop} ${x3},${yBot} ${x4},${yBot}`}
-                              fill="url(#backfill)"
-                              stroke="#B07006"
-                              strokeWidth="2"
-                              strokeDasharray="4 4"
-                            />
-
-                            {/* Bedding Material */}
-                            <polygon 
-                              points={`
-                                ${(x4 + (yBot - (yBot - bDiaDraw)) * ((x1 - x4)/h))},${yBot - bDiaDraw}
-                                ${(x3 + (yBot - (yBot - bDiaDraw)) * ((x2 - x3)/h))},${yBot - bDiaDraw}
-                                ${x3},${yBot}
-                                ${x4},${yBot}
-                              `}
-                              fill="url(#bedding)"
-                              opacity="0.8"
-                            />
-
-                            {/* The Pipe */}
-                            <circle 
-                              cx={pCX} 
-                              cy={pCY} 
-                              r={pDiaDraw / 2} 
-                              fill="#F4F2EE" 
-                              stroke="#6B6862" 
-                              strokeWidth="4" 
-                            />
-                            {/* Pipe inner hole */}
-                            <circle 
-                              cx={pCX} 
-                              cy={pCY} 
-                              r={(pDiaDraw / 2) * 0.8} 
-                              fill="#1F1D1A" 
-                            />
-
-                            {/* Annotations */}
-                            {/* Total depth line */}
-                            <line x1={x1 - 20} y1={yTop} x2={x1 - 20} y2={yBot} stroke="#6B6862" strokeWidth="1.5" strokeDasharray="3 3"/>
-                            <text x={x1 - 25} y={yTop + h/2} fill="#6B6862" fontSize="12" fontWeight="bold" textAnchor="end" transform={`rotate(-90, ${x1 - 25}, ${yTop + h/2})`}>{d}m Depth</text>
-
-                            {/* Top width line */}
-                            <line x1={x1} y1={yTop - 15} x2={x2} y2={yTop - 15} stroke="#6B6862" strokeWidth="1.5" />
-                            <polygon points={`${x1},${yTop - 15} ${x1+5},${yTop - 18} ${x1+5},${yTop - 12}`} fill="#6B6862" />
-                            <polygon points={`${x2},${yTop - 15} ${x2-5},${yTop - 18} ${x2-5},${yTop - 12}`} fill="#6B6862" />
-                            <text x={svgWidth/2} y={yTop - 22} fill="#6B6862" fontSize="12" fontWeight="bold" textAnchor="middle">{wTop.toFixed(2)}m Top Width</text>
-
-                            {/* Bottom width line */}
-                            <line x1={x4} y1={yBot + 15} x2={x3} y2={yBot + 15} stroke="#6B6862" strokeWidth="1.5" />
-                            <polygon points={`${x4},${yBot + 15} ${x4+5},${yBot + 18} ${x4+5},${yBot + 12}`} fill="#6B6862" />
-                            <polygon points={`${x3},${yBot + 15} ${x3-5},${yBot + 18} ${x3-5},${yBot + 12}`} fill="#6B6862" />
-                            <text x={svgWidth/2} y={yBot + 30} fill="#6B6862" fontSize="12" fontWeight="bold" textAnchor="middle">{wBot}m Bottom W</text>
-
-                            {/* Pipe and Bedding labels */}
-                            <line x1={pCX + pDiaDraw/2 + 5} y1={pCY} x2={x2 + 20} y2={pCY} stroke="#6B6862" strokeWidth="1" strokeDasharray="2 2" />
-                            <text x={x2 + 25} y={pCY + 4} fill="#6B6862" fontSize="11" fontWeight="600">Pipe ∅{pipeD}m</text>
-
-                            <line x1={pCX + pDiaDraw/2} y1={yBot - bDiaDraw/2} x2={x2 + 20} y2={yBot - bDiaDraw/2} stroke="#6B6862" strokeWidth="1" strokeDasharray="2 2" />
-                            <text x={x2 + 25} y={yBot - bDiaDraw/2 + 4} fill="#6B6862" fontSize="11" fontWeight="600">{bedD}m Bedding</text>
-                            
-                            {/* Slope ratio text if sloped */}
-                            {isSloped && (
-                              <text x={x1 + 10} y={yTop + 30} fill="#B07006" fontSize="11" fontWeight="bold" textAnchor="start">
-                                1V : {s}H
-                              </text>
-                            )}
-                          </>
-                        );
-                      })()}
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Invert Level Accordion */}
-          <div className="w-full bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden">
-            <Button
-              onClick={() => toggleSection("il")}
-              className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
-                  <ArrowDownRight className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-bold text-txt-primary">
-                  Invert Level (IL) Calculator
-                </h2>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-txt-secondary  transition-transform duration-300 ${openSection === "il" ? "rotate-180" : ""}`}
-              />
-            </Button>
-            <div
-              className={`transition-all duration-500 ease-in-out ${openSection === "il" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
-            >
-              <div className="px-6 pb-6 border-t border-border-color pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Starting IL (m)
-                      </label>
-                      <><label htmlFor="a11y-input-475" className="sr-only">Input</label>
-<input id="a11y-input-475" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={startIL}
-                        onChange={(e) => setStartIL(e.target.value)}
-                      /></>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                          Length (m)
-                        </label>
-                        <><label htmlFor="a11y-input-476" className="sr-only">Input</label>
-<input id="a11y-input-476" type="number" inputMode="decimal"
-                          className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                          value={ilLength}
-                          onChange={(e) => setIlLength(e.target.value)}
-                        /></>
-                      </div>
-                      <div>
-                        <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                          Gradient (1 in X)
-                        </label>
-                        <div className="flex items-center bg-surface-default/50 border border-border-color rounded-2xl focus-within:ring-2 focus-within:ring-accent-500/50 overflow-hidden">
-                          <div className="px-3 text-sm text-txt-secondary font-medium">
-                            1 :
-                          </div>
-                          <><label htmlFor="a11y-input-477" className="sr-only">Input</label>
-<input id="a11y-input-477" type="number" inputMode="decimal"
-                            className="w-full flex-1 bg-transparent text-txt-primary py-3 pr-4 focus:outline-none min-h-[44px] rounded-full"
-                            value={ilGradient}
-                            onChange={(e) => setIlGradient(e.target.value)}
-                          /></>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 backdrop-blur-md border border-ui-borderSubtle/60 shadow-brand-sm [0_4px_20px_rgba(31,29,26,0.15)] flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-brand-md[0_8px_30px_rgba(31,29,26,0.2)] w-full overflow-hidden group">
-                    <div className="text-accent-800 text-base font-medium mb-1">
-                      Ending Invert Level
-                    </div>
-                    <div className="flex items-end gap-2">
-                      <span className="text-[clamp(1.75rem,5vw,2.5rem)] break-all font-semibold tabular-nums tracking-tight text-accent-800 tracking-tighter whitespace-nowrap">
-                        {endIL.toFixed(3)}
-                      </span>
-                      <span className="text-xl font-medium text-accent-800 mb-1">
-                        m
-                      </span>
-                    </div>
-                    <div className="text-accent-800/70 text-sm mt-3 font-medium">
-                      Drop:
-                      <strong className="text-accent-800">
-                        {drop.toFixed(3)} m
-                      </strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Pipe Sections Accordion */}
-          <div className="w-full bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden">
-            <Button
-              onClick={() => toggleSection("pipe")}
-              className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
-                  <Waves className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-bold text-txt-primary">
-                  Pipe Count Calculator
-                </h2>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-txt-secondary  transition-transform duration-300 ${openSection === "pipe" ? "rotate-180" : ""}`}
-              />
-            </Button>
-            <div
-              className={`transition-all duration-500 ease-in-out ${openSection === "pipe" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
-            >
-              <div className="px-6 pb-6 border-t border-border-color pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
-                  <div className="space-y-4 h-fit">
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Total Run Length (m)
-                      </label>
-                      <><label htmlFor="a11y-input-478" className="sr-only">Input</label>
-<input id="a11y-input-478" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={pipeLength}
-                        onChange={(e) => setPipeLength(e.target.value)}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        One Pipe Section Length (m)
-                      </label>
-                      <><label htmlFor="a11y-input-479" className="sr-only">Input</label>
-<input id="a11y-input-479" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={pipeSectionLen}
-                        onChange={(e) => setPipeSectionLen(e.target.value)}
-                      /></>
-                    </div>
-                  </div>
-                  <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 backdrop-blur-md border border-ui-borderSubtle/60 shadow-brand-sm [0_4px_20px_rgba(31,29,26,0.15)] flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-brand-md[0_8px_30px_rgba(31,29,26,0.2)] w-full overflow-hidden group">
-                    <div className="text-accent-800 text-base font-medium mb-1">
-                      Required Pipes
-                    </div>
-                    <div className="flex items-center justify-between mt-1">
-                      <div className="flex items-baseline gap-2 flex-wrap relative z-10">
-                        <span className="text-[clamp(1.75rem,5vw,2.5rem)] break-all font-semibold tabular-nums tracking-tight text-accent-800 tracking-tighter leading-none">
-                          {pipeCount}
-                        </span>
-                        <span className="text-lg font-medium text-accent-800">
-                          sections
-                        </span>
-                      </div>
-                      <Button onClick={handleAddPipesToBOQ}
-                        className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-full transition-all shadow-brand-md hover:shadow-brand-lg active:scale-95 hover:-translate-y-0.5"
-                      >
-                        <Plus className="w-5 h-5" />
-                        <span className="font-semibold">Add to BOQ</span>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Pipe Bedding Calculator Accordion */}
-          <div className="w-full bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden mb-8">
-            <Button
-              onClick={() => toggleSection("bedding")}
-              className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
-                  <Layers className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-bold text-txt-primary">
-                  Pipe Bedding Calculator
-                </h2>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-txt-secondary  transition-transform duration-300 ${openSection === "bedding" ? "rotate-180" : ""}`}
-              />
-            </Button>
-            <div
-              className={`transition-all duration-500 ease-in-out ${openSection === "bedding" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
-            >
-              <div className="px-6 pb-6 border-t border-border-color pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
-                  <div className="space-y-4 h-fit">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                          Trench Length (m)
-                        </label>
-                        <><label htmlFor="a11y-input-480" className="sr-only">Input</label>
-<input id="a11y-input-480" type="number" inputMode="decimal"
-                          className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                          value={beddingCalcLength}
-                          onChange={(e) => setBeddingCalcLength(e.target.value)}
-                        /></>
-                      </div>
-                      <div>
-                        <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                          Trench Width (m)
-                        </label>
-                        <><label htmlFor="a11y-input-481" className="sr-only">Input</label>
-<input id="a11y-input-481" type="number" inputMode="decimal"
-                          className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                          value={beddingCalcWidth}
-                          onChange={(e) => setBeddingCalcWidth(e.target.value)}
-                        /></>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Pipe Outer Dia (m)
-                      </label>
-                      <><label htmlFor="a11y-input-482" className="sr-only">Input</label>
-<input id="a11y-input-482" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={beddingCalcPipeOD}
-                        onChange={(e) => setBeddingCalcPipeOD(e.target.value)}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Bedding Type / Class
-                      </label>
-                      <select
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 appearance-none overflow-hidden"
-                        value={beddingType}
-                        onChange={(e) => setBeddingType(e.target.value as any)}
-                      >
-                        <option value="classA">
-                          Class A (Concrete Cradle/Arch)
-                        </option>
-                        <option value="classB">
-                          Class B (Granular Bedding)
-                        </option>
-                        <option value="classC">
-                          Class C (Granular Shaped Bottom)
-                        </option>
-                      </select>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 border-t border-border-color pt-4">
-                      <div>
-                        <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                          Depth Under Pipe (m)
-                        </label>
-                        <><label htmlFor="a11y-input-483" className="sr-only">Input</label>
-<input id="a11y-input-483" type="number" inputMode="decimal"
-                          className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                          value={beddingUnderPipe}
-                          onChange={(e) => setBeddingUnderPipe(e.target.value)}
-                        /></>
-                      </div>
-                      <div>
-                        <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                          Haunching HT (m)
-                        </label>
-                        <><label htmlFor="a11y-input-484" className="sr-only">Input</label>
-<input id="a11y-input-484" type="number" inputMode="decimal"
-                          className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                          value={beddingHaunchHeight}
-                          onChange={(e) =>
-                            setBeddingHaunchHeight(e.target.value)
-                          }
-                        /></>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 backdrop-blur-md border border-ui-borderSubtle/60 shadow-brand-sm [0_4px_20px_rgba(31,29,26,0.15)] flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-brand-md[0_8px_30px_rgba(31,29,26,0.2)] w-full overflow-hidden group">
-                    <h3 className="text-accent-800 font-bold border-b border-accent-200 pb-2">
-                      Material Requirements
-                    </h3>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-accent-800 font-medium">
-                        Cross-Sectional Area
-                      </span>
-                      <div className="text-right">
-                        <span className="text-accent-900 font-bold">
-                          {bedCrossSection.toFixed(4)}
-                        </span>
-                        <span className="text-accent-800 font-medium text-sm">
-                          m²
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-accent-800 font-medium">
-                        Total Volume
-                      </span>
-                      <div className="text-right">
-                        <span className="text-accent-900 font-bold text-xl">
-                          {beddingCalculatedVol.toFixed(2)}
-                        </span>
-                        <span className="text-accent-800 font-medium text-sm">
-                          m³
-                        </span>
-                      </div>
-                    </div>
-                    {(beddingType === "classB" || beddingType === "classC") &&
-                      beddingWeightTons > 0 && (
-                        <div className="flex justify-between items-center text-sm border-t border-accent-200 pt-3 mt-1">
-                          <div className="flex flex-col">
-                            <span className="text-accent-800 font-medium">
-                              Estimated Weight
-                            </span>
-                            <span className="text-accent-800 text-xs">
-                              @ 1600 kg/m³ density
-                            </span>
-                          </div>
-                          <div className="text-right">
-                            <span className="text-accent-900 font-bold tabular-nums tracking-tight text-2xl whitespace-nowrap">
-                              {beddingWeightTons.toFixed(2)}
-                            </span>
-                            <span className="text-accent-800 font-bold">
-                              tons
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    {beddingType === "classA" && (
-                      <div className="flex items-start gap-2 bg-accent-50 border border-accent-200 p-3 rounded-2xl mt-1 overflow-hidden">
-                        <p className="text-sm font-medium text-accent-800">
-                          For Class A (Concrete), you typically use low-strength
-                          concrete (e.g., M10 or M15).
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Hydraulic Flow Calculator Accordion */}
-          <div className="w-full bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden">
-            <Button
-              onClick={() => toggleSection("flow")}
-              className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
-                  <Droplet className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-bold text-txt-primary">
-                  Hydraulic Flow Calculator
-                </h2>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-txt-secondary  transition-transform duration-300 ${openSection === "flow" ? "rotate-180" : ""}`}
-              />
-            </Button>
-            <div
-              className={`transition-all duration-500 ease-in-out ${openSection === "flow" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
-            >
-              <div className="px-6 pb-6 border-t border-border-color pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
-                  <div className="space-y-4 h-fit">
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Pipe Inner Diameter (m)
-                      </label>
-                      <><label htmlFor="a11y-input-485" className="sr-only">Input</label>
-<input id="a11y-input-485" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={flowDia}
-                        onChange={(e) => setFlowDia(e.target.value)}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Gradient (1 in X)
-                      </label>
-                      <><label htmlFor="a11y-input-486" className="sr-only">Input</label>
-<input id="a11y-input-486" type="number" inputMode="decimal"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={flowGradient}
-                        onChange={(e) => setFlowGradient(e.target.value)}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Pipe Material
-                      </label>
-                      <select
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 appearance-none overflow-hidden"
-                        value={flowMaterial}
-                        onChange={(e) => setFlowMaterial(e.target.value as any)}
-                      >
-                        <option value="pvc">
-                          PVC / Plastic (n=0.009)
-                        </option>
-                        <option value="concrete">Concrete (n=0.013)</option>
-                        <option value="cast_iron">Cast Iron (n=0.014)</option>
-                        <option value="clay">
-                          Clay / Ceramic (n=0.015)
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-default/80 backdrop-blur-md border border-ui-borderSubtle/60 shadow-brand-sm [0_4px_20px_rgba(31,29,26,0.15)] flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-brand-md[0_8px_30px_rgba(31,29,26,0.2)] w-full overflow-hidden group">
-                    <h3 className="text-accent-800 font-bold border-b border-accent-200 pb-2">
-                      Full-Bore Flow Characteristics
-                    </h3>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-accent-800 font-medium">
-                        Flow Velocity
-                      </span>
-                      <div className="text-right">
-                        <span className="text-accent-800 font-bold text-xl">
-                          {flowVelocity.toFixed(3)}
-                        </span>
-                        <span className="text-accent-800 font-medium text-sm">
-                          m/s
-                        </span>
-                      </div>
-                    </div>
-                    {flowVelocity > 0 && flowVelocity < 0.6 && (
-                      <div className="flex items-start gap-2 bg-ui-error border border-ui-errorBorder text-ui-errorText p-3 rounded-2xl mt-1 overflow-hidden">
-                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-ui-errorText" />
-                        <p className="text-sm font-medium">
-                          Warning: Calculated velocity is below the typical
-                          self-cleansing velocity of 0.6 m/s. Siltation may
-                          occur.
-                        </p>
-                      </div>
-                    )}
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-accent-800 font-medium">
-                        Discharge Capacity
-                      </span>
-                      <div className="text-right">
-                        <span className="text-accent-800 font-bold text-lg">
-                          {dischargeCapacityM3.toFixed(4)}
-                        </span>
-                        <span className="text-accent-800 font-medium text-sm">
-                          m³/s
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center text-sm border-t border-accent-200 pt-3 mt-1">
-                      <span className="text-accent-800 font-medium">
-                        Discharge (Liters/sec)
-                      </span>
-                      <div className="text-right">
-                        <span className="text-accent-800 font-bold tabular-nums tracking-tight text-2xl whitespace-nowrap">
-                          {dischargeCapacityL.toFixed(2)}
-                        </span>
-                        <span className="text-accent-800 font-bold">
-                          L/s
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Septic System Sizing Calculator Accordion */}
-          <div className="w-full bg-surface-default rounded-[1.5rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-border-color overflow-hidden mb-8">
-            <Button
-              onClick={() => toggleSection("septic")}
-              className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-surface-default/50 transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-ui-success text-ui-successText rounded-2xl overflow-hidden">
-                  <Waves className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-bold text-txt-primary">
-                  Septic System Sizing Calculator
-                </h2>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-txt-secondary  transition-transform duration-300 ${openSection === "septic" ? "rotate-180" : ""}`}
-              />
-            </Button>
-            <div
-              className={`transition-all duration-500 ease-in-out ${openSection === "septic" ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
-            >
-              <div className="px-6 pb-6 border-t border-border-color pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 responsive-tool-grid">
-                  <div className="space-y-4 h-fit">
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Number of Users
-                      </label>
-                      <><label htmlFor="a11y-input-487" className="sr-only">Input</label>
-<input id="a11y-input-487" type="number" inputMode="decimal"
-                        min="0"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={septicUsers}
-                        onChange={(e) => {
-                          const val = parseFloat(e.target.value);
-                          if (!isNaN(val) && val < 0) return;
-                          setSepticUsers(e.target.value);
-                        }}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Per Capita Water Demand (L/day)
-                      </label>
-                      <><label htmlFor="a11y-input-488" className="sr-only">Input</label>
-<input id="a11y-input-488" type="number" inputMode="decimal"
-                        min="0"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={septicDemand}
-                        onChange={(e) => {
-                          const val = parseFloat(e.target.value);
-                          if (!isNaN(val) && val < 0) return;
-                          setSepticDemand(e.target.value);
-                        }}
-                      /></>
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium uppercase tracking-wider mb-1.5 ml-1">
-                        Soil Percolation Rate (L/m²/day)
-                      </label>
-                      <><label htmlFor="a11y-input-489" className="sr-only">Input</label>
-<input id="a11y-input-489" type="number" inputMode="decimal"
-                        min="0"
-                        step="any"
-                        className="w-full bg-surface-default/50 border border-border-color text-txt-primary rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 min-h-[44px]"
-                        value={septicPercolation}
-                        onChange={(e) => {
-                          const val = parseFloat(e.target.value);
-                          if (!isNaN(val) && val < 0) return;
-                          setSepticPercolation(e.target.value);
-                        }}
-                      /></>
-                    </div>
-                  </div>
-                  <div className="flex flex-col h-full">
-                    <MaterialSummary
-                      title="Septic Tank Dimensions"
-                      totalLabel="Calculated Volume (24h retention + sludge)"
-                      totalValue={septicTotalVolM3.toFixed(2)}
-                      totalUnit="m³"
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                        <ResultCard
-                          title="Length"
-                          value={septicLength.toFixed(2)}
-                          unit="m"
-                          variant="neutral"
-                        />
-                        <ResultCard
-                          title="Width"
-                          value={septicWidth.toFixed(2)}
-                          unit="m"
-                          variant="neutral"
-                        />
-                        <ResultCard
-                          title="Liquid Depth"
-                          value={septicDepth.toFixed(2)}
-                          unit="m"
-                          variant="neutral"
-                        />
-                      </div>
-                      
-                      <h4 className="font-bold text-txt-primary dark:text-white mt-6 mb-4 flex items-center gap-2">
-                        Soakage Pit Dimensions
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <ResultCard
-                          title="Req. Sidewall Area"
-                          value={soakageAreaRequired.toFixed(2)}
-                          unit="m²"
-                          variant="primary"
-                        />
-                        <ResultCard
-                          title="Diameter"
-                          value={soakageDia.toFixed(2)}
-                          unit="m"
-                          variant="neutral"
-                        />
-                        <ResultCard
-                          title="Depth"
-                          value={soakageDepth.toFixed(2)}
-                          unit="m"
-                          variant="neutral"
-                        />
-                      </div>
-                    </MaterialSummary>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="w-full md:max-w-7xl md:mx-auto space-y-6 px-4 md:px-0">
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={handleCopy} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover">{copied ? <Check size={16} /> : <Copy size={16} />} {copied ? "Copied" : "Copy results"}</Button>
+          <Button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover"><Printer size={16} /> Print</Button>
+          <Button onClick={handleExport} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover"><Download size={16} /> Export</Button>
+          <Button onClick={handleAddAllToBoq} disabled={costLines.filter((l) => l.rate != null).length === 0 && calc.pipeCount === 0} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700">{boqAdded ? "Added to BOQ ✓" : "Add all to BOQ"}</Button>
         </div>
+        <p className="text-sm text-txt-secondary">Nothing is added to the BOQ automatically — use “Add all to BOQ” when you are happy with the sizing. Enter rates below to price the job; lines without a rate show “—”, never 0.</p>
+
+        {calc.errors.length > 0 && (
+          <div className="bg-ui-error border border-ui-errorBorder rounded-2xl p-4 text-sm text-ui-errorText flex gap-2"><AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" /><div>{calc.errors.map((e) => <p key={e}>{e}</p>)}</div></div>
+        )}
+
+        <Section id="hydraulics" title="Design Flow & Pipe Sizing (Manning)" icon={<Waves className="w-5 h-5" />}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 gap-4 h-fit">
+              <NumberInput label="Population Served" value={population} onChange={setPopulation} requirePositive />
+              <NumberInput label="Wastewater per Person" unit="L/day" value={litresPerPerson} onChange={setLitresPerPerson} />
+              <NumberInput label="Pipe Diameter" unit="m" value={flowDia} onChange={setFlowDia} />
+              <NumberInput label="Gradient" unit="1 in X" value={flowGradient} onChange={setFlowGradient} />
+              <div className="col-span-2">
+                <label className="block text-sm font-medium text-txt-secondary mb-1.5">Pipe Material (Manning&apos;s n)</label>
+                <select value={flowMaterial} onChange={(e) => setFlowMaterial(e.target.value as SewerPipeMaterial)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                  {Object.entries(MANNING_N).map(([k, v]) => <option key={k} value={k}>{k} — n = {v}</option>)}
+                </select>
+              </div>
+            </div>
+            <div>
+              {calc.manning && calc.designFlow && calc.selection && (
+                <MaterialSummary title="Hydraulic Results" totalLabel="Design Flow" totalValue={calc.designFlow.designFlowLPerS.toFixed(2)} totalUnit="L/s" relatedToolIds={[]}>
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <ResultCard title="Velocity (full bore)" value={calc.manning.velocityMs.toFixed(3)} unit="m/s" variant={calc.manning.selfCleansing ? "success" : "warning"} />
+                    <ResultCard title="Capacity (this pipe)" value={calc.manning.dischargeLPerS.toFixed(1)} unit="L/s" variant="neutral" />
+                    <ResultCard title="Min Slope (self-cleansing)" value={`1 in ${calc.manning.minSlopeForSelfCleansing1InX.toFixed(0)}`} unit="" variant="info" />
+                    <ResultCard title="Selected Pipe" value={calc.selection.selectedDiameterMm ?? "—"} unit="mm" variant={calc.selection.adequate ? "primary" : "warning"} />
+                  </div>
+                  <p className="text-xs text-txt-tertiary mt-3">{calc.selection.note}</p>
+                  <FormulaAccordion steps={calc.manning.steps.map((s, i) => ({ id: i + 1, label: `Step ${i + 1}`, theoretical: "Manning: V = (1/n) × R^(2/3) × S^(1/2)", applied: s }))} />
+                </MaterialSummary>
+              )}
+            </div>
+          </div>
+        </Section>
+
+        <Section id="septic" title="Septic Tank & Soak Pit (IS 2470)" icon={<Droplet className="w-5 h-5" />}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 gap-4 h-fit">
+              <NumberInput label="Users" value={septicUsers} onChange={setSepticUsers} requirePositive />
+              <NumberInput label="Wastewater per Person" unit="L/day" value={septicDemand} onChange={setSepticDemand} />
+              <NumberInput label="Soil Loading Rate" unit="L/m²/day" value={septicPercolation} onChange={setSepticPercolation} />
+            </div>
+            <div>
+              {calc.septic && (
+                <MaterialSummary title="Septic & Soak Pit" totalLabel="Liquid Volume Provided" totalValue={calc.septic.liquidVolumeL.toFixed(0)} totalUnit="Liters" relatedToolIds={[]}>
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <ResultCard title="Tank Size (L × W × D)" value={`${calc.septic.lengthM.toFixed(2)} × ${calc.septic.widthM.toFixed(2)} × ${calc.septic.totalDepthM.toFixed(2)}`} unit="m" variant="primary" />
+                    <ResultCard title="IS 2470 Minimum Applied" value={calc.septic.minimumApplied ? "Yes — 1,000 L" : "No"} unit="" variant={calc.septic.minimumApplied ? "warning" : "success"} />
+                    <ResultCard title="Soak Pits" value={calc.septic.soakPits} unit={`× ${calc.septic.soakPitDepthPerPitM.toFixed(2)} m deep`} variant="neutral" />
+                    <ResultCard title="Dispersion Trench (alt.)" value={calc.septic.dispersionTrenchLengthM.toFixed(1)} unit="m" variant="info" />
+                  </div>
+                  <FormulaAccordion steps={calc.septic.steps.map((s, i) => ({ id: i + 1, label: `Step ${i + 1}`, theoretical: "V = P×q×T + P×S×N (IS 2470)", applied: s }))} />
+                </MaterialSummary>
+              )}
+            </div>
+          </div>
+        </Section>
+
+        <Section id="trench" title="Trench Excavation, Invert Levels & Pipe Count" icon={<AlignVerticalJustifyStart className="w-5 h-5" />}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 gap-4 h-fit">
+              <NumberInput label="Trench Length" unit="m" value={trenchLength} onChange={setTrenchLength} />
+              <NumberInput label="Trench Width" unit="m" value={trenchWidth} onChange={setTrenchWidth} />
+              <NumberInput label="Trench Depth" unit="m" value={trenchDepth} onChange={setTrenchDepth} />
+              <NumberInput label="Pipe Outer Diameter" unit="m" value={pipeOuterDia} onChange={setPipeOuterDia} />
+              <NumberInput label="Bedding Depth" unit="m" value={beddingDepth} onChange={setBeddingDepth} />
+              <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-txt-secondary col-span-2">
+                <input type="checkbox" checked={trenchSloped} onChange={(e) => setTrenchSloped(e.target.checked)} className="w-4 h-4 text-accent-800 rounded" /> Sloped trench sides
+              </label>
+              {trenchSloped && <NumberInput label="Slope Ratio (H per V)" value={trenchSlopeRatio} onChange={setTrenchSlopeRatio} />}
+              <NumberInput label="Start Invert Level" unit="m" value={startIL} onChange={setStartIL} />
+              <NumberInput label="Invert Length" unit="m" value={ilLength} onChange={setIlLength} />
+              <NumberInput label="Invert Gradient" unit="1 in X" value={ilGradient} onChange={setIlGradient} />
+              <NumberInput label="Pipe Run Length" unit="m" value={pipeLength} onChange={setPipeLength} />
+              <NumberInput label="Pipe Section Length" unit="m" value={pipeSectionLen} onChange={setPipeSectionLen} />
+            </div>
+            <div>
+              {calc.trench && (
+                <MaterialSummary title="Trench & Pipe Quantities" totalLabel="Excavation Volume" totalValue={calc.trench.volumeM3.toFixed(1)} totalUnit="m³" relatedToolIds={[]}>
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <ResultCard title="Top Width" value={calc.trench.topWidthM.toFixed(2)} unit="m" variant="neutral" />
+                    <ResultCard title="Net Backfill" value={calc.netBackfill.toFixed(1)} unit="m³" variant="neutral" />
+                    <ResultCard title="Bedding Volume" value={calc.beddingVol.toFixed(2)} unit="m³" variant="info" />
+                    <ResultCard title="End Invert Level" value={calc.endIL.toFixed(2)} unit="m" variant="primary" />
+                    <ResultCard title="Pipes Required" value={calc.pipeCount} unit="nos" variant="primary" />
+                    <ResultCard title="Invert Drop" value={calc.drop.toFixed(2)} unit="m" variant="neutral" />
+                  </div>
+                </MaterialSummary>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">Bedding Class</label>
+              <select value={beddingType} onChange={(e) => setBeddingType(e.target.value as "classA" | "classB" | "classC")} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                <option value="classA">Class A (concrete)</option><option value="classB">Class B (granular)</option><option value="classC">Class C (granular)</option>
+              </select>
+            </div>
+            <NumberInput label="Bedding Under Pipe" unit="m" value={beddingUnderPipe} onChange={setBeddingUnderPipe} />
+            <NumberInput label="Haunch Height" unit="m" value={beddingHaunch} onChange={setBeddingHaunch} />
+          </div>
+        </Section>
+
+        <Section id="manhole" title="Manhole Calculator" icon={<CircleDashed className="w-5 h-5" />}>
+          <ManholeModule onStateChange={setMhResults} />
+          {mhResults && <p className="text-sm text-txt-secondary mt-3">Manhole calculated — its quantities are included in the cost table below when you enter a manhole rate.</p>}
+        </Section>
+
+        <Section id="cost" title="Cost Estimate (enter your rates)" icon={<Layers className="w-5 h-5" />}>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-txt-secondary mb-1.5">Currency</label>
+              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
+                <option value="PKR">PKR</option><option value="INR">INR</option><option value="AED">AED</option>
+              </select>
+            </div>
+            <NumberInput label={`Excavation (${sym}/m³)`} value={excavationRate} onChange={setExcavationRate} />
+            <NumberInput label={`Pipe (${sym}/m)`} value={pipeRatePerM} onChange={setPipeRatePerM} />
+            <NumberInput label={`Manhole (${sym} each)`} value={manholeRate} onChange={setManholeRate} />
+            <NumberInput label={`Septic RCC (${sym}/m³)`} value={septicRatePerM3} onChange={setSepticRatePerM3} />
+            <NumberInput label={`Soak Pit (${sym} each)`} value={soakPitRate} onChange={setSoakPitRate} />
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead><tr className="text-left text-txt-secondary border-b border-border-color"><th className="py-2 pr-4">Item</th><th className="py-2 pr-4 text-right">Qty</th><th className="py-2 pr-4">Unit</th><th className="py-2 pr-4 text-right">Rate</th><th className="py-2 text-right">Amount</th></tr></thead>
+              <tbody>
+                {costLines.map((l) => (
+                  <tr key={l.desc} className="border-b border-border-color">
+                    <td className="py-2 pr-4">{l.desc}</td>
+                    <td className="py-2 pr-4 text-right font-mono">{l.qty.toFixed(2)}</td>
+                    <td className="py-2 pr-4">{l.unit}</td>
+                    <td className="py-2 pr-4 text-right font-mono">{l.rate != null ? fmt(l.rate) : "—"}</td>
+                    <td className="py-2 text-right font-mono font-bold">{l.amount != null ? fmt(l.amount) : "—"}</td>
+                  </tr>
+                ))}
+                <tr><td colSpan={4} className="py-2 pr-4 text-right font-bold">Total</td><td className="py-2 text-right font-mono font-bold">{fmt(costTotal)}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-txt-tertiary mt-3">No sourced PK/IN/AE sewerage rates were in the audit spec, so no rates are pre-filled — enter your supplier&apos;s rates. Lines without a rate show “—”, never 0.</p>
+        </Section>
+
+        <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 text-sm text-txt-secondary flex gap-2">
+          <Ruler className="w-4 h-4 shrink-0 text-accent-800" />
+          <span>Planning estimate only — not a substitute for a licensed engineer. Check gradients, invert levels, manhole spacing and septic siting against local by-laws and ground conditions before building.</span>
+        </div>
+
+        <GlobalFAQ faqs={SEWERAGE_FAQS} moduleId="wastewater-calculator" />
+        <CalculationHistory calculatorId="sewerage_estimator" currentInputs={{ population, flowDia, flowGradient, septicUsers }} currentResults={calc.manning ? { velocityMs: calc.manning.velocityMs, dischargeLPerS: calc.manning.dischargeLPerS } : {}} />
       </div>
-      <CalculationHistory
-        calculatorId="sewerage_v1"
-        estimationName="Sewerage Calculation"
-        currentInputs={{
-          openSection, trenchLength, trenchWidth, trenchDepth, pipeOuterDiameter, beddingDepth
-        }}
-        currentResults={{
-          dischargeCapacityL: dischargeCapacityL.toFixed(2),
-          septicTotalVolM3: septicTotalVolM3.toFixed(2),
-          soakageAreaRequired: soakageAreaRequired.toFixed(2)
-        }}
-        summaryGeneration={(inputs, res) => `Flow: ${res.dischargeCapacityL} L/s`}
-        onRestore={(inputs) => {
-          if (inputs.openSection) setOpenSection(inputs.openSection);
-          if (inputs.trenchLength) setTrenchLength(inputs.trenchLength);
-          if (inputs.trenchWidth) setTrenchWidth(inputs.trenchWidth);
-          if (inputs.trenchDepth) setTrenchDepth(inputs.trenchDepth);
-          if (inputs.pipeOuterDiameter) setPipeOuterDiameter(inputs.pipeOuterDiameter);
-          if (inputs.beddingDepth) setBeddingDepth(inputs.beddingDepth);
-        }}
-      />
     </div>
   );
 }

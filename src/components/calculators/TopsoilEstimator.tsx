@@ -1,5 +1,6 @@
 import { Button } from '../ui/Button';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { topsoilCalc } from '../../lib/topsoilCalc';
 import { Shovel, Ruler, Box, Package, Truck, Scale, Download, Printer } from 'lucide-react';
 import { FormulaAccordion, FormulaStep } from '../ui/FormulaAccordion';
 
@@ -33,9 +34,8 @@ export function TopsoilEstimator() {
 
   const [soilType, setSoilType] = useState<keyof typeof soilTypes>('topsoil');
   const [customDensity, setCustomDensity] = useState<number>(1200);
-  const [compactionFactor, setCompactionFactor] = useState<number>(15); // %
+  const [compactionFactor, setCompactionFactor] = useState<number>(10); // % — competitor norm; old 15% default was high
 
-  const [result, setResult] = useState<TopsoilResult | null>(null);
 
   // Sync custom density with selected preset
   useEffect(() => {
@@ -57,39 +57,27 @@ export function TopsoilEstimator() {
     }
   }, [unitSystem]);
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      // Convert to metric before sending to API
-      let areaInM2 = 0;
-      let depthInM = 0;
-
-      if (unitSystem === 'metric') {
-        areaInM2 = inputMode === 'dimensions' ? length * width : totalArea;
-        depthInM = depth / 100; // cm to m
-      } else {
-        const areaInSqFt = inputMode === 'dimensions' ? length * width : totalArea;
-        areaInM2 = areaInSqFt * 0.092903; // sq ft to m2
-        depthInM = depth * 0.0254; // inches to m
-      }
-
-      try {
-        const res = await fetch('/api/tools/topsoil-calculator', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            area: areaInM2,
-            depth: depthInM,
-            density: customDensity,
-            compactionFactor
-          })
-        });
-        const data = await res.json();
-        setResult(data);
-      } catch (err) {
-        console.error("Calculation failed", err);
-      }
-    };
-    fetchResults();
+  // P0 FIX: pure client-side calculation. The old code POSTed
+  // /api/tools/topsoil-calculator, which does not exist on static GitHub
+  // Pages — the live result was always null with no error shown.
+  // (server.ts endpoint left untouched — dead on Pages, harmless in dev.)
+  const result = useMemo<TopsoilResult | null>(() => {
+    let areaInM2 = 0;
+    let depthInM = 0;
+    if (unitSystem === 'metric') {
+      areaInM2 = inputMode === 'dimensions' ? length * width : totalArea;
+      depthInM = depth / 100; // cm to m
+    } else {
+      const areaInSqFt = inputMode === 'dimensions' ? length * width : totalArea;
+      areaInM2 = areaInSqFt * 0.092903; // sq ft to m2
+      depthInM = depth * 0.0254; // inches to m
+    }
+    try {
+      const r = topsoilCalc({ areaM2: areaInM2, depthM: depthInM, densityKgM3: customDensity, allowancePct: compactionFactor });
+      return { volumeNet: r.netM3, volumeGross: r.orderM3, weightKg: r.weightKg, weightTons: r.weightTonnes };
+    } catch {
+      return null;
+    }
   }, [inputMode, length, width, totalArea, depth, customDensity, compactionFactor, unitSystem]);
 
   const unitL = unitSystem === 'metric' ? 'm' : 'ft';

@@ -14,7 +14,7 @@ import { useSettings } from "../../context/SettingsContext";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { ResultCard } from "../ui/ResultCard";
-export default function RigidPavementEstimator() {
+export default function RigidPavementEstimator({ designStandard }: { designStandard?: string }) {
   const { user } = useAuth();
   const { settings, formatCurrency } = useSettings();
   const isPKR = settings.currency === "PKR";
@@ -136,6 +136,8 @@ export default function RigidPavementEstimator() {
 
   return (
     <div className="w-full text-txt-primary font-sans md:p-4">
+      {designStandard && (<p className="text-sm text-txt-secondary">Design standard: <strong>{designStandard}</strong></p>)}
+      <p className="text-sm text-txt-secondary">Quantity-only estimate. The 1:1.5:3 mix is a nominal M20 mix — it is NOT an M40 mix and this is NOT an IRC:58-2015 design. Slab thickness must be designed per IRC:58-2015 (CFD ≤ 1.0) by a pavement engineer.</p>
       {" "}
       <div className="max-w-7xl mx-auto space-y-6">
         {" "}

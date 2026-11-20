@@ -1,633 +1,633 @@
-import { Button } from '../ui/Button';
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Calculator, Layers, PaintBucket, Grid, Blocks, 
-  Download, Save, Send, Settings, Check, Droplets, HardHat, LayoutDashboard, Hammer
-} from 'lucide-react';
-import { useSettings } from '../../context/SettingsContext';
-import { useBOQ } from '../../context/BOQContext';
-import SEOHead from '../seo/SEOHead';
+import React, { useMemo, useState } from "react";
+import { jsPDF } from "jspdf";
+import { Button } from "../ui/Button";
+import { FormulaAccordion, type FormulaStep } from "../ui/FormulaAccordion";
+import {
+  calcRoomGeometry, calcMasonry, calcPlaster, calcPaint, calcFlooring,
+  calcCountertop, calcCarpentry, calcCarpetArea, formatFinishesMoney,
+  costLine, sumCosts, validateRoom, TILE_PATTERN_WASTAGE,
+  type FinishesCurrency, type OpeningInput, type TilePattern, type CounterShape,
+} from "../../lib/finishesCalc";
+import { BRICK_PRESETS, THICKNESS_PRESETS, type BrickPreset } from "../../lib/brickCalc";
+import { getRates } from "../../lib/rates";
+import { useBOQ } from "../../context/BOQContext";
+import { Calculator, Check, Copy, Download, Printer, Share2 } from "lucide-react";
+
+type Unit = "m" | "ft";
+const FT = 3.28084;
+const inputCls = "w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-accent-500/20 focus:border-accent-800 outline-none";
+const labelCls = "text-sm font-medium text-txt-secondary";
+const money = (v: number | null, c: FinishesCurrency) => formatFinishesMoney(v, c);
 
 
-type Tab = 'area' | 'masonry' | 'plaster' | 'paint' | 'flooring' | 'countertop' | 'woodwork';
-
-const TABS: { id: Tab; label: string; icon: React.FC<any> }[] = [
-  { id: 'area', label: 'Carpet Area Engine', icon: LayoutDashboard },
-  { id: 'masonry', label: 'Masonry & Blocks', icon: Blocks },
-  { id: 'plaster', label: 'Plaster & Prep', icon: Layers },
-  { id: 'paint', label: 'Wall Paint', icon: PaintBucket },
-  { id: 'flooring', label: 'Flooring & Skirting', icon: Grid },
-  { id: 'countertop', label: 'Countertops', icon: Droplets },
-  { id: 'woodwork', label: 'Carpentry', icon: Hammer },
+type Tab = "masonry" | "plaster" | "paint" | "flooring" | "countertop" | "carpentry" | "carpet";
+const TABS: { id: Tab; label: string }[] = [
+  { id: "masonry", label: "Masonry" },
+  { id: "plaster", label: "Plaster" },
+  { id: "paint", label: "Paint" },
+  { id: "flooring", label: "Flooring" },
+  { id: "countertop", label: "Countertop" },
+  { id: "carpentry", label: "Carpentry" },
+  { id: "carpet", label: "Carpet Area" },
 ];
 
+let opSeq = 0;
+const newOpening = (kind: OpeningInput["kind"]): OpeningInput => ({
+  id: `op-${++opSeq}-${Date.now()}`,
+  kind,
+  widthM: kind === "door" ? 0.9 : 1.2,
+  heightM: kind === "door" ? 2.1 : 1.2,
+  count: 1,
+});
+
 export default function FinishesEstimator() {
-  const { settings, updateSettings, formatCurrency } = useSettings();
   const { addItem } = useBOQ();
-  const [activeTab, setActiveTab] = useState<Tab>('area');
-  
-  const isImperial = settings.measurement === 'FPS';
+  const [unit, setUnit] = useState<Unit>("m");
+  const [currency, setCurrency] = useState<FinishesCurrency>("PKR");
+  const pk = getRates("PK").rates;
+  const [activeTab, setActiveTab] = useState<Tab>("masonry");
+  const [touched, setTouched] = useState<Set<Tab>>(new Set(["masonry"]));
 
-  // Shared State
-  const [sLength, setSLength] = useState('');
-  const [sWidth, setSWidth] = useState('');
-  const [sHeight, setSHeight] = useState('');
-  const [sDeductArea, setSDeductArea] = useState('');
+  const [roomL, setRoomL] = useState("5");
+  const [roomW, setRoomW] = useState("4");
+  const [roomH, setRoomH] = useState("3");
+  const [faces, setFaces] = useState<1 | 2>(1);
+  const [openings, setOpenings] = useState<OpeningInput[]>([newOpening("door"), newOpening("window")]);
+  const [jambDepth, setJambDepth] = useState("0.23");
 
-  // 1. Carpet Area
-  const [wallAreaDeductPct, setWallAreaDeductPct] = useState('10');
-  const [superBuiltUpAddPct, setSuperBuiltUpAddPct] = useState('20');
+  const [brickId, setBrickId] = useState("pk-awwal");
+  const [thicknessId, setThicknessId] = useState("t230");
+  const [thicknessMm, setThicknessMm] = useState("230");
+  const [jointMm, setJointMm] = useState("10");
+  const [mWastage, setMWastage] = useState("5");
+  const [mMix, setMMix] = useState("1:4");
+  const [pIntThick, setPIntThick] = useState("12");
+  const [pExtThick, setPExtThick] = useState("20");
+  const [pMix, setPMix] = useState("1:4");
+  const [pUneven, setPUneven] = useState(true);
+  const [pWastage, setPWastage] = useState("5");
+  const [pCeiling, setPCeiling] = useState(true);
+  const [paintPreset, setPaintPreset] = useState("standard");
+  const [coverage, setCoverage] = useState("11");
+  const [primerCoverage, setPrimerCoverage] = useState("7");
+  const [coats, setCoats] = useState("2");
+  const [primerCoats, setPrimerCoats] = useState("1");
+  const [puttyCoats, setPuttyCoats] = useState("2");
+  const [paintWastage, setPaintWastage] = useState("10");
+  const [ceilingPaint, setCeilingPaint] = useState(true);
+  const [skirtingDeduct, setSkirtingDeduct] = useState(true);
+  const [tileL, setTileL] = useState("0.6");
+  const [tileW, setTileW] = useState("0.6");
+  const [groutMm, setGroutMm] = useState("3");
+  const [pattern, setPattern] = useState<TilePattern>("straight");
+  const [tilesPerBox, setTilesPerBox] = useState("4");
+  const [skirtH, setSkirtH] = useState("0.1");
+  const [bedThick, setBedThick] = useState("50");
+  const [cShape, setCShape] = useState<CounterShape>("straight");
+  const [cLA, setCLA] = useState("3");
+  const [cLB, setCLB] = useState("2");
+  const [cLC, setCLC] = useState("2");
+  const [cDepth, setCDepth] = useState("0.6");
+  const [cThick, setCThick] = useState("20");
+  const [sinkOn, setSinkOn] = useState(true);
+  const [hobOn, setHobOn] = useState(true);
+  const [cWastage, setCWastage] = useState("5");
+  const [studSpacing, setStudSpacing] = useState("0.4");
+  const [purpose, setPurpose] = useState<"panelling" | "formwork">("panelling");
+  const [reuse, setReuse] = useState("4");
+  const [openRun, setOpenRun] = useState(false);
+  const [woodWastage, setWoodWastage] = useState("5");
+  const [wallDeductPct, setWallDeductPct] = useState("15");
+  const [superAddPct, setSuperAddPct] = useState("20");
 
-  // 2. Masonry & Blocks
-  const [masonryType, setMasonryType] = useState<'brick' | 'aac' | 'hollow'>('brick');
-  const [mThickness, setMThickness] = useState(isImperial ? '9' : '0.228');
-  const [mMortarRatio, setMMortarRatio] = useState('1:4');
-  const [mWastage, setMWastage] = useState('5');
+  const [rBrick, setRBrick] = useState(String(pk.bricksPer1000 ?? ""));
+  const [rCement, setRCement] = useState(String(pk.cementPerBag ?? ""));
+  const [rSand, setRSand] = useState(String(pk.sandPerCft ?? ""));
+  const [rPaint, setRPaint] = useState("1200");
+  const [rPrimer, setRPrimer] = useState("800");
+  const [rTileBox, setRTileBox] = useState(String(pk.tilesPerBox ?? ""));
+  const [rCounter, setRCounter] = useState("5000");
+  const [rEdge, setREdge] = useState("200");
+  const [rStud, setRStud] = useState("500");
+  const [rPly, setRPly] = useState("4500");
+  const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
 
-  // 3. Plaster & Prep
-  const [plasterType, setPlasterType] = useState<'internal' | 'external'>('internal');
-  const [pThickness, setPThickness] = useState(isImperial ? '0.5' : '0.012'); // 12mm internal
-  const [pRatio, setPRatio] = useState('1:4');
-  const [pFaces, setPFaces] = useState('1'); // 1 face or 2 faces
+  const num = (s: string) => parseFloat(s);
+  const toM = (v: number) => (unit === "ft" ? v * 0.3048 : v);
+  const fromM = (v: number) => (unit === "ft" ? v / 0.3048 : v);
 
-  // 4. Wall Finishes & Paint
-  const [paintCoats, setPaintCoats] = useState('2');
-  const [primerCoats, setPrimerCoats] = useState('1');
-  const [paintSpread, setPaintSpread] = useState(isImperial ? '107' : '10'); // sqft/liter or sqm/liter
+  const geometry = useMemo(() => {
+    return calcRoomGeometry(toM(num(roomL) || 0), toM(num(roomW) || 0), toM(num(roomH) || 0), openings, faces, toM(num(jambDepth) || 0));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomL, roomW, roomH, openings, faces, jambDepth, unit]);
+  const roomErrors = validateRoom(toM(num(roomL) || 0), toM(num(roomW) || 0), toM(num(roomH) || 0), openings);
 
-  // 5. Flooring & Skirting
-  const [fTileL, setFTileL] = useState(isImperial ? '2' : '0.6');
-  const [fTileW, setFTileW] = useState(isImperial ? '2' : '0.6');
-  const [fBoxSize, setFBoxSize] = useState('4');
-  const [skirtingHeight, setSkirtingHeight] = useState(isImperial ? '4' : '0.1'); // 4 inches or 10cm
-  const [skirtingMortarBed, setSkirtingMortarBed] = useState('0.05'); // 50mm
+  const brick: BrickPreset = BRICK_PRESETS.find((p) => p.id === brickId) ?? BRICK_PRESETS[0];
+  const mixParts = (s: string): [number, number] => {
+    const [a, b] = s.split(":").map((x) => parseFloat(x) || 0);
+    return [a || 1, b || 4];
+  };
 
-  // 6. Countertop
-  const [cLength, setCLength] = useState('');
-  const [cWidth, setCWidth] = useState(isImperial ? '2' : '0.6');
-  const [cCutouts, setCCutouts] = useState('1'); // sink/hob
-  const [cEdgePolishingLength, setCEdgePolishingLength] = useState('');
-  const [cSupportBaseThickness, setCSupportBaseThickness] = useState(isImperial ? '2' : '0.05');
+  const masonry = useMemo(() => calcMasonry({
+    netWallM2: geometry.netWallM2, thicknessMm: num(thicknessMm) || 0, brick,
+    jointMm: num(jointMm) || 0, wastagePct: num(mWastage) || 0, mix: mixParts(mMix),
+    currency: currency === "USD" ? "PKR" : currency,
+    rates: {
+      brickPer1000: rBrick === "" ? null : num(rBrick),
+      cementPerBag: rCement === "" ? null : num(rCement),
+      sandPerUnit: rSand === "" ? null : num(rSand),
+    },
+  }), [geometry, thicknessMm, brick, jointMm, mWastage, mMix, currency, rBrick, rCement, rSand]);
 
-  // 7. Carpentry
-  const [woodStudSpacing, setWoodStudSpacing] = useState(isImperial ? '16' : '0.4'); // 16 inches or 400mm
-  const [plywoodThickness, setPlywoodThickness] = useState('18'); // 18mm
-  const [plywoodReuseFactor, setPlywoodReuseFactor] = useState('1');
-  const [doorWindowFrames, setDoorWindowFrames] = useState('2');
+  const plaster = useMemo(() => calcPlaster({
+    internalAreaM2: geometry.netWallM2, externalAreaM2: geometry.grossWallM2,
+    ceilingAreaM2: geometry.ceilingM2, ceilingIncluded: pCeiling,
+    internalThicknessMm: num(pIntThick) || 0, externalThicknessMm: num(pExtThick) || 0,
+    mix: mixParts(pMix), unevenFactor: pUneven ? 1.1 : 1, wastagePct: num(pWastage) || 0,
+  }), [geometry, pIntThick, pExtThick, pMix, pUneven, pWastage, pCeiling]);
 
-  const toMeters = (val: number, isImp: boolean) => isImp ? val * 0.3048 : val;
-  const toSqMeters = (val: number, isImp: boolean) => isImp ? val * 0.092903 : val;
-  const fromInchesToMeters = (val: number, isImp: boolean) => isImp ? val * 0.0254 : val;
+  const paint = useMemo(() => calcPaint({
+    netWallM2: geometry.netWallM2, ceilingM2: geometry.ceilingM2, ceilingIncluded: ceilingPaint,
+    doorAreaM2: 0, skirtingHeightM: 0.1, perimeterM: geometry.perimeterM, skirtingDeducted: skirtingDeduct,
+    coverageM2PerL: num(coverage) || 10, primerCoverageM2PerL: num(primerCoverage) || 7,
+    coats: num(coats) || 0, primerCoats: num(primerCoats) || 0,
+    puttyCoverageM2PerKg: 1.1, puttyCoats: num(puttyCoats) || 0, wastagePct: num(paintWastage) || 0,
+  }), [geometry, coverage, primerCoverage, coats, primerCoats, puttyCoats, paintWastage, ceilingPaint, skirtingDeduct]);
 
-  const results = useMemo(() => {
-    let totalCement = 0;
-    let totalSand = 0;
-    let totalCost = 0;
-    
-    // Parsed Shared Dimensions
-    const L = toMeters(parseFloat(sLength) || 0, isImperial);
-    const W = toMeters(parseFloat(sWidth) || 0, isImperial);
-    const H = toMeters(parseFloat(sHeight) || 0, isImperial);
-    const deductM = toSqMeters(parseFloat(sDeductArea) || 0, isImperial);
+  const flooring = useMemo(() => calcFlooring({
+    floorAreaM2: geometry.floorM2, perimeterM: geometry.perimeterM,
+    tileLengthM: toM(num(tileL) || 0), tileWidthM: toM(num(tileW) || 0), groutMm: num(groutMm) || 0,
+    pattern, tilesPerBox: num(tilesPerBox) || 1, skirtingHeightM: toM(num(skirtH) || 0),
+    skirtingIncluded: true, doorWidthsTotalM: 0, bedThicknessMm: num(bedThick) || 0, mix: [1, 4],
+  }), [geometry, tileL, tileW, groutMm, pattern, tilesPerBox, skirtH, bedThick, unit]);
 
-    // 1. Carpet Area Results
-    const totalPlotAreaM2 = L * W;
-    const wallDeductFactor = parseFloat(wallAreaDeductPct) / 100 || 0;
-    const carpetAreaM2 = totalPlotAreaM2 * (1 - wallDeductFactor);
-    const superBuiltUpAddFactor = parseFloat(superBuiltUpAddPct) / 100 || 0;
-    const superBuiltUpAreaM2 = totalPlotAreaM2 * (1 + superBuiltUpAddFactor);
+  const counter = useMemo(() => calcCountertop({
+    shape: cShape, lengthAM: toM(num(cLA) || 0), lengthBM: toM(num(cLB) || 0), lengthCM: toM(num(cLC) || 0),
+    depthM: toM(num(cDepth) || 0), slabThicknessMm: num(cThick) || 0,
+    sinkOn, sinkLengthM: 0.6, sinkWidthM: 0.45, hobOn, hobLengthM: 0.6, hobWidthM: 0.5,
+    skirtingHeightM: 0.1, wastagePct: num(cWastage) || 0,
+  }), [cShape, cLA, cLB, cLC, cDepth, cThick, sinkOn, hobOn, cWastage, unit]);
 
-    // 2. Masonry Results
-    let masonryPieces = 0;
-    const mT = isImperial ? fromInchesToMeters(parseFloat(mThickness) || 0, true) : parseFloat(mThickness) || 0;
-    const wallPerimeter = 2 * (L + W);
-    const grossWallArea = wallPerimeter * H;
-    const netWallArea = Math.max(0, grossWallArea - deductM);
-    const wallVol = netWallArea * mT;
-    const wasteFactor = 1 + (parseFloat(mWastage) / 100 || 0);
+  const carpentry = useMemo(() => calcCarpentry({
+    perimeterM: geometry.perimeterM, netWallAreaM2: geometry.netWallM2,
+    studSpacingM: toM(num(studSpacing) || 0.4), openRun,
+    sheetLengthM: 2.44, sheetWidthM: 1.22, wastagePct: num(woodWastage) || 0,
+    purpose, reuseFactor: num(reuse) || 1,
+  }), [geometry, studSpacing, openRun, woodWastage, purpose, reuse, unit]);
 
-    if (wallVol > 0) {
-      const parts = mMortarRatio.split(':').map(Number);
-      const cPart = parts[0] || 1;
-      const sPart = parts[1] || 4;
-      const sumPart = cPart + sPart;
-      
-      let unitVolWithMortar = 0;
-      let unitVol = 0;
+  const carpet = useMemo(() => calcCarpetArea({
+    floorAreaM2: geometry.floorM2,
+    internalWallDeductionPct: num(wallDeductPct) || 0,
+    superBuiltUpAddPct: num(superAddPct) || 0,
+  }), [geometry, wallDeductPct, superAddPct]);
 
-      if (masonryType === 'brick') {
-        unitVolWithMortar = 0.238 * 0.124 * 0.086; // 9x4.5x3 + 10mm
-        unitVol = 0.228 * 0.114 * 0.076;
-      } else if (masonryType === 'aac') {
-        unitVolWithMortar = 0.61 * 0.21 * 0.16; // 600x200x150 + 10mm
-        unitVol = 0.6 * 0.2 * 0.15;
-      } else { // hollow
-        unitVolWithMortar = 0.41 * 0.21 * 0.21; // 400x200x200 + 10mm
-        unitVol = 0.4 * 0.2 * 0.2;
-      }
-
-      masonryPieces = Math.ceil((wallVol / unitVolWithMortar) * wasteFactor);
-      const mortarVol = wallVol - (masonryPieces * unitVol / wasteFactor); // without waste factor for mortar approximation
-      const dryMortar = mortarVol * 1.33;
-      totalCement += (dryMortar * (cPart/sumPart)) / 0.0347;
-      totalSand += dryMortar * (sPart/sumPart);
-    }
-
-    // 3. Plaster Results
-    let pCementBags = 0;
-    let pSandVol = 0;
-    const pT = isImperial ? fromInchesToMeters(parseFloat(pThickness) || 0, true) : parseFloat(pThickness) || 0;
-    const numFaces = parseFloat(pFaces) || 1;
-    const plasterArea = netWallArea * numFaces;
-    
-    if (plasterArea > 0 && pT > 0) {
-      const wetVol = plasterArea * pT;
-      const dryVol = wetVol * 1.33;
-      const parts = pRatio.split(':').map(Number);
-      const cPart = parts[0] || 1;
-      const sPart = parts[1] || 4;
-      const sumPart = cPart + sPart;
-      pCementBags = (dryVol * (cPart/sumPart)) / 0.0347;
-      pSandVol = dryVol * (sPart/sumPart);
-      totalCement += pCementBags;
-      totalSand += pSandVol;
-    }
-
-    // 4. Paint Results
-    const ptA = netWallArea * numFaces; // Paint area based on plastered faces
-    const pCoats = parseFloat(paintCoats) || 2;
-    const prCoats = parseFloat(primerCoats) || 1;
-    const pSpreadM = isImperial ? parseFloat(paintSpread) * 0.0929 : parseFloat(paintSpread) || 10;
-    let paintLiters = 0;
-    let primerLiters = 0;
-
-    if (ptA > 0 && pSpreadM > 0) {
-      paintLiters = (ptA * pCoats) / pSpreadM;
-      primerLiters = (ptA * prCoats) / (pSpreadM * 1.2); // Primer spreads ~20% more
-    }
-
-    // 5. Flooring & Skirting Results
-    const floorArea = L * W;
-    const tL = isImperial ? toMeters(parseFloat(fTileL) || 0, true) : parseFloat(fTileL) || 0;
-    const tW = isImperial ? toMeters(parseFloat(fTileW) || 0, true) : parseFloat(fTileW) || 0;
-    const bSize = parseFloat(fBoxSize) || 4;
-    let tileBoxes = 0;
-    
-    if (floorArea > 0 && tL > 0 && tW > 0) {
-      const tileArea = tL * tW;
-      
-      // Skirting Area
-      const skirtH = isImperial ? fromInchesToMeters(parseFloat(skirtingHeight)||0, true) : parseFloat(skirtingHeight)||0;
-      const skirtingArea = wallPerimeter * skirtH;
-      const totalTileArea = floorArea + skirtingArea;
-
-      const tilesReq = (totalTileArea / tileArea) * 1.05; // 5% wastage
-      tileBoxes = Math.ceil(tilesReq / bSize);
-      
-      // Mortar for floor bed
-      const fBed = parseFloat(skirtingMortarBed) || 0.05; // default 50mm bed
-      const bedVol = floorArea * fBed;
-      const dryBed = bedVol * 1.33;
-      totalCement += (dryBed * (1/5)) / 0.0347; // 1:4 assumed for floor bed
-      totalSand += dryBed * (4/5);
-    }
-
-    // 6. Countertop Results
-    const cntL = toMeters(parseFloat(cLength) || 0, isImperial);
-    const cntW = toMeters(parseFloat(cWidth) || 0, isImperial);
-    const numCutouts = parseFloat(cCutouts) || 0;
-    const cutoutArea = numCutouts * (0.6 * 0.4); // approx 600x400mm per cutout
-    const countertopArea = Math.max(0, (cntL * cntW) - cutoutArea);
-    const supportBaseThick = isImperial ? fromInchesToMeters(parseFloat(cSupportBaseThickness)||0, true) : parseFloat(cSupportBaseThickness)||0;
-    const supportBaseVol = countertopArea * supportBaseThick;
-    // concrete support base
-    if (supportBaseVol > 0) {
-      const dryVol = supportBaseVol * 1.54;
-      totalCement += (dryVol * (1/7)) / 0.0347; // 1:2:4 ratio assumed
-      totalSand += dryVol * (2/7);
-    }
-
-    // 7. Carpentry
-    const wStud = isImperial ? fromInchesToMeters(parseFloat(woodStudSpacing)||0, true) : parseFloat(woodStudSpacing)||0;
-    let studCount = 0;
-    let plywoodSheets = 0;
-    if (floorArea > 0) {
-       const sheetArea = 1.22 * 2.44; // 4x8 ft in meters
-       const reuse = parseFloat(plywoodReuseFactor) || 1;
-       plywoodSheets = Math.ceil((floorArea / sheetArea * 1.1) / reuse); // 10% wastage
-       
-       if (wStud > 0) {
-         studCount = Math.ceil(wallPerimeter / wStud) + 4; // Add corners
-       }
-       
-       const frames = parseFloat(doorWindowFrames) || 0;
-       studCount += frames * 2; // extra studs for frames
-    }
-
-    // Calculate Costs
-    totalCost += Math.ceil(totalCement) * (settings.rates.cement || 1200);
-    totalCost += totalSand * 35.31 * (settings.rates.sand || 40);
-    totalCost += masonryPieces * (settings.rates.bricks || 15);
-    totalCost += paintLiters * 1200;
-    totalCost += tileBoxes * 1500;
-    totalCost += countertopArea * (isImperial ? 500 : 5000); // placeholder rates
-    totalCost += plywoodSheets * 4500; // placeholder rate
-
-    return {
-      carpetArea: isImperial ? carpetAreaM2 / 0.0929 : carpetAreaM2,
-      superBuiltUpArea: isImperial ? superBuiltUpAreaM2 / 0.0929 : superBuiltUpAreaM2,
-      cement: Math.ceil(totalCement),
-      sand: totalSand,
-      masonryPieces,
-      masonryType,
-      paintLiters: Math.ceil(paintLiters),
-      primerLiters: Math.ceil(primerLiters),
-      tileBoxes,
-      countertopArea: isImperial ? countertopArea / 0.0929 : countertopArea,
-      plywoodSheets,
-      studCount,
-      cEdgePolishingLength: parseFloat(cEdgePolishingLength) || 0,
-      cost: totalCost
-    };
-  }, [
-    sLength, sWidth, sHeight, sDeductArea,
-    wallAreaDeductPct, superBuiltUpAddPct,
-    masonryType, mThickness, mMortarRatio, mWastage,
-    plasterType, pThickness, pRatio, pFaces,
-    paintCoats, primerCoats, paintSpread,
-    fTileL, fTileW, fBoxSize, skirtingHeight, skirtingMortarBed,
-    cLength, cWidth,
-    woodStudSpacing, plywoodThickness,
-    isImperial, settings.rates
+  const rate = (s: string) => (s === "" ? null : num(s));
+  const masonryCost = sumCosts([masonry.brickCost, masonry.cementCost, masonry.sandCost]);
+  const plasterCost = sumCosts([
+    costLine(plaster.cementBags, rate(rCement)),
+    costLine(plaster.sandM3, rate(rSand) != null ? rate(rSand)! * 35.3147 : null),
   ]);
+  const paintCost = sumCosts([
+    costLine(paint.paintLitres, rate(rPaint)),
+    costLine(paint.primerLitres, rate(rPrimer)),
+  ]);
+  const flooringCost = sumCosts([
+    costLine(flooring.boxes, rate(rTileBox)),
+    costLine(flooring.bedCementBags, rate(rCement)),
+  ]);
+  const counterCost = sumCosts([
+    costLine(counter.orderAreaM2, rate(rCounter)),
+    costLine(counter.edgePolishM, rate(rEdge)),
+  ]);
+  const carpentryCost = sumCosts([
+    costLine(carpentry.studs, rate(rStud)),
+    costLine(carpentry.sheets, rate(rPly)),
+  ]);
+  const grandCost = sumCosts([masonryCost, plasterCost, paintCost, flooringCost, counterCost, carpentryCost]);
 
-  const [toastMsg, setToastMsg] = useState("");
-  const showToast = (msg: string) => {
-    setToastMsg(msg);
-    setTimeout(() => setToastMsg(""), 3000);
+  const switchUnit = (u: Unit) => {
+    if (u === unit) return;
+    const f = u === "ft" ? FT : 1 / FT;
+    const conv = (setter: (v: string) => void, v: string) => {
+      const n = parseFloat(v);
+      if (isFinite(n)) setter(String(+(n * f).toFixed(3)));
+    };
+    conv(setRoomL, roomL); conv(setRoomW, roomW); conv(setRoomH, roomH);
+    conv(setTileL, tileL); conv(setTileW, tileW); conv(setSkirtH, skirtH);
+    conv(setCLA, cLA); conv(setCLB, cLB); conv(setCLC, cLC); conv(setCDepth, cDepth);
+    conv(setStudSpacing, studSpacing);
+    setUnit(u);
+  };
+  const onCurrencyChange = (c: FinishesCurrency) => {
+    setCurrency(c);
+    if (c === "PKR") {
+      setRBrick(String(pk.bricksPer1000 ?? "")); setRCement(String(pk.cementPerBag ?? ""));
+      setRSand(String(pk.sandPerCft ?? "")); setRTileBox(String(pk.tilesPerBox ?? ""));
+    } else { setRBrick(""); setRCement(""); setRSand(""); setRTileBox(""); }
+  };
+  const goTab = (t: Tab) => { setActiveTab(t); setTouched((prev) => new Set(prev).add(t)); };
+
+  const summaryText = () => [
+    "Finishes estimate — Civil Estimation Pro",
+    `Room: ${roomL} × ${roomW} × ${roomH} ${unit}; net wall ${geometry.netWallM2.toFixed(2)} m²; floor ${geometry.floorM2.toFixed(2)} m²`,
+    `Masonry: ${masonry.bricks.toLocaleString()} bricks/blocks (${Math.round(masonry.bricksBeforeWastage).toLocaleString()} before ${mWastage}% wastage), ${masonry.cementBags} cement bags, ${masonry.sandM3.toFixed(2)} m³ sand`,
+    `Plaster: ${plaster.cementBags} cement bags, ${plaster.sandM3.toFixed(2)} m³ sand (dry ${plaster.dryM3.toFixed(2)} m³)`,
+    `Paint: ${paint.paintLitres} L paint, ${paint.primerLitres} L primer, ${paint.puttyKg} kg putty (${paint.paintableAreaM2.toFixed(1)} m²)`,
+    `Flooring: ${flooring.totalTiles} tiles (${flooring.boxes} boxes), ${flooring.bedCementBags} cement bags`,
+    `Countertop: ${counter.netAreaM2.toFixed(2)} m² net, ${counter.orderAreaM2.toFixed(2)} m² to order, edge ${counter.edgePolishM.toFixed(2)} m`,
+    `Carpentry: ${carpentry.studs} studs, ${carpentry.sheets} plywood sheets`,
+    `Carpet ${carpet.carpetAreaM2.toFixed(2)} m² · Built-up ${carpet.builtUpAreaM2.toFixed(2)} m² · Super built-up ${carpet.superBuiltUpAreaM2.toFixed(2)} m²`,
+    grandCost != null ? `Estimated material cost: ${money(grandCost, currency)}` : "Cost incomplete — enter all rates.",
+    "Rates are indicative — confirm with your supplier. Brick rates are per 1,000.",
+  ].join("\n");
+
+  const handleCopy = async () => { try { await navigator.clipboard.writeText(summaryText()); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ } };
+  const handleShare = async () => {
+    const text = summaryText();
+    if (navigator.share) { try { await navigator.share({ title: "Finishes estimate — Civil Estimation Pro", text }); setShared(true); setTimeout(() => setShared(false), 2000); return; } catch { /* cancelled */ } }
+    await handleCopy(); setShared(true); setTimeout(() => setShared(false), 2000);
+  };
+  const handlePdf = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16); doc.text("Finishes Estimate — Civil Estimation Pro", 14, 18);
+    doc.setFontSize(10); doc.text(`Calculated ${new Date().toLocaleDateString("en-GB")} · Indicative rates — confirm with your supplier.`, 14, 26);
+    let y = 38; doc.setFontSize(11);
+    for (const line of summaryText().split("\n").slice(1)) { doc.text(line, 14, y); y += 8; }
+    doc.setFontSize(9); doc.text("Disclaimer: planning estimate only — confirm the final order with your quantity surveyor or contractor.", 14, y + 8, { maxWidth: 180 });
+    doc.save("finishes-estimate-civil-estimation-pro.pdf");
+  };
+  const handleExportBOQ = () => {
+    if (touched.has("masonry")) {
+      addItem({ name: `${brick.label} (bricks/blocks)`, quantity: masonry.bricks, unit: "Nos", rate: rate(rBrick) != null ? rate(rBrick)! / 1000 : 0, category: "Masonry & Finishes" });
+      addItem({ name: "Cement — masonry", quantity: masonry.cementBags, unit: "Bags", rate: rate(rCement) ?? 0, category: "Masonry & Finishes" });
+    }
+    if (touched.has("plaster")) addItem({ name: "Cement — plaster", quantity: plaster.cementBags, unit: "Bags", rate: rate(rCement) ?? 0, category: "Masonry & Finishes" });
+    if (touched.has("paint")) addItem({ name: "Wall paint", quantity: paint.paintLitres, unit: "Liters", rate: rate(rPaint) ?? 0, category: "Masonry & Finishes" });
+    if (touched.has("flooring")) addItem({ name: "Floor tiles", quantity: flooring.boxes, unit: "Boxes", rate: rate(rTileBox) ?? 0, category: "Masonry & Finishes" });
+    if (touched.has("countertop")) addItem({ name: "Countertop slab", quantity: counter.orderAreaM2, unit: "m²", rate: rate(rCounter) ?? 0, category: "Masonry & Finishes" });
+    if (touched.has("carpentry")) addItem({ name: "Plywood sheets", quantity: carpentry.sheets, unit: "Sheets", rate: rate(rPly) ?? 0, category: "Masonry & Finishes" });
   };
 
-  const handleExportToBOQ = () => {
-    if (results.cement > 0) addItem({ name: 'Cement (Finishes)', quantity: results.cement, unit: 'bags', rate: settings.rates.cement || 1200, category: 'Masonry & Finishes' });
-    if (results.sand > 0) addItem({ name: 'Sand (Finishes)', quantity: results.sand * (isImperial ? 35.31 : 1), unit: isImperial ? 'cft' : 'cu.m', rate: settings.rates.sand || 40, category: 'Masonry & Finishes' });
-    if (results.masonryPieces > 0) addItem({ name: `${results.masonryType.toUpperCase()} Blocks/Bricks`, quantity: results.masonryPieces, unit: 'pcs', rate: settings.rates.bricks || 15, category: 'Masonry & Finishes' });
-    if (results.paintLiters > 0) addItem({ name: 'Wall Paint', quantity: results.paintLiters, unit: 'Liters', rate: 1200, category: 'Masonry & Finishes' });
-    if (results.primerLiters > 0) addItem({ name: 'Wall Primer', quantity: results.primerLiters, unit: 'Liters', rate: 800, category: 'Masonry & Finishes' });
-    if (results.tileBoxes > 0) addItem({ name: 'Tiles', quantity: results.tileBoxes, unit: 'Boxes', rate: 1500, category: 'Masonry & Finishes' });
-    if (results.countertopArea > 0) addItem({ name: 'Countertop Slab', quantity: results.countertopArea, unit: isImperial ? 'sqft' : 'sqm', rate: isImperial ? 500 : 5000, category: 'Masonry & Finishes' });
-    if (results.plywoodSheets > 0) addItem({ name: 'Plywood (4x8)', quantity: results.plywoodSheets, unit: 'Sheets', rate: 4500, category: 'Masonry & Finishes' });
-    if (results.cEdgePolishingLength > 0) addItem({ name: 'Countertop Edge Polishing', quantity: results.cEdgePolishingLength, unit: isImperial ? 'ft' : 'm', rate: 100, category: 'Masonry & Finishes' });
-    showToast("Exported to BOQ!");
-  };
+  const steps: FormulaStep[] = [
+    { id: 1, label: "Room geometry (IS 1200 openings)", theoretical: "Gross wall = 2(L+W)×H × faces; openings <0.5 m²: no deduction; 0.5–3 m²: one face; >3 m²: both faces + jambs (2h+w)×jamb depth", applied: `Gross = ${geometry.grossWallM2.toFixed(2)} m²; deductions = ${geometry.deductionsM2.toFixed(2)} m²; jambs = ${geometry.jambsM2.toFixed(2)} m²\nNet wall = ${geometry.netWallM2.toFixed(2)} m²; floor = ${geometry.floorM2.toFixed(2)} m²; perimeter = ${geometry.perimeterM.toFixed(2)} m` },
+    { id: 2, label: "Masonry", theoretical: "Bricks = wall volume ÷ brick-with-mortar volume; wet mortar = (wall vol − brick vol) × 1.15; dry = wet × 1.33 × (1+wastage); bags = ceil(cement ÷ 0.0347)", applied: `Bricks ${Math.round(masonry.bricksBeforeWastage).toLocaleString()} → ${masonry.bricks.toLocaleString()} @ ${mWastage}%; cement ${masonry.cementBags} bags; sand ${masonry.sandM3.toFixed(2)} m³` },
+    { id: 3, label: "Plaster", theoretical: "Wet = area × thickness (×1.10 if uneven); dry = wet × 1.33 × (1+wastage); cement = dry ÷ (1+sand parts); bags = ceil(cement ÷ 0.0347)", applied: `Wet ${plaster.wetM3.toFixed(3)} m³; dry ${plaster.dryM3.toFixed(3)} m³; cement ${plaster.cementBags} bags; sand ${plaster.sandM3.toFixed(2)} m³` },
+    { id: 4, label: "Paint", theoretical: "Paintable = net wall + ceiling − skirting; paint L = ceil(area × coats ÷ coverage × (1+wastage)); primer L = ceil(area × primer coats ÷ primer coverage)", applied: `Paintable ${paint.paintableAreaM2.toFixed(2)} m²; paint ${paint.paintLitres} L (${paint.packs.map((p) => `${p.count}×${p.sizeL} L`).join(" + ") || "—"}); primer ${paint.primerLitres} L; putty ${paint.puttyKg} kg` },
+    { id: 5, label: "Flooring", theoretical: "Effective tile = (L+grout)×(W+grout); floor tiles = ceil(floor ÷ tile × (1+waste)); skirting tiles counted separately as cut strips; boxes = ceil(total ÷ per box)", applied: `Floor ${flooring.floorTiles} + skirting ${flooring.skirtingTiles} = ${flooring.totalTiles} tiles; ${flooring.boxes} boxes (${flooring.spares} spares); bed cement ${flooring.bedCementBags} bags; grout ${flooring.groutKg.toFixed(1)} kg` },
+  ];
+
+  const Row = ({ label, value, unit: u }: { label: string; value: string; unit: string }) => (
+    <div className="flex justify-between items-center py-2.5 border-b border-ui-borderSubtle last:border-0">
+      <span className="text-txt-secondary text-sm font-medium">{label}</span>
+      <span className="text-right"><span className="text-lg font-bold text-txt-primary">{value}</span> <span className="text-accent-800 text-xs font-semibold">{u}</span></span>
+    </div>
+  );
 
   return (
-    <SEOHead 
-      title="Complete Finishes, Surfaces & Carpet Area Estimator | Civil Estimation Pro" 
-      description="Merge bricks, plaster, paint, flooring, countertops, woodwork, and carpet area in one seamless multi-tab interface."
-      divisionName="Masonry, Surfaces & Finishes" 
-      toolName="Complete Finishes Estimator"
-    >
-      <div className="w-full max-w-7xl mx-auto py-8 px-4 font-sans text-txt-primary">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-black tracking-tight text-txt-primary">Complete Finishes & Surfaces</h1>
-            <p className="text-txt-tertiary font-medium mt-1">Unified workspace for area engine, masonry, plaster, paint, flooring, and woodwork.</p>
+    <div className="w-full max-w-7xl mx-auto py-8 px-4 space-y-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-black tracking-tight text-txt-primary">Complete Finishes &amp; Surfaces</h1>
+          <p className="text-txt-tertiary font-medium mt-1">Masonry, plaster, paint, flooring, countertops, carpentry and carpet area — one room, IS 1200 opening rules, costs in PKR, INR, AED or USD.</p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex bg-surface-hover p-1 rounded-xl">
+            {(["m", "ft"] as const).map((u) => (
+              <Button key={u} onClick={() => switchUnit(u)} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${unit === u ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-secondary"}`}>{u === "m" ? "Metric (m)" : "Feet (ft)"}</Button>
+            ))}
           </div>
-          
-          <div className="flex items-center gap-3 bg-surface-default p-2 rounded-2xl shadow-brand-sm border border-ui-borderSubtle">
-            <select 
-              value={settings.measurement}
-              onChange={(e) => updateSettings({ measurement: e.target.value as any })}
-              className="bg-surface-hover border-none text-sm font-bold rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-accent-500"
-            >
-              <option value="SI">Metric (m, sq.m)</option>
-              <option value="FPS">Imperial (ft, sq.ft)</option>
+          <select value={currency} onChange={(e) => onCurrencyChange(e.target.value as FinishesCurrency)} className="bg-surface-hover border border-ui-borderSubtle rounded-xl px-3 py-2 text-sm font-semibold" aria-label="Currency">
+            {(["PKR", "INR", "AED", "USD"] as const).map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <Button onClick={handleCopy} className="flex items-center gap-2 px-3 py-1.5 text-sm border border-ui-borderSubtle rounded-lg">{copied ? <Check size={16} /> : <Copy size={16} />} {copied ? "Copied" : "Copy"}</Button>
+          <Button onClick={handleShare} className="flex items-center gap-2 px-3 py-1.5 text-sm border border-ui-borderSubtle rounded-lg"><Share2 size={16} /> {shared ? "Shared / copied" : "Share"}</Button>
+          <Button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-1.5 text-sm border border-ui-borderSubtle rounded-lg"><Printer size={16} /> Print</Button>
+          <Button onClick={handlePdf} className="flex items-center gap-2 px-3 py-1.5 text-sm text-white bg-ink rounded-lg"><Download size={16} /> PDF</Button>
+          <Button onClick={handleExportBOQ} className="flex items-center gap-2 px-3 py-1.5 text-sm text-white bg-ink rounded-lg"><Download size={16} /> Export BOQ</Button>
+        </div>
+      </div>
+
+      {roomErrors.length > 0 && (
+        <div className="rounded-xl border border-ui-errorBorder bg-ui-error p-4 text-sm text-ui-errorText" role="alert">
+          {roomErrors.map((e) => <p key={e}>{e}</p>)}
+        </div>
+      )}
+
+      <div className="bg-ink rounded-2xl p-5 text-white shadow-brand-lg">
+        <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Room / zone dimensions</h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-end">
+          <div><label className="text-xs text-txt-tertiary">Length ({unit})</label><input type="number" min="0" value={roomL} onChange={(e) => setRoomL(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-txt-tertiary">Width ({unit})</label><input type="number" min="0" value={roomW} onChange={(e) => setRoomW(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-txt-tertiary">Height ({unit})</label><input type="number" min="0" value={roomH} onChange={(e) => setRoomH(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-txt-tertiary">Faces plastered</label>
+            <select value={faces} onChange={(e) => setFaces(Number(e.target.value) as 1 | 2)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white">
+              <option value={1}>1 face</option>
+              <option value={2}>2 faces</option>
             </select>
           </div>
+          <div className="bg-ink p-3 rounded-xl border border-ink-600 flex justify-between items-center"><span className="text-txt-tertiary text-sm">Net wall</span><span className="text-2xl font-bold text-accent-400">{geometry.netWallM2.toFixed(2)} <span className="text-sm">m²</span></span></div>
         </div>
-
-        {/* Global Shared Dimensions */}
-        <div className="mb-8 p-6 bg-surface-default rounded-2xl shadow-brand-sm border border-accent-100 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-accent-50 rounded-bl-[100px] -z-10" />
-          <h3 className="text-sm font-bold text-accent-900 uppercase tracking-widest mb-4">Global Room / Zone Dimensions</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 relative z-10">
-            <div>
-              <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Length ({isImperial ? 'ft' : 'm'})</label>
-              <input type="number" value={sLength} onChange={e => setSLength(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-bold text-lg focus:ring-2 focus:ring-accent-500 outline-none" placeholder="e.g. 15" />
+        <div className="mt-4">
+          <h4 className="text-xs uppercase tracking-wider text-txt-tertiary mb-2">Openings (IS 1200 deductions applied per opening)</h4>
+          {openings.map((o) => (
+            <div key={o.id} className="flex flex-wrap gap-2 items-center mb-2">
+              <select value={o.kind} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, kind: e.target.value as OpeningInput["kind"] } : x))} className="bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white text-sm">
+                <option value="door">Door</option><option value="window">Window</option><option value="other">Other</option>
+              </select>
+              <input type="number" min="0" step="any" value={fromM(o.widthM).toFixed(2)} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, widthM: toM(parseFloat(e.target.value) || 0) } : x))} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening width" />
+              <span className="text-txt-tertiary">×</span>
+              <input type="number" min="0" step="any" value={fromM(o.heightM).toFixed(2)} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, heightM: toM(parseFloat(e.target.value) || 0) } : x))} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening height" />
+              <span className="text-txt-tertiary text-sm">{unit}</span>
+              <input type="number" min="1" step="1" value={o.count} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, count: parseInt(e.target.value, 10) || 0 } : x))} className="w-16 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening count" />
+              <span className="text-txt-tertiary text-sm">× {(o.widthM * o.heightM).toFixed(2)} m² each — {geometry.openings.find((d) => d.id === o.id)?.rule ?? ""}</span>
+              <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-ui-errorText px-2 py-1 text-sm">✕</Button>
             </div>
-            <div>
-              <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Width ({isImperial ? 'ft' : 'm'})</label>
-              <input type="number" value={sWidth} onChange={e => setSWidth(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-bold text-lg focus:ring-2 focus:ring-accent-500 outline-none" placeholder="e.g. 12" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Height ({isImperial ? 'ft' : 'm'})</label>
-              <input type="number" value={sHeight} onChange={e => setSHeight(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-bold text-lg focus:ring-2 focus:ring-accent-500 outline-none" placeholder="e.g. 10" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Deductions ({isImperial ? 'sq.ft' : 'sq.m'})</label>
-              <input type="number" value={sDeductArea} onChange={e => setSDeductArea(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-bold text-lg focus:ring-2 focus:ring-accent-500 outline-none" placeholder="e.g. 42" />
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 relative">
-          <div className="xl:col-span-8 flex flex-col gap-6">
-            <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide">
-              {TABS.map(tab => (
-                <Button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as Tab)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm whitespace-nowrap transition-all duration-300 ${
-                    activeTab === tab.id 
-                      ? 'bg-ink text-white shadow-brand-md shadow-accent-200' 
-                      : 'bg-surface-default text-txt-secondary hover:bg-surface-hover border border-ui-borderSubtle'
-                  }`}
-                >
-                  <tab.icon size={18} />
-                  {tab.label}
-                </Button>
-              ))}
-            </div>
-
-            <div className="bg-surface-default p-6 md:p-8 rounded-2xl shadow-brand-sm border border-border-color min-h-[300px]">
-              <AnimatePresence mode="wait">
-                {activeTab === 'area' && (
-                  <motion.div key="area" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                    <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><LayoutDashboard className="text-accent-800"/> Carpet & Built-Up Area Engine</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Wall Area Deduction (%)</label>
-                        <input type="number" value={wallAreaDeductPct} onChange={e => setWallAreaDeductPct(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" placeholder="Default 10%" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Super Built-up Addition (%)</label>
-                        <input type="number" value={superBuiltUpAddPct} onChange={e => setSuperBuiltUpAddPct(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" placeholder="Default 20%" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'masonry' && (
-                  <motion.div key="masonry" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                    <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><Blocks className="text-accent-800"/> Masonry & Blocks</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Material Type</label>
-                        <select value={masonryType} onChange={e => setMasonryType(e.target.value as any)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none">
-                          <option value="brick">Red Bricks (Standard)</option>
-                          <option value="aac">AAC Blocks</option>
-                          <option value="hollow">Hollow Concrete Blocks</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Wall Thickness ({isImperial ? 'in' : 'm'})</label>
-                        <input type="number" value={mThickness} onChange={e => setMThickness(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Mortar Mix Ratio</label>
-                        <select value={mMortarRatio} onChange={e => setMMortarRatio(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none">
-                          <option value="1:4">1:4 (Internal walls)</option>
-                          <option value="1:6">1:6 (External/Thick walls)</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Wastage (%)</label>
-                        <input type="number" value={mWastage} onChange={e => setMWastage(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'plaster' && (
-                  <motion.div key="plaster" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                    <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><Layers className="text-accent-800"/> Plaster & Prep</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Plaster Location</label>
-                        <select value={plasterType} onChange={e => {
-                          setPlasterType(e.target.value as any);
-                          setPThickness(isImperial ? (e.target.value === 'internal' ? '0.5' : '0.8') : (e.target.value === 'internal' ? '0.012' : '0.020'));
-                        }} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none">
-                          <option value="internal">Internal (12mm typical)</option>
-                          <option value="external">External (20mm typical)</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Thickness ({isImperial ? 'in' : 'm'})</label>
-                        <input type="number" value={pThickness} onChange={e => setPThickness(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Number of Faces</label>
-                        <select value={pFaces} onChange={e => setPFaces(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none">
-                          <option value="1">1 Face</option>
-                          <option value="2">2 Faces (Both sides of wall)</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Mortar Ratio (Cement:Sand)</label>
-                        <select value={pRatio} onChange={e => setPRatio(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none">
-                          <option value="1:3">1:3</option>
-                          <option value="1:4">1:4</option>
-                          <option value="1:6">1:6</option>
-                        </select>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'paint' && (
-                  <motion.div key="paint" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                    <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><PaintBucket className="text-accent-800"/> Wall Finishes & Paint</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Paint Coats</label>
-                        <input type="number" value={paintCoats} onChange={e => setPaintCoats(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Primer Coats</label>
-                        <input type="number" value={primerCoats} onChange={e => setPrimerCoats(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Paint Spread Rate ({isImperial ? 'sq.ft/liter' : 'sq.m/liter'})</label>
-                        <input type="number" value={paintSpread} onChange={e => setPaintSpread(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'flooring' && (
-                  <motion.div key="flooring" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                    <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><Grid className="text-accent-800"/> Flooring & Skirting</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Tile Length ({isImperial ? 'ft' : 'm'})</label>
-                        <input type="number" value={fTileL} onChange={e => setFTileL(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Tile Width ({isImperial ? 'ft' : 'm'})</label>
-                        <input type="number" value={fTileW} onChange={e => setFTileW(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Pieces per Box</label>
-                        <input type="number" value={fBoxSize} onChange={e => setFBoxSize(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Skirting Height ({isImperial ? 'in' : 'm'})</label>
-                        <input type="number" value={skirtingHeight} onChange={e => setSkirtingHeight(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'countertop' && (
-                  <motion.div key="countertop" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                    <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><Droplets className="text-accent-800"/> Kitchen / Bath Countertops</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Slab Length ({isImperial ? 'ft' : 'm'})</label>
-                        <input type="number" value={cLength} onChange={e => setCLength(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Slab Width ({isImperial ? 'ft' : 'm'})</label>
-                        <input type="number" value={cWidth} onChange={e => setCWidth(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Sink/Hob Cutouts</label>
-                        <input type="number" value={cCutouts} onChange={e => setCCutouts(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Edge Polishing Length ({isImperial ? 'ft' : 'm'})</label>
-                        <input type="number" value={cEdgePolishingLength} onChange={e => setCEdgePolishingLength(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Concrete Base Thickness ({isImperial ? 'in' : 'm'})</label>
-                        <input type="number" value={cSupportBaseThickness} onChange={e => setCSupportBaseThickness(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'woodwork' && (
-                  <motion.div key="woodwork" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                    <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><Hammer className="text-accent-800"/> Carpentry & Woodwork</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Wood Stud Spacing ({isImperial ? 'in' : 'm'})</label>
-                        <input type="number" value={woodStudSpacing} onChange={e => setWoodStudSpacing(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Plywood Thickness (mm)</label>
-                        <input type="number" value={plywoodThickness} onChange={e => setPlywoodThickness(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Plywood Re-use Factor</label>
-                        <input type="number" value={plywoodReuseFactor} onChange={e => setPlywoodReuseFactor(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" placeholder="e.g. 2 for 2 times" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-2">Door/Window Frame Count</label>
-                        <input type="number" value={doorWindowFrames} onChange={e => setDoorWindowFrames(e.target.value)} className="w-full bg-surface-hover p-3 rounded-xl border border-ui-borderSubtle font-medium focus:ring-2 focus:ring-accent-500 outline-none" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <Button 
-                onClick={handleExportToBOQ}
-                className="flex items-center gap-2 px-6 py-3 bg-ink text-white font-bold rounded-2xl hover:bg-ink transition-colors shadow-brand-sm"
-              >
-                <Send size={18} /> Sync All to Master BOQ
-              </Button>
-            </div>
-
-            <AnimatePresence>
-              {toastMsg && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-ink text-white px-6 py-3 rounded-full font-bold text-sm shadow-brand-lg flex items-center gap-2 z-50"
-                >
-                  <Check size={18} className="text-ui-successText" /> {toastMsg}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <div className="xl:col-span-4 relative">
-            <div className="sticky top-6 flex flex-col gap-4">
-              <div className="bg-ink rounded-2xl p-6 text-white shadow-brand-lg shadow-ink/10 overflow-hidden relative">
-                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/20 blur-[80px] rounded-full pointer-events-none translate-x-1/3 -translate-y-1/3" />
-                 <h3 className="text-sm font-black text-txt-tertiary uppercase tracking-widest mb-6">Live Materials Summary</h3>
-                 
-                 <div className="flex flex-col gap-5 relative z-10">
-                   <div className="flex justify-between items-end border-b border-white/10 pb-4">
-                     <div>
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Est. Total Cost</p>
-                       <p className="text-3xl font-black">{formatCurrency(results.cost)}</p>
-                     </div>
-                   </div>
-                   
-                   <div className="grid grid-cols-2 gap-4">
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5 col-span-2">
-                       <div className="flex justify-between items-center mb-2">
-                         <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Carpet Area</p>
-                         <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider">Super Built-up</p>
-                       </div>
-                       <div className="flex justify-between items-center">
-                         <p className="text-xl font-bold">{results.carpetArea.toFixed(1)} <span className="text-sm font-medium text-txt-tertiary">{isImperial ? 'sqft' : 'sqm'}</span></p>
-                         <p className="text-xl font-bold">{results.superBuiltUpArea.toFixed(1)} <span className="text-sm font-medium text-txt-tertiary">{isImperial ? 'sqft' : 'sqm'}</span></p>
-                       </div>
-                     </div>
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Cement</p>
-                       <p className="text-xl font-bold">{results.cement.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">bags</span></p>
-                     </div>
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Sand</p>
-                       <p className="text-xl font-bold">{(results.sand * (isImperial?35.31:1)).toLocaleString('en-US', {maximumFractionDigits:1})} <span className="text-sm font-medium text-txt-tertiary">{isImperial?'cft':'cu.m'}</span></p>
-                     </div>
-                     {results.masonryPieces > 0 && (
-                       <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5 col-span-2">
-                         <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Masonry ({results.masonryType})</p>
-                         <p className="text-xl font-bold">{results.masonryPieces.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">pcs</span></p>
-                       </div>
-                     )}
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Paint</p>
-                       <p className="text-xl font-bold">{results.paintLiters.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">L</span></p>
-                     </div>
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Primer</p>
-                       <p className="text-xl font-bold">{results.primerLiters.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">L</span></p>
-                     </div>
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Tiles</p>
-                       <p className="text-xl font-bold">{results.tileBoxes.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">Boxes</span></p>
-                     </div>
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Countertop</p>
-                       <p className="text-xl font-bold">{results.countertopArea.toFixed(1)} <span className="text-sm font-medium text-txt-tertiary">{isImperial?'sqft':'sqm'}</span></p>
-                     </div>
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Plywood</p>
-                       <p className="text-xl font-bold">{results.plywoodSheets.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">Sheets</span></p>
-                     </div>
-                     <div className="bg-surface-default/5 p-4 rounded-2xl border border-white/5">
-                       <p className="text-xs font-bold text-txt-tertiary uppercase tracking-wider mb-1">Studs</p>
-                       <p className="text-xl font-bold">{results.studCount.toLocaleString()} <span className="text-sm font-medium text-txt-tertiary">pcs</span></p>
-                     </div>
-                   </div>
-                 </div>
-              </div>
-            </div>
+          ))}
+          <div className="flex gap-2 mt-2">
+            <Button onClick={() => setOpenings([...openings, newOpening("door")])} className="text-accent-400 text-sm font-semibold">+ Add door</Button>
+            <Button onClick={() => setOpenings([...openings, newOpening("window")])} className="text-accent-400 text-sm font-semibold">+ Add window</Button>
+            <label className="text-xs text-txt-tertiary ml-2">Jamb depth (m)<input type="number" min="0" step="any" value={jambDepth} onChange={(e) => setJambDepth(e.target.value)} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-1 text-white font-mono text-sm ml-1" /></label>
           </div>
         </div>
       </div>
-    
-    </SEOHead>
+
+      <div className="flex flex-wrap gap-2">
+        {TABS.map((t) => (
+          <Button key={t.id} onClick={() => goTab(t.id)} className={`px-4 py-2.5 rounded-lg text-sm font-semibold ${activeTab === t.id ? "bg-ink text-white" : "bg-surface-default border border-ui-borderSubtle text-txt-secondary"}`}>{t.label}</Button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-surface-default rounded-2xl border border-ui-borderSubtle p-6">
+        {activeTab === "masonry" && (
+          <>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold border-b pb-2">Masonry — bricks / blocks</h3>
+              <div><label className={labelCls}>Unit</label>
+                <select value={brickId} onChange={(e) => setBrickId(e.target.value)} className={inputCls}>
+                  {BRICK_PRESETS.map((p) => <option key={p.id} value={p.id}>{p.label} — {p.note}</option>)}
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Wall thickness</label>
+                  <select value={thicknessId} onChange={(e) => { setThicknessId(e.target.value); const t = THICKNESS_PRESETS.find((x) => x.id === e.target.value); if (t && e.target.value !== "tcustom") setThicknessMm(String(t.mm)); }} className={inputCls}>
+                    {THICKNESS_PRESETS.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
+                  </select>
+                </div>
+                {thicknessId === "tcustom" && <div><label className={labelCls}>Custom thickness (mm)</label><input type="number" min="0" value={thicknessMm} onChange={(e) => setThicknessMm(e.target.value)} className={inputCls} /></div>}
+                <div><label className={labelCls}>Mortar joint (mm)</label><input type="number" min="0" max="25" value={jointMm} onChange={(e) => setJointMm(e.target.value)} className={inputCls} /></div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Wastage (%)</label><input type="number" min="0" max="50" value={mWastage} onChange={(e) => setMWastage(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Mortar mix</label>
+                  <select value={mMix} onChange={(e) => setMMix(e.target.value)} className={inputCls}>
+                    <option value="1:3">1:3 — load-bearing</option><option value="1:4">1:4 — general</option><option value="1:6">1:6 — partitions</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div><label className={labelCls}>Brick rate / 1,000</label><input type="number" min="0" value={rBrick} onChange={(e) => setRBrick(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
+                <div><label className={labelCls}>Cement / bag</label><input type="number" min="0" value={rCement} onChange={(e) => setRCement(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
+                <div><label className={labelCls}>Sand / cft</label><input type="number" min="0" value={rSand} onChange={(e) => setRSand(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
+              </div>
+              <p className="text-xs text-txt-tertiary">Brick rate is per 1,000 — the cost divides by 1,000. (An earlier version multiplied pieces by the per-1,000 rate and overstated brick cost 1,000×.)</p>
+            </div>
+            <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
+              <h3 className="text-lg font-bold mb-2">Masonry takeoff</h3>
+              <Row label="Bricks / blocks before wastage" value={Math.round(masonry.bricksBeforeWastage).toLocaleString()} unit="Nos" />
+              <Row label="Bricks / blocks to order" value={masonry.bricks.toLocaleString()} unit="Nos" />
+              <Row label="Per sq ft" value={masonry.bricksPerSqFt.toFixed(2)} unit="Nos/sq ft" />
+              <Row label="Wet mortar" value={masonry.wetMortarM3.toFixed(2)} unit="m³" />
+              <Row label="Dry mortar" value={masonry.dryMortarM3.toFixed(2)} unit="m³" />
+              <Row label="Cement" value={String(masonry.cementBags)} unit="Bags (50 kg)" />
+              <Row label="Sand" value={masonry.sandM3.toFixed(2)} unit={`m³ (${masonry.sandCft.toFixed(1)} cft)`} />
+              <Row label="Material cost" value={money(masonryCost, currency)} unit="" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "plaster" && (
+          <>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold border-b pb-2">Plaster</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Internal thickness (mm)</label><input type="number" min="6" max="25" value={pIntThick} onChange={(e) => setPIntThick(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>External thickness (mm)</label><input type="number" min="6" max="25" value={pExtThick} onChange={(e) => setPExtThick(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Mix</label>
+                  <select value={pMix} onChange={(e) => setPMix(e.target.value)} className={inputCls}>
+                    <option value="1:3">1:3</option><option value="1:4">1:4</option><option value="1:6">1:6</option>
+                  </select>
+                </div>
+                <div><label className={labelCls}>Wastage (%)</label><input type="number" min="0" max="50" value={pWastage} onChange={(e) => setPWastage(e.target.value)} className={inputCls} /></div>
+              </div>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={pUneven} onChange={(e) => setPUneven(e.target.checked)} /> Uneven surface +10%</label>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={pCeiling} onChange={(e) => setPCeiling(e.target.checked)} /> Plaster ceiling (at internal thickness)</label>
+              <p className="text-xs text-txt-tertiary">Internal plaster uses the net wall area; external plaster uses the gross wall area with the same IS 1200 opening rules.</p>
+            </div>
+            <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
+              <h3 className="text-lg font-bold mb-2">Plaster material</h3>
+              <Row label="Wet volume" value={plaster.wetM3.toFixed(3)} unit="m³" />
+              <Row label="Dry volume" value={plaster.dryM3.toFixed(3)} unit="m³" />
+              <Row label="Cement" value={String(plaster.cementBags)} unit="Bags (50 kg)" />
+              <Row label="Sand" value={plaster.sandM3.toFixed(2)} unit={`m³ (${plaster.sandCft.toFixed(1)} cft)`} />
+              <Row label="Material cost" value={money(plasterCost, currency)} unit="" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "paint" && (
+          <>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold border-b pb-2">Paint</h3>
+              <div><label className={labelCls}>Paint preset (coverage is editable)</label>
+                <select value={paintPreset} onChange={(e) => { setPaintPreset(e.target.value); const cov: Record<string, string> = { economy: "9.5", standard: "11", premium: "12.5", exterior: "9" }; setCoverage(cov[e.target.value] ?? "11"); }} className={inputCls}>
+                  <option value="economy">Economy — 9.5 m²/L</option><option value="standard">Standard — 11 m²/L</option><option value="premium">Premium — 12.5 m²/L</option><option value="exterior">Exterior — 9 m²/L</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Coverage (m²/L/coat)</label><input type="number" min="5" max="20" step="any" value={coverage} onChange={(e) => setCoverage(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Primer coverage (m²/L)</label><input type="number" min="1" step="any" value={primerCoverage} onChange={(e) => setPrimerCoverage(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Paint coats (1–3)</label><input type="number" min="1" max="3" step="1" value={coats} onChange={(e) => setCoats(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Primer coats</label><input type="number" min="0" max="3" step="1" value={primerCoats} onChange={(e) => setPrimerCoats(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Putty coats</label><input type="number" min="0" max="3" step="1" value={puttyCoats} onChange={(e) => setPuttyCoats(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Wastage (%)</label><input type="number" min="0" max="50" value={paintWastage} onChange={(e) => setPaintWastage(e.target.value)} className={inputCls} /></div>
+              </div>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={ceilingPaint} onChange={(e) => setCeilingPaint(e.target.checked)} /> Paint ceiling</label>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={skirtingDeduct} onChange={(e) => setSkirtingDeduct(e.target.checked)} /> Deduct skirting (perimeter × 0.1 m)</label>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Paint rate / L</label><input type="number" min="0" value={rPaint} onChange={(e) => setRPaint(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Primer rate / L</label><input type="number" min="0" value={rPrimer} onChange={(e) => setRPrimer(e.target.value)} className={inputCls} /></div>
+              </div>
+            </div>
+            <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
+              <h3 className="text-lg font-bold mb-2">Paint quantities</h3>
+              <Row label="Paintable area" value={paint.paintableAreaM2.toFixed(2)} unit="m²" />
+              <Row label="Paint" value={String(paint.paintLitres)} unit="Litres" />
+              <Row label="Packs to buy" value={paint.packs.map((p) => `${p.count} × ${p.sizeL} L`).join(" + ") || "—"} unit="" />
+              <Row label="Primer" value={String(paint.primerLitres)} unit="Litres" />
+              <Row label="Putty (indicative, 1.1 m²/kg)" value={String(paint.puttyKg)} unit="kg" />
+              <Row label="Material cost" value={money(paintCost, currency)} unit="" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "flooring" && (
+          <>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold border-b pb-2">Flooring &amp; skirting</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Tile length ({unit})</label><input type="number" min="0" step="any" value={tileL} onChange={(e) => setTileL(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Tile width ({unit})</label><input type="number" min="0" step="any" value={tileW} onChange={(e) => setTileW(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Grout gap (mm)</label><input type="number" min="0" value={groutMm} onChange={(e) => setGroutMm(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Tiles per box</label><input type="number" min="1" step="1" value={tilesPerBox} onChange={(e) => setTilesPerBox(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Laying pattern</label>
+                  <select value={pattern} onChange={(e) => setPattern(e.target.value as TilePattern)} className={inputCls}>
+                    {(Object.keys(TILE_PATTERN_WASTAGE) as TilePattern[]).map((p) => <option key={p} value={p}>{p} — {TILE_PATTERN_WASTAGE[p]}% waste</option>)}
+                  </select>
+                </div>
+                <div><label className={labelCls}>Skirting height ({unit})</label><input type="number" min="0" step="any" value={skirtH} onChange={(e) => setSkirtH(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Mortar bed (mm)</label><input type="number" min="0" value={bedThick} onChange={(e) => setBedThick(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Tile rate / box</label><input type="number" min="0" value={rTileBox} onChange={(e) => setRTileBox(e.target.value)} className={inputCls} /></div>
+              </div>
+            </div>
+            <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
+              <h3 className="text-lg font-bold mb-2">Flooring takeoff</h3>
+              <Row label="Floor tiles" value={String(flooring.floorTiles)} unit="Nos" />
+              <Row label="Skirting tiles (cut strips)" value={String(flooring.skirtingTiles)} unit="Nos" />
+              <Row label="Total tiles" value={String(flooring.totalTiles)} unit="Nos" />
+              <Row label="Boxes" value={String(flooring.boxes)} unit={`Boxes (${flooring.spares} spares)`} />
+              <Row label="Grout (0.3 kg/m²)" value={flooring.groutKg.toFixed(1)} unit="kg" />
+              <Row label="Bed cement (1:4)" value={String(flooring.bedCementBags)} unit="Bags" />
+              <Row label="Bed sand" value={flooring.bedSandM3.toFixed(2)} unit={`m³ (${flooring.bedSandCft.toFixed(1)} cft)`} />
+              <Row label="Material cost" value={money(flooringCost, currency)} unit="" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "countertop" && (
+          <>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold border-b pb-2">Countertop</h3>
+              <div><label className={labelCls}>Shape</label>
+                <select value={cShape} onChange={(e) => setCShape(e.target.value as CounterShape)} className={inputCls}>
+                  <option value="straight">Straight</option><option value="l-shape">L-shape</option><option value="u-shape">U-shape</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div><label className={labelCls}>Length A ({unit})</label><input type="number" min="0" step="any" value={cLA} onChange={(e) => setCLA(e.target.value)} className={inputCls} /></div>
+                {cShape !== "straight" && <div><label className={labelCls}>Length B ({unit})</label><input type="number" min="0" step="any" value={cLB} onChange={(e) => setCLB(e.target.value)} className={inputCls} /></div>}
+                {cShape === "u-shape" && <div><label className={labelCls}>Length C ({unit})</label><input type="number" min="0" step="any" value={cLC} onChange={(e) => setCLC(e.target.value)} className={inputCls} /></div>}
+                <div><label className={labelCls}>Depth ({unit})</label><input type="number" min="0" step="any" value={cDepth} onChange={(e) => setCDepth(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Slab thickness (mm)</label><input type="number" min="0" value={cThick} onChange={(e) => setCThick(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Wastage (%)</label><input type="number" min="0" max="50" value={cWastage} onChange={(e) => setCWastage(e.target.value)} className={inputCls} /></div>
+              </div>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={sinkOn} onChange={(e) => setSinkOn(e.target.checked)} /> Sink cutout (0.6 × 0.45 m)</label>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={hobOn} onChange={(e) => setHobOn(e.target.checked)} /> Hob cutout (0.6 × 0.5 m)</label>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Slab rate / m²</label><input type="number" min="0" value={rCounter} onChange={(e) => setRCounter(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Edge polish rate / m</label><input type="number" min="0" value={rEdge} onChange={(e) => setREdge(e.target.value)} className={inputCls} /></div>
+              </div>
+            </div>
+            <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
+              <h3 className="text-lg font-bold mb-2">Countertop takeoff</h3>
+              <Row label="Gross area" value={counter.grossAreaM2.toFixed(2)} unit="m²" />
+              <Row label="Net area (after cutouts)" value={counter.netAreaM2.toFixed(2)} unit="m²" />
+              <Row label="Skirting area" value={counter.skirtingAreaM2.toFixed(2)} unit="m²" />
+              <Row label="Area to order" value={counter.orderAreaM2.toFixed(2)} unit="m²" />
+              <Row label="Slab volume" value={counter.slabVolumeM3.toFixed(3)} unit="m³" />
+              <Row label="Edge polishing" value={counter.edgePolishM.toFixed(2)} unit="m" />
+              <Row label="Material cost" value={money(counterCost, currency)} unit="" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "carpentry" && (
+          <>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold border-b pb-2">Carpentry / woodwork</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Stud spacing ({unit})</label><input type="number" min="0" step="any" value={studSpacing} onChange={(e) => setStudSpacing(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Wastage (%)</label><input type="number" min="0" max="50" value={woodWastage} onChange={(e) => setWoodWastage(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Purpose</label>
+                  <select value={purpose} onChange={(e) => setPurpose(e.target.value as "panelling" | "formwork")} className={inputCls}>
+                    <option value="panelling">Wall panelling (fixed — no reuse)</option>
+                    <option value="formwork">Formwork / shuttering (reuse applies)</option>
+                  </select>
+                </div>
+                {purpose === "formwork" && <div><label className={labelCls}>Reuse factor (1–8)</label><input type="number" min="1" max="8" step="1" value={reuse} onChange={(e) => setReuse(e.target.value)} className={inputCls} /></div>}
+              </div>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={openRun} onChange={(e) => setOpenRun(e.target.checked)} /> Open run (add 1 stud — closed rooms do not need it)</label>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Stud rate / Nos</label><input type="number" min="0" value={rStud} onChange={(e) => setRStud(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Plywood rate / sheet</label><input type="number" min="0" value={rPly} onChange={(e) => setRPly(e.target.value)} className={inputCls} /></div>
+              </div>
+              <p className="text-xs text-txt-tertiary">Reuse divides formwork sheets only. Dividing fixed panelling by a reuse factor was an old bug — panelling sheets are bought once.</p>
+            </div>
+            <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
+              <h3 className="text-lg font-bold mb-2">Carpentry takeoff</h3>
+              <Row label="Vertical studs" value={String(carpentry.studs)} unit="Nos" />
+              <Row label="Plywood sheets (2.44 × 1.22 m)" value={String(carpentry.sheets)} unit="Nos" />
+              <Row label="Material cost" value={money(carpentryCost, currency)} unit="" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "carpet" && (
+          <>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold border-b pb-2">Carpet &amp; built-up area</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelCls}>Internal-wall deduction (%)</label><input type="number" min="0" max="90" value={wallDeductPct} onChange={(e) => setWallDeductPct(e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Super built-up addition (%)</label><input type="number" min="0" value={superAddPct} onChange={(e) => setSuperAddPct(e.target.value)} className={inputCls} /></div>
+              </div>
+              <p className="text-xs text-txt-tertiary">Built-up = carpet ÷ (1 − deduction%) is an assumption-based conversion, labelled as such — it is not a measurement. For a measured built-up area, add the internal-wall area and common-area share instead (see the Room Area Calculator).</p>
+            </div>
+            <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
+              <h3 className="text-lg font-bold mb-2">Area breakdown</h3>
+              <Row label="Carpet area (net)" value={carpet.carpetAreaM2.toFixed(2)} unit="m²" />
+              <Row label="Built-up area (assumption-based)" value={carpet.builtUpAreaM2.toFixed(2)} unit="m²" />
+              <Row label="Super built-up area" value={carpet.superBuiltUpAreaM2.toFixed(2)} unit="m²" />
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="bg-ink rounded-2xl p-6 text-white flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <p className="text-sm text-txt-tertiary">Estimated material cost (tabs you have opened)</p>
+          <p className="text-3xl font-bold">{money(grandCost, currency)}</p>
+          {grandCost == null && <p className="text-sm text-accent-400">Enter all rates to see a total — unknown rates show as “—”, never as 0.</p>}
+        </div>
+        <div className="flex items-center gap-2 text-sm text-txt-tertiary">
+          <Calculator size={18} /> Rates are indicative — confirm with your supplier.
+        </div>
+      </div>
+
+      <article className="prose prose-lg max-w-none text-txt-secondary space-y-6 mt-10">
+        <section>
+          <h2 className="text-2xl font-bold text-txt-primary">How the room is measured</h2>
+          <p>
+            You enter the room once — length, width, height, wall faces and a list of openings — and all seven tabs
+            work from the same geometry. The net wall area is the gross wall area minus the openings, deducted under
+            IS 1200: openings under 0.5 m² are not deducted, openings from 0.5 to 3 m² are deducted on one face at the
+            full area, and openings over 3 m² are deducted on both faces with the jambs added back. Because every tab
+            shares that net area, the plaster, paint and flooring quantities can never disagree with each other.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-2xl font-bold text-txt-primary">What each tab gives you</h2>
+          <p>
+            Masonry gives bricks, blocks, mortar, cement bags and sand. Plaster gives wet and dry mortar, cement and
+            sand for internal, external and ceiling plaster. Paint gives primer, paint in 20/10/4/1-litre packs and
+            putty, by coverage and coats. Flooring gives floor tiles, skirting tiles, boxes and bedding mortar.
+            Countertops give net and order area, edge polish and slab volume — thickness included. Carpentry gives
+            studs, panelling sheets and formwork sheets, with reuse applied only to formwork. Carpet gives carpet,
+            built-up and super built-up area with the loading factor labelled as an assumption.
+          </p>
+        </section>
+      </article>
+
+      <FormulaAccordion steps={steps} />
+    </div>
   );
 }

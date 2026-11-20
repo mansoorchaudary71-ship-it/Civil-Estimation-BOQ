@@ -13,6 +13,8 @@
  *     Overrides are keyed by tool id and win over everything else.
  */
 
+import { getBasename } from "./toolRoutes";
+
 export type ToolImageKey =
   | "bricks" | "concrete" | "rebar" | "blueprint" | "soil" | "aggregate" | "road"
   | "solar" | "water" | "stairs" | "tiles" | "steel" | "site" | "frame" | "wall"
@@ -123,14 +125,17 @@ const BY_CATEGORY: Record<string, ToolImageKey> = {
 };
 
 export function getToolImage(mod: { id?: string; category?: string }): string {
-  // The app uses clean URLs (BrowserRouter, e.g. /calculator/slug) and Vite's base is "./".
-  // A relative "./tool-images/..." would 404 on any nested URL, so always resolve from the site root.
-  const envBase: string = (import.meta as any).env?.BASE_URL ?? "/";
-  const base = envBase.startsWith("/") ? envBase : "/";
+  // Resolve from the site root exactly the way the router does (getBasename):
+  // on the GitHub Pages project page the site lives under /Civil-Estimation-BOQ/,
+  // while on the custom domain it lives at /. A hardcoded "/" breaks every card
+  // image on the project page (the files 404 at the domain root), and a bare
+  // relative "./tool-images/..." breaks on nested URLs — so always prefix with
+  // the detected hosting subpath ("" on the custom domain).
+  const base = getBasename();
   const override = mod.id ? PHOTO_OVERRIDES[mod.id] : undefined;
-  if (override) return `${base}${override}`;
+  if (override) return `${base}/${override}`;
   const key: ToolImageKey = (mod.id && BY_ID[mod.id]) || BY_CATEGORY[mod.category || ""] || "concrete";
-  return `${base}tool-images/${key}.svg`;
+  return `${base}/tool-images/${key}.svg`;
 }
 
 /** Short label for the badge on the image (category names are too long for a pill). */

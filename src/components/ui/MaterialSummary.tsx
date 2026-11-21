@@ -311,6 +311,14 @@ export function MaterialSummary({
                             layout="vertical"
                             verticalAlign="bottom"
                             wrapperStyle={{ fontSize: '11px', paddingTop: '20px' }}
+                            // Recharts colours legend text with the series
+                            // colour by default — the first slice is amber
+                            // (#F2A413 / #F5B731), which is unreadable on
+                            // white. Force theme-aware dark text instead;
+                            // the coloured icon still identifies the slice.
+                            formatter={(value: any) => (
+                              <span className="text-txt-primary dark:text-txt-primary">{value}</span>
+                            )}
                           />
                         </PieChart>
                       ) : (

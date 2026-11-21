@@ -606,7 +606,13 @@ export function CalculationHistory({
     <>
       {finalExplanationOpts && (
         <div className="w-[calc(100%+1.5rem)] -ml-3 md:w-full md:ml-0 mt-2 mb-4 bg-surface-default/60 rounded-2xl md:rounded-2xl overflow-hidden border border-ui-borderSubtle dark:border-ink shadow-brand-sm transition-all duration-300">
+          {/* Explicit ghost variant: this Button's className carries no
+              bg-/text- colour class, so the shared Button's auto-variant
+              logic resolved it to 'primary' (dark ink pill) — while the
+              h3 below sets its own dark text, making the title invisible
+              on the black bar. Ghost keeps the light card + dark text. */}
           <Button
+            variant="ghost"
             onClick={() => setIsExplanationOpen(!isExplanationOpen)}
             className="w-full flex items-center justify-between p-4 sm:p-6 md:p-8 relative z-10 text-left focus:outline-none min-h-[44px]"
           >

@@ -260,13 +260,19 @@ export default function MasterQuantityEstimator({
                 {/* <!-- Tool Results Section --> */}
                 <ToolLayoutResults>
                   <ToolSection title="Estimate Results" color="emerald" number="02">
+                    {/* stackVisual + single-column cards: this summary sits
+                        in the span-8 results column beside a 320px sidebar,
+                        so the side visual was ~103px wide (clipped) and
+                        2-col cards ~107px — the 40px ResultCard values
+                        wrapped digit-by-digit. Full-width cards fit them. */}
                     <MaterialSummary
                       title={activeCalculator.label}
                       totalLabel={firstResult ? firstResult[0] : "Status"}
                       totalValue={firstResult ? firstResult[1] : "—"}
                       totalUnit=""
+                      stackVisual
                     >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-8">
+                      <div className="grid grid-cols-1 gap-4 sm:gap-6 mt-8">
                         {Object.entries(currentResults).map(([key, val]) => (
                           <ResultCard
                             key={key}

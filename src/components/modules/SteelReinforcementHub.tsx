@@ -27,6 +27,7 @@ export default function SteelReinforcementHub() {
   const [designStandard, setDesignStandard] = useState("IS 1786:2008 (Deformed Steel)");
 
   return (
+    <>
     <div className="w-full h-full flex flex-col md:flex-row bg-surface-hover overflow-hidden">
       {/* Sidebar for Sub-Navigation */}
       <div className="w-full md:w-64 flex-shrink-0 bg-surface-default border-r border-ui-borderSubtle flex flex-col pt-6 px-4 gap-2">
@@ -74,8 +75,16 @@ export default function SteelReinforcementHub() {
           {activeTab === "formwork" && <FormworkEstimator />}
         </div>
       </div>
-    
-      <CalculationHistory calculatorId="steelreinforcementhub_tool" currentInputs={{}} />
-</div>
+    </div>
+
+    {/*
+      CalculationHistory must NOT live inside the flex-row shell above:
+      its root is `md:w-full`, so as a row item it consumed all free space
+      and squeezed the `flex-1` content area to 0px wide (the whole hub
+      collapsed to min-content width). Rendered here as a full-width block
+      below the hub instead.
+    */}
+    <CalculationHistory calculatorId="steelreinforcementhub_tool" currentInputs={{}} />
+    </>
   );
 }

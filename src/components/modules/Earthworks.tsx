@@ -24,6 +24,7 @@ export default function EarthworksEstimator() {
   ];
 
   return (
+    <>
     <div className="w-full h-full flex flex-col md:flex-row bg-surface-hover overflow-hidden">
       {/* Sidebar for Sub-Navigation */}
       <div className="w-full md:w-64 flex-shrink-0 bg-surface-default border-r border-ui-borderSubtle flex flex-col pt-6 px-4 gap-2">
@@ -71,9 +72,18 @@ export default function EarthworksEstimator() {
           {activeTab === "trench" && <TrenchExcavationEstimator />}
         </div>
       </div>
-    
-      <CalculationHistory calculatorId="earthworks_tool" currentInputs={{}} />
-</div>
+    </div>
+
+    {/*
+      CalculationHistory must NOT live inside the flex-row shell above:
+      its root is `md:w-full`, so as a row item it consumed all free space
+      and squeezed the `flex-1` content area to 0px wide (the whole form
+      collapsed to min-content width and the guided tour positioned itself
+      off-screen). Rendered here as a full-width block below the hub instead.
+      Every tab already renders its own wired history bar inside the form.
+    */}
+    <CalculationHistory calculatorId="earthworks_tool" currentInputs={{}} />
+    </>
   );
 }
 

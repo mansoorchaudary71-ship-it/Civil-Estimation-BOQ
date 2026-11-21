@@ -1,5 +1,5 @@
 import { Button } from './/Button';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, ChevronLeft } from 'lucide-react';
 
@@ -21,6 +21,23 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
   const [currentStep, setCurrentStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [hasSeen, setHasSeen] = useState(false);
+  // Mirrors currentStep for use inside timers/listeners (avoids stale closures).
+  const currentStepRef = useRef(0);
+  // Which step index we already scrolled into view (scroll at most once per step).
+  const scrolledStepRef = useRef(-1);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    currentStepRef.current = currentStep;
+    // A new step may need its own one-time scroll.
+    scrolledStepRef.current = -1;
+  }, [currentStep]);
+
+  const handleClose = useCallback(() => {
+    localStorage.setItem(`tour_seen_${tourId}`, 'true');
+    setHasSeen(true);
+    if (onComplete) onComplete();
+  }, [tourId, onComplete]);
 
   useEffect(() => {
     const seen = localStorage.getItem(`tour_seen_${tourId}`);
@@ -29,45 +46,94 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
     }
   }, [tourId]);
 
+  // Recompute the highlight/popup position from the target's current rect.
+  // Deliberately NEVER scrolls: scrolling from a scroll/resize listener
+  // restarts the smooth scroll on every event and the page can never settle.
+  const reposition = useCallback(() => {
+    const idx = currentStepRef.current;
+    if (idx >= steps.length) return;
+    const el = document.querySelector(steps[idx].targetSelector) as HTMLElement | null;
+    setTargetRect(el ? el.getBoundingClientRect() : null);
+  }, [steps]);
+
+  // Bring the target into view at most ONCE per step, and only when it is
+  // actually outside the viewport. Instant (not smooth) so no animation
+  // can be interrupted and re-triggered by the scroll events it causes.
+  const ensureTargetVisible = useCallback(() => {
+    const idx = currentStepRef.current;
+    if (idx >= steps.length || scrolledStepRef.current === idx) return;
+    const el = document.querySelector(steps[idx].targetSelector) as HTMLElement | null;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const inView =
+      r.top >= 0 &&
+      r.bottom <= window.innerHeight &&
+      r.left >= 0 &&
+      r.right <= window.innerWidth;
+    if (!inView) {
+      scrolledStepRef.current = idx;
+      el.scrollIntoView({ behavior: 'instant', block: 'center' });
+      // The rect changes once the scroll lands; re-measure on the next frame.
+      requestAnimationFrame(() => reposition());
+    }
+  }, [steps, reposition]);
+
   useEffect(() => {
     if (hasSeen || steps.length === 0) return;
 
     // Small delay to allow module animations to finish
     const tm = setTimeout(() => {
-      calculatePosition();
+      const idx = currentStepRef.current;
+      const step = steps[idx];
+      if (!step) return;
+      const el = document.querySelector(step.targetSelector) as HTMLElement | null;
+      if (el) {
+        ensureTargetVisible();
+        reposition();
+      } else {
+        // Target not rendered yet (lazy chunk still loading): retry once.
+        // If it never appears, move on instead of leaving a dimmed page
+        // with a popup pointing at nothing and no way out.
+        retryTimerRef.current = setTimeout(() => {
+          const el2 = document.querySelector(step.targetSelector) as HTMLElement | null;
+          if (el2) {
+            ensureTargetVisible();
+            reposition();
+          } else if (idx < steps.length - 1) {
+            setCurrentStep(idx + 1);
+          } else {
+            handleClose();
+          }
+        }, 500);
+      }
     }, 1500);
 
-    const handleResize = () => calculatePosition();
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleResize, true);
+    const handleReposition = () => reposition();
+    window.addEventListener('resize', handleReposition);
+    window.addEventListener('scroll', handleReposition, true);
 
     return () => {
       clearTimeout(tm);
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleResize, true);
+      if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+      window.removeEventListener('resize', handleReposition);
+      window.removeEventListener('scroll', handleReposition, true);
     };
-  }, [currentStep, hasSeen, steps]);
+  }, [currentStep, hasSeen, steps, ensureTargetVisible, reposition, handleClose]);
 
-  const calculatePosition = () => {
-    if (currentStep >= steps.length) return;
-    const step = steps[currentStep];
-    const el = document.querySelector(step.targetSelector) as HTMLElement;
-    
-    if (el) {
-      setTargetRect(el.getBoundingClientRect());
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } else {
-      // If target not found, retry after a short delay or nullify
-      setTimeout(() => {
-        const retryEl = document.querySelector(step.targetSelector) as HTMLElement;
-        if (retryEl) {
-          setTargetRect(retryEl.getBoundingClientRect());
-        } else {
-          setTargetRect(null);
-        }
-      }, 500);
-    }
-  };
+  // Escape dismisses the tour. Capture phase + stopPropagation/preventDefault
+  // so the app-level Escape handler (which navigates home) never sees it.
+  useEffect(() => {
+    if (hasSeen || steps.length === 0) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [hasSeen, steps.length, handleClose]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -81,12 +147,6 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
     if (currentStep > 0) {
       setCurrentStep(s => s - 1);
     }
-  };
-
-  const handleClose = () => {
-    localStorage.setItem(`tour_seen_${tourId}`, 'true');
-    setHasSeen(true);
-    if (onComplete) onComplete();
   };
 
   if (hasSeen || steps.length === 0) return null;
@@ -135,6 +195,12 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
     if (typeof popupStyle.left === 'number' && popupStyle.left > window.innerWidth - 320) {
       popupStyle.left = window.innerWidth - 320;
     }
+    // Never let the popup's top escape the viewport: even if the target sits
+    // near the bottom edge, the card (and its close button) stays reachable.
+    // The centred fallback uses a percentage top, so only clamp numeric tops.
+    if (typeof popupStyle.top === 'number') {
+      popupStyle.top = Math.max(8, Math.min(popupStyle.top, window.innerHeight - 300));
+    }
   }
 
   return (
@@ -176,14 +242,22 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
             <p className="text-sm text-txt-tertiary">{steps[currentStep].content}</p>
           </div>
           <div className="p-4 bg-surface-hover border-t border-border-color flex items-center justify-between">
-            <Button
-              onClick={handlePrev}
-              disabled={currentStep === 0}
-              className="text-txt-tertiary disabled:opacity-0 hover:text-txt-secondary flex items-center text-sm font-medium transition-colors outline-none"
-            >
-              <ChevronLeft className="w-4 h-4 mr-1" />
-              Back
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                onClick={handlePrev}
+                disabled={currentStep === 0}
+                className="text-txt-tertiary disabled:opacity-0 hover:text-txt-secondary flex items-center text-sm font-medium transition-colors outline-none"
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Back
+              </Button>
+              <Button
+                onClick={handleClose}
+                className="text-txt-tertiary hover:text-txt-secondary text-sm font-medium px-2 py-2 transition-colors outline-none"
+              >
+                Skip tour
+              </Button>
+            </div>
             <Button
               onClick={handleNext}
               className="bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition-colors shadow-brand-sm outline-none"

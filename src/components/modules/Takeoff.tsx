@@ -1414,7 +1414,7 @@ export default function Takeoff() {
             } catch (e) { console.error(e); toast.error("Excel export failed"); }
           }} className="px-3 py-1.5 bg-surface-hover rounded-full text-xs font-bold">Export Excel</Button>
         </div>
-        <p className="text-xs text-txt-tertiary mt-2">
+        <p className="text-xs text-txt-tertiary mt-2 break-words">
           Rates: PCC/RCC/brickwork/plaster/steel priced from the dated PK table ({PK_TABLE.lastUpdated}, {PK_TABLE.source}) via rate analysis (material + 1% water + 15% CPOH, labour excluded). Excavation, formwork and road-course rates are example values — verify against your market before tendering. Work is saved on this device (localStorage) and restores on reload.
         </p>
       </div>

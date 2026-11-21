@@ -463,7 +463,17 @@ export default function HouseEstimator() {
     setSelectedItems(new Set());
   };
 
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  // The guided tour's first two steps target #tour-house-area and
+  // #tour-room-height, which live inside this accordion. Open it on a first
+  // visit (tour not seen yet) so those targets exist when the tour looks them
+  // up; otherwise the tour auto-advances past them and lands on step 3, and
+  // Back appears broken because the missing targets re-trigger the advance.
+  // Returning visitors (tour seen) keep the previous closed default.
+  const [isAccordionOpen, setIsAccordionOpen] = useState(
+    () =>
+      typeof window === "undefined" ||
+      localStorage.getItem("tour_seen_house-estimator") !== "true"
+  );
   const [specs, setSpecs] = useState<SpecsState>(initialSpecs);
   const [isSpecsAccordionOpen, setIsSpecsAccordionOpen] = useState(false);
   const [showResults, setShowResults] = useState(false);

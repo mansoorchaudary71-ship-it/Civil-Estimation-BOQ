@@ -18,7 +18,7 @@
  *   min(least lateral dimension, 16 φ, 300 mm)).
  * - Circular column option; steel weight / concrete / cost outputs.
  */
-import { unitWeightKgPerM } from "./steelCalc";
+import { unitWeightKgPerM, stirrupLengthDetailed } from "./steelCalc";
 import {
   barAreaMm2, checkRange, costLine, materialsForConcrete, mixRatioForGrade,
   round, totalCost, type CostLine, type FaqItem, type MaterialBreakdown,
@@ -232,8 +232,11 @@ export function designColumn(input: Partial<ColumnInputs> = {}): ColumnResult {
   const slenderD = leD > 12;
   const slenderB = leB > 12;
   const eMin = Math.max((i.lengthM * 1000) / 500 + i.depthMm / 30, 20);
+  // Y-axis minimum eccentricity uses the WIDTH (B), not the depth — the
+  // old code used eMin (D/30) for both axes.
+  const eMinY = Math.max((i.lengthM * 1000) / 500 + i.widthMm / 30, 20);
   let designM = Math.max(mu, (pu * eMin) / 1000);
-  let designMy = Math.max(muy, (pu * eMin) / 1000);
+  let designMy = Math.max(muy, (pu * eMinY) / 1000);
   let eAdd = 0;
   // Additional moment about the governing (most slender) axis, IS 456 Cl. 39.7.1
   if (slenderD || slenderB) {
@@ -270,9 +273,15 @@ export function designColumn(input: Partial<ColumnInputs> = {}): ColumnResult {
   // Ties — IS 456 Cl. 26.5.3.2
   const tieDia = Math.max(i.barDiaMm / 4, 6);
   const tieSpacing = Math.min(Math.min(i.widthMm, i.depthMm), 16 * i.barDiaMm, 300);
-  const tieCount = Math.floor((i.lengthM * 1000) / tieSpacing) + 1;
-  // One closed tie per level: perimeter at stirrup centreline.
-  const tieLenM = (2 * ((i.widthMm - 2 * i.coverMm) + (i.depthMm - 2 * i.coverMm)) + 24 * i.stirrupDiaMm) / 1000;
+  const tieCount = Math.ceil((i.lengthM * 1000) / tieSpacing) + 1;
+  // Ties: IS 2502 detailed length with inner dims (section − 2·cover − φ),
+  // the unified X3 convention — the old code used the field rule with
+  // A/B = section − 2·cover, reading ~10% long vs beam-design/BBS.
+  const tieLenM = stirrupLengthDetailed(
+    i.widthMm - 2 * i.coverMm - i.stirrupDiaMm,
+    i.depthMm - 2 * i.coverMm - i.stirrupDiaMm,
+    i.stirrupDiaMm,
+  ) / 1000;
   const longKg = unitWeightKgPerM(i.barDiaMm) * i.lengthM * i.barCount;
   const tieKg = unitWeightKgPerM(i.stirrupDiaMm) * tieLenM * tieCount;
   const totalSteel = longKg + tieKg;
@@ -306,7 +315,7 @@ export function designColumn(input: Partial<ColumnInputs> = {}): ColumnResult {
       { label: "Effective depth", text: `d = D − cover − stirrup dia − φ/2 = ${i.depthMm} − ${i.coverMm} − ${i.stirrupDiaMm} − ${i.barDiaMm}/2 = ${round(d, 1)} mm (old tool used ${i.depthMm - i.coverMm} mm)` },
       { label: "Factored loads", text: `Pu = ${i.workingLoadKN} × ${i.safetyFactor} = ${round(pu)} kN; Mu = ${round(mu, 1)} kNm` },
       { label: "Slenderness", text: `le = ${k} × ${i.lengthM} = ${round(le, 2)} m; le/D = ${round(leD, 2)}, le/B = ${round(leB, 2)} — ${slenderD || slenderB ? "slender" : "short"} column (limit 12)` },
-      { label: "Minimum eccentricity", text: `e_min = max(L/500 + D/30, 20) = ${round(eMin)} mm; design Mu = ${round(designM, 1)} kNm` },
+      { label: "Minimum eccentricity", text: `e_min,x = max(L/500 + D/30, 20) = ${round(eMin)} mm; e_min,y = max(L/500 + B/30, 20) = ${round(eMinY)} mm; design Mu = ${round(designM, 1)} kNm, Muy = ${round(designMy, 1)} kNm` },
       { label: "Steel", text: `Asc = ${i.barCount} × ${i.barDiaMm} mm = ${round(asc)} mm² = ${round(steelPct, 2)}% of Ag (limits 0.8–6%)` },
       { label: "Capacity", text: `Puz = ${round(puz)} kN; moment capacity at Pu = ${round(capM, 1)} kNm; linear cross-check Pu/Puz + Mu/Muz = ${round(linearCheck, 3)}` },
       { label: "Ties", text: `Tie dia ≥ max(φ/4, 6) = ${Math.ceil(tieDia)} mm; spacing ≤ min(least dimension, 16φ, 300) = ${Math.floor(tieSpacing / 5) * 5} mm; ${tieCount} ties` },

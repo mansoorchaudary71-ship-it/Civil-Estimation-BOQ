@@ -103,17 +103,22 @@ export default function CbrTestCalculator() {
       }
     }
 
-    // Identify loads at exactly 2.5 and 5.0 (after correction) using linear interpolation if missing
+    // Identify loads at exactly 2.5 and 5.0 (after correction) using linear interpolation if missing.
+    // Past the last data point the load is clamped to the last reading
+    // (the engine does the same); the old code returned 0, so a curve
+    // ending at 5.0 mm with a 0.6 mm origin shift reported CBR 5.0 mm = 0%.
     const getLoadAtPenetration = (pen: number) => {
       const exactMatch = sortedData.find(d => Math.abs(d.penetration - pen) < 0.01);
       if (exactMatch) return exactMatch.load;
-      
+
       const lower = sortedData.filter(d => d.penetration < pen).pop();
       const higher = sortedData.find(d => d.penetration > pen);
-      
+
       if (lower && higher) {
         return lower.load + ((higher.load - lower.load) / (higher.penetration - lower.penetration)) * (pen - lower.penetration);
       }
+      if (lower) return lower.load;
+      if (higher) return higher.load;
       return 0;
     };
 
@@ -233,8 +238,8 @@ export default function CbrTestCalculator() {
                   {testData.map((row, idx) => (
                     <div key={idx} className="grid grid-cols-12 gap-2 items-center">
                       <div className="col-span-5 relative group">
-                        <><label htmlFor="a11y-input-173" className="sr-only">Input</label>
-<input id="a11y-input-173"
+                        <><label htmlFor={`a11y-input-173-${idx}`} className="sr-only">Input</label>
+<input id={`a11y-input-173-${idx}`}
                           type="number" inputMode="decimal"
                           step="0.5"
                           value={row.penetration}
@@ -243,8 +248,8 @@ export default function CbrTestCalculator() {
                         /></>
                       </div>
                       <div className="col-span-5 relative">
-                        <><label htmlFor="a11y-input-174" className="sr-only">Input</label>
-<input id="a11y-input-174"
+                        <><label htmlFor={`a11y-input-174-${idx}`} className="sr-only">Input</label>
+<input id={`a11y-input-174-${idx}`}
                           type="number" inputMode="decimal"
                           value={row.load}
                           onChange={(e) => handleDataChange(idx, "load", e.target.value)}
@@ -297,7 +302,7 @@ export default function CbrTestCalculator() {
               <ul className="text-sm text-accent-800/80 space-y-2 list-disc list-inside leading-relaxed uppercase tracking-wider font-semibold">
                 <li>CBR <span className="lowercase">at</span> 2.5<span className="lowercase">mm</span> = (Measured Load / 1370 <span className="lowercase">kg</span>) × 100</li>
                 <li>CBR <span className="lowercase">at</span> 5.0<span className="lowercase">mm</span> = (Measured Load / 2055 <span className="lowercase">kg</span>) × 100</li>
-                <li>Design CBR = <span className="lowercase">max(</span>CBR 2.5, CBR 5.0<span className="lowercase">)</span></li>
+                <li>Design CBR = CBR <span className="lowercase">at</span> 2.5<span className="lowercase">mm</span> (IS 2720 Pt 16) — <span className="lowercase">if</span> CBR 5.0 <span className="lowercase">is higher, repeat the test; never take the max</span></li>
               </ul>
               <div className="mt-3 p-3 bg-surface-default/60 rounded-2xl border border-accent-100 text-sm text-accent-900 font-medium overflow-hidden">
                 Standard loads assume a standard 50mm diameter plunger.
@@ -341,6 +346,21 @@ export default function CbrTestCalculator() {
                       <span className="text-sm text-txt-secondary font-mono mt-1 block">Load: {estimateData.load50.toFixed(1)} kg</span>
                     </div>
                   </div>
+                  <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="w-full bg-surface-default/60 p-4 rounded-2xl border border-ui-borderDefault/5 shadow-brand-sm overflow-hidden">
+                      <span className="text-txt-tertiary text-base font-medium uppercase tracking-widest block mb-1">Resilient Modulus (Heukelom)</span>
+                      <div className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-txt-primary">{estimateData.mrHeukelom.toFixed(0)} MPa</div>
+                      <span className="text-sm text-txt-secondary font-mono mt-1 block">Mr = 10.34 × CBR₂.₅</span>
+                    </div>
+                    <div className="w-full bg-surface-default/60 p-4 rounded-2xl border border-ui-borderDefault/5 shadow-brand-sm overflow-hidden">
+                      <span className="text-txt-tertiary text-base font-medium uppercase tracking-widest block mb-1">Resilient Modulus (AASHTO)</span>
+                      <div className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-txt-primary">{estimateData.mrAashto.toFixed(0)} MPa</div>
+                      <span className="text-sm text-txt-secondary font-mono mt-1 block">Mr = 17.6 × CBR₂.₅^0.64</span>
+                    </div>
+                  </div>
+                  {estimateData.repeatTest && (
+                    <p className="text-sm font-medium mb-8 p-3 rounded-xl bg-accent-50 border border-accent-100 text-accent-900">⚠ CBR at 5.0 mm ({estimateData.cbr50.toFixed(1)}%) exceeds CBR at 2.5 mm ({estimateData.cbr25.toFixed(1)}%) — repeat the test per IS 2720 Part 16; the design CBR remains the 2.5 mm value.</p>
+                  )}
                   
                   <div className="w-full bg-surface-default rounded-2xl border border-ui-borderDefault/5 shadow-brand-sm p-5 flex items-center justify-between mb-8 overflow-hidden">
                      <div>

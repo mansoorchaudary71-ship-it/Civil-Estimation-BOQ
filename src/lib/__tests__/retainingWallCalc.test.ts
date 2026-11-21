@@ -74,7 +74,11 @@ test("stemOk compares required steel with steel actually provided (over-limit st
 test("Ka for phi=30 is 1/3; solve-for-B returns a passing width <= 3.0 m", () => {
   assert.equal(kaFor(30), 1 / 3);
   const r = designRetainingWall();
-  assert.ok(r.minBaseWidthM <= 3.0 && r.minBaseWidthM >= 2.0);
+  // minBaseWidthM is null when no width up to the search limit passes;
+  // at defaults a passing width exists, so assert non-null first.
+  assert.ok(r.minBaseWidthM != null);
+  const minB = r.minBaseWidthM;
+  assert.ok(minB <= 3.0 && minB >= 2.0);
 });
 
 test("mu above tan(phi) is flagged", () => {

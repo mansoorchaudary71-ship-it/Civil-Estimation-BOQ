@@ -132,6 +132,11 @@ export default function FinishesEstimator() {
   const masonry = useMemo(() => calcMasonry({
     netWallM2: geometry.netWallM2, thicknessMm: num(thicknessMm) || 0, brick,
     jointMm: num(jointMm) || 0, wastagePct: num(mWastage) || 0, mix: mixParts(mMix),
+    // The brick engine has no USD mode (Currency = PKR | INR | AED). USD
+    // falls back to PKR, which only selects the sand unit (cft — matching
+    // the "Sand / cft" input). The rates themselves are user-entered
+    // numbers, so a USD rate prices in USD; and switching currency clears
+    // the PKR defaults, so no Rs rate is ever silently priced as USD.
     currency: currency === "USD" ? "PKR" : currency,
     rates: {
       brickPer1000: rBrick === "" ? null : num(rBrick),
@@ -140,27 +145,44 @@ export default function FinishesEstimator() {
     },
   }), [geometry, thicknessMm, brick, jointMm, mWastage, mMix, currency, rBrick, rCement, rSand]);
 
+  // External plaster is ONE face of the outside of the same walls, with the
+  // same IS 1200 opening deductions — it must NOT inherit the "faces"
+  // multiplier (old code passed geometry.grossWallM2, i.e. gross × faces
+  // with no deductions at all, overstating external plaster by the
+  // deductions and doubling it when faces = 2).
+  const externalGeometry = useMemo(() => {
+    return calcRoomGeometry(toM(num(roomL) || 0), toM(num(roomW) || 0), toM(num(roomH) || 0), openings, 1, toM(num(jambDepth) || 0));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomL, roomW, roomH, openings, jambDepth, unit]);
+
   const plaster = useMemo(() => calcPlaster({
-    internalAreaM2: geometry.netWallM2, externalAreaM2: geometry.grossWallM2,
+    internalAreaM2: geometry.netWallM2, externalAreaM2: externalGeometry.netWallM2,
     ceilingAreaM2: geometry.ceilingM2, ceilingIncluded: pCeiling,
     internalThicknessMm: num(pIntThick) || 0, externalThicknessMm: num(pExtThick) || 0,
     mix: mixParts(pMix), unevenFactor: pUneven ? 1.1 : 1, wastagePct: num(pWastage) || 0,
-  }), [geometry, pIntThick, pExtThick, pMix, pUneven, pWastage, pCeiling]);
+  }), [geometry, externalGeometry, pIntThick, pExtThick, pMix, pUneven, pWastage, pCeiling]);
 
+  // Door areas and widths come from the openings list above — the old
+  // code hardcoded 0. The door opening itself is already deducted from
+  // the net wall area by the IS 1200 rules; doorAreaM2 is the door faces
+  // to paint, which the engine ADDS to the paintable area (one face per
+  // door), and doorWidthsTotalM is the skirting length the doors replace.
+  const doorAreaM2 = openings.filter((o) => o.kind === "door").reduce((s, o) => s + o.widthM * o.heightM * o.count, 0);
+  const doorWidthsTotalM = openings.filter((o) => o.kind === "door").reduce((s, o) => s + o.widthM * o.count, 0);
   const paint = useMemo(() => calcPaint({
     netWallM2: geometry.netWallM2, ceilingM2: geometry.ceilingM2, ceilingIncluded: ceilingPaint,
-    doorAreaM2: 0, skirtingHeightM: 0.1, perimeterM: geometry.perimeterM, skirtingDeducted: skirtingDeduct,
+    doorAreaM2, skirtingHeightM: 0.1, perimeterM: geometry.perimeterM, skirtingDeducted: skirtingDeduct,
     coverageM2PerL: num(coverage) || 10, primerCoverageM2PerL: num(primerCoverage) || 7,
     coats: num(coats) || 0, primerCoats: num(primerCoats) || 0,
     puttyCoverageM2PerKg: 1.1, puttyCoats: num(puttyCoats) || 0, wastagePct: num(paintWastage) || 0,
-  }), [geometry, coverage, primerCoverage, coats, primerCoats, puttyCoats, paintWastage, ceilingPaint, skirtingDeduct]);
+  }), [geometry, doorAreaM2, coverage, primerCoverage, coats, primerCoats, puttyCoats, paintWastage, ceilingPaint, skirtingDeduct]);
 
   const flooring = useMemo(() => calcFlooring({
     floorAreaM2: geometry.floorM2, perimeterM: geometry.perimeterM,
     tileLengthM: toM(num(tileL) || 0), tileWidthM: toM(num(tileW) || 0), groutMm: num(groutMm) || 0,
     pattern, tilesPerBox: num(tilesPerBox) || 1, skirtingHeightM: toM(num(skirtH) || 0),
-    skirtingIncluded: true, doorWidthsTotalM: 0, bedThicknessMm: num(bedThick) || 0, mix: [1, 4],
-  }), [geometry, tileL, tileW, groutMm, pattern, tilesPerBox, skirtH, bedThick, unit]);
+    skirtingIncluded: true, doorWidthsTotalM, bedThicknessMm: num(bedThick) || 0, mix: [1, 4],
+  }), [geometry, doorWidthsTotalM, tileL, tileW, groutMm, pattern, tilesPerBox, skirtH, bedThick, unit]);
 
   const counter = useMemo(() => calcCountertop({
     shape: cShape, lengthAM: toM(num(cLA) || 0), lengthBM: toM(num(cLB) || 0), lengthCM: toM(num(cLC) || 0),
@@ -183,10 +205,17 @@ export default function FinishesEstimator() {
   }), [geometry, wallDeductPct, superAddPct]);
 
   const rate = (s: string) => (s === "" ? null : num(s));
+  // Sand rate unit follows the currency: PKR/INR/USD rates are entered
+  // per cft, AED per m³ (the brick engine prices sand per m³ for AED).
+  // The old code labelled the input "Sand / cft" for every currency and
+  // multiplied by 35.3147 in the plaster cost, overstating AED sand cost
+  // 35× when the rate was really per m³.
+  const sandPerCft = currency !== "AED";
+  const sandRatePerM3 = rate(rSand) != null ? (sandPerCft ? rate(rSand)! * 35.3147 : rate(rSand)) : null;
   const masonryCost = sumCosts([masonry.brickCost, masonry.cementCost, masonry.sandCost]);
   const plasterCost = sumCosts([
     costLine(plaster.cementBags, rate(rCement)),
-    costLine(plaster.sandM3, rate(rSand) != null ? rate(rSand)! * 35.3147 : null),
+    costLine(plaster.sandM3, sandRatePerM3),
   ]);
   const paintCost = sumCosts([
     costLine(paint.paintLitres, rate(rPaint)),
@@ -204,7 +233,13 @@ export default function FinishesEstimator() {
     costLine(carpentry.studs, rate(rStud)),
     costLine(carpentry.sheets, rate(rPly)),
   ]);
-  const grandCost = sumCosts([masonryCost, plasterCost, paintCost, flooringCost, counterCost, carpentryCost]);
+  // Grand total covers only the tabs the user has opened (the label says
+  // so). The old code summed all six costed tabs from first load, so the
+  // "total" included plaster, paint, flooring, countertop and carpentry
+  // the user had never looked at. Carpet has no cost line, so it is not
+  // part of the total.
+  const tabCosts = { masonry: masonryCost, plaster: plasterCost, paint: paintCost, flooring: flooringCost, countertop: counterCost, carpentry: carpentryCost } as const;
+  const grandCost = sumCosts((Object.keys(tabCosts) as (keyof typeof tabCosts)[]).filter((t) => touched.has(t)).map((t) => tabCosts[t]));
 
   const switchUnit = (u: Unit) => {
     if (u === unit) return;
@@ -288,7 +323,7 @@ export default function FinishesEstimator() {
     <div className="w-full max-w-7xl mx-auto py-8 px-4 space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-txt-primary">Complete Finishes &amp; Surfaces</h1>
+          <h2 className="text-3xl font-black tracking-tight text-txt-primary">Complete Finishes &amp; Surfaces</h2>
           <p className="text-txt-tertiary font-medium mt-1">Masonry, plaster, paint, flooring, countertops, carpentry and carpet area — one room, IS 1200 opening rules, costs in PKR, INR, AED or USD.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -317,37 +352,37 @@ export default function FinishesEstimator() {
       <div className="bg-ink rounded-2xl p-5 text-white shadow-brand-lg">
         <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Room / zone dimensions</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-end">
-          <div><label className="text-xs text-txt-tertiary">Length ({unit})</label><input type="number" min="0" value={roomL} onChange={(e) => setRoomL(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
-          <div><label className="text-xs text-txt-tertiary">Width ({unit})</label><input type="number" min="0" value={roomW} onChange={(e) => setRoomW(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
-          <div><label className="text-xs text-txt-tertiary">Height ({unit})</label><input type="number" min="0" value={roomH} onChange={(e) => setRoomH(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
-          <div><label className="text-xs text-txt-tertiary">Faces plastered</label>
+          <div><label className="text-xs text-[#948D82]">Length ({unit})</label><input type="number" min="0" value={roomL} onChange={(e) => setRoomL(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-[#948D82]">Width ({unit})</label><input type="number" min="0" value={roomW} onChange={(e) => setRoomW(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-[#948D82]">Height ({unit})</label><input type="number" min="0" value={roomH} onChange={(e) => setRoomH(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-[#948D82]">Faces plastered</label>
             <select value={faces} onChange={(e) => setFaces(Number(e.target.value) as 1 | 2)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white">
               <option value={1}>1 face</option>
               <option value={2}>2 faces</option>
             </select>
           </div>
-          <div className="bg-ink p-3 rounded-xl border border-ink-600 flex justify-between items-center"><span className="text-txt-tertiary text-sm">Net wall</span><span className="text-2xl font-bold text-accent-400">{geometry.netWallM2.toFixed(2)} <span className="text-sm">m²</span></span></div>
+          <div className="bg-ink p-3 rounded-xl border border-ink-600 flex justify-between items-center"><span className="text-[#948D82] text-sm">Net wall</span><span className="text-2xl font-bold text-accent-400">{geometry.netWallM2.toFixed(2)} <span className="text-sm">m²</span></span></div>
         </div>
         <div className="mt-4">
-          <h4 className="text-xs uppercase tracking-wider text-txt-tertiary mb-2">Openings (IS 1200 deductions applied per opening)</h4>
+          <h4 className="text-xs uppercase tracking-wider text-[#948D82] mb-2">Openings (IS 1200 deductions applied per opening)</h4>
           {openings.map((o) => (
             <div key={o.id} className="flex flex-wrap gap-2 items-center mb-2">
               <select value={o.kind} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, kind: e.target.value as OpeningInput["kind"] } : x))} className="bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white text-sm">
                 <option value="door">Door</option><option value="window">Window</option><option value="other">Other</option>
               </select>
               <input type="number" min="0" step="any" value={fromM(o.widthM).toFixed(2)} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, widthM: toM(parseFloat(e.target.value) || 0) } : x))} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening width" />
-              <span className="text-txt-tertiary">×</span>
+              <span className="text-[#948D82]">×</span>
               <input type="number" min="0" step="any" value={fromM(o.heightM).toFixed(2)} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, heightM: toM(parseFloat(e.target.value) || 0) } : x))} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening height" />
-              <span className="text-txt-tertiary text-sm">{unit}</span>
+              <span className="text-[#948D82] text-sm">{unit}</span>
               <input type="number" min="1" step="1" value={o.count} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, count: parseInt(e.target.value, 10) || 0 } : x))} className="w-16 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening count" />
-              <span className="text-txt-tertiary text-sm">× {(o.widthM * o.heightM).toFixed(2)} m² each — {geometry.openings.find((d) => d.id === o.id)?.rule ?? ""}</span>
+              <span className="text-[#948D82] text-sm">× {(o.widthM * o.heightM).toFixed(2)} m² each — {geometry.openings.find((d) => d.id === o.id)?.rule ?? ""}</span>
               <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-ui-errorText px-2 py-1 text-sm">✕</Button>
             </div>
           ))}
           <div className="flex gap-2 mt-2">
             <Button onClick={() => setOpenings([...openings, newOpening("door")])} className="text-accent-400 text-sm font-semibold">+ Add door</Button>
             <Button onClick={() => setOpenings([...openings, newOpening("window")])} className="text-accent-400 text-sm font-semibold">+ Add window</Button>
-            <label className="text-xs text-txt-tertiary ml-2">Jamb depth (m)<input type="number" min="0" step="any" value={jambDepth} onChange={(e) => setJambDepth(e.target.value)} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-1 text-white font-mono text-sm ml-1" /></label>
+            <label className="text-xs text-[#948D82] ml-2">Jamb depth (m)<input type="number" min="0" step="any" value={jambDepth} onChange={(e) => setJambDepth(e.target.value)} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-1 text-white font-mono text-sm ml-1" /></label>
           </div>
         </div>
       </div>
@@ -388,7 +423,7 @@ export default function FinishesEstimator() {
               <div className="grid grid-cols-3 gap-4">
                 <div><label className={labelCls}>Brick rate / 1,000</label><input type="number" min="0" value={rBrick} onChange={(e) => setRBrick(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
                 <div><label className={labelCls}>Cement / bag</label><input type="number" min="0" value={rCement} onChange={(e) => setRCement(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
-                <div><label className={labelCls}>Sand / cft</label><input type="number" min="0" value={rSand} onChange={(e) => setRSand(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
+                <div><label className={labelCls}>Sand / {sandPerCft ? "cft" : "m³"}</label><input type="number" min="0" value={rSand} onChange={(e) => setRSand(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
               </div>
               <p className="text-xs text-txt-tertiary">Brick rate is per 1,000 — the cost divides by 1,000. (An earlier version multiplied pieces by the per-1,000 rate and overstated brick cost 1,000×.)</p>
             </div>
@@ -422,7 +457,7 @@ export default function FinishesEstimator() {
               </div>
               <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={pUneven} onChange={(e) => setPUneven(e.target.checked)} /> Uneven surface +10%</label>
               <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={pCeiling} onChange={(e) => setPCeiling(e.target.checked)} /> Plaster ceiling (at internal thickness)</label>
-              <p className="text-xs text-txt-tertiary">Internal plaster uses the net wall area; external plaster uses the gross wall area with the same IS 1200 opening rules.</p>
+              <p className="text-xs text-txt-tertiary">Internal plaster uses the net wall area (gross × faces, minus IS 1200 opening deductions); external plaster uses the net area of one external face, with the same opening deductions.</p>
             </div>
             <div className="space-y-3 bg-surface-hover/50 p-5 rounded-xl">
               <h3 className="text-lg font-bold mb-2">Plaster material</h3>

@@ -29,6 +29,8 @@ export default function RaftFoundationDesigner() {
   const [colSize, setColSize] = useState<number | "">(defaultRaftInputs.colSizeMm);
   const [colLoad, setColLoad] = useState<number | "">(defaultRaftInputs.colLoadKN);
   const [cover, setCover] = useState<number | "">(defaultRaftInputs.coverMm);
+  const [depth, setDepth] = useState<number | "">(defaultRaftInputs.depthM);
+  const [barDia, setBarDia] = useState<number | "">(defaultRaftInputs.barDiaMm);
   const [wastage, setWastage] = useState<number | "">(5);
 
   const results = useMemo(() => designRaft({
@@ -38,11 +40,12 @@ export default function RaftFoundationDesigner() {
     clayThicknessM: Number(clayH) || 0, e0: Number(e0) || 0, sigmaV0KPa: Number(sigV0) || 0,
     fck: Number(fck) || 0, fy: Number(fy) || 0, colSizeMm: Number(colSize) || 0,
     colLoadKN: Number(colLoad) || 0, coverMm: Number(cover) || 0, wastagePct: Number(wastage) || 0,
+    depthM: Number(depth) || 0, barDiaMm: Number(barDia) || 20,
     cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg,
     sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
-  }), [length, width, thickness, totalLoad, ex, ey, sbc, es, cc, clayH, e0, sigV0, fck, fy, colSize, colLoad, cover, wastage, rates]);
+  }), [length, width, thickness, totalLoad, ex, ey, sbc, es, cc, clayH, e0, sigV0, fck, fy, colSize, colLoad, cover, wastage, depth, barDia, rates]);
 
-  const summary = `Raft ${length}×${width}×${thickness} m; q_avg ${results.qAvgKPa} kPa, qmax ${results.qMaxKPa}, qmin ${results.qMinKPa} (SBC ${sbc}); settlement ${results.settlementTotalMm} mm (immediate ${results.settlementImmediateMm} + consolidation ${results.settlementConsolidationMm}); punching utilisation ${(results.punchingUtil * 100).toFixed(0)}%; Ast ${results.astTopMm2PerM} mm²/m top+bottom each way; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
+  const summary = `Raft ${length}×${width}×${thickness} m; q_avg ${results.qAvgKPa} kPa, qmax ${results.qMaxKPa}, qmin ${results.qMinKPa} (SBC ${sbc}); settlement ${results.settlementTotalMm} mm (immediate ${results.settlementImmediateMm} + consolidation ${results.settlementConsolidationMm}); punching utilisation ${(results.punchingUtil * 100).toFixed(0)}%; Ast ${Number.isFinite(results.astTopMm2PerM) ? results.astTopMm2PerM : "—"} mm²/m top+bottom each way; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
@@ -65,6 +68,7 @@ export default function RaftFoundationDesigner() {
                 <NumberInput label="Eccentricity ey" unit="m" value={ey} onChange={setEy} />
                 <NumberInput label={<span className="flex items-center gap-1">Soil Bearing Capacity <CodeTooltip standard="IS" code="1904:1986" description="Design and construction of foundations in soils: General requirements." /></span>} unit="kN/m²" value={sbc} onChange={setSbc} requirePositive />
                 <NumberInput label="Soil Modulus (Es)" unit="MPa" value={es} onChange={setEs} requirePositive />
+                <NumberInput label="Foundation Depth (excavation)" unit="m" value={depth} onChange={setDepth} requirePositive />
               </div>
             </div>
             <div>
@@ -84,6 +88,7 @@ export default function RaftFoundationDesigner() {
                 <NumberInput label="Concrete (fck)" unit="MPa" value={fck} onChange={setFck} requirePositive />
                 <NumberInput label="Steel (fy)" unit="MPa" value={fy} onChange={setFy} requirePositive />
                 <NumberInput label="Cover" unit="mm" value={cover} onChange={setCover} requirePositive />
+                <NumberInput label="Main Bar Dia" unit="mm" value={barDia} onChange={setBarDia} requirePositive />
                 <NumberInput label="Wastage" unit="%" value={wastage} onChange={setWastage} />
                 <NumberInput label="Cement" unit={table.currency + "/bag"} value={rates.cementPerBag ?? ""} onChange={(v) => setRate("cementPerBag", v === "" ? null : Number(v))} />
                 <NumberInput label="Steel" unit={table.currency + "/kg"} value={rates.steelPerKg ?? ""} onChange={(v) => setRate("steelPerKg", v === "" ? null : Number(v))} />
@@ -106,7 +111,7 @@ export default function RaftFoundationDesigner() {
                 <ResultCard title="Limit 50 mm" value={results.settlementOk ? "PASS" : "FAIL"} unit="" variant={results.settlementOk ? "primary" : "warning"} />
               </div>
             </MaterialSummary>
-            <MaterialSummary title="Punching & Flexure" totalLabel="Steel (each way, top + bottom)" totalValue={results.astTopMm2PerM.toFixed(0)} totalUnit="mm²/m" relatedToolIds={[]}>
+            <MaterialSummary title="Punching & Flexure" totalLabel="Steel (each way, top + bottom)" totalValue={Number.isFinite(results.astTopMm2PerM) ? results.astTopMm2PerM.toFixed(0) : "—"} totalUnit="mm²/m" relatedToolIds={[]}>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
                 <ResultCard title="Punching τv" value={results.punchingTauVMpa.toFixed(2)} unit="MPa" variant={results.punchingOk ? "neutral" : "warning"} />
                 <ResultCard title="Allowable" value={results.punchingAllowMpa.toFixed(2)} unit="MPa" variant="neutral" />
@@ -139,7 +144,7 @@ export default function RaftFoundationDesigner() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="raftfoundationdesigner_tool" currentInputs={{ length, width, thickness, totalLoad, ex, ey, sbc, es, cc, clayH, e0, sigV0, fck, fy, colSize, colLoad, cover, wastage }} />
+      <CalculationHistory calculatorId="raftfoundationdesigner_tool" currentInputs={{ length, width, thickness, totalLoad, ex, ey, sbc, es, cc, clayH, e0, sigV0, fck, fy, colSize, colLoad, cover, wastage, depth, barDia }} />
     </div>
   );
 }

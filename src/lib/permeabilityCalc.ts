@@ -28,10 +28,13 @@ export function fallingHeadK(standpipeAreaCm2: number, lengthCm: number, sampleA
   return (2.303 * (standpipeAreaCm2 * lengthCm) / (sampleAreaCm2 * timeS)) * Math.log10(head1Cm / head2Cm);
 }
 export function kToMetresPerDay(kCmS: number): number { return kCmS * 864; }
-/** Hazen screening estimate k ≈ 0.01·D10² (D10 in mm → k in cm/s). Labelled estimate only. */
+/** Hazen screening estimate k ≈ 1.0·D10² (D10 in mm → k in cm/s).
+ * Hazen: k = C·D10² with C ≈ 100 and D10 in cm; with D10 in mm that is
+ * k ≈ 1.0·D10² cm/s. The old 0.01 coefficient was 100× too low (a clean
+ * sand read as silt). Labelled estimate only. */
 export function hazenK(d10Mm: number): number {
   if (d10Mm <= 0) throw new Error("D10 must be > 0.");
-  return 0.01 * d10Mm * d10Mm;
+  return 1.0 * d10Mm * d10Mm;
 }
 export function averageK(values: number[]): number {
   if (values.length === 0) throw new Error("Need at least one trial.");

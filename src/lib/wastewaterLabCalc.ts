@@ -9,8 +9,8 @@
  * BOD5 (APHA 5210B): P = sampleVol / bottleVol; BOD = (DOi - DOf) / P
  * COD  (APHA 5220D): COD = ((Vblank - Vsample) x N x 8000) / sampleVol
  * Thresholds are PEQS/NEQS (Punjab EPA): BOD 80 mg/L inland / 250 to
- * sewer; COD 150 mg/L inland / 400 to sewer; TSS 200 mg/L. The old
- * "Safe <30 BOD / <250 COD" bands were wrong and are retired.
+ * sewer; COD 150 mg/L inland / 400 to sewer; TSS 200 mg/L inland / 400
+ * to sewer. The old "Safe <30 BOD / <250 COD" bands were wrong and are retired.
  */
 import { PEQS_LIMITS_MG_L } from "./mepConstants";
 
@@ -178,6 +178,6 @@ export function calcEffluentScreen(inp: EffluentScreenInputs): EffluentScreenRes
     codBodInterpretation: interpretation,
     tssMgL: inp.tssMgL ?? null,
     tssStatus:
-      inp.tssMgL != null ? (inp.tssMgL <= PEQS_LIMITS_MG_L.tss ? "meets-inland" : "exceeds") : null,
+      inp.tssMgL != null ? peqsStatus(inp.tssMgL, PEQS_LIMITS_MG_L.tss, PEQS_LIMITS_MG_L.tssToSewer) : null,
   };
 }

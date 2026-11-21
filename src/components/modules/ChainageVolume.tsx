@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
 import { FieldTooltip } from "../ui/FieldTooltip";
+import { parseChainage } from "../../lib/chainageCalc";
 
 
 interface Station {
@@ -54,13 +55,11 @@ export default function ChainageVolumeEstimator() {
     { id: uuidv4(), chainage: "90", ngl: "99", fl: "100" },
   ]);
 
-  const parseChainage = (val: string) => {
-    const clean = val.replace(/\s/g, "");
-    if (clean.includes("+")) {
-      const parts = clean.split("+");
-      return parseFloat(parts.join("")) || 0;
-    }
-    return parseFloat(clean) || 0;
+  // km+m notation ("1+20" = 1 km + 20 m = 1,020 m) uses the engine's
+  // parseChainage. The old local version joined the parts ("1+20" → 120 m).
+  const parseChainageLocal = (val: string) => {
+    const n = parseChainage(val);
+    return isFinite(n) ? n : 0;
   };
 
   const handleUpdateStation = (id: string, field: keyof Station, value: string) => {
@@ -84,11 +83,11 @@ export default function ChainageVolumeEstimator() {
     const swell = Number(swellFactor) || 0;
     const shrink = Number(shrinkFactor) || 0;
 
-    let sortedStations = [...stations].sort((a, b) => parseChainage(a.chainage) - parseChainage(b.chainage));
+    let sortedStations = [...stations].sort((a, b) => parseChainageLocal(a.chainage) - parseChainageLocal(b.chainage));
     
     // First pass: Calculate areas for each station
     const processedStations = sortedStations.map((station) => {
-      const ch = parseChainage(station.chainage);
+      const ch = parseChainageLocal(station.chainage);
       const ngl = parseFloat(station.ngl) || 0;
       const fl = parseFloat(station.fl) || 0;
       const d = ngl - fl;
@@ -217,11 +216,6 @@ export default function ChainageVolumeEstimator() {
         totalFill = segments[segments.length - 1].cumFill;
     }
 
-    // Apply Factors
-    const bulkedCut = totalCut * (1 + swell / 100);
-    const shrunkenFill = totalFill * (1 - shrink / 100);
-    const finalNet = bulkedCut - shrunkenFill;
-
     // Simpson's 1/3 rule is only valid with equal spacing + an odd station
     // count — the old tool silently used d = totalL/2 on unequal spacing.
     let simpsonError: string | null = null;
@@ -234,8 +228,29 @@ export default function ChainageVolumeEstimator() {
         if (spacings.some((sp) => Math.abs(sp - spacings[0]) > 1e-9)) simpsonError = "Simpson's rule needs equal station spacing — switch to Trapezoidal or re-space the stations.";
       }
     }
-    if (stations.some((st, i) => i > 0 && parseChainage(st.chainage) < parseChainage(stations[i - 1].chainage))) {
+    // When Simpson's rule is invalid the totals below are NOT Simpson
+    // totals — the old code displayed the hybrid-method numbers alongside
+    // the error message. Suppress (zero) them until the preconditions hold.
+    if (simpsonError) {
+      segments = segments.map((s: any) => ({ ...s, intCut: 0, intFill: 0, cumCut: 0, cumFill: 0, netVolume: 0 }));
+      totalCut = 0;
+      totalFill = 0;
+    }
+    // Apply Factors
+    const bulkedCut = totalCut * (1 + swell / 100);
+    const shrunkenFill = totalFill * (1 - shrink / 100);
+    const finalNet = bulkedCut - shrunkenFill;
+
+    if (stations.some((st, i) => i > 0 && parseChainageLocal(st.chainage) < parseChainageLocal(stations[i - 1].chainage))) {
       sortWarning = "Chainages were entered out of order — stations are sorted for the calculation.";
+    }
+    // Duplicate chainages produce zero-length segments (the engine throws
+    // "Chainages must be strictly increasing") — warn instead of silently
+    // showing a zero segment.
+    let duplicateError: string | null = null;
+    {
+      const chs = processedStations.map((st) => st.ch);
+      if (new Set(chs).size !== chs.length) duplicateError = "Duplicate chainages entered — a zero-length segment contributes no volume. Give each station a different chainage.";
     }
     return {
       segments,
@@ -246,6 +261,7 @@ export default function ChainageVolumeEstimator() {
       finalNet,
       simpsonError,
       sortWarning,
+      duplicateError,
     };
   }, [stations, formationWidth, cutSlope, fillSlope, method, swellFactor, shrinkFactor]);
 
@@ -319,6 +335,7 @@ export default function ChainageVolumeEstimator() {
                         <option value="simpson">Simpson's (1/3) Rule</option>
                     </select>
                     {results.simpsonError && (<p className="text-sm text-ui-errorText font-medium mt-2">{results.simpsonError}</p>)}
+                    {results.duplicateError && (<p className="text-sm text-ui-errorText font-medium mt-2">{results.duplicateError}</p>)}
                     {results.sortWarning && (<p className="text-sm text-accent-800 font-medium mt-2">{results.sortWarning}</p>)}
                     <p className="text-xs text-txt-tertiary mt-2">Chainage accepts km+m notation, e.g. 1+200 = 1200 m.</p>
                     <Button onClick={addStation}

@@ -4,11 +4,15 @@
  * Canonical rules (G3 spec + repo AGENTS.md):
  * - Effective depth: d = D - (cover + phi/2), phi = main bar dia.
  * - Steel area: As = n * pi * phi^2 / 4. Steel ratio rho = As / (b*d).
- * - Rectangular stirrup, AGENTS.md field rule (quantity take-off):
- *   L = 2(A+B) + 24*phi. The IS 2502 detailed value is computed alongside
- *   and shown, because it reads ~10.3% LOWER (demo 1.364 m vs 1.492 m for
- *   the default beam) — the two must never be silently swapped.
- * - Stirrup count: N = floor(L/S) + 1 (AGENTS.md: N = L/S + 1, rounded up).
+ * - Rectangular stirrup: IS 2502 DETAILED length is canonical (unified
+ *   X3 convention — inner dims A/B = section − 2·cover − φ; headline
+ *   weight uses the detailed length). The AGENTS.md field rule
+ *   L = 2(A+B) + 24φ is computed alongside from the same inner dims and
+ *   shown for comparison — it reads ~10% HIGHER (demo 1.460 m vs
+ *   1.332 m for the default beam) because it does not deduct bend
+ *   shortening. The two must never be silently swapped.
+ * - Stirrup count: N = ceil(L/S) + 1 (AGENTS.md: N = L/S + 1, always
+ *   round up).
  * - All steel weight via steelCalc.ts unitWeightKgPerM (d^2/162.28).
  * - Slab grid (Omni pattern): n = floor(grid/spacing) + 1 per direction.
  *
@@ -256,12 +260,19 @@ export function calcReinforcement(inp: ReinforcementInputs): ReinforcementResult
   const rhoBottom = (asBottom / (inp.widthMm * d)) * 100;
   const rhoTop = (asTop / (inp.widthMm * d)) * 100;
 
-  const a = inp.widthMm - 2 * inp.coverMm;
-  const b = inp.depthMm - 2 * inp.coverMm;
+  // Stirrup inner dims: section minus 2x cover minus the stirrup dia —
+  // the unified X3 convention. The headline stirrup weight uses the
+  // IS 2502 DETAILED length (the old code used the field rule, ~10%
+  // higher, so no other tool agreed with this one); the field rule is
+  // still reported as a labelled comparison.
+  const a = inp.widthMm - 2 * inp.coverMm - stirDia;
+  const b = inp.depthMm - 2 * inp.coverMm - stirDia;
   const stirSimple = stirrupLengthSimple(a, b, stirDia);
   const stirDetailed = stirrupLengthDetailed(a, b, stirDia);
-  const stirCount = Math.floor((inp.lengthM * 1000) / stirSpacing) + 1;
-  const stirTotalM = round2((stirCount * stirSimple) / 1000);
+  // AGENTS.md rebar-spacing rule: N = L/S + 1, always round up (the old
+  // code used floor, one stirrup short whenever L/S was non-integer).
+  const stirCount = Math.ceil((inp.lengthM * 1000) / stirSpacing) + 1;
+  const stirTotalM = round2((stirCount * stirDetailed) / 1000);
   const stirWt = round2(stirTotalM * unitWeightKgPerM(stirDia));
 
   const barLen = (dia: number) => inp.lengthM + lapAllowanceM(inp.lengthM, dia);
@@ -272,7 +283,7 @@ export function calcReinforcement(inp: ReinforcementInputs): ReinforcementResult
   layers.push(
     { label: "Bottom (main) bars", count: botCount, diaMm: botDia, barLengthM: round2(barLen(botDia)), totalLengthM: botLenM, weightKg: botWt, areaMm2: round2(asBottom) },
     { label: "Top bars", count: topCount, diaMm: topDia, barLengthM: round2(barLen(topDia)), totalLengthM: topLenM, weightKg: topWt, areaMm2: round2(asTop) },
-    { label: "Stirrups", count: stirCount, diaMm: stirDia, barLengthM: round2(stirSimple / 1000), totalLengthM: stirTotalM, weightKg: stirWt },
+    { label: "Stirrups", count: stirCount, diaMm: stirDia, barLengthM: round2(stirDetailed / 1000), totalLengthM: stirTotalM, weightKg: stirWt },
   );
   const mainWt = round2(botWt + topWt);
   const totalNetKg = round2(mainWt + stirWt);
@@ -280,7 +291,19 @@ export function calcReinforcement(inp: ReinforcementInputs): ReinforcementResult
   formula =
     `d = ${inp.depthMm} − (${inp.coverMm} + ${botDia}/2) = ${d} mm; ` +
     `As,bottom = ${botCount}×π×${botDia}²/4 = ${round2(asBottom)} mm²; ρ = ${round2(asBottom)}/(${inp.widthMm}×${d}) = ${rhoBottom.toFixed(2)}%; ` +
-    `stirrup L = 2(${a}+${b}) + 24×${stirDia} = ${stirSimple} mm (field rule); N = ⌊${inp.lengthM * 1000}/${stirSpacing}⌋+1 = ${stirCount}.`;
+    `stirrup L (IS 2502 detailed) = 2(${a}+${b}) + 2·10×${stirDia} − (3·2×${stirDia} + 2·3×${stirDia}) = ${stirDetailed} mm (field rule ${stirSimple} mm, shown for comparison); N = ⌈${inp.lengthM * 1000}/${stirSpacing}⌉+1 = ${stirCount}.`;
+  // The rho note is conditional on the computed ratio and member type —
+  // the old text always claimed "within the typical 0.8–1.5% rule of
+  // thumb for beams" even at ρ = 0.76% and for columns.
+  const rhoNote = (() => {
+    const isColumn = inp.type === "Column";
+    const [lo, hi] = isColumn ? [0.8, 4] : [0.8, 1.5];
+    const band = `${lo}–${hi}%`;
+    const kind = isColumn ? "columns" : "beams";
+    if (rhoBottom < lo) return `Steel ratio ${rhoBottom.toFixed(2)}% (bottom) — BELOW the typical ${band} rule of thumb for ${kind}; lightly reinforced, check the design. This is a quantity check, not a design check.`;
+    if (rhoBottom > hi) return `Steel ratio ${rhoBottom.toFixed(2)}% (bottom) — ABOVE the typical ${band} rule of thumb for ${kind}; heavily reinforced, check congestion and the design. This is a quantity check, not a design check.`;
+    return `Steel ratio ${rhoBottom.toFixed(2)}% (bottom) — within the typical ${band} rule of thumb for ${kind}. This is a quantity check, not a design check.`;
+  })();
   return {
     effectiveDepthMm: d,
     activeWidthMm: activeWidth,
@@ -300,7 +323,7 @@ export function calcReinforcement(inp: ReinforcementInputs): ReinforcementResult
     asTopMm2: round2(asTop),
     rhoBottomPct: round2(rhoBottom),
     rhoTopPct: round2(rhoTop),
-    rhoNote: `Steel ratio ${rhoBottom.toFixed(2)}% (bottom) — within the typical 0.8–1.5% rule of thumb for beams. This is a quantity check, not a design check.`,
+    rhoNote,
     layers,
     stirrupLengthSimpleMm: stirSimple,
     stirrupLengthDetailedMm: stirDetailed,

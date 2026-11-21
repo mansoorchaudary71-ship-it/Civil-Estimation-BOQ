@@ -87,7 +87,7 @@ export default function NewsletterSignupCard() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-500 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500"></span>
             </span>
-            Join 15,000+ Engineers
+            Free Weekly Newsletter
           </div>
           
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-txt-primary dark:text-white mb-4 leading-tight">
@@ -96,7 +96,7 @@ export default function NewsletterSignupCard() {
           </h2>
           
           <p className="text-txt-secondary dark:text-txt-tertiary text-base md:text-lg leading-relaxed mb-8 max-w-lg mx-auto md:mx-0 font-medium">
-            Join 15,000+ contractors getting free weekly insights on live material rates, professional takeoff strategies, and plug-and-play BOQ templates.
+            Get free weekly insights on live material rates, professional takeoff strategies, and plug-and-play BOQ templates.
           </p>
 
           <div className="flex flex-col gap-3 mb-8 md:mb-0 hidden md:flex">

@@ -238,10 +238,19 @@ export function MasterRccCoreBody() {
 
   const sendToBOQ = () => {
     if (!results) return;
+    const m = results.materials;
+    // Concrete rate = material cost per m³ (cement + sand + aggregate),
+    // so the BOQ line is priced from the same rates as the cost summary —
+    // the old code sent rate 0 for all three lines, pricing everything at
+    // zero in the BOQ. Steel uses the entered steel rate; formwork uses
+    // the entered formwork rate (0 only when no rate was entered).
+    const concRate = results.totalWet > 0 && effCement != null && effSand != null && effAgg != null
+      ? (m.cementBagsOrder * effCement + m.sandM3 * effSand * 35.3147 + m.aggregateM3 * effAgg * 35.3147) / results.totalWet
+      : 0;
     const items = [
-      { id: Math.random().toString(36).substr(2, 9), division: "03 - Concrete", description: `RCC concrete (${results.materials.mixLabel})`, unit: "m³", quantity: results.totalWet, rate: 0 },
-      { id: Math.random().toString(36).substr(2, 9), division: "05 - Metals", description: "Steel reinforcement", unit: "kg", quantity: results.totalSteel, rate: 0 },
-      { id: Math.random().toString(36).substr(2, 9), division: "03 - Concrete", description: "Formwork / shuttering", unit: "m²", quantity: results.totalShut, rate: 0 },
+      { id: Math.random().toString(36).substr(2, 9), division: "03 - Concrete", description: `RCC concrete (${m.mixLabel})`, unit: "m³", quantity: results.totalWet, rate: concRate },
+      { id: Math.random().toString(36).substr(2, 9), division: "05 - Metals", description: "Steel reinforcement", unit: "kg", quantity: results.totalSteel, rate: effSteel ?? 0 },
+      { id: Math.random().toString(36).substr(2, 9), division: "03 - Concrete", description: "Formwork / shuttering", unit: "m²", quantity: results.totalShut, rate: effFormwork ?? 0 },
     ];
     window.dispatchEvent(new CustomEvent("fill-boq", { detail: items }));
     alert("Sent to BOQ Generator!");
@@ -268,7 +277,7 @@ export function MasterRccCoreBody() {
               <option value="M15">M15 — 1:2:4</option>
               <option value="M20">M20 — 1:1.5:3</option>
             </select>
-            <p className="text-xs text-txt-tertiary mt-1">Nominal mixes only up to M20. For M25+ use the <a href="/mix-design" className="text-accent-800 underline">mix-design calculator</a>.</p>
+            <p className="text-xs text-txt-tertiary mt-1">Nominal mixes (IS 456 Table 9) only up to M20. For M25+ use the <a href="/mix-design" className="text-accent-800 underline">mix-design calculator</a>.</p>
           </div>
           <div>
             <label htmlFor="rcc-wastage" className="text-base font-medium mb-1 block">Wastage % (0–15)</label>

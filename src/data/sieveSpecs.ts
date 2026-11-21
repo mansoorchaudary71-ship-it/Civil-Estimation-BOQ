@@ -204,8 +204,8 @@ export const sieveSpecData: { categories: Category[] } = {
              { size: 9.5, minPassing: 35, maxPassing: 65 },
              { size: 4.75, minPassing: 25, maxPassing: 55 },
              { size: 2.36, minPassing: 20, maxPassing: 40 },
-             { size: 0.425, minPassing: 10, maxPassing: 25 },
-             { size: 0.075, minPassing: 3, maxPassing: 10 },
+             { size: 0.425, minPassing: 10, maxPassing: 15 },
+             { size: 0.075, minPassing: 0, maxPassing: 5 },
            ]
          },
          {
@@ -218,7 +218,7 @@ export const sieveSpecData: { categories: Category[] } = {
              { size: 4.75, minPassing: 25, maxPassing: 40 },
              { size: 2.36, minPassing: 15, maxPassing: 30 },
              { size: 0.6, minPassing: 8, maxPassing: 22 },
-             { size: 0.075, minPassing: 0, maxPassing: 8 },
+             { size: 0.075, minPassing: 0, maxPassing: 5 },
            ]
          }
        ]

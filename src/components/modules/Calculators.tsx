@@ -31,7 +31,6 @@ import {
 import UnitToggleGroup from "../ui/UnitToggleGroup";
 import MasterQuantityEstimator from "./MasterQuantityEstimator";
 import { useAuth } from "../../contexts/AuthContext";
-import Brickwork9InchModule from "./Brickwork9InchModule";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from "recharts";
 import { CodeTooltip } from "../ui/CodeTooltip";
 import { jsPDF } from "jspdf";
@@ -588,9 +587,14 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
       unitVol,
       rawExport: currentExportData,
     } as any;
-    content =
-      activeTab === "bricks" ? (
-        <>
+    // The bricks tab used to embed Brickwork9InchModule, whose own internal
+    // defaults (20 x 10 x 0.22 m wall -> 18,204 bricks, 91 bags) were shown
+    // while the export/cart/batch used THIS tab's inputs — two different
+    // answers on one tab. Both tabs now render the hub's own inputs, so the
+    // numbers on screen are the numbers that get exported.
+    content = (
+      <>
+        {activeTab === "bricks" && (
           <div className="mb-4 bg-accent-50 dark:bg-accent-900/20 border border-accent-200 dark:border-accent-800 rounded-2xl px-4 py-3 text-sm">
             <a href="/brick-calculator" className="font-semibold text-accent-800 dark:text-accent-400 hover:underline">
               Open the full Brick Calculator →
@@ -600,9 +604,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
               or AED, plus PDF, print and share.
             </span>
           </div>
-          <Brickwork9InchModule hideHistory={true} />
-        </>
-      ) : (
+        )}
         <div className="space-y-6 bg-transparent/50 px-4 py-3 rounded-2xl border w-full overflow-hidden">
           <h3 className="border-b pb-2 uppercase st text-lg font-medium text-txt-primary mb-4">
             {activeTab} Wall
@@ -880,7 +882,8 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
             </div>
           </div>
         </div>
-      );
+      </>
+    );
   } else if (activeTab === "steel") {
     const calc = new SteelCalculator(
       parseNum(sDia),

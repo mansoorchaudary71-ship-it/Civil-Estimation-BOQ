@@ -7,8 +7,12 @@
  * - Stirrup length by the canonical IS 2502 detailed form
  *   (stirrupLengthDetailed from steelCalc.ts): L = 2(A+B) + 2·10φ −
  *   (3·2φ + 2·3φ), A/B = section dims − 2·cover − φ.
- * - Rectangular formwork counts SIDES ONLY (2·L·(W+D) − W·L, bottom
- *   excluded) with a "formed on ground" toggle that shows both numbers.
+ * - Rectangular formwork: SIDES ONLY for a beam formed on the ground —
+ *   the two long sides plus the two ends, 2·D·(L+W) (no soffit, no top);
+ *   a suspended beam also needs the soffit, 2·D·(L+W) + L·W; all six
+ *   faces are 2·(L·W + L·D + W·D). The old code counted 2·L·(W+D) − W·L,
+ *   which INCLUDED the soffit and OMITTED the ends (3.3 m² at the
+ *   defaults — true sides-only 2.64 m², beam formwork 3.54 m²).
  * - Shared editable rate table + currency via rates.ts; cost shown in-UI.
  * - Cement/sand/aggregate (dry × 1.54) + wastage per tab.
  * - Precast post/footing sizes are inputs (were hardcoded 0.15×0.15 m and
@@ -112,7 +116,9 @@ function finish(
     costLine(`Cement (${materials.cementBags} bags)`, materials.cementBags, "bags", rates.cementPerBag),
     costLine(`Sand (${round(materials.sandCft, 1)} cft)`, materials.sandCft, "cft", rates.sandPerCft),
     costLine(`Aggregate (${round(materials.aggCft, 1)} cft)`, materials.aggCft, "cft", rates.crushPerCft),
-    costLine(`Steel (${round(totalSteel, 1)} kg)`, totalSteel, "kg", rates.steelPerKg),
+    // No steel line when the tab has no reinforcement (precast, tube,
+    // trap footing) — the old code printed a "Steel (0.0 kg)" line.
+    ...(totalSteel > 0 ? [costLine(`Steel (${round(totalSteel, 1)} kg)`, totalSteel, "kg", rates.steelPerKg)] : []),
   ];
   return {
     errors, warnings, volM3: round(volM3, 3), formworkM2: round(formworkM2, 2),
@@ -129,9 +135,13 @@ export function calcRectangular(i: RectInputs, rates: GeometryRates = defaultGeo
   checkRange(errors, "Width", i.widthM, 0.05, 10);
   checkRange(errors, "Depth", i.depthM, 0.05, 10);
   const vol = i.lengthM * i.widthM * i.depthM;
-  const formworkAll = 2 * i.lengthM * (i.widthM + i.depthM);
-  const formworkSides = formworkAll - i.widthM * i.lengthM; // bottom excluded
-  const formwork = i.formedOnGround ? formworkSides : formworkAll;
+  // Sides only (ground beam: bottom formed on the ground): two long sides
+  // 2·L·D plus two ends 2·W·D. Suspended beam: sides + soffit (top open).
+  // All six faces (closed box) for reference.
+  const formworkSides = 2 * i.depthM * (i.lengthM + i.widthM);
+  const formworkBeam = formworkSides + i.lengthM * i.widthM;
+  const formworkAll = 2 * (i.lengthM * i.widthM + i.lengthM * i.depthM + i.widthM * i.depthM);
+  const formwork = i.formedOnGround ? formworkSides : formworkBeam;
   const mainKg = unitWeightKgPerM(i.mainDiaMm) * i.lengthM * i.mainBarCount;
   const stirrupCount = Math.ceil(i.lengthM / i.stirrupSpacingM) + 1;
   const aMm = i.widthM * 1000 - 2 * i.coverMm - i.stirrupDiaMm;
@@ -140,7 +150,7 @@ export function calcRectangular(i: RectInputs, rates: GeometryRates = defaultGeo
   const stirrupKg = unitWeightKgPerM(i.stirrupDiaMm) * (stirrupLenMm / 1000) * stirrupCount;
   return finish(vol, formwork, mainKg, stirrupKg, i.fck, i.wastagePct, rates, [
     { label: "Volume", text: `V = L·W·D = ${i.lengthM} × ${i.widthM} × ${i.depthM} = ${round(vol, 3)} m³` },
-    { label: "Formwork (sides only)", text: `2·L·(W+D) − W·L = ${round(formworkAll, 2)} − ${round(i.widthM * i.lengthM, 2)} = ${round(formworkSides, 2)} m² (bottom not formed on ground; all four sides = ${round(formworkAll, 2)} m²)` },
+    { label: "Formwork (sides only)", text: `Sides = 2·D·(L+W) = 2 × ${i.depthM} × (${i.lengthM}+${i.widthM}) = ${round(formworkSides, 2)} m² (bottom not formed on ground; suspended beam with soffit = ${round(formworkBeam, 2)} m²; all six faces = ${round(formworkAll, 2)} m²)` },
     { label: "Main steel", text: `${i.mainBarCount} × ${i.mainDiaMm} mm × ${i.lengthM} m × ${round(unitWeightKgPerM(i.mainDiaMm), 3)} kg/m = ${round(mainKg, 2)} kg` },
     { label: "Stirrups (IS 2502 detailed)", text: `A = ${round(aMm)} mm, B = ${round(bMm)} mm; L = 2(A+B) + 2·10φ − (3·2φ + 2·3φ) = ${round(stirrupLenMm)} mm; ${stirrupCount} nos × ${i.stirrupDiaMm} mm = ${round(stirrupKg, 2)} kg` },
   ], errors, [], undefined, formworkAll);
@@ -181,13 +191,16 @@ export function calcPrecast(i: PrecastInputs, rates: GeometryRates = defaultGeom
   const postCount = Math.ceil(i.wallLengthM / i.postSpacingM) + 1;
   const panelsPerSpan = Math.ceil(i.wallHeightM / i.panelHeightM);
   const totalPanels = panelsPerSpan * (postCount - 1);
-  const panelVol = (i.postSpacingM - 0.1) * i.panelHeightM * i.panelThickM * totalPanels;
+  // Panel clear length = post spacing minus the post width (the panel
+  // sits BETWEEN posts) — the old code used a magic 0.1 m here.
+  const panelClearM = Math.max(0, i.postSpacingM - i.postSizeM);
+  const panelVol = panelClearM * i.panelHeightM * i.panelThickM * totalPanels;
   const postVol = postCount * i.postSizeM * i.postSizeM * i.wallHeightM;
   const footingVol = postCount * i.footingSizeM * i.footingSizeM * i.footingDepthM;
   const vol = panelVol + postVol + footingVol;
   return finish(vol, 0, 0, 0, i.fck, i.wastagePct, rates, [
     { label: "Posts", text: `${postCount} posts (${i.postSizeM} × ${i.postSizeM} m) at ${i.postSpacingM} m centres` },
-    { label: "Panels", text: `${totalPanels} panels (${i.panelHeightM} m high × ${i.panelThickM} m thick)` },
+    { label: "Panels", text: `${totalPanels} panels (${round(panelClearM, 2)} m clear between posts × ${i.panelHeightM} m high × ${i.panelThickM} m thick)` },
     { label: "Footings", text: `${postCount} footings ${i.footingSizeM} × ${i.footingSizeM} × ${i.footingDepthM} m = ${round(footingVol, 2)} m³` },
   ], errors, [], { postCount, totalPanels, panelVol: round(panelVol, 2), postVol: round(postVol, 2), footingVol: round(footingVol, 2) });
 }
@@ -198,7 +211,9 @@ export function calcRoof(i: RoofInputs): { rafterM: number; pitchDeg: number; ar
   const rafter = Math.sqrt((i.spanM / 2) ** 2 + i.riseM ** 2);
   const pitch = (Math.atan(i.riseM / (i.spanM / 2)) * 180) / Math.PI;
   const area = 2 * rafter * i.runM;
-  const purlins = Math.ceil(rafter / i.purlinSpacingM) * 2 * i.runM;
+  // Purlins run along the slope on each side: one at the ridge, one at
+  // the eave, and one every spacing in between (+1, not just ceil).
+  const purlins = (Math.ceil(rafter / i.purlinSpacingM) + 1) * 2 * i.runM;
   const battens = Math.ceil((2 * rafter) / i.battenSpacingM) * i.runM;
   const sheets = Math.ceil(area / (i.sheetWidthM * 2.44));
   return { rafterM: round(rafter, 2), pitchDeg: round(pitch, 1), areaM2: round(area, 2), purlinsM: round(purlins, 1), battensM: round(battens, 1), sheets, errors };
@@ -210,9 +225,16 @@ export function calcTrapFooting(i: TrapFootingInputs, rates: GeometryRates = def
   const a1 = i.baseLengthM * i.baseWidthM;
   const a2 = i.topLengthM * i.topWidthM;
   const vol = i.baseLengthM * i.baseWidthM * i.baseDepthM + (i.slopeDepthM / 3) * (a1 + a2 + Math.sqrt(a1 * a2));
-  const formwork = 2 * (i.baseLengthM + i.baseWidthM) * i.baseDepthM;
+  // Formwork: base sides + the four sloped (frustum) faces. Each sloped
+  // face is a trapezoid (base edge + top edge)/2 × slant height.
+  const baseSides = 2 * (i.baseLengthM + i.baseWidthM) * i.baseDepthM;
+  const slantL = Math.sqrt(i.slopeDepthM ** 2 + ((i.baseLengthM - i.topLengthM) / 2) ** 2);
+  const slantW = Math.sqrt(i.slopeDepthM ** 2 + ((i.baseWidthM - i.topWidthM) / 2) ** 2);
+  const slopedFaces = (i.baseLengthM + i.topLengthM) * slantL + (i.baseWidthM + i.topWidthM) * slantW;
+  const formwork = baseSides + slopedFaces;
   return finish(vol, formwork, 0, 0, i.fck, i.wastagePct, rates, [
     { label: "Volume", text: `V = base + frustum = L·B·D1 + (h/3)(A1 + A2 + √(A1·A2)) = ${round(vol, 3)} m³ (trapezoidal rule, IS 456 practice)` },
+    { label: "Formwork", text: `Base sides ${round(baseSides, 2)} m² + sloped faces ${round(slopedFaces, 2)} m² (slant ${round(slantL, 2)} / ${round(slantW, 2)} m) = ${round(formwork, 2)} m²` },
     { label: "Note", text: "For the full structural design (punching shear, bending, steel) use the Isolated Footing Design tool — this tab is quantities only." },
   ], errors, []);
 }
@@ -225,7 +247,7 @@ export function calcStaircaseTab(i: Partial<StaircaseInputs>): ReturnType<typeof
 export const GEOMETRY_FAQS: FaqItem[] = [
   { q: "How is hollow cylinder (tube) volume calculated?", a: "V = π(R² − r²)·L — the outer cylinder minus the inner cylinder. The same formula gives a pipe, a well ring or a hollow column; the weight is volume × 2,400 kg/m³ for concrete." },
   { q: "How much steel per cubic metre of concrete?", a: "As a planning rule: slab ~1.0% (≈ 78 kg/m³), beam ~1.5% (≈ 118 kg/m³), column ~2.0% (≈ 157 kg/m³), footing ~0.8% (≈ 63 kg/m³). This tool does not use those rules where a design exists — the rectangular tab uses your actual bar sizes and spacing." },
-  { q: "What is the formwork area formula?", a: "For a beam on the ground, formwork is the two sides plus the ends: 2·L·(W+D) minus the bottom (W·L), which the ground forms. A column is perimeter × height; a circular column is π·D·h." },
+  { q: "What is the formwork area formula?", a: "For a beam formed on the ground, formwork is the two sides plus the two ends: 2·D·(L+W) — the bottom is formed by the ground, not by shuttering. A suspended beam also needs the soffit: 2·D·(L+W) + L·W (top open). A column is perimeter × height; a circular column is π·D·h." },
   { q: "How many plywood sheets are needed?", a: "One standard sheet is 1.22 × 2.44 m = 2.97 m². Sheets = ceil(formwork area ÷ 2.97). Battens run about 3.5 m per m² of formwork." },
   { q: "What is the stirrup length formula?", a: "IS 2502 detailed form: L = 2(A+B) + 2·10φ − (3·2φ + 2·3φ), where A and B are the inner dimensions (section minus 2× cover minus φ) and φ is the stirrup diameter. The field rule 2(A+B) + 24φ reads about 10% higher because it does not deduct bend shortening — this tool uses the detailed form and says so." },
 ];

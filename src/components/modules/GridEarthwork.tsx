@@ -75,9 +75,15 @@ export default function GridEarthworkEstimator() {
   const avgExisting = (tlE + trE + blE + brE) / 4;
   const avgProposed = (tlP + trP + blP + brP) / 4;
   const avgDepth = (tlDiff + trDiff + blDiff + brDiff) / 4;
-  const totalVolume = Math.abs(avgDepth) * area;
-  const isCut = avgDepth > 0;
-  const isFill = avgDepth < 0;
+  // Cut and fill are summed SEPARATELY per corner (each corner covers a
+  // quarter of the cell): the old |mean depth| × area cancelled cut
+  // against fill — a +1/+1/−1/−1 m cell showed 0 m³ instead of 50 m³ cut
+  // and 50 m³ fill. Same per-corner split the multi-cell engine uses.
+  const cornerCutM3 = [tlDiff, trDiff, blDiff, brDiff].reduce((s, d) => s + (d > 0 ? d : 0) * (area / 4), 0);
+  const cornerFillM3 = [tlDiff, trDiff, blDiff, brDiff].reduce((s, d) => s + (d < 0 ? -d : 0) * (area / 4), 0);
+  const totalVolume = cornerCutM3 + cornerFillM3;
+  const isCut = cornerCutM3 > 0 && cornerFillM3 === 0;
+  const isFill = cornerFillM3 > 0 && cornerCutM3 === 0;
   return (
     <div className="w-full bg-transparent text-txt-primary font-sans mt-4">
       <div className="space-y-8">
@@ -296,7 +302,7 @@ export default function GridEarthworkEstimator() {
           <section className="space-y-6 flex-1 flex flex-col mt-6">
                  <MaterialSummary
                    title="Results (Grid Leveling)"
-                   totalLabel={`Total ${isCut ? "Cut" : isFill ? "Fill" : ""} Volume`}
+                   totalLabel={`Total ${isCut ? "Cut" : isFill ? "Fill" : "Cut + Fill"} Volume`}
                    totalValue={totalVolume.toFixed(2)}
                    totalUnit={unitV || ""}
                  >
@@ -311,6 +317,18 @@ export default function GridEarthworkEstimator() {
                        title="Avg Proposed Elev."
                        value={avgProposed.toFixed(3)}
                        unit={unitL || ""}
+                       variant="neutral"
+                     />
+                     <ResultCard
+                       title="Cut Volume"
+                       value={cornerCutM3.toFixed(2)}
+                       unit={unitV || ""}
+                       variant="neutral"
+                     />
+                     <ResultCard
+                       title="Fill Volume"
+                       value={cornerFillM3.toFixed(2)}
+                       unit={unitV || ""}
                        variant="neutral"
                      />
                      <ResultCard

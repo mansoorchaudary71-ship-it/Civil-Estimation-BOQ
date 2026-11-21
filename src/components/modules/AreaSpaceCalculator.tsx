@@ -80,6 +80,9 @@ export default function AreaSpaceCalculator() {
   const toM = (v: number) => (unit === "ft" ? v * 0.3048 : v);
   const toM2 = (v: number) => (unit === "ft" ? v * 0.092903 : v);
   const areaOut = (m2: number) => (unit === "ft" ? m2 * 10.7639 : m2);
+  // Lengths (including perimeters) convert with FT; the old code showed the
+  // metre perimeter with an "ft" label (18 m displayed as "18 ft").
+  const lenOut = (m: number) => (unit === "ft" ? m * FT : m);
   const uLen = unit === "m" ? "m" : "ft";
   const uArea = unit === "m" ? "m²" : "sq ft";
 
@@ -186,7 +189,7 @@ export default function AreaSpaceCalculator() {
   };
 
   const steps: FormulaStep[] = [
-    { id: 1, label: "Shape", theoretical: "Rectangle L×W; circle πr²; triangle Heron; trapezoid (a+b)/2×h; L-shape = overall L×arm1 + (overall W−arm1)×arm2, perimeter 2×(overall L+overall W); polygon shoelace", applied: `Area = ${shape.areaM2.toFixed(2)} m²; perimeter = ${shape.perimeterM.toFixed(2)} m` },
+    { id: 1, label: "Shape", theoretical: "Rectangle L×W; circle πr²; triangle Heron; trapezoid (a+b)/2×h (perimeter assumes an isosceles trapezoid); L-shape = overall L×arm1 + (overall W−arm1)×arm2, perimeter 2×(overall L+overall W); polygon shoelace", applied: `Area = ${shape.areaM2.toFixed(2)} m²; perimeter = ${shape.perimeterM.toFixed(2)} m` },
     { id: 2, label: "Plot triangulation", theoretical: "Split the plot on the diagonal into two triangles; Heron: s=(a+b+c)/2, area=√(s(s−a)(s−b)(s−c))", applied: plot.totalM2 != null ? `Triangles ${plot.area1M2!.toFixed(2)} + ${plot.area2M2!.toFixed(2)} = ${plot.totalM2.toFixed(2)} m²` : (plot.error ?? "Invalid diagonal") },
     { id: 3, label: "Plaster deductions (IS 1200)", theoretical: "<0.5 m²: no deduction; 0.5–3 m²: deduct the FULL opening area once (one face); >3 m²: deduct both faces + jambs (2h+w)×jamb depth", applied: `Gross ${plaster.grossAreaM2.toFixed(2)} − ${plaster.totalDeductionM2.toFixed(2)} + ${plaster.jambsM2.toFixed(2)} = net ${plaster.netAreaM2.toFixed(2)} m²` },
     { id: 4, label: "Roof pitch", theoretical: "True area = (floor area + perimeter × overhang) ÷ cos(pitch)", applied: `Horizontal ${roof.horizontalAreaM2.toFixed(2)} m² ÷ cos(${roofPitch}°) = ${roof.trueAreaM2.toFixed(2)} m² (×${roof.pitchMultiplier.toFixed(3)}, pitch ${roof.pitchRatio})` },
@@ -217,7 +220,7 @@ export default function AreaSpaceCalculator() {
       <p className="text-base text-txt-secondary leading-relaxed px-4 md:px-0">Geometric triangulation, the RERA area ladder, roof pitch multipliers and IS 1200 opening deductions — with marla and kanal conversions on every tab and a BOQ handoff for the result.</p>
       <div className="w-full bg-surface-default/80 rounded-2xl border border-white/20 p-4 sm:p-6 shadow-brand-sm">
         <div className="flex flex-wrap justify-between items-center gap-4">
-          <h1 className="flex items-center gap-3 text-xl font-semibold text-txt-primary"><div className="p-3 bg-accent-50 text-accent-800 rounded-2xl"><Ruler className="w-8 h-8" /></div> Plot Area Calculator — Irregular Land, RERA &amp; IS Code Compliant</h1>
+          <h2 className="flex items-center gap-3 text-xl font-semibold text-txt-primary"><div className="p-3 bg-accent-50 text-accent-800 rounded-2xl"><Ruler className="w-8 h-8" /></div> Plot Area Calculator — Irregular Land, RERA &amp; IS Code Compliant</h2>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex bg-surface-hover p-1 rounded-xl">
               {(["m", "ft"] as const).map((u) => (
@@ -284,7 +287,7 @@ export default function AreaSpaceCalculator() {
                   </div>
                 )}
               </div>
-              <p className="text-lg font-bold">Area: {areaOut(shape.areaM2).toFixed(2)} {uArea} · Perimeter: {shape.perimeterM.toFixed(2)} {uLen === "m" ? "m" : "ft"}</p>
+              <p className="text-lg font-bold">Area: {areaOut(shape.areaM2).toFixed(2)} {uArea} · Perimeter: {lenOut(shape.perimeterM).toFixed(2)} {uLen === "m" ? "m" : "ft"}</p>
             </div>
           )}
 
@@ -301,7 +304,7 @@ export default function AreaSpaceCalculator() {
               {plot.error ? (
                 <p className="text-sm text-ui-errorText bg-ui-error border border-ui-errorBorder rounded-xl px-4 py-2">{plot.error}</p>
               ) : (
-                <p className="text-lg font-bold">Plot area: {areaOut(plot.totalM2 ?? 0).toFixed(2)} {uArea} (triangles {areaOut(plot.area1M2 ?? 0).toFixed(2)} + {areaOut(plot.area2M2 ?? 0).toFixed(2)}) · Perimeter: {plot.perimeterM.toFixed(2)} {uLen}</p>
+                <p className="text-lg font-bold">Plot area: {areaOut(plot.totalM2 ?? 0).toFixed(2)} {uArea} (triangles {areaOut(plot.area1M2 ?? 0).toFixed(2)} + {areaOut(plot.area2M2 ?? 0).toFixed(2)}) · Perimeter: {lenOut(plot.perimeterM).toFixed(2)} {uLen}</p>
               )}
             </div>
           )}

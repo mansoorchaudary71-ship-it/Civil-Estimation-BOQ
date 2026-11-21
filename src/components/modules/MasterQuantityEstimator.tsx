@@ -104,32 +104,46 @@ export default function MasterQuantityEstimator({
     const computed = computeWithUnits(activeCalculator, parsedInputs, sharedState, isSI);
     currentResults = computed.results;
   }
+
+  // Headline total = the first result line (the calculator's primary
+  // quantity), not a hardcoded "Complete".
+  const firstResult = Object.entries(currentResults)[0];
   
-  // Run computations independently for shared states
+  // Run computations independently for shared states — to a FIXED POINT.
+  // The old code made a single pass over the calculators in list order,
+  // so a calculator that reads a shared value produced by a LATER
+  // calculator (Backfilling reads PCC/footing volumes) got 0 on first
+  // load and never re-ran: the effect did not depend on sharedState.
+  // Repeating the pass until nothing changes (bounded at 10 passes)
+  // makes the order irrelevant and first load correct.
   useEffect(() => {
-    let newShared = { ...sharedState };
-    let changed = false;
-    
-    // Re-run all calculators to gather their shared outputs
-    calculatorsList.forEach(calc => {
-      const raw = calcInputs[calc.id] || {};
-      const parsed: Record<string, number> = {};
-      Object.keys(raw).forEach(k => {
-        parsed[k] = isNaN(parseFloat(raw[k])) ? 0 : parseFloat(raw[k]);
-      });
-      
-      const computed = computeWithUnits(calc, parsed, newShared, isSI);
-      if (computed.sharedOutputs) {
-        Object.entries(computed.sharedOutputs).forEach(([k, v]) => {
-          if (newShared[k] !== v) {
-            newShared[k] = v;
-            changed = true;
-          }
+    let newShared: Record<string, number> = { ...sharedState };
+    for (let pass = 0; pass < 10; pass++) {
+      let changed = false;
+      calculatorsList.forEach(calc => {
+        const raw = calcInputs[calc.id] || {};
+        const parsed: Record<string, number> = {};
+        Object.keys(raw).forEach(k => {
+          parsed[k] = isNaN(parseFloat(raw[k])) ? 0 : parseFloat(raw[k]);
         });
-      }
-    });
-    
-    if (changed) {
+
+        const computed = computeWithUnits(calc, parsed, newShared, isSI);
+        if (computed.sharedOutputs) {
+          Object.entries(computed.sharedOutputs).forEach(([k, v]) => {
+            if (newShared[k] !== v) {
+              newShared[k] = v;
+              changed = true;
+            }
+          });
+        }
+      });
+      if (!changed) break;
+    }
+
+    const differs =
+      Object.keys(newShared).some((k) => newShared[k] !== sharedState[k]) ||
+      Object.keys(sharedState).some((k) => !(k in newShared));
+    if (differs) {
       setSharedState(newShared);
     }
   }, [calcInputs, isSI]);
@@ -233,7 +247,7 @@ export default function MasterQuantityEstimator({
                                     <div className="w-1.5 h-1.5 rounded-full bg-ink/80 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
                                     <span className="font-mono text-xs font-black text-txt-primary dark:text-txt-primary uppercase tracking-wider">{dep}</span>
                                   </div>
-                                  <span className="font-black text-sm tracking-tight text-accent-800 dark:text-accent-400">{(sharedState[dep] || 0).toFixed(2)}</span>
+                                  <span className="font-black text-sm tracking-tight text-accent-800 dark:text-accent-400">{(sharedState[dep] || 0).toFixed(2)} {dep.startsWith("a_") ? "m²" : "m³"}</span>
                                </div>
                              ))}
                            </div>
@@ -248,8 +262,8 @@ export default function MasterQuantityEstimator({
                   <ToolSection title="Estimate Results" color="emerald" number="02">
                     <MaterialSummary
                       title={activeCalculator.label}
-                      totalLabel="Status"
-                      totalValue="Complete"
+                      totalLabel={firstResult ? firstResult[0] : "Status"}
+                      totalValue={firstResult ? firstResult[1] : "—"}
                       totalUnit=""
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-8">
@@ -263,14 +277,32 @@ export default function MasterQuantityEstimator({
                         ))}
                       </div>
                       {Object.values(calcInputs[activeCalc] ?? {}).some((v) => v !== "" && !(parseFloat(v as string) > 0)) && (
-                        <p className="mt-4 text-sm font-semibold text-amber-700">Check inputs: every dimension must be greater than 0 — blank or zero values are not silently treated as 0.</p>
+                        <p className="mt-4 text-sm font-semibold text-accent-800">Check inputs: every dimension must be greater than 0 — blank or zero values are not silently treated as 0.</p>
                       )}
                       <p className="mt-4 text-sm text-txt-tertiary">
                         {isSI ? "Metric (SI) mode — all computation in metres." : "Imperial mode — your ft / sqft inputs are converted to metric for computation and results are converted back, so Imperial and SI give the same physical quantities."}
-                        {" "}Plaster openings use the IS 1200 rule (see the deduction input). Rates: cement {pkRates.cementPerBag ? `Rs ${pkRates.cementPerBag}/bag` : "—"}, steel {pkRates.steelPerKg ? `Rs ${pkRates.steelPerKg}/kg` : "—"} ({rateTable.lastUpdated}).
+                        {" "}Plaster openings: pick the deduction mode (0/1/2) from your own opening sizes — the tool does not apply the IS 1200 rule automatically. Rates: cement {pkRates.cementPerBag ? `Rs ${pkRates.cementPerBag}/bag` : "—"}, steel {pkRates.steelPerKg ? `Rs ${pkRates.steelPerKg}/kg` : "—"} ({rateTable.lastUpdated}).
                       </p>
                       <div className="mt-4 flex flex-wrap gap-3">
-                        <Button onClick={() => setSharedState({})} className="px-4 py-2 rounded-full bg-ink text-white text-sm font-bold">Reset shared chain</Button>
+                        <Button
+                          onClick={() => {
+                            // Reset the whole chain to the calculators' default
+                            // inputs; the fixed-point effect above then
+                            // recomputes every shared value from scratch.
+                            // (The old button only cleared sharedState, so
+                            // the next effect pass refilled it from the
+                            // current — possibly edited — inputs.)
+                            const defaults: Record<string, Record<string, string>> = {};
+                            calculatorsList.forEach((c) => {
+                              const vals: Record<string, string> = {};
+                              c.inputs.forEach((inp) => { vals[inp.id] = inp.defaultVal; });
+                              defaults[c.id] = vals;
+                            });
+                            setCalcInputs(defaults);
+                            setSharedState({});
+                          }}
+                          className="px-4 py-2 rounded-full bg-ink text-white text-sm font-bold"
+                        >Reset shared chain</Button>
                       </div>
                     </MaterialSummary>
                   </ToolSection>

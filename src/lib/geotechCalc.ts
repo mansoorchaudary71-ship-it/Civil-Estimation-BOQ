@@ -74,7 +74,10 @@ export function phaseRelations(wPct: number, gs: number, bulkDensity: number): {
 export function freeSwell(initialMl: number, finalMl: number): { swellPct: number; band: string } {
   if (initialMl <= 0) throw new Error("Initial volume must be > 0.");
   const swellPct = ((finalMl - initialMl) / initialMl) * 100;
-  const band = swellPct < 20 ? "Low expansiveness" : swellPct <= 50 ? "Moderate expansiveness" : "High expansiveness";
+  // IS 1498 convention: <50% low, 50–100% moderate, >100% high. The old
+  // bands (<20 / ≤50 / >50) were stricter than IS 1498 and mislabelled
+  // ordinary soils as "high" expansiveness.
+  const band = swellPct < 50 ? "Low expansiveness" : swellPct <= 100 ? "Moderate expansiveness" : "High expansiveness";
   return { swellPct, band };
 }
 export const GEOTECH_WORKED = { waterContentPct: 25.0, specificGravity: 2.667, liquidLimit: 41.4, cbr25: 13.14, cbr50: 14.6 };

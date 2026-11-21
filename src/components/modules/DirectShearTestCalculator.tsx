@@ -150,6 +150,16 @@ export default function DirectShearTestCalculator() {
 
   const handlePrint = () => window.dispatchEvent(new CustomEvent('global-print-action'));
 
+  // Engine fit shown ON SCREEN (not PDF-only): R², the fit warning
+  // (e.g. negative cohesion clamped to 0) and the labelled Terzaghi SBC.
+  const screenFit = useMemo(() => {
+    const pts = testData.filter((d) => d.normalStress > 0).map((d) => ({ normalKpa: d.normalStress, shearKpa: d.shearStress }));
+    if (pts.length < 3) return null;
+    const fit = directShearFit(pts);
+    const sbc = terzaghiSbc(Math.max(0, fit.cohesionKpa), fit.phiDeg, 18, 1.0, 1.5, 3);
+    return { fit, sbc: sbc.sbcKpa, factors: sbc.factors };
+  }, [testData]);
+
   const handleSave = async () => {
     if (!estimateData) return;
     
@@ -342,6 +352,14 @@ export default function DirectShearTestCalculator() {
                       <span className="text-sm text-accent-800/70 font-bold mt-1 block relative z-10">degrees</span>
                     </div>
                   </div>
+                  {screenFit && (
+                    <div className="mb-8 p-4 rounded-2xl bg-surface-default border border-ui-borderSubtle text-sm space-y-1">
+                      <div className="flex justify-between"><span className="text-txt-secondary">Fit quality (R²)</span><span className="font-mono font-bold">{screenFit.fit.r2.toFixed(3)}{screenFit.fit.r2 < 0.95 ? " — below 0.95, repeat the test" : ""}</span></div>
+                      <div className="flex justify-between"><span className="text-txt-secondary">Terzaghi SBC (estimate only)</span><span className="font-mono font-bold">≈ {Math.round(screenFit.sbc)} kN/m²</span></div>
+                      <p className="text-xs text-txt-tertiary">SBC assumes γ 18 kN/m³, Df 1.0 m, B 1.5 m, FoS 3 (Nc {screenFit.factors.nc.toFixed(1)}, Nq {screenFit.factors.nq.toFixed(1)}, Nγ {screenFit.factors.ngamma.toFixed(1)}) — NOT a design bearing capacity.</p>
+                      {screenFit.fit.warning && <p className="text-sm font-medium text-accent-900 bg-accent-50 border border-accent-100 rounded-xl p-3">⚠ {screenFit.fit.warning}</p>}
+                    </div>
+                  )}
                   
                   {/* Chart section */}
                   <div className="bg-surface-default p-5 rounded-2xl border border-ui-borderDefault/5 shadow-brand-sm h-[350px] w-full pt-6 mb-6 overflow-hidden">

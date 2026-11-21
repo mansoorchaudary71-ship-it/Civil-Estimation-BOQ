@@ -36,11 +36,9 @@ export interface WaterTankInputs {
   wallThicknessMm: number;
   baseThicknessMm: number;
   fck: number;
-  fy: number;
   barType: BarType;
   coverMm: number;
   mainDiaMm: number;
-  stagingHeightM: number; // overhead only
   wastagePct: number;
   cementPerBag: number | null;
   steelPerKg: number | null;
@@ -55,8 +53,8 @@ export const defaultWaterTankInputs: WaterTankInputs = {
   lengthM: 4.5, widthM: 2.15, diameterM: 3.0,
   waterDepthM: 2.0, freeboardM: 0.3,
   wallThicknessMm: 200, baseThicknessMm: 200,
-  fck: 25, fy: 415, barType: "deformed", coverMm: 40, mainDiaMm: 10,
-  stagingHeightM: 6, wastagePct: 5,
+  fck: 25, barType: "deformed", coverMm: 40, mainDiaMm: 10,
+  wastagePct: 5,
   cementPerBag: 1450, steelPerKg: 270, sandPerCft: 90, crushPerCft: 90,
 };
 
@@ -68,6 +66,13 @@ export function sigmaStMpa(barType: BarType, stressType: "direct-tension" | "fle
 
 export function validateWaterTankInputs(i: WaterTankInputs): string[] {
   const e: string[] = [];
+  // Demand inputs: an empty occupants field used to give demand 0 L and a
+  // spurious "covers demand" PASS — these are errors, not warnings.
+  checkRange(e, "Occupants", i.occupants, 1, 100);
+  checkRange(e, "Water per person (lpcd)", i.lpcd, 20, 300);
+  checkRange(e, "Days of reserve", i.daysReserve, 1, 7);
+  checkRange(e, "Clear cover", i.coverMm, 20, 75);
+  checkRange(e, "Main bar diameter", i.mainDiaMm, 8, 16);
   checkRange(e, "Water depth", i.waterDepthM, 0.5, 6);
   checkRange(e, "Freeboard", i.freeboardM, 0.15, 0.5);
   checkRange(e, "Wall thickness", i.wallThicknessMm, 150, 500);
@@ -117,6 +122,13 @@ export function designWaterTank(input: Partial<WaterTankInputs> = {}): WaterTank
   const demandOk = capacityL >= demand;
   if (!demandOk) warnings.push(`Capacity ${round(capacityL)} L is below the demand ${demand} L — increase the dimensions or the reserve days.`);
   if (i.placement === "overhead" && i.fck < 30) warnings.push("IS 3370 recommends minimum M30 concrete for severe exposure (overhead tank) — M25 is shown for resting/underground use.");
+  // The Table 3 moment coefficients (0.027 sagging / 0.017 hogging) are
+  // tabulated for L/H ≈ 2.25. Far from that ratio they do not apply —
+  // warn instead of inventing coefficients for other ratios.
+  if (i.shape === "rectangular") {
+    const lhRatio = i.lengthM / i.waterDepthM;
+    if (lhRatio < 1.5 || lhRatio > 3) warnings.push(`L/H = ${round(lhRatio, 2)} is far from 2.25, the ratio the IS 3370 Part 4 Table 3 moment coefficients (0.027 / 0.017) are tabulated for — check Table 3 for your L/H or get the moments from a structural engineer; the wall steel above is indicative only.`);
+  }
   const waterLoad = capacityM3 * 9.81;
   const pMax = 9.81 * i.waterDepthM;
   const d = i.wallThicknessMm - i.coverMm - i.mainDiaMm / 2;
@@ -137,7 +149,11 @@ export function designWaterTank(input: Partial<WaterTankInputs> = {}): WaterTank
   const astLong = Math.max(astLongFlex, astMin);
   const astShort = Math.max(astShortFlex, astMin);
   const astHoop = Math.max(astHoopFlex, astMin);
-  const minGoverns = astMin >= astLongFlex && astMin >= astHoopFlex;
+  // "Minimum steel governs" must compare against the governing steel for
+  // THIS shape: for a circular tank the long-wall flexure steel is
+  // meaningless (a circular wall has no long/short walls), so comparing
+  // against it gave a wrong governs flag. Rectangular: long-wall flexure.
+  const minGoverns = i.shape === "circular" ? astMin >= astHoopFlex : astMin >= astLongFlex;
   const astDesign = i.shape === "circular" ? astHoop : astLong;
   const spacing = spacingForAst(astDesign, i.mainDiaMm);
   const astProv = astProvidedPerM(i.mainDiaMm, spacing);

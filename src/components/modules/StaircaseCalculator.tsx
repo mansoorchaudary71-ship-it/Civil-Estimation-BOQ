@@ -21,7 +21,7 @@ const StaircaseVisualizer = ({ rise, tread, numSteps, uLen }: { rise: number, tr
   const t = tread > 0 ? tread : 0.25;
   const stepsCount = numSteps > 0 ? Math.min(Math.floor(numSteps), 20) : 10;
   
-  const totalW = stepsCount * t;
+  const totalW = Math.max(0, stepsCount - 1) * t; // (n−1) goings — the top riser meets the floor
   const totalH = stepsCount * r;
   
   const viewBoxW = totalW * 100;
@@ -168,9 +168,36 @@ export default function StaircaseCalculator() {
         lWidth = lWidth * 0.3048;
       }
 
-      // Step 1: Volume of Steps (Triangular portion)
-      const volOneStep = (r * t * w) / 2;
-      const totalStepVol = volOneStep * stepsCount;
+      // Engine FIRST: all volumes, materials and steel come from
+      // designStaircase (single source of truth). The steps below only
+      // DISPLAY the engine's values — the old code recomputed them
+      // locally with n × tread (one tread too long) and a single landing.
+      const parts = concreteGrade.match(/\(([\d.]+):([\d.]+):([\d.]+)\)/);
+      let cPart = 1, sPart = 1.5, aPart = 3;
+      if (parts) {
+        cPart = parseFloat(parts[1]);
+        sPart = parseFloat(parts[2]);
+        aPart = parseFloat(parts[3]);
+      }
+      const sum = cPart + sPart + aPart;
+      const fckNum = parseInt((concreteGrade.match(/M(\d+)/) || ["", "20"])[1], 10) || 20;
+      const landingCount = landings.length > 0 ? landings.length : (isStraight ? 0 : 1);
+      stairEngine = designStaircase({
+        shape: isStraight ? "straight" : (stairShape === "L-Shape" ? "l-shaped" : "u-shaped"),
+        steps: stepsCount, flight1Steps: parseNum(flight1Steps) || 0, flight2Steps: parseNum(flight2Steps) || 0,
+        riseM: r, treadM: t, widthM: w, waistM: waist,
+        landingLengthM: lLength, landingWidthM: lWidth, landingCount,
+        floorHeightM: 0, fck: fckNum, fy: 500,
+        mainDiaMm: parseNum(mainBarDia) || 12, mainSpacingMm: parseNum(mainBarSpacing) || 150,
+        distDiaMm: parseNum(distBarDia) || 10, distSpacingMm: parseNum(distBarSpacing) || 200,
+        coverMm: parseNum(clearCover) || 20,
+        mix: { c: cPart, s: sPart, a: aPart }, wastagePct: was,
+        cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg,
+        sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
+      });
+
+      // Step 1: Volume of Steps (Triangular portion) — from the engine.
+      const totalStepVol = stairEngine.stepVolM3;
       steps.push({
         stepName: "1. Volume of Steps (Triangular Portion)",
         equation: "V_steps = [(Rise × Tread × Width) / 2] × Total Steps",
@@ -187,13 +214,13 @@ export default function StaircaseCalculator() {
         resultColor: "emerald"
       });
 
-      // Step 2: Volume of Waist Slab
-      const inclinedLen = Math.sqrt(r * r + t * t);
-      const totalInclinedLen = inclinedLen * stepsCount;
-      const waistVol = totalInclinedLen * w * waist;
+      // Step 2: Volume of Waist Slab — from the engine. Inclined length
+      // is √(((n−1)·t)² + (n·r)²): n risers, n−1 goings.
+      const totalInclinedLen = stairEngine.inclinedLengthM;
+      const waistVol = stairEngine.waistVolM3;
       steps.push({
         stepName: "2. Waist Slab Volume",
-        equation: "V_waist = (√(Rise² + Tread²) × Steps) × Width × Waist_Thickness",
+        equation: "V_waist = L_incl × Width × Waist_Thickness, L_incl = √(((n−1)·Tread)² + (n·Rise)²)",
         variables: [
           { name: "Inclined Length", value: totalInclinedLen.toFixed(3), unit: "m" },
           { name: "Waist Thickness", value: waist.toFixed(3), unit: "m" }
@@ -204,27 +231,24 @@ export default function StaircaseCalculator() {
         resultColor: "emerald"
       });
 
-      // Step 3: Volume of Landing
-      let landingVol = 0;
-      if (!isStraight) {
-         landingVol = lLength * lWidth * waist;
-         steps.push({
-           stepName: "3. Landing Volume",
-           equation: "V_landing = Length × Width × Thickness",
-           variables: [
-             { name: "Length", value: lLength.toFixed(3), unit: "m" },
-             { name: "Width", value: lWidth.toFixed(3), unit: "m" },
-             { name: "Thickness", value: waist.toFixed(3), unit: "m" }
-           ],
-           substitution: `V_landing = ${lLength.toFixed(3)} × ${lWidth.toFixed(3)} × ${waist.toFixed(3)}`,
-           result: parseFloat(landingVol.toFixed(4)),
-           resultUnit: "m³",
-           resultColor: "emerald"
-         });
-      }
+      // Step 3: Volume of Landing — from the engine (all landings).
+      let landingVol = stairEngine.landingVolM3;
+      steps.push({
+        stepName: "3. Landing Volume",
+        equation: "V_landing = Length × Width × Thickness",
+        variables: [
+          { name: "Length", value: lLength.toFixed(3), unit: "m" },
+          { name: "Width", value: lWidth.toFixed(3), unit: "m" },
+          { name: "Thickness", value: waist.toFixed(3), unit: "m" }
+        ],
+        substitution: `V_landing = ${lLength.toFixed(3)} × ${lWidth.toFixed(3)} × ${waist.toFixed(3)}`,
+        result: parseFloat(landingVol.toFixed(4)),
+        resultUnit: "m³",
+        resultColor: "emerald"
+      });
 
-      // Step 4: Total Volume
-      const totalConcreteVol = totalStepVol + waistVol + landingVol;
+      // Step 4: Total Volume — from the engine.
+      const totalConcreteVol = stairEngine.wetVolM3;
       steps.push({
         stepName: !isStraight ? "4. Total Wet Concrete Volume" : "3. Total Wet Concrete Volume",
         equation: "V_total_wet = V_steps + V_waist" + (!isStraight ? " + V_landing" : ""),
@@ -257,18 +281,10 @@ export default function StaircaseCalculator() {
       // Step 5.5: Dry Volume conversion
       const dryVol = totalWithWastage * 1.54;
       wetVol = totalWithWastage;
-      
-      const parts = concreteGrade.match(/\(([\d.]+):([\d.]+):([\d.]+)\)/);
-      let cPart = 1, sPart = 1.5, aPart = 3;
-      if (parts) {
-        cPart = parseFloat(parts[1]);
-        sPart = parseFloat(parts[2]);
-        aPart = parseFloat(parts[3]);
-      }
-      const sum = cPart + sPart + aPart;
 
-      // Cement bags
-      cementBags = Math.ceil((dryVol * (cPart / sum)) / 0.0347);
+      // Cement / sand / aggregate — from the engine's materials (same
+      // wet volume, same ×1.54 dry conversion, same wastage).
+      cementBags = stairEngine.materials.cementBags;
       steps.push({
         stepName: !isStraight ? "6. Cement Bags" : "5. Cement Bags",
         equation: "Bags = (Dry Volume × cement_ratio / total_ratio) / 0.0347",
@@ -283,8 +299,8 @@ export default function StaircaseCalculator() {
         resultColor: "purple"
       });
 
-      // Sand CFT
-      sandCft = (dryVol * (sPart / sum)) * 35.3147;
+      // Sand CFT — from the engine's materials.
+      sandCft = stairEngine.materials.sandCft;
       steps.push({
         stepName: !isStraight ? "7. Sand Volume" : "6. Sand Volume",
         equation: "Sand (CFT) = Dry Volume × (sand_ratio / total_ratio) × 35.3147",
@@ -297,8 +313,8 @@ export default function StaircaseCalculator() {
         resultColor: "blue"
       });
 
-      // Aggregate CFT
-      aggCft = (dryVol * (aPart / sum)) * 35.3147;
+      // Aggregate CFT — from the engine's materials.
+      aggCft = stairEngine.materials.aggCft;
       steps.push({
         stepName: !isStraight ? "8. Aggregate Volume" : "7. Aggregate Volume",
         equation: "Aggregate (CFT) = Dry Volume × (aggregate_ratio / total_ratio) × 35.3147",
@@ -313,29 +329,17 @@ export default function StaircaseCalculator() {
 
       // Steel — DESIGNED from the waist-slab moment (IS 456 Cl. 33), not the flat
       // 1%-of-volume rule. The 1% figure is shown only as a cross-check.
-      const fckNum = parseInt((concreteGrade.match(/M(\d+)/) || ["", "20"])[1], 10) || 20;
-      const landingCount = landings.length > 0 ? landings.length : (isStraight ? 0 : 1);
-      stairEngine = designStaircase({
-        shape: isStraight ? "straight" : (stairShape === "L-Shape" ? "l-shaped" : "u-shaped"),
-        steps: stepsCount, flight1Steps: parseNum(flight1Steps) || 0, flight2Steps: parseNum(flight2Steps) || 0,
-        riseM: r, treadM: t, widthM: w, waistM: waist,
-        landingLengthM: lLength, landingWidthM: lWidth, landingCount,
-        floorHeightM: 0, fck: fckNum, fy: 500,
-        mainDiaMm: parseNum(mainBarDia) || 12, mainSpacingMm: parseNum(mainBarSpacing) || 150,
-        distDiaMm: parseNum(distBarDia) || 10, distSpacingMm: parseNum(distBarSpacing) || 200,
-        coverMm: parseNum(clearCover) || 20,
-        mix: { c: cPart, s: sPart, a: aPart }, wastagePct: was,
-        cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg,
-        sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
-      });
+      // No extra wastage is added here: designedSteelKg is the same figure
+      // the engine's cost lines use (the old code added wastage a second
+      // time, showing 43.9 kg against 41.9 kg costed).
       steelKg = stairEngine.designedSteelKg;
       steps.push({
         stepName: !isStraight ? "9. Steel Requirement (designed)" : "8. Steel Requirement (designed)",
         equation: "Main bars from waist-slab Mu (IS 456 Cl. 33) + 0.12% distribution steel",
-        insight: `Designed steel ${stairEngine.designedSteelKg.toFixed(1)} kg (${stairEngine.mainBars} main bars ${mainBarDia} mm @ ${mainBarSpacing} mm = ${stairEngine.astProvidedMm2PerM} mm²/m vs ${stairEngine.astReqMm2PerM} mm²/m required; distribution ${stairEngine.distBars} bars). The old 1% rule would give ${stairEngine.onePctRuleKg.toFixed(1)} kg — cross-check only.`,
+        insight: `Designed steel ${stairEngine.designedSteelKg.toFixed(1)} kg (${stairEngine.mainBars} main bars ${mainBarDia} mm @ ${mainBarSpacing} mm = ${stairEngine.astProvidedMm2PerM} mm²/m vs ${Number.isFinite(stairEngine.astReqMm2PerM) ? stairEngine.astReqMm2PerM : "—"} mm²/m required; distribution ${stairEngine.distBars} bars). The old 1% rule would give ${stairEngine.onePctRuleKg.toFixed(1)} kg — cross-check only.`,
         variables: [
           { name: "Mu (waist)", value: stairEngine.muKNmPerM, unit: "kNm/m" },
-          { name: "Ast req", value: stairEngine.astReqMm2PerM, unit: "mm²/m" },
+          { name: "Ast req", value: Number.isFinite(stairEngine.astReqMm2PerM) ? stairEngine.astReqMm2PerM : "—", unit: "mm²/m" },
           { name: "Formwork", value: stairEngine.formworkM2, unit: "m²" }
         ],
         substitution: `Steel = main ${stairEngine.mainSteelKg.toFixed(1)} kg + distribution ${stairEngine.distSteelKg.toFixed(1)} kg`,
@@ -362,7 +366,7 @@ export default function StaircaseCalculator() {
         sandCft: parseFloat(sandCft.toFixed(2)),
         aggCft: parseFloat(aggCft.toFixed(2)),
         totalWetVolume: wetVol,
-        totalSteelWeight: steelKg + (steelKg * was) / 100,
+        totalSteelWeight: steelKg,
         formworkM2: engineOut ? engineOut.formworkM2 : 0,
         mainBars: engineOut ? engineOut.mainBars : 0,
         distBars: engineOut ? engineOut.distBars : 0,
@@ -570,7 +574,7 @@ export default function StaircaseCalculator() {
                    />
                    <ResultCard title="Formwork" value={res.formworkM2} unit="m²" variant="neutral" />
                    <ResultCard title="Main bars" value={res.mainBars} unit="bars" variant="neutral" />
-                   <ResultCard title="Ast req / provided" value={`${res.astReq} / ${res.astProvided}`} unit="mm²/m" variant={res.astProvided >= res.astReq ? "neutral" : "warning"} />
+                   <ResultCard title="Ast req / provided" value={`${Number.isFinite(res.astReq) ? res.astReq : "—"} / ${res.astProvided}`} unit="mm²/m" variant={res.astProvided >= res.astReq ? "neutral" : "warning"} />
                    <ResultCard title="Total run" value={res.totalRunM} unit="m" variant="neutral" />
                    <ResultCard title="Stairwell" value={`${res.stairwellW} × ${res.stairwellL}`} unit="m" variant="neutral" />
                    <ResultCard title="Total cost" value={res.totalCost == null ? "—" : res.totalCost.toLocaleString("en-US")} unit={table.currency} variant="neutral" />

@@ -33,7 +33,8 @@ interface BinData {
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { FieldTooltip } from "../ui/FieldTooltip";
 
-import { Category, sieveSpecData } from "../../data/sieveSpecs";
+import { blendedGs, power45Line, batchQuantities, batchCost, validatePassing, type Stockpile } from "../../lib/blendCalc";
+import { sieveSpecData, type Category, type Grading, type SieveSpec } from "../../data/sieveSpecs";
 
 
 export default function AggregateBlendingCalculator() {
@@ -47,6 +48,11 @@ export default function AggregateBlendingCalculator() {
   // Proportions for Bin A, B, C, D
   const [proportions, setProportions] = useState<[number, number, number, number]>([25, 25, 25, 25]);
   const [binNames, setBinNames] = useState<[string, string, string, string]>(["20mm Agg", "10mm Agg", "Stone Dust", "Sand"]);
+  // Specific gravity + cost per tonne per stockpile (for blended Gs and
+  // batch quantities/cost) and the batch size to price.
+  const [binGs, setBinGs] = useState<[number, number, number, number]>([2.65, 2.65, 2.65, 2.65]);
+  const [binCost, setBinCost] = useState<[string, string, string, string]>(["", "", "", ""]);
+  const [batchKg, setBatchKg] = useState<number | "">(1000);
 
   useEffect(() => {
     // Initial setup if needed, handled by initial state
@@ -66,18 +72,18 @@ export default function AggregateBlendingCalculator() {
   useEffect(() => {
     if (selectedCategory && selectedGrading) {
       const category = categories.find((c) => c.name === selectedCategory);
-      const grading = category?.gradings.find((g) => g.name === selectedGrading);
+      const grading = category?.gradings.find((g: Grading) => g.name === selectedGrading);
       
       if (grading) {
         setSieveData(
-          grading.sieves.map((s) => ({
+          grading.sieves.map((s: SieveSpec) => ({
             size: s.size,
             minPassing: s.minPassing,
             maxPassing: s.maxPassing,
-            binA: 0, // Empty by default — all-100% defaults drew a misleading flat line
-            binB: 0,
-            binC: 0,
-            binD: 0,
+            binA: "", // Empty by default — 0% defaults drew a misleading 0.0% FAIL
+            binB: "",
+            binC: "",
+            binD: "",
           }))
         );
       }
@@ -224,10 +230,34 @@ export default function AggregateBlendingCalculator() {
         logSize: row.size === 0 ? 0.001 : row.size,
         Blend: blendValue !== null ? parseFloat(blendValue.toFixed(2)) : null,
         Min: row.minPassing,
-        Max: row.maxPassing
+        Max: row.maxPassing,
+        // 0.45-power maximum-density line (Fuller curve) for reference.
+        Power45: parseFloat(power45Line(row.size, Math.max(...sieveData.map((r) => r.size))).toFixed(2)),
       };
     }).sort((a, b) => a.size - b.size);
   }, [sieveData, debouncedProportions]);
+
+  // Engine outputs the tool advertises: blended Gs, batch quantities and
+  // cost, and per-bin % passing validation. Built from the same table data
+  // the blended column uses.
+  const blendOutputs = useMemo(() => {
+    const bins: Stockpile[] = [0, 1, 2, 3].map((i) => {
+      const passing: Record<number, number> = {};
+      sieveData.forEach((row) => {
+        const v = [row.binA, row.binB, row.binC, row.binD][i];
+        if (v !== "") passing[row.size] = v;
+      });
+      return { name: binNames[i], gs: binGs[i], costPerTonne: binCost[i] === "" ? null : Number(binCost[i]), passing };
+    });
+    const hasData = bins.some((b) => Object.keys(b.passing).length > 0);
+    if (!hasData) return null;
+    const errors = bins.flatMap((b) => validatePassing(b.passing).map((e) => `${b.name}: ${e}`));
+    let gs: number | null = null;
+    try { gs = blendedGs(bins, [...proportions]); } catch { gs = null; }
+    const qtys = batchQuantities(Number(batchKg) || 0, [...proportions]);
+    const cost = batchCost(Number(batchKg) || 0, [...proportions], bins);
+    return { gs, qtys, cost, errors };
+  }, [sieveData, binNames, binGs, binCost, proportions, batchKg]);
 
   return (
     <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500 md:max-w-7xl md:mx-auto pb-20 px-4 md:px-0">
@@ -274,7 +304,7 @@ export default function AggregateBlendingCalculator() {
                   value={selectedGrading}
                   onChange={(e) => setSelectedGrading(e.target.value)}
                 >
-                  {categories.find(c => c.name === selectedCategory)?.gradings.map(g => (
+                  {categories.find(c => c.name === selectedCategory)?.gradings.map((g: Grading) => (
                     <option key={g.name} value={g.name}>{g.name}</option>
                   ))}
                 </select>
@@ -387,8 +417,8 @@ export default function AggregateBlendingCalculator() {
                     <span className="font-semibold text-txt-secondary">{binNames[i]}</span>
                     <span className="font-mono font-bold text-accent-700">{proportions[i].toFixed(1)}%</span>
                   </div>
-                  <><label htmlFor="a11y-input-39" className="sr-only">Input</label>
-<input id="a11y-input-39" 
+                  <><label htmlFor={`a11y-input-39-${i}`} className="sr-only">Input</label>
+<input id={`a11y-input-39-${i}`} 
                     type="range"
                     min="0"
                     max="100"
@@ -397,8 +427,25 @@ export default function AggregateBlendingCalculator() {
                     onChange={(e) => handleProportionChange(i, e.target.value)}
                     className="w-full h-2 bg-surface-active rounded-full appearance-none cursor-pointer accent-accent-600"
                   /></>
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className="flex items-center gap-1 text-xs text-txt-tertiary">Gs
+                      <input type="number" inputMode="decimal" min="2" max="3" step="0.01" value={binGs[i]}
+                        onChange={(e) => { const g = [...binGs] as [number, number, number, number]; g[i] = Number(e.target.value) || 2.65; setBinGs(g); }}
+                        className="w-full px-2 py-1 rounded bg-surface-default border border-ui-borderSubtle text-sm font-medium text-txt-primary outline-none" />
+                    </label>
+                    <label className="flex items-center gap-1 text-xs text-txt-tertiary">Cost/t
+                      <input type="number" inputMode="decimal" min="0" value={binCost[i]} placeholder="—"
+                        onChange={(e) => { const c = [...binCost] as [string, string, string, string]; c[i] = e.target.value; setBinCost(c); }}
+                        className="w-full px-2 py-1 rounded bg-surface-default border border-ui-borderSubtle text-sm font-medium text-txt-primary outline-none" />
+                    </label>
+                  </div>
                 </div>
               ))}
+              <label className="flex items-center gap-2 text-sm text-txt-secondary">Batch size (kg)
+                <input type="number" inputMode="decimal" min="0" value={batchKg}
+                  onChange={(e) => setBatchKg(e.target.value === "" ? "" : Number(e.target.value))}
+                  className="w-28 px-2 py-1 rounded bg-surface-default border border-ui-borderSubtle text-sm font-medium text-txt-primary outline-none" />
+              </label>
             </div>
             
             <div className="mt-6 p-4 rounded-2xl bg-accent-50 border border-accent-200 text-sm text-accent-800 flex items-start gap-2 overflow-hidden">
@@ -413,6 +460,25 @@ export default function AggregateBlendingCalculator() {
             </Button>
           </div>
 
+          {blendOutputs && (
+            <div className="bg-bg-card/80 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle overflow-hidden">
+              <h3 className="text-txt-primary dark:text-white mb-4 flex items-center gap-2 text-lg font-medium text-txt-primary">
+                <Calculator className="w-5 h-5 text-accent-700" /> Blend Properties
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between"><span className="text-txt-secondary">Blended specific gravity (Gs)</span><span className="font-mono font-bold">{blendOutputs.gs != null ? blendOutputs.gs.toFixed(3) : "—"}</span></div>
+                {[0, 1, 2, 3].map((i) => (
+                  <div key={i} className="flex justify-between"><span className="text-txt-secondary">{binNames[i]} ({proportions[i].toFixed(1)}%)</span><span className="font-mono font-bold">{blendOutputs.qtys[i].toFixed(1)} kg</span></div>
+                ))}
+                <div className="flex justify-between"><span className="text-txt-secondary">Batch cost ({Number(batchKg) || 0} kg)</span><span className="font-mono font-bold">{blendOutputs.cost != null ? blendOutputs.cost.toFixed(0) : "— (enter a cost/t for every stockpile)"}</span></div>
+                <p className="text-xs text-txt-tertiary">Batch quantities are for a {Number(batchKg) || 0} kg batch at the slider proportions. The dashed grey line on the chart is the 0.45-power maximum-density line.</p>
+                {blendOutputs.errors.map((e) => (
+                  <p key={e} className="text-sm font-medium p-3 rounded-xl bg-accent-50 border border-accent-100 text-accent-900">⚠ {e}</p>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="bg-bg-card/80 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-brand-sm border border-ui-borderSubtle h-[400px] flex flex-col overflow-hidden">
             <h3 className="text-txt-primary dark:text-white mb-4 flex items-center gap-2 text-lg font-medium text-txt-primary">
               <LineChartIcon className="w-5 h-5 text-accent-700" /> Blended Gradation Curve
@@ -426,12 +492,15 @@ export default function AggregateBlendingCalculator() {
         
         <CalculationHistory
           calculatorId="aggregate_blending_v1"
-          currentInputs={{ proportions, binNames, selectedCategory, selectedGrading }}
+          currentInputs={{ proportions, binNames, selectedCategory, selectedGrading, binGs, binCost, batchKg }}
           onRestore={(ins) => {
             if (ins.proportions) setProportions(ins.proportions);
             if (ins.binNames) setBinNames(ins.binNames);
             if (ins.selectedCategory) setSelectedCategory(ins.selectedCategory);
             if (ins.selectedGrading) setSelectedGrading(ins.selectedGrading);
+            if (ins.binGs) setBinGs(ins.binGs);
+            if (ins.binCost) setBinCost(ins.binCost);
+            if (ins.batchKg != null) setBatchKg(ins.batchKg);
           }}
         />
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ClipboardList, Info, Printer, Save, Download, Share2, BookOpen, Menu, Search, ChevronDown, Copy, FileText, Mail, MessageCircle, Smartphone } from 'lucide-react';
 import { useSettings, Currency } from '../../context/SettingsContext';
 import { CodeReferences, TOOL_REFERENCES } from './CodeReferences';
+import { TOOL_FORMULAS } from './toolFormulas';
 import { FormulaModal } from './FormulaModal';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -31,6 +32,12 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
   /** Only 11 real tools have code references — hide the button entirely
    *  for the rest instead of toggling an empty section. */
   const hasReferences = Boolean(TOOL_REFERENCES[id]?.length);
+  /** Per-tool formula text (toolFormulas.ts, transcribed from verified
+   *  sources). Tools with no verified formula text have no entry, and
+   *  the Formulas buttons are hidden for them instead of showing the
+   *  old one-sentence generic text on every tool. */
+  const formulaText = TOOL_FORMULAS[id];
+  const hasFormula = Boolean(formulaText);
   const { settings, updateSettings } = useSettings();
   const [isFormulaModalOpen, setIsFormulaModalOpen] = useState(false);
   const [showReferences, setShowReferences] = useState(false);
@@ -254,6 +261,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
                   {displayTitle}
                 </motion.h1>
                 <div className="group relative flex items-center pt-1">
+                  {hasFormula && (
                   <Button 
                     onClick={() => setIsFormulaModalOpen(true)}
                     className="text-txt-tertiary hover:text-txt-primary transition-colors"
@@ -261,10 +269,13 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
                   >
                     <Info className="w-4 h-4" />
                   </Button>
+                  )}
+                  {hasFormula && (
                   <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 w-64 bg-ink text-white text-xs rounded-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-brand-sm hidden md:block">
                     <div className="font-medium text-sm mb-1 text-white">Formulas</div>
                     <p className="text-ink-300 leading-relaxed font-light">View standardized engineering equations, parameters, and design codes.</p>
                   </div>
+                  )}
                 </div>
               </div>
               <p className="text-[14px] font-normal text-txt-tertiary mt-1.5 max-w-xl leading-relaxed">
@@ -357,6 +368,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
         {/* Action Button Grid */}
         <div className="print:hidden grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 border-b border-border-color pb-6 mt-4 w-full">
            {/* Row 1 */}
+           {hasFormula && (
            <Button 
              onClick={() => setIsFormulaModalOpen(true)}
              className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-ui-borderStrong text-txt-primary hover:bg-secondary-100 transition-colors group"
@@ -364,6 +376,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
              <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Formulas</span>
            </Button>
+           )}
            
            <Button onClick={handlePrint}
              className="flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 rounded-full border border-ui-borderStrong text-txt-primary hover:bg-secondary-100 transition-colors group"
@@ -485,7 +498,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
         isOpen={isFormulaModalOpen}
         onClose={() => setIsFormulaModalOpen(false)}
         title={displayTitle}
-        formulaDescription="Calculations follow standardized civil engineering guidelines for material density and proportioning. Specific details can be referenced from structural design codes."
+        formulaDescription={formulaText ?? ""}
       />
     </div>
   );

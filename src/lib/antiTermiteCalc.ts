@@ -21,6 +21,11 @@ import {
   ANTITERMITE_TRENCH_L_PER_LINEAR_M,
 } from "./mepConstants";
 
+/** IS 6313-2:2022 dose for RCC vertical surfaces in contact with soil (L/m²).
+ * Same number as the trench linear dose (7.5) but a different unit — kept
+ * as its own named constant so the two can never be confused or drift. */
+export const ANTITERMITE_VERTICAL_L_PER_M2 = 7.5;
+
 export interface AntiTermiteChemical {
   id: string;
   name: string;
@@ -134,7 +139,9 @@ export function calcAntiTermite(inp: AntiTermiteInputs): AntiTermiteResults {
   const errors = validateAntiTermiteInputs(inp);
   if (errors.length > 0) throw new Error(errors.join(" "));
   const trenchWidthM = inp.trenchWidthM ?? 0.6;
-  const trenchDepthM = inp.trenchDepthM ?? 0.5;
+  // Default 0.3 m: the IS 6313 trench-sides dose is specified to 30 cm
+  // depth, so a deeper default only ever triggered the over-depth warning.
+  const trenchDepthM = inp.trenchDepthM ?? 0.3;
   const wastagePct = inp.wastagePct ?? 5;
   const packSizeL = inp.packSizeL ?? 5;
   const waterParts =
@@ -148,7 +155,7 @@ export function calcAntiTermite(inp: AntiTermiteInputs): AntiTermiteResults {
   const externalPeripheryL = inp.includeExternalPeriphery
     ? inp.trenchLengthM * ANTITERMITE_TRENCH_L_PER_LINEAR_M
     : 0;
-  const verticalL = (inp.verticalAreaM2 ?? 0) * 7.5;
+  const verticalL = (inp.verticalAreaM2 ?? 0) * ANTITERMITE_VERTICAL_L_PER_M2;
   const subtotalL = trenchBottomL + trenchSidesL + floorL + externalPeripheryL + verticalL;
   const wastageL = (subtotalL * wastagePct) / 100;
   const totalEmulsionL = subtotalL + wastageL;
@@ -205,7 +212,7 @@ export function calcAntiTermite(inp: AntiTermiteInputs): AntiTermiteResults {
       ...(inp.includeExternalPeriphery
         ? [`External periphery apron: ${inp.trenchLengthM} m x 7.5 L/m = ${externalPeripheryL.toFixed(1)} L`]
         : []),
-      ...(verticalL > 0 ? [`RCC vertical surfaces: ${(inp.verticalAreaM2 ?? 0)} m² x 7.5 L/m² = ${verticalL.toFixed(1)} L`] : []),
+      ...(verticalL > 0 ? [`RCC vertical surfaces: ${(inp.verticalAreaM2 ?? 0)} m² x ${ANTITERMITE_VERTICAL_L_PER_M2} L/m² = ${verticalL.toFixed(1)} L`] : []),
       `Subtotal = ${subtotalL.toFixed(1)} L; +${wastagePct}% wastage (${wastageL.toFixed(1)} L) = ${totalEmulsionL.toFixed(1)} L emulsion`,
       `Concentrate (1:${waterParts}) = ${totalEmulsionL.toFixed(1)} / ${1 + waterParts} = ${concentrateL.toFixed(1)} L; water = ${waterL.toFixed(1)} L`,
       `Packs: ${concentrateL.toFixed(1)} L / ${packSizeL} L = ${packs} packs (${packsVolumeL} L)`,

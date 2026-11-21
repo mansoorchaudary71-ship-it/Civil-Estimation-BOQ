@@ -20,6 +20,12 @@ export const WASTAGE_DEFAULTS = {
   cement: 2, steel: 3, bricks: 5, tiles: 10, paint: 5, sand: 3, aggregate: 3,
 };
 
+/** One box of 600x600 mm floor tiles (4 tiles) covers 15.5 sqft. The
+ * tiles rate is per BOX, so the sqft area must be converted to boxes
+ * before multiplying — the old code multiplied sqft by the per-box rate
+ * (2,200 sqft x Rs 1,200 = Rs 2,904,000 of tiles for a 2,000 sqft house). */
+export const TILE_BOX_COVERAGE_SQFT = 15.5;
+
 export interface TakeoffInput {
   builtUpSqft: number;
   floors: number;
@@ -67,7 +73,11 @@ export function materialTakeoff(i: TakeoffInput, rates: TakeoffRates): TakeoffLi
     line("Aggregate — PCC", area * 0.3, "cft", w.aggregate, rates.crushPerCft, "cft", "0.3 cft/sqft"),
     line("Bricks", area * brickPerSqft * structMult, "nos", w.bricks, rates.bricksPer1000 == null ? null : rates.bricksPer1000 / 1000, "pc", `10/sqft (9" outer + 4.5" inner walls)`),
     line("Steel / Rebar", area * 3.5 * structMult, "kg", w.steel, rates.steelPerKg, "kg", "3.5 kg/sqft (range 3.5–4.0)"),
-    line("Floor tiles", area * 1.1 * finishMult, "sqft", w.tiles, rates.tilesPerBox, "box*", "1.1x area (10% wastage incl.) — rate per box, see note"),
+    // Tiles: area (1.1x incl. 10% cutting wastage) converted to whole
+    // boxes at TILE_BOX_COVERAGE_SQFT before pricing — wastage 0 here
+    // because the 1.1x factor already includes it (passing w.tiles as
+    // well would double-count it).
+    line("Floor tiles", Math.ceil((area * 1.1 * finishMult) / TILE_BOX_COVERAGE_SQFT), "boxes", 0, rates.tilesPerBox, "box", "1.1x area (10% wastage incl.) ÷ 15.5 sqft/box (4 x 600x600 mm tiles)"),
     line("Paint", area * 0.17 * finishMult, "L", w.paint, rates.paintPerL, "L", "0.12 L/sqft primer + 0.05 L/sqft finish"),
   ];
 }

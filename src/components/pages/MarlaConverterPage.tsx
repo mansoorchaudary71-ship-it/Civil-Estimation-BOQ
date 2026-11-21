@@ -303,9 +303,9 @@ export default function MarlaConverterPage() {
                     <td className="px-6 py-4">~505.85 m²</td>
                   </tr>
                   <tr className="hover:bg-surface-default/30 transition-colors">
-                    <td className="px-6 py-4 font-bold text-txt-primary">1 Acre (8 Kanals)</td>
+                    <td className="px-6 py-4 font-bold text-txt-primary">1 Acre (8 Punjab Kanals / 9.68 KPK Kanals)</td>
                     <td className="px-6 py-4">43,560 Sq.Ft / 4,840 Sq.Yd</td>
-                    <td className="px-6 py-4">36,000 Sq.Ft / 4,000 Sq.Yd</td>
+                    <td className="px-6 py-4">43,560 Sq.Ft / 4,840 Sq.Yd (9.68 Kanal — the acre is a fixed 43,560 sq ft; only the kanal differs)</td>
                     <td className="px-6 py-4">~4046.86 m²</td>
                   </tr>
                   <tr className="hover:bg-surface-default/30 transition-colors bg-surface-default/30">
@@ -333,7 +333,7 @@ export default function MarlaConverterPage() {
         <ToolPageFooter 
            toolName="Area Plot Converter (Marla, Kanal, Sq.Ft)"
            standards={["Punjab Land Revenue Act 1887", "KPK Local Measurement Laws"]}
-           formulaDescription="1 Karam = 5.5 Ft. 1 Marla (Punjab) = 1 Sirsai x 9 = 272.25 Sq.Ft. Metric Conversion: 1 m² = 10.7639 Sq.Ft."
+           formulaDescription="1 Karam = 5.5 Ft. 1 Marla (Punjab) = 1 Sarsai x 9 = 272.25 Sq.Ft. Metric Conversion: 1 m² = 10.7639 Sq.Ft."
            difficulty="Beginner"
            lastUpdated="November 2026"
            category="Quantity Estimation"

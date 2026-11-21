@@ -8,6 +8,7 @@ import { ProcessingSkeleton } from "../ui/ProcessingSkeleton";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { SoilReportHeader } from "../ui/SoilReportHeader";
 import { SoilReportDetails, generateGeotechReportPDF } from "../../utils/soilReports";
+import { cbrFromLoads } from "../../lib/geotechCalc";
 
 
 // Sub-components for each Geotechnical test
@@ -134,20 +135,23 @@ export default function GeotechnicalCalculator() {
       "Calculated Liquid Limit (LL)": `${LL.toFixed(2)}%`,
     };
   } else if (activeTab === "cbr") {
-    const L25 = parseNum(cbrLoad25);
-    const L50 = parseNum(cbrLoad50);
-    let CBR25 = (L25 / 1370) * 100;
-    let CBR50 = (L50 / 2055) * 100;
-    let CBR_Final = Math.max(CBR25, CBR50);
+    // Design CBR is the 2.5 mm value (IS 2720 Part 16): if CBR at 5.0 mm
+    // is higher, the test is repeated — the old code took max(2.5, 5.0),
+    // e.g. loads 180/300 kg gave 14.60% instead of 13.14% + a repeat flag.
+    const cbr = cbrFromLoads(parseNum(cbrLoad25), parseNum(cbrLoad50));
+    const CBR25 = cbr.cbr25;
+    const CBR50 = cbr.cbr50;
+    const CBR_Final = cbr.reported;
 
     currentExportData = {
       "Test Type": "California Bearing Ratio (CBR)",
       "CBR @ 2.5mm Penetration": `${CBR25.toFixed(2)}%`,
       "CBR @ 5.0mm Penetration": `${CBR50.toFixed(2)}%`,
-      "Final CBR Value": `${CBR_Final.toFixed(2)}%`,
+      "Final CBR Value (design = 2.5mm)": `${CBR_Final.toFixed(2)}%`,
+      ...(cbr.repeatTest ? { "Repeat Test": "Yes — CBR @ 5.0mm exceeds CBR @ 2.5mm (IS 2720 Pt 16)" } : {}),
     };
     const cbrStatus = CBR_Final >= 5 ? "PASS" : "FAIL";
-    interpretationText = `Design CBR = ${CBR_Final.toFixed(1)}% — Per IRC:37-2018, recommended subgrade CBR for traffic > 10 MSA requires minimum 5%.\nResult: [${cbrStatus}]`;
+    interpretationText = `Design CBR = ${CBR_Final.toFixed(1)}% (2.5 mm value, IS 2720 Pt 16) — Per IRC:37-2018, recommended subgrade CBR for traffic > 10 MSA requires minimum 5%.\nResult: [${cbrStatus}]${cbr.repeatTest ? "\n⚠ CBR @ 5.0mm exceeds CBR @ 2.5mm — repeat the test; do not use the higher value." : ""}`;
   }
 
   const handleSave = async () => {
@@ -169,7 +173,7 @@ export default function GeotechnicalCalculator() {
     <div className="w-full h-full bg-transparent text-txt-primary p-6 md:p-8">
       
       <div className="w-full md:max-w-7xl md:mx-auto px-4 md:px-0">
-        <p className="text-base font-normal text-txt-secondary leading-relaxed mb-6">Free soil test calculator: water content, specific gravity, liquid limit, plastic limit, Proctor OMC and CBR per IS 2720 — with worked formulas and PDF report.</p>
+        <p className="text-base font-normal text-txt-secondary leading-relaxed mb-6">Free soil test calculator: water content, specific gravity, sieve analysis, one-point liquid limit and CBR per IS 2720 — with worked formulas and PDF report. (Plastic limit and Proctor OMC are not in this tool — use the Soil Lab Suite.)</p>
 
         {/* Tab Navigation */}
         <UniversalTabs 
@@ -263,6 +267,9 @@ export default function GeotechnicalCalculator() {
                   <><label htmlFor="a11y-input-245" className="sr-only">Input</label>
 <input id="a11y-input-245" type="number" inputMode="decimal" min="0" max={sieveTotal} value={sieveRetainedSand} onChange={e => setSieveRetainedSand(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
+                {parseNum(sieveTotal) > 0 && (parseNum(sieveRetainedGravel) + parseNum(sieveRetainedSand)) > parseNum(sieveTotal) && (
+                  <p className="text-sm font-medium p-3 rounded-xl bg-accent-50 border border-accent-100 text-accent-900">⚠ Retained weights ({(parseNum(sieveRetainedGravel) + parseNum(sieveRetainedSand)).toFixed(0)} g) exceed the total sample ({parseNum(sieveTotal).toFixed(0)} g) — check the weights; fines would come out negative.</p>
+                )}
               </div>
             )}
 
@@ -278,6 +285,9 @@ export default function GeotechnicalCalculator() {
                   <><label htmlFor="a11y-input-247" className="sr-only">Input</label>
 <input id="a11y-input-247" type="number" inputMode="decimal" min="0" value={llWaterContent} onChange={e => setLlWaterContent(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
+                {parseNum(llBlows) > 0 && (parseNum(llBlows) < 15 || parseNum(llBlows) > 35) && (
+                  <p className="text-sm font-medium p-3 rounded-xl bg-accent-50 border border-accent-100 text-accent-900">⚠ The one-point method is only valid for N = 15–35 blows (IS 2720 Pt 5); outside that range the LL is unreliable — repeat with a blow count inside 15–35.</p>
+                )}
               </div>
             )}
 
@@ -293,6 +303,9 @@ export default function GeotechnicalCalculator() {
                   <><label htmlFor="a11y-input-249" className="sr-only">Input</label>
 <input id="a11y-input-249" type="number" inputMode="decimal" min="0" value={cbrLoad50} onChange={e => setCbrLoad50(e.target.value)} className="mt-1 w-full bg-surface-default border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500" /></>
                 </div>
+                {parseNum(cbrLoad25) > 0 && parseNum(cbrLoad50) > 0 && (parseNum(cbrLoad50) / 2055) > (parseNum(cbrLoad25) / 1370) && (
+                  <p className="text-sm font-medium p-3 rounded-xl bg-accent-50 border border-accent-100 text-accent-900">⚠ CBR @ 5.0 mm exceeds CBR @ 2.5 mm — repeat the test per IS 2720 Part 16; the design CBR is the 2.5 mm value, not the higher one.</p>
+                )}
               </div>
             )}
 

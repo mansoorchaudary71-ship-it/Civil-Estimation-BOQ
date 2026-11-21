@@ -86,6 +86,16 @@ test("labour: Brickwork 100 m3, 2 masons @1.25, 3 helpers -> 40.0 days, burn 4,2
   assert.equal(s.parallelDays, 44);
 });
 
+test("labour: total is priced from the DISPLAYED (rounded) days, not raw days", () => {
+  // Audit example: 10.1 m³ brickwork, 2 masons + 3 helpers -> raw 4.04 d.
+  // Displayed 4.0 d x Rs 4,200 = Rs 16,800 (the old code showed 16,968).
+  const t = { id: "b", name: "Brickwork", qty: 10.1, unit: "m³", outputPerWorker: 1.25, keyWorkers: 2, helpers: 3, masonWage: 1200, helperWage: 600 };
+  const r = calcLabourTask(t, 0);
+  assert.equal(r.days, 4.0);
+  assert.equal(r.totalCost, 16800);
+  assert.equal(r.totalCost, r.days * r.dailyBurn);
+});
+
 test("EVM: BAC 119,000 EV 36,000 PV 50,000 AC 36,500 -> SPI 0.72 CPI 0.99 CV -500 SV -14,000 TCPI 1.01", () => {
   const r = calcEvm({ bac: 119000, ev: 36000, pv: 50000, ac: 36500 });
   assert.ok(approx(r.spi, 0.72, 0.005));

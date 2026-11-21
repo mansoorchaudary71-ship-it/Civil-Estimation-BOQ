@@ -5,9 +5,10 @@
  * Canonical rules (G3 spec + repo AGENTS.md + steelCalc.ts):
  * - Unit weight: W = d^2 / 162.28 kg/m, always via steelCalc.ts.
  * - Rectangular stirrup, IS 2502 detailed form (canonical):
- *   L = 2(A+B) + 2*10d - (3*2d + 2*3d), A/B = inner dims (section - 2*cover).
- * - Field shortcut 2(A+B) + 24d reads ~10.3% HIGHER (demo 1.372 m vs
- *   1.244 m) because it counts the full hook allowance without deducting
+ *   L = 2(A+B) + 2*10d - (3*2d + 2*3d), A/B = inner dims
+ *   (section - 2*cover - d, unified X3 convention).
+ * - Field shortcut 2(A+B) + 24d reads ~10.6% HIGHER (demo 1.340 m vs
+ *   1.212 m) because it counts the full hook allowance without deducting
  *   bend shortening. It is shown as a labelled approximation only — the
  *   schedule itself always uses the detailed form.
  * - Spiral / helix length is defined ONCE here (helixTurnLengthMm +
@@ -243,19 +244,21 @@ export function cutLengthMm(inp: BbsRowInput): { lengthMm: number; formula: stri
       };
     }
     case "rect-stirrup": {
-      const a = (inp.widthMm ?? 0) - 2 * c;
-      const b = (inp.depthMm ?? 0) - 2 * c;
+      // Inner dims: section − 2·cover − φ (unified X3 convention — the
+      // old code omitted φ, reading ~2.6% long vs beam-design/geometry).
+      const a = (inp.widthMm ?? 0) - 2 * c - d;
+      const b = (inp.depthMm ?? 0) - 2 * c - d;
       const l = stirrupLengthDetailed(a, b, d, hook);
       const simple = stirrupLengthSimple(a, b, d);
       return {
         lengthMm: l,
-        formula: `A = ${inp.widthMm} − 2×${c} = ${a} mm; B = ${inp.depthMm} − 2×${c} = ${b} mm; L = 2(${a}+${b}) + 2×${t.hookXd}d − (3×${t.bend90}d + 2×${t.bend135}d) = ${l} mm (IS 2502 detailed form)`,
+        formula: `A = ${inp.widthMm} − 2×${c} − ${d} = ${a} mm; B = ${inp.depthMm} − 2×${c} − ${d} = ${b} mm; L = 2(${a}+${b}) + 2×${t.hookXd}d − (3×${t.bend90}d + 2×${t.bend135}d) = ${l} mm (IS 2502 detailed form)`,
         fieldApproxNote: `Field shortcut 2(A+B)+24d gives ${(simple / 1000).toFixed(3)} m — ${(((simple - l) / l) * 100).toFixed(1)}% higher, because it counts the full hook allowance without deducting bend shortening. This schedule uses the IS 2502 detailed form above.`,
       };
     }
     case "u-stirrup": {
-      const a = (inp.widthMm ?? 0) - 2 * c;
-      const b = (inp.depthMm ?? 0) - 2 * c;
+      const a = (inp.widthMm ?? 0) - 2 * c - d;
+      const b = (inp.depthMm ?? 0) - 2 * c - d;
       const l = a + 2 * b + 2 * hook - 2 * (t.bend90 * d);
       return { lengthMm: l, formula: `A = ${a} mm; B = ${b} mm; L = ${a} + 2×${b} + 2×${t.hookXd}d − 2×${t.bend90}d = ${l} mm` };
     }
@@ -381,7 +384,7 @@ export interface FaqItem {
 export const BBS_FAQS: FaqItem[] = [
   {
     q: "How is cutting length calculated?",
-    a: "Cutting length is the straight length of bar needed before bending: the sum of the straight portions, plus the hook allowance, minus the shortening at each bend. For a rectangular stirrup the IS 2502 detailed form is L = 2(A+B) + 2×10d − (3×2d + 2×3d), where A and B are the inner dimensions (section minus twice the cover) and d is the bar diameter. A straight bar needs no addition: its cutting length is just its span.",
+    a: "Cutting length is the straight length of bar needed before bending: the sum of the straight portions, plus the hook allowance, minus the shortening at each bend. For a rectangular stirrup the IS 2502 detailed form is L = 2(A+B) + 2×10d − (3×2d + 2×3d), where A and B are the inner dimensions (section minus twice the cover minus the bar diameter) and d is the bar diameter. A straight bar needs no addition: its cutting length is just its span.",
   },
   {
     q: "What is the D²/162 formula?",
@@ -389,7 +392,7 @@ export const BBS_FAQS: FaqItem[] = [
   },
   {
     q: "How long is a rectangular stirrup for a 300 × 450 mm beam?",
-    a: "With 40 mm cover and Ø8 bars, the inner dimensions are A = 300 − 80 = 220 mm and B = 450 − 80 = 370 mm. The IS 2502 detailed form gives L = 2(220+370) + 2×80 − (3×16 + 2×24) = 1,244 mm = 1.244 m, weighing 1.244 × 0.394 = 0.49 kg. Twenty-five such stirrups need 31.10 m of bar, 12.27 kg net, or 12.88 kg with 5% wastage.",
+    a: "With 40 mm cover and Ø8 bars, the inner dimensions are A = 300 − 80 − 8 = 212 mm and B = 450 − 80 − 8 = 362 mm. The IS 2502 detailed form gives L = 2(212+362) + 2×80 − (3×16 + 2×24) = 1,212 mm = 1.212 m, weighing 1.212 × 0.394 = 0.48 kg. Twenty-five such stirrups need 30.30 m of bar, 11.95 kg net, or 12.55 kg with 5% wastage.",
   },
   {
     q: "How much wastage should I add for reinforcement?",

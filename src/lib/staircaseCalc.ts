@@ -5,7 +5,8 @@
  *
  * Fixes over the old StaircaseCalculator (G7 spec §4.8):
  * - The dead rebar inputs are now wired in: main steel is DESIGNED from
- *   the waist-slab moment (effective span = going·n + landing/2,
+ *   the waist-slab moment (effective span = one flight's going
+ *   (risers − 1) × tread + landing/2,
  *   w = self-weight + finishes 1.0 + live 3.0 kN/m², Mu = wL²/8), with
  *   bar count from the main dia/spacing inputs and distribution steel
  *   0.12% from the distribution dia/spacing inputs. The old flat
@@ -114,12 +115,19 @@ export function designStaircase(input: Partial<StaircaseInputs> = {}): Staircase
   const totalSteps = isStraight ? i.steps : i.flight1Steps + i.flight2Steps;
   const r = i.riseM, t = i.treadM, w = i.widthM;
   const totalRise = totalSteps * r;
-  const totalRun = totalSteps * t;
+  // A stair with n risers has n−1 goings — the top riser meets the
+  // landing/floor, which is itself the last tread. The old code used
+  // n × t (one tread too long: 2.80 m vs 2.52 m at the defaults), which
+  // inflated the effective span, waist volume, inclined length, formwork
+  // and Mu. This now agrees with the Staircase Design Reference tool,
+  // which already used (risers − 1) × going.
+  const totalRun = Math.max(0, totalSteps - 1) * t;
   const twoRT = 2 * r * 1000 + t * 1000;
   const ergonomicsOk = twoRT >= 600 && twoRT <= 650;
   if (!ergonomicsOk) warnings.push(`2R+T = ${round(twoRT)} mm is outside 600–650 mm — adjust riser or tread.`);
+  // Inclined (waist) length: horizontal (n−1) goings, vertical n risers.
   const inclPerStep = Math.sqrt(r * r + t * t);
-  const inclinedLength = inclPerStep * totalSteps;
+  const inclinedLength = Math.sqrt(((totalSteps - 1) * t) ** 2 + (totalSteps * r) ** 2);
   const stepVol = ((r * t * w) / 2) * totalSteps;
   const waistVol = inclinedLength * w * i.waistM;
   const landingVol = isStraight ? 0 : i.landingCount * i.landingLengthM * i.landingWidthM * i.waistM;
@@ -132,16 +140,24 @@ export function designStaircase(input: Partial<StaircaseInputs> = {}): Staircase
   // Effective span is ONE flight's going, not the total run: each flight
   // of a dog-legged / L / U stair is its own simply-supported waist slab.
   // The old code summed both flights, inflating Mu ~3x (22.78 vs 7.88
-  // kNm/m for a 5+5 dog-legged stair at the defaults).
-  const flight1Run = i.flight1Steps * t;
-  const flight2Run = i.flight2Steps * t;
+  // kNm/m for a 5+5 dog-legged stair at the defaults). Each flight's
+  // going is (steps − 1) × tread, same convention as totalRun above.
+  const flight1Run = Math.max(0, i.flight1Steps - 1) * t;
+  const flight2Run = Math.max(0, i.flight2Steps - 1) * t;
   const designRun = isStraight
     ? totalRun
     : (flight1Run > 0 || flight2Run > 0 ? Math.max(flight1Run, flight2Run) : totalRun / 2);
   const effSpan = designRun + (isStraight ? 0 : i.landingLengthM / 2);
   const mu = (1.5 * load * effSpan * effSpan) / 8; // kNm per m width (factored)
   const d = i.waistM * 1000 - i.coverMm - i.mainDiaMm / 2;
-  const astFlex = astForMu(mu, i.fck, i.fy, 1000, d);
+  // No singly-reinforced solution exists past Mu,lim (IS 456: xu ≤
+  // xu,max = 0.46·d for Fe500) — astForMu only returns Infinity past the
+  // looser discriminant limit (Mu = fck·b·d²/4.6), so a moment between
+  // Mu,lim and that limit used to return a finite but over-reinforced
+  // Ast (the 24-step flight: Mu 81.7 vs Mu,lim 51.4, Ast 2,642 mm²).
+  // Treat Mu > Mu,lim as Infinity here so the hard error fires.
+  const muLim = muLimKNm(i.fck, 1000, d, i.fy);
+  const astFlex = mu > muLim ? Infinity : astForMu(mu, i.fck, i.fy, 1000, d);
   const astMin = (0.12 / 100) * 1000 * i.waistM * 1000;
   const astReq = Math.max(astFlex, astMin);
   if (!isFinite(astFlex)) {
@@ -159,9 +175,13 @@ export function designStaircase(input: Partial<StaircaseInputs> = {}): Staircase
   const distKg = unitWeightKgPerM(i.distDiaMm) * w * distBars;
   const designedSteel = mainKg + distKg;
   const onePctKg = wetVol * 0.01 * 7850;
-  // Stairwell size (dog-legged): width = 2·W + 0.1 m gap, length = going + landing.
-  const stairwellW = isStraight ? w : 2 * w + 0.1;
-  const stairwellL = isStraight ? totalRun : totalRun / 2 + i.landingLengthM;
+  // Stairwell size. Dog-legged / U: two flights side by side, width =
+  // 2·W + 0.1 m gap, length = one flight's going + landing. L-shaped
+  // (quarter turn): the flights are at right angles, so the well is
+  // (W + landing) wide, not 2W + 0.1 — the old code used the dog-legged
+  // footprint for every non-straight shape.
+  const stairwellW = isStraight ? w : i.shape === "l-shaped" ? w + i.landingLengthM : 2 * w + 0.1;
+  const stairwellL = isStraight ? totalRun : designRun + i.landingLengthM;
   let risersForFloor = 0;
   let flightSplit = "";
   if (i.floorHeightM > 0) {
@@ -207,7 +227,7 @@ export function designStaircase(input: Partial<StaircaseInputs> = {}): Staircase
 export const STAIRCASE_FAQS: FaqItem[] = [
   { q: "How many risers are needed for a 3 m floor?", a: "Risers = ceil(floor height ÷ target riser). For a 3.0 m floor with a 170 mm riser that is 18 risers, split into two flights of 9 with a landing between — never more than 12 risers in one flight for a residential stair (NBC 2016 Part 4), 15 for commercial." },
   { q: "What is 2R+T?", a: "Blondel's comfort rule: twice the riser plus the tread (going) should be 600–650 mm. A 170 mm riser with a 280 mm tread gives 620 mm — comfortable. The old defaults (150/250) gave 550 mm, which feels steep." },
-  { q: "How thick should the waist slab be?", a: "About 150 mm for a normal house stair (span up to ~3.5 m), 175–200 mm for longer flights. The thickness is checked by IS 456 Cl. 33: the waist is designed as an inclined slab with effective span = going × steps + landing/2." },
+  { q: "How thick should the waist slab be?", a: "About 150 mm for a normal house stair (span up to ~3.5 m), 175–200 mm for longer flights. The thickness is checked by IS 456 Cl. 33: the waist is designed as an inclined slab with effective span = one flight's going ((risers − 1) × tread) + landing/2." },
   { q: "How much steel is in a staircase?", a: "Designed steel, not a thumb rule: main bars from the waist-slab moment (about 0.8–1.2% by volume for a house stair) plus 0.12% distribution steel. The old 1%-of-volume rule is shown here only as a cross-check — the designed bar schedule is what to order." },
   { q: "Dog-legged vs straight stair?", a: "A straight stair needs one long run (about 5 m for a 3 m floor) and no landing. A dog-legged stair folds back on itself with a half landing, so it fits a stairwell about 2.5 m × 5 m — the usual choice for houses." },
   { q: "How is shuttering (formwork) area calculated?", a: "Formwork = inclined soffit (L_incl × W) + riser faces (n × R × W) + landing soffit. Divide by 2.97 m² per plywood sheet (1.22 × 2.44 m) for the sheet count." },

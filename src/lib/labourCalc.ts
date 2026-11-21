@@ -54,18 +54,24 @@ export function calcLabourTask(t: LabourTaskInput, contingencyPct: number): Labo
   // Unskilled-driven tasks (e.g. excavation): helpers are the key workers.
   const effectiveKey = keyWorkers > 0 ? keyWorkers : helpers;
   const dailyOutput = effectiveKey * t.outputPerWorker;
-  const days = dailyOutput > 0 ? t.qty / dailyOutput : 0;
+  const rawDays = dailyOutput > 0 ? t.qty / dailyOutput : 0;
   const dailyBurn = keyWorkers * t.masonWage + helpers * t.helperWage;
   const factor = 1 + contingencyPct / 100;
+  // Costs are computed from the SAME rounded days that are displayed —
+  // the old code priced the unrounded days, so displayed days x burn did
+  // not equal the displayed total (e.g. 4.0 d x Rs 4,200 = 16,800 shown
+  // as 16,968 for 10.1 m³ of brickwork).
+  const days = Math.round(rawDays * 10) / 10;
+  const daysWithContingency = Math.round(rawDays * factor * 10) / 10;
   return {
     id: t.id,
     name: t.name,
     dailyOutput,
-    days: Math.round(days * 10) / 10,
-    daysWithContingency: Math.round(days * factor * 10) / 10,
+    days,
+    daysWithContingency,
     dailyBurn,
     totalCost: Math.round(days * dailyBurn),
-    totalCostWithContingency: Math.round(days * factor * dailyBurn),
+    totalCostWithContingency: Math.round(daysWithContingency * dailyBurn),
   };
 }
 

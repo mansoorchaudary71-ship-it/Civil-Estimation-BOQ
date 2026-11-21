@@ -32,6 +32,7 @@ export interface RaftInputs {
   colSizeMm: number; // square column side
   colLoadKN: number; // service load per column
   coverMm: number;
+  barDiaMm: number; // main bar dia — d = D − (cover + φ/2), per AGENTS.md
   depthM: number; // foundation depth for excavation
   wastagePct: number;
   cementPerBag: number | null;
@@ -46,7 +47,7 @@ export const defaultRaftInputs: RaftInputs = {
   sbcKNm2: 150, soilModulusMPa: 25, poisson: 0.3,
   cc: 0.25, clayThicknessM: 4, e0: 0.9, sigmaV0KPa: 80, deltaSigmaRatio: 0.6,
   fck: 30, fy: 500, colSizeMm: 400, colLoadKN: 1500,
-  coverMm: 75, depthM: 1.5, wastagePct: 5,
+  coverMm: 75, barDiaMm: 20, depthM: 1.5, wastagePct: 5,
   cementPerBag: 1450, steelPerKg: 270, sandPerCft: 90, crushPerCft: 90,
 };
 
@@ -89,7 +90,12 @@ export function designRaft(input: Partial<RaftInputs> = {}): RaftResult {
   const qAvg = i.totalLoadKN / area;
   const qMax = qAvg * (1 + (6 * Math.abs(i.exM)) / i.widthM + (6 * Math.abs(i.eyM)) / i.lengthM);
   const qMin = qAvg * (1 - (6 * Math.abs(i.exM)) / i.widthM - (6 * Math.abs(i.eyM)) / i.lengthM);
-  const kernOk = Math.abs(i.exM) <= i.widthM / 6 && Math.abs(i.eyM) <= i.lengthM / 6;
+  // Kern: the resultant must lie inside the middle-third DIAMOND —
+  // |ex|/(B/6) + |ey|/(L/6) ≤ 1. The old check (ex ≤ B/6 AND ey ≤ L/6)
+  // was the circumscribed rectangle and could pass a case outside the
+  // true kern. (bearingOk also requires qmin ≥ 0, which bounds the same
+  // failure, so this tightens the kern verdict itself.)
+  const kernOk = Math.abs(i.exM) / (i.widthM / 6) + Math.abs(i.eyM) / (i.lengthM / 6) <= 1;
   const bearingOk = qMax <= i.sbcKNm2 && qMin >= 0;
   if (!bearingOk) warnings.push(`Bearing pressure qmax = ${round(qMax, 1)} kPa exceeds SBC ${i.sbcKNm2} kPa or qmin < 0 — enlarge the raft or improve the ground.`);
   if (!kernOk) warnings.push("Resultant falls outside the middle third — corner pressures are tensile in theory; widen the raft or shift the load.");
@@ -105,7 +111,9 @@ export function designRaft(input: Partial<RaftInputs> = {}): RaftResult {
   const settlementOk = totalSettle <= 50;
   if (!settlementOk) warnings.push(`Total settlement ${round(totalSettle)} mm exceeds the usual 50 mm limit for a raft — thicken the raft, improve the ground, or consider piles.`);
   // Punching at one interior column (IS 456 Cl. 31.6.3)
-  const d = i.thicknessM * 1000 - i.coverMm - 10;
+  // Effective depth from the actual main bar dia (AGENTS.md): the old
+  // code used a hardcoded −10 mm (an unexplained Ø20 assumption).
+  const d = i.thicknessM * 1000 - i.coverMm - i.barDiaMm / 2;
   const cPlusD = i.colSizeMm + d;
   const b0 = 2 * (cPlusD + cPlusD);
   const qu = (1.5 * i.totalLoadKN) / area; // factored average pressure, kN/m2
@@ -124,6 +132,9 @@ export function designRaft(input: Partial<RaftInputs> = {}): RaftResult {
   const astFlex = astForMu(muStrip, i.fck, i.fy, 1000, d);
   const astMin = (0.12 / 100) * 1000 * i.thicknessM * 1000; // IS 456 Cl. 26.5.2.1: 0.12% of total area
   const astReq = Math.max(astFlex, astMin);
+  if (!isFinite(astFlex)) {
+    errors.push(`Strip moment Mu = ${round(muStrip, 1)} kNm/m exceeds the limiting moment of resistance (Mu,lim) — deepen the raft or increase the concrete grade; no singly-reinforced steel area exists for this moment.`);
+  }
   const concVol = area * i.thicknessM;
   // Steel: top + bottom mats each way at the required Ast per m (min governs in practice)
   const steelPerM2 = (astReq * 2 * 2) / 1e6 * 7850; // kg/m2 (2 faces x 2 directions)
@@ -152,7 +163,7 @@ export function designRaft(input: Partial<RaftInputs> = {}): RaftResult {
     materials, costLines: lines, totalCost: totalCost(lines),
     steps: [
       { label: "Bearing pressure", text: `A = ${i.lengthM} × ${i.widthM} = ${round(area)} m²; q_avg = P/A = ${round(qAvg, 1)} kPa; qmax = q_avg·(1 + 6ex/B + 6ey/L) = ${round(qMax, 1)} kPa; qmin = ${round(qMin, 1)} kPa` },
-      { label: "Kern check", text: `Resultant inside middle third iff ex ≤ B/6 = ${round(i.widthM / 6, 2)} m and ey ≤ L/6 = ${round(i.lengthM / 6, 2)} m — ${kernOk ? "PASS" : "FAIL"}` },
+      { label: "Kern check", text: `Resultant inside middle third iff |ex|/(B/6) + |ey|/(L/6) ≤ 1 (diamond, not the rectangle) — ${kernOk ? "PASS" : "FAIL"}` },
       { label: "Settlement", text: `Immediate si = q·B·(1−ν²)·If/Es = ${round(siMm, 1)} mm; consolidation sc = (Hc/(1+e0))·Cc·log10((σ′v0+Δσ)/σ′v0) = ${round(scMm, 1)} mm; total ${round(totalSettle, 1)} mm vs 50 mm limit` },
       { label: "Punching shear", text: `b0 = 2[(c+d)+(c+d)] = ${round(b0)} mm; τv = ${round(tauV, 2)} MPa ≤ ks·0.25√fck = ${round(tauAllow, 2)} MPa (utilisation ${(util * 100).toFixed(0)}%)` },
       { label: "Flexure", text: `Strip Mu = ${round(muStrip, 1)} kNm/m → Ast = ${round(astReq)} mm²/m each way, top and bottom (min 0.12% governs where noted)` },

@@ -137,7 +137,11 @@ export function calcSolarWaterHeater(inp: SolarWaterHeaterInputs): SolarWaterHea
   const annualSavings = annualSolarKwh * energyCost;
 
   const ratePerM2 = inp.ratePerM2Collector ?? collector.ratePerM2;
-  const collectorCost = area * ratePerM2;
+  // Cost the INSTALLED area (whole 2 m² panels), not the theoretical area:
+  // you buy panels, not fractions of one. The old code cost 6.97 m² at
+  // Rs 45,000 = Rs 313,650 while 4 panels = 8.00 m² actually cost
+  // Rs 360,000 (~13% light).
+  const collectorCost = installedArea * ratePerM2;
   const tankCost = tank * (inp.tankCostPerLitre ?? 800);
   const installationCost = (collectorCost + tankCost) * ((inp.installationPct ?? 10) / 100);
   const systemCost = collectorCost + tankCost + installationCost;

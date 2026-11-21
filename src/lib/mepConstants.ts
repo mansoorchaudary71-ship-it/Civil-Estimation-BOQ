@@ -173,6 +173,7 @@ export const PEQS_LIMITS_MG_L = {
   codInland: 150,
   codToSewer: 400,
   tss: 200,
+  tssToSewer: 400, // PEQS table: TSS 200 inland / 400 into sewage treatment
 };
 
 /* ------------------------------------------------------------------ */

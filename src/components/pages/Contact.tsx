@@ -1,6 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useState } from 'react';
-import { Mail, MessageSquare, PhoneCall, MapPin, CheckCircle, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Mail, MessageSquare, CheckCircle, AlertCircle, ShieldCheck } from 'lucide-react';
 import { SEO } from '../SEO';
 import { CONTACT_EMAIL } from '../../seo/siteConfig';
 
@@ -60,7 +60,7 @@ export default function Contact() {
   return (
     <div className="max-w-5xl mx-auto space-y-12 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SEO
-        title="Contact Us"
+        title="Contact Us — BOQ & Estimation Help"
         description="Contact Civil Estimation Pro for help with BOQ calculators, material rates, pricing, or technical support. Send us a message and we will get back to you."
       />
       <div className="text-center space-y-4">
@@ -84,30 +84,11 @@ export default function Contact() {
                <a href={`mailto:${CONTACT_EMAIL}`} className="text-base font-medium text-accent-800 dark:text-accent-400 hover:underline">{CONTACT_EMAIL}</a>
              </div>
           </div>
-
-          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm flex items-start gap-4 hover:shadow-brand-md transition-shadow overflow-hidden">
-             <div className="w-12 h-12 bg-accent-50 dark:bg-accent-500/10 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
-               <MapPin className="w-6 h-6 text-accent-800 dark:text-accent-400" />
-             </div>
-             <div>
-               <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Visit Us</h3>
-               <p className="text-sm text-txt-secondary dark:text-txt-tertiary mb-3">Visit our office HQ.</p>
-               <address className="text-base font-medium dark:text-txt-tertiary not-italic">
-                 100 Civil Way<br/>San Francisco, CA 94107
-               </address>
-             </div>
-          </div>
-
-          <div className="bg-bg-card rounded-2xl p-6 md:p-8 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm flex items-start gap-4 hover:shadow-brand-md transition-shadow overflow-hidden">
-             <div className="w-12 h-12 bg-accent-50 dark:bg-accent-500/20 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
-               <PhoneCall className="w-6 h-6 text-accent-700 dark:text-accent-400" />
-             </div>
-             <div>
-               <h3 className="text-lg font-bold text-txt-primary dark:text-white mb-1">Call Us</h3>
-               <p className="text-sm text-txt-secondary dark:text-txt-tertiary mb-3">Mon-Fri from 8am to 5pm.</p>
-               <a href="tel:+15550000000" className="text-base font-medium text-accent-800 dark:text-accent-400 hover:underline">+1 (555) 000-0000</a>
-             </div>
-          </div>
+          {/* NOTE: the "Visit Us" office card and the "Call Us" phone card
+              were removed (Wave 2-C): the address "100 Civil Way, San
+              Francisco, CA 94107" and phone "+1 (555) 000-0000" were
+              invented placeholders, not real contact details. Email is
+              the only verified contact channel. */}
         </div>
 
         <div className="lg:col-span-2 bg-bg-card rounded-[2.5rem] p-8 md:p-10 border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm">

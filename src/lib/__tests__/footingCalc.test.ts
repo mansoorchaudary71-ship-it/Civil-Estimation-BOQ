@@ -16,7 +16,7 @@ import { designFooting, autoSizeFooting, defaultFootingInputs, footingConcreteVo
 const approx = (a: number, e: number, tol: number) =>
   assert.ok(Math.abs(a - e) <= tol, `expected ${e} (±${tol}), got ${a}`);
 
-test("worked vector: Pu=1500, qu=310, d=444; punching tau 0.85 <= 1.25 PASS (68%); one-way 0.32 PASS", () => {
+test("worked vector: Pu=1500, qu=310, d=444; punching tau 0.85 <= 1.25 PASS (68%); one-way 0.32 vs 0.27 FAIL at the actual pt", () => {
   const r = designFooting({ workingLoadKN: 1000 }); // Pu = 1000 x 1.5 = 1500 kN
   assert.equal(r.errors.length, 0);
   assert.equal(r.puKN, 1500);
@@ -26,8 +26,14 @@ test("worked vector: Pu=1500, qu=310, d=444; punching tau 0.85 <= 1.25 PASS (68%
   approx(r.punchingAllowMpa, 1.25, 0.01);
   approx(r.punchingUtil, 0.68, 0.03);
   assert.equal(r.punchingOk, true);
+  // One-way shear RE-CHECKED at the actual provided pt ≈ 0.17% (not the
+  // pt ≈ 0.5% guess the old test locked in): τc,allow drops 0.42 -> 0.27
+  // MPa, so τv = 0.32 MPa now FAILS — the footing as drawn needs a
+  // deeper section (auto-size below now returns 0.65 m, not 0.45 m).
   approx(r.oneWayTauVMpa, 0.32, 0.03);
-  assert.equal(r.oneWayOk, true);
+  approx(r.oneWayAllowMpa, 0.27, 0.02);
+  assert.equal(r.oneWayOk, false);
+  assert.ok(r.warnings.some((w) => w.includes("actual provided steel ratio")));
 });
 
 test("flexure: Mu=276 kNm -> Ast ~1,470 mm2 (LSM, fy 500); auto spacing 160 mm; flexure passes", () => {
@@ -57,10 +63,12 @@ test("top dimensions larger than base are an error", () => {
   assert.ok(r.errors.length > 0);
 });
 
-test("auto-size solves 2.6 m square, depth 0.45 m for the defaults", () => {
+test("auto-size solves 2.6 m square, depth 0.65 m for the defaults", () => {
+  // Depth grew 0.45 -> 0.65 m because the one-way shear re-check at the
+  // actual provided pt (not the 0.5% guess) now governs the design.
   const s = autoSizeFooting({ ...defaultFootingInputs, workingLoadKN: 1000 });
   assert.equal(s.sizeM, 2.6);
-  assert.equal(s.depthM, 0.45);
+  assert.equal(s.depthM, 0.65);
 });
 
 test("frustum volume rule: rectangular and stepped types", () => {

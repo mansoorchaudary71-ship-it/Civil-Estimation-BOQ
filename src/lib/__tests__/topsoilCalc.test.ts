@@ -2,14 +2,14 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { topsoilCalc, TOPSOIL_WORKED, TOPSOIL_MATERIALS } from "../topsoilCalc";
 const approx = (a: number, b: number, tol = 0.01) => assert.ok(Math.abs(a - b) <= tol, `${a} ≈ ${b}`);
-test("worked (task): 10×5 m, 15 cm, 1200 kg/m³, 15% → net 7.50, gross 8.63 m³, 10,350 kg, 414 bags, 1 truck", () => {
+test("worked (task): 10×5 m, 15 cm, 1200 kg/m³, swell 1.25 → net 7.50, order 9.38 m³, 11,250 kg, 450 bags, 1 truck", () => {
   const r = topsoilCalc(TOPSOIL_WORKED);
-  approx(r.netM3, 7.5); approx(r.orderM3, 8.63, 0.01); approx(r.weightKg, 10350, 1);
-  assert.equal(r.bags, 414); assert.equal(r.trucks, 1);
+  approx(r.netM3, 7.5); approx(r.orderM3, 9.375, 0.01); approx(r.weightKg, 11250, 1);
+  assert.equal(r.bags, 450); assert.equal(r.trucks, 1);
 });
-test("spec default allowance 10%: same inputs → order 8.25 m³, 9900 kg, 396 bags", () => {
+test("spec default swell 1.25: same inputs → order 9.375 m³, 11,250 kg, 450 bags", () => {
   const r = topsoilCalc({ areaM2: 50, depthM: 0.15, densityKgM3: 1200 });
-  approx(r.orderM3, 8.25); approx(r.weightKg, 9900); assert.equal(r.bags, 396);
+  approx(r.orderM3, 9.375); approx(r.weightKg, 11250); assert.equal(r.bags, 450);
 });
 test("material presets carry densities + swell factors (merged orphan)", () => {
   assert.equal(TOPSOIL_MATERIALS.topsoil.densityKgM3, 1200);

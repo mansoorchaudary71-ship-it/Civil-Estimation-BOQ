@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
-import { Building2, Grid2X2, Columns, FileSpreadsheet, Layers, AlignVerticalSpaceAround, LayoutDashboard, ArrowUp, Calculator } from "lucide-react";
+import { Grid2X2, Columns, FileSpreadsheet, Layers, AlignVerticalSpaceAround, LayoutDashboard } from "lucide-react";
 
 import { MasterRccCoreBody } from "./MasterRccCore";
 import SlabEstimator from "./SlabEstimator";

@@ -1,9 +1,9 @@
 /**
  * Precast compound wall engine — pure functions, no React.
  * Metric internally. Dry concrete = wet x 1.54; 50 kg cement bag = 0.0347 m3.
- * Rates are INDICATIVE defaults (Nov 2026, unverified — both in-repo rate
- * sets disagree: rendered tool 1500/800 vs orphan file 800/400). The UI
- * must show them as editable indicative rates, never as verified prices.
+ * Rates are INDICATIVE defaults (Nov 2026, unverified — post Rs 1,500,
+ * panel Rs 800). The UI must show them as editable indicative rates,
+ * never as verified prices.
  */
 import { CEMENT_BAG_M3 } from "./brickCalc";
 
@@ -133,7 +133,10 @@ export function calcPrecastWall(inp: PrecastInputs): PrecastResults {
     panels * inp.panelWidthM * inp.panelHeightM * (Math.max(0, inp.panelThicknessMm) / 1000);
 
   const r = inp.rates;
-  const postCost = r.postPerNos != null ? posts * r.postPerNos : null;
+  // Posts and panels are BOTH costed at the to-order quantities (with
+  // wastage). The old code costed panels at orderPanels but posts at the
+  // exact count, understating the post cost by one post at 5% wastage.
+  const postCost = r.postPerNos != null ? orderPosts * r.postPerNos : null;
   const panelCost = r.panelPerNos != null ? orderPanels * r.panelPerNos : null;
   const footingCost = r.concretePerM3 != null ? footingWetM3 * r.concretePerM3 : null;
   const labourCost = r.labourPerM != null ? effectiveLengthM * r.labourPerM : null;

@@ -117,24 +117,35 @@ export default function LabourCalculator() {
     }));
   };
 
+  // ONE source of truth: the shared engine (IS 7272 outputs). The old
+  // component-local calculateTaskCost rounded days UP (Math.ceil) while the
+  // engine rounds to nearest, so the same task showed two different day
+  // counts and totals (brickwork 10.1 m³: 4.1 d / Rs 17,220 locally vs
+  // 4.0 d / Rs 16,968 in the engine — and neither equalled days x burn).
+  const engineSummary = calcLabourSummary(
+    tasks.map((t) => ({
+      id: t.id, name: t.name, qty: t.qty, unit: t.unit,
+      outputPerWorker: t.outputPerWorker,
+      keyWorkers: t.isUnskilledDriven ? 0 : t.skilledCount,
+      helpers: t.unskilledCount,
+      masonWage: t.skilledWage, helperWage: t.unskilledWage,
+    })),
+    contingencyPct,
+  );
+  const engineById = new Map(engineSummary.results.map((r) => [r.id, r]));
   const calculateTaskCost = (t: LabourTask) => {
-    const keyWorkers = t.isUnskilledDriven ? t.unskilledCount : t.skilledCount;
-    const dailyOutput = keyWorkers * t.outputPerWorker;
-    const daysRequired = dailyOutput > 0 ? Math.ceil((t.qty / dailyOutput) * 10) / 10 : 0;
-    const dailyBurnRate = (t.skilledCount * t.skilledWage) + (t.unskilledCount * t.unskilledWage);
-    return { days: daysRequired, burn: dailyBurnRate, total: daysRequired * dailyBurnRate };
+    const r = engineById.get(t.id);
+    return { days: r?.days ?? 0, burn: r?.dailyBurn ?? 0, total: r?.totalCost ?? 0 };
   };
 
-  const calculateTotalProjectCost = () => {
-    return tasks.reduce((sum, t) => sum + calculateTaskCost(t).total, 0);
-  };
+  const calculateTotalProjectCost = () => engineSummary.totalCost;
 
   const calculateMaxEstimatedDays = () => {
-    return Math.max(0, ...tasks.map(t => calculateTaskCost(t).days));
+    return Math.max(0, ...engineSummary.results.map((r) => r.days));
   };
 
   const calculateSumActualDays = () => {
-    return tasks.reduce((sum, t) => sum + calculateTaskCost(t).days, 0);
+    return Math.round(engineSummary.results.reduce((sum, r) => sum + r.days, 0) * 10) / 10;
   };
 
   const totalCost = calculateTotalProjectCost();
@@ -172,18 +183,6 @@ export default function LabourCalculator() {
       grandTotal: totalCost
     };
   };
-
-  // Contingency-adjusted totals from the shared engine (IS 7272 outputs).
-  const engineSummary = calcLabourSummary(
-    tasks.map((t) => ({
-      id: t.id, name: t.name, qty: t.qty, unit: t.unit,
-      outputPerWorker: t.outputPerWorker,
-      keyWorkers: t.isUnskilledDriven ? 0 : t.skilledCount,
-      helpers: t.unskilledCount,
-      masonWage: t.skilledWage, helperWage: t.unskilledWage,
-    })),
-    contingencyPct,
-  );
 
   const handleExportCSV = () => {
     const rows = [["Task", "Qty", "Unit", "Days (with contingency)", "Daily burn", "Total cost"]];
@@ -452,10 +451,13 @@ export default function LabourCalculator() {
       <CalculationHistory
         calculatorId="labour_workforce"
         estimationName="Labour & Workforce Estimate"
-        currentInputs={{ tasks: tasks.length }}
+        currentInputs={{ tasks, contingencyPct }}
         currentResults={{ total: totalCost, burn: overallBurnRate }}
-        summaryGeneration={(inputs, res) => `Total: Rs ${res.total} - Tasks: ${inputs.tasks}`}
-        onRestore={(savedInputs) => {}}
+        summaryGeneration={(inputs, res) => `Total: Rs ${res.total} - Tasks: ${inputs.tasks?.length ?? 0}`}
+        onRestore={(savedInputs) => {
+          if (Array.isArray(savedInputs.tasks)) setTasks(savedInputs.tasks);
+          if (typeof savedInputs.contingencyPct === "number") setContingencyPct(savedInputs.contingencyPct);
+        }}
       />
     </div>
   );

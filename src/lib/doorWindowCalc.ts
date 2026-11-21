@@ -1,9 +1,12 @@
 /**
  * Door & window schedule engine — pure functions, no React.
  * Metric internally. Lintel = masonry opening width + 0.30 m
- * (150 mm bearing each side). Frame length = 2 x (frame-outer H + W).
- * Glass area for glazed shutters uses a 50 mm sill-rail allowance
- * (labelled assumption in the UI).
+ * (150 mm bearing each side). Door frame = 2 x frame-outer H + frame-outer
+ * W (two jambs + head, no sill member); window/ventilator frame = full
+ * perimeter 2 x (H + W). Door opening height = frame-outer H + 10 mm
+ * (head clearance only — the frame sits on the floor); windows add
+ * 10 mm top and bottom. Glass area for glazed shutters uses a 50 mm
+ * sill-rail allowance (labelled assumption in the UI).
  */
 export type DoorWindowCurrency = "PKR" | "INR" | "AED" | "USD";
 export type DoorWindowKind = "door" | "window" | "ventilator";
@@ -82,14 +85,24 @@ export function calcDoorWindowRow(r: DoorWindowRowInput): DoorWindowRowResult {
   const frameOuterHeightM =
     Math.max(0, r.leafHeightM) + (r.kind === "door" ? 1 : 2) * fs;
   const openingWidthM = frameOuterWidthM + (2 * FRAME_CLEARANCE_MM) / 1000;
-  const openingHeightM = frameOuterHeightM + (2 * FRAME_CLEARANCE_MM) / 1000;
+  // Door openings sit on the floor — clearance only at the head (+10 mm).
+  // Windows/ventilators get clearance top and bottom (+20 mm).
+  const openingHeightM =
+    frameOuterHeightM + (r.kind === "door" ? 1 : 2) * (FRAME_CLEARANCE_MM / 1000);
   const clearWidthM = Math.max(0, r.leafWidthM - (2 * STOP_ALLOWANCE_MM) / 1000);
   const glazed = r.glass !== "none";
   const glassAreaM2 = glazed
     ? Math.max(0, r.leafWidthM - 2 * fs) *
       Math.max(0, r.leafHeightM - fs - SILL_RAIL_MM / 1000)
     : 0;
-  const frameLengthM = 2 * (frameOuterHeightM + frameOuterWidthM);
+  // A door frame is two jambs + head — no sill member — so 2H + W, not
+  // the full perimeter. Windows/ventilators have a sill member: 2H + 2W.
+  // (Old code used the full perimeter for doors too, overstating a
+  // 1.2 × 2.1 m door frame 7.20 → 5.80 r.m.)
+  const frameLengthM =
+    r.kind === "door"
+      ? 2 * frameOuterHeightM + frameOuterWidthM
+      : 2 * (frameOuterHeightM + frameOuterWidthM);
   const lintelLengthM = openingWidthM + 2 * LINTEL_BEARING_M;
   // Lintel section 0.15 m deep x wall thickness (default 0.23 m).
   const lintelVolumeM3 = lintelLengthM * 0.15 * Math.max(0, r.wallThicknessM);

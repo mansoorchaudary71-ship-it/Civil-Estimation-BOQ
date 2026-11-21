@@ -54,6 +54,11 @@ test("tie design per Cl. 26.5.3.2", () => {
   assert.equal(r.tieDiaMm, 6); // max(20/4, 6)
   assert.equal(r.tieSpacingMm, 300); // min(300, 16x20, 300)
   assert.ok(r.tieCount > 0 && r.tieSteelKg > 0);
+  // Ties use the IS 2502 detailed length (1.212 m for 300x450, cover 40,
+  // Ø8) with inner dims A/B = section − 2·cover − φ — the old field-rule
+  // length (1.372 m) read ~13% high: tie steel 5.95 -> 5.26 kg.
+  assert.equal(r.tieCount, 11); // ceil(3000/300) + 1
+  approx(r.tieSteelKg, 5.26, 0.05);
 });
 
 test("bar layout is explicit, not a half/half split", () => {

@@ -1,8 +1,14 @@
 import { Button } from './/Button';
-import React from 'react';
+import React, { lazy, Suspense, useEffect, useRef } from 'react';
 import { X, Calculator, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FormulaVisualizer } from './FormulaVisualizer';
+
+// Lazily loaded: the visualizer pulls in recharts (~376 kB), which must
+// not ride along with the eager ToolHeader just because the modal exists.
+// It only downloads when the user actually opens the Formulas modal.
+const FormulaVisualizer = lazy(() =>
+  import('./FormulaVisualizer').then((m) => ({ default: m.FormulaVisualizer }))
+);
 
 
 export function FormulaModal({
@@ -16,6 +22,31 @@ export function FormulaModal({
   title: string;
   formulaDescription: string;
 }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Esc closes the modal (and only the modal). App.tsx's global Esc
+  // handler returns early while a [role="dialog"] is present, so this is
+  // the handler that actually runs — previously the modal had no
+  // role="dialog", so Esc fell through to the global handler and sent the
+  // user back to Home instead of closing the modal.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [isOpen, onClose]);
+
+  // Initial focus inside the dialog when it opens.
+  useEffect(() => {
+    if (isOpen) panelRef.current?.focus();
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -26,12 +57,18 @@ export function FormulaModal({
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-ink/50 backdrop-blur-sm z-[200]"
             onClick={onClose}
+            aria-hidden="true"
           />
           <motion.div
+            ref={panelRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Formula and variables — ${title}`}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-surface-default dark:bg-ink rounded-2xl shadow-2xl z-[201] overflow-hidden border border-border-color dark:border-ink flex flex-col"
+            className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-surface-default dark:bg-ink rounded-2xl shadow-2xl z-[201] overflow-hidden border border-border-color dark:border-ink flex flex-col focus:outline-none"
           >
             <div className="p-4 sm:p-6 border-b border-border-color dark:border-ink shrink-0 flex items-center justify-between">
               <h3 className="text-xl font-bold tracking-tight text-txt-primary dark:text-white flex items-center gap-2">
@@ -40,6 +77,7 @@ export function FormulaModal({
               </h3>
               <Button
                 onClick={onClose}
+                aria-label="Close formula dialog"
                 className="p-2 -mr-2 text-txt-tertiary hover:text-txt-secondary dark:hover:text-txt-primary transition-colors rounded-full hover:bg-surface-hover"
               >
                 <X className="w-5 h-5" />
@@ -63,7 +101,9 @@ export function FormulaModal({
                 </div>
               </div>
 
-              <FormulaVisualizer title={title} />
+              <Suspense fallback={<div className="mt-4 h-40 rounded-2xl border border-border-color bg-surface-hover/50 animate-pulse" role="status" aria-label="Loading formula chart" />}>
+                <FormulaVisualizer title={title} />
+              </Suspense>
             </div>
             
             <div className="p-6 pt-0 shrink-0 mt-2">

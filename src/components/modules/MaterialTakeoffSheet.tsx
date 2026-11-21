@@ -55,6 +55,8 @@ const MaterialTakeoffSheet: React.FC = () => {
     { id: "ag_pcc", category: "Aggregate", name: "Aggregate/Crush (PCC)", unit: "Cft", quantity: 0, rate: 65, amount: 0 },
     { id: "br_blk", category: "Masonry", name: "Bricks / Blocks", unit: "Nos", quantity: 0, rate: 14, amount: 0 },
     { id: "st_reb", category: "Steel", name: "Steel Reinforcement", unit: "Kg", quantity: 0, rate: 260, amount: 0 },
+    // Tile rates are component defaults (Rs 120/100 per sqft) — the CEP
+    // rate table prices tiles per box (Rs 1,200/box), not per sqft.
     { id: "tl_flr", category: "Finishes", name: "Floor Tiles", unit: "Sq.ft", quantity: 0, rate: 120, amount: 0 },
     { id: "tl_wal", category: "Finishes", name: "Wall Tiles", unit: "Sq.ft", quantity: 0, rate: 100, amount: 0 },
     { id: "pt_int", category: "Finishes", name: "Interior Paint", unit: "Liters", quantity: 0, rate: 650, amount: 0 },
@@ -83,6 +85,13 @@ const MaterialTakeoffSheet: React.FC = () => {
   }, [area, floors, quality]);
 
   const calculateTakeoff = () => {
+    // Invalid inputs: zero the table instead of showing negative
+    // quantities (the error above already explains what to fix).
+    if (!isFinite(area) || area <= 0 || !isFinite(floors) || floors < 1) {
+      setItems((prev) => prev.map((it) => ({ ...it, quantity: 0, amount: 0 })));
+      setGrandTotal(0);
+      return;
+    }
     const totalArea = area * floors;
     
     // Quality multipliers 
@@ -160,10 +169,10 @@ const MaterialTakeoffSheet: React.FC = () => {
     <div className="tool-card p-4 md:p-8 flex flex-col w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
+          <h2 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
             <Building className="w-6 h-6 text-accent-800" />
             Material Takeoff Sheet
-          </h1>
+          </h2>
           <p className="text-txt-tertiary mt-1">
             Auto-calculate building material quantities based on area, floors, and finishes.
           </p>
@@ -232,7 +241,7 @@ const MaterialTakeoffSheet: React.FC = () => {
         <p className="mb-4 text-sm font-semibold text-red-600">Enter a built-up area greater than 0 and at least 1 floor.</p>
       )}
       <p className="mb-4 text-sm text-txt-tertiary">
-        Rates from the CEP rate table ({rateTable.lastUpdated}): cement Rs {pkRates.cementPerBag ?? "—"}/bag, sand Rs {pkRulesSand()}/cft, crush Rs {pkRates.crushPerCft ?? "—"}/cft, bricks Rs {pkRates.bricksPer1000 ?? "—"}/1,000, steel Rs {pkRates.steelPerKg ?? "—"}/kg, paint Rs {pkRates.paintPerL ?? "—"}/L — indicative, edit any rate in the table. Quantities use thumb rules (cement 0.40 bags/sqft, steel 3.5 kg/sqft, bricks 10/sqft on 9&quot; outer + 4.5&quot; inner walls, sand 1.5 cft/sqft, aggregate 1.35 cft/sqft) with 5% bricks / 10% tiles / 2% cement / 3% steel wastage to add at ordering.
+        Rates from the CEP rate table ({rateTable.lastUpdated}): cement Rs {pkRates.cementPerBag ?? "—"}/bag, sand Rs {pkRulesSand()}/cft, crush Rs {pkRates.crushPerCft ?? "—"}/cft, bricks Rs {pkRates.bricksPer1000 ?? "—"}/1,000, steel Rs {pkRates.steelPerKg ?? "—"}/kg, paint Rs {pkRates.paintPerL ?? "—"}/L — indicative, edit any rate in the table. Floor/wall tile rates (Rs 120/100 per sqft) are component defaults, not from the rate table (it prices tiles per box). Quantities use thumb rules (cement 0.40 bags/sqft, steel 3.5 kg/sqft, bricks 10/sqft on 9&quot; outer + 4.5&quot; inner walls, sand 1.5 cft/sqft, aggregate 1.35 cft/sqft) with 5% bricks / 10% tiles / 2% cement / 3% steel wastage to add at ordering.
       </p>
       {boqSent && <p className="mb-4 text-sm font-semibold text-emerald-700">Takeoff sent to the BOQ Generator — open BOQ to load it.</p>}
 

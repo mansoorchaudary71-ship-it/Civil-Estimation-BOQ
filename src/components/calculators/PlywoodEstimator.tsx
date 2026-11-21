@@ -154,7 +154,7 @@ export function PlywoodEstimator() {
   };
 
   const steps: FormulaStep[] = [
-    { id: 1, label: "1. Net surface area", theoretical: element === "wall" ? "Contact area = Length × Height × Faces" : element === "slab" ? "Contact area = Length × Width" : element === "beam" ? "Contact area = (2 × Depth + Width) × Length" : element === "column" ? "Contact area = 2 × (Side A + Side B) × Height" : "Net area = Length × Width (or your direct area)", applied: `Contact area = ${area(result.contactAreaM2).toFixed(2)} ${unitA}\nNet = contact − openings = ${area(result.netAreaM2).toFixed(2)} ${unitA}` },
+    { id: 1, label: "1. Net surface area", theoretical: element === "wall" ? "Contact area = Length × Height × Faces; openings deducted once per face" : element === "slab" ? "Contact area = Length × Width" : element === "beam" ? "Contact area = (2 × Depth + Width) × Length" : element === "column" ? "Contact area = 2 × (Side A + Side B) × Height" : "Net area = Length × Width (or your direct area)", applied: `Contact area = ${area(result.contactAreaM2).toFixed(2)} ${unitA}\nNet = contact − openings = ${area(result.netAreaM2).toFixed(2)} ${unitA}` },
     { id: 2, label: "2. Gross area (incl. wastage)", theoretical: "Gross = Net × (1 + Wastage% / 100)", applied: `Gross = ${area(result.netAreaM2).toFixed(2)} × (1 + ${wastage}/100) = ${area(result.grossAreaM2).toFixed(2)} ${unitA}` },
     { id: 3, label: "3. Sheets", theoretical: "Sheet area = Sheet L × Sheet W\nExact sheets = Gross / Sheet area\nTo buy = ceil(Exact / Reuse) for formwork, else ceil(Exact)", applied: `Sheet area = ${result.sheetAreaM2.toFixed(2)} m²\nExact = ${result.exactSheets.toFixed(2)} → ${result.sheetsToBuy} sheets to buy (reuse ${inputs.reuseFactor})` },
     { id: 4, label: "4. Cost & volume", theoretical: "Total cost = Sheets to buy × Cost per sheet\nOne-sheet volume = Sheet area × Thickness; order volume = Sheets × One-sheet volume", applied: `Cost = ${result.sheetsToBuy} × ${costPerSheet || "—"} = ${money(result.totalCost, currency)}\nOrder volume = ${result.totalOrderVolumeM3.toFixed(2)} m³` },
@@ -282,6 +282,7 @@ export function PlywoodEstimator() {
                     <option value="marine">Marine</option>
                     <option value="shuttering">Shuttering / film-faced (HDO/MDO)</option>
                   </select>
+                  <p className="text-xs text-txt-tertiary">Grade labels the order only — the sheet count does not depend on it. Enter the rate for your grade below.</p>
                 </div>
                 <div className="space-y-2"><label className={labelCls}>Wastage &amp; overlap (%)</label><input type="number" min="0" max="30" value={wastage} onChange={(e) => setWastage(e.target.value)} className={inputCls} /><p className="text-xs text-txt-tertiary">5% simple rectangular · 10% standard · 15% diagonal/complex.</p></div>
                 {element !== "general" && (

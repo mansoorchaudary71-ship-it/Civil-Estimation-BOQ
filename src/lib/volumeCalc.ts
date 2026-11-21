@@ -244,8 +244,17 @@ export function calcVolume(shape: VolumeShape, d: VolumeDims): VolumeResult {
         : baseArea * Math.max(0, d.deadStorageM);
       usableVolumeM3 = Math.max(0, grossVolumeM3 - freeboardVol - deadVol);
       volumeM3 = usableVolumeM3;
-      surfaceAreaM2 = 2 * (L * W + L * H + W * H);
-      lateralAreaM2 = 2 * H * (L + W);
+      // Surface area follows the tank base: a cylindrical tank (diameter L)
+      // is 2πr² + 2πrH, not the rectangular 2(LW+LH+WH) the old code used
+      // for both (L=4, W=3, H=5 → 94 m² reported vs 87.96 m² true).
+      if (d.tankBase === "rect") {
+        surfaceAreaM2 = 2 * (L * W + L * H + W * H);
+        lateralAreaM2 = 2 * H * (L + W);
+      } else {
+        const r = L / 2;
+        surfaceAreaM2 = 2 * Math.PI * r * r + 2 * Math.PI * r * H;
+        lateralAreaM2 = 2 * Math.PI * r * H;
+      }
       const usablePct = grossVolumeM3 > 0 ? (usableVolumeM3 / grossVolumeM3) * 100 : 0;
       if (usablePct < 75 || usablePct > 95)
         warnings.push(

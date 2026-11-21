@@ -23,7 +23,6 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { MarketRatesTrendChart } from "../ui/MarketRatesTrendChart";
 
 import { saveEstimate } from "../../lib/estimates";
 import { CalculationHistory } from "../ui/CalculationHistory";
@@ -443,7 +442,12 @@ export default function RateAnalysis() {
             </div>
           </section>
         </div>
-        <MarketRatesTrendChart />
+        {/* The 6-month trend chart was removed: its series (crush 220–250/cft,
+            bricks 15–18/pc, steel 280/kg) contradict the live rate table on
+            this page (crush 90, bricks 23.355, steel 270) and the IN/AE
+            trend lines were unsourced (rates.ts has IN/AE null). The chart
+            component and its data live in files this wave may not edit, so
+            the mount is removed here; re-add it only with sourced series. */}
       </div>
       <CalculationHistory
         calculatorId="rate_analysis_v1"

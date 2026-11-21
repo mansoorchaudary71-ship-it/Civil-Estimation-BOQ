@@ -35,28 +35,20 @@ const CITY_LABELS: Record<PakCity, string> = {
   faisalabad: "Faisalabad", multan: "Multan", other: "Other",
 };
 
-const unitMultipliers = {
-  "Sq.Ft": 1,
-  "Sq.Yards": 9,
-  "Marla": 272.25,
-  "Kanal": 5445
-};
-
-const floorModifiers = {
-  "G": 0.75,
-  "G+1": 1.5,
-  "G+2": 2.25,
-  "G+3": 3.0,
-  "G+4+": 3.75
-};
+// Option lists only — the engine (pakistanCost.ts) does the conversion.
+// (The old unitMultipliers/floorModifiers objects carried numeric values
+// that were never read; "Marla": 272.25 also hardcoded one marla standard
+// while the page has a 225/272.25 toggle.)
+const UNIT_OPTIONS = ["Sq.Ft", "Sq.Yards", "Marla", "Kanal"] as const;
+const FLOOR_OPTIONS = ["G", "G+1", "G+2", "G+3", "G+4+"] as const;
 
 export default function PakistanCostCalculatorPage() {
   const [area, setArea] = useState<number>(5);
-  const [unit, setUnit] = useState<keyof typeof unitMultipliers>("Marla");
+  const [unit, setUnit] = useState<(typeof UNIT_OPTIONS)[number]>("Marla");
   const [marlaStandard, setMarlaStandard] = useState<MarlaStandard>("revenue272");
   const [city, setCity] = useState<PakCity>("lahore");
   const [constructionType, setConstructionType] = useState<PakTier>("standard");
-  const [floors, setFloors] = useState<keyof typeof floorModifiers>("G+1");
+  const [floors, setFloors] = useState<(typeof FLOOR_OPTIONS)[number]>("G+1");
   const [hasBasement, setHasBasement] = useState(false);
 
   // Engine (src/lib/pakistanCost): 2026 dated rates. Floor multipliers are
@@ -176,10 +168,10 @@ export default function PakistanCostCalculatorPage() {
                 <div>
                   <label className="block text-xs font-bold text-txt-secondary uppercase tracking-wider mb-2">Measurement Unit</label>
                   <div className="flex bg-surface-default p-1 rounded-xl border border-ui-borderSubtle">
-                     {Object.keys(unitMultipliers).map((u) => (
+                     {UNIT_OPTIONS.map((u) => (
                        <Button
                          key={u}
-                         onClick={() => setUnit(u as keyof typeof unitMultipliers)}
+                         onClick={() => setUnit(u)}
                          className={`flex-1 text-xs py-2.5 rounded-lg font-bold transition-colors ${unit === u ? 'bg-accent-500 text-txt-primary' : 'text-txt-secondary hover:text-txt-primary'}`}
                        >
                          {u}
@@ -210,10 +202,10 @@ export default function PakistanCostCalculatorPage() {
                  <div>
                     <label className="block text-xs font-bold text-txt-secondary uppercase tracking-wider mb-2">Floors</label>
                     <div className="flex gap-2">
-                       {Object.keys(floorModifiers).map(f => (
+                       {FLOOR_OPTIONS.map(f => (
                           <Button
                             key={f}
-                            onClick={() => setFloors(f as keyof typeof floorModifiers)}
+                            onClick={() => setFloors(f)}
                             className={`flex-1 text-sm py-2.5 rounded-xl border font-bold transition-all ${floors === f ? 'bg-surface-default border-accent-500 text-accent-700' : 'bg-surface-default border-ui-borderSubtle text-txt-secondary hover:border-ui-borderStrong hover:text-txt-primary'}`}
                           >
                             {f}
@@ -272,9 +264,13 @@ export default function PakistanCostCalculatorPage() {
               
               <div className="mb-8">
                 <p className="text-accent-700 font-bold text-xs uppercase tracking-widest mb-3">Estimated Total Cost</p>
-                <h3 className="text-4xl lg:text-5xl font-black text-txt-primary tracking-tighter mb-2">
-                   PKR {formatLakhCrore(minCost)} <span className="text-txt-tertiary font-medium text-2xl">to</span> <br className="hidden md:block"/> {formatLakhCrore(maxCost)}
-                </h3>
+                {result.error ? (
+                  <p className="text-sm font-semibold text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{result.error}</p>
+                ) : (
+                  <h3 className="text-4xl lg:text-5xl font-black text-txt-primary tracking-tighter mb-2">
+                     PKR {formatLakhCrore(minCost)} <span className="text-txt-tertiary font-medium text-2xl">to</span> <br className="hidden md:block"/> {formatLakhCrore(maxCost)}
+                  </h3>
+                )}
                 <p className="text-txt-secondary mt-4 text-sm font-medium flex justify-between items-center bg-surface-default/50 rounded-lg py-2 px-3">
                   <span>Covered Area:</span>
                   <span className="text-txt-primary font-bold">{formatPKR(totalCoveredArea)} Sq.Ft</span>
@@ -320,7 +316,7 @@ export default function PakistanCostCalculatorPage() {
               <div className="bg-surface-default border border-accent-200 rounded-xl p-4 flex gap-3 items-start shrink-0">
                 <AlertTriangle className="w-4 h-4 text-accent-700 shrink-0 mt-0.5" />
                 <p className="text-xs leading-relaxed text-txt-secondary">
-                  <strong className="text-txt-secondary">Disclaimer:</strong> These are 2026 standard market rates (Nov 2026). Exact costs vary based on design complexity, material inflation, transportation, and plot conditions. It does not include boundary wall, architect fee, or external utility connections.
+                  Disclaimer: This estimate is algorithmically generated based on benchmark rates and standard assumptions. It should not be used as a substitute for a professional BOQ certified by a licensed structural engineer or quantity surveyor.
                 </p>
               </div>
             </div>
@@ -351,34 +347,22 @@ export default function PakistanCostCalculatorPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-ink/60">
-                  <tr className="hover:bg-surface-default/30 transition-colors">
-                    <td className="px-6 py-4 font-bold text-txt-primary">Lahore</td>
-                    <td className="px-6 py-4">2,800 – 3,200</td>
-                    <td className="px-6 py-4">3,800 – 4,500</td>
-                    <td className="px-6 py-4">5,700 – 6,400</td>
-                    <td className="px-6 py-4 text-accent-700 font-semibold">7,000 – 8,500</td>
-                  </tr>
-                  <tr className="hover:bg-surface-default/30 transition-colors bg-surface-default/30">
-                    <td className="px-6 py-4 font-bold text-txt-primary">Islamabad</td>
-                    <td className="px-6 py-4">3,000 – 3,500</td>
-                    <td className="px-6 py-4">4,200 – 5,000</td>
-                    <td className="px-6 py-4">5,500 – 6,500</td>
-                    <td className="px-6 py-4 text-accent-700 font-semibold">7,000 – 9,000</td>
-                  </tr>
-                  <tr className="hover:bg-surface-default/30 transition-colors">
-                    <td className="px-6 py-4 font-bold text-txt-primary">Karachi</td>
-                    <td className="px-6 py-4">2,600 – 3,000</td>
-                    <td className="px-6 py-4">4,000 – 4,700</td>
-                    <td className="px-6 py-4">4,500 – 5,200</td>
-                    <td className="px-6 py-4 text-accent-700 font-semibold">5,500 – 7,000</td>
-                  </tr>
-                  <tr className="hover:bg-surface-default/30 transition-colors bg-surface-default/30">
-                    <td className="px-6 py-4 font-bold text-txt-primary">Other Cities (Avg)</td>
-                    <td className="px-6 py-4">2,700 – 3,100</td>
-                    <td className="px-6 py-4">3,700 – 4,300</td>
-                    <td className="px-6 py-4">4,500 – 5,200</td>
-                    <td className="px-6 py-4 text-accent-700 font-semibold">5,800 – 7,000</td>
-                  </tr>
+                  {/* Rendered from PAK_RATES (src/lib/pakistanCost.ts) — the
+                      same table the calculator uses, so the two can never
+                      disagree again. */}
+                  {CITY_KEYS.map((c, idx) => {
+                    const r = PAK_RATES[c];
+                    const fmt = (t: PakTier) => `${r[t][0].toLocaleString()} – ${r[t][1].toLocaleString()}`;
+                    return (
+                      <tr key={c} className={`hover:bg-surface-default/30 transition-colors ${idx % 2 === 1 ? "bg-surface-default/30" : ""}`}>
+                        <td className="px-6 py-4 font-bold text-txt-primary">{c === "other" ? "Other Cities (Avg)" : CITY_LABELS[c]}</td>
+                        <td className="px-6 py-4">{fmt("grey")}</td>
+                        <td className="px-6 py-4">{fmt("standard")}</td>
+                        <td className="px-6 py-4">{fmt("premium")}</td>
+                        <td className="px-6 py-4 text-accent-700 font-semibold">{fmt("luxury")}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
            </div>
@@ -389,10 +373,10 @@ export default function PakistanCostCalculatorPage() {
            <h3 className="text-xl font-bold text-txt-primary mb-6">Explore Professional Evaluation Tools</h3>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {[
-                { title: "BOQ Generator", desc: "Instantly create detailed Bills of Quantities.", icon: ClipboardList, target: "#" },
-                { title: "Material Takeoff", desc: "Systematic quantity extraction workflows.", icon: Hammer, target: "#" },
-                { title: "Concrete Mix Design", desc: "IS 10262:2019 compliant mix calculations.", icon: Layers, target: "#" },
-                { title: "Steel Weight Estimator", desc: "Calculate precise rebar weights & lengths.", icon: Grid, target: "#" }
+                { title: "BOQ Generator", desc: "Instantly create detailed Bills of Quantities.", icon: ClipboardList, target: "/boq" },
+                { title: "Material Takeoff", desc: "Systematic quantity extraction workflows.", icon: Hammer, target: "/material-takeoff" },
+                { title: "Concrete Mix Design", desc: "IS 10262:2019 compliant mix calculations.", icon: Layers, target: "/mix-design" },
+                { title: "Steel Weight Estimator", desc: "Calculate precise rebar weights & lengths.", icon: Grid, target: "/metal-weight" }
               ].map((tool, idx) => (
                  <a key={idx} href={tool.target} className="bg-surface-default border border-ui-borderSubtle hover:border-accent-500/40 rounded-2xl p-5 group transition-all overflow-hidden">
                     <div className="bg-surface-hover/50 w-10 h-10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent-500/10 transition-colors">

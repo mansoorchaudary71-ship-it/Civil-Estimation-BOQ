@@ -1235,6 +1235,116 @@ const SPECIFIC_FAQS: Record<string, FAQItem[]> = {
     },
   ],
   "water-tank-design": WATER_TANK_FAQS.map((f) => ({ question: f.q, answer: f.a })),
+  "labour-calculator": [
+    {
+      question: "How are labour days calculated?",
+      answer: "Days = quantity ÷ daily output, where daily output = key workers × output per worker per day. A mason laying brickwork produces about 1.25 m³ per day (IS 7272 Pt 1), so 2 masons finish 25 m³ in 10 days. Unskilled-driven tasks such as excavation use the helpers as the key workers (3.0 m³ per labour-day)."
+    },
+    {
+      question: "What are the standard daily outputs in IS 7272 Pt 1?",
+      answer: "For an 8-hour day: brickwork 1.25 m³ per mason, excavation 3.0 m³ per labourer, plastering 10 m² per mason, concreting 4.0 m³ per gang, steel binding 150 kg per bar-bender, formwork 8 m² per carpenter, painting 40 m² per painter. These are the presets this calculator uses; adjust them if your site records show different outputs."
+    },
+    {
+      question: "How is the daily labour cost worked out?",
+      answer: "Daily burn = (key workers × mason wage) + (helpers × helper wage). The default wages are the indicative Pakistan rates in the rate table (mason Rs 1,200/day, helper Rs 600/day, November 2026) — change them to your site's actual wages. Total cost = daily burn × days, and the contingency percentage is applied on top."
+    },
+    {
+      question: "What does the contingency percentage cover?",
+      answer: "Idle time, rework, weather delays and slower-than-standard output. Days with contingency = days × (1 + contingency ÷ 100), and the cost with contingency is the total cost × the same factor. It is applied to time and cost together, so the two stay consistent."
+    },
+    {
+      question: "Why does excavation need no masons?",
+      answer: "Excavation is unskilled-driven: the calculator treats the helpers as the key workers for it (4 helpers × 3.0 m³ per day = 12 m³ per day). For skilled tasks such as brickwork or plastering, the mason count drives the output and helpers support them."
+    },
+  ],
+  "building-setback-calculator": [
+    {
+      question: "What is a building setback?",
+      answer: "A setback is the minimum distance a building must sit back from the plot boundary — front (towards the road), rear, and sides. Setbacks keep light and air reaching the building, leave room for access and services, and stop buildings crowding the street. The area left after all setbacks is the buildable footprint."
+    },
+    {
+      question: "Do I need side setbacks on a 5 marla plot in Lahore?",
+      answer: "Under the LDA figures used here, a plot under 5 marla typically has 5 ft front and 5 ft rear setbacks and no side setback — houses are built continuously along the sides. This comes from society-practice summaries, not from a verified LDA setback table, so confirm it with LDA or your housing society before building."
+    },
+    {
+      question: "What changes on a corner plot?",
+      answer: "A corner plot faces a road on two sides, so the side facing the second road needs an extra setback on top of the normal side margin. No sourced value for that extra setback was found, so this calculator leaves it for you to enter from your authority's figures — the buildable frontage shrinks by exactly the amount you enter."
+    },
+    {
+      question: "Setback footprint vs ground coverage — what is the difference?",
+      answer: "They are two different limits. The setback footprint is the area left after front, rear and side setbacks — pure geometry. Ground coverage is a separate regulatory cap (for example 70% of the plot for a 10 marla LDA plot). Your real buildable footprint is whichever is smaller. A plot can pass its setbacks yet breach coverage, or pass coverage yet fail its setbacks — this calculator reports both numbers separately so you can see which one binds."
+    },
+    {
+      question: "Who approves setbacks, and is this calculator a permission?",
+      answer: "In Lahore the Lahore Development Authority (LDA) approves building plans; in India your municipal corporation or development authority applies the state bye-laws; in Dubai the plot's Affection Plan and the master developer's rules govern. This tool is a planning screen only — it is not a building permission, and its preset figures are secondary summaries that must be confirmed with the approving authority."
+    },
+  ],
+  "far-fsi-calculator": [
+    {
+      question: "What is the difference between FAR and FSI?",
+      answer: "There is none in practice — FAR (Floor Area Ratio) and FSI (Floor Space Index) are the same number expressed differently. FSI 2.0 means FAR 200%: you may build floor area equal to twice your plot area. This calculator uses FAR and FSI interchangeably."
+    },
+    {
+      question: "What counts in the gross floor area (GFA)?",
+      answer: "It depends on the authority. Under LDA 2019 basements count toward FAR. Under the India Model Bye-Laws 2016, FAR uses the covered area on all floors excluding specified exemptions such as stilt parking, balconies within limits and service areas. Under the Dubai Building Code, Table A.3 lists explicit GFA inclusions and exclusions. Always check what your authority counts before sizing floors — a basement or a stilt floor can change the answer."
+    },
+    {
+      question: "Why does the calculator say 0 floors?",
+      answer: "Because the FAR is below the ground coverage. Floors are roughly FAR ÷ coverage: with FSI 0.4 and 50% coverage you get 0.8 floors, which floors down to 0 — no full floor is possible at that coverage. Raise the permitted FAR or lower the ground coverage (a smaller footprint spread over more floors) to get a whole number of floors."
+    },
+    {
+      question: "Does a basement count toward FAR?",
+      answer: "Under LDA 2019, yes — basements count toward FAR in Lahore. In India it depends on the state bye-laws and the basement's use. In Dubai it depends on the DBC GFA rules for your plot. If your basement counts, it eats into the same built-up allowance as the floors above ground."
+    },
+    {
+      question: "What FAR applies in Dubai?",
+      answer: "Dubai has no single residential FAR table. FAR is plot-specific and comes from your plot's Affection Plan and the master developer's planning documents — it can be around 0.6 in a villa community like Al Barari and 12 or more downtown. This calculator ships the Al Barari example only as an illustration, and asks you to enter your own plot's figures for a real answer."
+    },
+  ],
+  "roof-calculator": [
+    {
+      question: "What does roof pitch in X:12 mean, and how does it relate to degrees?",
+      answer: "X:12 is the rise over a 12-unit run: 6:12 means the roof rises 6 units for every 12 units of horizontal run. In degrees that is arctan(6/12) = 26.6°, and in percent it is 50%. All three describe the same slope — this calculator keeps them live-synced, so you can enter whichever one your drawings give you."
+    },
+    {
+      question: "How many bundles of shingles are in one square?",
+      answer: "One roofing square covers 100 sq ft, and a square of composition shingles is normally 3 bundles (about 33 ft² per bundle). So 22 squares need 66 bundles. This calculator rounds squares up — you cannot buy part of a square — and applies your wastage percentage before rounding."
+    },
+    {
+      question: "How many felt rolls do I need?",
+      answer: "One roll of #15 felt covers about 432 sq ft (36 in × 144 ft) and one roll of #30 felt about 216 sq ft (36 in × 72 ft). Divide the roof area by the coverage and round up. #30 is thicker and used under heavier shingles or on low slopes; most homes use #15."
+    },
+    {
+      question: "How is a hip roof area different from a gable roof?",
+      answer: "A gable roof is two rectangles: 2 × rafter length × building length. A hip roof slopes on all four sides, so its area is the horizontal projection (including the overhangs on all sides) divided by cos θ — the same pitch multiplier, applied to a bigger footprint. The hip and valley rafters are longer than common rafters; this calculator approximates them at 1.5 × the common run and says so, because the exact length depends on the hip geometry."
+    },
+    {
+      question: "My roof in Pakistan is flat — can I use this calculator?",
+      answer: "No — this calculator is for pitched roofs. Most houses in Pakistan have a flat RCC slab roof, and a pitch of 0 gives a flat result on purpose. For a flat roof, use the Concrete / Slab tools on this site to estimate the slab, and use this calculator only if you are adding a pitched roof, a pergola, or a sloped sheet roof."
+    },
+  ],
+  "permeability-test": [
+    {
+      question: "How is the coefficient of permeability (k) calculated?",
+      answer: "Constant-head test (coarse soils): k = Q × L ÷ (A × h × t), where Q is the volume collected, L the sample length, A the sample area, h the head and t the time. Falling-head test (fine soils): k = 2.303 × (a × L) ÷ (A × t) × log10(h1 ÷ h2), where a is the standpipe area and h1, h2 are the start and end heads. Both follow ASTM D2434 / D5084."
+    },
+    {
+      question: "Why does the test temperature matter?",
+      answer: "Water viscosity changes with temperature, so a k measured at 10 °C is not the same as at 20 °C. The result is corrected to the 20 °C standard using the ASTM viscosity-ratio table (10 °C 1.301, 15 °C 1.135, 20 °C 1.000, 25 °C 0.890, 30 °C 0.797), linearly interpolated between those points."
+    },
+    {
+      question: "What is the Hazen estimate, and when can I use it?",
+      answer: "Hazen's screening estimate is k ≈ 0.01 × D10², with D10 in mm and k in cm/s. It is a rough estimate for clean sands only — this calculator labels it as an estimate, never as a test result. For design, use a measured constant-head or falling-head value."
+    },
+    {
+      question: "How do I read the permeability class?",
+      answer: "k above 10⁻¹ cm/s is very high (clean gravel), 10⁻² to 10⁻¹ high (clean sand), 10⁻³ to 10⁻² medium (fine or silty sand), 10⁻⁵ to 10⁻³ low (silt), and below 10⁻⁵ very low (clay). Multiply k in cm/s by 864 to get metres per day."
+    },
+    {
+      question: "Why must the final head be lower than the initial head?",
+      answer: "In a falling-head test the water level in the standpipe only falls — h2 must be less than h1, or the logarithm in the formula has nothing to measure. The calculator rejects h2 ≥ h1, and also rejects zero or negative areas, heads and times."
+    },
+  ],
 };
 
 ;
@@ -1285,7 +1395,13 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
     }
   });
   const combinedFaqs = Array.from(combinedFaqsMap.values());
-  const displayedFaqs = showAll ? combinedFaqs : combinedFaqs.slice(0, 2);
+  // Show every FAQ when the list is short; only collapse long lists.
+  // Previously this sliced to 2, so tools with 5 tool-specific FAQs
+  // (prepended before the generic ones) showed only generic items.
+  const COLLAPSED_LIMIT = 5;
+  const displayedFaqs = showAll || combinedFaqs.length <= COLLAPSED_LIMIT
+    ? combinedFaqs
+    : combinedFaqs.slice(0, COLLAPSED_LIMIT);
 
   return (
     <section className="w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-border-color shadow-brand-sm overflow-hidden" aria-label="Frequently Asked Questions">
@@ -1326,7 +1442,7 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
           );
         })}
       </div>
-      {combinedFaqs.length > 2 && (
+      {combinedFaqs.length > COLLAPSED_LIMIT && (
         <div className="text-center mt-8">
           <Button
             onClick={() => setShowAll(!showAll)}

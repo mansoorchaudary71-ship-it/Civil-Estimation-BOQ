@@ -1,8 +1,11 @@
 /** topsoilCalc.ts — topsoil engine (pure client-side).
  * Replaces the dead POST /api/tools/topsoil-calculator (no server on
- * static GitHub Pages). Settling/compaction allowance default 10%
- * (competitor norm; the old 15% was high). Swell factors from the merged
- * TopSoilFillCalculator orphan: topsoil 1.25, sand 1.15, gravel 1.12, clay 1.40. */
+ * static GitHub Pages). Order volume = net volume × the material's swell
+ * factor: the loose volume delivered settles to the compacted volume
+ * (topsoil 1.25, compost 1.20, sand 1.15, gravel 1.12, clay 1.40). The old
+ * "compaction allowance %" input duplicated this with a different number
+ * (10% default vs 15% in the worked example) and is removed — the swell
+ * factor is the single source of truth. */
 export const TOPSOIL_MATERIALS = {
   topsoil: { label: "Topsoil", densityKgM3: 1200, swellFactor: 1.25 },
   compost: { label: "Compost", densityKgM3: 600, swellFactor: 1.2 },
@@ -11,15 +14,16 @@ export const TOPSOIL_MATERIALS = {
   clay: { label: "Clay fill", densityKgM3: 1600, swellFactor: 1.4 },
 } as const;
 export type TopsoilMaterial = keyof typeof TOPSOIL_MATERIALS;
-export interface TopsoilInput { areaM2: number; depthM: number; densityKgM3: number; allowancePct?: number; bagWeightKg?: number; truckCapacityM3?: number; bulkRatePerM3?: number | null; bagRateEach?: number | null; deliveryFee?: number; }
+export interface TopsoilInput { areaM2: number; depthM: number; densityKgM3: number; /** loose-volume multiplier; default 1.25 (topsoil) */ swellFactor?: number; bagWeightKg?: number; truckCapacityM3?: number; bulkRatePerM3?: number | null; bagRateEach?: number | null; deliveryFee?: number; }
 export function topsoilCalc(input: TopsoilInput) {
   const { areaM2, depthM, densityKgM3 } = input;
   if (areaM2 <= 0) throw new Error("Area must be > 0.");
   if (depthM <= 0 || depthM > 1) throw new Error("Depth must be 0–1 m (1–100 cm).");
   if (densityKgM3 <= 0) throw new Error("Density must be > 0.");
-  const allowancePct = input.allowancePct ?? 10;
+  const swellFactor = input.swellFactor ?? 1.25;
+  if (!(swellFactor > 0)) throw new Error("Swell factor must be > 0.");
   const netM3 = areaM2 * depthM;
-  const orderM3 = netM3 * (1 + allowancePct / 100);
+  const orderM3 = netM3 * swellFactor;
   const weightKg = orderM3 * densityKgM3;
   const bagWeightKg = input.bagWeightKg ?? 25;
   const bags = Math.ceil(weightKg / bagWeightKg);
@@ -28,10 +32,10 @@ export function topsoilCalc(input: TopsoilInput) {
   const bulkCost = input.bulkRatePerM3 != null ? orderM3 * input.bulkRatePerM3 + (input.deliveryFee ?? 0) : null;
   const bagCost = input.bagRateEach != null ? bags * input.bagRateEach + (input.deliveryFee ?? 0) : null;
   return {
-    netM3, orderM3, weightKg, weightTonnes: weightKg / 1000, bags, trucks,
+    netM3, orderM3, swellFactor, weightKg, weightTonnes: weightKg / 1000, bags, trucks,
     volumeYd3: orderM3 * 1.30795, volumeFt3: orderM3 * 35.3147, volumeLitres: orderM3 * 1000,
     bulkCost, bagCost,
     cheaper: bulkCost != null && bagCost != null ? (bulkCost <= bagCost ? "bulk" : "bags") : null,
   };
 }
-export const TOPSOIL_WORKED: TopsoilInput = { areaM2: 50, depthM: 0.15, densityKgM3: 1200, allowancePct: 15, bagWeightKg: 25, truckCapacityM3: 10 };
+export const TOPSOIL_WORKED: TopsoilInput = { areaM2: 50, depthM: 0.15, densityKgM3: 1200, swellFactor: 1.25, bagWeightKg: 25, truckCapacityM3: 10 };

@@ -23,11 +23,12 @@ const defaults = (): PrecastInputs => ({
   rates: { postPerNos: 1500, panelPerNos: 800, concretePerM3: 12000, labourPerM: 150, transportFlat: 0 },
 });
 
-test("metric defaults, open run, 5% wastage, 1:2:4, labour 150/m -> 16 posts, 120 panels, 126 to order, 13 bags, Rs 152,628", () => {
+test("metric defaults, open run, 5% wastage, 1:2:4, labour 150/m -> 16 posts, 17 to order, 120 panels, 126 to order, 13 bags, Rs 154,128", () => {
   const r = calcPrecastWall(defaults());
   assert.deepEqual(validatePrecast(defaults()), []);
   assert.equal(r.spans, 15);
   assert.equal(r.posts, 16);
+  assert.equal(r.orderPosts, 17);
   assert.equal(r.panelsPerSpan, 8);
   assert.equal(r.panels, 120);
   assert.equal(r.orderPanels, 126);
@@ -36,13 +37,15 @@ test("metric defaults, open run, 5% wastage, 1:2:4, labour 150/m -> 16 posts, 12
   assert.equal(r.cementBags, 13);
   approx(r.sandM3, 0.855, 0.01);
   approx(r.aggregateM3, 1.711, 0.01);
-  assert.equal(r.postCost, 24000);
+  // Posts are costed at the to-order count (17 x 1,500), like panels —
+  // the old code costed the exact 16 posts (Rs 24,000).
+  assert.equal(r.postCost, 25500);
   assert.equal(r.panelCost, 100800);
   assert.equal(r.footingCost, 23328);
   assert.equal(r.labourCost, 4500);
-  assert.equal(r.totalCost, 152628);
-  approx(r.costPerRunningM!, 5087.6, 0.1);
-  approx(r.costPerM2Wall!, 2119.8, 0.1);
+  assert.equal(r.totalCost, 154128);
+  approx(r.costPerRunningM!, 5137.6, 0.1);
+  approx(r.costPerM2Wall!, 2140.7, 0.1);
 });
 
 test("closed 40x30 m rectangle: perimeter 140 m, spans 70, posts 70 (not 71), panels 560", () => {

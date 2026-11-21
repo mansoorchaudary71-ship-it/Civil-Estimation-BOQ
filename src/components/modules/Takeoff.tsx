@@ -1328,15 +1328,6 @@ export default function Takeoff() {
               </div>
             </div>
 
-            <details className="mb-6 group">
-               <summary className="text-sm cursor-pointer font-medium text-accent-800 hover:text-accent-800 list-none flex items-center gap-2 p-3 bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary rounded-2xl border border-ui-borderSubtle overflow-hidden">
-                 ▶ Watch Video Tutorial
-               </summary>
-               <div className="mt-3 aspect-video bg-surface-hover rounded-2xl overflow-hidden border border-ui-borderSubtle">
-                 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video Tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="border-0"></iframe>
-               </div>
-            </details>
-
             <Button onClick={closeTutorial} className="w-full py-3 bg-ink hover:bg-ink-700 text-white font-semibold rounded-full transition-colors shadow-brand-sm active:scale-95 hover:-translate-y-0.5">
               Get Started
             </Button>

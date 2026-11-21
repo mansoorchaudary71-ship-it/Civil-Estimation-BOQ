@@ -124,6 +124,17 @@ const STANDARD_TEMPLATES: Record<string, BOQItem[]> = {
   ],
 };
 
+// The four legacy templates below carry placeholder demo rates (PCC
+// Rs 85/m³, RCC Rs 150/m³, brickwork Rs 110/m³ — roughly 100x below
+// market). They are NOT sourced from the dated PK table, so the gallery
+// and the Financial Summary must never claim they are.
+const LEGACY_TEMPLATE_NAMES = new Set([
+  "Residential Building",
+  "Road Project",
+  "Retaining Structure",
+  "Drainage/Sewer Project",
+]);
+
 export default function BOQGenerator() {
   const { formatCurrency, settings } = useSettings();
   const { rates } = useMarketRates();
@@ -218,20 +229,47 @@ export default function BOQGenerator() {
     return () => window.removeEventListener('fill-boq' as any, handleFillBOQ);
   }, [decimals]);
 
+  // PK rate-table units: cement per bag, steel per kg, sand/crush per cft,
+  // bricks per piece, tiles per box, paint per litre. A line is synced
+  // ONLY when its unit matches the rate's unit — the old code matched on
+  // the description alone, so a steel line in tonnes got the per-kg rate
+  // (a 1000x understatement) and a concrete line in m³ got the per-bag
+  // cement rate. Lines whose unit does not match are left untouched and
+  // listed, never silently re-priced.
+  const RATE_UNITS: { keys: string[]; units: string[]; rate: number }[] = [
+    { keys: ["cement"], units: ["bag", "bags"], rate: rates.cement },
+    { keys: ["steel", "rebar"], units: ["kg"], rate: rates.steel },
+    { keys: ["sand"], units: ["cft", "ft3", "ft³"], rate: rates.sand },
+    { keys: ["crush", "aggregate"], units: ["cft", "ft3", "ft³"], rate: rates.crush },
+    { keys: ["brick"], units: ["nos", "no", "pc", "pcs", "piece", "pieces"], rate: rates.bricks },
+    { keys: ["tile"], units: ["box", "boxes"], rate: rates.tiles },
+    { keys: ["paint"], units: ["l", "litre", "litres", "liter", "liters", "ltr"], rate: rates.paint },
+  ];
+
   const syncRates = () => {
-    setItems(items.map(item => {
-      let newRate = item.rate;
+    const skipped: string[] = [];
+    let synced = 0;
+    const next = items.map((item) => {
       const lowerDesc = item.description.toLowerCase();
-      if (lowerDesc.includes("cement")) newRate = rates.cement;
-      if (lowerDesc.includes("steel") || lowerDesc.includes("rebar")) newRate = rates.steel;
-      if (lowerDesc.includes("sand")) newRate = rates.sand;
-      if (lowerDesc.includes("crush") || lowerDesc.includes("aggregate")) newRate = rates.crush;
-      if (lowerDesc.includes("brick")) newRate = rates.bricks;
-      if (lowerDesc.includes("tile")) newRate = rates.tiles;
-      if (lowerDesc.includes("paint")) newRate = rates.paint;
-      
-      return { ...item, rate: newRate };
-    }));
+      const unit = item.unit.trim().toLowerCase();
+      const match = RATE_UNITS.find(
+        (r) => r.keys.some((k) => lowerDesc.includes(k)) && r.units.includes(unit),
+      );
+      if (!match) {
+        if (RATE_UNITS.some((r) => r.keys.some((k) => lowerDesc.includes(k)))) {
+          skipped.push(`${item.description} (${item.unit})`);
+        }
+        return item;
+      }
+      synced += 1;
+      return { ...item, rate: match.rate };
+    });
+    setItems(next);
+    toast.success(
+      skipped.length > 0
+        ? `Synced ${synced} line(s) from the PK rate table. Skipped ${skipped.length}: ${skipped.join("; ")} — unit does not match the rate unit.`
+        : `Synced ${synced} line(s) from the PK rate table.`,
+    );
   };
 
   const handleAddItem = () => {
@@ -491,11 +529,13 @@ export default function BOQGenerator() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Object.entries(STANDARD_TEMPLATES).map(([name, tItems]) => {
             const total = tItems.reduce((sum, i) => sum + i.quantity * i.rate, 0);
+            const legacy = LEGACY_TEMPLATE_NAMES.has(name);
             return (
               <div key={name} className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 shadow-brand-sm">
                 <h3 className="text-lg font-semibold text-txt-primary">{name}</h3>
+                {legacy && <p className="text-xs font-bold text-accent-800 bg-accent-50 border border-accent-200 rounded-full px-3 py-1 mt-2 inline-block">Legacy demo rates — not market rates</p>}
                 <p className="text-sm text-txt-tertiary mt-1">{tItems.length} items · sample total {settings.currency} {total.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
-                <p className="text-xs text-txt-tertiary mt-1">Rates are example rates from the dated PK table ({pkTable.lastUpdated}) — edit per your market before tendering.</p>
+                <p className="text-xs text-txt-tertiary mt-1">{legacy ? "Placeholder demo rates from an old template — re-price every line from the PK table or your supplier before tendering." : `Rates are example rates from the dated PK table (${pkTable.lastUpdated}) — edit per your market before tendering.`}</p>
                 <Button onClick={() => { loadTemplate(name); setView("boq"); }} className="mt-4 px-4 py-2 bg-ink text-white rounded-full text-sm font-bold">Load this template</Button>
               </div>
             );
@@ -725,7 +765,7 @@ export default function BOQGenerator() {
                             </td>
                             <td className="p-4 align-top text-right font-semibold tabular-nums tracking-tight text-txt-primary tabular-nums">
                               <div className="group relative inline-block">
-                                {(() => { const amt = lineAmount(toBoqLine(item)); return amt == null ? <span className="text-amber-700 font-bold">— unpriced</span> : amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); })()}
+                                {(() => { const amt = lineAmount(toBoqLine(item)); return amt == null ? <span className="text-accent-800 font-bold">— unpriced</span> : amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); })()}
                                 <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-1 w-max max-w-[200px] px-2 py-1 bg-surface-default text-txt-primary text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-center font-normal whitespace-nowrap shadow-xl overflow-hidden">
                                   Value = Qty × Rate
                                   <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></span>
@@ -773,7 +813,7 @@ export default function BOQGenerator() {
               <div className="flex justify-between items-center text-sm">
                 <span className="text-txt-tertiary">Subtotal</span>
                 <span className="font-bold text-txt-primary tabular-nums">
-                  ${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {formatCurrency(subtotal, false)}
                 </span>
               </div>
 
@@ -801,11 +841,7 @@ export default function BOQGenerator() {
                       className="w-12 px-1 py-0.5 bg-surface-hover border border-ui-borderSubtle text-txt-primary rounded text-right text-sm focus:outline-none focus:border-accent-300 rounded-full"
                     /></>
                     <span className="font-bold tabular-nums text-accent-800">
-                      +$
-                      {contingencyAmount.toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      +{formatCurrency(contingencyAmount, false)}
                     </span>
                     <span className="pointer-events-none absolute right-0 bottom-full mb-2 w-max max-w-[250px] px-2 py-1 bg-surface-default text-txt-primary text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-center font-normal whitespace-nowrap shadow-xl overflow-hidden">
                       Risk = Subtotal × Factor
@@ -819,7 +855,7 @@ export default function BOQGenerator() {
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-txt-tertiary">Taxable Amount</span>
                   <span className="font-bold text-txt-primary tabular-nums">
-                    ${taxableAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {formatCurrency(taxableAmount, false)}
                   </span>
                 </div>
                 <div className="flex gap-1 mb-2">
@@ -828,9 +864,9 @@ export default function BOQGenerator() {
                   ))}
                 </div>
                 {unpricedCount > 0 && (
-                  <p className="text-xs font-bold text-amber-700 bg-accent-50 border border-accent-200 rounded-full px-3 py-1.5">{unpricedCount} unpriced line(s) — rate 0 is shown as a warning, never silently counted as 0.</p>
+                  <p className="text-xs font-bold text-accent-800 bg-accent-50 border border-accent-200 rounded-full px-3 py-1.5">{unpricedCount} unpriced line(s) — rate 0 is shown as a warning, never silently counted as 0.</p>
                 )}
-                <p className="text-xs text-txt-tertiary">Template rates sourced from the dated PK table ({pkTable.lastUpdated}, {pkTable.source}).</p>
+                <p className="text-xs text-txt-tertiary">PK-template rates are sourced from the dated PK table ({pkTable.lastUpdated}, {pkTable.source}). Legacy demo templates use placeholder rates, not market rates — re-price before tendering.</p>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-txt-tertiary flex items-center gap-1">
                     {taxInfo.label} <Percent className="w-3 h-3" />
@@ -854,11 +890,7 @@ export default function BOQGenerator() {
                       className="w-12 px-1 py-0.5 bg-surface-hover border border-ui-borderSubtle text-txt-primary rounded text-right text-sm focus:outline-none focus:border-accent-300 rounded-full"
                     /></>
                     <span className="font-bold tabular-nums text-ui-errorText">
-                      +$
-                      {gstAmount.toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      +{formatCurrency(gstAmount, false)}
                     </span>
                     <span className="pointer-events-none absolute right-0 bottom-full mb-2 w-max max-w-[250px] px-2 py-1 bg-surface-default text-txt-primary text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-center font-normal whitespace-nowrap shadow-xl overflow-hidden">
                       Tax = Taxable Amount × Tax % — {taxInfo.note}
@@ -873,11 +905,7 @@ export default function BOQGenerator() {
                   Grand Total
                 </span>
                 <p className="text-xl tabular-nums tracking-tight bg-gradient-to-r from-accent-500 to-accent-700 bg-clip-text text-transparent mt-1 text-base font-normal text-txt-secondary leading-relaxed">
-                  $
-                  {grandTotal.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {formatCurrency(grandTotal, false)}
                 </p>
               </div>
             </div>
@@ -899,12 +927,27 @@ export default function BOQGenerator() {
               </div>
               <div className="bg-surface-default p-4 rounded-2xl border border-border-color overflow-hidden">
                 <div className="text-base font-medium uppercase text-txt-tertiary mb-1">
-                  Total QTY
+                  Quantities by Unit
                 </div>
-                <div className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-ui-successText">
-                  {items
-                    .reduce((s, i) => s + i.quantity, 0)
-                    .toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}
+                <div className="text-sm font-semibold text-txt-primary tabular-nums tracking-tight">
+                  {/* A single "Total QTY" summed m³ + m² + kg + nos into one
+                      meaningless number. Quantities are only summable
+                      within the same unit. */}
+                  {items.length === 0 ? (
+                    <span className="text-txt-tertiary">—</span>
+                  ) : (
+                    Object.entries(
+                      items.reduce<Record<string, number>>((acc, i) => {
+                        acc[i.unit] = (acc[i.unit] ?? 0) + i.quantity;
+                        return acc;
+                      }, {}),
+                    ).map(([unit, qty]) => (
+                      <div key={unit} className="flex justify-between gap-2">
+                        <span className="text-txt-tertiary">{unit}</span>
+                        <span>{qty.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</span>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

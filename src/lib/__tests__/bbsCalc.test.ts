@@ -46,26 +46,28 @@ const base: BbsRowInput = {
   depthMm: 450,
 };
 
-test("rectangular stirrup demo: W300 x D450, cover 40, dia 8 -> 1,244 mm / 0.49 kg", () => {
+test("rectangular stirrup demo: W300 x D450, cover 40, dia 8 -> 1,212 mm / 0.48 kg", () => {
+  // Inner dims subtract the bar dia too (A = 212, B = 362 — the old
+  // code used 220/370, reading 1,244 mm).
   const r = row(calcBbsRow(base));
-  assert.equal(r.cutLengthMm, 1244);
-  assert.equal(r.cutLengthM, 1.244);
-  approx(r.weightKg, 0.49, 0.01);
-  assert.ok(r.fieldApproxNote?.includes("1.372"), "field shortcut note must quote 1.372 m");
-  assert.ok(r.fieldApproxNote?.includes("10.3%"), "field shortcut note must quote 10.3%");
+  assert.equal(r.cutLengthMm, 1212);
+  assert.equal(r.cutLengthM, 1.212);
+  approx(r.weightKg, 0.48, 0.01);
+  assert.ok(r.fieldApproxNote?.includes("1.340"), "field shortcut note must quote 1.340 m");
+  assert.ok(r.fieldApproxNote?.includes("10.6%"), "field shortcut note must quote 10.6%");
   assert.equal(r.barsToOrderCount, 1);
 });
 
-test("worked example: 25 stirrups -> 31.10 m, 12.27 kg net, 12.88 kg @5%, Rs 3,478", () => {
+test("worked example: 25 stirrups -> 30.30 m, 11.95 kg net, 12.55 kg @5%, Rs 3,389", () => {
   const r = row(calcBbsRow(bbsWorkedExample()));
-  assert.equal(r.cutLengthMm, 1244);
-  approx(r.totalLengthM, 31.1, 1e-9);
-  approx(r.weightKg, 12.27, 0.05);
+  assert.equal(r.cutLengthMm, 1212);
+  approx(r.totalLengthM, 30.3, 1e-9);
+  approx(r.weightKg, 11.95, 0.05);
   assert.equal(r.barsToOrderCount, 3);
   const totals = calcBbsTotals([r], 5, 270, STOCK_BAR_M);
-  approx(totals.netWeightKg, 12.27, 0.05);
-  approx(totals.orderWeightKg, 12.88, 0.05);
-  assert.equal(Math.round(totals.cost ?? 0), 3478);
+  approx(totals.netWeightKg, 11.95, 0.05);
+  approx(totals.orderWeightKg, 12.55, 0.05);
+  assert.equal(Math.round(totals.cost ?? 0), 3389);
   assert.equal(totals.perDia.length, 1);
   assert.equal(totals.perDia[0].diaMm, 8);
   assert.equal(totals.totalBarsToOrder, 3);
@@ -89,9 +91,9 @@ test("other shapes spot-check (G3 spec §1)", () => {
     calcBbsRow({ ...base, shape: "cranked", spanMm: 3000, slabThicknessMm: 150, cranks: 2 }),
   );
   approx(cranked.cutLengthMm, 3148.08, 0.01);
-  // U-stirrup: A=220, B=370 -> 220+740+160-32 = 1088 mm
+  // U-stirrup: A=212, B=362 -> 212+724+160-32 = 1064 mm (old code: 1088 with A=220, B=370)
   const ustir = row(calcBbsRow({ ...base, shape: "u-stirrup" }));
-  assert.equal(ustir.cutLengthMm, 1088);
+  assert.equal(ustir.cutLengthMm, 1064);
 });
 
 test("spiral: col Ø300, pitch 150, H=3000, cover 40, Ø8 -> 21 turns, 14.497 m, 5.72 kg", () => {

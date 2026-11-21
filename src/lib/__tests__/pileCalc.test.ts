@@ -58,6 +58,20 @@ test("spacing below 2.5D is an error", () => {
   assert.ok(r.errors.some((e) => e.includes("2.5D")));
 });
 
+test("materials are costed on the INSTALLED group (m x n), not requiredPiles", () => {
+  // Load 4000 kN needs only 5 piles, but the 2x3 group installs 6 and
+  // the cap is sized for 6 — the old code costed 5 piles of concrete
+  // and steel (14.73 m³) against a 6-pile cap.
+  const r = designPile({ totalLoadKN: 4000 });
+  assert.equal(r.requiredPiles, 5);
+  approx(r.pileConcreteM3, 17.67, 0.05); // π·0.5²/4 x 15 x 6
+});
+
+test("a partial direct override warns instead of silently using the layered model", () => {
+  const r = designPile({ directSigmaVTipKPa: 120 });
+  assert.ok(r.warnings.some((w) => w.includes("only used when all three")));
+});
+
 test("Nq and alpha tables are sane", () => {
   assert.equal(nqForPhi(30), 20);
   assert.ok(nqForPhi(40) > nqForPhi(30));

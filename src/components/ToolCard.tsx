@@ -110,7 +110,7 @@ export default function ToolCard({
       <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] bg-[#e9d3a8]">
         <img
           src={getToolImage(mod)}
-          alt=""
+          alt={mod.title}
           width={400}
           height={250}
           loading="lazy"

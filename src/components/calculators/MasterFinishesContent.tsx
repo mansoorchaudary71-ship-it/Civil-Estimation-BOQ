@@ -28,11 +28,12 @@ export default function MasterFinishesContent() {
         <h2 className="text-2xl font-bold text-txt-primary">Masonry — bricks, blocks and mortar</h2>
         <p>
           The brick count is the wall volume divided by the volume of one brick with its mortar joint. A standard
-          9 × 4.5 × 3 inch brick with a 10 mm joint occupies 0.00203 m³, so a 10 × 10 ft wall, 230 mm thick, needs 873
+          9 × 4.5 × 3 inch brick (230 × 110 × 75 mm) with a 10 mm joint occupies 0.00245 m³, so a 10 × 10 ft wall, 230 mm thick, needs 873
           bricks before wastage and 917 to order at 5%. Mortar is the wall volume minus the brick volume, converted to
           dry mortar by multiplying by 1.33. For a 1:4 mix, cement is one fifth of the dry mortar and sand is four
-          fifths; cement bags are the cement volume divided by 0.0347, rounded up. The mortar is always worked out
-          from the brick count before wastage, because wastage bricks are spares — they do not need extra mortar.
+          fifths; cement bags are the cement volume divided by 0.0347, rounded up. The dry mortar is ordered with the
+          same wastage as the bricks — cut and broken bricks still need their mortar, so wastage is applied to the dry
+          mortar as well as to the brick count.
         </p>
         <p>
           The same engine also handles AAC blocks (600 × 200 × 150 mm with a 3 mm joint) and hollow concrete blocks
@@ -52,11 +53,14 @@ export default function MasterFinishesContent() {
           overstates the plaster by roughly a sixth.
         </p>
         <p>
-          Wet plaster volume is the net area times the thickness — 12 mm inside, 20 mm outside, 6 mm on ceilings.
+          Wet plaster volume is the net area times the thickness — 12 mm inside, 20 mm outside. The ceiling, when
+          included, is plastered at the same internal thickness as the walls; there is no separate ceiling thickness
+          in the calculator.
           Uneven walls add 10% to the wet volume. Dry mortar is wet volume × 1.33, split by the mix ratio, and cement
-          bags are rounded up. For the example room, internal plaster at 12 mm in 1:4 with 5% wastage needs 16 bags of
-          cement and 2.17 m³ of sand; external plaster at 20 mm needs its own quantities, because the thickness and
-          the mix are different.
+          bags are rounded up. For the example room, internal plaster at 12 mm (ceiling included, uneven walls) plus
+          external plaster at 20 mm, both in 1:4 with 5% wastage, needs 17 bags of cement and 2.29 m³ of sand;
+          internal plaster alone needs 8 bags and 1.04 m³ of sand. External plaster is priced from the net area of
+          one external face, with the same opening deductions — not from the gross wall area.
         </p>
       </section>
 
@@ -68,8 +72,9 @@ export default function MasterFinishesContent() {
           11, premium about 12.5, and exterior weather-shield about 9. The calculator applies primer at roughly
           9 m² per litre and putty at about 1.1 m² per kg, and it deducts the skirting height from the wall area before
           painting, because the skirting is not painted. For the example room, two coats of standard emulsion at
-          11 m² per litre with 10% wastage need 11 litres — one 10-litre pack and one 1-litre pack — plus 8 litres of
-          primer and 93 kg of putty. Paint is sold in 20, 10, 4 and 1 litre packs, and the calculator breaks the
+          11 m² per litre with 10% wastage, ceiling included and one door face painted, need 15 litres — one 10-litre
+          pack, one 4-litre pack and one 1-litre pack — plus 11 litres of
+          primer and 129 kg of putty. Paint is sold in 20, 10, 4 and 1 litre packs, and the calculator breaks the
           quantity into packs so you can buy it.
         </p>
       </section>
@@ -83,7 +88,7 @@ export default function MasterFinishesContent() {
           brick-bond, 14% diagonal, 16% herringbone. Skirting tiles are counted separately as cut strips — a 600 mm
           tile cut into skirting gives four 150 mm strips, and the strips are never folded into the floor area. The
           bedding under the tiles is a dry mortar of 25 mm (or the thickness you enter), converted with the 1.33 dry
-          factor and split by the mix ratio. For the example room, straight laying at 10% needs 61 floor tiles, 6
+          factor and split by the mix ratio. For the example room, straight laying at 7% needs 59 floor tiles, 6
           skirting tiles and 17 boxes of 4, with 8 bags of cement in the bedding.
         </p>
       </section>

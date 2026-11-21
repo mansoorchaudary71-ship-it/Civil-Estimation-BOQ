@@ -5,7 +5,7 @@ import BrickCalculatorContent, {
   BRICK_CONTENT_LAST_UPDATED,
 } from "../calculators/BrickCalculatorContent";
 import CalculatorPageShell from "../../seo/CalculatorPageShell";
-import { SITE_URL, ORGANIZATION_JSON_LD } from "../../seo/siteConfig";
+import { getSiteUrl, getOrganizationJsonLd } from "../../seo/siteConfig";
 import {
   parseBrickVariant,
   type BrickVariant,
@@ -44,7 +44,7 @@ const RELATED = [
   },
 ];
 
-const MAIN_TITLE = "Brick Calculator Pakistan, India & UAE | Civil Estimation Pro";
+const MAIN_TITLE = "Brick Calculator Pakistan, India, UAE | Civil Estimation Pro";
 const MAIN_DESCRIPTION =
   "Free brick calculator for Pakistan, India & UAE. Bricks, cement bags, sand & total cost in PKR, INR or AED — with openings, wastage & local rates.";
 const MAIN_KEYWORDS = [
@@ -61,11 +61,11 @@ const MAIN_KEYWORDS = [
 ];
 
 function hreflangFor(variant: BrickVariant): { lang: string; href: string }[] {
-  const main = `${SITE_URL}/brick-calculator`;
+  const main = `${getSiteUrl()}/brick-calculator`;
   return [
-    { lang: "en-PK", href: `${SITE_URL}/brick-calculator/lahore` },
-    { lang: "en-IN", href: `${SITE_URL}/brick-calculator/delhi` },
-    { lang: "en-AE", href: `${SITE_URL}/brick-calculator/dubai` },
+    { lang: "en-PK", href: `${getSiteUrl()}/brick-calculator/lahore` },
+    { lang: "en-IN", href: `${getSiteUrl()}/brick-calculator/delhi` },
+    { lang: "en-AE", href: `${getSiteUrl()}/brick-calculator/dubai` },
     { lang: "x-default", href: main },
   ];
 }
@@ -81,12 +81,42 @@ function buildJsonLd(variant: BrickVariant, title: string, description: string, 
     description,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList: [
-      "Wall length, height and thickness (4.5, 9 and 13.5 inch)",
-      "Doors and windows deduction",
-      "Pakistani, Indian and UAE brick sizes plus custom size",
+      "Wall length, height and thickness (4.5, 9, 13.5 and 18 inch)",
+      "Multi-wall room projects and total wall area mode",
+      "Doors and windows deduction, per opening or by total area",
+      "Pakistani, Indian, US and UAE brick sizes plus custom size",
+      "Stretcher, English and Flemish bond patterns with a live wall drawing",
       "Cement bags and sand quantity",
       "Cost in PKR, INR and AED",
       "PDF download, print, share and copy results",
+    ],
+  };
+  const howTo = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to calculate bricks for a wall",
+    description,
+    step: [
+      {
+        "@type": "HowToStep",
+        name: "Measure the wall",
+        text: "Length × height gives the gross area. A 10 ft × 10 ft wall is 100 sq ft.",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Deduct openings",
+        text: "Every door and window is subtracted — a 3 × 7 ft door removes 21 sq ft of brickwork.",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Pick the brick and joint",
+        text: "A Pakistani Awwal brick is 9″ × 4½″ × 3″ with a 10 mm joint; Indian modular is 190 × 90 × 90 mm; UAE clay brick is 215 × 102.5 × 65 mm.",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Add wastage and read the cost",
+        text: "5% covers a normal rectangular wall; 10% covers kiln bricks or cut work. Enter your supplier's rates to see the material cost in PKR, INR or AED.",
+      },
     ],
   };
   const faqPage = {
@@ -99,8 +129,8 @@ function buildJsonLd(variant: BrickVariant, title: string, description: string, 
     })),
   };
   const breadcrumbItems: { "@type": "ListItem"; position: number; name: string; item?: string }[] = [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Calculators", item: `${SITE_URL}/calculators` },
+    { "@type": "ListItem", position: 1, name: "Home", item: getSiteUrl() },
+    { "@type": "ListItem", position: 2, name: "Calculators", item: `${getSiteUrl()}/calculators` },
     { "@type": "ListItem", position: 3, name: title },
   ];
   if (variant.kind !== "main") {
@@ -108,7 +138,7 @@ function buildJsonLd(variant: BrickVariant, title: string, description: string, 
       "@type": "ListItem",
       position: 3,
       name: "Brick Calculator",
-      item: `${SITE_URL}/brick-calculator`,
+      item: `${getSiteUrl()}/brick-calculator`,
     });
     breadcrumbItems[3].position = 4;
   }
@@ -117,7 +147,7 @@ function buildJsonLd(variant: BrickVariant, title: string, description: string, 
     "@type": "BreadcrumbList",
     itemListElement: breadcrumbItems,
   };
-  return [webApp, faqPage, breadcrumb, ORGANIZATION_JSON_LD];
+  return [webApp, howTo, faqPage, breadcrumb, getOrganizationJsonLd()];
 }
 
 /** Prefill for the calculator from the variant (currency, rates, brick preset). */
@@ -166,8 +196,8 @@ export default function BrickCalculatorPage() {
 
   const canonical =
     variant.kind === "main"
-      ? `${SITE_URL}/brick-calculator`
-      : `${SITE_URL}/brick-calculator/${
+      ? `${getSiteUrl()}/brick-calculator`
+      : `${getSiteUrl()}/brick-calculator/${
           variant.kind === "city"
             ? variant.data.slug
             : variant.kind === "type"

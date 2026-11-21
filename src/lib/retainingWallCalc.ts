@@ -116,7 +116,8 @@ export interface RetainingResult {
   toeAstMm2PerM: number; heelAstMm2PerM: number;
   baseSteelKg: number; stemSteelKg: number; totalSteelKg: number;
   concreteVolM3: number; materials: MaterialBreakdown;
-  minBaseWidthM: number;
+  /** Minimum base width (m) for FS_slide ≥ 1.5, FS_over ≥ 2.0, qmax ≤ SBC — null when NO width up to the search limit satisfies all three (the old code returned the last tried width as if it passed). */
+  minBaseWidthM: number | null;
   costLines: CostLine[]; totalCost: number | null;
   steps: { label: string; text: string }[];
 }
@@ -225,17 +226,21 @@ export function designRetainingWall(input: Partial<RetainingInputs> = {}, intern
   const totalSteel = stemSteel + baseSteel;
   const materials = materialsForConcrete(concVol, i.mix, i.wastagePct);
   // Solve-for-B: grow B in 0.1 m steps until all three FS targets pass.
-  let minB = i.baseWidthM;
+  // minB stays null when no width in the search range passes — the old
+  // code returned the last tried width and presented it as "minimum base
+  // width" even though it failed.
+  let minB: number | null = null;
   if (!internal?.skipSolveB) {
     for (let b = 0.5 * totalH; b <= 1.2 * totalH + 0.5; b += 0.1) {
       const trial = designRetainingWall({ ...i, baseWidthM: round(b, 1), toeM: Math.max(0.5, round(b, 1) * 0.3) }, { skipSolveB: true });
       if (trial.slidingOk && trial.overturningOk && trial.bearingOk) { minB = round(b, 1); break; }
-      minB = round(b, 1);
     }
   }
   if (!slidingOk) {
     const idx = suggestions.findIndex((s) => s.startsWith("Sliding fails"));
-    if (idx >= 0) suggestions[idx] = `Sliding fails (FS ${round(fsSlide, 2)} < 1.5). Widen the base to at least ${minB} m, or add a shear key 0.3 m deep, which adds passive resistance in front of the key.`;
+    if (idx >= 0) suggestions[idx] = minB != null
+      ? `Sliding fails (FS ${round(fsSlide, 2)} < 1.5). Widen the base to at least ${minB} m, or add a shear key 0.3 m deep, which adds passive resistance in front of the key.`
+      : `Sliding fails (FS ${round(fsSlide, 2)} < 1.5) and no base width up to ${round(1.2 * totalH + 0.5, 1)} m satisfies all three stability checks — add a shear key, improve the soil, or reduce the retained height.`;
   }
   const lines: CostLine[] = [
     costLine(`Cement (${materials.cementBags} bags)`, materials.cementBags, "bags", i.cementPerBag),

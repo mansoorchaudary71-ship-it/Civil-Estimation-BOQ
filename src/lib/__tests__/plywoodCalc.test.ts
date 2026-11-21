@@ -50,6 +50,19 @@ test("worked example 2 (NRTech cross-check): 10x3 m wall, both faces, 10% -> 23 
   assert.equal(r.sheetsToBuy, 23);
 });
 
+test("2-face wall: a 6 m2 opening is deducted once per face (12 m2), not once", () => {
+  const r = calcPlywood({
+    ...base(), lengthM: 10, widthM: 3, element: "wall", faces: 2, openingsM2: 6, wastagePct: 0,
+  });
+  // Contact 60 m2; deduction 6 x 2 = 12; net 48; exact 48 / 2.9768 = 16.13 -> 17 sheets.
+  approx(r.netAreaM2, 48);
+  assert.equal(r.sheetsToBuy, 17);
+  const oneFace = calcPlywood({
+    ...base(), lengthM: 10, widthM: 3, element: "wall", faces: 1, openingsM2: 6, wastagePct: 0,
+  });
+  approx(oneFace.netAreaM2, 24);
+});
+
 test("worked example 3 (reuse): same as #1 but formwork reuse 4 -> 5 sheets to buy", () => {
   const r = calcPlywood({ ...base(), element: "slab", reuseFactor: 4 });
   assert.equal(r.sheetsToBuy, 5);

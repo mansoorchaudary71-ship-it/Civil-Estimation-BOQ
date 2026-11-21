@@ -250,7 +250,8 @@ export default function SolarRoofCalculator() {
                     <div className="h-3 bg-surface-hover rounded-full overflow-hidden">
                       <div className={`h-full ${result.roofFits ? "bg-accent-500" : "bg-ui-errorText"}`} style={{ width: `${Math.min(100, (result.roofAreaRequiredM2 / (inputs.roofAreaM2 || 1)) * 100)}%` }} />
                     </div>
-                    <p className="text-xs text-txt-tertiary mt-2">Roof fits up to {result.maxPanelsOnRoof} panels ({result.maxKwOnRoof.toFixed(2)} kWp). Battery note: rounding up to {result.batteryModules} × 200 Ah × {inputs.batteryVoltage} V modules oversizes the battery by {result.batteryOversizePct.toFixed(1)}% — that is why the battery dominates the cost.</p>
+                    {result.hasBattery && <p className="text-xs text-txt-tertiary mt-2">Roof fits up to {result.maxPanelsOnRoof} panels ({result.maxKwOnRoof.toFixed(2)} kWp). Battery note: rounding up to {result.batteryModules} × 200 Ah × {inputs.batteryVoltage} V modules oversizes the battery by {result.batteryOversizePct.toFixed(1)}% — that is why the battery dominates the cost.</p>}
+                    {!result.hasBattery && <p className="text-xs text-txt-tertiary mt-2">Roof fits up to {result.maxPanelsOnRoof} panels ({result.maxKwOnRoof.toFixed(2)} kWp). On-grid system — no battery.</p>}
                     {result.loanMonthlyInstalment != null && <p className="text-xs text-txt-secondary mt-2">Loan: {fmt(result.loanMonthlyInstalment)} / month; total interest {fmt(result.loanTotalInterest)} over {inputs.loanTenureYears} years.</p>}
                   </div>
                 </MaterialSummary>

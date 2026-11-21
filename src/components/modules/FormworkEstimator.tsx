@@ -213,9 +213,14 @@ export default function FormworkEstimator() {
       count: parseFloat(el.count) || 0,
     }));
     const spacing = parseFloat(propSpacing);
+    // Prop spacing is entered in the display unit (ft in imperial mode),
+    // like the element dimensions — convert it too. The old code used the
+    // raw value, so a 3 ft spacing gave 1/9 = 0.11 props/m² instead of
+    // 1/(0.914 m)² = 1.20 props/m² — an 11x understatement of props.
+    const spacingM = spacing > 0 ? spacing * conv : 0;
     const constants = {
       ...DEFAULT_FORMWORK_CONSTANTS,
-      propsPerM2: spacing > 0 ? 1 / (spacing * spacing) : DEFAULT_FORMWORK_CONSTANTS.propsPerM2,
+      propsPerM2: spacingM > 0 ? 1 / (spacingM * spacingM) : DEFAULT_FORMWORK_CONSTANTS.propsPerM2,
     };
     return calcFormwork(engineEls, repetitionFactor, wastagePct, constants);
   }, [elements, repetitionFactor, wastagePct, propSpacing, isMetric]);
@@ -410,7 +415,7 @@ export default function FormworkEstimator() {
 
                   <div>
                     <label className="text-sm font-bold text-txt-secondary block mb-2">
-                      Prop spacing (m) — optional
+                      Prop spacing ({unitStr}) — optional
                     </label>
                     <input
                       type="number" inputMode="decimal" min="0.3" step="0.05"
@@ -430,9 +435,9 @@ export default function FormworkEstimator() {
             <MaterialSummary
               title="Material Summary"
               totalLabel="Total Formwork Area"
-              totalValue={results.totalAreaM2.toFixed(1)}
-              totalUnit={isMetric ? "m²" : "m²"}
-              subtitle={`${results.totalAreaSqFt.toFixed(1)} sq.ft · effective ${results.effectiveAreaM2.toFixed(1)} m² (÷${repetitionFactor}, +${wastagePct}%)`}
+              totalValue={isMetric ? results.totalAreaM2.toFixed(1) : results.totalAreaSqFt.toFixed(1)}
+              totalUnit={isMetric ? "m²" : "sq ft"}
+              subtitle={`${results.totalAreaSqFt.toFixed(1)} sq.ft · effective ${isMetric ? `${results.effectiveAreaM2.toFixed(1)} m²` : `${results.effectiveAreaSqFt.toFixed(1)} sq ft`} (÷${repetitionFactor}, +${wastagePct}%)`}
               icon={<SquareStack className="w-5 h-5 flex-shrink-0" />}
             >
               {results.errors.length > 0 && (
@@ -507,7 +512,7 @@ export default function FormworkEstimator() {
                   <li>Column: 2 × (L + W) × H · Beam: (2 × D + W) × L · Slab: L × W + 2 × (L + W) × thickness · Footing: 2 × (L + W) × depth.</li>
                   <li>Effective area = total area ÷ repetition factor × (1 + wastage%).</li>
                   <li>Plywood: ⌈effective sq ft ÷ 32⌉ (4&apos;×8&apos; sheet) — one set serves all repetitions, no separate plywood-reuse divisor. Battens: effective sq ft × 0.24 Rft — <b>top of the cited competitor range (0.79 Rmt/m²), editable</b>. Props: ⌈effective m² × 1.5⌉ — <b>unsourced assumption, editable</b> (or 1 ÷ spacing² when you enter a prop spacing).</li>
-                  <li>Consumables: nails 0.075 kg/m², binding wire 0.075 kg/m², shuttering oil 0.065 L/m²; beam bottom planks 1 Rft per Rft of beam; centering plates ⌈slab/footing perimeter (ft) ÷ 4⌉.</li>
+                  <li>Consumables: nails 0.075 kg/m², binding wire 0.075 kg/m², shuttering oil 0.065 L/m²; beam bottom planks 1 Rft per Rft of beam; centering plates ⌈slab/footing perimeter (ft) ÷ 4⌉. Consumables are priced on the TOTAL contact area — every reuse consumes fresh nails and oil — while plywood, battens and props are bought once for the effective area (÷ repetitions). That split is deliberate, not an oversight.</li>
                 </ul>
               </div>
 

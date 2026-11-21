@@ -49,8 +49,6 @@ const errTextCls = "text-sm text-ui-errorText mt-1 ml-1";
 
 const CURRENCIES: SteelCurrency[] = ["PKR", "INR", "AED", "USD"];
 
-let rowSeq = 0;
-
 export default function BarBendingSchedule() {
   const [rows, setRows] = useState<BbsRowResult[]>([]);
   const [member, setMember] = useState("Item 1");
@@ -143,7 +141,6 @@ export default function BarBendingSchedule() {
     setRows((prev) => [...prev, r].sort((a, b) => a.diaMm - b.diaMm));
     setFormErrors([]);
     setNotice(`Added ${r.member} — ${r.cutLengthM.toFixed(3)} m cut, ${r.weightKg.toFixed(2)} kg.`);
-    rowSeq += 1;
     setMember(`Item ${rows.length + 2}`);
   };
 
@@ -341,7 +338,7 @@ export default function BarBendingSchedule() {
             <div>
               <label className={labelCls} htmlFor="bbs-wastage">Wastage %</label>
               <input id="bbs-wastage" type="number" inputMode="decimal" value={wastagePct} onChange={(e) => setWastagePct(e.target.value)} className={inputCls} />
-              <p className="text-xs text-txt-secondary mt-1 ml-1">3% straight bars, 5% bent shapes.</p>
+              <p className="text-xs text-txt-secondary mt-1 ml-1">One wastage % applies to the whole schedule. Use 3% for straight bars, 5% for bent shapes.</p>
             </div>
             <div>
               <label className={labelCls} htmlFor="bbs-rate">Steel rate / kg</label>
@@ -405,6 +402,7 @@ export default function BarBendingSchedule() {
                         <option key={g.id} value={g.id}>{g.label} — {g.standard}</option>
                       ))}
                     </select>
+                    <p className="text-xs text-txt-secondary mt-1 ml-1">Display only — cutting length and weight do not depend on grade.</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -462,20 +460,25 @@ export default function BarBendingSchedule() {
                     </div>
                   </div>
                 )}
-                {shapeNeeds("spiral") && (
+                {(shape === "spiral" || shape === "circular-ring") && (
                   <div className="grid grid-cols-2 gap-4 p-4 bg-accent-50 rounded-2xl border border-accent-100 overflow-hidden">
                     <div className="col-span-2">
                       <label className={labelCls} htmlFor="bbs-coldia">Col Dia (mm)</label>
                       <input id="bbs-coldia" type="number" inputMode="decimal" value={spiralDia} onChange={(e) => setSpiralDia(e.target.value)} className={inputCls} />
+                      {shape === "circular-ring" && <p className="text-xs text-txt-secondary mt-1 ml-1">Ring diameter — the ring length is π × (dia − 2 × cover − bar dia) + hooks.</p>}
                     </div>
-                    <div>
-                      <label className={labelCls} htmlFor="bbs-pitch">Pitch (mm)</label>
-                      <input id="bbs-pitch" type="number" inputMode="decimal" value={spiralPitch} onChange={(e) => setSpiralPitch(e.target.value)} className={inputCls} />
-                    </div>
-                    <div>
-                      <label className={labelCls} htmlFor="bbs-height">Height (mm)</label>
-                      <input id="bbs-height" type="number" inputMode="decimal" value={spiralHeight} onChange={(e) => setSpiralHeight(e.target.value)} className={inputCls} />
-                    </div>
+                    {shape === "spiral" && (
+                      <>
+                        <div>
+                          <label className={labelCls} htmlFor="bbs-pitch">Pitch (mm)</label>
+                          <input id="bbs-pitch" type="number" inputMode="decimal" value={spiralPitch} onChange={(e) => setSpiralPitch(e.target.value)} className={inputCls} />
+                        </div>
+                        <div>
+                          <label className={labelCls} htmlFor="bbs-height">Height (mm)</label>
+                          <input id="bbs-height" type="number" inputMode="decimal" value={spiralHeight} onChange={(e) => setSpiralHeight(e.target.value)} className={inputCls} />
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
                 {shapeNeeds("span") && (

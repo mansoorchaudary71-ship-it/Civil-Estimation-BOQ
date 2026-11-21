@@ -24,6 +24,10 @@
  *   (≈ 1 prop per 16 sq ft, lalag pattern). Editable; prop spacing input.
  * - Nails 0.075 kg/m2, binding wire 0.075 kg/m2, shuttering oil 0.065 L/m2
  *   (Scribd thumb-rule constants table — labelled as thumb rules).
+ *   Consumables are priced on the TOTAL contact area, not the effective
+ *   area: every reuse consumes fresh nails and oil, while plywood,
+ *   battens and props are bought once for the effective area
+ *   (total / repetitions x (1 + wastage)). That split is deliberate.
  * - Beam bottom planks: 1 Rft per Rft of beam length (editable).
  * - Ballies (thumb check): 0.16 nos per sq ft of slab area (civilatwork).
  * - Centering plates: 1 per 4 ft of slab/footing perimeter (lalag).

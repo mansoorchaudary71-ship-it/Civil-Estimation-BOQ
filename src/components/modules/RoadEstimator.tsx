@@ -53,13 +53,13 @@ export default function RoadEstimator({ designStandard }: { designStandard?: str
     const tDBM = (Number(dbmT) || 0) / 1000;
     const tBC = (Number(bcT) || 0) / 1000;
 
-    // Cross-slope camber calculations
+    // Cross-slope camber: crown rise at the centreline and the drop across
+    // the shoulder — shown in the results (they do not change layer volumes,
+    // which come from the side slope). The old slant-width values computed
+    // here were never used anywhere.
     const halfCarriage = w / 2;
     const riseAtCenter = halfCarriage * (c / 100);
-    const slantCarriage = Math.sqrt(halfCarriage * halfCarriage + riseAtCenter * riseAtCenter);
     const dropAtShoulder = shW * (shF / 100);
-    const slantShoulder = Math.sqrt(shW * shW + dropAtShoulder * dropAtShoulder);
-    const actualSurfaceWidth = (slantCarriage + slantShoulder) * 2;
 
     // Layer widths (Top and Bottom for trapezoid)
     // BC (topmost) includes shoulders? Usually BC/DBM might be just on carriageway, but let's assume it spans carriageway.
@@ -115,10 +115,12 @@ export default function RoadEstimator({ designStandard }: { designStandard?: str
     const primeArea = wWmmTop * l;
     const primeLiters = primeArea * (Number(primeRate) || 0);
     
-    // Tack Coat is usually applied between bituminous layers (WMM->DBM and DBM->BC)
-    const tackArea1 = wDbmTop * l; // between WMM/DBM (sometimes prime is enough here, but let's say tack is on DBM for BC)
-    const tackArea2 = wBcTop * l; // between DBM and BC
-    const tackLiters = (tackArea1 + tackArea2) * (Number(tackRate) || 0);
+    // Tack coat: ONE application, on top of DBM (the DBM→BC interface,
+    // area wDbmTop × L). The old code added a second "coat" on top of BC
+    // (which has no layer above it) and so overstated tack ≈2× (3,540 L
+    // vs 1,790 L at defaults); the WMM→DBM interface already gets prime.
+    const tackArea = wDbmTop * l;
+    const tackLiters = tackArea * (Number(tackRate) || 0);
 
     const primeTons = (primeLiters * (Number(bitumenSG) || 0)) / 1000;
     const tackTons = (tackLiters * (Number(bitumenSG) || 0)) / 1000;
@@ -129,12 +131,11 @@ export default function RoadEstimator({ designStandard }: { designStandard?: str
       volBC, volDBM, volWMM, volGSB, volSG,
       tonBC, tonDBM, tonWMM, tonGSB, tonSG,
       primeLiters, tackLiters, primeTons, tackTons,
-      riseAtCenter
+      riseAtCenter, dropAtShoulder
     };
   }, [length, width, camber, shoulderWidth, shoulderFall, sideSlope, sgT, gsbT, wmmT, dbmT, bcT, sgD, gsbD, wmmD, dbmD, bcD, primeRate, tackRate, bitumenSG]);
 
-  const sendToBOQ = () => {
-    const items = [
+  const buildBoqItems = () => [
       {
         id: Math.random().toString(36).substr(2, 9),
         division: "02 - Site Work & Earthwork",
@@ -192,6 +193,16 @@ export default function RoadEstimator({ designStandard }: { designStandard?: str
         rate: 0
       }
     ];
+  // The hub's "Use these quantities in BOQ" button reads this global — the
+  // old code never set it on the flexible tab, so the button always said
+  // "Please calculate quantities first". (Delivery still depends on the
+  // BOQ module's fill-boq listener; see the wave report, X5.)
+  React.useEffect(() => {
+    (window as any).__currentRoadBOQItems = buildBoqItems();
+  }, [results]);
+
+  const sendToBOQ = () => {
+    const items = buildBoqItems();
     window.dispatchEvent(new CustomEvent('fill-boq', { detail: items }));
     alert("Material schedule sent to BOQ Generator!");
   };
@@ -258,7 +269,9 @@ export default function RoadEstimator({ designStandard }: { designStandard?: str
                                     <div className="flex justify-between"><span>DBM Volume:</span> <span className="font-bold">{results.volDBM.toFixed(1)} m³</span></div>
                                     <div className="flex justify-between"><span>WMM Volume:</span> <span className="font-bold">{results.volWMM.toFixed(1)} m³</span></div>
                                     <div className="flex justify-between"><span>GSB Volume:</span> <span className="font-bold">{results.volGSB.toFixed(1)} m³</span></div>
-                                    <div className="flex justify-between text-txt-tertiary pt-2 border-t border-ui-borderSubtle mt-2"><span>Subgrade Fill:</span> <span>{results.volSG.toFixed(1)} m³</span></div>
+                                    <div className="flex justify-between"><span>Subgrade Fill:</span> <span>{results.volSG.toFixed(1)} m³</span></div>
+                                    <div className="flex justify-between text-txt-tertiary pt-2 border-t border-ui-borderSubtle mt-2"><span>Crown rise (camber):</span> <span>{results.riseAtCenter.toFixed(3)} m</span></div>
+                                    <div className="flex justify-between text-txt-tertiary"><span>Shoulder drop:</span> <span>{results.dropAtShoulder.toFixed(3)} m</span></div>
                                 </div>
                             </div>
                             

@@ -93,16 +93,16 @@ function AsphaltCalculator() {
         {
           id: Math.random().toString(),
           division: "09 - Finishes (Plaster, Flooring, Paint)",
-          description: "Asphalt Concrete Wearing Course",
+          description: `Asphalt Concrete Wearing Course (${mix}) — to order`,
           unit: "Tons",
-          quantity: Number(results.tons),
+          quantity: Number(results.orderTons),
           rate: 0
         }
       ];
     } else {
       (window as any).__currentRoadBOQItems = [];
     }
-  }, [results?.tons]);
+  }, [results?.orderTons]);
 
   return (
     <div className="animate-in fade-in duration-300">
@@ -161,15 +161,40 @@ function AsphaltCalculator() {
               </select>
              </div>
           </InputGroup>
+          <div className="grid grid-cols-2 gap-4">
+            <InputGroup label="Mix">
+              <select
+                value={mix}
+                onChange={(e) => setMix(e.target.value as AsphaltMix)}
+                className="w-full h-12 bg-surface-hover border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-accent-500 outline-none transition-all"
+              >
+                {(Object.keys(ASPHALT_MIXES) as AsphaltMix[]).map((m) => (
+                  <option key={m} value={m}>{m} — {ASPHALT_MIXES[m].densityKgM3} kg/m³, {ASPHALT_MIXES[m].bitumenPct}% bitumen</option>
+                ))}
+              </select>
+            </InputGroup>
+            <InputGroup label="Wastage (%)">
+              <><label htmlFor="a11y-input-90" className="sr-only">Wastage percent</label>
+<input id="a11y-input-90"
+                type="number" inputMode="decimal"
+                min="0"
+                value={wastagePct}
+                onChange={(e) => setWastagePct(e.target.value ? Number(e.target.value) : "")}
+                className="w-full h-12 bg-surface-hover border border-ui-borderSubtle rounded-full px-4 text-txt-primary font-bold focus:ring-2 focus:ring-accent-500 outline-none transition-all"
+              /></>
+            </InputGroup>
+          </div>
+          <p className="text-xs text-txt-tertiary">Mix densities and bitumen contents are MoRTH values (BC 2355 kg/m³, DBM 2370, BM 2160). Wastage default 10% (5% simple rectangle / 15% hand-laid); loose volume is +20%.</p>
         </div>
 
         <div className="flex-1 flex flex-col">
           {results ? (
             <MaterialSummary
               title="Estimate Results"
-              totalLabel="Required Asphalt"
-              totalValue={results.tons}
+              totalLabel="Required Asphalt (to order)"
+              totalValue={results.orderTons}
               totalUnit="Metric Tons"
+              subtitle={`Net ${results.tons} t + ${Number(wastagePct) || 0}% wastage, rounded up to 0.5 t · ${mix} at ${ASPHALT_MIXES[mix].densityKgM3} kg/m³`}
             >
               <div className="grid grid-cols-2 gap-4">
                 <ResultCard
@@ -184,6 +209,24 @@ function AsphaltCalculator() {
                   unit="m²"
                   variant="neutral"
                 />
+                <ResultCard
+                  title="Net Asphalt"
+                  value={results.tons}
+                  unit="t"
+                  variant="neutral"
+                />
+                <ResultCard
+                  title="Loose Volume"
+                  value={results.looseVolume}
+                  unit="m³"
+                  variant="neutral"
+                />
+                <ResultCard
+                  title="Bitumen"
+                  value={results.bitumenTons}
+                  unit="t"
+                  variant="neutral"
+                />
               </div>
             </MaterialSummary>
           ) : (
@@ -196,12 +239,14 @@ function AsphaltCalculator() {
       
       <CalculationHistory
         calculatorId="asphalt_calc_v1"
-        currentInputs={{ length, width, thickness, thicknessUnit }}
+        currentInputs={{ length, width, thickness, thicknessUnit, mix, wastagePct }}
         onRestore={(ins) => {
           if (ins.length) setLength(ins.length);
           if (ins.width) setWidth(ins.width);
           if (ins.thickness) setThickness(ins.thickness);
           if (ins.thicknessUnit) setThicknessUnit(ins.thicknessUnit);
+          if (ins.mix) setMix(ins.mix);
+          if (ins.wastagePct != null) setWastagePct(ins.wastagePct);
         }}
       />
     </div>

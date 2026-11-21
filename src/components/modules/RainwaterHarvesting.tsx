@@ -44,7 +44,9 @@ export default function RainwaterHarvesting() {
         rainfallMm: Number(rainfall),
         city,
         roofType,
-        filterEfficiency: (Number(filterEff) || 90) / 100,
+        // Empty means "use the 90% default"; an explicit 0% is a real input
+        // (no filter) — the old `Number(filterEff) || 90` turned 0 into 90.
+        filterEfficiency: (filterEff === "" ? 90 : Number(filterEff)) / 100,
         firstFlushEventsPerYear: Number(firstFlushEvents) || 0,
         people: Number(people),
         usePerPersonLPerDay: Number(usePerPerson),

@@ -51,7 +51,12 @@ export default function StaircaseDesignReference() {
     const risersPerFlight = flightsNeeded > 0 ? Math.ceil(numberOfRisers / flightsNeeded) : 0;
     const stairwellStraightM = totalRunM + Ld; // straight flight + landing
     const stairwellDogLegW = 2 * W + 0.1;
-    const stairwellDogLegL = totalRunM / 2 + Ld;
+    // Dog-legged stairwell length = the LONGEST flight's run + landing.
+    // The old code used totalRunM / 2, i.e. it assumed the two flights are
+    // equal — with an uneven split the longer flight sets the length.
+    // Each flight has at most risersPerFlight risers, so its run is
+    // (risersPerFlight − 1) goings.
+    const stairwellDogLegL = ((risersPerFlight - 1) * G) / 1000 + Ld;
     const handrailMm = Number(handrail) || 0;
     const handrailOk = handrailMm >= 800 && handrailMm <= 900;
 
@@ -64,7 +69,10 @@ export default function StaircaseDesignReference() {
     const headroomSafe = Hd >= 2.1;
     const landingSafe = Ld >= W; // Landing depth must at least be equal to stair width
 
-    const isFullyCompliant = widthSafe && riserSafe && goingSafe && headroomSafe && landingSafe;
+    // PASS means every check passes — including handrail height and the
+    // 2R+G ergonomics band. The old code left both out, so a stair with
+    // a 700 mm handrail or a 500 mm 2R+G still showed PASS.
+    const isFullyCompliant = widthSafe && riserSafe && goingSafe && headroomSafe && landingSafe && handrailOk && isErgonomic;
 
     return {
       numberOfRisers,
@@ -176,6 +184,16 @@ export default function StaircaseDesignReference() {
                         localStorage.setItem("stair_tread", ((Number(going) || 0) / 1000).toFixed(3));
                         localStorage.setItem("stair_stairWidth", (Number(width) || 0).toString());
                         localStorage.setItem("stair_numSteps", String(results.numberOfRisers));
+                        // Carry the shape and the flight split too — the old
+                        // button sent only rise/tread/width/steps, so a
+                        // two-flight stair arrived as a single straight
+                        // flight of the same risers.
+                        const multi = results.flightsNeeded > 1;
+                        localStorage.setItem("stair_stairShape", multi ? "U-Shape" : "Straight");
+                        localStorage.setItem("stair_flight1Steps", String(multi ? results.risersPerFlight : results.numberOfRisers));
+                        localStorage.setItem("stair_flight2Steps", String(multi ? Math.max(0, results.numberOfRisers - results.risersPerFlight) : 0));
+                        localStorage.setItem("stair_landingLength", (Number(landingDepth) || 0).toString());
+                        localStorage.setItem("stair_landingWidth", (Number(width) || 0).toString());
                         window.location.assign("/staircase-calculator");
                       }}
                       className="mt-4 text-sm font-bold px-4 py-2 bg-ink text-white rounded-full hover:opacity-90"

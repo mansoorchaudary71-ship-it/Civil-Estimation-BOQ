@@ -222,7 +222,10 @@ export function checkRange(
   min: number,
   max: number,
 ): void {
-  if (!isFinite(value) || value <= 0) {
+  // 0 is valid when the range starts at 0 (e.g. a zero working moment for
+  // a pure-axial column) — the old `value <= 0` test rejected it even
+  // when min was 0.
+  if (!isFinite(value) || value < 0) {
     errors.push(`${label} must be greater than 0.`);
   } else if (value < min || value > max) {
     errors.push(`${label} must be between ${min} and ${max}.`);

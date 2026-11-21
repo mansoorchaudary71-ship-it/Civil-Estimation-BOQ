@@ -40,7 +40,7 @@ export interface PlumbingInputs {
   fixtures: PlumbingFixtureCount[];
   /** Design velocity limit, m/s (default 2). */
   maxVelocityMs?: number;
-  /** Overhead tank size, litres (default 3,785 L = 1,000 gallons, PK standard). */
+  /** Overhead tank size, litres (default 4,546 L = 1,000 Imperial gallons, PK standard). */
   tankLitres?: number;
   /** Static head (tank to highest fixture), m (default 10). */
   staticHeadM?: number;
@@ -112,7 +112,10 @@ export function calcPlumbing(inp: PlumbingInputs): PlumbingResults {
   const maxFixtureWsfu = Math.max(...lines.map((l) => l.wsfuEach));
   const branchFlowLs = 0.25 * Math.sqrt(maxFixtureWsfu);
   const branchMm = pipeSizeForFlow(branchFlowLs, maxV);
-  const tankLitres = inp.tankLitres ?? 3785;
+  // House gallon = Imperial gallon (4.546 L), the Pakistan standard and
+  // the definition the water-tank tool already uses. The old code divided
+  // by 3.785 (US gallon) while calling 3,785 L "1,000 gallons, PK standard".
+  const tankLitres = inp.tankLitres ?? 4546;
   const staticHead = inp.staticHeadM ?? 10;
   const frictionHead = inp.frictionHeadM ?? 5;
   const pumpHead = (staticHead + frictionHead) * 1.1;
@@ -127,7 +130,7 @@ export function calcPlumbing(inp: PlumbingInputs): PlumbingResults {
     mainDiameterInch: (mainMm / 25.4).toFixed(2),
     branchDiameterMm: branchMm,
     tankLitres,
-    tankGallons: tankLitres / 3.785,
+    tankGallons: tankLitres / 4.546,
     pumpHeadM: pumpHead,
     pumpKw,
     pumpHp: pumpKw * 1.341,

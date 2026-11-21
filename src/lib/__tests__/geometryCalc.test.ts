@@ -2,10 +2,12 @@
  * Universal geometry engine tests — G7 spec §4.11 worked vectors.
  * Run: npx tsx --test src/lib/__tests__/geometryCalc.test.ts
  *
- * NOTE on the spec's formwork figure: §4.11 quotes sides-only formwork
+ * NOTE on the spec's formwork figure: §4.11 quoted sides-only formwork
  * 4.20 − 0.09 = 4.11 m², but the bottom is W·L = 0.3 × 3.0 = 0.90 m²,
- * not 0.09 m², so sides-only formwork is 4.20 − 0.90 = 3.30 m².
- * This engine uses 3.30 m²; the test asserts it.
+ * not 0.09 m² — and the whole formula was wrong: it counted the soffit
+ * and omitted the two ends. Sides-only formwork is 2·D·(L+W) =
+ * 2 × 0.4 × 3.3 = 2.64 m²; a suspended beam (sides + soffit) is
+ * 3.54 m²; all six faces are 4.44 m². This engine uses those values.
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -17,12 +19,12 @@ import {
 const approx = (a: number, e: number, tol: number) =>
   assert.ok(Math.abs(a - e) <= tol, `expected ${e} (±${tol}), got ${a}`);
 
-test("rect defaults: V=0.36, formwork sides-only 3.30 m2, main 10.66 kg", () => {
+test("rect defaults: V=0.36, formwork sides-only 2.64 m2, main 10.66 kg", () => {
   const r = calcRectangular(defaultRectInputs);
   assert.equal(r.errors.length, 0);
   assert.equal(r.volM3, 0.36);
-  assert.equal(r.formworkM2, 3.3);
-  assert.equal(r.formworkAllSidesM2, 4.2);
+  assert.equal(r.formworkM2, 2.64); // 2·D·(L+W); old code gave 3.30 (soffit in, ends out)
+  assert.equal(r.formworkAllSidesM2, 4.44); // all six faces; old code gave 4.20
   approx(r.mainSteelKg, 10.66, 0.05);
 });
 
@@ -53,6 +55,9 @@ test("tube: hollow volume and weight", () => {
 test("trapezoidal footing reuses the frustum rule: V = 1.62 m3", () => {
   const r = calcTrapFooting({ baseLengthM: 2.2, baseWidthM: 2.2, baseDepthM: 0.2, topLengthM: 0.6, topWidthM: 0.6, slopeDepthM: 0.3, fck: 25, wastagePct: 5 });
   approx(r.volM3, 1.62, 0.02);
+  // Formwork is base sides (1.76) + the four sloped faces (4.78) — the
+  // old code counted the base sides only.
+  approx(r.formworkM2, 6.54, 0.05);
 });
 
 test("roof: rafter, pitch, purlins and sheets", () => {
@@ -60,14 +65,17 @@ test("roof: rafter, pitch, purlins and sheets", () => {
   approx(r.rafterM, 4.47, 0.02);
   approx(r.pitchDeg, 26.6, 0.2);
   assert.ok(r.sheets > 0 && r.purlinsM > 0);
+  // Purlins: ridge + eave + one every spacing, per slope — (⌈4.47/1.2⌉+1)
+  // x 2 slopes x 12 m = 120 m (old code missed the ridge/eave pair: 96 m).
+  approx(r.purlinsM, 120, 0.5);
 });
 
 test("staircase tab delegates to the shared engine (designed steel, not 120 kg/m3)", () => {
   const r = calcStaircaseTab({});
   assert.equal(r.twoRPlusT, 620);
   assert.ok(r.designedSteelKg > 0);
-  // The old 120 kg/m3 rule would give 0.876 x 120 = 105 kg; designed steel differs.
-  assert.ok(Math.abs(r.designedSteelKg - 105) > 5);
+  // The old 120 kg/m3 rule would give 0.833 x 120 = 100 kg; designed steel differs.
+  assert.ok(Math.abs(r.designedSteelKg - 100) > 5);
 });
 
 test("materials and cost are shown in-UI", () => {

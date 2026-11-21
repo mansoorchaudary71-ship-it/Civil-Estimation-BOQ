@@ -167,9 +167,9 @@ export default function UniversalStructuralGeometryEngine() {
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Universal Structural Geometry</h1>
+          <h2 className="text-3xl font-bold text-txt-primary dark:text-white tracking-tight">Universal Structural Geometry</h2>
           <p className="text-txt-tertiary dark:text-txt-tertiary mt-1">Unified engine for complex shapes, formwork, steel, and concrete volumes.</p>
-          <p className="text-sm text-txt-secondary mt-2 max-w-3xl">Volumes, formwork, bar schedules and material cost for beams, columns, tubes, precast walls, stairs, roofs and trapezoidal footings. Bar sizes are inputs (no more hardcoded 12/8 mm); stirrup length follows IS 2502 (detailed); a ground beam counts side formwork only — the bottom is formed on the ground. Staircase steel is designed (IS 456 Cl. 33), not the old flat 120 kg/m³.</p>
+          <p className="text-sm text-txt-secondary mt-2 max-w-3xl">Volumes, formwork, bar schedules and material cost for beams, columns, tubes, precast walls, stairs, roofs and trapezoidal footings. Bar sizes are inputs (no more hardcoded 12/8 mm); stirrup length follows IS 2502 (detailed); formwork for a ground beam is the two sides plus the two ends, 2·D·(L+W) — the bottom is formed on the ground — while a suspended beam also needs the soffit. Staircase steel is designed (IS 456 Cl. 33), not the old flat 120 kg/m³.</p>
           <div className="flex flex-wrap gap-3 mt-3 text-sm">
             <label className="flex items-center gap-2 font-medium"><input type="checkbox" checked={formedOnGround} onChange={(e) => setFormedOnGround(e.target.checked)} className="w-4 h-4 rounded border-ui-borderDefault text-accent-800 focus:ring-accent-500" /> Beam formed on ground (no bottom formwork)</label>
             <label className="flex items-center gap-2 font-medium">fck <select value={fck} onChange={(e) => setFck(Number(e.target.value))} className="bg-surface-default border border-ui-borderSubtle rounded-lg px-2 py-1">{[20, 25, 30, 35, 40].map((g) => (<option key={g} value={g}>M{g}</option>))}</select></label>
@@ -452,6 +452,10 @@ export default function UniversalStructuralGeometryEngine() {
             </div>
           </div>
         )}
+        {/* The roof tab has no materials or cost — its export is the "Sync
+            to BOQ" button above, so the materials export bar is hidden here
+            rather than shown empty. */}
+        {activeTab !== 'roof' && (
         <StructuralExportBar title={`Universal Structural Geometry — ${activeTab}`} summaryText={`Universal geometry (${activeTab}): volume ${activeResult.vol?.toFixed?.(2) ?? activeResult.totalVol?.toFixed?.(2) ?? "—"} m³, formwork ${activeResult.formwork?.toFixed?.(2) ?? "—"} m², steel ${activeResult.totalSteel?.toFixed?.(1) ?? activeResult.steel?.toFixed?.(1) ?? "—"} kg, cost ${activeResult.totalCost == null ? "—" : activeResult.totalCost.toLocaleString("en-US")} ${table.currency}.`}
           boqItems={activeResult.materials ? [
             { description: "Cement", quantity: activeResult.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
@@ -460,6 +464,7 @@ export default function UniversalStructuralGeometryEngine() {
             ...(activeResult.totalSteel || activeResult.steel ? [{ description: "Steel reinforcement", quantity: activeResult.totalSteel ?? activeResult.steel, unit: "kg", rate: rates.steelPerKg ?? 0 }] : []),
           ] : []}
           totalAmount={activeResult.totalCost ?? null} />
+        )}
         {activeResult.steps && <CalcSteps steps={activeResult.steps} />}
       </div>
     </div>
@@ -489,7 +494,7 @@ function ResultRow({ label, value, unit }: { label: string, value: number, unit:
       <span className="text-white/70 text-sm font-medium">{label}</span>
       <div className="text-right">
         <span className="text-xl font-bold text-white">
-          {isNaN(value) || !isFinite(value) ? "0.00" : (value % 1 === 0 && unit === 'Nos' ? value : value.toFixed(2))}
+          {isNaN(value) || !isFinite(value) ? "—" : (value % 1 === 0 && unit === 'Nos' ? value : value.toFixed(2))}
         </span>
         <span className="text-accent-400 ml-1.5 text-sm">{unit}</span>
       </div>

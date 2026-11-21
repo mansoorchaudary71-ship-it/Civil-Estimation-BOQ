@@ -100,7 +100,13 @@ export function contactArea(inp: PlywoodInputs): number {
 
 export function calcPlywood(inp: PlywoodInputs): PlywoodResults {
   const rawArea = inp.mode === "dimensions" ? contactArea(inp) : Math.max(0, inp.areaM2);
-  const netAreaM2 = Math.max(0, rawArea - Math.max(0, inp.openingsM2));
+  // An opening passes through BOTH faces of a 2-face wall, so it is
+  // deducted once per face. (Old code deducted it once, understating
+  // the deduction by half for 2-face walls.) In "area" mode the user
+  // enters the total contact area, so the deduction is taken as entered.
+  const deductionM2 =
+    Math.max(0, inp.openingsM2) * (inp.mode === "dimensions" && inp.element === "wall" ? inp.faces : 1);
+  const netAreaM2 = Math.max(0, rawArea - deductionM2);
   const grossAreaM2 = netAreaM2 * (1 + Math.max(0, inp.wastagePct) / 100);
   const sheetAreaM2 = Math.max(0, inp.sheetLengthM) * Math.max(0, inp.sheetWidthM);
   const exactSheets = sheetAreaM2 > 0 ? grossAreaM2 / sheetAreaM2 : 0;

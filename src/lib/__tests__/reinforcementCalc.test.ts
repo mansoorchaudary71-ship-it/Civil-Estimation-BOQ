@@ -36,23 +36,30 @@ test("default beam: d=415, As,bottom=942 mm2, rho=0.76%, clear spacing 87/202 mm
   assert.equal(r.activeWidthMm, 234);
 });
 
-test("default beam: stirrups 21 x 1.492 m = 31.33 m, main 31.65 kg, total 43.99 kg net", () => {
+test("default beam: stirrups 21 x 1.332 m = 27.97 m, main 31.65 kg, total 42.68 kg net", () => {
+  // Unified X3 stirrup convention: inner dims A/B = section − 2·cover −
+  // φ (242/392 mm, not 250/400) and the headline weight uses the IS 2502
+  // DETAILED length (1.332 m, not the 1.492 m field rule) — stirrup
+  // weight 12.34 -> 11.03 kg, total 43.99 -> 42.68 kg.
   const r = calcReinforcement(defaultReinforcementInputs());
-  assert.equal(r.stirrupLengthSimpleMm, 1492);
-  assert.equal(r.stirrupLengthDetailedMm, 1364);
+  assert.equal(r.stirrupLengthSimpleMm, 1460);
+  assert.equal(r.stirrupLengthDetailedMm, 1332);
   assert.ok(r.stirrupLengthSimpleMm! > r.stirrupLengthDetailedMm!, "field rule must read higher than detailed form");
   assert.equal(r.stirrupCount, 21);
-  approx(r.stirrupTotalLengthM!, 31.33, 0.01);
-  approx(r.stirrupWeightKg!, 12.34, 0.05);
+  approx(r.stirrupTotalLengthM!, 27.97, 0.01);
+  approx(r.stirrupWeightKg!, 11.03, 0.05);
   const main = r.layers.find((l) => l.label === "Bottom (main) bars")!;
   const top = r.layers.find((l) => l.label === "Top bars")!;
   approx(main.weightKg, 22.18, 0.05);
   approx(top.weightKg, 9.47, 0.05);
   approx(r.mainWeightKg, 31.65, 0.05);
-  approx(r.totalNetKg, 43.99, 0.05);
-  approx(r.orderWeightKg, 46.19, 0.05);
-  approx(r.cost ?? 0, 12471, 10);
+  approx(r.totalNetKg, 42.68, 0.05);
+  approx(r.orderWeightKg, 44.81, 0.05);
+  approx(r.cost ?? 0, 12100, 10);
   assert.equal(r.costComplete, true);
+  // ρ = 0.76% is BELOW the 0.8–1.5% beam band — the old note always
+  // claimed "within" regardless of the computed value.
+  assert.ok(r.rhoNote?.includes("BELOW"), "rho note must say BELOW at 0.76%");
 });
 
 test("slab worked example: 4x3 m, 150 thick, Ø12@150 + Ø8@200 -> 20+20 bars, 138.4 m, 93.57 kg", () => {

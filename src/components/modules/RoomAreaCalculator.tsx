@@ -39,7 +39,7 @@ export default function RoomAreaCalculator() {
   const errors = validateRoomArea(inp);
   const result = useMemo(() => calcRoomArea(inp), [inp.roomType, inp.lengthM, inp.widthM, inp.wallThicknessM, inp.ceilingHeightM, inp.loadingFactorPct]);
   const reverse = useMemo(
-    () => calcCarpetFromSuperBuiltUp(toM(toM(1) * 0) + (unit === "ft" ? parseFloat(superBuiltUp) || 0 : parseFloat(superBuiltUp) || 0) * (unit === "ft" ? 0.092903 : 1), inp.wallThicknessM, inp.lengthM, inp.widthM, inp.loadingFactorPct),
+    () => calcCarpetFromSuperBuiltUp((parseFloat(superBuiltUp) || 0) * (unit === "ft" ? 0.092903 : 1), inp.wallThicknessM, inp.lengthM, inp.widthM, inp.loadingFactorPct),
     [superBuiltUp, inp.wallThicknessM, inp.lengthM, inp.widthM, inp.loadingFactorPct, unit],
   );
 
@@ -50,8 +50,15 @@ export default function RoomAreaCalculator() {
       const n = parseFloat(v);
       if (isFinite(n)) setter(String(+(n * f).toFixed(3)));
     };
+    // Super built-up is an AREA, so it converts with f² — the old code
+    // never converted it, so switching units left it 10.76× wrong.
+    const convArea = (setter: (v: string) => void, v: string) => {
+      const n = parseFloat(v);
+      if (isFinite(n)) setter(String(+(n * f * f).toFixed(3)));
+    };
     conv(setLength, length); conv(setWidth, width); conv(setWallThickness, wallThickness);
     if (ceilingHeight) conv(setCeilingHeight, ceilingHeight);
+    if (superBuiltUp) convArea(setSuperBuiltUp, superBuiltUp);
     setUnit(u);
   };
 
@@ -109,7 +116,7 @@ export default function RoomAreaCalculator() {
       <p className="text-base text-txt-secondary leading-relaxed">Carpet, built-up and super built-up area for any room — in m², sq ft, sq yd, marla and kanal — with an NBC 2016 minimum-size compliance check and a reverse mode that recovers carpet area from a super built-up figure.</p>
       <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm">
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-          <h1 className="text-2xl font-bold flex items-center gap-2"><Layout className="w-6 h-6 text-accent-800" /> Room Area Calculator (NBC / RERA)</h1>
+          <h2 className="text-2xl font-bold flex items-center gap-2"><Layout className="w-6 h-6 text-accent-800" /> Room Area Calculator (NBC / RERA)</h2>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex bg-surface-hover p-1 rounded-xl">
               {(["m", "ft"] as const).map((u) => (
@@ -141,6 +148,7 @@ export default function RoomAreaCalculator() {
               <option value="bedroom">Bedroom</option><option value="living">Living room</option>
               <option value="dining">Dining room</option><option value="study">Study</option>
               <option value="kitchen">Kitchen</option><option value="bathroom">Bathroom (+WC)</option>
+              <option value="bath-wc">Bath + WC (combined)</option>
               <option value="wc">WC alone</option>
             </select>
           </div>

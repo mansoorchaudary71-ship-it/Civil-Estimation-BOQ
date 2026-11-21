@@ -202,7 +202,14 @@ export default function BuildingSetbackCalculator() {
       const n = parseFloat(s);
       return Number.isFinite(n) ? String(round2(n * f)) : s;
     });
-    setAreaValue((v) => round2(v * (next === "ft" ? 10.7639 : 0.092903)));
+    // Area converts through the m² pivot using the CURRENT area unit
+    // (marla × 25.293 m², kanal × 505.86 m²). The old code assumed the
+    // value was always in m²/sq ft, so 10 marla became 107.64 "sq ft"
+    // instead of 2,722.5 sq ft.
+    setAreaValue((v) => {
+      const m2 = v * AREA_FACTORS[areaUnit];
+      return round2(next === "ft" ? m2 * 10.7639 : m2);
+    });
     setAreaUnit(next === "ft" ? "sqft" : "m2");
     setUnit(next);
   };
@@ -211,9 +218,12 @@ export default function BuildingSetbackCalculator() {
     setPresetId(id);
     const p = presets.find((x) => x.id === id);
     if (!p) return;
-    if (p.frontM != null) setFront(round2(toDisplay(p.frontM, unit)));
-    if (p.rearM != null) setRear(round2(toDisplay(p.rearM, unit)));
-    if (p.sideM != null) setSide(round2(toDisplay(p.sideM, unit)));
+    // Clear a field when the preset has no value for it, so the engine's
+    // null-path warnings fire — the old code left the previous preset's
+    // value in place (stale setback).
+    setFront(p.frontM != null ? round2(toDisplay(p.frontM, unit)) : 0);
+    setRear(p.rearM != null ? round2(toDisplay(p.rearM, unit)) : 0);
+    setSide(p.sideM != null ? round2(toDisplay(p.sideM, unit)) : 0);
     setSideBoth(p.sideBoth);
   };
 
@@ -229,14 +239,24 @@ export default function BuildingSetbackCalculator() {
   const result = useMemo(() => {
     const cornerExtraM =
       cornerExtra.trim() === "" ? undefined : toMetres(parseFloat(cornerExtra) || 0, unit);
+    // A field cleared by applyPreset (preset has no value for it) is 0 —
+    // pass undefined to the engine so its "no verified setback" warnings
+    // fire instead of silently computing with a 0 setback. (The engine
+    // type is `number | undefined`; undefined falls through its ?? chain
+    // to the preset, then to null — the same no-value sentinel as before.)
+    // A user-typed 0 on a preset that DOES source the value still passes
+    // through as 0.
+    const frontM = preset.frontM == null && front === 0 ? undefined : toMetres(front, unit);
+    const rearM = preset.rearM == null && rear === 0 ? undefined : toMetres(rear, unit);
+    const sideM = preset.sideM == null && side === 0 ? undefined : toMetres(side, unit);
     if (plotMode === "area") {
       return calcSetback({
         region,
         presetId,
         areaM2: areaValue * AREA_FACTORS[areaUnit],
-        frontM: toMetres(front, unit),
-        rearM: toMetres(rear, unit),
-        sideM: toMetres(side, unit),
+        frontM,
+        rearM,
+        sideM,
         sideBoth,
         cornerPlot,
         cornerExtraM,
@@ -249,9 +269,9 @@ export default function BuildingSetbackCalculator() {
       presetId,
       frontageM: toMetres(frontage, unit),
       depthM: toMetres(depth, unit),
-      frontM: toMetres(front, unit),
-      rearM: toMetres(rear, unit),
-      sideM: toMetres(side, unit),
+      frontM,
+      rearM,
+      sideM,
       sideBoth,
       cornerPlot,
       cornerExtraM,

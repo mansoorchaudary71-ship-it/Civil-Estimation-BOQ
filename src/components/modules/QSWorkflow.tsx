@@ -65,12 +65,16 @@ export default function QSWorkflow() {
     solarSize: 10, // kW
   });
 
-  // BOQ rates — EXAMPLE defaults, editable in Step 7. These are NOT from a
-  // live database (the old "Rates populated from Live DB" badge was false).
-  // Dated material rates from the CEP rate table are shown alongside:
-  // cement Rs {pkRates.cementPerBag}/bag, steel Rs {pkRates.steelPerKg}/kg
-  // ({rateTable.lastUpdated}). Concrete line rates below are per-m3 norms.
-  const rates = {
+  // BOQ rates — EXAMPLE defaults, editable in Step 7 (the header copy
+  // says so; the old code rendered them as plain text). These are NOT from
+  // a live database (the old "Rates populated from Live DB" badge was
+  // false). Dated material rates from the CEP rate table are shown
+  // alongside: cement Rs {pkRates.cementPerBag}/bag, steel Rs
+  // {pkRates.steelPerKg}/kg ({rateTable.lastUpdated}). Concrete line rates
+  // below are per-m3 norms.
+  // Rainwater Rs 15/litre is an EXAMPLE rate inherited from the legacy
+  // "Paint / misc" line — confirm with your vendor.
+  const [rates, setRates] = useState({
     excavation: 350,   // per m3
     footingConc: 5500, // per m3 (approx M25)
     plinthBeam: 6000,  // per m3
@@ -84,32 +88,32 @@ export default function QSWorkflow() {
     painting: 150,     // per m2
     plumbing: 1200,    // per point
     electrical: 850,   // per point
-    rainwater: 15,     // per liter
+    rainwater: 15,     // per liter (example — see note above)
     solar: 50000,      // per kW
-  };
+  });
 
   const boqItems = useMemo(() => {
     return [
-      { section: 'Substructure', item: 'Earthwork in Excavation', qty: substructure.excavation, unit: 'm³', rate: rates.excavation, amount: substructure.excavation * rates.excavation },
-      { section: 'Substructure', item: 'PCC/RCC for Footing', qty: substructure.footingConc, unit: 'm³', rate: rates.footingConc, amount: substructure.footingConc * rates.footingConc },
-      { section: 'Substructure', item: 'RCC for Plinth Beam', qty: substructure.plinthBeam, unit: 'm³', rate: rates.plinthBeam, amount: substructure.plinthBeam * rates.plinthBeam },
+      { section: 'Substructure', rateKey: 'excavation', item: 'Earthwork in Excavation', qty: substructure.excavation, unit: 'm³', rate: rates.excavation, amount: substructure.excavation * rates.excavation },
+      { section: 'Substructure', rateKey: 'footingConc', item: 'PCC/RCC for Footing', qty: substructure.footingConc, unit: 'm³', rate: rates.footingConc, amount: substructure.footingConc * rates.footingConc },
+      { section: 'Substructure', rateKey: 'plinthBeam', item: 'RCC for Plinth Beam', qty: substructure.plinthBeam, unit: 'm³', rate: rates.plinthBeam, amount: substructure.plinthBeam * rates.plinthBeam },
       
-      { section: 'Superstructure', item: 'RCC for Columns', qty: superstructure.columns, unit: 'm³', rate: rates.columns, amount: superstructure.columns * rates.columns },
-      { section: 'Superstructure', item: 'RCC for Beams', qty: superstructure.beams, unit: 'm³', rate: rates.beams, amount: superstructure.beams * rates.beams },
-      { section: 'Superstructure', item: 'RCC for Slab', qty: superstructure.slabs, unit: 'm³', rate: rates.slabs, amount: superstructure.slabs * rates.slabs },
-      { section: 'Superstructure', item: 'RCC for Staircase', qty: superstructure.staircase, unit: 'm³', rate: rates.staircase, amount: superstructure.staircase * rates.staircase },
+      { section: 'Superstructure', rateKey: 'columns', item: 'RCC for Columns', qty: superstructure.columns, unit: 'm³', rate: rates.columns, amount: superstructure.columns * rates.columns },
+      { section: 'Superstructure', rateKey: 'beams', item: 'RCC for Beams', qty: superstructure.beams, unit: 'm³', rate: rates.beams, amount: superstructure.beams * rates.beams },
+      { section: 'Superstructure', rateKey: 'slabs', item: 'RCC for Slab', qty: superstructure.slabs, unit: 'm³', rate: rates.slabs, amount: superstructure.slabs * rates.slabs },
+      { section: 'Superstructure', rateKey: 'staircase', item: 'RCC for Staircase', qty: superstructure.staircase, unit: 'm³', rate: rates.staircase, amount: superstructure.staircase * rates.staircase },
 
-      { section: 'Masonry & Finishes', item: 'Brickwork (1:6 / 1:4)', qty: masonry.brickwork, unit: 'm³', rate: rates.brickwork, amount: masonry.brickwork * rates.brickwork },
-      { section: 'Masonry & Finishes', item: 'Plastering (Int/Ext)', qty: masonry.plaster, unit: 'm²', rate: rates.plaster, amount: masonry.plaster * rates.plaster },
-      { section: 'Masonry & Finishes', item: 'Flooring / Tiling', qty: masonry.flooring, unit: 'm²', rate: rates.flooring, amount: masonry.flooring * rates.flooring },
-      { section: 'Masonry & Finishes', item: 'Painting & Primer', qty: masonry.painting, unit: 'm²', rate: rates.painting, amount: masonry.painting * rates.painting },
+      { section: 'Masonry & Finishes', rateKey: 'brickwork', item: 'Brickwork (1:6 / 1:4)', qty: masonry.brickwork, unit: 'm³', rate: rates.brickwork, amount: masonry.brickwork * rates.brickwork },
+      { section: 'Masonry & Finishes', rateKey: 'plaster', item: 'Plastering (Int/Ext)', qty: masonry.plaster, unit: 'm²', rate: rates.plaster, amount: masonry.plaster * rates.plaster },
+      { section: 'Masonry & Finishes', rateKey: 'flooring', item: 'Flooring / Tiling', qty: masonry.flooring, unit: 'm²', rate: rates.flooring, amount: masonry.flooring * rates.flooring },
+      { section: 'Masonry & Finishes', rateKey: 'painting', item: 'Painting & Primer', qty: masonry.painting, unit: 'm²', rate: rates.painting, amount: masonry.painting * rates.painting },
 
-      { section: 'Services', item: 'Plumbing Works', qty: services.plumbingPoints, unit: 'Pts', rate: rates.plumbing, amount: services.plumbingPoints * rates.plumbing },
-      { section: 'Services', item: 'Electrical Works', qty: services.electricalPoints, unit: 'Pts', rate: rates.electrical, amount: services.electricalPoints * rates.electrical },
-      { section: 'Services', item: 'Rainwater Harvesting', qty: services.rainwaterCapacity, unit: 'L', rate: rates.rainwater, amount: services.rainwaterCapacity * rates.rainwater },
-      { section: 'Services', item: 'Solar PV System', qty: services.solarSize, unit: 'kW', rate: rates.solar, amount: services.solarSize * rates.solar },
+      { section: 'Services', rateKey: 'plumbing', item: 'Plumbing Works', qty: services.plumbingPoints, unit: 'Pts', rate: rates.plumbing, amount: services.plumbingPoints * rates.plumbing },
+      { section: 'Services', rateKey: 'electrical', item: 'Electrical Works', qty: services.electricalPoints, unit: 'Pts', rate: rates.electrical, amount: services.electricalPoints * rates.electrical },
+      { section: 'Services', rateKey: 'rainwater', item: 'Rainwater Harvesting', qty: services.rainwaterCapacity, unit: 'L', rate: rates.rainwater, amount: services.rainwaterCapacity * rates.rainwater },
+      { section: 'Services', rateKey: 'solar', item: 'Solar PV System', qty: services.solarSize, unit: 'kW', rate: rates.solar, amount: services.solarSize * rates.solar },
     ];
-  }, [substructure, superstructure, masonry, services]);
+  }, [substructure, superstructure, masonry, services, rates]);
 
   const categoryTotals = useMemo(() => {
     const totals: Record<string, number> = {};
@@ -127,8 +131,8 @@ export default function QSWorkflow() {
 
   const COLORS = ['#F2A413', '#1F1D1A', '#B07006', '#6B6862', '#0F766E'];
 
-  useAutoSave('qs-workflow', { projectData, totalPlinthArea, substructure, superstructure, masonry, services, currentStep },
-    { projectData: setProjectData, totalPlinthArea: setTotalPlinthArea, substructure: setSubstructure, superstructure: setSuperstructure, masonry: setMasonry, services: setServices, currentStep: (v: Step) => setCurrentStep(v) });
+  useAutoSave('qs-workflow', { projectData, totalPlinthArea, substructure, superstructure, masonry, services, currentStep, rates },
+    { projectData: setProjectData, totalPlinthArea: setTotalPlinthArea, substructure: setSubstructure, superstructure: setSuperstructure, masonry: setMasonry, services: setServices, currentStep: (v: Step) => setCurrentStep(v), rates: setRates });
 
   const handleNext = () => setCurrentStep(prev => (prev < 8 ? prev + 1 : prev) as Step);
   const handlePrev = () => setCurrentStep(prev => (prev > 1 ? prev - 1 : prev) as Step);
@@ -168,11 +172,11 @@ export default function QSWorkflow() {
       {/* HEADER SECTION */}
       <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-brand-sm mb-6 flex justify-between items-center no-print overflow-hidden">
          <div>
-           <h1 className="text-xl font-semibold tabular-nums tracking-tight text-txt-primary tracking-tight flex items-center gap-3">
+           <h2 className="text-xl font-semibold tabular-nums tracking-tight text-txt-primary tracking-tight flex items-center gap-3">
              <div className="p-3 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">
                <Activity className="w-8 h-8" />
              </div>
-             Guided QS Workflow</h1>
+             Guided QS Workflow</h2>
              <p className="text-sm text-txt-tertiary mt-1">Quantity takeoff &amp; BOQ wizard (IS 1200). Quantities come from dimensions; rates are example defaults — edit them in Step 7. Dated material rates: cement Rs {pkRates.cementPerBag ?? "—"}/bag, steel Rs {pkRates.steelPerKg ?? "—"}/kg ({rateTable.lastUpdated}).</p>
            </div>
            <p className="text-txt-tertiary mt-2 font-medium">
@@ -271,7 +275,7 @@ export default function QSWorkflow() {
                  <label className="block text-base font-medium mb-2">Estimated Total Plinth Area (sq.ft)</label>
                  {(!isFinite(totalPlinthArea) || totalPlinthArea <= 0) && <p className="text-sm font-semibold text-red-600 mb-2">Plinth area must be greater than 0.</p>}
                  <><label htmlFor="a11y-input-388" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-388" type="number" inputMode="decimal" value={totalPlinthArea} onChange={e=>setTotalPlinthArea(+e.target.value)} className="w-full md:w-1/2 px-4 py-3 bg-surface-hover border rounded-full" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-388" type="number" inputMode="decimal" value={totalPlinthArea} onChange={e=>setTotalPlinthArea(Math.max(0, +e.target.value))} className="w-full md:w-1/2 px-4 py-3 bg-surface-hover border rounded-full" /></>
                </div>
             </div>
          )}
@@ -330,22 +334,22 @@ export default function QSWorkflow() {
                  <div>
                     <label className="block text-base font-medium mb-2">Columns RCC - m³</label>
                     <><label htmlFor="a11y-input-392" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-392" type="number" inputMode="decimal" value={superstructure.columns} onChange={e=>setSuperstructure({...superstructure, columns: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-392" type="number" inputMode="decimal" value={superstructure.columns} onChange={e=>setSuperstructure({...superstructure, columns: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Beams RCC - m³</label>
                     <><label htmlFor="a11y-input-393" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-393" type="number" inputMode="decimal" value={superstructure.beams} onChange={e=>setSuperstructure({...superstructure, beams: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-393" type="number" inputMode="decimal" value={superstructure.beams} onChange={e=>setSuperstructure({...superstructure, beams: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Slabs RCC - m³</label>
                     <><label htmlFor="a11y-input-394" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-394" type="number" inputMode="decimal" value={superstructure.slabs} onChange={e=>setSuperstructure({...superstructure, slabs: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-394" type="number" inputMode="decimal" value={superstructure.slabs} onChange={e=>setSuperstructure({...superstructure, slabs: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Staircase RCC - m³</label>
                     <><label htmlFor="a11y-input-395" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-395" type="number" inputMode="decimal" value={superstructure.staircase} onChange={e=>setSuperstructure({...superstructure, staircase: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-395" type="number" inputMode="decimal" value={superstructure.staircase} onChange={e=>setSuperstructure({...superstructure, staircase: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                </div>
             </div>
@@ -361,22 +365,22 @@ export default function QSWorkflow() {
                  <div>
                     <label className="block text-base font-medium mb-2">Brickwork/Blockwork - m³</label>
                     <><label htmlFor="a11y-input-396" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-396" type="number" inputMode="decimal" value={masonry.brickwork} onChange={e=>setMasonry({...masonry, brickwork: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-396" type="number" inputMode="decimal" value={masonry.brickwork} onChange={e=>setMasonry({...masonry, brickwork: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Plastering (Int & Ext) - m²</label>
                     <><label htmlFor="a11y-input-397" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-397" type="number" inputMode="decimal" value={masonry.plaster} onChange={e=>setMasonry({...masonry, plaster: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-397" type="number" inputMode="decimal" value={masonry.plaster} onChange={e=>setMasonry({...masonry, plaster: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Flooring/Tiling - m²</label>
                     <><label htmlFor="a11y-input-398" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-398" type="number" inputMode="decimal" value={masonry.flooring} onChange={e=>setMasonry({...masonry, flooring: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-398" type="number" inputMode="decimal" value={masonry.flooring} onChange={e=>setMasonry({...masonry, flooring: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Painting & Finishes - m²</label>
                     <><label htmlFor="a11y-input-399" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-399" type="number" inputMode="decimal" value={masonry.painting} onChange={e=>setMasonry({...masonry, painting: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-399" type="number" inputMode="decimal" value={masonry.painting} onChange={e=>setMasonry({...masonry, painting: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                </div>
             </div>
@@ -392,22 +396,22 @@ export default function QSWorkflow() {
                  <div>
                     <label className="block text-base font-medium mb-2">Plumbing (No. of Output Points)</label>
                     <><label htmlFor="a11y-input-400" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-400" type="number" inputMode="decimal" value={services.plumbingPoints} onChange={e=>setServices({...services, plumbingPoints: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-400" type="number" inputMode="decimal" value={services.plumbingPoints} onChange={e=>setServices({...services, plumbingPoints: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Electrical (No. of Output Points)</label>
                     <><label htmlFor="a11y-input-401" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-401" type="number" inputMode="decimal" value={services.electricalPoints} onChange={e=>setServices({...services, electricalPoints: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-401" type="number" inputMode="decimal" value={services.electricalPoints} onChange={e=>setServices({...services, electricalPoints: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Rainwater Harvesting Capacity (L)</label>
                     <><label htmlFor="a11y-input-402" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-402" type="number" inputMode="decimal" value={services.rainwaterCapacity} onChange={e=>setServices({...services, rainwaterCapacity: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-402" type="number" inputMode="decimal" value={services.rainwaterCapacity} onChange={e=>setServices({...services, rainwaterCapacity: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                  <div>
                     <label className="block text-base font-medium mb-2">Solar Generation (kW)</label>
                     <><label htmlFor="a11y-input-403" className="sr-only">Input</label>
-<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-403" type="number" inputMode="decimal" value={services.solarSize} onChange={e=>setServices({...services, solarSize: +e.target.value})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-403" type="number" inputMode="decimal" value={services.solarSize} onChange={e=>setServices({...services, solarSize: Math.max(0, +e.target.value)})} className="w-full px-4 py-3 bg-surface-hover border rounded-full font-bold" /></>
                  </div>
                </div>
             </div>
@@ -439,7 +443,7 @@ export default function QSWorkflow() {
                              <td className="p-4 text-txt-tertiary">{item.section}</td>
                              <td className="p-4 font-semibold">{item.item}</td>
                              <td className="p-4 text-right">{item.qty} {item.unit}</td>
-                             <td className="p-4 text-right">{settings.currency} {item.rate.toLocaleString()}</td>
+                             <td className="p-4 text-right"><span className="text-txt-tertiary text-xs mr-1">{settings.currency}</span><input type="number" inputMode="decimal" min={0} value={item.rate} onChange={(e) => setRates((r) => ({ ...r, [item.rateKey]: Math.max(0, +e.target.value || 0) }))} className="w-28 border rounded-lg py-1.5 px-2 text-right" title="Rate — edit per your market" /></td>
                              <td className="p-4 text-right font-bold text-accent-800">{settings.currency} {item.amount.toLocaleString()}</td>
                           </tr>
                        ))}
@@ -456,7 +460,7 @@ export default function QSWorkflow() {
                  <Button onClick={exportBoqCsv} className="px-4 py-2 rounded-full bg-ink text-white text-sm font-bold">Download CSV</Button>
                  <Button onClick={copyBoq} className="px-4 py-2 rounded-full bg-surface-hover text-sm font-bold">Copy BOQ (TSV)</Button>
                </div>
-               <p className="text-xs text-txt-tertiary mt-2">Quantities are derived from the dimensions you entered; the pie in Step 8 sums the same category totals — no double-counting.</p>
+               <p className="text-xs text-txt-tertiary mt-2">Quantities are derived from the dimensions you entered; the pie in Step 8 sums the same category totals — no double-counting. Rainwater harvesting at Rs 15/litre is an example rate carried over from the legacy template — confirm with your vendor.</p>
             </div>
          )}
 
@@ -543,7 +547,7 @@ export default function QSWorkflow() {
                          {pieData.map((data, idx) => (
                            <li key={idx} className="flex justify-between border-b pb-1">
                              <span className="font-bold">{data.name}</span>
-                             <span>{settings.currency} {data.value.toLocaleString()} ({(data.value / totalCost * 100).toFixed(1)}%)</span>
+                             <span>{settings.currency} {data.value.toLocaleString()} ({totalCost > 0 ? (data.value / totalCost * 100).toFixed(1) : "0.0"}%)</span>
                            </li>
                          ))}
                        </ul>

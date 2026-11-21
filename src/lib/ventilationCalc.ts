@@ -49,7 +49,18 @@ export const ASHRAE_RP_RA: Record<VentRoomType, { rp: number; ra: number }> = {
   classroom: { rp: 5, ra: 0.6 },
 };
 
-export const STANDARD_FAN_SIZES_CFM = [100, 150, 200, 250, 300, 400, 600];
+export const STANDARD_FAN_SIZES_CFM = [50, 100, 150, 200, 250, 300, 400, 600];
+
+/** ASHRAE 62.2 residential exhaust rates (intermittent, CFM): a kitchen or
+ * bathroom exhaust fan is sized on the exhaust rate, NOT on whole-room air
+ * changes. The old code sized the fan from volume × ACH (a 90 m³ kitchen
+ * got a 600 CFM commercial-hood fan). Continuous rates are 25 CFM
+ * (kitchen) / 20 CFM (bathroom); the intermittent rates below are the
+ * default sizing basis. */
+export const EXHAUST_FAN_CFM: Record<"kitchen" | "bathroom", number> = {
+  kitchen: 100,
+  bathroom: 50,
+};
 
 export const M3H_TO_CFM = 0.5886;
 export const LS_TO_M3H = 3.6;
@@ -153,8 +164,12 @@ export function calcVentilation(inp: VentilationInputs): VentilationResults {
   const vozCfm = (vbz / ez) * LS_TO_CFM;
 
   const isExhaustRoom = inp.roomType === "kitchen" || inp.roomType === "bathroom";
+  // Exhaust fan sized on the ASHRAE 62.2 exhaust rate for the room type
+  // (kitchen 100 CFM / bathroom 50 CFM intermittent), rounded up to the
+  // next standard size — NOT on the whole-room ACH airflow, which is a
+  // ventilation rate, not an exhaust-fan size.
   const exhaustFanCfm = isExhaustRoom
-    ? (STANDARD_FAN_SIZES_CFM.find((s) => s >= requiredAirflowCfm) ??
+    ? (STANDARD_FAN_SIZES_CFM.find((s) => s >= EXHAUST_FAN_CFM[inp.roomType as "kitchen" | "bathroom"]) ??
       STANDARD_FAN_SIZES_CFM[STANDARD_FAN_SIZES_CFM.length - 1])
     : null;
   // Recommended window schedule: 1.2 m x 1.5 m windows (1.8 m2 each).
@@ -193,6 +208,9 @@ export function calcVentilation(inp: VentilationInputs): VentilationResults {
       `Glazing: required = ${floorArea.toFixed(1)} / ${ratio} (1/${ratio}, ${climate}) = ${requiredGlazing.toFixed(2)} m²; required openable = 50% = ${requiredOpenable.toFixed(2)} m²`,
       `ACH: required airflow = ${volume.toFixed(1)} m³ x ${targetAch} ACH = ${requiredAirflowM3h.toFixed(0)} m³/h = ${requiredAirflowCfm.toFixed(0)} CFM; one air change every ${minutesPerChange.toFixed(0)} minutes`,
       `ASHRAE 62.1: Vbz = ${rp} x ${occupants} people + ${ra} x ${floorArea.toFixed(1)} m² = ${vbz.toFixed(1)} L/s; Voz = ${vbz.toFixed(1)} / Ez ${ez} = ${vozM3h.toFixed(1)} m³/h (${vozCfm.toFixed(0)} CFM) of OUTDOOR air`,
+      ...(exhaustFanCfm != null
+        ? [`Exhaust fan: ASHRAE 62.2 intermittent exhaust rate ${EXHAUST_FAN_CFM[inp.roomType as "kitchen" | "bathroom"]} CFM for a ${VENTILATION_ROOM_LABELS[inp.roomType].toLowerCase()} → next standard size ${exhaustFanCfm} CFM (sized on the exhaust rate, NOT on the whole-room ACH airflow of ${requiredAirflowCfm.toFixed(0)} CFM)`]
+        : []),
     ],
   };
 }

@@ -19,15 +19,19 @@ const row = (over: Partial<DoorWindowRowInput>): DoorWindowRowInput => ({
   ...over,
 });
 
-test("D1 main door 1.067x2.134: leaf 2.28, frame-outer 1.267x2.234, opening 1.287x2.254, lintel 1.59, frame 7.00 r.m", () => {
+test("D1 main door 1.067x2.134: leaf 2.28, frame-outer 1.267x2.234, opening 1.287x2.244, lintel 1.59, frame 5.74 r.m", () => {
   const r = calcDoorWindowRow(row({ mark: "D1", leafWidthM: 1.067, leafHeightM: 2.134 }));
   approx(r.leafAreaM2, 2.28);
   approx(r.frameOuterWidthM, 1.267);
   approx(r.frameOuterHeightM, 2.234);
   approx(r.openingWidthM, 1.287);
-  approx(r.openingHeightM, 2.254);
+  // Door opening height adds head clearance only (+10 mm, not +20 mm):
+  // 2.234 + 0.01 = 2.244.
+  approx(r.openingHeightM, 2.244);
   approx(r.lintelLengthM, 1.59);
-  approx(r.frameLengthM, 7.0);
+  // Door frame = 2H + W (no sill member): 2 x 2.234 + 1.267 = 5.74 r.m,
+  // not the full perimeter 2 x (2.234 + 1.267) = 7.00 r.m.
+  approx(r.frameLengthM, 5.74);
   approx(r.clearWidthM, 1.017);
 });
 
@@ -40,6 +44,11 @@ test("W1 living window 1.524x1.219 x2 UPVC sliding: leaf 1.86 each, total 3.72, 
   approx(r.leafAreaM2, 1.86);
   approx(r.totalLeafAreaM2, 3.72);
   approx(r.glassAreaM2, 1.42);
+  // Windows keep the full-perimeter frame (sill member included):
+  // frame-outer 1.724 x 1.419 -> 2 x (1.419 + 1.724) = 6.29 r.m.
+  approx(r.frameLengthM, 6.29);
+  // Window opening height adds clearance top and bottom: 1.419 + 0.02.
+  approx(r.openingHeightM, 1.439);
 });
 
 test("default schedule: D1 2.52 + D2 5.67 + W1 3.60 = 11.79 m2 total opening; lintels from masonry opening + 0.30", () => {

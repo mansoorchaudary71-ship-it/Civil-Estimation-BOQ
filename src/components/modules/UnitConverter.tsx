@@ -54,7 +54,7 @@ const categories: { id: Category; label: string; icon: any; color: string }[] = 
   { id: "Length", label: "Length", icon: Ruler, color: "text-ui-successText bg-ui-success/50 " },
   { id: "Area", label: "Area", icon: Square, color: "text-accent-800 bg-accent-100 " },
   { id: "Volume", label: "Volume", icon: Box, color: "text-accent-700 bg-accent-50/50 " },
-  { id: "Mass", label: "Mass (Weignt)", icon: Scale, color: "text-ui-errorText bg-ui-error/50 " },
+  { id: "Mass", label: "Mass (Weight)", icon: Scale, color: "text-ui-errorText bg-ui-error/50 " },
   { id: "Density", label: "Density", icon: Droplets, color: "text-accent-700 bg-accent-100/50 " },
   { id: "Force", label: "Force", icon: Hammer, color: "text-accent-800 bg-accent-100 " },
   { id: "Pressure & Stress", label: "Pressure / Stress", icon: Gauge, color: "text-ui-errorText bg-ui-error/50 " },
@@ -214,9 +214,9 @@ export default function UnitConverter() {
     if (activeCategory === "Length") {
       setToUnit(newUnit === "SI" ? "m" : "ft");
     } else if (activeCategory === "Area") {
-      setToUnit(newUnit === "SI" ? "m²" : "ft²");
+      setToUnit(newUnit === "SI" ? "sm" : "sft");
     } else if (activeCategory === "Volume") {
-      setToUnit(newUnit === "SI" ? "m³" : "ft³");
+      setToUnit(newUnit === "SI" ? "cm" : "cf");
     } else if (activeCategory === "Mass") {
       setToUnit(newUnit === "SI" ? "kg" : "lb");
     }
@@ -674,7 +674,7 @@ export default function UnitConverter() {
                         <ArrowRightLeft className="w-3 h-3 text-txt-tertiary group-hover:text-accent-400 shrink-0" />
                         <div className="min-w-0 text-right">
                           <p className="font-bold text-accent-700 truncate">
-                            {conv.toValue} <span className="text-xs text-accent-400">{conv.toUnit}</span>
+                            {conv.toValue} <span className="text-xs text-accent-800">{conv.toUnit}</span>
                           </p>
                         </div>
                       </div>

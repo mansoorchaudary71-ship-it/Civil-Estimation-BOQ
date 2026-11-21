@@ -55,3 +55,25 @@ test("overhead staging load is computed", () => {
   const resting = designWaterTank({ placement: "resting" });
   assert.equal(resting.stagingLoadKN, 0);
 });
+
+test("circular minSteelGoverns compares hoop only: deep tank where hoop steel exceeds min", () => {
+  // D = 3 m, H = 6 m: T = 9.81 x 6 x 3 / 2 = 88.3 kN/m; Ast,hoop = 88,290/130
+  // = 679 mm2/m > Ast,min 434, so min steel must NOT govern. The old
+  // comparison also required Ast,min >= long-wall flexure steel (which a
+  // circular tank does not have) and could report governs wrongly.
+  const r = designWaterTank({ shape: "circular", waterDepthM: 6 });
+  approx(r.astHoopMm2PerM, 679, 2);
+  assert.equal(r.minSteelGoverns, false);
+});
+
+test("L/H far from 2.25 warns (Table 3 coefficients do not apply)", () => {
+  const r = designWaterTank({ lengthM: 10, waterDepthM: 2 }); // L/H = 5
+  assert.ok(r.warnings.some((w) => w.includes("L/H = 5")));
+  const ok = designWaterTank(); // defaults L/H = 4.5/2 = 2.25
+  assert.ok(!ok.warnings.some((w) => w.includes("L/H")));
+});
+
+test("empty occupants is an error, not a 0 L demand PASS", () => {
+  const r = designWaterTank({ occupants: 0 });
+  assert.ok(r.errors.some((e) => e.includes("Occupants")));
+});

@@ -33,6 +33,7 @@ export default function AggregateChart({ data }: ChartProps) {
         
         <Line type="stepAfter" dataKey="Max" stroke="#B07006" strokeWidth={2} strokeDasharray="5 5" name="Upper Limit" dot={false} />
         <Line type="stepAfter" dataKey="Min" stroke="#1F1D1A" strokeWidth={2} strokeDasharray="5 5" name="Lower Limit" dot={false} />
+        <Line type="monotone" dataKey="Power45" stroke="#6B7280" strokeWidth={1.5} strokeDasharray="3 3" name="0.45-power line" dot={false} />
         <Line type="monotone" dataKey="Blend" stroke="#F2A413" strokeWidth={3} name="Blended %" dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
       </LineChart>
     </ResponsiveContainer>

@@ -40,6 +40,9 @@ test("continuous beam uses wL^2/10 support / wL^2/12 span, not wL^2/8", () => {
   approx(r.muSupportKNm, r.factoredLoadKNm * 25 / 10, 0.3);
   approx(r.muSpanKNm, r.factoredLoadKNm * 25 / 12, 0.3);
   assert.ok(r.astSupportMm2 > r.astSpanMm2);
+  // Interior-support shear is 0.625·W·L, not the simply-supported WL/2
+  // (0.625 x 29.22 x 5 = 91.3 kN; WL/2 would give 73.1 kN, 20% low).
+  approx(r.vuKN, 0.625 * r.factoredLoadKNm * 5, 0.2);
 });
 
 test("cantilever uses wL^2/2", () => {

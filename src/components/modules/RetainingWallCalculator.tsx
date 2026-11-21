@@ -88,61 +88,12 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
   const sb = parseFloat(stemWBot) || 0;
   const tp = parseFloat(toeProj) || 0;
   
-  const gamma = parseFloat(soilDens) || 0;
-  const phi = parseFloat(phiAngle) || 0;
-  const q = parseFloat(surcharge) || 0;
-  const mu = parseFloat(frictionCoeff) || 0;
-  
-  const heelProj = b - tp - sb; 
-  
-  // Stability Check
-  const totalH = h + bd;
-  const phiRad = (phi * Math.PI) / 180;
-  const Ka = (1 - Math.sin(phiRad)) / (1 + Math.sin(phiRad));
-  
-  // Forces per meter run
-  const Pa_soil = 0.5 * Ka * gamma * Math.pow(totalH, 2);
-  const Pa_sur = Ka * q * totalH;
-  const F_driving = Pa_soil + Pa_sur;
-  
-  const M_overturning = (Pa_soil * (totalH / 3)) + (Pa_sur * (totalH / 2));
-  
-  // Weights (kN/m run)
-  const W_stem_rect = st * h * 25; // concrete = 25
-  const W_stem_tri = 0.5 * (sb - st) * h * 25;
-  const W_base = b * bd * 25;
-  const W_soil = heelProj * h * gamma;
-  const W_sur = heelProj * q;
-  
-  const sumW = W_stem_rect + W_stem_tri + W_base + W_soil + W_sur;
-  const F_resisting = sumW * mu;
-  
-  // Lever arms from toe
-  const x_stem_rect = tp + sb - (st / 2);
-  const x_stem_tri = tp + (2/3)*(sb - st);
-  const x_base = b / 2;
-  const x_soil = b - (heelProj / 2);
-  const x_sur = b - (heelProj / 2);
-  
-  const M_resisting = (W_stem_rect * x_stem_rect) + 
-                      (W_stem_tri * x_stem_tri) + 
-                      (W_base * x_base) + 
-                      (W_soil * x_soil) + 
-                      (W_sur * x_sur);
-                      
-  const FS_sliding = F_driving > 0 ? F_resisting / F_driving : 0;
-  const FS_overturn = M_overturning > 0 ? M_resisting / M_overturning : 0;
-  
-  // Bearing Pressure
-  const x_bar = sumW > 0 ? (M_resisting - M_overturning) / sumW : 0;
-  const e = Math.abs((b / 2) - x_bar);
-  const q_max = sumW > 0 ? (sumW / b) * (1 + (6 * e) / b) : 0;
-  const q_min = sumW > 0 ? (sumW / b) * (1 - (6 * e) / b) : 0;
+  const heelProj = b - tp - sb;
+
+  // Stability comes from the engine (designRetainingWall) — the old code
+  // recomputed FS locally and IGNORED seismic, passive pressure and the
+  // shear key, so the cards could disagree with the design verdict.
   const max_sbc = parseFloat(sbc) || 0;
-  
-  const isSlidingSafe = FS_sliding >= 1.5;
-  const isOverturnSafe = FS_overturn >= 2.0;
-  const isBearingSafe = q_max <= max_sbc && q_min >= 0 && e <= b / 6;
 
   const { rates, setRate, table } = useRates();
   // Engine design (IS 456) — stability + stem/base flexural steel + cost.
@@ -393,8 +344,14 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                 {design.suggestions.map((sg, i) => (
                   <p key={i} className="text-sm text-txt-secondary bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 py-2">{sg}</p>
                 ))}
-                <p className="text-sm text-txt-secondary">Minimum base width for FS_slide ≥ 1.5: <strong>{design.minBaseWidthM.toFixed(2)} m</strong> (current {b.toFixed(2)} m).</p>
-                <Button onClick={() => setBaseW(design.minBaseWidthM.toFixed(2))} className="text-sm font-medium px-4 py-2 bg-ink text-white rounded-full hover:opacity-90">Apply minimum base width</Button>
+                {design.minBaseWidthM != null ? (
+                  <>
+                    <p className="text-sm text-txt-secondary">Minimum base width for FS_slide ≥ 1.5: <strong>{design.minBaseWidthM.toFixed(2)} m</strong> (current {b.toFixed(2)} m).</p>
+                    <Button onClick={() => setBaseW(design.minBaseWidthM!.toFixed(2))} className="text-sm font-medium px-4 py-2 bg-ink text-white rounded-full hover:opacity-90">Apply minimum base width</Button>
+                  </>
+                ) : (
+                  <p className="text-sm text-txt-secondary">No base width satisfies all three stability checks (sliding ≥ 1.5, overturning ≥ 2.0, bearing) — widening the base alone will not fix this wall; add a shear key, improve the soil, or reduce the retained height.</p>
+                )}
               </div>
             )}
           </ToolSection>
@@ -436,31 +393,31 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
 
             {/* Stability Check */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-3">
-              <div className={`p-4 rounded-2xl border ${isSlidingSafe ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
+              <div className={`p-4 rounded-2xl border ${design.slidingOk ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
                 <h4 className="font-bold text-xs text-txt-secondary dark:text-txt-tertiary mb-1 leading-tight uppercase">Sliding FS</h4>
-                <p className={`text-xl font-bold tabular-nums tracking-tight ${isSlidingSafe ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{FS_sliding.toFixed(2)}</p>
+                <p className={`text-xl font-bold tabular-nums tracking-tight ${design.slidingOk ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{design.fsSliding.toFixed(2)}</p>
               </div>
-              <div className={`p-4 rounded-2xl border ${isOverturnSafe ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
+              <div className={`p-4 rounded-2xl border ${design.overturningOk ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
                 <h4 className="font-bold text-xs text-txt-secondary dark:text-txt-tertiary mb-1 leading-tight uppercase">Overturn FS</h4>
-                <p className={`text-xl font-bold tabular-nums tracking-tight ${isOverturnSafe ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{FS_overturn.toFixed(2)}</p>
+                <p className={`text-xl font-bold tabular-nums tracking-tight ${design.overturningOk ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{design.fsOverturning.toFixed(2)}</p>
               </div>
-              <div className={`col-span-2 md:col-span-1 lg:col-span-2 p-4 rounded-2xl border ${isBearingSafe ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
+              <div className={`col-span-2 md:col-span-1 lg:col-span-2 p-4 rounded-2xl border ${design.bearingOk ? 'bg-ui-success border-ui-successBorder/60 dark:bg-ui-success/20 dark:border-ui-successBorder/20' : 'bg-ui-error border-ui-errorBorder/60 dark:bg-ui-error/20 dark:border-ui-errorBorder/20'}`}>
                 <h4 className="font-bold text-xs text-txt-secondary dark:text-txt-tertiary mb-1 leading-tight uppercase">Bearing Pressure (Max / SBC)</h4>
-                <p className={`text-xl font-bold tabular-nums tracking-tight ${isBearingSafe ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{q_max.toFixed(1)} / {max_sbc}</p>
+                <p className={`text-xl font-bold tabular-nums tracking-tight ${design.bearingOk ? 'text-ui-successText dark:text-ui-successText' : 'text-ui-errorText dark:text-ui-errorText'}`}>{design.qMaxKPa.toFixed(1)} / {max_sbc}</p>
               </div>
             </div>
             
-            {(!isSlidingSafe || !isOverturnSafe || !isBearingSafe) && (
+            {(!design.slidingOk || !design.overturningOk || !design.bearingOk) && (
               <div className="p-4 bg-ui-error dark:bg-ui-error/20 border border-ui-errorBorder dark:border-ui-errorBorder/50 text-ui-errorText dark:text-ui-errorBorder rounded-2xl text-sm font-semibold flex items-start gap-3 shadow-brand-sm">
                 <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  {!isSlidingSafe && <p>Sliding FS ({FS_sliding.toFixed(2)}) &lt; 1.5</p>}
-                  {!isOverturnSafe && <p>Overturning FS ({FS_overturn.toFixed(2)}) &lt; 2.0</p>}
-                  {!isBearingSafe && (
+                  {!design.slidingOk && <p>Sliding FS ({design.fsSliding.toFixed(2)}) &lt; 1.5</p>}
+                  {!design.overturningOk && <p>Overturning FS ({design.fsOverturning.toFixed(2)}) &lt; 2.0</p>}
+                  {!design.bearingOk && (
                     <p>
-                      {e > b / 6 ? `Resultant outside middle third. ` : ''}
-                      {q_max > max_sbc ? `Max Pressure exceeds SBC. ` : ''}
-                      {q_min < 0 ? `Tension exists under base.` : ''}
+                      {design.eccentricityM > b / 6 ? `Resultant outside middle third. ` : ''}
+                      {design.qMaxKPa > max_sbc ? `Max Pressure exceeds SBC. ` : ''}
+                      {design.qMinKPa < 0 ? `Tension exists under base.` : ''}
                     </p>
                   )}
                 </div>
@@ -530,9 +487,9 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                     </div>
                     <div className="grid grid-cols-2 gap-3 mt-3">
                       <ResultCard title="Stem Mu (factored)" value={design.stemMuKNmPerM.toFixed(1)} unit="kNm/m" variant="neutral" />
-                      <ResultCard title="Stem Ast" value={design.stemAstMm2PerM.toFixed(0)} unit="mm²/m" variant={design.stemOk ? "neutral" : "warning"} />
-                      <ResultCard title="Toe Mu / Ast" value={`${design.toeMuKNmPerM.toFixed(1)} / ${design.toeAstMm2PerM.toFixed(0)}`} unit="kNm/m · mm²/m" variant="neutral" />
-                      <ResultCard title="Heel Mu / Ast" value={`${design.heelMuKNmPerM.toFixed(1)} / ${design.heelAstMm2PerM.toFixed(0)}`} unit="kNm/m · mm²/m" variant="neutral" />
+                      <ResultCard title="Stem Ast" value={Number.isFinite(design.stemAstMm2PerM) ? design.stemAstMm2PerM.toFixed(0) : "—"} unit="mm²/m" variant={design.stemOk ? "neutral" : "warning"} />
+                      <ResultCard title="Toe Mu / Ast" value={`${design.toeMuKNmPerM.toFixed(1)} / ${Number.isFinite(design.toeAstMm2PerM) ? design.toeAstMm2PerM.toFixed(0) : "—"}`} unit="kNm/m · mm²/m" variant="neutral" />
+                      <ResultCard title="Heel Mu / Ast" value={`${design.heelMuKNmPerM.toFixed(1)} / ${Number.isFinite(design.heelAstMm2PerM) ? design.heelAstMm2PerM.toFixed(0) : "—"}`} unit="kNm/m · mm²/m" variant="neutral" />
                       <ResultCard title="Total cost" value={design.totalCost == null ? "—" : design.totalCost.toLocaleString("en-US")} unit={table.currency} variant="neutral" />
                       <ResultCard title="Ka / Kp" value={`${design.ka.toFixed(3)} / ${design.kp.toFixed(2)}`} unit="" variant="neutral" />
                     </div>
@@ -545,7 +502,7 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
                 </div>
               </MaterialSummary>
             </div>
-            <StructuralExportBar title="Retaining Wall (IS 456)" summaryText={`Retaining wall H=${h} m, L=${l} m, base ${b} m; FS sliding ${design.fsSliding.toFixed(2)} (≥1.5 ${design.slidingOk ? "PASS" : "FAIL"}), FS overturning ${design.fsOverturning.toFixed(2)} (≥2.0), qmax ${design.qMaxKPa.toFixed(1)} kPa; stem Ast ${design.stemAstMm2PerM.toFixed(0)} mm²/m; concrete ${totalConcrete.toFixed(2)} m³, steel ${totalSteel.toFixed(1)} kg (stem ${design.stemSteelKg.toFixed(0)} + base ${design.baseSteelKg.toFixed(0)}).`}
+            <StructuralExportBar title="Retaining Wall (IS 456)" summaryText={`Retaining wall H=${h} m, L=${l} m, base ${b} m; FS sliding ${design.fsSliding.toFixed(2)} (≥1.5 ${design.slidingOk ? "PASS" : "FAIL"}), FS overturning ${design.fsOverturning.toFixed(2)} (≥2.0), qmax ${design.qMaxKPa.toFixed(1)} kPa; stem Ast ${Number.isFinite(design.stemAstMm2PerM) ? design.stemAstMm2PerM.toFixed(0) : "—"} mm²/m; concrete ${totalConcrete.toFixed(2)} m³, steel ${totalSteel.toFixed(1)} kg (stem ${design.stemSteelKg.toFixed(0)} + base ${design.baseSteelKg.toFixed(0)}).`}
               boqItems={[
                 { description: `Cement for retaining wall (${mix})`, quantity: design.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
                 { description: "Sand for retaining wall concrete", quantity: design.materials.sandCft, unit: "cft", rate: rates.sandPerCft ?? 0 },

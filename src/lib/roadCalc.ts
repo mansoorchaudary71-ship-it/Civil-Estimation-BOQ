@@ -29,10 +29,14 @@ export function irc37Guidance(cbrPct: number, msa: number): string {
   if (msa <= 30) return "Medium traffic (5–30 MSA): GSB + WMM + DBM + BC per IRC:37 — guidance only.";
   return "Heavy traffic (>30 MSA): full IRC:37 crust with DBM + BC — guidance only; design by a pavement engineer.";
 }
+/** Worked layers rebuilt from ONE consistent 2:1 side slope with continuous
+ * stacking (each layer's top = the layer above's bottom). The old fixture
+ * had gaps (WMM bottom 11.14 m vs GSB top 11.8 m; GSB bottom 12.04 m vs
+ * subgrade top 13.2 m) and implied a different slope per layer. */
 export const ROAD_WORKED_LAYERS: PavementLayer[] = [
   { name: "BC", thicknessMm: 40, topWidthM: 7.0, bottomWidthM: 7.16, densityTM3: 2.4 },
   { name: "DBM", thicknessMm: 90, topWidthM: 7.16, bottomWidthM: 7.52, densityTM3: 2.35 },
-  { name: "WMM", thicknessMm: 250, topWidthM: 10.9, bottomWidthM: 11.14, densityTM3: 2.25 },
-  { name: "GSB", thicknessMm: 200, topWidthM: 11.8, bottomWidthM: 12.04, densityTM3: 2.1 },
-  { name: "Subgrade", thicknessMm: 500, topWidthM: 13.2, bottomWidthM: 13.44, densityTM3: 1.8 },
+  { name: "WMM", thicknessMm: 250, topWidthM: 7.52, bottomWidthM: 8.52, densityTM3: 2.25 },
+  { name: "GSB", thicknessMm: 200, topWidthM: 8.52, bottomWidthM: 9.32, densityTM3: 2.1 },
+  { name: "Subgrade", thicknessMm: 500, topWidthM: 9.32, bottomWidthM: 11.32, densityTM3: 1.8 },
 ];

@@ -158,7 +158,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                   onClick={() => setConstType("premium")}
                   className={`p-3 rounded-2xl border-2 text-left transition-all ${constType === "premium" ? 'border-ink bg-accent-50  text-accent-800 ' : 'border-ui-borderSubtle text-txt-secondary  hover:border-ui-borderDefault'}`}
                 >
-                  <div className="font-bold text-sm rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Premium / Luxury</div>
+                  <div className="font-bold text-sm rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">Premium</div>
                   <div className="text-xs opacity-70 mt-0.5">High-end imported finishes</div>
                 </Button>
                 <Button
@@ -270,21 +270,21 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                       <div className="flex items-center gap-3"><div className="w-full w-3 h-3 rounded-full bg-surface-default/70 backdrop-blur-md border border-white/20 shadow-brand-sm overflow-hidden" /> <span className="font-semibold text-txt-secondary">Steel / Rebar</span></div>
                       <div className="flex flex-col items-end gap-1">
                         <div className="font-bold text-txt-primary">{results.materials.steelKgMin.toLocaleString()}–{results.materials.steelKgMax.toLocaleString()} kg</div>
-                        <Button onClick={() => onNavigate && onNavigate("steel_calculator")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact weight <ArrowRight size={10} /></Button>
+                        <Button onClick={() => onNavigate && onNavigate("metal-weight")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact weight <ArrowRight size={10} /></Button>
                       </div>
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-2xl bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-secondary-400" /> <span className="font-semibold text-txt-secondary">Cement</span></div>
                       <div className="flex flex-col items-end gap-1">
                         <div className="font-bold text-txt-primary">{results.materials.cementBagsMin.toLocaleString()}–{results.materials.cementBagsMax.toLocaleString()} bags</div>
-                        <Button onClick={() => onNavigate && onNavigate("volume")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact bags <ArrowRight size={10} /></Button>
+                        <Button onClick={() => onNavigate && onNavigate("volume-estimator")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact bags <ArrowRight size={10} /></Button>
                       </div>
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-2xl bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
                       <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-ink" /> <span className="font-semibold text-txt-secondary">Bricks / Blocks</span></div>
                       <div className="flex flex-col items-end gap-1">
                         <div className="font-bold text-txt-primary">{results.materials.bricksMin.toLocaleString()}–{results.materials.bricksMax.toLocaleString()} nos</div>
-                        <Button onClick={() => onNavigate && onNavigate("wall_estimator")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact bricks <ArrowRight size={10} /></Button>
+                        <Button onClick={() => onNavigate && onNavigate("brick-calculator")} className="text-xs text-accent-800 hover:text-accent-800 underline flex items-center gap-1">Calculate exact bricks <ArrowRight size={10} /></Button>
                       </div>
                     </div>
                     {constType !== "grey" && (
@@ -304,7 +304,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                 <div>
                   <h4 className="font-bold text-accent-800 mb-1">Rough Estimation Disclaimer</h4>
                   <p className="text-sm text-accent-800 leading-relaxed">
-                    This is a highly simplified thumb-rule estimate designed for rapid preliminary budgeting under standard soil and foundation conditions. Variations in foundation depth, structural design (spans), and imported finishes will alter actual costs. Use the detailed BOQ Generator for formal project estimates.
+                    Disclaimer: This estimate is algorithmically generated based on benchmark rates and standard assumptions. It should not be used as a substitute for a professional BOQ certified by a licensed structural engineer or quantity surveyor.
                   </p>
                 </div>
               </div>
@@ -328,7 +328,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
       </div>
     
       <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 text-sm text-txt-secondary">
-        Rates: grey Rs {QUICK_RATES[constType].grey.toLocaleString()}/sqft + finish Rs {QUICK_RATES[constType].finish.toLocaleString()}/sqft (Lahore base, {RATES_LAST_UPDATED}; {RATE_SOURCE}). City multiplier {CITY_MULTIPLIERS[location].label} ×{CITY_MULTIPLIERS[location].multiplier}. {areaUnit === "marla" ? `Marla standard: ${marlaStandard === "society225" ? "225 sqft (society/DHA/Bahria)" : "272.25 sqft (Punjab revenue)"} — the other standard changes this estimate by ~17%.` : ""}
+        Rates: grey Rs {QUICK_RATES[constType].grey.toLocaleString()}/sqft + finish Rs {QUICK_RATES[constType].finish.toLocaleString()}/sqft (Lahore base, {RATES_LAST_UPDATED}; {RATE_SOURCE}). City multiplier {CITY_MULTIPLIERS[location].label} ×{CITY_MULTIPLIERS[location].multiplier}. Covered area uses 100% plot coverage per floor — the Pakistan Cost Calculator uses 75%, so the same plot gives a larger area and total here. {areaUnit === "marla" ? `Marla standard: ${marlaStandard === "society225" ? "225 sqft (society/DHA/Bahria)" : "272.25 sqft (Punjab revenue)"} — the other standard changes this estimate by ~17%.` : ""}
         {validationError && <span className="block text-red-600 font-semibold mt-1">{validationError}</span>}
       </div>
       <CalculationHistory calculatorId="quickroughestimation_tool" currentInputs={{ areaInput, areaUnit, marlaStandard, floors, constType, location, basement }} currentResults={results ? { totalCost: results.totalCost } : undefined} />

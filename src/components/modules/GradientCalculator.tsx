@@ -3,7 +3,7 @@ import React, { useState, useMemo } from "react";
 import { ArrowRight, Triangle, Activity, CheckCircle2, AlertTriangle, Route } from "lucide-react";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { NumberInput } from "../ui/NumberInput";
-import { verticalCurve, ssdForSpeed } from "../../lib/gradientCalc";
+import { verticalCurve, ssdForSpeed, curveHighLowPoint, stationElevations } from "../../lib/gradientCalc";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 
@@ -27,6 +27,8 @@ export default function GradientCalculator() {
   const [g2, setG2] = useState<number | "">(-2.0); // %
   const [designSpeed, setDesignSpeed] = useState<number | "">(80); // km/h
   const [ssdOverride, setSsdOverride] = useState<number | "">(""); // m (blank = SSD table by speed)
+  const [pvcChainage, setPvcChainage] = useState<number | "">(0); // m — start of curve
+  const [pvcElevation, setPvcElevation] = useState<number | "">(100.0); // m
 
   const longitudinalResults = useMemo(() => {
     const ch1 = Number(startChainage) || 0;
@@ -69,11 +71,28 @@ export default function GradientCalculator() {
     const v = Number(designSpeed) || 0;
     try {
       const vc = verticalCurve(grade1, grade2, v, ssdOverride === "" ? undefined : Number(ssdOverride));
-      return { A: vc.aPct, type: vc.type, K: vc.k, requiredLength: vc.lengthM, ssd: vc.ssdM, branch: vc.branch, drainageFlag: vc.drainageFlag };
+      return { A: vc.aPct, type: vc.type, K: vc.k, requiredLength: vc.lengthM, ssd: vc.ssdM, branch: vc.branch, drainageFlag: vc.drainageFlag, minLengthComfortM: vc.minLengthComfortM };
     } catch {
-      return { A: Math.abs(grade1 - grade2), type: grade1 > grade2 ? "Crest" : "Sag", K: 0, requiredLength: 0, ssd: ssdForSpeed(v || 80), branch: "Check inputs (grade <= 12%, speed 20-120 km/h).", drainageFlag: false };
+      return { A: Math.abs(grade1 - grade2), type: grade1 > grade2 ? "Crest" : "Sag", K: 0, requiredLength: 0, ssd: ssdForSpeed(v || 80), branch: "Check inputs (grade <= 12%, speed 20-120 km/h).", drainageFlag: false, minLengthComfortM: null as number | null };
     }
   }, [g1, g2, designSpeed, ssdOverride]);
+
+  // Curve profile: high/low point + station elevations every 10 m
+  // (engine helpers existed with no UI — the curve length alone does not
+  // tell the surveyor where to set out).
+  const vcProfile = useMemo(() => {
+    const L = vcResults.requiredLength;
+    const grade1 = Number(g1) || 0;
+    const grade2 = Number(g2) || 0;
+    if (!L || L <= 0) return null;
+    const hl = curveHighLowPoint(grade1, grade2, L);
+    const stations = stationElevations(Number(pvcChainage) || 0, Number(pvcElevation) || 0, grade1, grade2, L, 10);
+    // hl.eM is the mid-curve offset E = A·L/800, NOT the high/low elevation —
+    // the elevation at the turning point is the parabola value at x.
+    const hlElev = hl.xFromPvcM == null ? null
+      : (Number(pvcElevation) || 0) + (grade1 / 100) * hl.xFromPvcM + (((grade2 - grade1) / 100) * hl.xFromPvcM * hl.xFromPvcM) / (2 * L);
+    return { hl, hlElev, stations };
+  }, [vcResults.requiredLength, g1, g2, pvcChainage, pvcElevation]);
 
 
   return (
@@ -149,6 +168,8 @@ export default function GradientCalculator() {
                             <div className="col-span-2">
                                <NumberInput label="Design Speed (V)" unit="km/h" value={designSpeed} onChange={setDesignSpeed} />
                                <NumberInput label="Stopping Sight Distance (SSD) — blank = table value" unit="m" value={ssdOverride} onChange={setSsdOverride} />
+                               <NumberInput label="PVC Chainage (start of curve)" unit="m" value={pvcChainage} onChange={setPvcChainage} />
+                               <NumberInput label="PVC Elevation" unit="m" value={pvcElevation} onChange={setPvcElevation} />
                             </div>
                         </div>
                         <p className="mt-4 text-base font-normal text-txt-secondary leading-relaxed">
@@ -222,7 +243,34 @@ export default function GradientCalculator() {
                             <ResultCard title="Algebraic Diff (A)" value={vcResults.A.toFixed(1)} unit="%" variant="neutral" />
                             <ResultCard title="K-Value" value={vcResults.K.toFixed(1)} unit="m/%" variant="neutral" />
                             <ResultCard title="Stopping Sight Distance" value={vcResults.ssd.toFixed(0)} unit="m" variant="neutral" />
+                            {vcResults.minLengthComfortM != null && <ResultCard title="Min Length (Comfort)" value={vcResults.minLengthComfortM.toFixed(1)} unit="m" variant="neutral" />}
+                            {vcResults.type === "Sag" && <ResultCard title="Drainage" value={vcResults.drainageFlag ? "Check" : "OK"} unit={vcResults.drainageFlag ? "K > 51 — flat sag, ponding risk" : "K ≤ 51"} variant={vcResults.drainageFlag ? "warning" : "success"} />}
+                            {vcProfile && vcProfile.hl.xFromPvcM != null && vcProfile.hlElev != null && (
+                              <ResultCard title={vcResults.type === "Crest" ? "High Point" : "Low Point"} value={`${(vcProfile.hl.xFromPvcM + (Number(pvcChainage) || 0)).toFixed(1)}`} unit={`m chainage · ${vcProfile.hlElev.toFixed(2)} m elev.`} variant="neutral" />
+                            )}
                         </div>
+
+                        {vcProfile && (
+                          <div className="mt-6 overflow-x-auto">
+                            <h4 className="text-base font-medium text-txt-primary mb-2">Curve Profile — elevations every 10 m</h4>
+                            <table className="w-full text-left text-sm whitespace-nowrap">
+                              <thead>
+                                <tr className="border-b border-ui-borderSubtle text-txt-tertiary">
+                                  <th className="pb-2 px-2 font-medium">Chainage (m)</th>
+                                  <th className="pb-2 px-2 font-medium">Elevation (m)</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {vcProfile.stations.map((s) => (
+                                  <tr key={s.chainage} className="border-b border-ui-borderSubtle/50 last:border-0">
+                                    <td className="py-1.5 px-2 font-medium">{s.chainage.toFixed(1)}</td>
+                                    <td className="py-1.5 px-2">{s.elevationM.toFixed(3)}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
                         
                         <div className="mt-6 flex flex-col gap-3">
                              <div className={`p-4 rounded-2xl border flex items-start justify-between ${vcResults.A > 0.5 ? "bg-ui-success border-ui-successBorder" : "bg-surface-hover border-ui-borderSubtle"}`}>

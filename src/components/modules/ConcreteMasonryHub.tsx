@@ -43,7 +43,7 @@ export default function ConcreteMasonryHub({ isEmbedded = false, onNavigate }: C
       {!isEmbedded && (
         <>
           <SEO 
-            title="Concrete & Masonry Hub | EstiPro"
+            title="Concrete & Masonry Hub | Civil Estimation Pro"
             description="Unified hub for all concrete and masonry calculations: slabs, columns, foundations, bricks, blocks, and plaster calculations."
           />
           

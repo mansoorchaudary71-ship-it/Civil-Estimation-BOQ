@@ -156,7 +156,11 @@ export default function ReinforcementVisualizer() {
     const scale = 3;
     const paddingX = 100;
     const paddingY = 80;
-    const vWidth = width + paddingX * 2;
+    // Same geometry as the rendered SVG's viewBox (slab width is capped
+    // at 1200 mm there too) — the old code used the raw width, so a slab
+    // PNG was drawn at the wrong aspect.
+    const svgWidthMm = type === "Slab" ? Math.min(width, 1200) : width;
+    const vWidth = svgWidthMm + paddingX * 2;
     const vHeight = depth + paddingY * 2;
     canvas.width = vWidth * scale;
     canvas.height = vHeight * scale;
@@ -165,14 +169,22 @@ export default function ReinforcementVisualizer() {
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.scale(scale, scale);
-      ctx.drawImage(img, 0, 0);
+      // drawImage with explicit destination size: the serialised SVG has
+      // a viewBox but no width/height, so without this the image rasterises
+      // at the browser's 300×150 default and the PNG comes out blank.
+      ctx.drawImage(img, 0, 0, vWidth, vHeight);
       const pngUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = `reinforcement_${type.toLowerCase()}.png`;
       link.href = pngUrl;
       link.click();
     };
-    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+    // Give the SVG explicit width/height (in px) so the rasteriser sizes
+    // it to the viewBox instead of its 300×150 default.
+    const sizedSvg = svgData.includes('width="')
+      ? svgData
+      : svgData.replace("<svg ", `<svg width="${vWidth}" height="${vHeight}" `);
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(sizedSvg)));
   };
 
   const summaryText = () => {
@@ -428,6 +440,7 @@ export default function ReinforcementVisualizer() {
                         <select id="reinf-grade" value={grade} onChange={(e) => setGrade(e.target.value)} className={selectCls}>
                           {BAR_GRADES.map((g) => <option key={g.id} value={g.id}>{g.label} — {g.standard}</option>)}
                         </select>
+                        <p className="text-xs text-txt-secondary mt-1">Display only — the quantity maths does not use it.</p>
                       </div>
                       <div>
                         <label className={labelCls} htmlFor="reinf-conc">Concrete Grade</label>

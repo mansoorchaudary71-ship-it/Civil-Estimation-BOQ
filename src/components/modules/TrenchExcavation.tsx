@@ -262,6 +262,18 @@ export default function TrenchExcavationEstimator() {
                          variant="neutral"
                        />
                      )}
+                     <ResultCard
+                       title="Backfill Volume"
+                       value={Math.max(0, totalExcavationVolume - (D_pipe > 0 ? Math.PI * Math.pow(D_pipe / 2, 2) * L : 0) - beddingMaterialVolume).toFixed(2)}
+                       unit={unitV || ""}
+                       variant="info"
+                     />
+                     <ResultCard
+                       title="Spoil to Cart Away (loose, +15% swell)"
+                       value={(totalExcavationVolume * 1.15).toFixed(2)}
+                       unit={unitV || ""}
+                       variant="warning"
+                     />
                    </div>
                   </MaterialSummary>
               </div>

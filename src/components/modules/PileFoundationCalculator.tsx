@@ -79,7 +79,7 @@ export default function PileFoundationCalculator() {
                 <NumberInput label="Factor of safety" value={fos} onChange={setFos} requirePositive />
                 <NumberInput label="Total column load (P)" unit="kN" value={totalLoad} onChange={setTotalLoad} requirePositive />
               </div>
-              <p className="text-xs text-txt-tertiary mt-2">Single uniform soil layer is used here. For layered soils, split the length into layers in the engine (layers array) — the α/β methods sum each layer separately.</p>
+              <p className="text-xs text-txt-tertiary mt-2">Single uniform soil layer is used here. For layered soils, split the length into layers in the engine (layers array) — the α/β methods sum each layer separately. Sand β defaults to 0.35, a conservative bored-pile value (β = tan(φ − 5°) ≈ 0.51 at φ = 32°); bored piles lose shaft friction to borehole softening, so the lower value is deliberate.</p>
             </div>
             <div>
               <h3 className="font-bold text-txt-primary mb-4 pb-2 border-b border-border-color">Group &amp; Cap</h3>
@@ -103,7 +103,8 @@ export default function PileFoundationCalculator() {
                 <ResultCard title="End bearing (Qb)" value={results.qbKN.toFixed(0)} unit="kN" variant="neutral" />
                 <ResultCard title="Skin friction (Qs)" value={results.qsKN.toFixed(0)} unit="kN" variant="neutral" />
                 <ResultCard title="Ultimate (Qu)" value={results.quKN.toFixed(0)} unit="kN" variant="neutral" />
-                <ResultCard title="Piles required" value={String(results.requiredPiles)} unit="nos" variant="neutral" />
+                <ResultCard title="Piles required" value={String(results.requiredPiles)} unit="nos" variant={results.requiredPiles <= (Number(rows) || 1) * (Number(cols) || 1) ? "neutral" : "warning"} />
+                <ResultCard title="Piles installed (m × n)" value={String((Number(rows) || 1) * (Number(cols) || 1))} unit="nos" variant="neutral" />
               </div>
             </MaterialSummary>
             <MaterialSummary title="Group Capacity" totalLabel="Group allowable capacity" totalValue={results.groupCapacityKN.toFixed(0)} totalUnit="kN" relatedToolIds={[]}>
@@ -113,7 +114,7 @@ export default function PileFoundationCalculator() {
                 <ResultCard title="Allowable per pile" value={results.groupCapacityPerPileKN.toFixed(0)} unit="kN" variant="neutral" />
                 <ResultCard title="Settlement ≈" value={results.settlementMm.toFixed(1)} unit="mm" variant="neutral" />
               </div>
-              <p className="text-sm text-txt-secondary mt-3">Group ultimate {results.groupUltimateKN.toFixed(0)} kN · allowable {results.groupCapacityKN.toFixed(0)} kN vs load {Number(totalLoad) || 0} kN — <strong>{results.groupCapacityKN >= (Number(totalLoad) || 0) ? "PASS" : "FAIL"}</strong>.</p>
+              <p className="text-sm text-txt-secondary mt-3">Group ultimate {results.groupUltimateKN.toFixed(0)} kN · allowable {results.groupCapacityKN.toFixed(0)} kN vs load {Number(totalLoad) || 0} kN — <strong>{results.groupCapacityKN >= (Number(totalLoad) || 0) ? "PASS" : "FAIL"}</strong>. Concrete and steel below are costed on the {(Number(rows) || 1) * (Number(cols) || 1)} installed piles, not the {results.requiredPiles} required — the cap is sized for the installed group.</p>
               {results.blockCapacityKN != null && <p className="text-sm text-txt-secondary mt-3">Block failure capacity: {results.blockCapacityKN.toFixed(0)} kN.</p>}
             </MaterialSummary>
             <MaterialSummary title="Quantities & Cost" totalLabel="Total cost" totalValue={results.totalCost == null ? "—" : results.totalCost.toLocaleString("en-US")} totalUnit={table.currency} relatedToolIds={[]}>
@@ -131,7 +132,7 @@ export default function PileFoundationCalculator() {
             </MaterialSummary>
             <StructuralExportBar title="Pile Foundation (IS 2911)" summaryText={summary}
               boqItems={[
-                { description: `Cement for ${results.requiredPiles} piles + cap`, quantity: results.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
+                { description: `Cement for ${(Number(rows) || 1) * (Number(cols) || 1)} installed piles + cap`, quantity: results.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
                 { description: "Sand for pile + cap concrete", quantity: results.materials.sandCft, unit: "cft", rate: rates.sandPerCft ?? 0 },
                 { description: "Aggregate for pile + cap concrete", quantity: results.materials.aggCft, unit: "cft", rate: rates.crushPerCft ?? 0 },
                 { description: "Steel reinforcement for piles + cap", quantity: results.totalSteelKg, unit: "kg", rate: rates.steelPerKg ?? 0 },

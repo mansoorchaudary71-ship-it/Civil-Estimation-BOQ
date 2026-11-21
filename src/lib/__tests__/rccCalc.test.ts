@@ -63,12 +63,12 @@ test("REGRESSION: column exact BBS must never be 2,001 bars / 7,105.89 kg", () =
   assert.ok(r.bbs.every((b) => b.count < 100), "no row may have hundreds of bars");
   assert.ok(r.steelKg < 200, `total steel ${r.steelKg} kg must be sane for one column`);
   assert.ok(r.steelKg > 20, `total steel ${r.steelKg} kg must include stirrups`);
-  // stirrups: ceil(3000/150)+1 = 21, detailed length 1244 mm for 300x450? here 300x300 cover 40:
-  // A = B = 220 -> 2x440 + 160 - 96 = 944 mm
+  // stirrups: ceil(3000/150)+1 = 21, detailed length 912 mm for 300x300 cover 40:
+  // A = B = 300 − 80 − 8 = 212 -> 2x424 + 160 - 96 = 912 mm (old code: 944 with A=B=220)
   const stirrupRow = r.bbs.find((b) => b.description.startsWith("Stirrups"));
   assert.equal(stirrupRow!.count, 21);
-  assert.equal(r.stirrupLengthDetailedMm, 944);
-  assert.equal(r.stirrupLengthSimpleMm, 1072); // 2x440 + 24x8 = 1072 (labelled approx)
+  assert.equal(r.stirrupLengthDetailedMm, 912);
+  assert.equal(r.stirrupLengthSimpleMm, 1040); // 2x424 + 24x8 = 1040 (labelled approx)
 });
 
 test("beam 4 m, 230x450, thumb 1.5%: wet 0.414, shuttering 4.52, steel 48.75", () => {
@@ -99,7 +99,7 @@ test("footing: rectangular base + frustum (AGENTS.md formula)", () => {
   const r = calcRccElement(el);
   // base 1.5x1.5x0.3 = 0.675; frustum 0.3/3 x (2.25 + 0.36 + sqrt(0.81)) = 0.351
   approx(r.wetVolumeM3, 1.026, 1e-9);
-  approx(r.shutteringM2, 1.8, 1e-9); // 2 x (1.5+1.5) x 0.3, base sides only
+  approx(r.shutteringM2, 4.07, 0.05); // base sides 1.80 + sloped faces 2.27 (old code: base sides only, 1.80)
 });
 
 test("stirrup lengths: detailed is canonical, simple is the labelled approximation", () => {
@@ -133,7 +133,7 @@ test("materials: 15 m3 wet, 1:2:4, 5% wastage — water from UNROUNDED cement (2
   assert.ok(m.waterLiters < 2500);
 });
 
-test("slab defaults (two-way 5x4x150): wet 3.00, dry 4.62, steel ~209.8 kg (not 210.71)", () => {
+test("slab defaults (two-way 5x4x150): wet 3.00, dry 4.85, steel ~209.0 kg (not 210.71)", () => {
   const r = calcSlab({
     slabType: "two-way",
     lyM: 5,
@@ -149,17 +149,20 @@ test("slab defaults (two-way 5x4x150): wet 3.00, dry 4.62, steel ~209.8 kg (not 
     wastagePct: 5,
   });
   assert.equal(r.wetVolumeM3, 3);
-  assert.equal(r.dryVolumeM3, 4.62);
+  // Dry volume now includes wastage (3 x 1.54 x 1.05 = 4.85) — the old
+  // 4.62 skipped it, understating cement/sand/agg.
+  approx(r.dryVolumeM3, 4.851, 0.001);
   assert.equal(r.shortBarsCount, 35);
   assert.equal(r.longBarsCount, 28);
-  // Correct method: d = D - (cover + phi/2), 0.42d crank on alternate bars only.
-  // Spec §4.3 says "~207 kg" (loose); the exact hand-computed value is 209.8 kg.
-  approx(r.totalSteelKg, 209.8, 0.5);
+  // Correct method: d = D - (cover + phi/2), crank 0.42·h − 2φ per crank
+  // (h = thickness − 2·cover − φ) on alternate bars only. The old 0.42·d
+  // crank overstated each crank by ~35 mm: steel 209.8 -> 209.0 kg.
+  approx(r.totalSteelKg, 209.0, 0.5);
   assert.ok(r.totalSteelKg < 210.71, "must be below the old wrong 210.71 kg");
   assert.deepEqual(r.errors, []);
 });
 
-test("slab one-way defaults: steel 208.6 kg, no crank", () => {
+test("slab one-way defaults: steel 208.8 kg, main direction cranked", () => {
   const r = calcSlab({
     slabType: "one-way",
     lyM: 5,
@@ -174,7 +177,13 @@ test("slab one-way defaults: steel 208.6 kg, no crank", () => {
     riggingRadiusM: 5,
     wastagePct: 5,
   });
-  approx(r.totalSteelKg, 208.6, 0.5);
+  approx(r.totalSteelKg, 208.8, 0.5);
+  // Main (short-span) bars are cranked at the supports — the old code
+  // passed cranked=false for both directions. Short bars total 138.89 m
+  // (17 of 35 cranked, +17.16 mm each); distribution bars stay straight
+  // at 28 x 4.96 = 138.88 m.
+  approx(r.shortBarsTotalLengthM, 138.89, 0.05);
+  approx(r.longBarsTotalLengthM, 138.88, 0.05);
 });
 
 test("REGRESSION: crane capacity is 10.80 t and load moment 54.0 t.m — separate numbers", () => {

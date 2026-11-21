@@ -1,5 +1,5 @@
 import { Button } from './/Button';
-import React from "react";
+import React, { useRef } from "react";
 
 
 export type TabItem = {
@@ -19,6 +19,32 @@ export function UniversalTabs({
   onTabChange: (id: string) => void;
   className?: string;
 }) {
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const focusTab = (index: number) => {
+    const next = (index + tabs.length) % tabs.length;
+    onTabChange(tabs[next].id);
+    tabRefs.current[next]?.focus();
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent, index: number) => {
+    // WAI-ARIA tabs pattern: arrows move between tabs (and activate),
+    // Home/End jump to the first/last tab.
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      focusTab(index + 1);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      focusTab(index - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      focusTab(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      focusTab(tabs.length - 1);
+    }
+  };
+
   const COLOR_PALETTE = [
     {
       text: "text-ui-errorText dark:text-ui-errorText",
@@ -50,7 +76,7 @@ export function UniversalTabs({
     <div
       className={`w-full overflow-x-auto pb-3 md:pb-4 scroll-smooth ${className}`}
     >
-      <div className="flex px-1 min-w-max border-b border-ui-borderSubtle dark:border-ink">
+      <div role="tablist" aria-label="Calculator views" className="flex px-1 min-w-max border-b border-ui-borderSubtle dark:border-ink">
         {tabs.map((tab, index) => {
           const isActive = activeTab === tab.id;
           const colorTheme = COLOR_PALETTE[index % COLOR_PALETTE.length];
@@ -58,7 +84,14 @@ export function UniversalTabs({
           return (
             <Button
               key={tab.id}
+              ref={(el) => { tabRefs.current[index] = el; }}
+              role="tab"
+              id={`universal-tab-${tab.id}`}
+              aria-selected={isActive}
+              aria-controls={`universal-tabpanel-${tab.id}`}
+              tabIndex={isActive ? 0 : -1}
               onClick={() => onTabChange(tab.id)}
+              onKeyDown={(e) => onKeyDown(e, index)}
               className={`
                 relative flex items-center justify-center gap-1.5 sm:gap-2.5 px-3 py-2.5 sm:px-5 md:px-6 sm:py-3 text-xs sm:text-xs md:text-sm font-bold transition-all whitespace-nowrap
                 rounded-t-xl rounded-b-none

@@ -42,7 +42,7 @@ export const PRESET_LABELS: Record<MixPreset, string> = {
 /** Default bitumen content % of mix (MoRTH minimum shown in the UI). */
 export const PRESET_BITUMEN: Record<MixPreset, { min: number; typical: number }> = {
   "gsb-i": { min: 0, typical: 0 },
-  "dbm-1": { min: 4.5, typical: 4.5 },
+  "dbm-1": { min: 4.0, typical: 4.5 },
   "dbm-2": { min: 4.5, typical: 4.5 },
   sma: { min: 5.8, typical: 5.8 },
   "bc-1": { min: 5.0, typical: 5.2 },
@@ -56,31 +56,39 @@ export const SPECIFICATIONS: Record<MixPreset, SieveSpec[]> = {
     { sieve: 26.5, min: 55, max: 90 },
     { sieve: 19, min: null, max: null },
     { sieve: 9.5, min: 35, max: 65 },
-    { sieve: 4.75, min: 25, max: 50 },
+    { sieve: 4.75, min: 25, max: 55 },
     { sieve: 2.36, min: null, max: null },
     { sieve: 0.3, min: null, max: null },
-    { sieve: 0.075, min: 0, max: 10 },
+    { sieve: 0.075, min: 0, max: 5 },
   ],
+  // DBM-1 = MoRTH Table 500-10, Grading 1 (37.5 mm NMAS): 37.5 mm 95–100,
+  // 26.5 mm 63–93, 13.2 mm 55–75, 4.75 mm 38–54, 2.36 mm 28–42,
+  // 0.3 mm 7–21, 0.075 mm 2–8. No spec at 19 or 9.5 mm (null, not a band).
+  // The old envelope was shifted one row down (the 37.5 mm row's 100 landed
+  // on 26.5 mm), so a blend at 100% passing 26.5 mm passed in-tool but
+  // fails MoRTH (63–93%).
   "dbm-1": [
     { sieve: 75, min: null, max: null },
     { sieve: 53, min: null, max: null },
-    { sieve: 26.5, min: 100, max: 100 },
-    { sieve: 19, min: 90, max: 100 },
-    { sieve: 9.5, min: 56, max: 80 },
-    { sieve: 4.75, min: 29, max: 59 },
-    { sieve: 2.36, min: 19, max: 45 },
-    { sieve: 0.3, min: 5, max: 17 },
-    { sieve: 0.075, min: 1, max: 7 },
+    { sieve: 26.5, min: 63, max: 93 },
+    { sieve: 19, min: null, max: null },
+    { sieve: 9.5, min: null, max: null },
+    { sieve: 4.75, min: 38, max: 54 },
+    { sieve: 2.36, min: 28, max: 42 },
+    { sieve: 0.3, min: 7, max: 21 },
+    { sieve: 0.075, min: 2, max: 8 },
   ],
+  // DBM-2 = MoRTH Table 500-10, Grading 2 (26.5 mm NMAS): no 9.5 mm row
+  // (the old 50–73 was invented) and 0.3 mm is 7–21 (old 7–18 was wrong).
   "dbm-2": [
     { sieve: 75, min: null, max: null },
     { sieve: 53, min: null, max: null },
     { sieve: 26.5, min: 90, max: 100 },
     { sieve: 19, min: 71, max: 95 },
-    { sieve: 9.5, min: 50, max: 73 },
+    { sieve: 9.5, min: null, max: null },
     { sieve: 4.75, min: 38, max: 54 },
     { sieve: 2.36, min: 28, max: 42 },
-    { sieve: 0.3, min: 7, max: 18 },
+    { sieve: 0.3, min: 7, max: 21 },
     { sieve: 0.075, min: 2, max: 8 },
   ],
   sma: [

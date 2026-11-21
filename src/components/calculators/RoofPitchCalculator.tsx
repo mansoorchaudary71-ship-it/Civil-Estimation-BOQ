@@ -297,8 +297,8 @@ export function RoofPitchCalculator() {
           {
             id: 1,
             label: "1. Run calculation",
-            theoretical: "Run = Span / 2",
-            applied: `Run = ${span} / 2 = ${result.runM.toFixed(2)} ${unitL}`,
+            theoretical: roofType === "mono" ? "Run = Span (mono-pitch: one slope spans the full width)" : "Run = Span / 2 (gable/hip: ridge at mid-span)",
+            applied: roofType === "mono" ? `Run = ${span} = ${result.runM.toFixed(2)} ${unitL}` : `Run = ${span} / 2 = ${result.runM.toFixed(2)} ${unitL}`,
           },
           {
             id: 2,

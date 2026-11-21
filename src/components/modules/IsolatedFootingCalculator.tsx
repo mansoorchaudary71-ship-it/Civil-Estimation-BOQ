@@ -171,8 +171,11 @@ export default function IsolatedFootingCalculator({
     sbcKNm2: parseFloat(sbc) || 0,
     fck: parseFloat(fck) || 25, fy: parseFloat(fy) || 500,
     momentXKNm: parseFloat(momentX) || 0, momentYKNm: parseFloat(momentY) || 0,
-    coverMm: cover, barDiaMm: parseFloat(diaX) || 12,
-    autoDesign, manualSpacingMm: parseFloat(spacingX) || 115,
+    coverMm: cover, barDiaMm: parseFloat(diaX) || 12, barDiaYMm: parseFloat(diaY) || 12,
+    autoDesign, manualSpacingMm: parseFloat(spacingX) || 115, manualSpacingYMm: parseFloat(spacingY) || 115,
+    topMesh: hasTopMesh,
+    topMeshDiaXMm: parseFloat(diaXTop) || 10, topMeshDiaYMm: parseFloat(diaYTop) || 10,
+    topMeshSpacingXMm: parseFloat(spacingXTop) || 200, topMeshSpacingYMm: parseFloat(spacingYTop) || 200,
     mix: mixRatios[mix] ?? { c: 1, s: 1.5, a: 3 },
     wastagePct: parseFloat(wastage) || 0,
     workingSpaceM: ws, excavationDepthM: parseFloat(excavationDepth) || 0,
@@ -182,48 +185,23 @@ export default function IsolatedFootingCalculator({
   const effSpacingX = design.spacingXMm;
   const effSpacingY = design.spacingYMm;
 
-  // Steel Reinforcement
-  // Length Direction (bars placed along Width)
-  const dX = parseFloat(diaX) || 0;
-  const barsX = Math.ceil((fW * 1000 - 2 * cover) / effSpacingX) + 1; // RULE: REBAR_SPACING_COUNT
-
-  // hook length based on bottom step depth for sloped/stepped, or total depth for rect
-  const edgeD = footingType === "rectangular" ? fD : Math.max(fD1, 0.15);
-  const hookL = edgeD * 1000 - 2 * cover;
-  const cutLengthX = fL * 1000 - 2 * cover + 2 * hookL;
-  const wtX = (Math.pow(dX, 2) / 162.28) * (cutLengthX / 1000) * barsX; // RULE: STEEL_WEIGHT_ESTIMATION
-
-  // Width Direction (bars placed along Length)
-  const dY = parseFloat(diaY) || 0;
-  const barsY = Math.ceil((fL * 1000 - 2 * cover) / effSpacingY) + 1;
-  const cutLengthY = fW * 1000 - 2 * cover + 2 * hookL;
-  const wtY = (Math.pow(dY, 2) / 162.28) * (cutLengthY / 1000) * barsY;
-
-  // Top Mesh
-  let wtXTop = 0;
-  let wtYTop = 0;
-  let barsXTop = 0;
-  let barsYTop = 0;
-  let cutLengthXTop = 0;
-  let cutLengthYTop = 0;
-  if (hasTopMesh) {
-    const topEdgeD = footingType === "rectangular" ? fD : fD1 + fD2;
-    const topHookL = topEdgeD * 1000 - 2 * cover;
-
-    const dXT = parseFloat(diaXTop) || 0;
-    const sXT = parseFloat(spacingXTop) || 150;
-    barsXTop = Math.ceil((fW * 1000 - 2 * cover) / sXT) + 1;
-    cutLengthXTop = fL * 1000 - 2 * cover + 2 * topHookL;
-    wtXTop = (Math.pow(dXT, 2) / 162.28) * (cutLengthXTop / 1000) * barsXTop;
-
-    const dYT = parseFloat(diaYTop) || 0;
-    const sYT = parseFloat(spacingYTop) || 150;
-    barsYTop = Math.ceil((fL * 1000 - 2 * cover) / sYT) + 1;
-    cutLengthYTop = fW * 1000 - 2 * cover + 2 * topHookL;
-    wtYTop = (Math.pow(dYT, 2) / 162.28) * (cutLengthYTop / 1000) * barsYTop;
-  }
-
-  const totalSteel = wtX + wtY + wtXTop + wtYTop;
+  // Steel comes from the engine (single source of truth) — the old code
+  // recomputed bars, cut lengths and weights locally, ignoring diaY and
+  // the top-mesh inputs the engine now handles. Bar-schedule figures
+  // below are design.barsX / design.cutLengthXMm etc.
+  const barsX = design.barsX;
+  const barsY = design.barsY;
+  const cutLengthX = design.cutLengthXMm;
+  const cutLengthY = design.cutLengthYMm;
+  const wtX = design.bottomSteelXKg;
+  const wtY = design.bottomSteelYKg;
+  const barsXTop = design.topBarsX;
+  const barsYTop = design.topBarsY;
+  const cutLengthXTop = design.topCutLengthXMm;
+  const cutLengthYTop = design.topCutLengthYMm;
+  const wtXTop = design.topSteelXKg;
+  const wtYTop = design.topSteelYKg;
+  const totalSteel = design.steelKg;
 
   const handleAiSafetyFactor = () => {
     let sf = 1.5;
@@ -794,7 +772,7 @@ export default function IsolatedFootingCalculator({
                         <NumberInput className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle text-txt-primary px-4 py-3 shadow-brand-sm" value={rates.crushPerCft ?? ""} onChange={(v) => setRate("crushPerCft", v === "" ? null : Number(v))} />
                       </InputGroup>
                     </div>
-                    <p className="text-xs text-txt-tertiary mt-3">Effective depth d = {design.dMm} mm (D − cover − φ/2). Auto-design derives spacing from Ast,req so the mesh can never be under-designed by a stale default — the old 12 mm @ 150 mm default (1,696 mm²) is replaced by 12 mm @ 115 mm with auto-design on.</p>
+                    <p className="text-xs text-txt-tertiary mt-3">Effective depth d = {design.dMm} mm (D − cover − φ/2). Auto-design derives spacing from Ast,req so the mesh can never be under-designed by a stale default — the spacing shown in the design results ({design.spacingXMm} / {design.spacingYMm} mm) is computed from the required steel, not from a fixed default.</p>
                   </div>
                 </Accordion>
               {/* Drawing & SBC Status */}
@@ -1116,12 +1094,13 @@ export default function IsolatedFootingCalculator({
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
                   <ResultCard title="Factored load Pu" value={design.puKN.toFixed(0)} unit="kN" variant="neutral" />
                   <ResultCard title="Bearing pressure qu" value={design.quKNm2.toFixed(0)} unit="kN/m²" variant="neutral" />
+                  <ResultCard title="Peak pressure qmax" value={design.qMaxKNm2.toFixed(0)} unit="kN/m²" variant={design.bearingOk ? "neutral" : "warning"} />
                   <ResultCard title="Punching τv" value={design.punchingTauVMpa.toFixed(2)} unit="MPa" variant={design.punchingOk ? "neutral" : "warning"} />
                   <ResultCard title="Punching allowable" value={design.punchingAllowMpa.toFixed(2)} unit="MPa" variant="neutral" />
                   <ResultCard title="One-way τv" value={design.oneWayTauVMpa.toFixed(2)} unit="MPa" variant={design.oneWayOk ? "neutral" : "warning"} />
                   <ResultCard title="One-way allowable" value={design.oneWayAllowMpa.toFixed(2)} unit="MPa" variant="neutral" />
                   <ResultCard title="Mu (X / Y)" value={`${design.muXKNm.toFixed(0)} / ${design.muYKNm.toFixed(0)}`} unit="kNm" variant="neutral" />
-                  <ResultCard title="Ast req (X / Y)" value={`${design.astXReqMm2.toFixed(0)} / ${design.astYReqMm2.toFixed(0)}`} unit="mm²" variant="neutral" />
+                  <ResultCard title="Ast req (X / Y)" value={`${Number.isFinite(design.astXReqMm2) ? design.astXReqMm2.toFixed(0) : "—"} / ${Number.isFinite(design.astYReqMm2) ? design.astYReqMm2.toFixed(0) : "—"}`} unit="mm²" variant="neutral" />
                   <ResultCard title="Ast provided (X)" value={design.astXProvidedMm2.toFixed(0)} unit="mm²" variant={design.flexureOk ? "neutral" : "warning"} />
                   <ResultCard title="Spacing X / Y" value={`${design.spacingXMm} / ${design.spacingYMm}`} unit="mm" variant="neutral" />
                   <ResultCard title="Development length Ld" value={design.ldMm.toFixed(0)} unit="mm" variant="neutral" />
@@ -1133,7 +1112,7 @@ export default function IsolatedFootingCalculator({
                   ))}
                 </div>
               </MaterialSummary>
-              <StructuralExportBar title="Isolated Footing (IS 456)" summaryText={`Isolated footing ${fL}×${fW} m, D=${totalD.toFixed(2)} m (${footingType}); Pu=${design.puKN.toFixed(0)} kN, qu=${design.quKNm2.toFixed(0)} kN/m²; punching τv=${design.punchingTauVMpa.toFixed(2)} MPa ≤ ${design.punchingAllowMpa.toFixed(2)} (${design.punchingOk ? "PASS" : "FAIL"}); one-way τv=${design.oneWayTauVMpa.toFixed(2)} MPa (${design.oneWayOk ? "PASS" : "FAIL"}); Ast req ${design.astXReqMm2.toFixed(0)} mm², provided ${design.astXProvidedMm2.toFixed(0)} mm² @ ${design.spacingXMm} mm (${design.flexureOk ? "PASS" : "FAIL"}); concrete ${concreteVol.toFixed(2)} m³, steel ${totalSteel.toFixed(1)} kg.`}
+              <StructuralExportBar title="Isolated Footing (IS 456)" summaryText={`Isolated footing ${fL}×${fW} m, D=${totalD.toFixed(2)} m (${footingType}); Pu=${design.puKN.toFixed(0)} kN, qu=${design.quKNm2.toFixed(0)} kN/m², qmax=${design.qMaxKNm2.toFixed(0)} kN/m² ≤ SBC ${parseFloat(sbc) || 0} (${design.bearingOk ? "PASS" : "FAIL"}); punching τv=${design.punchingTauVMpa.toFixed(2)} MPa ≤ ${design.punchingAllowMpa.toFixed(2)} (${design.punchingOk ? "PASS" : "FAIL"}); one-way τv=${design.oneWayTauVMpa.toFixed(2)} MPa (${design.oneWayOk ? "PASS" : "FAIL"}); Ast req ${Number.isFinite(design.astXReqMm2) ? design.astXReqMm2.toFixed(0) : "—"} mm², provided ${design.astXProvidedMm2.toFixed(0)} mm² @ ${design.spacingXMm} mm (${design.flexureOk ? "PASS" : "FAIL"}); concrete ${concreteVol.toFixed(2)} m³, steel ${totalSteel.toFixed(1)} kg.`}
                 boqItems={[
                   { description: `Cement for isolated footing (${mix})`, quantity: design.materials.cementBags, unit: "bags", rate: rates.cementPerBag ?? 0 },
                   { description: "Sand for footing concrete", quantity: design.materials.sandCft, unit: "cft", rate: rates.sandPerCft ?? 0 },
@@ -1152,14 +1131,9 @@ export default function IsolatedFootingCalculator({
                 totalValue={concreteVol.toFixed(2)}
                 totalUnit="m³"
                 relatedToolIds={[
-                  "column-estimator",
-                  "beam-calc",
-                  "concrete-mix",
+                  "column-design",
+                  "beam-design",
                 ]}
-                onRecalculate={() => {
-                  // This is a minimal demo trigger for the recalculate visual feedback
-                  // Since React state instantly updates, we don't 'actually' need to do anything here for this tool
-                }}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 responsive-tool-grid">
                   <div>

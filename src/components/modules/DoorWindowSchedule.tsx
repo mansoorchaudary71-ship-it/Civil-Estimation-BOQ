@@ -31,11 +31,21 @@ export default function DoorWindowSchedule() {
 
   const update = (id: string, patch: Partial<DoorWindowRowInput>) =>
     setRows(rows.map((r) => (r.id === id ? { ...r, ...patch } : r)));
+  // Marks must stay unique — the old "Add row" used D + row count, so
+  // deleting a row and adding another produced a duplicate mark.
+  const nextMark = (kind: DoorWindowKind) => {
+    const prefix = kind === "door" ? "D" : kind === "window" ? "W" : "V";
+    const max = rows.reduce((m, r) => {
+      const n = r.mark.startsWith(prefix) ? parseInt(r.mark.slice(prefix.length), 10) : NaN;
+      return Number.isInteger(n) && n > m ? n : m;
+    }, 0);
+    return `${prefix}${max + 1}`;
+  };
   const addPreset = (presetId: string) => {
     const p = DOOR_WINDOW_PRESETS.find((x) => x.id === presetId);
     if (!p) return;
     setRows([...rows, {
-      id: `row-${Date.now()}`, mark: p.mark, kind: p.kind, room: p.room,
+      id: `row-${Date.now()}`, mark: rows.some((r) => r.mark === p.mark) ? nextMark(p.kind) : p.mark, kind: p.kind, room: p.room,
       leafWidthM: p.leafWidthM, leafHeightM: p.leafHeightM, frameMaterial: p.frameMaterial,
       shutterType: p.shutterType, glass: p.glass, frameSectionMm: 100,
       sillHeightM: p.sillHeightM, qty: 1, wallThicknessM: 0.23,
@@ -47,7 +57,7 @@ export default function DoorWindowSchedule() {
     "Door & window schedule — Civil Estimation Pro",
     ...rows.map((r, i) => {
       const res = totals.rows[i];
-      return `${r.mark} (${r.kind}, ${r.room}): leaf ${fmt(r.leafWidthM)} × ${fmt(r.leafHeightM)} ${unit} × ${r.qty} = ${res.totalLeafAreaM2.toFixed(2)} m²; frame-outer ${res.frameOuterWidthM.toFixed(2)} × ${res.frameOuterHeightM.toFixed(2)} m; opening ${res.openingWidthM.toFixed(2)} × ${res.openingHeightM.toFixed(2)} m; lintel ${res.lintelLengthM.toFixed(2)} m; frame ${res.frameLengthM.toFixed(2)} r.m; glass ${res.glassAreaM2.toFixed(2)} m²`;
+      return `${r.mark} (${r.kind}, ${r.room}): leaf ${fmt(r.leafWidthM)} × ${fmt(r.leafHeightM)} ${unit} × ${r.qty} = ${res.totalLeafAreaM2.toFixed(2)} m²; frame-outer ${res.frameOuterWidthM.toFixed(2)} × ${res.frameOuterHeightM.toFixed(2)} m; opening ${res.openingWidthM.toFixed(2)} × ${res.openingHeightM.toFixed(2)} m; lintel ${res.lintelLengthM.toFixed(2)} m; frame ${(res.frameLengthM * r.qty).toFixed(2)} r.m; glass ${(res.glassAreaM2 * r.qty).toFixed(2)} m²`;
     }),
     `Totals: leaf area ${totals.totalLeafAreaM2.toFixed(2)} m² · frame ${totals.totalFrameLengthM.toFixed(2)} r.m · glass ${totals.totalGlassAreaM2.toFixed(2)} m² · lintel concrete ${totals.totalLintelVolumeM3.toFixed(2)} m³ · hardware sets ${totals.totalHardwareSets}`,
     totals.totalCost != null ? `Estimated cost: ${money(totals.totalCost, currency)}` : "Cost incomplete — enter frame, leaf and hardware rates.",
@@ -55,10 +65,10 @@ export default function DoorWindowSchedule() {
   ].join("\n");
 
   const downloadCSV = () => {
-    let csv = "Mark,Kind,Room,Leaf Width (m),Leaf Height (m),Area per Unit (m2),Qty,Total Leaf Area (m2),Frame Outer W (m),Frame Outer H (m),Masonry Opening W (m),Clear Width (m),Sill (m),Lintel (m),Frame (r.m),Glass (m2),Hardware Sets,Frame Material,Shutter,Glass Type,Rate Amount\n";
+    let csv = "Mark,Kind,Room,Leaf Width (m),Leaf Height (m),Area per Unit (m2),Qty,Total Leaf Area (m2),Frame Outer W (m),Frame Outer H (m),Masonry Opening W (m),Clear Width (m),Sill (m),Lintel (m),Frame total (r.m),Glass total (m2),Hardware Sets,Frame Material,Shutter,Glass Type,Rate Amount\n";
     rows.forEach((r, i) => {
       const res = totals.rows[i];
-      csv += `"${r.mark}","${r.kind}","${r.room}",${r.leafWidthM},${r.leafHeightM},${res.leafAreaM2.toFixed(2)},${r.qty},${res.totalLeafAreaM2.toFixed(2)},${res.frameOuterWidthM.toFixed(2)},${res.frameOuterHeightM.toFixed(2)},${res.openingWidthM.toFixed(2)},${res.clearWidthM.toFixed(2)},${r.sillHeightM},${res.lintelLengthM.toFixed(2)},${res.frameLengthM.toFixed(2)},${res.glassAreaM2.toFixed(2)},${res.hardwareSets},"${r.frameMaterial}","${r.shutterType}","${r.glass}",${res.rowCost ?? ""}\n`;
+      csv += `"${r.mark}","${r.kind}","${r.room}",${r.leafWidthM},${r.leafHeightM},${res.leafAreaM2.toFixed(2)},${r.qty},${res.totalLeafAreaM2.toFixed(2)},${res.frameOuterWidthM.toFixed(2)},${res.frameOuterHeightM.toFixed(2)},${res.openingWidthM.toFixed(2)},${res.clearWidthM.toFixed(2)},${r.sillHeightM},${res.lintelLengthM.toFixed(2)},${(res.frameLengthM * r.qty).toFixed(2)},${(res.glassAreaM2 * r.qty).toFixed(2)},${res.hardwareSets},"${r.frameMaterial}","${r.shutterType}","${r.glass}",${res.rowCost ?? ""}\n`;
     });
     const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -82,8 +92,8 @@ export default function DoorWindowSchedule() {
   };
 
   const steps: FormulaStep[] = [
-    { id: 1, label: "Leaf, frame and opening", theoretical: "Frame-outer W = leaf W + 2×frame section; frame-outer H = leaf H + 1×section (door) or 2×section (window)\nMasonry opening = frame-outer + 10 mm clearance per side\nClear width = leaf W − 2×25 mm stop allowance", applied: rows.map((r, i) => `${r.mark}: frame-outer ${totals.rows[i].frameOuterWidthM.toFixed(2)} × ${totals.rows[i].frameOuterHeightM.toFixed(2)} m; opening ${totals.rows[i].openingWidthM.toFixed(2)} × ${totals.rows[i].openingHeightM.toFixed(2)} m; clear ${totals.rows[i].clearWidthM.toFixed(2)} m`).join("\n") },
-    { id: 2, label: "Lintel and frame", theoretical: "Lintel length = masonry opening W + 0.30 m (150 mm bearing each side)\nLintel volume = lintel length × 0.15 m × wall thickness\nFrame length = 2 × (frame-outer H + frame-outer W)", applied: rows.map((r, i) => `${r.mark}: lintel ${totals.rows[i].lintelLengthM.toFixed(2)} m (${totals.rows[i].lintelVolumeM3.toFixed(3)} m³); frame ${totals.rows[i].frameLengthM.toFixed(2)} r.m`).join("\n") },
+    { id: 1, label: "Leaf, frame and opening", theoretical: "Frame-outer W = leaf W + 2×frame section; frame-outer H = leaf H + 1×section (door) or 2×section (window)\nMasonry opening = frame-outer + 10 mm clearance per side (door height: head only, +10 mm)\nClear width = leaf W − 2×25 mm stop allowance", applied: rows.map((r, i) => `${r.mark}: frame-outer ${totals.rows[i].frameOuterWidthM.toFixed(2)} × ${totals.rows[i].frameOuterHeightM.toFixed(2)} m; opening ${totals.rows[i].openingWidthM.toFixed(2)} × ${totals.rows[i].openingHeightM.toFixed(2)} m; clear ${totals.rows[i].clearWidthM.toFixed(2)} m`).join("\n") },
+    { id: 2, label: "Lintel and frame", theoretical: "Lintel length = masonry opening W + 0.30 m (150 mm bearing each side)\nLintel volume = lintel length × 0.15 m × wall thickness\nFrame length = 2 × frame-outer H + frame-outer W (door, no sill) or 2 × (H + W) (window/ventilator)", applied: rows.map((r, i) => `${r.mark}: lintel ${totals.rows[i].lintelLengthM.toFixed(2)} m (${totals.rows[i].lintelVolumeM3.toFixed(3)} m³); frame ${totals.rows[i].frameLengthM.toFixed(2)} r.m`).join("\n") },
     { id: 3, label: "Glass and cost", theoretical: "Glass = (leaf W − 2×frame section) × (leaf H − frame section − 50 mm sill rail), glazed shutters only\nCost = frame length × rate/m + leaf area × rate/m² + hardware sets × rate/set", applied: `Total glass ${totals.totalGlassAreaM2.toFixed(2)} m²; hardware sets ${totals.totalHardwareSets}\nTotal cost ${money(totals.totalCost, currency)}` },
   ];
 
@@ -92,7 +102,7 @@ export default function DoorWindowSchedule() {
       <p className="text-base text-txt-secondary leading-relaxed">Every door and window in the house, scheduled. Leaf, frame and masonry opening sizes, lintel lengths, glass area, hardware sets and cost — with standard presets and CSV and PDF export.</p>
       <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm">
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-          <h1 className="flex items-center gap-2 text-xl font-semibold text-txt-primary"><Columns className="w-6 h-6 text-accent-800" /> Door &amp; Window Schedule Generator</h1>
+          <h2 className="flex items-center gap-2 text-xl font-semibold text-txt-primary"><Columns className="w-6 h-6 text-accent-800" /> Door &amp; Window Schedule Generator</h2>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex bg-surface-hover p-1 rounded-xl">
               {(["m", "ft", "mm"] as const).map((u) => (
@@ -123,7 +133,7 @@ export default function DoorWindowSchedule() {
             <option value="" disabled>Choose a standard size…</option>
             {DOOR_WINDOW_PRESETS.map((p) => <option key={p.id} value={p.id}>{p.mark} — {p.room} {p.leafWidthM} × {p.leafHeightM} m ({p.kind})</option>)}
           </select>
-          <Button onClick={() => setRows([...rows, { id: `row-${Date.now()}`, mark: `D${rows.length + 1}`, kind: "door" as DoorWindowKind, room: "", leafWidthM: 0.9, leafHeightM: 2.1, frameMaterial: "timber", shutterType: "flush", glass: "none", frameSectionMm: 100, sillHeightM: 0, qty: 1, wallThicknessM: 0.23, frameRatePerM: null, leafRatePerM2: null, hardwareRatePerSet: null }])} className="flex items-center gap-1 text-accent-800 bg-accent-50 px-3 py-2 rounded-full text-sm font-semibold"><Plus size={16} /> Add row</Button>
+          <Button onClick={() => setRows([...rows, { id: `row-${Date.now()}`, mark: nextMark("door"), kind: "door" as DoorWindowKind, room: "", leafWidthM: 0.9, leafHeightM: 2.1, frameMaterial: "timber", shutterType: "flush", glass: "none", frameSectionMm: 100, sillHeightM: 0, qty: 1, wallThicknessM: 0.23, frameRatePerM: null, leafRatePerM2: null, hardwareRatePerSet: null }])} className="flex items-center gap-1 text-accent-800 bg-accent-50 px-3 py-2 rounded-full text-sm font-semibold"><Plus size={16} /> Add row</Button>
         </div>
 
         <div className="overflow-x-auto">

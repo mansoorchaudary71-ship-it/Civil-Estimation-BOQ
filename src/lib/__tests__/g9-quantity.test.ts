@@ -76,6 +76,15 @@ test("material-takeoff: 1,000 sqft Standard quantities", () => {
   assert.ok(t.grandTotal != null && t.grandTotal > 0);
 });
 
+test("material-takeoff: tiles are priced per BOX, not per sqft — 2,000 sqft standard = 142 boxes, Rs 170,400 (was Rs 2,904,000)", () => {
+  const rates = { cementPerBag: 1450, sandPerCft: 90, crushPerCft: 90, bricksPer1000: 23355, steelPerKg: 270, tilesPerBox: 1200, paintPerL: 300 };
+  const lines = materialTakeoff({ builtUpSqft: 2000, floors: 1, quality: "standard" }, rates);
+  const tiles = lines.find((l) => l.material === "Floor tiles")!;
+  assert.equal(tiles.unit, "boxes");
+  assert.equal(tiles.qty, 142); // ceil(2,200 / 15.5)
+  assert.equal(tiles.cost, 170400);
+});
+
 test("cost-summary: example lines -> subtotal 5,700,000, grand 6,840,000, 3,420/sqft", () => {
   const r = costSummary({ areaSqft: 2000, lines: EXAMPLE_LINES, overheadPct: 15, contingencyPct: 5, taxPct: 0, taxLabel: "Sales Tax (PK)" });
   assert.equal(r.subtotal, 5700000);
@@ -83,6 +92,12 @@ test("cost-summary: example lines -> subtotal 5,700,000, grand 6,840,000, 3,420/
   assert.equal(r.contingency, 285000);
   assert.equal(r.grandTotal, 6840000);
   assert.equal(r.costPerSqft, 3420);
+});
+
+test("cost-summary: tax base is subtotal + contingency (matches boqTotals) — 18% on 5,700,000 + 285,000 = 1,077,300", () => {
+  const r = costSummary({ areaSqft: 2000, lines: EXAMPLE_LINES, overheadPct: 15, contingencyPct: 5, taxPct: 18, taxLabel: "Sales Tax (PK)" });
+  assert.equal(r.tax, 1077300);
+  assert.equal(r.grandTotal, 5700000 + 855000 + 285000 + 1077300);
 });
 
 test("measurement-sheet: 2x10x3x0.5 = 30 m3; L-only row is incomplete (null, not 10)", () => {

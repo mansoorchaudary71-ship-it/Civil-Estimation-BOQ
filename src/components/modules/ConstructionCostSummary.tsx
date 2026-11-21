@@ -65,13 +65,37 @@ const ConstructionCostSummary: React.FC = () => {
 
   const { formatCurrency, convertAmount, convertAmountToRaw, settings } = useSettings();
 
-  const updateItem = (category: "grey" | "finish" | "labour", id: string, field: "qty" | "rate", value: string) => {
+  const updateItem = (category: "grey" | "finish" | "labour", id: string, field: "qty" | "rate" | "name" | "unit", value: string) => {
+    // A quantity is not money: store it exactly as typed. Only the rate
+    // is round-tripped through the currency conversion (display
+    // convertAmount, store convertAmountToRaw). The old code converted
+    // qty too, so typing 5 in USD mode stored 5 / (1/278) = 1,390.
+    if (field === "name" || field === "unit") {
+      const apply = (list: CostItem[]) => list.map((item) => (item.id === id ? { ...item, [field]: value } : item));
+      if (category === "grey") setGreyStructure(apply);
+      else if (category === "finish") setFinishing(apply);
+      else setLabour(apply);
+      return;
+    }
     const parsed = parseFloat(value);
-    const num = isNaN(parsed) ? 0 : Math.max(0, convertAmountToRaw(parsed));
+    const num = isNaN(parsed) ? 0 : Math.max(0, field === "rate" ? convertAmountToRaw(parsed) : parsed);
     const apply = (list: CostItem[]) => list.map((item) => (item.id === id ? { ...item, [field]: num } : item));
     if (category === "grey") setGreyStructure(apply);
     else if (category === "finish") setFinishing(apply);
     else setLabour(apply);
+  };
+
+  const addItem = (category: "grey" | "finish" | "labour") => {
+    const item: CostItem = { id: `${category}-${Date.now()}`, name: "New item", qty: 1, unit: "LS", rate: 0 };
+    if (category === "grey") setGreyStructure((l) => [...l, item]);
+    else if (category === "finish") setFinishing((l) => [...l, item]);
+    else setLabour((l) => [...l, item]);
+  };
+
+  const deleteItem = (category: "grey" | "finish" | "labour", id: string) => {
+    if (category === "grey") setGreyStructure((l) => l.filter((i) => i.id !== id));
+    else if (category === "finish") setFinishing((l) => l.filter((i) => i.id !== id));
+    else setLabour((l) => l.filter((i) => i.id !== id));
   };
 
   useAutoSave("cost-summary", { totalArea, greyStructure, finishing, labour, overheadProfitPct, contingencyPct, taxPct, taxLabel },
@@ -149,7 +173,7 @@ const ConstructionCostSummary: React.FC = () => {
 
     // Final Summary Box
     doc.setFillColor(255, 251, 235); // amber-50
-    doc.rect(14, currentY, 182, 50, 'F');
+    doc.rect(14, currentY, 182, 64, 'F'); // 64 high: Grand Total sits at currentY + 56
     
     doc.setFontSize(14);
     doc.setTextColor(31, 29, 26);
@@ -179,12 +203,14 @@ const ConstructionCostSummary: React.FC = () => {
         <div className="space-y-3">
           {greyStructure.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
-              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
+              <input type="text" value={item.name} onChange={(e) => updateItem("grey", item.id, "name", e.target.value)} className="flex-1 min-w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-sm font-medium text-txt-secondary dark:text-txt-tertiary focus:border-ink outline-none" title="Item name" />
                             <div className="flex items-center gap-2">
                 <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("grey", item.id, "qty", e.target.value)} className="w-20 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Quantity" />
-                <span className="text-xs text-txt-tertiary">{item.unit} ×</span>
+                <input type="text" value={item.unit} onChange={(e) => updateItem("grey", item.id, "unit", e.target.value)} className="w-14 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-2 text-center text-xs focus:border-ink outline-none" title="Unit" />
+                <span className="text-xs text-txt-tertiary">×</span>
                 <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("grey", item.id, "rate", e.target.value)} className="w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Rate" />
                 <span className="font-semibold text-txt-primary w-28 text-right">{formatCurrency(itemAmount(item))}</span>
+                <button type="button" onClick={() => deleteItem("grey", item.id)} className="px-2 py-1 rounded-lg text-xs font-bold text-txt-tertiary hover:text-red-600 hover:bg-red-50" title="Remove line">✕</button>
               </div>
             </div>
           ))}
@@ -192,6 +218,7 @@ const ConstructionCostSummary: React.FC = () => {
             <span>Subtotal:</span>
             <span>{formatCurrency(greyTotal)}</span>
           </div>
+          <button type="button" onClick={() => addItem("grey")} className="mt-3 px-3 py-1.5 rounded-full text-xs font-bold bg-surface-hover text-txt-secondary hover:bg-accent-100">+ Add line</button>
         </div>
       </div>
       {/* Finishing */}
@@ -202,12 +229,14 @@ const ConstructionCostSummary: React.FC = () => {
         <div className="space-y-3">
           {finishing.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
-              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
+              <input type="text" value={item.name} onChange={(e) => updateItem("finish", item.id, "name", e.target.value)} className="flex-1 min-w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-sm font-medium text-txt-secondary dark:text-txt-tertiary focus:border-ink outline-none" title="Item name" />
                             <div className="flex items-center gap-2">
                 <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("finish", item.id, "qty", e.target.value)} className="w-20 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Quantity" />
-                <span className="text-xs text-txt-tertiary">{item.unit} ×</span>
+                <input type="text" value={item.unit} onChange={(e) => updateItem("finish", item.id, "unit", e.target.value)} className="w-14 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-2 text-center text-xs focus:border-ink outline-none" title="Unit" />
+                <span className="text-xs text-txt-tertiary">×</span>
                 <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("finish", item.id, "rate", e.target.value)} className="w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Rate" />
                 <span className="font-semibold text-txt-primary w-28 text-right">{formatCurrency(itemAmount(item))}</span>
+                <button type="button" onClick={() => deleteItem("finish", item.id)} className="px-2 py-1 rounded-lg text-xs font-bold text-txt-tertiary hover:text-red-600 hover:bg-red-50" title="Remove line">✕</button>
               </div>
             </div>
           ))}
@@ -215,6 +244,7 @@ const ConstructionCostSummary: React.FC = () => {
             <span>Subtotal:</span>
             <span>{formatCurrency(finishTotal)}</span>
           </div>
+          <button type="button" onClick={() => addItem("finish")} className="mt-3 px-3 py-1.5 rounded-full text-xs font-bold bg-surface-hover text-txt-secondary hover:bg-accent-100">+ Add line</button>
         </div>
       </div>
       {/* Labour */}
@@ -225,12 +255,14 @@ const ConstructionCostSummary: React.FC = () => {
         <div className="space-y-3">
           {labour.map((item, index) => (
             <div key={item.id} className="flex items-center justify-between gap-4 flex-wrap">
-              <label className="flex-1 text-sm font-medium text-txt-secondary dark:text-txt-tertiary mb-1 block">{item.name}</label>
+              <input type="text" value={item.name} onChange={(e) => updateItem("labour", item.id, "name", e.target.value)} className="flex-1 min-w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-sm font-medium text-txt-secondary dark:text-txt-tertiary focus:border-ink outline-none" title="Item name" />
                             <div className="flex items-center gap-2">
                 <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("labour", item.id, "qty", e.target.value)} className="w-20 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Quantity" />
-                <span className="text-xs text-txt-tertiary">{item.unit} ×</span>
+                <input type="text" value={item.unit} onChange={(e) => updateItem("labour", item.id, "unit", e.target.value)} className="w-14 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-2 text-center text-xs focus:border-ink outline-none" title="Unit" />
+                <span className="text-xs text-txt-tertiary">×</span>
                 <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("labour", item.id, "rate", e.target.value)} className="w-40 bg-surface-default border border-ui-borderDefault rounded-xl py-2 px-3 text-right focus:border-ink outline-none" title="Rate" />
                 <span className="font-semibold text-txt-primary w-28 text-right">{formatCurrency(itemAmount(item))}</span>
+                <button type="button" onClick={() => deleteItem("labour", item.id)} className="px-2 py-1 rounded-lg text-xs font-bold text-txt-tertiary hover:text-red-600 hover:bg-red-50" title="Remove line">✕</button>
               </div>
             </div>
           ))}
@@ -238,6 +270,7 @@ const ConstructionCostSummary: React.FC = () => {
             <span>Subtotal:</span>
             <span>{formatCurrency(labourTotal)}</span>
           </div>
+          <button type="button" onClick={() => addItem("labour")} className="mt-3 px-3 py-1.5 rounded-full text-xs font-bold bg-surface-hover text-txt-secondary hover:bg-accent-100">+ Add line</button>
         </div>
       </div>
       
@@ -255,8 +288,8 @@ const ConstructionCostSummary: React.FC = () => {
             </div>
             <input
               type="range"
-              min="5"
-              max="25"
+              min="0"
+              max="50"
               step="1"
               value={overheadProfitPct}
               onChange={(e) => setOverheadProfitPct(parseInt(e.target.value))}
@@ -318,18 +351,25 @@ const ConstructionCostSummary: React.FC = () => {
                     <div className="mt-2 text-xs text-txt-tertiary font-normal">Subtotal: {formatCurrency(greyTotal)}</div>
                   </td>
                 )}
-                <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
+                <td className="py-3 px-6"><input type="text" value={item.name} onChange={(e) => updateItem("grey", item.id, "name", e.target.value)} className="w-full border rounded-lg py-1.5 px-2 text-txt-secondary dark:text-txt-tertiary" title="Item name" /></td>
                 <td className="py-3 px-6 text-right">
                                     <div className="flex items-center gap-2 justify-end">
                     <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("grey", item.id, "qty", e.target.value)} className="w-16 border rounded-lg py-1.5 px-2 text-right" title="Quantity" />
+                    <input type="text" value={item.unit} onChange={(e) => updateItem("grey", item.id, "unit", e.target.value)} className="w-12 border rounded-lg py-1.5 px-1 text-center text-xs" title="Unit" />
                     <span className="text-xs text-txt-tertiary">×</span>
                     <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("grey", item.id, "rate", e.target.value)} className="w-28 border rounded-lg py-1.5 px-2 text-right" title="Rate" />
                     <span className="font-semibold w-24 text-right">{formatCurrency(itemAmount(item))}</span>
+                    <button type="button" onClick={() => deleteItem("grey", item.id)} className="px-2 py-1 rounded-lg text-xs font-bold text-txt-tertiary hover:text-red-600" title="Remove line">✕</button>
                   </div>
                 </td>
               </tr>
             ))}
-            {finishing.map((item, index) => (
+                        <tr>
+              <td colSpan={3} className="py-2 px-6">
+                <button type="button" onClick={() => addItem("grey")} className="px-3 py-1.5 rounded-full text-xs font-bold bg-surface-hover text-txt-secondary hover:bg-accent-100">+ Add line</button>
+              </td>
+            </tr>
+{finishing.map((item, index) => (
               <tr key={item.id} className="hover:bg-surface-hover/50 dark:hover:bg-ink/30 transition-colors border-t border-ui-borderSubtle dark:border-ink">
                 {index === 0 && (
                   <td rowSpan={finishing.length} className="py-3 px-6 font-medium text-txt-primary dark:text-txt-primary align-top border-r border-ui-borderSubtle dark:border-ink">
@@ -337,18 +377,25 @@ const ConstructionCostSummary: React.FC = () => {
                     <div className="mt-2 text-xs text-txt-tertiary font-normal">Subtotal: {formatCurrency(finishTotal)}</div>
                   </td>
                 )}
-                <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
+                <td className="py-3 px-6"><input type="text" value={item.name} onChange={(e) => updateItem("finish", item.id, "name", e.target.value)} className="w-full border rounded-lg py-1.5 px-2 text-txt-secondary dark:text-txt-tertiary" title="Item name" /></td>
                 <td className="py-3 px-6 text-right">
                                     <div className="flex items-center gap-2 justify-end">
                     <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("finish", item.id, "qty", e.target.value)} className="w-16 border rounded-lg py-1.5 px-2 text-right" title="Quantity" />
+                    <input type="text" value={item.unit} onChange={(e) => updateItem("finish", item.id, "unit", e.target.value)} className="w-12 border rounded-lg py-1.5 px-1 text-center text-xs" title="Unit" />
                     <span className="text-xs text-txt-tertiary">×</span>
                     <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("finish", item.id, "rate", e.target.value)} className="w-28 border rounded-lg py-1.5 px-2 text-right" title="Rate" />
                     <span className="font-semibold w-24 text-right">{formatCurrency(itemAmount(item))}</span>
+                    <button type="button" onClick={() => deleteItem("finish", item.id)} className="px-2 py-1 rounded-lg text-xs font-bold text-txt-tertiary hover:text-red-600" title="Remove line">✕</button>
                   </div>
                 </td>
               </tr>
             ))}
-            {labour.map((item, index) => (
+                        <tr>
+              <td colSpan={3} className="py-2 px-6">
+                <button type="button" onClick={() => addItem("finish")} className="px-3 py-1.5 rounded-full text-xs font-bold bg-surface-hover text-txt-secondary hover:bg-accent-100">+ Add line</button>
+              </td>
+            </tr>
+{labour.map((item, index) => (
               <tr key={item.id} className="hover:bg-surface-hover/50 dark:hover:bg-ink/30 transition-colors border-t border-ui-borderSubtle dark:border-ink">
                 {index === 0 && (
                   <td rowSpan={labour.length} className="py-3 px-6 font-medium text-txt-primary dark:text-txt-primary align-top border-r border-ui-borderSubtle dark:border-ink">
@@ -356,18 +403,25 @@ const ConstructionCostSummary: React.FC = () => {
                     <div className="mt-2 text-xs text-txt-tertiary font-normal">Subtotal: {formatCurrency(labourTotal)}</div>
                   </td>
                 )}
-                <td className="py-3 px-6 text-txt-secondary dark:text-txt-tertiary">{item.name}</td>
+                <td className="py-3 px-6"><input type="text" value={item.name} onChange={(e) => updateItem("labour", item.id, "name", e.target.value)} className="w-full border rounded-lg py-1.5 px-2 text-txt-secondary dark:text-txt-tertiary" title="Item name" /></td>
                 <td className="py-3 px-6 text-right">
                                     <div className="flex items-center gap-2 justify-end">
                     <input type="number" inputMode="decimal" min={0} value={item.qty} onChange={(e) => updateItem("labour", item.id, "qty", e.target.value)} className="w-16 border rounded-lg py-1.5 px-2 text-right" title="Quantity" />
+                    <input type="text" value={item.unit} onChange={(e) => updateItem("labour", item.id, "unit", e.target.value)} className="w-12 border rounded-lg py-1.5 px-1 text-center text-xs" title="Unit" />
                     <span className="text-xs text-txt-tertiary">×</span>
                     <input type="number" inputMode="decimal" min={0} value={convertAmount(item.rate) === 0 ? '' : Number(convertAmount(item.rate).toFixed(2))} onChange={(e) => updateItem("labour", item.id, "rate", e.target.value)} className="w-28 border rounded-lg py-1.5 px-2 text-right" title="Rate" />
                     <span className="font-semibold w-24 text-right">{formatCurrency(itemAmount(item))}</span>
+                    <button type="button" onClick={() => deleteItem("labour", item.id)} className="px-2 py-1 rounded-lg text-xs font-bold text-txt-tertiary hover:text-red-600" title="Remove line">✕</button>
                   </div>
                 </td>
               </tr>
             ))}
-          </tbody>
+                      <tr>
+              <td colSpan={3} className="py-2 px-6">
+                <button type="button" onClick={() => addItem("labour")} className="px-3 py-1.5 rounded-full text-xs font-bold bg-surface-hover text-txt-secondary hover:bg-accent-100">+ Add line</button>
+              </td>
+            </tr>
+</tbody>
         </table>
       </div>
       
@@ -380,8 +434,8 @@ const ConstructionCostSummary: React.FC = () => {
           </div>
           <input
             type="range"
-            min="5"
-            max="25"
+            min="0"
+            max="50"
             step="1"
             value={overheadProfitPct}
             onChange={(e) => setOverheadProfitPct(parseInt(e.target.value))}
@@ -411,7 +465,7 @@ const ConstructionCostSummary: React.FC = () => {
     <div className="max-w-7xl mx-auto space-y-6 pb-24 relative">
       <div className="flex justify-between items-end gap-4 flex-wrap mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">Construction Cost Summary</h1>
+          <h2 className="text-2xl font-bold text-txt-primary dark:text-white mb-2">Construction Cost Summary</h2>
           <p className="text-txt-tertiary dark:text-txt-tertiary">Each line is quantity × rate. The pre-filled lines are <strong>example figures</strong> — replace them with your quantities from the Material Takeoff or BOQ tools.</p>
           {(!isFinite(totalArea) || totalArea <= 0) && <p className="text-sm font-semibold text-red-600 mt-1">Area must be greater than 0.</p>}
         </div>

@@ -51,9 +51,10 @@ Formula:$$N = \left( \frac{L}{S} \right) + 1$$
 Enforcement: Ensure both Length and Spacing are in the same unit before dividing. Always round up to the next whole integer.
 
 # SYSTEM DIRECTIVE: RECTANGULAR_STIRRUP_LENGTH
-Calculate the cutting length ($L$) of a closed rectangular stirrup by finding the perimeter of the stirrup ($A$ and $B$ being inner dimensions), adding hook lengths, and deducting for bends. Use bar diameter ($\phi$).
-Formula:$$L = 2(A + B) + 24\phi$$
-Enforcement: This formula assumes two 135-degree hooks (adding $24\phi$) and standard bend deductions. Ensure Clear Cover has already been subtracted from the beam/column dimensions to find $A$ and $B$.
+Calculate the cutting length ($L$) of a closed rectangular stirrup from the INNER dimensions $A$ and $B$ ($A$ = section − 2·cover − $\phi$, $B$ likewise). Use bar diameter ($\phi$).
+Canonical formula (IS 2502 detailed form — use this in every engine): $$L = 2(A+B) + 2×10\phi − (3×2\phi + 2×3\phi)$$, i.e. two $10\phi$ hooks less bend deductions (= $2(A+B) + 8\phi$).
+Field-rule approximation (take-off only — reads ~10% high; demo: 1.372 m vs 1.244 m for a 300×450 beam, cover 40, dia 8): $$L \approx 2(A+B) + 24\phi$$. Keep it only as a labelled approximation computed from the SAME inner $A$/$B$, and always say which form a displayed weight uses. Never present the field rule as the detailed length.
+Enforcement: Ensure Clear Cover has already been subtracted from the beam/column dimensions to find $A$ and $B$ ($A$/$B$ are inner dims in every engine — section minus 2× cover minus $\phi$).
 
 # SYSTEM DIRECTIVE: CYLINDRICAL_VOLUME
 To calculate the volume of excavation, concrete, or water capacity for a circular structure like a well or manhole, treat it as a cylinder. Use the radius ($r$) and the depth/height ($h$).

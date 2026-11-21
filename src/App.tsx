@@ -22,6 +22,7 @@ const MarlaConverterPage = lazy(() => import("./components/pages/MarlaConverterP
 const PakistanCostCalculatorPage = lazy(() => import("./components/pages/PakistanCostCalculatorPage"));
 import StandardsReferencePage from "./components/StandardsReferencePage";
 import { resolvePath, pathFromId } from "./lib/toolRoutes";
+import { readBoqInbox, sendToBoq } from "./lib/boq";
 import Footer from "./components/Footer";
 import SmoothScroll from "./components/ui/SmoothScroll";
 import SkipToContent from "./components/ui/SkipToContent";
@@ -590,6 +591,37 @@ export default function App() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  // Persistent "fill-boq" listener (X5): ~10 tools + StructuralExportBar
+  // dispatch a `fill-boq` CustomEvent with BOQ lines, but the only listener
+  // used to live in BOQGenerator — a lazily-loaded tool that is unmounted
+  // whenever the user is on any other tool, so the event fired into the
+  // void and "Sent to BOQ Generator!" was a lie. This App-level listener
+  // is always mounted: when the BOQ tool is NOT open it appends the lines
+  // to the shared localStorage inbox (cep_boq_inbox_v1), which BOQGenerator
+  // reads on mount and offers to load. When the BOQ tool IS open its own
+  // listener adds the lines live, so this one stands down to avoid
+  // double-delivery.
+  useEffect(() => {
+    const handleFillBoq = (e: Event) => {
+      if (activeModule === "boq" || activeModule === "boq-templates") return;
+      const ce = e as CustomEvent<Array<{ description?: string; unit?: string; quantity?: number; rate?: number | null; division?: string }>>;
+      const items = Array.isArray(ce.detail) ? ce.detail : [];
+      const lines = items
+        .filter((it) => it && typeof it.description === "string" && it.description.trim() !== "" && isFinite(Number(it.quantity)))
+        .map((it) => ({
+          description: it.description as string,
+          unit: typeof it.unit === "string" ? it.unit : "",
+          quantity: Number(it.quantity),
+          rate: it.rate == null || !isFinite(Number(it.rate)) ? null : Number(it.rate),
+          source: typeof it.division === "string" && it.division ? `Fill BOQ (${it.division})` : "Fill BOQ",
+        }));
+      if (lines.length === 0) return;
+      sendToBoq([...readBoqInbox(), ...lines]);
+    };
+    window.addEventListener("fill-boq", handleFillBoq as EventListener);
+    return () => window.removeEventListener("fill-boq", handleFillBoq as EventListener);
+  }, [activeModule]);
   const [expandedCategory, setExpandedCategory] = useState<string | null>("Core Estimators");
   const scrollRef = useRef<HTMLDivElement>(null);
 

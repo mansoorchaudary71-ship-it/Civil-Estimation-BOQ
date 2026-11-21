@@ -510,12 +510,15 @@ export default function HouseEstimator() {
   const [bwLength, setBwLength] = useState(100);
   /* feet */ const [bwHeight, setBwHeight] = useState(6);
   /* feet */ const [bwGateSize, setBwGateSize] = useState(12);
+  // Marla standard: society marla = 225 sqft, Punjab revenue marla =
+  // 272.25 sqft (same toggle as quick-estimation / pakistan-cost).
+  const [marlaSqft, setMarlaSqft] = useState<225 | 272.25>(225);
   /* feet */ const plotAreaSqft = useMemo(() => {
     const val = parseFloat(geoState.plotSizeValue) || 0;
-    if (geoState.plotSizeUnit === "marla") return val * 225;
+    if (geoState.plotSizeUnit === "marla") return val * marlaSqft;
     if (geoState.plotSizeUnit === "sqyd") return val * 9;
     return val;
-  }, [geoState.plotSizeUnit, geoState.plotSizeValue]);
+  }, [geoState.plotSizeUnit, geoState.plotSizeValue, marlaSqft]);
   const coveredAreaSqft = useMemo(() => {
     return parseFloat(geoState.coveredAreaSqft) || 0;
   }, [geoState.coveredAreaSqft]);
@@ -679,9 +682,7 @@ export default function HouseEstimator() {
     const costExcavation = excavationVolTotal * (rates.laborGrey * 0.15);
     /* est factor */ const costTermite = termiteAreaSqft * 12;
     /* estimated Rs 12/sqft */ const costPolythene = polytheneAreaSqft * 8;
-    /* estimated Rs 8/sqft */ const costWaterTank = includeBoundaryWall
-      ? waterTankCost
-      : 0;
+    /* estimated Rs 8/sqft */ const costWaterTank = waterTankCost; // every house needs a water tank, with or without a boundary wall
     const trueTotalGrey =
       totalGrey + costExcavation + costTermite + costPolythene + costWaterTank;
     return {
@@ -746,16 +747,14 @@ export default function HouseEstimator() {
       rate: 12,
     },
   ];
-  if (includeBoundaryWall) {
-    greyFoundationData.push({
-      name: "Water Tank (UG & OH)",
-      value: estimates.costTerms.costWaterTank,
-      color: "#1F1D1A",
-      quantity: 1,
-      unit: "Lump Sum",
-      rate: estimates.costTerms.costWaterTank,
-    });
-  }
+  greyFoundationData.push({
+    name: "Water Tank (UG & OH)",
+    value: estimates.costTerms.costWaterTank,
+    color: "#1F1D1A",
+    quantity: 1,
+    unit: "Lump Sum",
+    rate: estimates.costTerms.costWaterTank,
+  });
   const greySuperstructureData = [
     {
       name: `Cement${isCustomRate("cement") ? "*" : ""}`,
@@ -770,7 +769,7 @@ export default function HouseEstimator() {
       name: `Steel${isCustomRate("steel") ? "*" : ""}`,
       value: estimates.costSteel,
       color: "#1F1D1A",
-      quantity: parseFloat(estimates.steelTons.toFixed(2)),
+      quantity: parseFloat(estimates.steelTons.toFixed(3)),
       unit: "Tons",
       rate: rates.steel * 1000,
       isCustom: isCustomRate("steel"),
@@ -892,7 +891,7 @@ export default function HouseEstimator() {
   const filteredTotalFinishing = finishingCostData.reduce((acc, item) => acc + item.value, 0);
 
   const handleExportCSV = (type: "grey" | "finishing") => {
-    let csvContent = "data:text/csv;charset=utf-8,";
+    let csvContent = "";
     csvContent += "Category,Material / Item,Quantity,Unit,Notes,Amount\n";
     
     const escapeCsv = (str: any) => `"${String(str || "").replace(/"/g, '""')}"`;
@@ -912,13 +911,15 @@ export default function HouseEstimator() {
       csvContent += `${escapeCsv("Total")},${escapeCsv("Total Finishing Works")},-,-,-,${escapeCsv(formatCurrency(filteredTotalFinishing))}\n`;
     }
 
-    const encodedUri = encodeURI(csvContent);
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
+    link.setAttribute("href", url);
     link.setAttribute("download", `${type}_structure_boq.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
 
@@ -984,7 +985,17 @@ export default function HouseEstimator() {
       cost: d.value,
       color: d.color
     }));
-    
+    if (includeBoundaryWall) {
+      customTableData.push({
+        item: "Boundary Wall",
+        quantityStr: "1",
+        unitStr: "Lump Sum",
+        rate: estimates.costBoundaryWall,
+        cost: estimates.costBoundaryWall,
+        color: "#0F766E",
+      });
+    }
+
     return {
       inputs: {
         "Project Name": projectDetails.projectName || "-",
@@ -996,13 +1007,17 @@ export default function HouseEstimator() {
         "Total Built-up Area": `${builtUpArea.toFixed(0)} sq.ft`
       },
       breakdown: {
-        "Total Cost": estimates.totalCost.toFixed(2),
-        "Grey Structure": estimates.totalGrey.toFixed(2),
-        "Finishing": estimates.totalFinishing.toFixed(2)
+        // Filtered totals — the same numbers the screen shows (after
+        // delete/duplicate edits) and the same rows as customTableData.
+        "Total Cost": currentTotalCost.toFixed(2),
+        "Grey Structure": filteredTotalGrey.toFixed(2),
+        "Finishing": filteredTotalFinishing.toFixed(2),
+        ...(includeBoundaryWall ? { "Boundary Wall": estimates.costBoundaryWall.toFixed(2) } : {}),
       },
+      disclaimer: "Disclaimer: This estimate is algorithmically generated based on benchmark rates and standard assumptions. It should not be used as a substitute for a professional BOQ certified by a licensed structural engineer or quantity surveyor.",
       customTableData
     };
-  }, [greyCostData, finishingCostData, geoState, finishQuality, projectDetails, builtUpArea, estimates]);
+  }, [greyCostData, finishingCostData, geoState, finishQuality, projectDetails, builtUpArea, estimates, currentTotalCost, filteredTotalGrey, filteredTotalFinishing, includeBoundaryWall]);
 
   return (
     <div className="w-full h-full bg-transparent text-txt-primary font-sans p-6 md:p-8">
@@ -1094,6 +1109,20 @@ export default function HouseEstimator() {
                       size="md"
                     />
                   </div>
+                  {geoState.plotSizeUnit === "marla" && (
+                    <div className="flex gap-2">
+                      {([225, 272.25] as const).map((v) => (
+                        <button
+                          key={v}
+                          type="button"
+                          onClick={() => setMarlaSqft(v)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-bold ${marlaSqft === v ? "bg-ink text-white" : "bg-surface-hover text-txt-secondary"}`}
+                        >
+                          {v === 225 ? "Society marla (225 sqft)" : "Revenue marla (272.25 sqft)"}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1202,26 +1231,14 @@ export default function HouseEstimator() {
                       setCurrencyRate(market);
                       if (market === "CUSTOM") return;
                       updateSettings({ currency: market as any });
-                      const marketPresets: Record<string, any> = {
-                        PKR: { cement: 1450, steel: 280, bricks: 18, sand: 90, crush: 250, laborGrey: 500, laborFinish: 600 },
-                        INR: { cement: 380, steel: 65, bricks: 8, sand: 45, crush: 80, laborGrey: 250, laborFinish: 350 },
-                        USD: { cement: 15, steel: 1, bricks: 0.6, sand: 2, crush: 4, laborGrey: 45, laborFinish: 55 },
-                        GBP: { cement: 8, steel: 1.5, bricks: 0.8, sand: 1.5, crush: 3, laborGrey: 35, laborFinish: 45 },
-                        AED: { cement: 18, steel: 3, bricks: 2, sand: 5, crush: 10, laborGrey: 30, laborFinish: 40 },
-                        SAR: { cement: 18, steel: 3, bricks: 2, sand: 4, crush: 9, laborGrey: 25, laborFinish: 35 },
-                        BDT: { cement: 500, steel: 100, bricks: 12, sand: 30, crush: 80, laborGrey: 300, laborFinish: 400 },
-                        LKR: { cement: 2000, steel: 400, bricks: 25, sand: 150, crush: 300, laborGrey: 800, laborFinish: 1000 }
-                      };
-                      const pst = marketPresets[market];
-                      if(pst) {
-                        setCustomRate("cement", pst.cement);
-                        setCustomRate("steel", pst.steel);
-                        setCustomRate("bricks", pst.bricks);
-                        setCustomRate("sand", pst.sand);
-                        setCustomRate("crush", pst.crush);
-                        setCustomRate("laborGrey", pst.laborGrey);
-                        setCustomRate("laborFinish", pst.laborFinish);
-                      }
+                      // No preset table: the old one overwrote the sourced
+                      // PK rates with stale/invented values (crush 250 vs
+                      // 90, steel 280 vs 270, bricks 18 vs 23.355). Rates
+                      // stay the sourced PK table from rates.ts; the
+                      // display currency conversion is handled by
+                      // SettingsContext. Reset any custom rates so a
+                      // previous market switch cannot linger.
+                      resetCustomRates();
                     }}
                     className="calc-input px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 transition-all font-medium shadow-brand-sm w-full"
                   >
@@ -2096,6 +2113,7 @@ export default function HouseEstimator() {
                   <h3 className="uppercase st mb-1.5 text-sm text-lg font-medium text-txt-primary mb-4">Total Estimated Cost</h3>
                   <p className="text-2xl sm:text-2xl break-all tabular-nums tracking-tighter text-txt-primary dark:text-white drop-shadow-sm text-base font-normal text-txt-secondary leading-relaxed">{formatCurrency(currentTotalCost)}</p>
                   <p className="mt-2 max-w-[200px] text-base font-normal text-txt-secondary leading-relaxed">Rates based on current regional market — verify with local suppliers.</p>
+                  <p className="mt-3 text-xs text-txt-tertiary leading-relaxed">Disclaimer: This estimate is algorithmically generated based on benchmark rates and standard assumptions. It should not be used as a substitute for a professional BOQ certified by a licensed structural engineer or quantity surveyor.</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4 mt-6 w-full pt-6 border-t border-[var(--border-color)]">

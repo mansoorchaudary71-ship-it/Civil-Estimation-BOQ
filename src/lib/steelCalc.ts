@@ -12,8 +12,13 @@
  *   The two differ: the field rule counts the full hook allowance without
  *   deducting bend shortening, so it reads ~10% HIGHER than the detailed
  *   form (demo: 1.372 m vs 1.244 m for a 300x450 beam, cover 40, dia 8).
- *   Both are exported — callers must say which one they used. Do NOT
- *   silently pick one.
+ *   UNIFIED CONVENTION (2026-11-20 audit fix, X3): the IS 2502 detailed
+ *   form is the canonical cutting length in every engine, and A/B are
+ *   the INNER dimensions in every engine — section minus 2x cover minus
+ *   the stirrup dia (A = section - 2*cover - phi). The field rule is
+ *   kept only as a labelled approximation, computed from the SAME inner
+ *   A/B, so the two forms can never drift apart again. Callers must say
+ *   which form a displayed weight uses.
  *
  * Rates are INDICATIVE defaults (Nov 2026, sources noted below). They are
  * editable in the UI and must be confirmed with a local dealer.
@@ -212,7 +217,9 @@ export function formatSteelMoney(value: number | null, currency: SteelCurrency):
 /**
  * Rectangular stirrup cutting length — AGENTS.md field rule.
  * L = 2(A+B) + 24*phi. A and B are the INNER dimensions (section minus
- * 2x cover), phi is the stirrup bar diameter. All lengths in the same unit.
+ * 2x cover minus phi), the same inner dims the detailed form uses — the
+ * field rule is a labelled approximation, never a second definition.
+ * All lengths in the same unit.
  */
 export function stirrupLengthSimple(aMm: number, bMm: number, phiMm: number): number {
   return 2 * (aMm + bMm) + 24 * phiMm;

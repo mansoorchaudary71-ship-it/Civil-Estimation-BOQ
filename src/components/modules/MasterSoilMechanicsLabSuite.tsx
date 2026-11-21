@@ -148,6 +148,7 @@ function PhaseTab() {
         </div>
         {phaseError && <p className="text-sm text-ui-errorText mt-2">{phaseError}</p>}
         {phase && <p className="mt-3 text-txt-primary">Dry density {phase.dryDensity.toFixed(3)} g/cc · void ratio {phase.voidRatio.toFixed(3)} · <strong>degree of saturation {phase.saturationPct.toFixed(1)}%</strong></p>}
+        {phase && phase.saturationPct > 100 && <p className="mt-2 text-sm font-medium p-3 rounded-xl bg-accent-50 border border-accent-100 text-accent-900">⚠ Degree of saturation {phase.saturationPct.toFixed(1)}% exceeds 100% — physically impossible. Check the water content, specific gravity and bulk density inputs.</p>}
       </div>
       <div className="border-t border-border-color pt-4">
         <h3 className="font-bold text-txt-primary mb-3">Free swell (IS 1498)</h3>

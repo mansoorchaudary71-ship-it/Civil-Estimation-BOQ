@@ -72,8 +72,8 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
         >
           <defs>
             <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#8B5CF6" /> {/* Violet */}
-              <stop offset="100%" stopColor="#06B6D4" /> {/* Cyan */}
+              <stop offset="0%" stopColor="#F5B731" /> {/* accent-400 */}
+              <stop offset="100%" stopColor="#D98F0B" /> {/* accent-600 */}
             </linearGradient>
             
             <filter id="glow-normal" x="-20%" y="-20%" width="140%" height="140%">
@@ -122,8 +122,8 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
           className="relative w-[56px] h-[56px] rounded-full backdrop-blur-xl bg-ink border border-white/20 text-white flex items-center justify-center focus:outline-none overflow-hidden"
           style={{ 
             boxShadow: isHovered 
-              ? '0 15px 35px -5px rgba(139, 92, 246, 0.5), inset 0 2px 4px rgba(255,255,255,0.3)' 
-              : '0 10px 25px -5px rgba(139, 92, 246, 0.3), inset 0 2px 4px rgba(255,255,255,0.2)', 
+              ? '0 15px 35px -5px rgba(242, 164, 19, 0.5), inset 0 2px 4px rgba(255,255,255,0.3)' 
+              : '0 10px 25px -5px rgba(242, 164, 19, 0.3), inset 0 2px 4px rgba(255,255,255,0.2)', 
             transition: 'box-shadow 0.3s ease' 
           }}
           aria-label="Open Master BOQ"

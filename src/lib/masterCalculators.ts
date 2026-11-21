@@ -31,7 +31,7 @@ export const calculatorsList: CalcItem[] = [
     compute: (v, shared, isSI) => {
       const vol = v.area * v.depth;
       return {
-        results: { "Topsoil Volume": `${vol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}` },
+        results: { "Topsoil Volume": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}` },
         sharedOutputs: { v_topsoil: vol }
       };
     }
@@ -53,8 +53,8 @@ export const calculatorsList: CalcItem[] = [
       const looseVol = vol * (1 + v.swell / 100);
       return {
         results: {
-          "Bank Volume (In-situ)": `${vol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`,
-          "Loose Volume (Excavated)": `${looseVol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`,
+          "Bank Volume (In-situ)": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+          "Loose Volume (Excavated)": `${looseVol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
         },
         sharedOutputs: { v_excavation: looseVol, v_bank_excavation: vol }
       };
@@ -93,8 +93,8 @@ export const calculatorsList: CalcItem[] = [
       const requiredFill = fillSpace * (1 + v.compaction / 100);
       return {
         results: {
-          "Space to Fill": `${fillSpace.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`,
-          "Required Fill Material": `${requiredFill.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`
+          "Space to Fill": `${fillSpace.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+          "Required Fill Material": `${requiredFill.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`
         },
         sharedOutputs: { v_backfill: requiredFill }
       };
@@ -117,8 +117,8 @@ export const calculatorsList: CalcItem[] = [
       const cementBags = Math.ceil(dryVol * (1/7) / 0.0347); // Assuming 1:2:4 -> Cement = 1/7
       return {
         results: {
-          "Wet Volume": `${vol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`,
-          "Dry Volume": `${dryVol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`,
+          "Wet Volume": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+          "Dry Volume": `${dryVol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
           "Cement Bags (approx 1:2:4)": cementBags
         },
         sharedOutputs: { v_pcc: vol, v_foundation_concrete: vol }
@@ -156,8 +156,8 @@ export const calculatorsList: CalcItem[] = [
       return {
         results: {
           "Single Footing Vol": `${singleVol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
-          "Total Wet Volume": `${totalVol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`,
-          "Total Dry Volume": `${dryVol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}`,
+          "Total Wet Volume": `${totalVol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+          "Total Dry Volume": `${dryVol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
         },
         sharedOutputs: { v_rcc_footing: totalVol, v_foundation_concrete: totalFoundConc }
       };
@@ -179,7 +179,7 @@ export const calculatorsList: CalcItem[] = [
       const vol = area * v.thick;
       const dryVol = vol * 1.54; // concrete dry vol
       return {
-         results: { "DPC Area": `${area.toFixed(2)} ${isSI ? "m²" : "sq.ft"}`, "DPC Concrete (Dry)": `${dryVol.toFixed(2)} ${isSI ? "m³" : "cu.ft"}` },
+         results: { "DPC Area": `${area.toFixed(3)} ${isSI ? "m²" : "sq.ft"}`, "DPC Concrete (Dry)": `${dryVol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}` },
          sharedOutputs: { a_dpc: area }
       };
     }
@@ -198,7 +198,7 @@ export const calculatorsList: CalcItem[] = [
     compute: (v, shared, isSI) => {
       const vol = v.len * v.w * v.d;
       return {
-        results: { "Wet Volume": vol.toFixed(2), "Dry Volume": (vol*1.54).toFixed(2) },
+        results: { "Wet Volume": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, "Dry Volume": `${(vol*1.54).toFixed(3)} ${isSI ? "m³" : "cu.ft"}` },
         sharedOutputs: { v_plinth: vol }
       };
     }
@@ -225,8 +225,8 @@ export const calculatorsList: CalcItem[] = [
       
       return { 
         results: { 
-          "Concrete Wet Vol": vol.toFixed(2), 
-          "Dry Vol": (vol*1.54).toFixed(2),
+          "Concrete Wet Vol": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, 
+          "Dry Vol": `${(vol*1.54).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
           "Total Stirrups": totalStirrups
         }, 
         sharedOutputs: { v_columns: vol } 
@@ -246,7 +246,7 @@ export const calculatorsList: CalcItem[] = [
     ],
     compute: (v, shared, isSI) => {
       const vol = v.len * v.w * v.d;
-      return { results: { "Concrete Wet Vol": vol.toFixed(2), "Dry Vol": (vol*1.54).toFixed(2) }, sharedOutputs: { v_beams: vol } };
+      return { results: { "Concrete Wet Vol": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, "Dry Vol": `${(vol*1.54).toFixed(3)} ${isSI ? "m³" : "cu.ft"}` }, sharedOutputs: { v_beams: vol } };
     }
   },
   // 11. RCC Slab (Must use EFFECTIVE_DEPTH calc)
@@ -270,8 +270,8 @@ export const calculatorsList: CalcItem[] = [
       return {
         results: { 
           "Effective Depth (d)": `${d_eff.toFixed(2)} mm`,
-          "Wet Concrete Vol": `${vol.toFixed(2)}`,
-          "Dry Concrete Vol": `${dryVol.toFixed(2)}`
+          "Wet Concrete Vol": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+          "Dry Concrete Vol": `${dryVol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`
         },
         sharedOutputs: { v_slab: vol }
       };
@@ -297,16 +297,18 @@ export const calculatorsList: CalcItem[] = [
       // rule MASONRY_BRICK_COUNT: N = V_wall / V_brick_with_mortar
       const V_brick_mortar = ((v.bl + v.jt)/1000) * ((v.bw + v.jt)/1000) * ((v.bh + v.jt)/1000);
       const N = Math.ceil(volWall / V_brick_mortar);
-      // Mortar volume = Wall volume - Brick only volume
+      // Mortar volume = Wall volume - Brick only volume. N is ceiled, so
+      // for a tiny wall the brick-only volume can exceed the wall volume
+      // and the mortar goes negative — clamp at 0 (no negative mortar).
       const V_brick_only = (v.bl/1000) * (v.bw/1000) * (v.bh/1000) * N;
-      const V_mortar_wet = volWall - V_brick_only;
+      const V_mortar_wet = Math.max(0, volWall - V_brick_only);
       const V_mortar_dry = V_mortar_wet * 1.33; // MORTAR_DRY_VOLUME
       
       const cementBags = Math.ceil((V_mortar_dry * (1/5)) / 0.0347); // Assume 1:4 ratio -> 1/5 cement
       return {
         results: {
           "Total Bricks": N,
-          "Dry Mortar Vol": V_mortar_dry.toFixed(3),
+          "Dry Mortar Vol": `${V_mortar_dry.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
           "Cement Bags (approx 1:4)": cementBags
         },
         sharedOutputs: { v_brickwork: volWall }
@@ -332,7 +334,7 @@ export const calculatorsList: CalcItem[] = [
       const waistVol = flightLen * v.width * v.waist;
       const total = stepVol + waistVol;
       return {
-        results: { "Concrete Vol (Wet)": total.toFixed(3), "Concrete Vol (Dry)": (total*1.54).toFixed(3) }
+        results: { "Concrete Vol (Wet)": `${total.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, "Concrete Vol (Dry)": `${(total*1.54).toFixed(3)} ${isSI ? "m³" : "cu.ft"}` }
       };
     }
   },
@@ -350,7 +352,7 @@ export const calculatorsList: CalcItem[] = [
     ],
     compute: (v, shared, isSI) => {
       const vol = v.count * v.L * v.W * v.D;
-      return { results: { "Concrete Vol (Wet)": vol.toFixed(3), "Concrete Vol (Dry)": (vol*1.54).toFixed(3) } };
+      return { results: { "Concrete Vol (Wet)": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, "Concrete Vol (Dry)": `${(vol*1.54).toFixed(3)} ${isSI ? "m³" : "cu.ft"}` } };
     }
   },
   // 15. Wall Plastering
@@ -382,7 +384,7 @@ export const calculatorsList: CalcItem[] = [
       const cementVol = v_dry * (1 / (1 + v.ratio)); // rule CEMENT_BAG_CONVERSION
       const bags = Math.ceil(cementVol / 0.0347);
       return {
-        results: { "Net Plaster Area": A_total.toFixed(2), "Dry Mortar Vol": v_dry.toFixed(3), "Cement Bags": bags },
+        results: { "Net Plaster Area": `${A_total.toFixed(3)} ${isSI ? "m²" : "sq.ft"}`, "Dry Mortar Vol": `${v_dry.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, "Cement Bags": bags },
         sharedOutputs: { a_wall_plaster: A_total }
       };
     }
@@ -403,7 +405,7 @@ export const calculatorsList: CalcItem[] = [
       const v_dry = v_wet * 1.33; // MORTAR_DRY_VOLUME
       const cementVol = v_dry * (1 / (1 + v.ratio)); 
       const bags = Math.ceil(cementVol / 0.0347); // CEMENT_BAG_CONVERSION
-      return { results: { "Dry Mortar Vol": v_dry.toFixed(3), "Cement Bags": bags } };
+      return { results: { "Dry Mortar Vol": `${v_dry.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, "Cement Bags": bags } };
     }
   },
   // 17. Flooring Base
@@ -418,7 +420,7 @@ export const calculatorsList: CalcItem[] = [
     ],
     compute: (v, shared, isSI) => {
       const vol = v.area * (v.thick / 1000);
-      return { results: { "Wet Vol": vol.toFixed(3), "Dry Vol": (vol*1.54).toFixed(3) }, sharedOutputs: { a_flooring: v.area } };
+      return { results: { "Wet Vol": `${vol.toFixed(3)} ${isSI ? "m³" : "cu.ft"}`, "Dry Vol": `${(vol*1.54).toFixed(3)} ${isSI ? "m³" : "cu.ft"}` }, sharedOutputs: { a_flooring: v.area } };
     }
   },
   // 18. Flooring Tiles
@@ -441,7 +443,7 @@ export const calculatorsList: CalcItem[] = [
       const tArea = tL * tW;
       const totalArea = areaTouse * (1 + v.waste/100);
       const count = Math.ceil(totalArea / tArea);
-      return { results: { "Tiles Required": count, "Total Area (inc. waste)": totalArea.toFixed(2) } };
+      return { results: { "Tiles Required": count, "Total Area (inc. waste)": `${totalArea.toFixed(3)} ${isSI ? "m²" : "sq.ft"}` } };
     }
   },
   // 19. Skirting
@@ -456,7 +458,7 @@ export const calculatorsList: CalcItem[] = [
     ],
     compute: (v, shared, isSI) => {
       const A = v.perim * (v.h / 1000);
-      return { results: { "Skirting Area": A.toFixed(2) } };
+      return { results: { "Skirting Area": `${A.toFixed(3)} ${isSI ? "m²" : "sq.ft"}` } };
     }
   },
   // 20. Paint
@@ -507,7 +509,7 @@ export const calculatorsList: CalcItem[] = [
     ],
     compute: (v, shared, isSI) => {
       const liters = (v.area / v.spread) * v.coats;
-      return { results: { "Chemical Liters": liters.toFixed(2) } };
+      return { results: { "Chemical Liters": `${liters.toFixed(2)} Liters` } };
     }
   },
   // 23. Unified BOQ
@@ -520,14 +522,14 @@ export const calculatorsList: CalcItem[] = [
     sharedDependencies: ["v_excavation", "v_bank_excavation", "v_foundation_concrete", "v_backfill", "v_pcc", "v_rcc_footing", "a_dpc", "v_columns", "v_slab", "v_brickwork"],
     compute: (v, shared, isSI) => {
       const agg = {
-        "Earthworks Vol": `${(shared.v_excavation || 0).toFixed(2)}`,
-        "Backfill Vol": `${(shared.v_backfill || 0).toFixed(2)}`,
-        "PCC Found. Vol": `${(shared.v_pcc || 0).toFixed(2)}`,
-        "RCC Footing Vol": `${(shared.v_rcc_footing || 0).toFixed(2)}`,
-        "DPC Area": `${(shared.a_dpc || 0).toFixed(2)}`,
-        "Columns Conc.": `${(shared.v_columns || 0).toFixed(2)}`,
-        "Slabs Conc.": `${(shared.v_slab || 0).toFixed(2)}`,
-        "Brickwork Vol": `${(shared.v_brickwork || 0).toFixed(2)}`,
+        "Earthworks Vol": `${(shared.v_excavation || 0).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+        "Backfill Vol": `${(shared.v_backfill || 0).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+        "PCC Found. Vol": `${(shared.v_pcc || 0).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+        "RCC Footing Vol": `${(shared.v_rcc_footing || 0).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+        "DPC Area": `${(shared.a_dpc || 0).toFixed(3)} ${isSI ? "m²" : "sq.ft"}`,
+        "Columns Conc.": `${(shared.v_columns || 0).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+        "Slabs Conc.": `${(shared.v_slab || 0).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
+        "Brickwork Vol": `${(shared.v_brickwork || 0).toFixed(3)} ${isSI ? "m³" : "cu.ft"}`,
       };
       return { results: agg };
     }
@@ -541,6 +543,12 @@ export const calculatorsList: CalcItem[] = [
  * This wrapper converts Imperial inputs to metric, computes in metric
  * (so the shared chain stays metric), then converts only the displayed
  * result strings back to Imperial. Shared outputs are never converted.
+ *
+ * Precision: result strings carry 3 decimals (BOQ convention), because
+ * the conversion parses the DISPLAYED string — at 2 decimals a 0.195 m³
+ * plinth beam rounded to "0.20" and converted to 7.06 cu.ft against a
+ * true 6.90 cu.ft. At 3 decimals the same value converts to 6.89 cu.ft,
+ * i.e. display rounding only.
  */
 const FT_TO_M = 0.3048;
 const SQFT_TO_M2 = 0.092903;

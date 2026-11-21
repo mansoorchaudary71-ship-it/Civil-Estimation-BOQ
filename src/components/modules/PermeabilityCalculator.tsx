@@ -53,7 +53,10 @@ export default function PermeabilityCalculator() {
       const h1 = Number(headInitial) || 0;
       const h2 = Number(headFinal) || 0;
       
-      if (A * t > 0 && h1 > 0 && h2 > 0 && h1 >= h2) {
+      // h1 must be STRICTLY greater than h2: h1 == h2 makes log10(1) = 0
+      // and the old `h1 >= h2` guard let it through as k = 0 with class
+      // "Unknown"; the engine throws when h2 >= h1.
+      if (A * t > 0 && h1 > 0 && h2 > 0 && h1 > h2) {
         k = 2.303 * ((a * L) / (A * t)) * Math.log10(h1 / h2);
       }
     }

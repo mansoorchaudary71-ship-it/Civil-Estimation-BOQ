@@ -121,7 +121,10 @@ export default function SlopeStability() {
 <input id="a11y-input-501"
                   type="number" inputMode="decimal"
                   value={slopeHeight}
-                  onChange={(e) => setSlopeHeight(e.target.value)}
+                  // In this infinite-slope screening the slip plane is at the
+                  // toe, so z = H: changing H moves the slip depth with it
+                  // (the old code kept H as a dead input — only z was used).
+                  onChange={(e) => { setSlopeHeight(e.target.value); setSlipDepth(e.target.value); }}
                   className="w-full mt-1 bg-surface-hover border border-ui-borderSubtle p-3 rounded-full font-bold focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 transition-all font-mono"
                 /></>
               </div>
@@ -152,7 +155,7 @@ export default function SlopeStability() {
                 />
               </div>
             </div>
-            <p className="mt-4 text-sm text-txt-secondary">Infinite-slope screening only: FoS = [c + γ·z·cos²β·(1−ru)·tanφ] / [γ·z·sinβ·cosβ]. No Bishop analysis — use slope-stability software for design. Defaults give FoS 1.06 (Marginal).</p>
+            <p className="mt-4 text-sm text-txt-secondary">Infinite-slope screening only: FoS = [c + γ·z·cos²β·(1−ru)·tanφ] / [γ·z·sinβ·cosβ]. The slip plane is taken at the toe (z = H), so changing Slope Height moves the slip depth with it; edit Slip-plane depth separately for a shallower slip surface. No Bishop analysis — use slope-stability software for design. Defaults give FoS 1.06 (Marginal).</p>
           </div>
         </div>
 

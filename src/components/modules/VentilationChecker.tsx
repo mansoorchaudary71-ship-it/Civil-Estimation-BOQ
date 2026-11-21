@@ -150,6 +150,7 @@ export default function VentilationChecker() {
                     <ResultCard title="ASHRAE Outdoor Air" value={result.ashraeVozM3h.toFixed(1)} unit="m³/h" secondaryValue={`${result.ashraeVbzLs.toFixed(1)} L/s`} variant="info" />
                     {result.actualAch != null && <ResultCard title="Actual ACH" value={result.actualAch.toFixed(1)} unit="ACH" variant={result.actualAch >= result.targetAch ? "success" : "warning"} />}
                     {result.exhaustFanCfm != null && <ResultCard title="Exhaust Fan Size" value={result.exhaustFanCfm} unit="CFM" variant="primary" />}
+                    {result.exhaustFanCfm != null && <p className="text-xs text-txt-tertiary col-span-2">Fan sized on the ASHRAE 62.2 intermittent exhaust rate (kitchen 100 CFM, bathroom 50 CFM) — not on the whole-room ACH airflow above, which is a different number.</p>}
                   </div>
                   <div className={`mt-6 p-4 rounded-2xl flex items-center justify-between border ${result.glazingPass && result.ventilationPass ? "bg-accent-50 border-accent-200" : "bg-ui-error border-ui-errorBorder"}`}>
                     <div className="flex items-center gap-3">

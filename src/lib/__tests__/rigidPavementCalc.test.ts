@@ -8,6 +8,12 @@ test("worked: 1000×7.5 m, DLC 150 mm 1:3:6 → 1125 m³, 4990 bags; PQC 250 mm 
   assert.equal(r.dlc.cementBags, 4990); assert.equal(r.pqc.cementBags, 15120);
   approx(r.pqc.sandM3, 787.5, 1); approx(r.pqc.aggregateM3, 1575, 1);
 });
+test("ties: 11 m wide pavement has 2 longitudinal joints (3332 bars), not 1", () => {
+  const r = rigidQuantities(1000, 11, 250, 150);
+  assert.equal(r.longitudinalJoints, 2);
+  assert.equal(r.tieBars, 3332);
+  approx(r.tieKg, 1774, 2);
+});
 test("dowels: 222 joints × 25 = 5550 bars, 17,510 kg; ties 1666 bars, 887 kg", () => {
   const r = rigidQuantities(1000, 7.5, 250, 150);
   assert.equal(r.dowelBars, 5550); approx(r.dowelKg, 17510, 5);

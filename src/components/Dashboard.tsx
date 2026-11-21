@@ -1,6 +1,6 @@
 import { Button } from './ui/Button';
 import { motion } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Calculator, Droplets,
  Sparkles,
@@ -53,8 +53,12 @@ import SocialProofSection from "./SocialProofSection";
 import GoalTabs from "./GoalTabs";
 import CategoryHub from "./CategoryHub";
 import WorkspaceSection from "./WorkspaceSection";
-import SummaryStatsWidget from "./SummaryStatsWidget";
-import { MaterialCostDonutChart } from "./ui/MaterialCostDonutChart";
+// Lazily loaded: both pull in recharts (~376 kB). They render below the
+// fold on the home page, so they must not ride in the eager graph.
+const SummaryStatsWidget = lazy(() => import("./SummaryStatsWidget"));
+const MaterialCostDonutChart = lazy(() =>
+  import("./ui/MaterialCostDonutChart").then((m) => ({ default: m.MaterialCostDonutChart }))
+);
 
 import { HowItWorksSection,
  FeatureComparisonSection,
@@ -1305,7 +1309,10 @@ export default function Dashboard({
  
   <RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} />
   
-  <button onClick={() => setIsRecentOpen(true)} className="fixed right-6 bottom-6 z-50 w-14 h-14 rounded-full bg-ink text-white shadow-2xl hover:bg-ink-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-accent-500/30 group p-0 flex items-center justify-center" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-ink border-2 border-white"></span></span></button>
+  {/* History FAB sits ABOVE the app-wide BOQ FAB (FloatingBOQButton,
+      fixed bottom-6 right-6): the two 56px buttons used to share the exact
+      same spot and the BOQ button (z-60) covered this one completely. */}
+  <button onClick={() => setIsRecentOpen(true)} aria-label="Calculation History" className="fixed right-6 bottom-24 z-50 w-14 h-14 rounded-full bg-ink text-white shadow-2xl hover:bg-ink-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-accent-500/30 group p-0 flex items-center justify-center" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-ink border-2 border-white"></span></span></button>
 <div className="relative w-full flex flex-col font-sans bg-surface-default text-txt-primary border-none">
 
   <div 
@@ -1372,10 +1379,14 @@ export default function Dashboard({
 
  <div className="w-full bg-surface-default relative overflow-visible shadow-[0_-8px_30px_rgba(31,29,26,0.08)] border-t border-ui-borderSubtle/60 pb-0 tools-section"> <div className="w-full z-10 overflow-visible flex flex-col pt-4">
  <div className="mb-12 w-full md:max-w-[1400px] md:mx-auto px-4">
- <SummaryStatsWidget />
+ <Suspense fallback={<div className="h-24 w-full rounded-2xl bg-surface-hover/50 animate-pulse" role="status" aria-label="Loading summary statistics" />}>
+            <SummaryStatsWidget />
+          </Suspense>
             <div className="mt-8 mb-8 grid grid-cols-1 xl:grid-cols-2 gap-8">
               
-              <MaterialCostDonutChart />
+              <Suspense fallback={<div className="h-64 w-full rounded-2xl bg-surface-hover/50 animate-pulse" role="status" aria-label="Loading cost chart" />}>
+                <MaterialCostDonutChart />
+              </Suspense>
             </div>
             <WorkspaceSection onSelect={handleSelect} />
  </div>

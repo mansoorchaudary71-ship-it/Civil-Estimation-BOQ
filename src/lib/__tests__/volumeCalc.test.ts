@@ -41,6 +41,14 @@ test("rect tank 3x2x2, freeboard 0.2 m, dead 0.2 m -> gross 12.00, usable 9.60 m
   approx(r.litres, 9600);
 });
 
+test("cylindrical commercial tank (dia 4 m, H 5 m): surface area 2πr²+2πrH = 87.96 m², not the rectangular 94 m²", () => {
+  const r = calcVolume("commercial-tank", dims({
+    lengthM: 4, widthM: 3, heightM: 5, tankBase: "cyl",
+    slopedBase: false, freeboardM: 0, deadStorageM: 0,
+  }));
+  approx(r.surfaceAreaM2, 87.96, 0.05);
+  approx(r.lateralAreaM2!, 2 * Math.PI * 2 * 5, 0.05);
+});
 test("commercial tank with sloped base uses the frustum formula h/3 x (A1+A2+sqrt(A1 A2))", () => {
   const r = calcVolume("commercial-tank", dims({
     lengthM: 3, widthM: 2, heightM: 2, tankBase: "rect",

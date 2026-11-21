@@ -250,7 +250,7 @@ export function PrecastWallEstimator() {
               <div className="space-y-2"><label className={labelCls}>Labour per running {unitL}</label><input type="number" min="0" value={labourRate} onChange={(e) => setLabourRate(e.target.value)} className={inputCls} placeholder="Enter rate" /></div>
               <div className="space-y-2"><label className={labelCls}>Transport (flat)</label><input type="number" min="0" value={transport} onChange={(e) => setTransport(e.target.value)} className={inputCls} /></div>
             </div>
-            <p className="text-xs text-txt-tertiary">Post/panel rates are unverified indicative defaults (the two in-repo rate sets disagreed: Rs 1,500/800 vs Rs 800/400). Confirm with your supplier before ordering.</p>
+            <p className="text-xs text-txt-tertiary">Post/panel rates are unverified indicative defaults (Rs 1,500 per post, Rs 800 per panel). Confirm with your supplier before ordering.</p>
           </div>
         </div>
 

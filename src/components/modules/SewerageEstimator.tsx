@@ -65,7 +65,6 @@ export default function SewerageEstimator() {
   const [trenchSloped, setTrenchSloped] = useState(false);
   const [trenchSlopeRatio, setTrenchSlopeRatio] = useState<number | "">(0.5);
   const [pipeOuterDia, setPipeOuterDia] = useState<number | "">(0.4);
-  const [beddingDepth, setBeddingDepth] = useState<number | "">(0.2);
   // Invert levels
   const [startIL, setStartIL] = useState<number | "">(100);
   const [ilLength, setIlLength] = useState<number | "">(50);
@@ -127,7 +126,9 @@ export default function SewerageEstimator() {
       { desc: `Sewer pipe (${calc.selection?.selectedDiameterMm ?? "—"} mm)`, unit: "m", rate: pipe, qty: Number(pipeLength) || 0 },
       { desc: "Septic tank (RCC)", unit: "m³", rate: sep, qty: (calc.septic.liquidVolumeL / 1000) },
       { desc: "Soak pit", unit: "nos", rate: soak, qty: calc.septic.soakPits },
-      ...(mhResults ? [{ desc: "Manhole", unit: "nos", rate: mh, qty: 1 }] : []),
+      // Single manhole as designed in the Manhole Calculator above — the
+      // module designs one manhole, so qty 1 is that one, not one per run.
+      ...(mhResults ? [{ desc: "Manhole (single, as designed above)", unit: "nos", rate: mh, qty: 1 }] : []),
     ];
     return lines.map((l) => ({ ...l, amount: l.rate != null ? l.rate * l.qty : null }));
   }, [calc, excavationRate, pipeRatePerM, manholeRate, septicRatePerM3, soakPitRate, pipeLength, mhResults]);
@@ -150,7 +151,10 @@ export default function SewerageEstimator() {
     const items = costLines
       .filter((l) => l.rate != null && l.qty > 0)
       .map((l) => ({ desc: l.desc, unit: l.unit, rate: l.rate as number, qtyOverride: l.qty }));
-    if (calc.pipeCount > 0) items.push({ desc: `Sewerage RCC Pipe (${pipeSectionLen}m sections)`, unit: "nos", rate: 2500, qtyOverride: calc.pipeCount });
+    // Pipe line uses the rate the user entered (the old code hardcoded
+    // Rs 2,500 per pipe regardless of the rate box): per-pipe rate =
+    // per-metre rate x section length; skipped when no rate is entered.
+    if (calc.pipeCount > 0 && r(pipeRatePerM) != null) items.push({ desc: `Sewerage RCC Pipe (${pipeSectionLen}m sections)`, unit: "nos", rate: (r(pipeRatePerM) as number) * (Number(pipeSectionLen) || 0), qtyOverride: calc.pipeCount });
     if (items.length === 0) return;
     addBoqItems(items);
     setBoqAdded(true);
@@ -247,7 +251,8 @@ export default function SewerageEstimator() {
               <NumberInput label="Trench Width" unit="m" value={trenchWidth} onChange={setTrenchWidth} />
               <NumberInput label="Trench Depth" unit="m" value={trenchDepth} onChange={setTrenchDepth} />
               <NumberInput label="Pipe Outer Diameter" unit="m" value={pipeOuterDia} onChange={setPipeOuterDia} />
-              <NumberInput label="Bedding Depth" unit="m" value={beddingDepth} onChange={setBeddingDepth} />
+              {/* "Bedding Depth" was removed: it fed nothing — the bedding
+                  volume below uses Bedding Under Pipe + Haunch Height. */}
               <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-txt-secondary col-span-2">
                 <input type="checkbox" checked={trenchSloped} onChange={(e) => setTrenchSloped(e.target.checked)} className="w-4 h-4 text-accent-800 rounded" /> Sloped trench sides
               </label>

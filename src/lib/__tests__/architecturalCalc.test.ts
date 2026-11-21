@@ -248,6 +248,23 @@ test("7. Roof metric defaults -> run 5, 30.96°, rafter 6.414 m, area 192.42 m²
   assert.notEqual(r.roofAreaM2, 189.93);
 });
 
+test("7b. Roof gable with 0.5 m rake overhang -> area 205.2 m² (length + 2 x rake)", () => {
+  const r = calcRoof({
+    spanM: 10,
+    riseM: 3,
+    overhangHM: 0.5,
+    rakeOverhangM: 0.5,
+    lengthM: 15,
+    roofType: "gable",
+  });
+  assert.deepEqual(r.errors, []);
+  // 2 slopes x rafter 6.414 m x (15 + 2 x 0.5) m = 205.25 m²; the old code
+  // used the bare 15 m length and gave 192.42 m².
+  approx(r.roofAreaM2, 205.2, 0.1);
+  approx(r.ridgeM, 16);
+  approx(r.eaveM, 32);
+});
+
 test("8. Roof imperial defaults -> rafter 19.831 ft, area 1983.1 sq ft; waste 10% -> 22 squares, 66 bundles", () => {
   const r = calcRoof({
     spanM: 30 * FT_TO_M,
@@ -337,7 +354,14 @@ test("roof: hip and mono shapes, and cost stays blank without rates", () => {
     lengthM: 15,
     roofType: "mono",
   });
-  approx(mono.roofAreaM2, 6.414 * 15, 0.05); // single slope
+  // Mono run is the FULL span: run 10 m, rafter √(10²+3²) + 0.5/cos θ ≈
+  // 10.96 m, area ≈ 164.4 m², pitch 3.6:12 / 16.7°. The old code halved
+  // the run (rafter 6.414 m, area 96.2 m²) — ~41% under.
+  approx(mono.runM, 10);
+  approx(mono.rafterM, 10.96, 0.05);
+  approx(mono.roofAreaM2, 164.4, 0.1);
+  approx(mono.pitchX12, 3.6);
+  approx(mono.angleDeg, 16.7, 0.1);
   assert.equal(mono.ridgeM, 0);
 
   // No PK/IN/UAE shingle price was found: with no rates the cost is null,

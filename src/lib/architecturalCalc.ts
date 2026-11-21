@@ -835,7 +835,11 @@ export function calcRoof(inp: RoofInput): RoofResult {
   };
   if (errors.length > 0) return empty;
 
-  const runM = inp.spanM / 2;
+  // Mono-pitch: the single slope runs the FULL span (high wall to low
+  // wall), not half of it — the old code halved the run for every roof
+  // type, so a 10 m span / 3 m rise mono roof came out at 96.2 m²
+  // instead of 164.4 m² (~41% under).
+  const runM = inp.roofType === "mono" ? inp.spanM : inp.spanM / 2;
   // Derive the rise from whichever pitch input was given (rise wins).
   let riseM: number;
   if (inp.riseM != null) {
@@ -867,10 +871,14 @@ export function calcRoof(inp: RoofInput): RoofResult {
   let rakeM: number;
   let hipRafterM: number | null = null;
   let slopeCount: number;
+  // The roof length includes the rake (gable-end) overhangs on both ends.
+  // The old code used the bare building length, so a gable roof with a
+  // 0.5 m rake overhang was 6.3% short on area (192.4 m² vs 205.2 m²).
+  const effectiveLengthM = inp.lengthM + 2 * rakeOverhangM;
   if (inp.roofType === "mono") {
-    roofAreaM2 = rafterM * inp.lengthM;
+    roofAreaM2 = rafterM * effectiveLengthM;
     ridgeM = 0;
-    eaveM = 2 * inp.lengthM;
+    eaveM = 2 * effectiveLengthM;
     rakeM = 2 * rafterM;
     slopeCount = 1;
   } else if (inp.roofType === "hip") {
@@ -887,10 +895,13 @@ export function calcRoof(inp: RoofInput): RoofResult {
     warnings.push(
       "Hip roof area assumes a uniform pitch on all slopes, and the hip/valley rafter (≈ 1.5 × run) is an approximation — confirm long hip rafters against your drawings.",
     );
+    warnings.push(
+      "Rafter count covers the two long slopes only — hip/valley jack rafters are not counted.",
+    );
   } else {
-    roofAreaM2 = 2 * rafterM * inp.lengthM;
-    ridgeM = inp.lengthM;
-    eaveM = 2 * inp.lengthM;
+    roofAreaM2 = 2 * rafterM * effectiveLengthM;
+    ridgeM = effectiveLengthM;
+    eaveM = 2 * effectiveLengthM;
     rakeM = 4 * rafterM;
     slopeCount = 2;
   }
@@ -903,7 +914,7 @@ export function calcRoof(inp: RoofInput): RoofResult {
   const ridgeCapBundles = ridgeM > 0 ? Math.ceil(ridgeM / RIDGE_M_PER_BUNDLE) : 0;
   const dripEdgeM = eaveM + rakeM;
   const dripEdgePieces = Math.ceil(dripEdgeM / DRIP_EDGE_M_PER_PIECE);
-  const rafterCount = (Math.ceil(inp.lengthM / spacingM) + 1) * slopeCount;
+  const rafterCount = (Math.ceil(effectiveLengthM / spacingM) + 1) * slopeCount;
 
   if (riseM === 0) {
     warnings.push(

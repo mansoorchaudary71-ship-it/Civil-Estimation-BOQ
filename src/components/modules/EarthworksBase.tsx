@@ -53,7 +53,10 @@ export default function StandardEarthworks() {
   const [autoCalcAm, setAutoCalcAm] = useState<boolean>(false);
   const [bulkingFactor, setBulkingFactor] = useState<string>("15");
   const [shrinkageFactor, setShrinkageFactor] = useState<string>("10");
-  const [truckCapacity, setTruckCapacity] = useState<string>("800");
+  // Truck capacity is entered in the displayed unit: 8 m³ in SI (≈ a
+  // standard tipper), 283 ft³ in imperial (8 × 35.3147). The old default
+  // of 800 showed 7 trips where 667 are needed (loose 5,328.3 m³).
+  const [truckCapacity, setTruckCapacity] = useState<string>(isMetric ? "8" : "283");
   const [excavationRate, setExcavationRate] = useState<string>("150");
   const [compactionRate, setCompactionRate] = useState<string>("100");
   const [haulingRate, setHaulingRate] = useState<string>("500");

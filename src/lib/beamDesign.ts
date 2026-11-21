@@ -174,7 +174,9 @@ export function designBeam(input: Partial<BeamInputs> = {}): BeamResult {
   } else if (i.support === "continuous") {
     muSupport = (W * L * L) / 10;
     muSpan = (W * L * L) / 12;
-    vu = (W * L) / 2;
+    // Interior-support shear for a continuous beam is 0.625·W·L (the old
+    // code used WL/2, the simply-supported value, understating Vu by 20%).
+    vu = (0.625 * W * L);
   } else {
     muSpan = (W * L * L) / 2;
     vu = W * L;
@@ -280,7 +282,7 @@ export function designBeam(input: Partial<BeamInputs> = {}): BeamResult {
     compSteelKg: round(compKg, 2), totalSteelKg: round(totalSteel, 2),
     concreteVolM3: round(concVol, 3), materials,
     costLines: lines, totalCost: totalCost(lines),    steps: [
-      { label: "Effective depth", text: `d = D − cover − stirrup dia − φ/2 = ${i.depthMm} − ${i.coverMm} − ${i.stirrupDiaMm} − ${i.mainDiaMm}/2 = ${round(d, 1)} mm` },
+      { label: "Effective depth", text: `d = D − cover − φ/2 = ${i.depthMm} − ${i.coverMm} − ${i.mainDiaMm}/2 = ${round(d, 1)} mm (the stirrup dia belongs in d' = cover + stirrup dia + φ/2 = ${round(dPrime, 1)} mm, not in d)` },
       { label: "Factored load", text: `w = (${i.workingLoadKNm} + self-weight ${round(wSw, 2)}) × ${i.safetyFactor} = ${round(W, 2)} kN/m` },
       { label: "Design moment", text: i.support === "continuous"
         ? `Support Mu = wL²/10 = ${round(muSupport, 1)} kNm; span Mu = wL²/12 = ${round(muSpan, 1)} kNm (IS 456 continuous beam)`
@@ -294,7 +296,7 @@ export function designBeam(input: Partial<BeamInputs> = {}): BeamResult {
 }
 
 export const BEAM_FAQS: FaqItem[] = [
-  { q: "How is Ast calculated for a beam?", a: "By the IS 456 limit state formula Ast = (0.5·fck/fy)·(1 − √(1 − 4.6·Mu/(fck·b·d²)))·b·d, where Mu is the factored design moment and d = D − cover − stirrup dia − φ/2. The result is then checked against Ast,min = 0.85·b·d/fy and Ast,max = 0.04·b·D." },
+  { q: "How is Ast calculated for a beam?", a: "By the IS 456 limit state formula Ast = (0.5·fck/fy)·(1 − √(1 − 4.6·Mu/(fck·b·d²)))·b·d, where Mu is the factored design moment and d = D − cover − φ/2. The result is then checked against Ast,min = 0.85·b·d/fy and Ast,max = 0.04·b·D." },
   { q: "When is a beam doubly reinforced?", a: "When the design moment Mu exceeds the limiting moment Mu,lim. Compression steel is then needed as well as tension steel. The compression steel stress fsc comes from SP-16 Table F by d′/d and steel grade — for Fe500 it is well below 0.87·fy, so assuming 0.87·fy would under-design the compression steel." },
   { q: "What is Mu,lim?", a: "The maximum moment a singly reinforced section can resist, reached when the neutral axis is at xu,max. For Fe500, xu,max/d = 0.46. If Mu is larger, either deepen the section or design it as doubly reinforced." },
   { q: "What are the minimum and maximum steel limits in a beam?", a: "Minimum tension steel is Ast,min = 0.85·b·d/fy (IS 456 Cl. 26.5.1.1) so the beam does not fail suddenly in tension. Maximum steel is Ast,max = 0.04·b·D — above that the section is over-reinforced and concrete crushes before the steel yields." },

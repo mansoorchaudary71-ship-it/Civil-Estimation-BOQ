@@ -34,16 +34,27 @@ export function verticalCurve(g1Pct: number, g2Pct: number, speedKmh: number, ss
   if (ssdM <= 0) throw new Error("Stopping sight distance must be > 0.");
   let lengthM: number, branch: string;
   if (type === "Crest") {
-    // Standard simplified form used by the spec worked example (multicalci /
-    // AASHTO): L = A·S²/658. The S>L branch (L = 2S − 658/A) is noted in
-    // `branch` when SSD exceeds L, but the worked example (S=120, L=109.4)
-    // applies the primary form — follow it.
-    lengthM = (aPct * ssdM * ssdM) / 658;
-    branch = ssdM <= lengthM ? "S ≤ L: L = A·S²/658" : "S > L — primary form L = A·S²/658 applied (AASHTO branch would give 2S − 658/A)";
+    // AASHTO: S ≤ L → L = A·S²/658; S > L → L = 2S − 658/A. The primary
+    // form alone is wrong when S > L (worked example: S = 120, primary
+    // L = 109.4, so the S > L branch applies → L = 2·120 − 658/5 = 108.4 m).
+    const primary = (aPct * ssdM * ssdM) / 658;
+    if (ssdM <= primary) {
+      lengthM = primary;
+      branch = "S ≤ L: L = A·S²/658";
+    } else {
+      lengthM = 2 * ssdM - 658 / aPct;
+      branch = "S > L: L = 2S − 658/A";
+    }
   } else {
     const denom = 120 + 3.5 * ssdM;
-    lengthM = (aPct * ssdM * ssdM) / denom;
-    branch = ssdM <= lengthM ? "S ≤ L: L = A·S²/(120+3.5S)" : "S > L — primary form L = A·S²/(120+3.5S) applied (AASHTO branch would give 2S − (120+3.5S)/A)";
+    const primary = (aPct * ssdM * ssdM) / denom;
+    if (ssdM <= primary) {
+      lengthM = primary;
+      branch = "S ≤ L: L = A·S²/(120+3.5S)";
+    } else {
+      lengthM = 2 * ssdM - denom / aPct;
+      branch = "S > L: L = 2S − (120+3.5S)/A";
+    }
   }
   const k = aPct === 0 ? 0 : lengthM / aPct;
   // Sag comfort check (IRC:66): L ≥ A·V²/46.5 — labelled, verify against IRC:66 before design use

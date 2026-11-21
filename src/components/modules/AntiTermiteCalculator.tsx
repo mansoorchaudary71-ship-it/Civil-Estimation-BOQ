@@ -20,7 +20,7 @@ export default function AntiTermiteCalculator() {
   const [floorArea, setFloorArea] = useState<number | "">(100);
   const [perimeter, setPerimeter] = useState<number | "">(40);
   const [trenchWidth, setTrenchWidth] = useState<number | "">(0.6);
-  const [trenchDepth, setTrenchDepth] = useState<number | "">(0.5);
+  const [trenchDepth, setTrenchDepth] = useState<number | "">(0.3);
   const [chemicalId, setChemicalId] = useState("bifenthrin");
   const [customRatio, setCustomRatio] = useState<number | "">(19);
   const [wastagePct, setWastagePct] = useState<number | "">(5);
@@ -30,6 +30,7 @@ export default function AntiTermiteCalculator() {
   const [currency, setCurrency] = useState("PKR");
   const [ratePerLitre, setRatePerLitre] = useState<number | "">("");
   const [labourPerM2, setLabourPerM2] = useState<number | "">("");
+  const [equipmentLumpSum, setEquipmentLumpSum] = useState<number | "">("");
   const [copied, setCopied] = useState(false);
 
   const chemical = ANTITERMITE_CHEMICALS.find((c) => c.id === chemicalId) ?? ANTITERMITE_CHEMICALS[0];
@@ -49,6 +50,7 @@ export default function AntiTermiteCalculator() {
         packSizeL: Number(packSize) || 5,
         ratePerLitreConcentrate: ratePerLitre === "" ? null : Number(ratePerLitre),
         labourPerM2: labourPerM2 === "" ? null : Number(labourPerM2),
+        equipmentLumpSum: equipmentLumpSum === "" ? 0 : Number(equipmentLumpSum),
       };
       const errs = validateAntiTermiteInputs(inp);
       if (errs.length > 0) return { result: null, errors: errs };
@@ -56,7 +58,7 @@ export default function AntiTermiteCalculator() {
     } catch (e) {
       return { result: null, errors: [(e as Error).message] };
     }
-  }, [floorArea, perimeter, trenchWidth, trenchDepth, includePeriphery, verticalArea, chemical, customRatio, wastagePct, packSize, ratePerLitre, labourPerM2]);
+  }, [floorArea, perimeter, trenchWidth, trenchDepth, includePeriphery, verticalArea, chemical, customRatio, wastagePct, packSize, ratePerLitre, labourPerM2, equipmentLumpSum]);
 
   const sym = CUR_SYMBOLS[currency] ?? "Rs";
   const fmt = (v: number | null | undefined) =>
@@ -76,6 +78,10 @@ export default function AntiTermiteCalculator() {
       { description: "Trench sides emulsion (7.5 L/m)", quantity: result.trenchSidesL, unit: "L", rate: 0, amount: 0 },
       { description: "Floor / plinth emulsion (5 L/m²)", quantity: result.floorL, unit: "L", rate: 0, amount: 0 },
       { description: `${chemical.name} concentrate`, quantity: result.concentrateL, unit: "L", rate: ratePerLitre === "" ? 0 : Number(ratePerLitre), amount: result.chemicalCost ?? 0 },
+      // Labour and equipment were silently dropped from the PDF even
+      // when priced — they are part of the total, so they are line items.
+      ...(result.labourCost != null ? [{ description: "Labour (application)", quantity: Number(floorArea) || 0, unit: "m²", rate: labourPerM2 === "" ? 0 : Number(labourPerM2), amount: result.labourCost }] : []),
+      ...(equipmentLumpSum !== "" && Number(equipmentLumpSum) > 0 ? [{ description: "Equipment hire (lump sum)", quantity: 1, unit: "lot", rate: Number(equipmentLumpSum), amount: Number(equipmentLumpSum) }] : []),
     ];
     exportBOQToPDF({ projectName: "Anti-Termite Treatment", date: new Date().toLocaleDateString(), items, totalAmount: result.totalCost ?? 0 });
   };
@@ -150,6 +156,7 @@ export default function AntiTermiteCalculator() {
                 </div>
                 <NumberInput label={`Concentrate Price per Litre (${sym}) — leave blank if unknown`} unit={sym} value={ratePerLitre} onChange={setRatePerLitre} />
                 <NumberInput label={`Labour per m² of Floor (${sym}) — leave blank if unknown`} unit={sym} value={labourPerM2} onChange={setLabourPerM2} />
+                <NumberInput label={`Equipment Hire, Lump Sum (${sym}) — leave blank if none`} unit={sym} value={equipmentLumpSum} onChange={setEquipmentLumpSum} />
               </div>
             </div>
           </div>

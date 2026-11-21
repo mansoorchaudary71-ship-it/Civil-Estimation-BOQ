@@ -101,8 +101,10 @@ export default function ColumnDesignTool() {
             <div>
               <h3 className="mb-3 border-b border-border-color pb-2 text-lg font-medium text-txt-primary mb-4">Section &amp; Materials</h3>
               <div className="grid grid-cols-2 gap-4">
-                <NumberInput label="Width (B)" unit="mm" value={width} onChange={setWidth} requirePositive />
-                <NumberInput label="Depth (D)" unit="mm" value={depth} onChange={setDepth} requirePositive />
+                {shape === "rectangular" && (
+                  <NumberInput label="Width (B)" unit="mm" value={width} onChange={setWidth} requirePositive />
+                )}
+                <NumberInput label={shape === "circular" ? "Diameter (D)" : "Depth (D)"} unit="mm" value={depth} onChange={setDepth} requirePositive />
                 <NumberInput label="Concrete (fck)" unit="MPa" value={fck} onChange={setFck} requirePositive />
                 <NumberInput label={<span className="flex items-center gap-1">Steel (fy) <CodeTooltip standard="IS" code="1786:2008" description="High strength deformed steel bars and wires for concrete reinforcement." /></span>} unit="MPa" value={fy} onChange={setFy} requirePositive />
               </div>
@@ -178,7 +180,7 @@ export default function ColumnDesignTool() {
                   <RechartsTooltip cursor={{ strokeDasharray: '3 3' }} formatter={(value: any) => Number(value).toFixed(1)} />
                   <Legend verticalAlign="top" height={36} />
                   <Line data={results.curve} type="monotone" dataKey="P" stroke="#B91C1C" strokeWidth={3} dot={false} name="Capacity Envelope" isAnimationActive={false} />
-                  <Scatter name="Applied Load (Pu, Mu)" data={[{ M: results.designMomentKNm, P: results.puKN }]} fill={results.isSafe ? "#FFFFFF" : "#B91C1C"} shape="circle" />
+                  <Scatter name="Applied Load (Pu, Mu)" data={[{ M: results.designMomentKNm, P: results.puKN }]} fill={results.isSafe ? "#16A34A" : "#B91C1C"} shape="circle" />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>

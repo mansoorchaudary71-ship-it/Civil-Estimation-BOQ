@@ -17,8 +17,11 @@ test("worked constant-head: Q=500,L=10,A=50,h=50,t=60 → 3.33×10⁻² cm/s", (
 test("worked falling-head: a=5,L=10,A=50,t=120,h1=100,h2=50 → 5.78×10⁻³ cm/s", () => {
   approx(fallingHeadK(5, 10, 50, 120, 100, 50), 0.00578, 0.00005);
 });
-test("Hazen k≈0.01·D10² and 3-trial averaging; h2≥h1 throws", () => {
-  approx(hazenK(0.3), 0.0009, 1e-6);
+test("Hazen k≈1.0·D10² (D10 in mm → cm/s) and 3-trial averaging; h2≥h1 throws", () => {
+  // Hazen: k = 100·D10² with D10 in cm = 1.0·D10² with D10 in mm.
+  // D10 = 0.3 mm → k ≈ 0.09 cm/s (clean sand); the old 0.0009 was 100× low.
+  approx(hazenK(0.3), 0.09, 1e-6);
+  approx(hazenK(0.2), 0.04, 1e-6);
   approx(averageK([0.01, 0.02, 0.03]), 0.02);
   assert.throws(() => fallingHeadK(5, 10, 50, 120, 50, 100));
 });

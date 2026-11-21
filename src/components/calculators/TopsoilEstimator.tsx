@@ -1,6 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useState, useEffect, useMemo } from 'react';
-import { topsoilCalc } from '../../lib/topsoilCalc';
+import { topsoilCalc, TOPSOIL_MATERIALS, type TopsoilMaterial } from '../../lib/topsoilCalc';
 import { Shovel, Ruler, Box, Package, Truck, Scale, Download, Printer } from 'lucide-react';
 import { FormulaAccordion, FormulaStep } from '../ui/FormulaAccordion';
 
@@ -15,13 +15,6 @@ interface TopsoilResult {
   weightTons: number;
 }
 
-const soilTypes = {
-  topsoil: { label: 'Topsoil', density: 1200 }, // kg/m3
-  compost: { label: 'Compost', density: 600 },
-  sand: { label: 'Sand', density: 1600 },
-  gravel: { label: 'Gravel', density: 1700 }
-};
-
 export function TopsoilEstimator() {
   const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
   const [inputMode, setInputMode] = useState<InputMode>('dimensions');
@@ -32,14 +25,15 @@ export function TopsoilEstimator() {
   const [totalArea, setTotalArea] = useState<number>(50); // m2
   const [depth, setDepth] = useState<number>(15); // cm
 
-  const [soilType, setSoilType] = useState<keyof typeof soilTypes>('topsoil');
+  // Material presets come from the engine (TOPSOIL_MATERIALS) — one source
+  // of truth for density and swell factor, including clay (1.40).
+  const [soilType, setSoilType] = useState<TopsoilMaterial>('topsoil');
   const [customDensity, setCustomDensity] = useState<number>(1200);
-  const [compactionFactor, setCompactionFactor] = useState<number>(10); // % — competitor norm; old 15% default was high
 
 
   // Sync custom density with selected preset
   useEffect(() => {
-    setCustomDensity(soilTypes[soilType].density);
+    setCustomDensity(TOPSOIL_MATERIALS[soilType].densityKgM3);
   }, [soilType]);
 
   // Handle unit system toggle logic
@@ -61,7 +55,11 @@ export function TopsoilEstimator() {
   // /api/tools/topsoil-calculator, which does not exist on static GitHub
   // Pages — the live result was always null with no error shown.
   // (server.ts endpoint left untouched — dead on Pages, harmless in dev.)
-  const result = useMemo<TopsoilResult | null>(() => {
+  // Order volume = net × the material's swell factor (no separate
+  // "compaction allowance" — the old input duplicated the swell factor
+  // with a different number). The error is kept, so an out-of-range
+  // depth shows a message instead of a blank panel.
+  const calc = useMemo(() => {
     let areaInM2 = 0;
     let depthInM = 0;
     if (unitSystem === 'metric') {
@@ -72,13 +70,39 @@ export function TopsoilEstimator() {
       areaInM2 = areaInSqFt * 0.092903; // sq ft to m2
       depthInM = depth * 0.0254; // inches to m
     }
+    const swellFactor = TOPSOIL_MATERIALS[soilType].swellFactor;
     try {
-      const r = topsoilCalc({ areaM2: areaInM2, depthM: depthInM, densityKgM3: customDensity, allowancePct: compactionFactor });
-      return { volumeNet: r.netM3, volumeGross: r.orderM3, weightKg: r.weightKg, weightTons: r.weightTonnes };
-    } catch {
-      return null;
+      const r = topsoilCalc({ areaM2: areaInM2, depthM: depthInM, densityKgM3: customDensity, swellFactor });
+      return { result: { volumeNet: r.netM3, volumeGross: r.orderM3, weightKg: r.weightKg, weightTons: r.weightTonnes } as TopsoilResult, error: null as string | null, swellFactor };
+    } catch (e) {
+      return { result: null as TopsoilResult | null, error: e instanceof Error ? e.message : "Check the inputs.", swellFactor };
     }
-  }, [inputMode, length, width, totalArea, depth, customDensity, compactionFactor, unitSystem]);
+  }, [inputMode, length, width, totalArea, depth, customDensity, soilType, unitSystem]);
+  const result = calc.result;
+
+  const handleExportCsv = () => {
+    if (!result) return;
+    const areaM2 = unitSystem === 'metric'
+      ? (inputMode === 'dimensions' ? length * width : totalArea)
+      : (inputMode === 'dimensions' ? length * width : totalArea) * 0.092903;
+    const rows = [
+      ["Topsoil estimate"],
+      ["Material", TOPSOIL_MATERIALS[soilType].label],
+      ["Area (m2)", areaM2.toFixed(2)],
+      ["Depth (m)", (unitSystem === 'metric' ? depth / 100 : depth * 0.0254).toFixed(3)],
+      ["Net volume (m3)", result.volumeNet.toFixed(2)],
+      ["Loose volume to order (m3)", result.volumeGross.toFixed(2)],
+      ["Swell factor", String(calc.swellFactor)],
+      ["Weight (kg)", result.weightKg.toFixed(0)],
+      ["Bags (25 kg)", String(Math.ceil(result.weightKg / 25))],
+      ["Truckloads (10 m3)", String(Math.ceil(result.volumeGross / 10))],
+    ];
+    const blob = new Blob([rows.map((r) => r.join(",")).join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "topsoil-estimate.csv"; a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const unitL = unitSystem === 'metric' ? 'm' : 'ft';
   const unitA = unitSystem === 'metric' ? 'm²' : 'sq ft';
@@ -106,9 +130,9 @@ export function TopsoilEstimator() {
     },
     {
       id: 2,
-      label: "2. Gross Volume (with Compaction)",
-      theoretical: "Gross Volume = Net Volume × (1 + Compaction Factor / 100)",
-      applied: `Gross Volume = ${result.volumeNet.toFixed(2)} × (1 + ${compactionFactor}/100) = ${result.volumeGross.toFixed(2)} m³`
+      label: "2. Loose Volume (with Swell)",
+      theoretical: "Loose Volume = Net Volume × Swell Factor",
+      applied: `Loose Volume = ${result.volumeNet.toFixed(2)} × ${calc.swellFactor} (${TOPSOIL_MATERIALS[soilType].label}) = ${result.volumeGross.toFixed(2)} m³`
     },
     {
       id: 3,
@@ -128,7 +152,7 @@ export function TopsoilEstimator() {
               <Shovel size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-txt-primary">Topsoil & Landscaping Estimator</h1>
+              <h2 className="text-2xl font-bold text-txt-primary">Topsoil & Landscaping Estimator</h2>
               <p className="text-txt-secondary text-sm">Calculate soil volume, weight, bags, and truckloads.</p>
             </div>
           </div>
@@ -151,10 +175,10 @@ export function TopsoilEstimator() {
             
             <div className="h-8 w-px bg-surface-active mx-1 hidden sm:block"></div>
             
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover transition-colors">
+            <Button onClick={() => window.print()} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-txt-secondary bg-surface-default border border-ui-borderSubtle rounded-lg hover:bg-surface-hover transition-colors">
               <Printer size={16} /> Print
             </Button>
-            <Button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
+            <Button onClick={handleExportCsv} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 transition-colors shadow-brand-sm">
               <Download size={16} /> Export
             </Button>
           </div>
@@ -235,15 +259,9 @@ export function TopsoilEstimator() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-txt-secondary">Compaction Factor (%)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={compactionFactor}
-                    onChange={(e) => setCompactionFactor(Math.max(0, Number(e.target.value)))}
-                    className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:border-ink outline-none"
-                  />
-                  <p className="text-xs text-txt-tertiary">Extra material needed due to settling.</p>
+                  <label className="text-sm font-medium text-txt-secondary">Swell Factor</label>
+                  <div className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary">×{TOPSOIL_MATERIALS[soilType].swellFactor} ({TOPSOIL_MATERIALS[soilType].label})</div>
+                  <p className="text-xs text-txt-tertiary">Loose volume delivered; it settles to the compacted volume. Set by the material — no separate allowance.</p>
                 </div>
               </div>
             </div>
@@ -259,10 +277,10 @@ export function TopsoilEstimator() {
                 <label className="text-sm font-medium text-txt-secondary">Material Type</label>
                 <select 
                   value={soilType}
-                  onChange={(e) => setSoilType(e.target.value as keyof typeof soilTypes)}
+                  onChange={(e) => setSoilType(e.target.value as TopsoilMaterial)}
                   className="w-full bg-surface-hover border border-ui-borderSubtle rounded-xl px-4 py-3 text-txt-primary focus:ring-2 focus:ring-ui-successText/20 focus:border-ui-successText outline-none transition-all"
                 >
-                  {Object.entries(soilTypes).map(([key, data]) => (
+                  {Object.entries(TOPSOIL_MATERIALS).map(([key, data]) => (
                     <option key={key} value={key}>{data.label}</option>
                   ))}
                 </select>
@@ -293,12 +311,18 @@ export function TopsoilEstimator() {
               Required Volume
             </h2>
 
+            {!result && calc.error && (
+              <div className="space-y-4 relative z-10">
+                <div className="bg-ui-errorText/15 rounded-2xl p-4 border border-ui-errorText/40 text-sm text-white">{calc.error}</div>
+              </div>
+            )}
+
             {result && (
               <div className="space-y-4 relative z-10">
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
                   <div className="text-accent-200 text-sm font-medium mb-1">Total Loose Volume</div>
                   <div className="text-4xl font-black">{displayVolume(result.volumeGross)}</div>
-                  <div className="text-xs text-txt-tertiary mt-1">Includes {compactionFactor}% compaction allowance</div>
+                  <div className="text-xs text-txt-tertiary mt-1">Loose volume — net × {calc.swellFactor} swell factor ({TOPSOIL_MATERIALS[soilType].label})</div>
                 </div>
                 
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">

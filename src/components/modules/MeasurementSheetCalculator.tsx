@@ -4,7 +4,7 @@ import { Plus, Trash2, Download, Section } from "lucide-react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { CalculationHistory } from '../ui/CalculationHistory';
-import { measureRow, validateMeasureRow, type MeasureKind } from "../../lib/measurementSheet";
+import { measureRow, type MeasureKind } from "../../lib/measurementSheet";
 import { sendToBoq } from "../../lib/boq";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { useRates } from "../../lib/useRates";
@@ -53,7 +53,12 @@ const TAB_KIND: Record<TabType, MeasureKind> = {
   excavation: "volume", pcc: "volume", rcc: "volume", masonry: "volume",
   plaster: "area", tiles: "area",
 };
-const TAB_UNIT_LABEL: Record<MeasureKind, string> = { volume: "m³", area: "m²", length: "m" };
+// Unit label follows the toggle: quantities are computed in the entered
+// unit (ft mode -> cu.ft/sqft), so the header and the BOQ unit must say so.
+const unitLabelFor = (kind: MeasureKind, unit: "m" | "ft"): string =>
+  kind === "volume" ? (unit === "m" ? "m³" : "cu.ft")
+  : kind === "area" ? (unit === "m" ? "m²" : "sqft")
+  : unit;
 
 const MeasurementSheetCalculator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>("excavation");
@@ -143,7 +148,7 @@ const MeasurementSheetCalculator: React.FC = () => {
     const rows = sheets[activeTab].filter((r) => r.result != null && r.description.trim() !== "");
     if (rows.length === 0) { toast.error("No complete rows to send — finish the dimensions first."); return; }
     sendToBoq(rows.map((r) => ({
-      description: r.description, unit: TAB_UNIT_LABEL[TAB_KIND[activeTab]],
+      description: r.description, unit: unitLabelFor(TAB_KIND[activeTab], unit),
       quantity: r.result as number, rate: r.rate === "" ? null : Number(r.rate),
       source: `Measurement Sheet (${TAB_TITLES[activeTab]})`,
     })));
@@ -151,11 +156,11 @@ const MeasurementSheetCalculator: React.FC = () => {
   };
 
   const exportCsv = () => {
-    const lines = [["Tab", "Item No", "Description", "Nos", "L", "W", "H/D", `Qty (${unit})`, "Rate", "Amount"]];
+    const lines = [["Tab", "Item No", "Description", "Nos", "L", "W", "H/D", "Qty", "Unit", "Rate", "Amount"]];
     (Object.keys(TAB_TITLES) as TabType[]).forEach((t) => {
       sheets[t].forEach((r) => {
         const rate = r.rate === "" ? 0 : Number(r.rate);
-        lines.push([TAB_TITLES[t], r.itemNo, r.description, r.nos, r.length, r.width, r.heightDepth, r.result == null ? "incomplete" : String(r.result), String(rate), String((r.result ?? 0) * rate)]);
+        lines.push([TAB_TITLES[t], r.itemNo, r.description, r.nos, r.length, r.width, r.heightDepth, r.result == null ? "incomplete" : String(r.result), unitLabelFor(TAB_KIND[t], unit), String(rate), String((r.result ?? 0) * rate)]);
       });
     });
     const csv = lines.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
@@ -219,12 +224,12 @@ const MeasurementSheetCalculator: React.FC = () => {
     <div className="tool-card p-4 md:p-8 flex flex-col w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
+          <h2 className="text-xl font-semibold text-txt-primary flex items-center gap-2">
             <Section className="w-6 h-6 text-accent-800" />
             Measurement Sheet
-          </h1>
+          </h2>
           <p className="text-txt-tertiary mt-1">
-            Nos × L × W × D quantities per IS 1200. A row with missing dimensions is flagged incomplete — never silently computed. Plaster openings use the IS 1200 rule (under 0.5 m² none, 0.5–3 m² one face, over 3 m² both faces).
+            Nos × L × W × D quantities per IS 1200. A row with missing dimensions is flagged incomplete — never silently computed. For plaster, enter the net area per row after applying the IS 1200 opening deductions yourself (under 0.5 m² none, 0.5–3 m² one face, over 3 m² both faces).
           </p>
           <div className="flex gap-2 mt-3">
             <span className="text-sm font-semibold text-txt-secondary self-center">Units:</span>
@@ -274,7 +279,7 @@ const MeasurementSheetCalculator: React.FC = () => {
               <th className="p-3 font-semibold w-24">L</th>
               <th className="p-3 font-semibold w-24">W</th>
               <th className="p-3 font-semibold w-24">H/D</th>
-              <th className="p-3 font-semibold w-32 border-l border-accent-200">Total ({TAB_UNIT_LABEL[TAB_KIND[activeTab]]})</th>
+              <th className="p-3 font-semibold w-32 border-l border-accent-200">Total ({unitLabelFor(TAB_KIND[activeTab], unit)})</th>
               <th className="p-3 font-semibold w-24">Rate</th>
               <th className="p-3 font-semibold w-28">Amount</th>
               <th className="p-3 font-semibold rounded-tr-xl w-16"></th>
@@ -342,9 +347,9 @@ const MeasurementSheetCalculator: React.FC = () => {
                 </td>
                 <td className="p-2 border-l border-border-color bg-surface-hover border-b-0 font-medium text-txt-primary">
                   <div className="w-full text-right px-2" title={row.hint ?? undefined}>
-                    {row.result == null ? <span className="text-amber-700 font-bold">— incomplete</span> : row.result.toFixed(2)}
+                    {row.result == null ? <span className="text-accent-800 font-bold">— incomplete</span> : row.result.toFixed(2)}
                   </div>
-                  {row.hint && <div className="text-xs text-amber-700 px-2">{row.hint}</div>}
+                  {row.hint && <div className="text-xs text-accent-800 px-2">{row.hint}</div>}
                 </td>
                 <td className="p-2">
                   <input type="number" inputMode="decimal" value={row.rate} onChange={(e) => handleRowChange(activeTab, row.id, "rate", e.target.value)} className="w-full bg-transparent border border-ui-borderSubtle rounded-full px-2 py-1.5 focus:border-ink outline-none text-center" placeholder="—" />

@@ -47,9 +47,11 @@ test("validation rejects impossible inputs", () => {
   assert.throws(() => calcCod({ ...COD_DEFAULTS, sampleTitrantMl: 30 }), /cannot exceed the blank/);
 });
 
-test("TSS screen uses the 200 mg/L PEQS limit", () => {
-  const screen = calcEffluentScreen({ bod: BOD_DEFAULTS, cod: COD_DEFAULTS, tssMgL: 250 });
-  assert.equal(screen.tssStatus, "exceeds");
+test("TSS screen uses the PEQS limits (200 inland / 400 to sewer)", () => {
+  const sewerOnly = calcEffluentScreen({ bod: BOD_DEFAULTS, cod: COD_DEFAULTS, tssMgL: 250 });
+  assert.equal(sewerOnly.tssStatus, "meets-sewer-only"); // 200 < 250 <= 400
   const ok = calcEffluentScreen({ bod: BOD_DEFAULTS, cod: COD_DEFAULTS, tssMgL: 100 });
   assert.equal(ok.tssStatus, "meets-inland");
+  const bad = calcEffluentScreen({ bod: BOD_DEFAULTS, cod: COD_DEFAULTS, tssMgL: 500 });
+  assert.equal(bad.tssStatus, "exceeds");
 });

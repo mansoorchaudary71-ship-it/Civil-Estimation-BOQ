@@ -5,6 +5,11 @@
  * soils, end bearing, Converse–Labarre group efficiency, block failure
  * (clay), required pile count for a given column load, settlement estimate,
  * and pile + cap quantities and cost.
+ * - Default sand β = 0.35 is a CONSERVATIVE bored-pile value for the
+ *   default φ = 32° layer: betaForPhi(32°, bored) = tan(27°) ≈ 0.51, and
+ *   the 0.35 is deliberately lower (bored piles lose shaft friction to
+ *   borehole softening). Do not "fix" it to 0.51 — that would flip the
+ *   defaults from FAIL to PASS and invalidate the verified test vector.
  */
 import {
   checkRange, costLine, materialsForConcrete, mixRatioForGrade, round,
@@ -152,6 +157,12 @@ export function designPile(input: Partial<PileInputs> = {}): PileResult {
     qb = ab * sigmaVTip * i.directNq;
     qs = per * i.lengthM * i.directFsKPa;
   } else {
+    // A partial direct override (only one or two of the three values) is
+    // silently ignored — warn so the user knows the layered model ran.
+    const directSet = [i.directSigmaVTipKPa, i.directNq, i.directFsKPa].filter((v) => v != null).length;
+    if (directSet > 0) {
+      warnings.push(`Direct-override values are only used when all three (σ'v at tip, Nq, fs) are set — ${directSet} of 3 were given, so the layered soil model was used instead.`);
+    }
     // Layered model: effective stress accumulated down the pile.
     let depth = 0;
     let sigmaV = 0;
@@ -178,6 +189,7 @@ export function designPile(input: Partial<PileInputs> = {}): PileResult {
   const qu = qb + qs;
   const qall = qu / i.fos;
   const requiredPiles = Math.max(1, Math.ceil(i.totalLoadKN / qall));
+  const installedPiles = i.groupRows * i.groupCols;
   if (qall < i.totalLoadKN / (i.groupRows * i.groupCols)) {
     warnings.push(`Allowable capacity ${round(qall)} kN/pile is below the load per pile in the ${i.groupRows}×${i.groupCols} group — add piles or lengthen them.`);
   }
@@ -214,15 +226,21 @@ export function designPile(input: Partial<PileInputs> = {}): PileResult {
   const elasticMm = ((i.totalLoadKN / (m * n)) * 1000 * i.lengthM) / (ap * 1e6 * ec) * 1000;
   const soilSettleMm = 0.01 * i.diameterM * 1000 * (qall / Math.max(qu, 1)) * 2;
   const settlement = elasticMm + soilSettleMm;
-  const pileConc = ab * i.lengthM * requiredPiles;
+  const pileConc = ab * i.lengthM * installedPiles;
   const capConc = i.capLengthM * i.capWidthM * i.capDepthM;
   const concVol = pileConc + capConc;
-  // Pile cage: 6 × 16 mm main + 8 mm spiral @ 150 mm.
+  // Pile cage: 6 × 16 mm main + 8 mm spiral @ 150 mm. Concrete and steel
+  // are costed on the INSTALLED group (m × n piles) — the cap is sized
+  // for that group, so the old code's use of requiredPiles under-costed
+  // the group whenever requiredPiles < m × n.
   const spiralTurns = Math.ceil(i.lengthM / 0.15);
   const spiralLenPerPile = spiralTurns * Math.sqrt((Math.PI * (i.diameterM - 0.08)) ** 2 + 0.15 ** 2);
-  const pileSteel = (6 * unitWeightKgPerM(16) * i.lengthM + unitWeightKgPerM(8) * spiralLenPerPile) * requiredPiles;
-  const capSteel = capConc * 100; // ~100 kg/m³ for a pile cap
+  const pileSteel = (6 * unitWeightKgPerM(16) * i.lengthM + unitWeightKgPerM(8) * spiralLenPerPile) * installedPiles;
+  const capSteel = capConc * 100; // thumb rule ~100 kg/m³ for a pile cap (not a designed value)
   const totalSteel = pileSteel + capSteel;
+  if (requiredPiles > installedPiles) {
+    warnings.push(`Capacity needs ${requiredPiles} piles but the group installs only ${installedPiles} — materials below are costed on the installed ${installedPiles} piles; add piles to the group before building.`);
+  }
   const materials = materialsForConcrete(concVol, mixRatioForGrade(i.fck), i.wastagePct);
   const lines: CostLine[] = [
     costLine(`Cement (${materials.cementBags} bags)`, materials.cementBags, "bags", i.cementPerBag),

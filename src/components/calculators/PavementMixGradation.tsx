@@ -181,7 +181,7 @@ export function PavementMixGradation() {
               <Layers size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-txt-primary">Pavement Mix &amp; Aggregate Gradation Calculator (MoRTH GSB / DBM / SMA)</h1>
+              <h2 className="text-2xl font-bold text-txt-primary">Pavement Mix &amp; Aggregate Gradation Calculator (MoRTH GSB / DBM / SMA)</h2>
               <p className="text-txt-secondary text-sm">Blend aggregate proportions and verify against MoRTH specification envelopes. All blending runs in your browser — no server.</p>
             </div>
           </div>
@@ -480,11 +480,11 @@ export function PavementMixGradation() {
           </div>
 
           <div className="bg-ink rounded-2xl p-6 shadow-xl text-white">
-            <h3 className="text-sm font-bold text-txt-tertiary mb-4 uppercase tracking-wider">Calculation Table</h3>
+            <h3 className="text-sm font-bold text-[#948D82] mb-4 uppercase tracking-wider">Calculation Table</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm whitespace-nowrap">
                 <thead>
-                  <tr className="border-b border-white/10 text-txt-tertiary">
+                  <tr className="border-b border-white/10 text-[#948D82]">
                     <th className="pb-3 px-2 font-medium">Sieve (mm)</th>
                     <th className="pb-3 px-2 font-medium">Lower Bound</th>
                     <th className="pb-3 px-2 font-medium">Combined Mix</th>
@@ -496,16 +496,16 @@ export function PavementMixGradation() {
                   {chartData.map((row) => (
                     <tr key={row.sieve} className="border-b border-white/5 last:border-0 hover:bg-surface-default/5 transition-colors">
                       <td className="py-3 px-2 font-medium text-txt-inverse">{row.sieve}</td>
-                      <td className="py-3 px-2 text-txt-tertiary">
+                      <td className="py-3 px-2 text-[#948D82]">
                         {row.min !== null ? row.min : '-'}
                       </td>
                       <td className="py-3 px-2 font-bold text-accent-400">{row.blended.toFixed(1)}%</td>
-                      <td className="py-3 px-2 text-txt-tertiary">
+                      <td className="py-3 px-2 text-[#948D82]">
                         {row.max !== null ? row.max : '-'}
                       </td>
                       <td className="py-3 px-2">
                         {row.status === null ? (
-                          <span className="text-txt-tertiary">—</span>
+                          <span className="text-[#948D82]">—</span>
                         ) : row.status === 'pass' ? (
                           <span className="inline-flex items-center gap-1 text-ui-successText bg-ui-successText/10 px-2 py-0.5 rounded text-xs font-bold">
                             PASS

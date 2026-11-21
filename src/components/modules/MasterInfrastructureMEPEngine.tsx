@@ -43,7 +43,7 @@ export default function MasterInfrastructureMEPEngine() {
       <div className="w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-screen">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-txt-primary tracking-tight">Master Infrastructure &amp; MEP Engine</h1>
+            <h2 className="text-3xl font-bold text-txt-primary tracking-tight">Master Infrastructure &amp; MEP Engine</h2>
             <p className="text-txt-tertiary mt-1 mb-4">MEP &amp; Green Energy — solar, water heating, AC and rainwater, all on the shared MEP engines. Earthworks and roads live in their own dedicated tools.</p>
             <p className="text-xs text-txt-tertiary flex gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> The earthworks and roads tabs were removed (they duplicated other tools). Retiring this route entirely is a separate decision for the project owner.</p>
           </div>
@@ -69,9 +69,9 @@ function Card({ title, icon, children }: { title: string; icon: React.ReactNode;
   );
 }
 
-function BoqButton({ onClick, added, label }: { onClick: () => void; added: boolean; label: string }) {
+function BoqButton({ onClick, added, label, disabled }: { onClick: () => void; added: boolean; label: string; disabled?: boolean }) {
   return (
-    <Button onClick={onClick} className="mt-4 flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700">
+    <Button onClick={onClick} disabled={disabled} className="mt-4 flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-ink border border-ink rounded-lg hover:bg-ink-700 disabled:opacity-50">
       <Save size={16} /> {added ? "Added to BOQ ✓" : label}
     </Button>
   );
@@ -123,6 +123,9 @@ function AcCard({ onAdd, added }: { onAdd: (name: string, qty: number, unit: str
   const [length, setLength] = useState<number | "">(12);
   const [width, setWidth] = useState<number | "">(10);
   const [height, setHeight] = useState<number | "">(10);
+  // No AC price is invented: the BOQ button stays disabled until the user
+  // enters a unit rate (the old code added the unit at rate 0).
+  const [acRate, setAcRate] = useState<number | "">("");
   const result = useMemo(() => {
     try {
       return calcAcSizing({ areaSqFt: (Number(length) || 0) * (Number(width) || 0), ceilingHeightFt: Number(height) || 8 });
@@ -143,7 +146,9 @@ function AcCard({ onAdd, added }: { onAdd: (name: string, qty: number, unit: str
           <ResultCard title="Running Watts" value={result.runningWatts.toFixed(0)} unit="W" variant="info" />
         </div>
       )}
-      <BoqButton added={added} label="Add AC Unit to BOQ" onClick={() => result && onAdd(`Split AC ${result.standardBtuPerHour} BTU/h`, 1, "nos", 0)} />
+      <NumberInput label="AC Unit Rate (Rs each)" value={acRate} onChange={setAcRate} />
+      <BoqButton added={added} label="Add AC Unit to BOQ" disabled={acRate === "" || Number(acRate) <= 0} onClick={() => result && onAdd(`Split AC ${result.standardBtuPerHour} BTU/h`, 1, "nos", Number(acRate))} />
+      {(acRate === "" || Number(acRate) <= 0) && <p className="text-xs text-txt-tertiary mt-2">Enter a unit rate to enable the BOQ button — no price is assumed (rates vary by brand and tonnage).</p>}
     </Card>
   );
 }

@@ -46,7 +46,10 @@ export function costSummary(i: CostSummaryInput): CostSummaryResult {
   const subtotal = greyTotal + finishTotal + labourTotal;
   const overhead = subtotal * (i.overheadPct / 100);
   const contingency = subtotal * (i.contingencyPct / 100);
-  const tax = subtotal * (i.taxPct / 100);
+  // Tax base is subtotal + contingency, matching boq.ts (boqTotals taxes
+  // `taxable = subtotal + contingency`). The old code taxed the subtotal
+  // only, so the same 18% produced a different tax in the two tools.
+  const tax = (subtotal + contingency) * (i.taxPct / 100);
   const grandTotal = subtotal + overhead + contingency + tax;
   return {
     greyTotal, finishTotal, labourTotal, subtotal, overhead, contingency, tax,

@@ -144,13 +144,18 @@ export default function VolumeEstimator() {
     ...result.warnings,
   ].filter(Boolean).join("\n");
 
-  const handleCopy = async () => { try { await navigator.clipboard.writeText(summaryText()); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ } };
+  // Copy/Share/PDF are gated on valid inputs: with invalid dimensions the
+  // computed surface area can be Infinity (e.g. parabolic cone, height 0)
+  // and that literal "Infinity" used to be written into the PDF/copy text.
+  const handleCopy = async () => { if (errors.length > 0) return; try { await navigator.clipboard.writeText(summaryText()); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ } };
   const handleShare = async () => {
+    if (errors.length > 0) return;
     const text = summaryText();
     if (navigator.share) { try { await navigator.share({ title: "Volume calculation — Civil Estimation Pro", text }); setShared(true); setTimeout(() => setShared(false), 2000); return; } catch { /* cancelled */ } }
     await handleCopy(); setShared(true); setTimeout(() => setShared(false), 2000);
   };
   const handlePdf = () => {
+    if (errors.length > 0) return;
     const doc = new jsPDF();
     doc.setFontSize(16); doc.text("Volume Calculation — Civil Estimation Pro", 14, 18);
     doc.setFontSize(10); doc.text(`Calculated ${new Date().toLocaleDateString("en-GB")}`, 14, 26);
@@ -180,7 +185,7 @@ export default function VolumeEstimator() {
       <p className="text-base text-txt-secondary leading-relaxed">Fourteen shapes, tank sizing by family, freeboard and dead storage, fill levels for horizontal cylinders, and weight for every shape — in cubic metres, litres, US or imperial gallons and cubic feet.</p>
       <div className="bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm">
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-          <h1 className="flex items-center gap-2 text-xl font-semibold text-txt-primary"><Box className="w-6 h-6 text-accent-800" /> Volume Calculator</h1>
+          <h2 className="flex items-center gap-2 text-xl font-semibold text-txt-primary"><Box className="w-6 h-6 text-accent-800" /> Volume Calculator</h2>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex bg-surface-hover p-1 rounded-xl">
               {(["m", "ft"] as const).map((u) => (
@@ -222,7 +227,7 @@ export default function VolumeEstimator() {
           </div>
           {densitySel === "custom" && <NumField label="Custom density (kg/m³)" value={densityCustom} onChange={setDensityCustom} hint="e.g. cement 1,440 kg/m³, aggregate 1,500 kg/m³." />}
           {(shape === "rect-prism" || shape === "trapezoidal-prism" || shape === "prism" || isTank) && <NumField label={`Length (${unit})`} value={length} onChange={setLength} />}
-          {(shape === "rect-prism" || shape === "triangular-prism" || shape === "trapezoidal-prism" || isTank) && <NumField label={`Width / base (${unit})`} value={width} onChange={setWidth} />}
+          {(shape === "rect-prism" || shape === "trapezoidal-prism" || isTank) && <NumField label={`Width / base (${unit})`} value={width} onChange={setWidth} />}
           {shape === "triangular-prism" && <NumField label={`Triangle base (${unit})`} value={base} onChange={setBase} />}
           {shape !== "cube" && shape !== "sphere" && shape !== "half-sphere" && <NumField label={`Height (${unit})`} value={height} onChange={setHeight} />}
           {shape === "cube" && <NumField label={`Side (${unit})`} value={length} onChange={setLength} />}

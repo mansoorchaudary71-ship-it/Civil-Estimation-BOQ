@@ -16,7 +16,9 @@ test("worked example: 2 WC tank, 2 basin, 2 shower, 1 kitchen, 1 WM -> 17 WSFU, 
   assert.equal(r.totalWsfu, 17);
   assert.ok(Math.abs(r.designFlowLs - 1.03) < 0.02, `Q ${r.designFlowLs}`);
   assert.equal(r.mainDiameterMm, 32);
-  assert.equal(r.tankLitres, 3785);
+  // Default tank is 1,000 Imperial gallons = 4,546 L (the old 3,785 L was
+  // 1,000 US gallons mislabelled as the PK standard).
+  assert.equal(r.tankLitres, 4546);
   assert.ok(Math.abs(r.tankGallons - 1000) < 1);
   assert.ok(r.pumpKw > 0 && r.pumpKw < 2);
 });

@@ -97,8 +97,10 @@ function SolarCalculator() {
       date: new Date().toLocaleDateString(),
       items: [
         { description: `Solar panels (${result.panels} x 545 W)`, quantity: result.actualKw, unit: "kWp", rate: result.panelsCost / (result.actualKw || 1), amount: result.panelsCost },
-        { description: `Inverter (${result.inverterKva} kVA)`, quantity: result.inverterKva, unit: "kVA", rate: 25000, amount: result.inverterCost },
-        ...(result.hasBattery ? [{ description: "Battery", quantity: result.batteryActualKwh, unit: "kWh", rate: 65000, amount: result.batteryCost }] : []),
+        // Per-city rates from the engine (the old PDF hardcoded PKR
+        // 25,000/kVA and 65,000/kWh even for Dubai/Mumbai).
+        { description: `Inverter (${result.inverterKva} kVA)`, quantity: result.inverterKva, unit: "kVA", rate: result.inverterCost / (result.inverterKva || 1), amount: result.inverterCost },
+        ...(result.hasBattery ? [{ description: "Battery", quantity: result.batteryActualKwh, unit: "kWh", rate: result.batteryCost / (result.batteryActualKwh || 1), amount: result.batteryCost }] : []),
       ],
       totalAmount: result.totalCost,
     });

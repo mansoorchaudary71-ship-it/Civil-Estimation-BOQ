@@ -26,7 +26,7 @@ export function SolarWaterHeaterCalculator() {
   const [usagePerPerson, setUsagePerPerson] = useState<number>(50);
   const [solarRadiation, setSolarRadiation] = useState<number>(5.0);
   const [targetTemp, setTargetTemp] = useState<number>(60);
-  const [inletTemp, setInletTemp] = useState<number>(15);
+  const [inletTemp, setInletTemp] = useState<number>(18); // Lahore preset (default city)
   const [collectorType, setCollectorType] = useState<SolarCollectorType>('flatPlate');
   const [efficiency, setEfficiency] = useState<number>(50);
   const [solarFraction, setSolarFraction] = useState<number>(0.6);
@@ -91,8 +91,10 @@ export function SolarWaterHeaterCalculator() {
     setEfficiency(SOLAR_COLLECTOR_TYPES[t].efficiencyPct);
   };
 
-  const demandL = unitSystem === 'imperial' && result ? result.demandLPerDay * 0.264172 : result?.demandLPerDay;
-  const tankL = unitSystem === 'imperial' && result ? result.tankL * 0.264172 : result?.tankL;
+  // House gallon = Imperial gallon: 1 L = 0.219969 Imp gal (1 Imp gal =
+  // 4.546 L). The old factor 0.264172 was the US gallon.
+  const demandL = unitSystem === 'imperial' && result ? result.demandLPerDay * 0.219969 : result?.demandLPerDay;
+  const tankL = unitSystem === 'imperial' && result ? result.tankL * 0.219969 : result?.tankL;
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
@@ -159,10 +161,10 @@ export function SolarWaterHeaterCalculator() {
             {result ? (
               <MaterialSummary title="Solar Water Heater Results" totalLabel="System Cost" totalValue={fmt(result.systemCost)} totalUnit="" relatedToolIds={[]}>
                 <div className="grid grid-cols-2 gap-4 mt-4">
-                  <ResultCard title="Daily Demand" value={demandL?.toFixed(0) ?? "—"} unit={unitSystem === 'imperial' ? "gal/day" : "L/day"} variant="neutral" />
+                  <ResultCard title="Daily Demand" value={demandL?.toFixed(0) ?? "—"} unit={unitSystem === 'imperial' ? "Imp gal/day" : "L/day"} variant="neutral" />
                   <ResultCard title="Collector Area" value={result.collectorAreaM2.toFixed(2)} unit="m²" variant="primary" />
                   <ResultCard title="Panels (2 m² each)" value={result.panels} unit={`= ${result.installedAreaM2} m²`} variant="neutral" />
-                  <ResultCard title="Tank Size" value={tankL?.toFixed(0) ?? "—"} unit={unitSystem === 'imperial' ? "gal" : "L"} variant="primary" />
+                  <ResultCard title="Tank Size" value={tankL?.toFixed(0) ?? "—"} unit={unitSystem === 'imperial' ? "Imp gal" : "L"} variant="primary" />
                   <ResultCard title="Heat Needed" value={result.energyKwhPerDay.toFixed(2)} unit="kWh/day" variant="info" />
                   <ResultCard title="Backup Energy" value={result.backupKwhPerDay.toFixed(2)} unit="kWh/day" variant="warning" />
                   <ResultCard title="Annual Saving" value={fmt(result.annualSavings)} unit="/ year" variant="success" />

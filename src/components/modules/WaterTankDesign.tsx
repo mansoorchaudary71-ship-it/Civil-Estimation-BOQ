@@ -24,11 +24,9 @@ export default function WaterTankDesign() {
   const [wallT, setWallT] = useState<number | "">(200);
   const [baseT, setBaseT] = useState<number | "">(200);
   const [fck, setFck] = useState<number | "">(25);
-  const [fy, setFy] = useState<number | "">(415);
   const [barType, setBarType] = useState<BarType>("deformed");
   const [cover, setCover] = useState<number | "">(40);
   const [mainDia, setMainDia] = useState<number | "">(10);
-  const [stagingH, setStagingH] = useState<number | "">(6);
   const [wastage, setWastage] = useState<number | "">(5);
 
   const results = useMemo(() => designWaterTank({
@@ -36,13 +34,13 @@ export default function WaterTankDesign() {
     daysReserve: Number(days) || 0, lengthM: Number(length) || 0, widthM: Number(width) || 0,
     diameterM: Number(diameter) || 0, waterDepthM: Number(depth) || 0, freeboardM: Number(freeboard) || 0,
     wallThicknessMm: Number(wallT) || 0, baseThicknessMm: Number(baseT) || 0,
-    fck: Number(fck) || 0, fy: Number(fy) || 0, barType, coverMm: Number(cover) || 0,
-    mainDiaMm: Number(mainDia) || 0, stagingHeightM: Number(stagingH) || 0, wastagePct: Number(wastage) || 0,
+    fck: Number(fck) || 0, barType, coverMm: Number(cover) || 0,
+    mainDiaMm: Number(mainDia) || 0, wastagePct: Number(wastage) || 0,
     cementPerBag: rates.cementPerBag, steelPerKg: rates.steelPerKg,
     sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
-  }), [shape, placement, occupants, lpcd, days, length, width, diameter, depth, freeboard, wallT, baseT, fck, fy, barType, cover, mainDia, stagingH, wastage, rates]);
+  }), [shape, placement, occupants, lpcd, days, length, width, diameter, depth, freeboard, wallT, baseT, fck, barType, cover, mainDia, wastage, rates]);
 
-  const summary = `Water tank ${shape} ${placement}: capacity ${results.capacityLitres} L (${results.capacityM3} m³, ${results.capacityGallons} gal) vs demand ${results.demandLitres} L — ${results.demandOk ? "covers demand" : "SHORT"}; wall steel ${results.astProvidedMm2PerM} mm²/m (${mainDia} mm @ ${results.barSpacingMm} mm); crack width ${results.crackWidthOk ? "≤ 0.2 mm PASS" : "CHECK"}; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
+  const summary = `Water tank ${shape} ${placement}: capacity ${results.capacityLitres} L (${results.capacityM3} m³, ${results.capacityGallons} gal (Imperial)) vs demand ${results.demandLitres} L — ${results.demandOk ? "covers demand" : "SHORT"}; wall steel ${results.astProvidedMm2PerM} mm²/m (${mainDia} mm @ ${results.barSpacingMm} mm); crack width ${results.crackWidthOk ? "≤ 0.2 mm PASS" : "CHECK"}; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">
@@ -75,7 +73,6 @@ export default function WaterTankDesign() {
                 <NumberInput label="Occupants" value={occupants} onChange={setOccupants} requirePositive />
                 <NumberInput label="Water per person" unit="lpcd" value={lpcd} onChange={setLpcd} requirePositive />
                 <NumberInput label="Days of reserve" value={days} onChange={setDays} requirePositive />
-                {placement === "overhead" && <NumberInput label="Staging height" unit="m" value={stagingH} onChange={setStagingH} requirePositive />}
               </div>
             </div>
             <div>
@@ -92,7 +89,6 @@ export default function WaterTankDesign() {
                 <NumberInput label="Wall thickness" unit="mm" value={wallT} onChange={setWallT} requirePositive />
                 <NumberInput label="Base slab thickness" unit="mm" value={baseT} onChange={setBaseT} requirePositive />
                 <NumberInput label="Concrete (fck)" unit="MPa" value={fck} onChange={setFck} requirePositive />
-                <NumberInput label="Steel (fy)" unit="MPa" value={fy} onChange={setFy} requirePositive />
                 <div>
                   <label className="block text-sm font-medium text-txt-secondary mb-1.5 ml-1">Bar type (σst per IS 3370 Table 2)</label>
                   <select value={barType} onChange={(e) => setBarType(e.target.value as BarType)} className="w-full h-11 bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 text-sm font-medium focus:outline-none">
@@ -156,7 +152,7 @@ export default function WaterTankDesign() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="watertankdesign_tool" currentInputs={{ shape, placement, occupants, lpcd, days, length, width, diameter, depth, freeboard, wallT, baseT, fck, fy, barType, cover, mainDia, stagingH, wastage }} />
+      <CalculationHistory calculatorId="watertankdesign_tool" currentInputs={{ shape, placement, occupants, lpcd, days, length, width, diameter, depth, freeboard, wallT, baseT, fck, barType, cover, mainDia, wastage }} />
     </div>
   );
 }

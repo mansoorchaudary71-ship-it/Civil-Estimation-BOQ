@@ -2,10 +2,14 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { verticalCurve, ssdForSpeed, longitudinalRise, camberDrop, curveHighLowPoint, stationElevations } from "../gradientCalc";
 const approx = (a: number, b: number, tol = 0.05) => assert.ok(Math.abs(a - b) <= tol, `${a} ≈ ${b}`);
-test("worked: g1=3, g2=−2, V=80, SSD 120 m → A=5%, crest L=109.4 m, K=21.9", () => {
+test("worked: g1=3, g2=−2, V=80, SSD 120 m → A=5%, crest L=108.4 m, K=21.7 (S>L branch)", () => {
   assert.equal(ssdForSpeed(80), 120);
   const v = verticalCurve(3, -2, 80);
-  assert.equal(v.type, "Crest"); approx(v.aPct, 5); approx(v.lengthM, 109.4, 0.1); approx(v.k, 21.9, 0.05);
+  // S = 120 > primary L = 109.4, so the AASHTO S>L branch applies:
+  // L = 2S − 658/A = 240 − 131.6 = 108.4 m (the old test locked in the
+  // primary-form 109.4 m). K = 108.4/5 = 21.68.
+  assert.equal(v.type, "Crest"); approx(v.aPct, 5); approx(v.lengthM, 108.4, 0.1); approx(v.k, 21.7, 0.05);
+  assert.ok(v.branch.startsWith("S > L"));
   assert.ok(v.lengthM !== 114.3, "old invented K=V²/280 gave 114.3 m");
 });
 test("sag curve uses L=A·S²/(120+3.5S)", () => {

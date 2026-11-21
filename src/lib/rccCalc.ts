@@ -7,14 +7,18 @@
  * - Wet volume -> dry volume x1.54; cement bag = 0.0347 m3 (50 kg).
  * - Steel unit weight W = d^2 / 162.28 kg/m (steelCalc.ts).
  * - Effective depth d = D - (cover + phi/2).
- * - Crank allowance 0.42 x d on ALTERNATE bars only.
+ * - Crank allowance on ALTERNATE bars only: 0.42 × h − 2·φ per crank,
+ *   where h = slab thickness − 2·cover − φ is the true vertical rise of
+ *   the crank (unified with bbsCalc.ts — the old 0.42 × d used the
+ *   effective depth and ignored the bend deductions).
  * - Stirrups: IS 2502 detailed length (stirrupLengthDetailed) is canonical;
  *   the field rule 2(A+B)+24phi (stirrupLengthSimple) is shown as a labelled
  *   approximation. Both imported from steelCalc.ts — never duplicated here.
  * - Bar count N = ceil(span / spacing) + 1 (AGENTS.md rebar-spacing rule).
  * - Shuttering: slab = soffit LxW + edges 2(L+W)xt (IS 1200 measurement,
  *   edges INCLUDED — the old code counted the soffit only); beam =
- *   (2h+w)xL; column = 2(l+w)xh; footing = 2(L+W)xdepth.
+ *   (2h+w)xL; column = 2(l+w)xh; footing = 2(L+W)xdepth + the four
+ *   sloped (frustum) faces when a frustum exists.
  * - Thumb steel % of wet volume: slab 1.0, beam 1.5, column 2.0,
  *   staircase 1.0, footing 0.8 (x 7850 kg/m3).
  * - Nominal mixes (IS 456 Table 9) only up to M20; for M25+ the UI links
@@ -202,7 +206,11 @@ export function barCount(spanMm: number, spacingMm: number): number {
 /**
  * One direction of slab bars with alternate cranked bars.
  * Straight bars: cut = span - 2 x cover.
- * Cranked bars (every other bar): cut = span - 2 x cover + 0.42 x d.
+ * Cranked bars (every other bar): cut = span - 2 x cover + 0.42 x h - 2 x phi,
+ * where h = thickness - 2 x cover - phi is the crank's vertical rise
+ * (IS 2502: 0.42 x rise, less one bar dia per 45° bend). This is the same
+ * formula bbsCalc.ts uses — the old code used 0.42 x effective depth,
+ * which overstated each crank by ~35 mm for a 150 mm slab.
  */
 export function slabDirectionBars(
   spanMm: number,
@@ -217,7 +225,8 @@ export function slabDirectionBars(
   const dMm = effectiveDepth(thicknessMm, coverMm, diaMm);
   const straightM = Math.max(0, (spanMm - 2 * coverMm) / 1000);
   const crankedCount = cranked ? Math.floor(count / 2) : 0;
-  const crankedM = straightM + (0.42 * dMm) / 1000;
+  const crankRiseMm = Math.max(0, thicknessMm - 2 * coverMm - diaMm);
+  const crankedM = straightM + Math.max(0, (0.42 * crankRiseMm - 2 * diaMm) / 1000);
   const totalLengthM = (count - crankedCount) * straightM + crankedCount * crankedM;
   return { count, totalLengthM, weightKg: totalLengthM * unitWeightKgPerM(diaMm), dMm };
 }
@@ -269,8 +278,8 @@ export function calcRccElement(el: RccElementInput): RccElementResult {
         count: el.mainBars * count,
         cutLengthM: mainCutM,
       });
-      const aMm = el.l - 2 * el.coverMm;
-      const bMm = el.w - 2 * el.coverMm;
+      const aMm = el.l - 2 * el.coverMm - el.stirrupDia;
+      const bMm = el.w - 2 * el.coverMm - el.stirrupDia;
       stirrupDetailed = stirrupLengthDetailed(aMm, bMm, el.stirrupDia);
       stirrupSimple = stirrupLengthSimple(aMm, bMm, el.stirrupDia);
       const nStirrups = barCount(el.h * 1000, el.stirrupSpacing);
@@ -292,8 +301,8 @@ export function calcRccElement(el: RccElementInput): RccElementResult {
         count: el.mainBars * count,
         cutLengthM: mainCutM,
       });
-      const aMm = el.w - 2 * el.coverMm;
-      const bMm = el.h - 2 * el.coverMm;
+      const aMm = el.w - 2 * el.coverMm - el.stirrupDia;
+      const bMm = el.h - 2 * el.coverMm - el.stirrupDia;
       stirrupDetailed = stirrupLengthDetailed(aMm, bMm, el.stirrupDia);
       stirrupSimple = stirrupLengthSimple(aMm, bMm, el.stirrupDia);
       const nStirrups = barCount(el.l * 1000, el.stirrupSpacing);
@@ -348,8 +357,9 @@ export function calcRccElement(el: RccElementInput): RccElementResult {
         count: el.mainBars * count,
         cutLengthM: mainCutM,
       });
-      // Circular ties: circumference at core diameter + hooks.
-      const coreDiaMm = el.l - 2 * el.coverMm;
+      // Circular ties: circumference at core diameter + hooks. Core dia
+      // is the section minus 2x cover minus the tie dia (unified X3).
+      const coreDiaMm = el.l - 2 * el.coverMm - el.stirrupDia;
       const tieLenMm = Math.PI * coreDiaMm + 2 * 10 * el.stirrupDia;
       const nTies = barCount(el.h * 1000, el.stirrupSpacing);
       pushBbs({
@@ -368,7 +378,15 @@ export function calcRccElement(el: RccElementInput): RccElementResult {
       frustumVol = (el.extra3 / 3) * (a1 + a2 + Math.sqrt(a1 * a2));
     }
     wet = (baseVol + frustumVol) * count;
-    shut = 2 * (el.l + el.w) * el.h * count;
+    // Shuttering: base sides + the four sloped (frustum) faces when a
+    // frustum exists — the old code counted the base depth only.
+    let shutSloped = 0;
+    if (frustumVol > 0) {
+      const slantL = Math.sqrt(el.extra3 ** 2 + ((el.l - el.extra1) / 2) ** 2);
+      const slantW = Math.sqrt(el.extra3 ** 2 + ((el.w - el.extra2) / 2) ** 2);
+      shutSloped = (el.l + el.extra1) * slantL + (el.w + el.extra2) * slantW;
+    }
+    shut = (2 * (el.l + el.w) * el.h + shutSloped) * count;
     if (el.steelMode === "bbs") {
       const nX = barCount(el.w * 1000, el.mainSpacing);
       pushBbs({
@@ -492,7 +510,11 @@ export function calcSlab(inp: SlabInputs): SlabResult {
     errors.push("Cover must be less than half the slab thickness.");
   }
   const wet = inp.lxM * inp.lyM * (inp.thicknessMm / 1000);
-  const dry = wet * DRY_CONCRETE_FACTOR;
+  // Dry volume = wet x 1.54 (AGENTS.md), then add wastage — the old code
+  // skipped wastage on dry volume, so cement/sand/agg were understated
+  // (the element calculator in this same file already applies wastage
+  // to dry volume, so the two paths now agree).
+  const dry = wet * DRY_CONCRETE_FACTOR * (1 + inp.wastagePct / 100);
   const lxMm = inp.lxM * 1000;
   const lyMm = inp.lyM * 1000;
   const elementWeightKg = wet * inp.densityKgM3;
@@ -507,7 +529,10 @@ export function calcSlab(inp: SlabInputs): SlabResult {
     short = slabDirectionBars(lxMm, lyMm, inp.mainDiaMm, inp.mainSpacingMm, inp.coverMm, inp.thicknessMm, true);
     long = slabDirectionBars(lyMm, lxMm, inp.distDiaMm, inp.distSpacingMm, inp.coverMm, inp.thicknessMm, true);
   } else {
-    short = slabDirectionBars(lxMm, lyMm, inp.mainDiaMm, inp.mainSpacingMm, inp.coverMm, inp.thicknessMm, false);
+    // One-way: main (short-span) bars are cranked at the supports, the
+    // distribution bars are straight — the old code passed cranked=false
+    // for BOTH directions, so no cranked bars were ever generated.
+    short = slabDirectionBars(lxMm, lyMm, inp.mainDiaMm, inp.mainSpacingMm, inp.coverMm, inp.thicknessMm, true);
     long = slabDirectionBars(lyMm, lxMm, inp.distDiaMm, inp.distSpacingMm, inp.coverMm, inp.thicknessMm, false);
   }
   const totalSteelKg = short.weightKg + long.weightKg;

@@ -162,9 +162,9 @@ export default function AIAssistant() {
               <Sparkles className="w-5 h-5 text-white" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
-              <h1 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-ink to-ink-500">
+              <h2 className="text-lg font-bold text-txt-primary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-ink to-ink-500">
                 Rule-Based Estimator
-              </h1>
+              </h2>
               <span className="text-xs font-semibold text-accent-800 uppercase tracking-wider mt-0.5">Rule-based · Not AI · No API key</span>
             </div>
           </div>

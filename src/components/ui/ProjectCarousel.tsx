@@ -16,7 +16,7 @@ export interface ProjectCard {
   title: string;
   metrics: string;
   inspectorName: string;
-  inspectorAvatar: string;
+  inspectorInitials: string;
   date: string;
 }
 
@@ -30,7 +30,7 @@ export const PROJECT_DATA: ProjectCard[] = [
     title: "Foundation Slab Alpha",
     metrics: "Total Volume: 125.5 m³",
     inspectorName: "Mansoor C.",
-    inspectorAvatar: "https://i.pravatar.cc/150?u=mansoor",
+    inspectorInitials: "MC",
     date: "12 Oct 2023"
   },
   {
@@ -41,7 +41,7 @@ export const PROJECT_DATA: ProjectCard[] = [
     title: "Perimeter Wall Sector 4",
     metrics: "Area: 450 sq.m",
     inspectorName: "Ali R.",
-    inspectorAvatar: "https://i.pravatar.cc/150?u=ali",
+    inspectorInitials: "AR",
     date: "14 Oct 2023"
   },
   {
@@ -52,7 +52,7 @@ export const PROJECT_DATA: ProjectCard[] = [
     title: "Highway Extension B",
     metrics: "Distance: 2.4 km",
     inspectorName: "Sarah K.",
-    inspectorAvatar: "https://i.pravatar.cc/150?u=sarah",
+    inspectorInitials: "SK",
     date: "18 Oct 2023"
   },
   {
@@ -63,7 +63,7 @@ export const PROJECT_DATA: ProjectCard[] = [
     title: "Retaining Wall Rebar",
     metrics: "Weight: 14.2 Tons",
     inspectorName: "Tariq M.",
-    inspectorAvatar: "https://i.pravatar.cc/150?u=tariq",
+    inspectorInitials: "TM",
     date: "20 Oct 2023"
   },
   {
@@ -74,7 +74,7 @@ export const PROJECT_DATA: ProjectCard[] = [
     title: "Basement Excavation",
     metrics: "Volume: 8,500 m³",
     inspectorName: "Mansoor C.",
-    inspectorAvatar: "https://i.pravatar.cc/150?u=mansoor",
+    inspectorInitials: "MC",
     date: "22 Oct 2023"
   }
 ];
@@ -237,7 +237,7 @@ export function ProjectCarousel({ className }: ProjectCarouselProps) {
                 {/* Footer / User info */}
                 <div className="mt-auto flex items-center justify-between pt-4 border-t border-border-color">
                   <div className="flex items-center gap-3">
-                    <img src={project.inspectorAvatar} alt="Inspector" className="w-8 h-8 rounded-full shadow-brand-sm ring-2 ring-white" />
+                    <span aria-hidden="true" className="w-8 h-8 rounded-full shadow-brand-sm ring-2 ring-white bg-ink text-white text-[11px] font-bold flex items-center justify-center shrink-0">{project.inspectorInitials}</span>
                     <div className="flex flex-col">
                       <span className="text-xs font-bold text-txt-primary">{project.inspectorName}</span>
                       <span className="text-xs font-medium text-txt-tertiary">Inspector</span>

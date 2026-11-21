@@ -44,6 +44,37 @@ test("defaults are sane: total loss inside the 15-25% band, jacking OK", () => {
   assert.ok(r.pctLoss >= 15 && r.pctLoss <= 25);
   assert.equal(r.jackingOk, true);
   assert.equal(r.initialStressMpa, 1250);
+  // Ultimate moment uses the tendon depth d = D/2 + e = 400 + 120 = 520
+  // mm (old code: D − 50 = 750 mm, Mu 783 kNm — 44% high).
+  approx(r.muKNm, 543.1, 0.5);
+  // Compression limits (IS 1343 Cl. 22.7): transfer 0.5·fck = 15 MPa,
+  // service 0.33·fck = 9.9 MPa — defaults pass both (5.88 / 9.71 MPa).
+  assert.ok(r.stressBottomTransferMpa <= 15);
+  assert.ok(r.stressTopServiceMpa <= 9.9);
+});
+
+test("ultimate moment: T-section uses the flange width, rectangular uses b", () => {
+  const rect = designPrestress();
+  approx(rect.muKNm, 543.1, 0.5);
+  const t = designPrestress({ sectionKind: "tee" });
+  // xu capped by the flange width 600 mm: xu = 199.8 mm (not 239.2),
+  // so Mu = 564.5 kNm — the old code used b = 300 mm for both.
+  approx(t.muKNm, 564.5, 0.5);
+  assert.ok(t.muKNm > rect.muKNm);
+});
+
+test("compression over the IS 1343 limit fails service, not just tension", () => {
+  // P0 = 2600 kN on Ap = 2100 mm²: transfer bottom ≈ 15.3 MPa > 0.5·fck.
+  const r = designPrestress({ p0KN: 2600, apMm2: 2100 });
+  assert.equal(r.serviceOk, false);
+  assert.ok(r.warnings.some((w) => w.includes("0.5·fck")), "must warn on the transfer compression limit");
+});
+
+test("pre-tensioned shrinkage defaults to 0.0003 when left at the post value", () => {
+  // The defaults object carries 0.0002 (post-tension); a pre-tensioned
+  // run that leaves the field untouched must use 0.0003 (IS 1343).
+  const r = designPrestress({ type: "pre" });
+  approx(r.lossShrinkageMpa, 63, 0.5); // 0.0003 x 210000
 });
 
 test("old defaults produced 42.6% loss and now warn", () => {

@@ -80,8 +80,10 @@ export default function FarFsiCalculator() {
     setPresetId(id);
     const p = presets.find((x) => x.id === id);
     if (!p) return;
-    if (p.maxFar != null) setFar(String(p.maxFar));
-    if (p.maxCoveragePct != null) setCoverage(String(p.maxCoveragePct));
+    // Clear a field when the preset has no value for it, so a stale figure
+    // from the previous preset is not carried over.
+    setFar(p.maxFar != null ? String(p.maxFar) : "");
+    setCoverage(p.maxCoveragePct != null ? String(p.maxCoveragePct) : "");
     setMaxHeight(p.maxHeightM != null ? p.maxHeightM.toFixed(2) : "");
     setMaxStoreys(p.maxStoreys != null ? String(p.maxStoreys) : "");
   };

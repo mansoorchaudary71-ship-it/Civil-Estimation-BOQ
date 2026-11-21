@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { BRICK_FAQS, formatInt } from "../../lib/brickCalc";
+import {
+  BRICK_FAQS,
+  BRICK_PRESETS,
+  bricksPerArea,
+  calcBrickwork,
+  defaultBrickInputs,
+  formatInt,
+  mixGuide,
+} from "../../lib/brickCalc";
 import {
   CITY_VARIANTS,
   HOUSE_SIZE_VARIANTS,
@@ -9,7 +17,26 @@ import {
 import { REVIEWER } from "../../seo/siteConfig";
 import { ChevronDown } from "lucide-react";
 
-export const BRICK_CONTENT_LAST_UPDATED = "10 November 2026";
+export const BRICK_CONTENT_LAST_UPDATED = "20 November 2026";
+
+/** Worked-example figures below are computed from the same engine as the
+ * calculator (single source of truth), not hand-typed. */
+const WORKED_1_5 = calcBrickwork({ ...defaultBrickInputs("PKR"), mix: [1, 5] });
+const BRICKS_PER_AREA_ROWS = [
+  { label: "4½″ (115 mm) — partition / internal", mm: 115, thumb: "4.5" },
+  { label: "9″ (230 mm) — external / load-bearing", mm: 230, thumb: "9" },
+  { label: "13½″ (345 mm) — foundations", mm: 345, thumb: "13.6" },
+  { label: "18″ (457 mm) — thick foundations / retaining", mm: 457, thumb: "18" },
+].map((row) => ({ ...row, ...bricksPerArea(row.mm, BRICK_PRESETS[0], { jointMm: 10 }) }));
+const MIX_GUIDE_ROWS = [
+  { label: "1:3", use: "Load-bearing walls, foundations" },
+  { label: "1:4", use: "General brickwork (standard)" },
+  { label: "1:5", use: "General brickwork, lean" },
+  { label: "1:6", use: "Partition walls, non-load-bearing" },
+].map((row) => ({
+  ...row,
+  ...mixGuide([1, Number(row.label.split(":")[1])] as [number, number]),
+}));
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
@@ -63,7 +90,9 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           divides it by the volume of one brick including its mortar joint. That gives the number
           of bricks before wastage; wastage is then added, and the mortar left over is split into
           cement bags and sand by your chosen mix ratio. Everything updates instantly as you type
-          — there is no calculate button to press.
+          — there is no calculate button to press. For a whole room, switch to the multi-wall
+          mode and add every wall; if you already know the total wall area, use the area mode
+          instead. The drawing updates live with your wall, bond pattern and openings.
         </p>
         <ol className="list-decimal list-inside space-y-2">
           <li>
@@ -126,7 +155,9 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           joint occupies 0.00245 m³ (0.086 cubic feet), so the wall needs 2.14 ÷ 0.00245 ≈ 873
           bricks before wastage, and 873 × 1.05 ≈ 917 bricks to order. The wet mortar is about
           19.5 cubic feet; at a 1:4 mix that becomes 5 bags of cement and 21.8 cubic feet of
-          sand, and at a 1:6 mix it is 4 bags of cement and 23.4 cubic feet of sand. Try it above
+          sand, at a 1:5 mix {WORKED_1_5.cementBags} bags of cement and{" "}
+          {WORKED_1_5.sandCft.toFixed(1)} cubic feet of sand, and at a 1:6 mix it is 4 bags of
+          cement and 23.4 cubic feet of sand. Try it above
           — the calculator is pre-loaded with exactly this wall, and the numbers match.
         </p>
         <p>
@@ -197,7 +228,8 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
         <p>
           The right mix depends on what the wall carries. Use 1:3 (one part cement to three
           parts sand) for load-bearing walls and foundations, 1:4 for general brickwork — the
-          standard for most house walls — and 1:6 for partition walls and other non-load-bearing
+          standard for most house walls — 1:5 for general brickwork where a leaner mix is
+          acceptable, and 1:6 for partition walls and other non-load-bearing
           work. A richer mix is stronger but costs more and shrinks more; a leaner mix than 1:6
           is too weak for structural brickwork.
         </p>
@@ -205,11 +237,68 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           Thickness follows the same logic. A 4½-inch (115 mm) single-brick wall suits internal
           partitions. A 9-inch (230 mm) double-brick wall is the standard for external and
           load-bearing walls. A 13½-inch (345 mm) wall is used for foundations and heavy
-          load-bearing work. With the standard 230 × 110 × 75 mm brick and a 10 mm joint, the
+          load-bearing work, and an 18-inch (457 mm) wall for thick foundations and retaining
+          walls. With the standard 230 × 110 × 75 mm brick and a 10 mm joint, the
           exact figures are about 4.4 bricks per square foot for a 4½-inch wall, 8.7 per square
           foot for a 9-inch wall and about 13.1 per square foot for a 13½-inch wall, before
           wastage. The commonly quoted rules — 4.5, 9 and 13.6 — round those up slightly, which
           is safe; the calculator uses the exact figure for your brick size.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden">
+            <thead>
+              <tr className="bg-surface-default text-left">
+                <th className="px-4 py-3 font-semibold">Wall thickness</th>
+                <th className="px-4 py-3 font-semibold">Exact (this calculator)</th>
+                <th className="px-4 py-3 font-semibold">Per 100 sq ft</th>
+                <th className="px-4 py-3 font-semibold">Contractor&apos;s thumb rule</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-ui-borderSubtle dark:divide-ink-600">
+              {BRICKS_PER_AREA_ROWS.map((row) => (
+                <tr key={row.mm}>
+                  <td className="px-4 py-3 font-semibold">{row.label}</td>
+                  <td className="px-4 py-3">{row.perSqFt.toFixed(1)} bricks / sq ft</td>
+                  <td className="px-4 py-3">{formatInt(row.per100SqFt)} bricks</td>
+                  <td className="px-4 py-3">{row.thumb} / sq ft (rounds up — safe)</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm">
+          Exact figures are for the Pakistani Awwal brick (230 × 110 × 75 mm) with a 10 mm
+          joint, before wastage, computed by the same engine as the calculator above. The thumb
+          rule is what contractors quote on site; it always orders slightly more, which is safe.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden">
+            <thead>
+              <tr className="bg-surface-default text-left">
+                <th className="px-4 py-3 font-semibold">Mortar mix</th>
+                <th className="px-4 py-3 font-semibold">Use</th>
+                <th className="px-4 py-3 font-semibold">Cement per m³ dry mortar</th>
+                <th className="px-4 py-3 font-semibold">Sand per m³ dry mortar</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-ui-borderSubtle dark:divide-ink-600">
+              {MIX_GUIDE_ROWS.map((row) => (
+                <tr key={row.label}>
+                  <td className="px-4 py-3 font-semibold">{row.label}</td>
+                  <td className="px-4 py-3">{row.use}</td>
+                  <td className="px-4 py-3">
+                    {row.cementBagsPerM3Dry.toFixed(1)} bags ({formatInt(row.cementKgPerM3Dry)} kg)
+                  </td>
+                  <td className="px-4 py-3">{row.sandM3PerM3Dry.toFixed(2)} m³</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm">
+          Cement per cubic metre of dry mortar assumes 50 kg bags (0.0347 m³ per bag). To use
+          the table, multiply by your dry mortar volume — the calculator above does this for
+          your wall.
         </p>
       </Section>
 
@@ -340,6 +429,7 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
                 <tr className="bg-surface-default text-left">
                   <th className="px-4 py-3 font-semibold">House</th>
                   <th className="px-4 py-3 font-semibold">Plot</th>
+                  <th className="px-4 py-3 font-semibold">Covered area / floor</th>
                   <th className="px-4 py-3 font-semibold">External walls</th>
                   <th className="px-4 py-3 font-semibold">Internal walls</th>
                   <th className="px-4 py-3 font-semibold">Boundary wall</th>
@@ -362,6 +452,7 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
                       </Link>
                     </td>
                     <td className="px-4 py-3">{formatInt(s.plotSqFt)} sq ft</td>
+                    <td className="px-4 py-3">{formatInt(Math.round(s.plotSqFt * 0.7))} sq ft (70%)</td>
                     <td className="px-4 py-3">{formatInt(s.externalBricks)}</td>
                     <td className="px-4 py-3">{formatInt(s.internalBricks)}</td>
                     <td className="px-4 py-3">{formatInt(s.boundaryBricks)}</td>
@@ -401,6 +492,18 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           <div>
             <dt className="font-semibold text-txt-primary dark:text-white">English bond</dt>
             <dd>Courses alternating between stretchers (long face out) and headers (short face out) — the strongest common bond for 9-inch walls.</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-txt-primary dark:text-white">Stretcher bond</dt>
+            <dd>Every brick laid long-face out — for single-leaf (4½-inch) walls only; the fastest bond to lay.</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-txt-primary dark:text-white">Flemish bond</dt>
+            <dd>Stretcher and header alternate in every course, giving a decorative chequered face — same strength class as English bond for 9-inch walls.</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-txt-primary dark:text-white">Single / double stack</dt>
+            <dd>A single-stack wall is one brick leaf thick (4½-inch); a double-stack wall is two leaves (9-inch), with the leaves bonded together. A cavity wall is two leaves with a gap between them.</dd>
           </div>
           <div>
             <dt className="font-semibold text-txt-primary dark:text-white">Marla / Kanal</dt>

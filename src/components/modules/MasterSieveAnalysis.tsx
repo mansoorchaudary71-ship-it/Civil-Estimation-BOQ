@@ -146,6 +146,7 @@ export default function MasterSieveAnalysis() {
   // (Old code tested the GW branch before SW, so SW could never be returned.)
   let uscs = "Unknown";
   const fmSizes = [4.75, 2.36, 1.18, 0.6, 0.3, 0.15];
+  const fmMissingSizes = fmSizes.filter((sz) => !sieveData.some((r) => Math.abs(r.size - sz) < 0.001));
   const fm = sieveData.length > 0 && totalWeight !== "" ? fmSizes.reduce((acc, sz) => {
       const row = sieveData.find((r) => Math.abs(r.size - sz) < 0.001);
       return acc + (row ? row.cumulativePercentRetained : 0);
@@ -156,7 +157,12 @@ export default function MasterSieveAnalysis() {
   if (sieveData.length > 0 && totalWeight !== "" && cu !== null && cc !== null) {
       const row475 = sieveData.find((r) => Math.abs(r.size - 4.75) < 0.001);
       const coarseRetainedPct = row475 ? row475.cumulativePercentRetained : 0;
-      const finesPct = sieveData.length ? sieveData[sieveData.length - 1].percentPassing : 0;
+      // Fines = % passing the 0.075 mm sieve when it is present; the old
+      // code used % passing the LAST (finest) sieve, which for a coarse
+      // grading without a 0.075 mm sieve understates fines (e.g. a GSB
+      // stack ending at 2.36 mm reported fines = % passing 2.36 mm).
+      const row0075 = sieveData.find((r) => Math.abs(r.size - 0.075) < 0.001);
+      const finesPct = row0075 ? row0075.percentPassing : (sieveData.length ? sieveData[sieveData.length - 1].percentPassing : 0);
       const isGravel = (100 - finesPct) > 0 && coarseRetainedPct / (100 - finesPct) > 0.5;
       const wellGraded = isGravel ? (cu >= 4 && cc >= 1 && cc <= 3) : (cu >= 6 && cc >= 1 && cc <= 3);
       const base = isGravel ? (wellGraded ? "GW" : "GP") : (wellGraded ? "SW" : "SP");
@@ -181,6 +187,9 @@ export default function MasterSieveAnalysis() {
       { label: "Cu", value: cu ? cu.toFixed(2) : 'N/A' },
       { label: "Cc", value: cc ? cc.toFixed(2) : 'N/A' },
       { label: "Fineness Modulus (FM)", value: fm !== null ? fm.toFixed(2) : 'N/A' },
+      // A missing FM sieve counts as 0% retained, so FM understates when
+      // the grading omits any of 4.75/2.36/1.18/0.6/0.3/0.15 mm.
+      ...(fmMissingSizes.length ? [{ label: "FM note", value: `FM sieves missing from this grading (${fmMissingSizes.join(", ")} mm) count as 0% retained — FM understates the true value.` }] : []),
       { label: "USCS Estimate", value: uscs },
       ...(sumCheckWarning ? [{ label: "Weight check", value: sumCheckWarning }] : [])
     ];
@@ -272,14 +281,18 @@ export default function MasterSieveAnalysis() {
                 <tbody>
                   {sieveData.map((row, idx) => {
                     const isPassing = row.percentPassing >= row.minPassing && row.percentPassing <= row.maxPassing;
-                    const hasInput = row.weightRetained !== "" || totalWeight !== "";
+                    // Gate the badge on THIS row's retained weight: with only
+                    // the total weight entered every row reads 100% passing
+                    // and shows a green PASS — the old gate (totalWeight
+                    // alone) did exactly that.
+                    const hasInput = row.weightRetained !== "";
                     
                     return (
                       <tr key={row.size} className="border-b border-ui-borderSubtle dark:border-ink-600/50 hover:bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary transition-colors overflow-hidden">
                         <td className="py-3 px-4 font-mono text-sm text-txt-primary font-medium">{row.size}</td>
                         <td className="py-2 px-4">
-                          <><label htmlFor="a11y-input-339" className="sr-only">Input</label>
-<input id="a11y-input-339" type="number" inputMode="decimal"
+                          <><label htmlFor={`a11y-input-339-${idx}`} className="sr-only">Input</label>
+<input id={`a11y-input-339-${idx}`} type="number" inputMode="decimal"
                             min="0"
                             className="w-24 px-3 py-1.5 rounded-full bg-bg-card border border-ui-borderDefault focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500 outline-none text-sm text-txt-secondary font-medium transition-all min-h-[44px]"
                             value={row.weightRetained}

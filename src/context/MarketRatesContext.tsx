@@ -57,31 +57,22 @@ interface MarketRatesContextType {
   isCompanyRate: (key: keyof MarketRates) => boolean;
 }
 
+// Trend history: the old hardcoded 6-month series was DELETED, not
+// "corrected". It was invented: PK crush 220–250 (a proven ~3x error —
+// the sourced rate is 90/cft), bricks 15–18 (sourced 23.355/pc, PBS Aug
+// 2026 Lahore), steel 250–280 (sourced 270/kg), and the IN/UAE series
+// were unsourced while rates.ts deliberately leaves IN/AE null ("Never
+// invent a rate"). There is no sourced monthly history anywhere in the
+// repo, so no trend is plotted: PK shows the single current month built
+// from the sourced table (defaultRates, so it can never drift from it),
+// and regions without sourced rates show nothing. Add a real dated
+// monthly series here only when one exists.
 const regionalTrendData: Record<string, any[]> = {
   PK: [
-    { month: 'Jan', cement: 1350, steel: 250, bricks: 15, sand: 80, crush: 220 },
-    { month: 'Feb', cement: 1380, steel: 255, bricks: 16, sand: 82, crush: 225 },
-    { month: 'Mar', cement: 1400, steel: 265, bricks: 16, sand: 85, crush: 230 },
-    { month: 'Apr', cement: 1420, steel: 270, bricks: 17, sand: 87, crush: 240 },
-    { month: 'May', cement: 1440, steel: 275, bricks: 17, sand: 88, crush: 245 },
-    { month: 'Jun', cement: 1450, steel: 280, bricks: 18, sand: 90, crush: 250 },
+    { month: "Nov", cement: defaultRates.cement, steel: defaultRates.steel, bricks: defaultRates.bricks, sand: defaultRates.sand, crush: defaultRates.crush },
   ],
-  IN: [
-    { month: 'Jan', cement: 380, steel: 80, bricks: 7, sand: 45, crush: 50 },
-    { month: 'Feb', cement: 385, steel: 82, bricks: 7, sand: 46, crush: 52 },
-    { month: 'Mar', cement: 390, steel: 85, bricks: 8, sand: 48, crush: 55 },
-    { month: 'Apr', cement: 395, steel: 84, bricks: 8, sand: 48, crush: 54 },
-    { month: 'May', cement: 400, steel: 86, bricks: 8, sand: 50, crush: 56 },
-    { month: 'Jun', cement: 410, steel: 88, bricks: 9, sand: 52, crush: 58 },
-  ],
-  UAE: [
-    { month: 'Jan', cement: 15, steel: 3, bricks: 1, sand: 2, crush: 3 },
-    { month: 'Feb', cement: 15.5, steel: 3.1, bricks: 1, sand: 2.1, crush: 3.1 },
-    { month: 'Mar', cement: 16, steel: 3.2, bricks: 1.1, sand: 2.2, crush: 3.2 },
-    { month: 'Apr', cement: 16, steel: 3.3, bricks: 1.1, sand: 2.2, crush: 3.3 },
-    { month: 'May', cement: 16.5, steel: 3.4, bricks: 1.2, sand: 2.3, crush: 3.4 },
-    { month: 'Jun', cement: 17, steel: 3.5, bricks: 1.2, sand: 2.4, crush: 3.5 },
-  ]
+  IN: [],
+  UAE: [],
 };
 
 const MarketRatesContext = createContext<MarketRatesContextType | undefined>(undefined);

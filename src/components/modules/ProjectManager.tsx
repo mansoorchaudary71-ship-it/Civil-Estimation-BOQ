@@ -2,6 +2,7 @@ import { Button } from '../ui/Button';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects, Project } from '../../context/ProjectContext';
+import { useSettings } from '../../context/SettingsContext';
 import toast from 'react-hot-toast';
 import { Plus, FolderOpen, Calendar, MapPin, Building, Share2, Printer, ChevronRight, BarChart3, AlertCircle, Upload, Play, FileText, ArrowRight, Home, Route, Save, X, Check } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
@@ -11,6 +12,7 @@ import { CalculationHistory } from '../ui/CalculationHistory';
 
 export default function ProjectManager() {
   const { projects, activeProjectId, setActiveProjectId, addProject, deleteProject, importProject, exportProject } = useProjects();
+  const { settings, formatCurrency, getCurrencySymbol } = useSettings();
   const [view, setView] = useState<'list' | 'detail' | 'compare'>('list');
   const [viewedProjectId, setViewedProjectId] = useState<string | null>(null);
   const [compareIds, setCompareIds] = useState<[string | null, string | null]>([null, null]);
@@ -87,7 +89,7 @@ export default function ProjectManager() {
              </div>
              Project Manager
           </h2>
-          <h1 className="sr-only">Project Manager — group calculations by project</h1>
+          <h2 className="sr-only">Project Manager — group calculations by project</h2>
           <p className="mt-2 text-base font-normal text-txt-secondary leading-relaxed">Manage and group your calculations by project. Projects are saved on this device (local-first) — no account or internet needed. Share a project by sending its file; the other person imports it.</p>
         </div>
         <div className="flex gap-2">
@@ -282,8 +284,8 @@ export default function ProjectManager() {
                     <BarChart data={globalTotals.projectCosts}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} dy={10} />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} tickFormatter={(val) => `$${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
-                      <Tooltip formatter={(val: any) => `$${val.toLocaleString()}`} contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: '#F4F2EE', opacity: 0.5 }} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} tickFormatter={(val) => `${getCurrencySymbol(settings.currency)}${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
+                      <Tooltip formatter={(val: any) => formatCurrency(val)} contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: '#F4F2EE', opacity: 0.5 }} />
                       <Bar dataKey="cost" fill="#F2A413" radius={[4, 4, 0, 0]} maxBarSize={50} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -440,10 +442,10 @@ function ProjectCompare({ p1, p2, onBack }: { p1: Project, p2: Project, onBack: 
            transition={{ duration: 0.5, delay: 0.2 + (i * 0.1), ease: [0.23, 1, 0.32, 1] }}
            className="w-full bg-surface-default backdrop-blur-xl border border-ui-borderSubtle p-4 sm:p-8 rounded-2xl shadow-brand-sm overflow-hidden"
          >
-            <h1 className="tabular-nums mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight">
+            <h2 className="tabular-nums mb-6 flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight">
                <span className="w-6 h-6 rounded-full bg-ink text-white shadow-brand-md flex items-center justify-center text-sm">{i+1}</span>
                {proj.name}
-            </h1>
+            </h2>
             
             <div className="space-y-6">
               <div className="p-4 bg-ui-success/50 backdrop-blur-md rounded-2xl border border-ui-successBorder/50 shadow-brand-sm text-txt-primary rounded-2xl overflow-hidden">
@@ -484,7 +486,8 @@ function ProjectCompare({ p1, p2, onBack }: { p1: Project, p2: Project, onBack: 
   );
 }
 function ProjectDetail({ project, onBack }: { project: Project, onBack: () => void }) {
-  const { deleteEstimate, updateProject, addMember, removeMember, saveVersion, exportProject } = useProjects();
+  const { deleteEstimate, updateProject, removeMember, saveVersion, exportProject } = useProjects();
+  const { settings, formatCurrency, getCurrencySymbol } = useSettings();
   const [inflationRate, setInflationRate] = useState<number>(0);
   const [wasteFactor, setWasteFactor] = useState<number>(0);
   const [budget, setBudget] = useState<number>(project.budget || 0);
@@ -631,7 +634,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                       <span className="w-full px-3 py-1 bg-surface-default/60 shadow-brand-sm text-accent-800 font-bold rounded-full text-xs uppercase tracking-wider mb-3 inline-block backdrop-blur-md overflow-hidden">
                          {project.type}
                       </span>
-                      <h1 className="md:text-[clamp(1.75rem,5vw,2.5rem)] break-all tabular-nums mb-2 text-xl font-semibold text-txt-primary tracking-tight mb-6">{project.name}</h1>
+                      <h2 className="md:text-[clamp(1.75rem,5vw,2.5rem)] break-all tabular-nums mb-2 text-xl font-semibold text-txt-primary tracking-tight mb-6">{project.name}</h2>
                       <div className="flex items-center gap-4 text-txt-tertiary font-medium flex-wrap">
                          <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {project.location}</span>
                          <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Started {project.startDate ? new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(project.startDate)) : 'N/A'}</span>
@@ -653,7 +656,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                 <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                    <div className="bg-ui-success/50 backdrop-blur-md p-5 rounded-2xl border border-ui-successBorder/50 overflow-hidden">
                      <p className="text-ui-successText uppercase tracking-wider mb-1 text-base font-normal text-txt-secondary leading-relaxed">Total Estimated Cost</p>
-                     <p className="text-xl tabular-nums tracking-tight text-ui-successText text-base font-normal text-txt-secondary leading-relaxed">${totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                     <p className="text-xl tabular-nums tracking-tight text-ui-successText text-base font-normal text-txt-secondary leading-relaxed">{formatCurrency(totalCost)}</p>
                    </div>
                    <div className="bg-ui-error/50 backdrop-blur-md p-5 rounded-2xl border border-ui-errorBorder/50 overflow-hidden">
                      <p className="text-ui-errorText uppercase tracking-wider mb-1 text-base font-normal text-txt-secondary leading-relaxed">Total Budget</p>
@@ -667,7 +670,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                           placeholder="0.00"
                        /></>
                      ) : (
-                       <p className="text-xl font-semibold tabular-nums tracking-tight text-ui-errorText bg-transparent">${budget.toLocaleString()}</p>
+                       <p className="text-xl font-semibold tabular-nums tracking-tight text-ui-errorText bg-transparent">{formatCurrency(budget)}</p>
                      )}
                    </div>
                    <div className="bg-accent-50/50 backdrop-blur-md p-5 rounded-2xl border border-accent-100/50 overflow-hidden">
@@ -683,7 +686,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                 {budget > 0 && (
                   <div className="w-full mt-6 bg-surface-default backdrop-blur-xl border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
                       <div className="flex justify-between mb-2">
-                        <p className="text-base font-normal text-txt-secondary leading-relaxed">Remaining Budget: <span className={totalCost > budget ? "text-ui-errorText" : "text-ui-successText"}>${(budget - totalCost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
+                        <p className="text-base font-normal text-txt-secondary leading-relaxed">Remaining Budget: <span className={totalCost > budget ? "text-ui-errorText" : "text-ui-successText"}>{formatCurrency(budget - totalCost)}</span></p>
                         <p className="text-base font-normal text-txt-secondary leading-relaxed">{((totalCost / budget) * 100).toFixed(1)}% Spent</p>
                       </div>
                       <div className="w-full bg-surface-hover rounded-full h-4 overflow-hidden">
@@ -701,8 +704,8 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                             <LineChart data={cumulativeTimelineData}>
                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
                                <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} dy={10} />
-                               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} tickFormatter={(val) => `$${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
-                               <Tooltip formatter={(val: any) => `$${val.toLocaleString()}`} contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} tickFormatter={(val) => `${getCurrencySymbol(settings.currency)}${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
+                               <Tooltip formatter={(val: any) => formatCurrency(val)} contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
                                <Line type="monotone" dataKey="cumulativeCost" name="Cumulative Cost" stroke="#F2A413" strokeWidth={3} dot={{ r: 4, fill: '#F2A413', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6 }} />
                             </LineChart>
                          </ResponsiveContainer>
@@ -931,18 +934,9 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
                </div>
                {canManageMembers && (
                  <div className="mt-4 pt-4 border-t border-ui-borderSubtle/50">
-                   <Button onClick={() => {
-                     const email = window.prompt("Enter member's email address:");
-                     if (email) {
-                       const role = window.prompt("Enter role (editor or viewer):", "editor");
-                       if (role === 'editor' || role === 'viewer') {
-                         addMember(project.id, email, role as 'editor'|'viewer').catch(e => alert(e.message));
-                       } else {
-                         alert("Invalid role. Must be 'editor' or 'viewer'.");
-                       }
-                     }
-                   }} className="w-full flex items-center justify-center gap-2 py-2 bg-accent-50 text-accent-800 hover:bg-accent-100 rounded-full font-bold text-sm transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
-                     <Plus className="w-4 h-4" /> Add Member
+                   <p className="text-sm text-txt-secondary mb-3">This site has no accounts, so members cannot be invited by email. To share this project, use the Share button above — the other person imports the project file.</p>
+                   <Button onClick={handleShare} className="w-full flex items-center justify-center gap-2 py-2 bg-accent-50 text-accent-800 hover:bg-accent-100 rounded-full font-bold text-sm transition transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
+                     <Share2 className="w-4 h-4" /> Share Project
                    </Button>
                  </div>
                )}

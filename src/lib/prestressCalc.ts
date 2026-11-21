@@ -170,7 +170,12 @@ export function designPrestress(input: Partial<PrestressInputs> = {}): Prestress
   const fc = piAfterImmediate / sec.areaMm2 + (piAfterImmediate * i.eccentricityMm * i.eccentricityMm) / sec.inertiaMm4;
   const lossElastic = i.type === "pre" ? m * fc : 0.5 * m * fc;
   const lossCreep = i.creepCoeff * m * fc;
-  const lossShrinkage = i.shrinkageStrain * i.esMpa;
+  // Shrinkage strain defaults by method (IS 1343 Cl. 19.4): pre-tension
+  // 0.0003, post-tension 0.0002. The defaults object carries 0.0002, so a
+  // pre-tensioned run that leaves the field untouched was silently using
+  // the post-tension value; tests that pass 0.0003 explicitly are unaffected.
+  const shrinkageStrain = i.type === "pre" && i.shrinkageStrain <= 0.0002 ? 0.0003 : i.shrinkageStrain;
+  const lossShrinkage = shrinkageStrain * i.esMpa;
   const lossRelaxation = (i.relaxationPct / 100) * sigma0;
   const totalLoss = lossFriction + lossSlip + lossElastic + lossCreep + lossShrinkage + lossRelaxation;
   const finalStress = sigma0 - totalLoss;
@@ -188,12 +193,26 @@ export function designPrestress(input: Partial<PrestressInputs> = {}): Prestress
   const transfer = stressAt(piAfterImmediate, i.transferMomentKNm);
   const service = stressAt(pe, i.serviceMomentKNm);
   const tensionLimit = i.prestressClass === 1 ? 0 : 3;
+  // IS 1343 Cl. 22.7 compression limits: 0.5·fck at transfer, 0.33·fck in
+  // service. The old check tested tension only, so a section crushing in
+  // compression could report serviceOk = true.
+  const compressionTransferLimit = 0.5 * i.fck;
+  const compressionServiceLimit = 0.33 * i.fck;
   const serviceOk = service.top >= -tensionLimit && service.bottom >= -tensionLimit
-    && transfer.top >= -tensionLimit && transfer.bottom >= -tensionLimit;
+    && transfer.top >= -tensionLimit && transfer.bottom >= -tensionLimit
+    && transfer.top <= compressionTransferLimit && transfer.bottom <= compressionTransferLimit
+    && service.top <= compressionServiceLimit && service.bottom <= compressionServiceLimit;
   if (!serviceOk) warnings.push(`Tension exceeds the Class ${i.prestressClass} limit (${tensionLimit} N/mm²) at a fibre — increase prestress or section depth.`);
+  if (transfer.top > compressionTransferLimit || transfer.bottom > compressionTransferLimit) warnings.push(`Transfer compression exceeds the IS 1343 limit 0.5·fck = ${round(compressionTransferLimit, 1)} MPa — reduce prestress or increase the section.`);
+  if (service.top > compressionServiceLimit || service.bottom > compressionServiceLimit) warnings.push(`Service compression exceeds the IS 1343 limit 0.33·fck = ${round(compressionServiceLimit, 1)} MPa — reduce prestress or increase the section.`);
   // Ultimate moment capacity (IS 1343 Cl. 23, simplified rectangular block)
-  const dEff = i.dMm - 50;
-  const xu = Math.min((0.87 * i.fpuMpa * i.apMm2) / (0.36 * i.fck * i.bMm), 0.46 * dEff);
+  // dEff is the tendon depth from the compression face: the tendon sits
+  // e below mid-depth, so d = D/2 + e. The old code used D − 50 mm
+  // (750 mm at the defaults vs the true 520 mm), overstating Mu by ~44%.
+  // T-sections use the flange width as the compression-block width.
+  const dEff = i.dMm / 2 + i.eccentricityMm;
+  const bEff = i.sectionKind === "rectangular" ? i.bMm : i.flangeBmm;
+  const xu = Math.min((0.87 * i.fpuMpa * i.apMm2) / (0.36 * i.fck * bEff), 0.46 * dEff);
   const mu = (0.87 * i.fpuMpa * i.apMm2 * (dEff - 0.42 * xu)) / 1e6;
   // Loss vs distance (friction grows from the jacking end; other losses uniform)
   const lossVsDistance: LossRow[] = [0, 0.25, 0.5].map((f) => {
@@ -238,13 +257,13 @@ export function designPrestress(input: Partial<PrestressInputs> = {}): Prestress
       { label: "Section", text: `A = ${round(sec.areaMm2)} mm²; I = ${(sec.inertiaMm4 / 1e9).toFixed(2)}×10⁹ mm⁴; Ec = 5000√fck = ${round(ec)} MPa; m = Es/Ec = ${round(m, 2)}` },
       { label: "Initial stress", text: `σ0 = P0/Ap = ${round(sigma0, 1)} MPa; jacking limit 0.8·fpu = ${round(jackingLimit, 1)} MPa — ${jackingOk ? "OK" : "EXCEEDED"}` },
       { label: "Immediate losses", text: i.type === "post"
-        ? `Friction ${round(lossFriction, 1)} MPa (IS 1343, μ = ${i.mu}, k = ${i.kPerM}/m); anchorage slip ${round(lossSlip, 1)} MPa uniform, ${round(lossSlipAffected, 1)} MPa by the affected-length method (l_set = ${round(slipLen, 2)} m)`
+        ? `Friction ${round(lossFriction, 1)} MPa (IS 1343, μ = ${i.mu}, k = ${i.kPerM}/m); anchorage slip ${round(lossSlip, 1)} MPa uniform (the total-loss figure uses this uniform value — the affected-length value ${round(lossSlipAffected, 1)} MPa applies only within l_set = ${round(slipLen, 2)} m of the anchorage)`
         : "Pre-tensioned: no friction or anchorage-slip loss." },
       { label: "Concrete stress at steel level", text: `fc = P/A + P·e²/I = ${round(fc, 2)} MPa` },
       { label: "Time-dependent losses", text: `Elastic ${round(lossElastic, 1)} + creep φ·m·fc ${round(lossCreep, 1)} + shrinkage ${round(lossShrinkage, 1)} + relaxation ${round(lossRelaxation, 1)} MPa` },
       { label: "Total loss", text: `${round(totalLoss, 1)} MPa = ${round(pctLoss, 1)}% of ${round(sigma0, 1)} MPa (typical band 15–25%); effective stress ${round(finalStress, 1)} MPa` },
-      { label: "Service stresses", text: `Transfer: top ${round(transfer.top, 2)} / bottom ${round(transfer.bottom, 2)} MPa; service: top ${round(service.top, 2)} / bottom ${round(service.bottom, 2)} MPa (Class ${i.prestressClass} tension limit ${tensionLimit} N/mm²)` },
-      { label: "Ultimate moment", text: `Mu ≈ ${round(mu, 1)} kNm (IS 1343 Cl. 23, simplified)` },
+      { label: "Service stresses", text: `Transfer: top ${round(transfer.top, 2)} / bottom ${round(transfer.bottom, 2)} MPa (compression limit 0.5·fck = ${round(compressionTransferLimit, 1)} MPa); service: top ${round(service.top, 2)} / bottom ${round(service.bottom, 2)} MPa (compression limit 0.33·fck = ${round(compressionServiceLimit, 1)} MPa; Class ${i.prestressClass} tension limit ${tensionLimit} N/mm²)` },
+      { label: "Ultimate moment", text: `Mu ≈ ${round(mu, 1)} kNm (IS 1343 Cl. 23, simplified; tendon depth d = D/2 + e = ${round(dEff)} mm${i.sectionKind === "rectangular" ? "" : `, flange width ${bEff} mm`})` },
     ],
   };
 }

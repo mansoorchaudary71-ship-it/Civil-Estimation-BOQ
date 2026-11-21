@@ -275,6 +275,17 @@ export default function Takeoff() {
     localStorage.setItem("takeoff_tutorial_seen", "true");
   };
 
+  // Esc closes the welcome modal (the App-level Esc handler skips
+  // navigation while a [role="dialog"] is open, so this is the only Esc path).
+  useEffect(() => {
+    if (!showTutorial) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeTutorial();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [showTutorial]);
+
   const handleLoadDemo = () => {
     setFilename("Demo Blueprint");
     const img = new Image();
@@ -512,6 +523,24 @@ export default function Takeoff() {
       inputs: initialInputs,
     });
   };
+  // Keyboard equivalent of dragging an assembly onto the canvas: Enter/Space
+  // on a focused assembly card opens its Configure prompt placed at the
+  // centre of the visible canvas (HTML5 drag-and-drop is mouse-only, and the
+  // cards were plain <div>s with no focusable element at all).
+  const handleAssemblyKeyActivate = (assemblyId: string) => {
+    const assemblyDef = ASSEMBLIES.find((a) => a.id === assemblyId);
+    if (!assemblyDef) return;
+    const initialInputs: Record<string, string> = {};
+    assemblyDef.inputs.forEach((inp) => (initialInputs[inp.key] = ""));
+    const cx = (dimensions.width / 2 - stagePos.x) / stageScale;
+    const cy = (dimensions.height / 2 - stagePos.y) / stageScale;
+    setAssemblyPrompt({
+      visible: true,
+      pos: { x: cx, y: cy },
+      assemblyId,
+      inputs: initialInputs,
+    });
+  };
   const handleCreateAssembly = () => {
     if (!assemblyPrompt) return;
     const asmDef = ASSEMBLIES.find((a) => a.id === assemblyPrompt.assemblyId);
@@ -735,10 +764,19 @@ export default function Takeoff() {
                 <div
                   key={asm.id}
                   draggable
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`${asm.name}: drag onto the canvas, or press Enter to place it at the canvas centre`}
                   onDragStart={(e) => {
                     e.dataTransfer.setData("assemblyId", asm.id);
                   }}
-                  className="p-3 bg-surface-default border border-ui-borderSubtle rounded cursor-grab active:cursor-grabbing hover:border-ui-borderStrong transition-all group"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleAssemblyKeyActivate(asm.id);
+                    }
+                  }}
+                  className="p-3 bg-surface-default border border-ui-borderSubtle rounded cursor-grab active:cursor-grabbing hover:border-ui-borderStrong focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-all group"
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <div
@@ -1297,7 +1335,12 @@ export default function Takeoff() {
       </div>
       
       {showTutorial && (
-        <div className="absolute inset-0 bg-surface-hover backdrop-blur-sm flex items-center justify-center z-[100] p-4 font-sans">
+        <div
+          className="fixed inset-0 bg-ink/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 font-sans"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Welcome to 2D Takeoff Engine"
+        >
           <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl max-w-lg w-full shadow-2xl p-4 sm:p-4 sm:p-4 sm:p-6 overflow-y-auto max-h-[90vh] relative overflow-hidden">
             <Button onClick={closeTutorial} className="absolute right-4 top-4 p-2 text-txt-tertiary hover:text-txt-secondary transition-colors rounded-full hover:bg-surface-hover active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
               <X className="w-5 h-5"/>

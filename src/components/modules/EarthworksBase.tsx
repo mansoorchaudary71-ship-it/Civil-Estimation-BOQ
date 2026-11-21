@@ -120,13 +120,13 @@ export default function StandardEarthworks() {
                   <div id="tour-earthworks-method" className="flex bg-surface-hover/80 p-1 rounded-2xl overflow-hidden">
                     <Button
                       onClick={() => setCalcMethod("prismoidal")}
-                      className={`flex-1 py-1.5 text-base font-medium rounded-2xl transition-all ${calcMethod === "prismoidal" ? "bg-surface-default shadow-[0_2px_10px_rgb(0,0,0,0.05)] text-accent-800" : "text-txt-secondary  hover:text-txt-secondary"}`}
+                      className={`flex-1 min-w-0 py-1.5 px-1 text-sm font-medium rounded-2xl transition-all ${calcMethod === "prismoidal" ? "bg-surface-default shadow-[0_2px_10px_rgb(0,0,0,0.05)] text-accent-800" : "text-txt-secondary  hover:text-txt-secondary"}`}
                     >
                       Prismoidal Formula
                     </Button>
                     <Button
                       onClick={() => setCalcMethod("averageEnd")}
-                      className={`flex-1 py-1.5 text-base font-medium rounded-2xl transition-all ${calcMethod === "averageEnd" ? "bg-surface-default shadow-[0_2px_10px_rgb(0,0,0,0.05)] text-accent-800" : "text-txt-secondary  hover:text-txt-secondary"}`}
+                      className={`flex-1 min-w-0 py-1.5 px-1 text-sm font-medium rounded-2xl transition-all ${calcMethod === "averageEnd" ? "bg-surface-default shadow-[0_2px_10px_rgb(0,0,0,0.05)] text-accent-800" : "text-txt-secondary  hover:text-txt-secondary"}`}
                     >
                       Average End Area
                     </Button>
@@ -343,6 +343,7 @@ export default function StandardEarthworks() {
                totalValue={formatCurrency(totalCostConverted)}
                totalUnit=""
                subtitle="Excavation + Compaction + Hauling"
+               stackVisual
              >
                {totalCostConverted === 0 && (
                 <div className="bg-accent-50 border border-accent-200 p-4 rounded-2xl mt-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-brand-sm overflow-hidden">

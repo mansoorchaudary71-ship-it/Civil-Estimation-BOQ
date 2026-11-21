@@ -486,6 +486,15 @@ html.high-contrast a {
     /* To prevent any deeply nested element from breaking the flex/grid container */
     max-width: 100%;
   }
+  /* Recharts sizes its .recharts-wrapper by JS to exactly the container
+     width, inside an inner div that is 0px wide BY DESIGN (overflow-visible
+     measurement trick). The blanket max-width:100% above therefore caps the
+     wrapper at 0px, so the donut/bar and its legend collapse into a vertical
+     letter strip. Exempt it: the JS-measured width cannot break the grid. */
+  .responsive-tool-grid > :nth-child(2) .recharts-wrapper,
+  .responsive-tool-grid > :nth-child(2) .recharts-responsive-container {
+    max-width: none;
+  }
   .responsive-tool-grid > :nth-child(2) > div {
     min-width: 0;
     overflow-x: hidden;

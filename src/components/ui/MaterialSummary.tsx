@@ -21,6 +21,12 @@ export interface MaterialSummaryProps {
   showRates?: boolean;
   onRecalculate?: () => void;
   relatedToolIds?: string[];
+  // When true the Visual Breakdown stacks full-width BELOW the result cards
+  // instead of sitting in a narrow 1/3 side column. Use it when this summary
+  // renders inside a half-width (span-8) results column, where the side
+  // column is only ~200px wide and the donut/legend collapse into a vertical
+  // letter strip (Slab Estimator, Earthworks).
+  stackVisual?: boolean;
 }
 
 import { useSettings } from '../../context/SettingsContext';
@@ -47,6 +53,7 @@ export function MaterialSummary({
   items = [],
   onRecalculate,
   relatedToolIds = [],
+  stackVisual = false,
 }: MaterialSummaryProps) {
   const { projects, activeProjectId, addEstimateToProject, canEditProject } = useProjects();
   const { settings } = useSettings();
@@ -249,8 +256,8 @@ export function MaterialSummary({
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
-          <div className="lg:col-span-2 flex flex-col gap-4">
+        <div className={stackVisual ? "grid grid-cols-1 gap-8 relative z-10" : "grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10"}>
+          <div className={stackVisual ? "flex flex-col gap-4" : "lg:col-span-2 flex flex-col gap-4"}>
             {children}
           </div>
           

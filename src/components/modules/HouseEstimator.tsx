@@ -1496,9 +1496,13 @@ export default function HouseEstimator() {
               <h3 className="mb-6 text-lg font-medium text-txt-primary mb-4">
                 Cost Breakdown Visuals
               </h3>
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              {/* Charts stack vertically: this card sits inside the form's
+                  flex column (~548px wide), so side-by-side halves (~242px
+                  each) squeezed the pie legend into wrapped lines and the bar
+                  chart into thin slivers with overlapping labels. */}
+              <div className="flex flex-col gap-8">
                 <div
-                  className="w-full md:w-1/2 h-80 relative"
+                  className="w-full h-80 relative"
                   id="export-chart-target"
                 >
                   <StyledChart 
@@ -1508,7 +1512,7 @@ export default function HouseEstimator() {
                     valueFormatter={(val) => formatCurrency(val, false)}
                   />
                 </div>
-                <div className="w-full md:w-1/2 h-80 relative mt-4 md:mt-0 pt-8 border-t md:border-t-0 md:border-l border-border-color/60 pl-0 md:pl-8">
+                <div className="w-full h-80 relative pt-8 border-t border-border-color/60">
                   <StyledChart 
                     data={combinedCostData.map(d => ({ ...d, fill: d.color })).slice(0, 10)}
                     type="bar"

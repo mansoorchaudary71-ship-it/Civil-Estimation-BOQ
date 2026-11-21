@@ -485,6 +485,7 @@ export default function SlabEstimator() {
               subtitle={`Wet Volume: ${results.concreteVolumeWet.toFixed(2)} m³`}
               relatedToolIds={['concrete-mix', 'beam-calc']}
               onRecalculate={() => {}}
+              stackVisual
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <ResultCard
@@ -522,7 +523,11 @@ export default function SlabEstimator() {
                 <div className="mb-4 text-xs sm:text-xs font-bold tracking-tight text-txt-tertiary uppercase tracking-[0.15em]">
                   Material Split — M20 (1:1.5:3), {wastage}% wastage
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Material split cards need full-width 2-col cells: at 4 cols
+                    inside this half-width column each card is ~99px wide while
+                    the value font computes to ~38px (cqw falls back to the
+                    viewport), so numbers wrapped digit-by-digit. */}
+                <div className="grid grid-cols-2 gap-4">
                   <ResultCard title="Cement" value={String(results.cementBagsOrder)} unit="bags" variant="neutral" description={results.concreteCost != null ? formatCurrency(results.concreteCost, false) : "Rate not entered"} />
                   <ResultCard title="Sand" value={results.sandM3.toFixed(2)} unit="m³" variant="neutral" />
                   <ResultCard title="Aggregate" value={results.aggregateM3.toFixed(2)} unit="m³" variant="neutral" />

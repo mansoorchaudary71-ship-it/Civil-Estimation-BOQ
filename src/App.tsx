@@ -888,7 +888,7 @@ export default function App() {
           <ProjectProvider>
                 <div className="flex flex-col min-h-screen w-full bg-surface-hover dark:bg-ink-900 font-sans text-txt-primary dark:text-txt-primary transition-colors duration-300">
                   <Toaster position="bottom-right" />
-                  <AppDownloadBanner />
+                  {activeModule === "home" && <AppDownloadBanner />}
                   <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
                   <PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} />
                   <GlobalSearchModal isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} onNavigate={handleSelectModule} />

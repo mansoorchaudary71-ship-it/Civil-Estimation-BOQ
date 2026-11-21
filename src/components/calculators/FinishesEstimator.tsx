@@ -379,7 +379,7 @@ export default function FinishesEstimator() {
               <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-ui-errorText px-2 py-1 text-sm">✕</Button>
             </div>
           ))}
-          <div className="flex gap-2 mt-2">
+          <div className="flex flex-wrap items-center gap-2 mt-2">
             <Button onClick={() => setOpenings([...openings, newOpening("door")])} className="text-accent-400 text-sm font-semibold">+ Add door</Button>
             <Button onClick={() => setOpenings([...openings, newOpening("window")])} className="text-accent-400 text-sm font-semibold">+ Add window</Button>
             <label className="text-xs text-[#948D82] ml-2">Jamb depth (m)<input type="number" min="0" step="any" value={jambDepth} onChange={(e) => setJambDepth(e.target.value)} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-1 text-white font-mono text-sm ml-1" /></label>

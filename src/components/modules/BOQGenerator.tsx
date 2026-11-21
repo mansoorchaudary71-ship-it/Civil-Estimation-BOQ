@@ -543,7 +543,7 @@ export default function BOQGenerator() {
         </div>
       ) : (
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-3 min-w-0 space-y-6">
           <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl shadow-brand-sm overflow-hidden">
             <div className="p-4 sm:p-6 border-b border-ui-borderSubtle flex justify-between items-center bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
               <h3 className="flex items-center gap-2 text-lg font-medium text-txt-primary mb-4">
@@ -792,7 +792,7 @@ export default function BOQGenerator() {
         </div>
 
         {/* Summary Sidebar */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="lg:col-span-1 min-w-0 space-y-6">
           <div className="w-full bg-surface-default border border-ui-borderSubtle border-l-[4px] border-l-accent-500 p-4 sm:p-6 rounded-2xl shadow-brand-sm relative overflow-hidden">
             {/* Pattern overlay */}
             <div

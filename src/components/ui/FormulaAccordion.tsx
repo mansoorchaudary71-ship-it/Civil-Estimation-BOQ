@@ -36,18 +36,18 @@ export function FormulaAccordion({
     <div className="bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-brand-sm overflow-hidden mt-6">
       <Button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 sm:p-5 bg-surface-hover hover:bg-surface-hover transition-colors text-left focus:outline-none"
+        className="w-full flex items-center justify-between whitespace-normal p-4 sm:p-5 bg-surface-hover hover:bg-surface-hover transition-colors text-left focus:outline-none"
       >
-        <div className="flex items-center gap-3">
-          <div className="bg-accent-100 text-accent-800 p-2 rounded-lg">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="bg-accent-100 text-accent-800 p-2 rounded-lg shrink-0">
             <Calculator size={20} />
           </div>
-          <h3 className="text-lg font-semibold text-txt-primary">{title}</h3>
+          <h3 className="text-lg font-semibold text-txt-primary min-w-0">{title}</h3>
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="text-txt-tertiary"
+          className="text-txt-tertiary shrink-0"
         >
           <ChevronDown size={24} />
         </motion.div>

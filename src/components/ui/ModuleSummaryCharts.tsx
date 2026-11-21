@@ -70,7 +70,7 @@ export function ModuleSummaryCharts({
                     formatter={(value) => [formatNumber(Number(value), 0), "Value"]}
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                   />
-                  <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                  <Legend verticalAlign="bottom" height={84} iconType="circle" />
                 </PieChart>
               </ResponsiveContainer>
             </div>

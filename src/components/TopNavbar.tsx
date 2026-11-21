@@ -289,7 +289,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
             className="hidden md:flex flex-1 max-w-xl items-center gap-3 h-11 pl-4 pr-2 rounded-full border border-ui-borderDefault dark:border-ink-600 bg-surface-default/60 text-left text-[15px] text-txt-secondary hover:border-ui-borderStrong dark:hover:border-ui-borderStrong transition-colors"
           >
             <Search className="w-[18px] h-[18px] shrink-0" aria-hidden="true" />
-            <span className="flex-1 truncate">Search {toolCount}+ calculators, formulas, materials…</span>
+            <span className="flex-1 truncate">Search {toolCount}+ calculators, formulas…</span>
             <kbd className="hidden xl:inline-flex items-center h-7 px-2 rounded-md border border-border-color dark:border-ink-600 text-xs font-semibold text-txt-secondary bg-surface-default">
               Ctrl K
             </kbd>
@@ -321,7 +321,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
           </ul>
 
           {/* Auth */}
-          <div className="hidden md:flex items-center gap-2 ml-auto lg:ml-2">
+          <div className="hidden lg:flex items-center gap-2 ml-auto lg:ml-2">
             {user ? (
               <button
                 type="button"

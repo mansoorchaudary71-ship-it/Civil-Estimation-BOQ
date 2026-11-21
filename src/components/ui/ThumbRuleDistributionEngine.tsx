@@ -38,13 +38,13 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
       <div className="flex border-b border-ui-borderSubtle dark:border-ink bg-surface-default/50">
         <Button
           onClick={() => setActiveTab('cashflow')}
-          className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeTab === 'cashflow' ? 'text-accent-800 dark:text-accent-400 border-b-2 border-accent-800 dark:border-accent-800' : 'text-txt-secondary dark:text-txt-tertiary hover:text-txt-primary dark:hover:text-txt-primary'}`}
+          className={`flex-1 min-w-0 whitespace-normal leading-snug py-4 text-sm font-semibold transition-colors ${activeTab === 'cashflow' ? 'text-accent-800 dark:text-accent-400 border-b-2 border-accent-800 dark:border-accent-800' : 'text-txt-secondary dark:text-txt-tertiary hover:text-txt-primary dark:hover:text-txt-primary'}`}
         >
           6-Month Cashflow Timeline
         </Button>
         <Button
           onClick={() => setActiveTab('material')}
-          className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeTab === 'material' ? 'text-accent-800 dark:text-accent-400 border-b-2 border-accent-800 dark:border-accent-800' : 'text-txt-secondary dark:text-txt-tertiary hover:text-txt-primary dark:hover:text-txt-primary'}`}
+          className={`flex-1 min-w-0 whitespace-normal leading-snug py-4 text-sm font-semibold transition-colors ${activeTab === 'material' ? 'text-accent-800 dark:text-accent-400 border-b-2 border-accent-800 dark:border-accent-800' : 'text-txt-secondary dark:text-txt-tertiary hover:text-txt-primary dark:hover:text-txt-primary'}`}
         >
           Material Cost Breakdown
         </Button>

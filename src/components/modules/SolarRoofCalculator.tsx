@@ -139,7 +139,7 @@ export default function SolarRoofCalculator() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-6">
             <section>
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><Home className="text-accent-800" /> Site &amp; Load</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -227,7 +227,7 @@ export default function SolarRoofCalculator() {
             </section>
           </div>
 
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-6">
             {result ? (
               <>
                 <MaterialSummary title="Solar System Results" totalLabel="Total System Cost" totalValue={fmt(result.totalCost)} totalUnit="" relatedToolIds={[]}>

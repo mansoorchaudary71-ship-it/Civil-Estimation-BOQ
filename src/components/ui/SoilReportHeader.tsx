@@ -14,7 +14,7 @@ interface Props {
 export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerateReport, isGenerating }) => {
   return (
     <div className="bg-surface-default dark:bg-ink rounded-2xl p-5 border border-ui-borderSubtle dark:border-ink shadow-brand-sm mb-6 overflow-hidden">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <h4 className="text-base font-medium dark:text-txt-primary uppercase tracking-widest flex items-center gap-2">
           <FileText className="w-4 h-4 text-accent-800" />
           Test Report Information
@@ -22,7 +22,7 @@ export const SoilReportHeader: React.FC<Props> = ({ details, onChange, onGenerat
         <Button
           onClick={onGenerateReport}
           disabled={isGenerating}
-          className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-xl text-base font-medium transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-xl text-base font-medium transition-colors disabled:opacity-50 w-full sm:w-auto justify-center"
         >
           <Download className="w-4 h-4" />
           {isGenerating ? "Generating..." : "Generate PDF Report"}

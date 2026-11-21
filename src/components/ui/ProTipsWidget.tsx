@@ -188,16 +188,16 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
     <div className="w-full overflow-hidden bg-surface-default rounded-2xl border border-border-color shadow-brand-sm">
       <Button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-surface-hover transition-colors"
+        className="w-full flex items-center justify-between whitespace-normal p-5 sm:p-6 text-left hover:bg-surface-hover transition-colors"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <div 
             className="w-10 h-10 rounded-full bg-surface-hover flex items-center justify-center shrink-0"
             style={{ color: 'var(--tool-theme-color, #4f46e5)' }}
           >
             <Lightbulb className="w-5 h-5" />
           </div>
-          <div>
+          <div className="min-w-0">
             <h3 className="font-semibold text-txt-primary leading-none mb-1">Engineering Pro Tips</h3>
             <p className="text-sm text-txt-tertiary font-medium">Best practices & principles for this calculation</p>
           </div>

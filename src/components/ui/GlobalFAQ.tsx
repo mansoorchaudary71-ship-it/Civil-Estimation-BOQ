@@ -1416,16 +1416,16 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
               key={index}
               className="w-full border border-ui-borderSubtle rounded-2xl bg-surface-default/80 backdrop-blur-xl overflow-hidden shadow-brand-sm hover:shadow transition-shadow"
             >
-              <Button className="w-full text-left px-6 py-4 md:py-5 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/20 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
+              <Button className="w-full text-left px-6 py-4 md:py-5 flex items-center justify-between whitespace-normal focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/20 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${index}`}
               >
-                <span className="font-semibold text-txt-primary text-lg pr-8">
+                <span className="font-semibold text-txt-primary text-lg pr-8 min-w-0 flex-1">
                   {faq.question}
                 </span>
                 <ChevronDown 
-                  className={`w-5 h-5 text-txt-tertiary transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-800' : ''}`}
+                  className={`w-5 h-5 shrink-0 text-txt-tertiary transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-800' : ''}`}
                 />
               </Button>
               

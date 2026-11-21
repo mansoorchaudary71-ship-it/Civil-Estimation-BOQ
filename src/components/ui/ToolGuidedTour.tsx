@@ -151,11 +151,16 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
 
   if (hasSeen || steps.length === 0) return null;
 
+  // Centred fallback (no target found yet, or the target never rendered).
+  // NOTE: do NOT centre with transform: translate(-50%,-50%) — the popup is
+  // a framer-motion div whose enter animation OWNS the transform, so the
+  // translate is clobbered and the card sits at left:50% with its right
+  // edge (Skip / close / Next) cut off the viewport on phones. Centre with
+  // a computed pixel left instead; framer-motion never touches `left`.
   let popupStyle: React.CSSProperties = {
     position: 'fixed',
     top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    left: Math.max(8, (window.innerWidth - 300) / 2),
     zIndex: 9999,
   };
 

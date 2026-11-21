@@ -603,10 +603,10 @@ export default function Takeoff() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleFinishDrawing]);
   return (
-    <div className="flex flex-col h-full text-txt-primary p-8">
+    <div className="flex flex-col h-full text-txt-primary p-3 sm:p-6 lg:p-8">
       <div className="flex-1 bg-surface-default border border-ui-borderSubtle rounded-2xl flex flex-col overflow-hidden relative">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-ui-borderSubtle flex justify-between items-center bg-surface-default">
+        <div className="px-6 py-4 border-b border-ui-borderSubtle flex flex-wrap gap-2 justify-between items-center bg-surface-default">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-txt-tertiary">
             2D Takeoff Engine
           </h2>
@@ -649,8 +649,8 @@ export default function Takeoff() {
           </div>
         </div>
         {/* Toolbar Inner */}
-        <div className="h-12 border-b border-ui-borderSubtle bg-transparent/50 flex items-center justify-between px-4 shrink-0 w-full text-xs">
-          <div className="flex items-center gap-4">
+        <div className="min-h-12 h-auto py-2 border-b border-ui-borderSubtle bg-transparent/50 flex flex-wrap gap-2 items-center justify-between px-4 shrink-0 w-full text-xs">
+          <div className="flex flex-wrap items-center gap-4 min-w-0">
             <div className="text-txt-primary font-medium truncate max-w-[200px]">
               {filename}
             </div>
@@ -725,9 +725,9 @@ export default function Takeoff() {
           </div>
         </div>
         {/* Main Workspace */}
-        <div className="flex-1 flex overflow-hidden relative">
+        <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden relative">
           {/* Left Measurement Tools */}
-          <div className="w-12 border-r border-ui-borderSubtle bg-transparent flex flex-col items-center py-4 gap-3 shrink-0">
+          <div className="w-full lg:w-12 border-b lg:border-b-0 lg:border-r border-ui-borderSubtle bg-transparent flex flex-row lg:flex-col items-center py-2 lg:py-4 gap-3 shrink-0">
             <Button
               onClick={() => {
                 setMode("area");
@@ -750,7 +750,7 @@ export default function Takeoff() {
             </Button>
           </div>
           {/* Assemblies Sidebar */}
-          <div className="w-56 border-r border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0">
+          <div className="w-full lg:w-56 border-b lg:border-b-0 lg:border-r border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0 max-h-[260px] lg:max-h-none">
             <div className="h-10 border-b border-ui-borderSubtle flex items-center px-4 bg-surface-default/30">
               <span className="text-xs font-semibold uppercase text-txt-secondary tracking-wider flex-1">
                 Smart Assemblies
@@ -803,7 +803,7 @@ export default function Takeoff() {
           {/* Canvas Area */}
           <div
             ref={containerRef}
-            className="flex-1 relative bg-transparent border border-dashed border-ui-borderSubtle m-4 rounded-2xl bg-[radial-gradient(#1F1D1A_1px,transparent_1px)] bg-[size:20px_20px] overflow-hidden"
+            className="relative bg-transparent border border-dashed border-ui-borderSubtle m-4 rounded-2xl bg-[radial-gradient(#1F1D1A_1px,transparent_1px)] bg-[size:20px_20px] overflow-hidden shrink-0 h-[380px] lg:h-auto lg:flex-1"
             tabIndex={0}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -1182,7 +1182,7 @@ export default function Takeoff() {
             )}
           </div>
           {/* Right Panel */}
-          <div className="w-64 border-l border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0">
+          <div className="w-full lg:w-64 border-t lg:border-t-0 lg:border-l border-ui-borderSubtle bg-transparent/50 flex flex-col shrink-0 max-h-[320px] lg:max-h-none">
             <div className="h-10 border-b border-ui-borderSubtle flex items-center px-4 bg-surface-default/30">
               <span className="text-xs font-semibold uppercase text-txt-secondary tracking-wider flex-1">
                 Takeoffs

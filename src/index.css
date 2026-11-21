@@ -467,6 +467,14 @@ html.high-contrast a {
 }
 
 /* Global Responsive Tool Grid Pattern */
+/* Below lg the grid is a single column, but grid items still default to
+   min-width:auto, so a wide table/chart/card inside a tool page forces the
+   whole column past the viewport (the page then clips it, since the body
+   has overflow-x: clip). Shrink-to-fit at every width, not just >=1024px. */
+.responsive-tool-grid > :nth-child(1),
+.responsive-tool-grid > :nth-child(2) {
+  min-width: 0;
+}
 @media (min-width: 1024px) {
   .responsive-tool-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr)) !important;

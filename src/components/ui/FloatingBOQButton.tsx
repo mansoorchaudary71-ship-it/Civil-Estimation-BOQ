@@ -43,7 +43,7 @@ export default function FloatingBOQButton({ onClick }: { onClick: () => void }) 
 
   return (
     <div 
-      className="fixed bottom-6 right-6 z-[60] flex items-center justify-center"
+      className="fixed bottom-24 right-6 z-[60] flex items-center justify-center"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

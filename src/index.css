@@ -117,11 +117,12 @@
     padding-right: 0 !important;
   }
 
-  .global-form-card-wrapper .bg-bg-card {
-    /* 
-      1. Maximize Width: spans full screen with minimal padding 
-      2. Global Application: applies to all form cards
-      3. Vertical Responsiveness: dynamic height avoiding clipping
+  .global-form-card-wrapper .bg-bg-card:not(button) {
+    /*
+      Applies to form CARD panels only. Buttons must be excluded: inactive
+      pill toggles (Brick, etc.) also carry bg-bg-card, and width:100% +
+      max-width:95vw + auto margins below turned every inactive pill into a
+      full-width bar while the active (bg-ink) pill stayed content-sized.
     */
     width: 100% !important;
     max-width: 95vw !important;
@@ -155,6 +156,41 @@
   .global-form-card-wrapper button {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
+  }
+}
+
+/* Segmented pill controls keep their intended columns on phones: the
+   blanket `.global-form-card-wrapper .grid { grid-template-columns: 1fr }`
+   rule above would stack every pill in a single column (and force a 1rem
+   gap), so pill grids opt out with these classes. Specificity (0,3,0) +
+   !important beats the blanket rule (0,2,0). */
+@media (max-width: 768px) {
+  .global-form-card-wrapper .grid.pill-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.25rem !important;
+  }
+  .global-form-card-wrapper .grid.pill-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+}
+@media (min-width: 640px) and (max-width: 768px) {
+  /* Wastage goes 5-across from the sm breakpoint, matching sm:grid-cols-5. */
+  .global-form-card-wrapper .grid.pill-grid-5-sm {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+}
+
+/* Area 5 finding (2026-11-21): with the blanket 1fr rule above, a 2nd grid
+   item auto-places into an implicit `auto` column instead of wrapping, so
+   track 1 gets squeezed (measured: RCC grade dropdown 57.6px at 360px,
+   computed columns `57.5781px 214.422px`). Force children of ordinary grids
+   onto column 1 so they stack full-width. Pill grids are excluded — they opt
+   out of the 1fr rule above and need their columns. */
+@media (max-width: 768px) {
+  .global-form-card-wrapper .grid:not(.pill-grid-2):not(.pill-grid-3):not(.pill-grid-5-sm) > * {
+    grid-column: 1 !important;
   }
 }
 

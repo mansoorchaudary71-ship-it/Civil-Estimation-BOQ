@@ -1421,11 +1421,11 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${index}`}
               >
-                <span className="font-semibold text-txt-primary text-lg pr-8 min-w-0 flex-1">
+                <span className="font-semibold text-white text-lg pr-8 min-w-0 flex-1">
                   {faq.question}
                 </span>
                 <ChevronDown 
-                  className={`w-5 h-5 shrink-0 text-txt-tertiary transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-800' : ''}`}
+                  className={`w-5 h-5 shrink-0 text-gray-200 transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-400' : ''}`}
                 />
               </Button>
               

@@ -352,12 +352,12 @@ export default function FormworkEstimator() {
                 className="w-full flex items-center justify-between gap-3 relative z-10 text-left focus:outline-none min-h-[44px]"
               >
                 <div className="flex items-center gap-3">
-                  <RefreshCw className="w-5 h-5 text-accent-800" />
-                  <h3 className="text-lg font-medium text-txt-primary">
+                  <RefreshCw className="w-5 h-5 text-accent-400" />
+                  <h3 className="text-lg font-medium text-white">
                     Settings &amp; Repetition
                   </h3>
                 </div>
-                <ChevronDown className={`w-5 h-5 text-txt-tertiary transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 text-gray-200 transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
               </Button>
 
               {isSettingsOpen && (

@@ -198,11 +198,11 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
             <Lightbulb className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-semibold text-txt-primary leading-none mb-1">Engineering Pro Tips</h3>
-            <p className="text-sm text-txt-tertiary font-medium">Best practices & principles for this calculation</p>
+            <h3 className="font-semibold text-white leading-none mb-1">Engineering Pro Tips</h3>
+            <p className="text-sm text-gray-200 font-medium">Best practices & principles for this calculation</p>
           </div>
         </div>
-        <div className="text-txt-tertiary shrink-0 ml-4">
+        <div className="text-gray-200 shrink-0 ml-4">
           {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
         </div>
       </Button>

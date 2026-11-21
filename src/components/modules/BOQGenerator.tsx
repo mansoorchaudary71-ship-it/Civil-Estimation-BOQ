@@ -496,7 +496,7 @@ export default function BOQGenerator() {
             {selectedItemIds.size > 0 && (
               <Button
                 onClick={() => triggerExportModal("selected")}
-                className="flex items-center gap-2 px-4 py-2 bg-ink hover:bg-ink-700 text-txt-primary font-bold rounded-full transition-colors shadow-brand-sm active:scale-95 hover:-translate-y-0.5"
+                className="flex items-center gap-2 px-4 py-2 bg-ink hover:bg-ink-700 text-white font-bold rounded-full transition-colors shadow-brand-sm active:scale-95 hover:-translate-y-0.5"
               >
                 <FileOutput className="w-4 h-4" /> Export Selected ({selectedItemIds.size})
               </Button>

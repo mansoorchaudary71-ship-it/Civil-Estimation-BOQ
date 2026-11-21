@@ -90,6 +90,18 @@ function elStateFrom(type: RccElementType, id: string): ElState {
   };
 }
 
+/** The example set — the same slab 4×3 m / column 300×300 / beam 4 m
+ *  the "Load example" button loads. Used as the first-render initial
+ *  state so Master RCC shows a live calculation out of the box instead
+ *  of an empty state; "Load example" re-applies it as a reset. */
+function exampleElements(): ElState[] {
+  return [
+    { ...elStateFrom("slab", "ex-slab"), name: "Slab 4×3 m", l: 4, w: 3, h: 150 },
+    { ...elStateFrom("column", "ex-col"), name: "Column 300×300", l: 300, w: 300, h: 3 },
+    { ...elStateFrom("beam", "ex-beam"), name: "Beam 4 m", l: 4, w: 230, h: 450 },
+  ];
+}
+
 function toEngineInput(el: ElState): RccElementInput {
   return {
     type: el.type,
@@ -116,7 +128,7 @@ function toEngineInput(el: ElState): RccElementInput {
 export function MasterRccCoreBody() {
   const { formatCurrency, currentCurrency } = useGlobalSettings();
   const { rates: tableRates, table } = useRates();
-  const [elements, setElements] = useState<ElState[]>([]);
+  const [elements, setElements] = useState<ElState[]>(exampleElements);
   const [grade, setGrade] = useState<"M10" | "M15" | "M20">("M20");
   const [wastage, setWastage] = useState("5");
   const [cementRate, setCementRate] = useState("");
@@ -145,11 +157,7 @@ export function MasterRccCoreBody() {
   };
 
   const loadExample = () => {
-    setElements([
-      { ...elStateFrom("slab", "ex-slab"), name: "Slab 4×3 m", l: 4, w: 3, h: 150 },
-      { ...elStateFrom("column", "ex-col"), name: "Column 300×300", l: 300, w: 300, h: 3 },
-      { ...elStateFrom("beam", "ex-beam"), name: "Beam 4 m", l: 4, w: 230, h: 450 },
-    ]);
+    setElements(exampleElements());
     setGrade("M20");
     setWastage("5");
   };

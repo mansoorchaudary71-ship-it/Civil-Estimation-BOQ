@@ -159,15 +159,19 @@ function OpeningsEditor({
   const areaLabel = lengthUnit === "ft" ? "sq ft" : lengthUnit === "m" ? "m²" : `${lengthUnit}²`;
   return (
     <div>
-      <div className="flex gap-2 mb-3" role="group" aria-label="Openings entry mode">
+      <div
+        className="grid grid-cols-2 gap-1 p-1 mb-3 rounded-full border border-ui-borderSubtle bg-accent-50 dark:bg-accent-900/20 pill-grid-2"
+        role="group"
+        aria-label="Openings entry mode"
+      >
         <button
           type="button"
           onClick={() => setOpeningsMode("list")}
           aria-pressed={openingsMode === "list"}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+          className={`min-h-[44px] rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap transition-all ${
             openingsMode === "list"
-              ? "bg-ink text-white border-ink"
-              : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
+              ? "bg-ink text-white shadow-sm"
+              : "text-txt-secondary hover:text-txt-primary"
           }`}
         >
           Per opening
@@ -176,10 +180,10 @@ function OpeningsEditor({
           type="button"
           onClick={() => setOpeningsMode("total")}
           aria-pressed={openingsMode === "total"}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+          className={`min-h-[44px] rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap transition-all ${
             openingsMode === "total"
-              ? "bg-ink text-white border-ink"
-              : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
+              ? "bg-ink text-white shadow-sm"
+              : "text-txt-secondary hover:text-txt-primary"
           }`}
         >
           Total area
@@ -823,7 +827,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
   return (
     <div className="w-full">
       {/* Calculation mode */}
-      <div className="flex flex-wrap gap-2 mb-8" role="group" aria-label="Calculation mode">
+      <div className="flex flex-col gap-2 mb-8" role="group" aria-label="Calculation mode">
         {(
           [
             ["single", "Single wall"],
@@ -836,7 +840,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
             type="button"
             onClick={() => setMode(m)}
             aria-pressed={mode === m}
-            className={`px-4 py-2.5 rounded-full text-sm font-semibold border transition-all ${
+            className={`w-full min-h-[44px] px-4 py-3 rounded-full text-sm font-semibold border text-center whitespace-nowrap transition-all ${
               mode === m
                 ? "bg-ink text-white border-ink"
                 : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
@@ -863,7 +867,11 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                 <span className="w-2 h-2 rounded-full bg-ink" />
                 Wall area
               </h3>
-              <div className="flex gap-2 mb-4" role="group" aria-label="Area unit">
+              <div
+                className="grid grid-cols-2 gap-1 p-1 mb-4 rounded-full border border-ui-borderSubtle bg-accent-50 dark:bg-accent-900/20 pill-grid-2"
+                role="group"
+                aria-label="Area unit"
+              >
                 {(
                   [
                     ["sqft", "Square feet (sq ft)"],
@@ -875,10 +883,10 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                     type="button"
                     onClick={() => setAreaUnit(u)}
                     aria-pressed={areaUnit === u}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
+                    className={`min-h-[44px] rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap transition-all ${
                       areaUnit === u
-                        ? "bg-ink text-white border-accent-800"
-                        : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
+                        ? "bg-ink text-white shadow-sm"
+                        : "text-txt-secondary hover:text-txt-primary"
                     }`}
                   >
                     {label}
@@ -962,16 +970,16 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                 Each wall has its own size, thickness and openings. Dimensions use the unit
                 switcher below — switching converts every wall's values.
               </p>
-              <div className="flex flex-wrap gap-2 mb-4" role="group" aria-label="Length unit">
+              <div className="grid grid-cols-3 gap-2 mb-4 pill-grid-3" role="group" aria-label="Length unit">
                 {LENGTH_UNITS.map((u) => (
                   <button
                     key={u.id}
                     type="button"
                     onClick={() => onLengthUnitChange(u.id)}
                     aria-pressed={lengthUnit === u.id}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                    className={`min-h-[44px] rounded-full px-2 py-2 text-xs font-semibold border whitespace-nowrap transition-all ${
                       lengthUnit === u.id
-                        ? "bg-ink text-white border-accent-800"
+                        ? "bg-ink text-white border-ink"
                         : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
                     }`}
                   >
@@ -1101,16 +1109,16 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   <span className="w-2 h-2 rounded-full bg-ink" />
                   Wall dimensions
                 </h3>
-                <div className="flex flex-wrap gap-2 mb-4" role="group" aria-label="Length unit">
+                <div className="grid grid-cols-3 gap-2 mb-4 pill-grid-3" role="group" aria-label="Length unit">
                   {LENGTH_UNITS.map((u) => (
                     <button
                       key={u.id}
                       type="button"
                       onClick={() => onLengthUnitChange(u.id)}
                       aria-pressed={lengthUnit === u.id}
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                      className={`min-h-[44px] rounded-full px-2 py-2 text-xs font-semibold border whitespace-nowrap transition-all ${
                         lengthUnit === u.id
-                          ? "bg-ink text-white border-accent-800"
+                          ? "bg-ink text-white border-ink"
                           : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
                       }`}
                     >
@@ -1236,17 +1244,21 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
             </p>
             {brickId === "custom" && (
               <>
-                <div className="flex gap-2 mt-3" role="group" aria-label="Custom brick size unit">
+                <div
+                  className="grid grid-cols-2 gap-1 p-1 mt-3 rounded-full border border-ui-borderSubtle bg-accent-50 dark:bg-accent-900/20 pill-grid-2"
+                  role="group"
+                  aria-label="Custom brick size unit"
+                >
                   {(["mm", "in"] as const).map((u) => (
                     <button
                       key={u}
                       type="button"
                       onClick={() => setCustomBrickUnit(u)}
                       aria-pressed={customBrickUnit === u}
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                      className={`min-h-[44px] rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap transition-all ${
                         customBrickUnit === u
-                          ? "bg-ink text-white border-ink"
-                          : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
+                          ? "bg-ink text-white shadow-sm"
+                          : "text-txt-secondary hover:text-txt-primary"
                       }`}
                     >
                       {u === "mm" ? "Millimetres (mm)" : "Inches (in)"}
@@ -1308,14 +1320,14 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
 
             <div className="mt-4">
               <span className={labelCls}>Wastage</span>
-              <div className="flex flex-wrap gap-2" role="group" aria-label="Wastage percent">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 pill-grid-3 pill-grid-5-sm" role="group" aria-label="Wastage percent">
                 {WASTAGE_PILLS.map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => setWastagePreset(p)}
                     aria-pressed={wastagePreset === p}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
+                    className={`min-h-[44px] rounded-full px-2 py-2 text-sm font-semibold border whitespace-nowrap transition-all ${
                       wastagePreset === p
                         ? "bg-ink text-white border-ink"
                         : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
@@ -1328,7 +1340,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   type="button"
                   onClick={() => setWastagePreset("custom")}
                   aria-pressed={wastagePreset === "custom"}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
+                  className={`min-h-[44px] rounded-full px-2 py-2 text-sm font-semibold border whitespace-nowrap transition-all ${
                     wastagePreset === "custom"
                       ? "bg-ink text-white border-ink"
                       : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
@@ -1336,19 +1348,19 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                 >
                   Custom
                 </button>
-                {wastagePreset === "custom" && (
-                  <input
-                    type="number"
-                    inputMode="decimal"
-                    min="0"
-                    max="50"
-                    value={wastageCustom}
-                    onChange={(e) => setWastageCustom(e.target.value)}
-                    aria-label="Custom wastage percent"
-                    className="w-24 bg-bg-card/80 border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-4 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500"
-                  />
-                )}
               </div>
+              {wastagePreset === "custom" && (
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  max="50"
+                  value={wastageCustom}
+                  onChange={(e) => setWastageCustom(e.target.value)}
+                  aria-label="Custom wastage percent"
+                  className="w-full mt-2 bg-bg-card/80 border border-ui-borderSubtle dark:border-ink-600 text-txt-primary dark:text-white rounded-full px-5 py-3 font-semibold focus:outline-none focus:ring-2 focus:ring-accent-500"
+                />
+              )}
               <p className="text-sm text-txt-tertiary mt-2">
                 5% — good Awwal / machine-made bricks, straight wall. 10% — kiln bricks, cut work,
                 many openings. 15% — curved walls. Wastage applies to bricks and to mortar.
@@ -1415,14 +1427,14 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
 
             <div className="mt-4">
               <span className={labelCls}>Bond pattern</span>
-              <div className="flex flex-wrap gap-2" role="group" aria-label="Bond pattern">
+              <div className="flex flex-col gap-2" role="group" aria-label="Bond pattern">
                 {BOND_PATTERNS.map((b) => (
                   <button
                     key={b.id}
                     type="button"
                     onClick={() => setBond(b.id)}
                     aria-pressed={bond === b.id}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
+                    className={`w-full min-h-[44px] px-4 py-3 rounded-full text-sm font-semibold border text-center whitespace-nowrap transition-all ${
                       bond === b.id
                         ? "bg-ink text-white border-ink"
                         : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-300"
@@ -1456,17 +1468,21 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
             </div>
             {costOpen && (
               <>
-                <div className="flex gap-2 mb-4" role="group" aria-label="Currency">
+                <div
+                  className="grid grid-cols-3 gap-1 p-1 mb-4 rounded-full border border-ui-borderSubtle bg-accent-50 dark:bg-accent-900/20 pill-grid-3"
+                  role="group"
+                  aria-label="Currency"
+                >
                   {(["PKR", "INR", "AED"] as Currency[]).map((c) => (
                     <button
                       key={c}
                       type="button"
                       onClick={() => setCurrency(c)}
                       aria-pressed={currency === c}
-                      className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
+                      className={`min-h-[44px] rounded-full px-2 py-2 text-sm font-semibold whitespace-nowrap transition-all ${
                         currency === c
-                          ? "bg-ink text-white border-ink"
-                          : "bg-bg-card border-ui-borderSubtle text-txt-secondary hover:border-accent-400"
+                          ? "bg-ink text-white shadow-sm"
+                          : "text-txt-secondary hover:text-txt-primary"
                       }`}
                     >
                       {c} ({CURRENCY_META[c].symbol})

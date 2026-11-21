@@ -827,8 +827,8 @@ export default function Takeoff() {
                     <div className="flex flex-col gap-2">
                        {recentBlueprints.map((b, i) => (
                          <Button key={i} onClick={() => handleLoadRecent(b)} className="px-4 py-2 border border-border-color rounded text-left hover:bg-accent-50 flex justify-between items-center group transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
-                           <span className="truncate flex-1 text-sm text-txt-secondary group-hover:text-accent-800 font-medium">{b.name}</span>
-                           <span className="text-xs uppercase font-bold text-txt-tertiary group-hover:text-accent-800">Load</span>
+                           <span className="truncate flex-1 text-sm text-gray-200 group-hover:text-accent-800 font-medium">{b.name}</span>
+                           <span className="text-xs uppercase font-bold text-gray-200 group-hover:text-accent-800">Load</span>
                          </Button>
                        ))}
                     </div>

@@ -629,11 +629,11 @@ export default function FinishesEstimator() {
 
       <div className="bg-ink rounded-2xl p-6 text-white flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
-          <p className="text-sm text-txt-tertiary">Estimated material cost (tabs you have opened)</p>
+          <p className="text-sm text-gray-200">Estimated material cost (tabs you have opened)</p>
           <p className="text-3xl font-bold">{money(grandCost, currency)}</p>
           {grandCost == null && <p className="text-sm text-accent-400">Enter all rates to see a total — unknown rates show as “—”, never as 0.</p>}
         </div>
-        <div className="flex items-center gap-2 text-sm text-txt-tertiary">
+        <div className="flex items-center gap-2 text-sm text-gray-200">
           <Calculator size={18} /> Rates are indicative — confirm with your supplier.
         </div>
       </div>

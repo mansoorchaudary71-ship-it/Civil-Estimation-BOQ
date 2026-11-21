@@ -181,8 +181,8 @@ export default function MasterQuantityEstimator({
                     onClick={() => setExpandedGroup(isExpanded && searchTerm === "" ? null : group)}
                     className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-default dark:hover:bg-ink transition-all group/group-btn"
                   >
-                    <span className="text-xs font-black uppercase tracking-[0.2em] text-txt-secondary dark:text-txt-tertiary">{group}</span>
-                    <ChevronDown className={`w-4 h-4 text-txt-tertiary group-hover:text-accent-800 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-gray-200">{group}</span>
+                    <ChevronDown className={`w-4 h-4 text-gray-200 group-hover:text-accent-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                   </Button>
                   {isExpanded && (
                     <div className="p-2 pt-0 space-y-1">

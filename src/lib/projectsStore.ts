@@ -45,7 +45,9 @@ export function listProjects(store: StorageAdapter): StoredProject[] {
     const raw = store.getItem(PROJECTS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as StoredProject[];
-    return Array.isArray(parsed) ? parsed : [];
+    // Drop null / non-object entries: a hand-edited or half-written value
+    // would otherwise throw on `p.id` in every find/findIndex below (Area 4).
+    return Array.isArray(parsed) ? parsed.filter((p): p is StoredProject => !!p && typeof p === 'object') : [];
   } catch { return []; }
 }
 
@@ -87,16 +89,20 @@ export function saveVersion(store: StorageAdapter, projectId: string, name: stri
   const all = listProjects(store);
   const p = all.find((x) => x.id === projectId);
   if (!p) return null;
-  p.versions.push({ id: `v_${Date.now().toString(36)}`, name, at: Date.now(), snapshot: JSON.parse(JSON.stringify(p.estimates)) });
+  // Guard: a legacy/corrupt stored project may lack `versions` (Area 4).
+  (p.versions ??= []).push({ id: `v_${Date.now().toString(36)}`, name, at: Date.now(), snapshot: JSON.parse(JSON.stringify(p.estimates ?? [])) });
   p.updatedAt = Date.now();
   saveAll(store, all);
   return p;
 }
 
 export function projectTotals(p: StoredProject): { totalCost: number; topMaterials: Array<{ name: string; unit: string; quantity: number }> } {
-  const totalCost = p.estimates.reduce((s, e) => s + (Number(e.cost) || 0), 0);
+  // Guards: a legacy/corrupt stored project may lack `estimates` (Area 4).
+  const estimates = p.estimates ?? [];
+  const totalCost = estimates.reduce((s, e) => s + (Number(e?.cost) || 0), 0);
   const map = new Map<string, { name: string; unit: string; quantity: number }>();
-  for (const e of p.estimates) {
+  for (const e of estimates) {
+    if (!e || typeof e !== 'object') continue;
     for (const m of e.materials ?? []) {
       const key = `${m.name}_${m.unit}`;
       const cur = map.get(key) ?? { name: m.name, unit: m.unit, quantity: 0 };

@@ -88,12 +88,12 @@ export default function TrenchExcavationEstimator() {
                   <div className="p-2.5 bg-accent-50 text-accent-800 rounded-xl">
                     <Ruler className="w-5 h-5" />
                   </div>
-                  <h2 className="text-xl font-bold tracking-tight text-txt-primary">
+                  <h2 className="text-xl font-bold tracking-tight text-white">
                     Trench Dimensions
                   </h2>
                 </div>
                 <ChevronDown
-                  className={`w-5 h-5 text-txt-secondary dark:text-txt-secondary transition-transform duration-300 ${isDimensionsOpen ? "rotate-180" : ""}`}
+                  className={`w-5 h-5 text-gray-200 transition-transform duration-300 ${isDimensionsOpen ? "rotate-180" : ""}`}
                 />
               </Button>
               
@@ -176,12 +176,12 @@ export default function TrenchExcavationEstimator() {
                   <div className="p-2.5 bg-accent-50 text-accent-800 rounded-xl">
                     <Activity className="w-5 h-5" />
                   </div>
-                  <h2 className="text-xl font-bold tracking-tight text-txt-primary">
+                  <h2 className="text-xl font-bold tracking-tight text-white">
                     Pipe & Bedding Details
                   </h2>
                 </div>
                 <ChevronDown
-                  className={`w-5 h-5 text-txt-secondary dark:text-txt-secondary transition-transform duration-300 ${isBeddingOpen ? "rotate-180" : ""}`}
+                  className={`w-5 h-5 text-gray-200 transition-transform duration-300 ${isBeddingOpen ? "rotate-180" : ""}`}
                 />
               </Button>
               

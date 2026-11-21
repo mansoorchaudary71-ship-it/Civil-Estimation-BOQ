@@ -7,6 +7,13 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import { initReactivity } from './lib/ReactivityEngine'
 import { getBasename } from './lib/toolRoutes'
+import { registerPreloadErrorHandler } from './lib/lazyWithRetry'
+
+// Area 4 (2026-11-21): after a GitHub Pages deploy, a stale cached entry can
+// request a lazy chunk by its old hash and fail with "Failed to fetch
+// dynamically imported module". Reload once so the fresh index.html's chunk
+// hashes are used, instead of showing the ErrorBoundary crash screen.
+registerPreloadErrorHandler();
 
 initReactivity();
 

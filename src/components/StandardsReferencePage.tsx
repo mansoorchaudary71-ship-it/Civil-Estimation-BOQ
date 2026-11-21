@@ -187,7 +187,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
               onClick={() => setActiveCountry(country)}
               className={`px-5 py-2.5 rounded-full text-base font-medium transition-all shadow-brand-sm
                 ${activeCountry === country 
-                  ? 'bg-ink text-txt-primary shadow-brand-md' 
+                  ? 'bg-ink text-white shadow-brand-md' 
                   : 'bg-surface-default text-[#8B8476] border border-[#E8E4D9] hover:bg-[#F2EFE9] hover:text-[#4A443B]'
                 }`}
             >
@@ -293,7 +293,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
               } else {
                  window.location.href = '/#tools';
               }
-           }} className="px-8 py-4 bg-ink hover:bg-accent-400 text-txt-primary font-bold rounded-full transition-all shadow-brand-md hover:shadow-brand-lg active:scale-95 hover:-translate-y-0.5">
+           }} className="px-8 py-4 bg-ink hover:bg-ink-700 text-white font-bold rounded-full transition-all shadow-brand-md hover:shadow-brand-lg active:scale-95 hover:-translate-y-0.5">
              Explore All Tools
            </Button>
         </div>

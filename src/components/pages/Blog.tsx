@@ -134,7 +134,7 @@ export default function Blog() {
 
         <Button
           onClick={() => window.location.hash = '#/blog'}
-          className="flex items-center gap-2 text-base font-medium hover:text-accent-800 transition-colors"
+          className="flex items-center gap-2 text-base font-medium hover:text-gray-200 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to all posts

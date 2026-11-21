@@ -160,10 +160,10 @@ export function DetailedCalculationDisplay({
               <Calculator className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.5} />
             </div>
             <div>
-              <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-txt-primary">
+              <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
                 {title}
               </h3>
-              <p className="text-sm sm:text-base font-medium text-txt-tertiary mt-1">
+              <p className="text-sm sm:text-base font-medium text-gray-200 mt-1">
                 {subtitle}
               </p>
             </div>

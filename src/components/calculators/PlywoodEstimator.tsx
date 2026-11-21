@@ -310,9 +310,9 @@ export function PlywoodEstimator() {
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none"><Layers size={120} /></div>
             <h2 className="text-xl font-bold flex items-center gap-2 relative z-10"><Calculator size={24} className="text-accent-400" /> Material Takeoff</h2>
             <div className="grid grid-cols-2 gap-4 relative z-10">
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Total sheets</div><div className="text-4xl font-black">{result.sheetsToBuy}</div><div className="text-xs text-txt-tertiary mt-1">Exact {result.exactSheets.toFixed(2)} · reuse {inputs.reuseFactor}</div></div>
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Gross area</div><div className="text-2xl font-bold">{area(result.grossAreaM2).toFixed(2)} <span className="text-sm font-normal text-txt-tertiary">{unitA}</span></div><div className="text-xs text-txt-tertiary mt-1">Inc. {wastage}% waste</div></div>
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 col-span-2"><div className="text-accent-200 text-sm font-medium mb-1">Order volume</div><div className="text-2xl font-bold">{result.totalOrderVolumeM3.toFixed(2)} m³</div><div className="text-xs text-txt-tertiary mt-1">One sheet {result.sheetVolumeM3.toFixed(4)} m³ ({thickness} mm) · Cost per m² {money(result.costPerM2, currency)}</div></div>
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Total sheets</div><div className="text-4xl font-black">{result.sheetsToBuy}</div><div className="text-xs text-gray-200 mt-1">Exact {result.exactSheets.toFixed(2)} · reuse {inputs.reuseFactor}</div></div>
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Gross area</div><div className="text-2xl font-bold">{area(result.grossAreaM2).toFixed(2)} <span className="text-sm font-normal text-gray-200">{unitA}</span></div><div className="text-xs text-gray-200 mt-1">Inc. {wastage}% waste</div></div>
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 col-span-2"><div className="text-accent-200 text-sm font-medium mb-1">Order volume</div><div className="text-2xl font-bold">{result.totalOrderVolumeM3.toFixed(2)} m³</div><div className="text-xs text-gray-200 mt-1">One sheet {result.sheetVolumeM3.toFixed(4)} m³ ({thickness} mm) · Cost per m² {money(result.costPerM2, currency)}</div></div>
               {element === "slab" && (
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 col-span-2"><div className="text-accent-200 text-sm font-medium mb-1">Slab beams</div><div className="text-2xl font-bold">{result.secondaryBeamM.toFixed(0)} m secondary · {result.primaryBeamM.toFixed(0)} m primary</div></div>
               )}
@@ -326,7 +326,7 @@ export function PlywoodEstimator() {
                     {result.sheetsToBuy > 200 && <div className="text-xs text-white/50 w-full text-center mt-1">…and {result.sheetsToBuy - 200} more</div>}
                   </div>
                 </div>
-                <div className="flex gap-4 mt-2 text-xs text-txt-tertiary justify-center">
+                <div className="flex gap-4 mt-2 text-xs text-gray-200 justify-center">
                   <div className="flex items-center gap-1"><div className="w-2 h-2 bg-accent-500/80 rounded-sm" /> Net</div>
                   <div className="flex items-center gap-1"><div className="w-2 h-2 bg-accent-300 rounded-sm" /> Cut / waste</div>
                   <div className="flex items-center gap-1"><div className="w-2 h-2 bg-ui-errorText/50 rounded-sm" /> Extra sheets</div>

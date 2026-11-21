@@ -254,7 +254,7 @@ export function FeatureComparisonSection({
             </div>
 
             <div className="text-lg md:text-xl font-bold text-txt-primary mb-6 border-b border-border-color pb-4 flex items-center gap-2 mt-2">
-              <div className="w-7 h-7 rounded-xl bg-ink text-txt-primary flex items-center justify-center font-black text-sm tracking-tighter shadow-brand-md shrink-0">CE</div>
+              <div className="w-7 h-7 rounded-xl bg-ink text-white flex items-center justify-center font-black text-sm tracking-tighter shadow-brand-md shrink-0">CE</div>
               Civil Estimation <span className="text-accent-800 ml-1">Pro</span>
             </div>
 

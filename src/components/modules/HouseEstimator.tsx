@@ -1348,7 +1348,7 @@ export default function HouseEstimator() {
                     </div>
                     <Button 
                       onClick={() => setIsRoomModalOpen(true)} 
-                      className="text-base font-medium bg-ink hover:bg-ink-700 px-4 py-2 rounded-full transition-all shadow-brand-sm active:scale-95 flex items-center gap-1 hover:-translate-y-0.5"
+                      className="text-base font-medium bg-ink hover:bg-ink-700 text-white px-4 py-2 rounded-full transition-all shadow-brand-sm active:scale-95 flex items-center gap-1 hover:-translate-y-0.5"
                     >
                       Open Rooms <ChevronRight className="w-3 h-3" />
                     </Button>

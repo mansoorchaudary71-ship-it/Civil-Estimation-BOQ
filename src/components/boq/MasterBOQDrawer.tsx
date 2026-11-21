@@ -1,5 +1,5 @@
 import { Button } from '../ui/Button';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useBOQ } from '../../context/BOQContext';
 import { useSettings, useGlobalSettings } from '../../context/SettingsContext';
 import { X, FileText, Download, Trash2, Search } from 'lucide-react';
@@ -29,6 +29,27 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
   const { currentCurrency, setCurrentCurrency } = useGlobalSettings();
   const currencies = ['PKR', 'INR', 'USD', 'AED', 'GBP', 'EUR'];
 
+  // Escape closes the topmost layer: the edit dialog first, then the drawer.
+  // Capture phase + stopPropagation so the app-level "Esc → home" handler in
+  // App.tsx never fires while the drawer is open (it would navigate home and
+  // leave the drawer open, since the drawer is not a [role="dialog"] there).
+  // The role="dialog" below is a second guard for that handler.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (editingItem) {
+        setEditingItem(null);
+      } else {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [isOpen, editingItem, onClose]);
+
   const exportCSV = () => {
     const headers = "Item Name,Category,Quantity,Unit,Rate,Amount\n";
     const rows = items.map(item => `"${item.name}","${item.category}",${item.quantity},"${item.unit}",${item.rate},${item.amount}`).join("\n");
@@ -52,7 +73,7 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-[160] flex justify-end" role="dialog" aria-modal="true" aria-label="Master BOQ">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -197,7 +218,7 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
       )}
     
       {editingItem && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[170] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Edit BOQ item">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

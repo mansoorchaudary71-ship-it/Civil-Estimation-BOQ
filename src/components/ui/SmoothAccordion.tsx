@@ -21,13 +21,13 @@ export function SmoothAccordion({ title, children, defaultExpanded = false }: Sm
         aria-expanded={isExpanded}
         aria-controls="accordion-content"
       >
-        <div className="font-semibold text-txt-primary dark:text-txt-primary text-left">
+        <div className="font-semibold text-white text-left">
           {title}
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="text-txt-tertiary p-1"
+          className="text-gray-200 p-1"
         >
           <ChevronDown className="w-5 h-5" />
         </motion.div>

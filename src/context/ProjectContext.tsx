@@ -74,26 +74,37 @@ interface ProjectContextType {
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 function toProject(sp: StoredProject): Project {
+  // Defensive defaults: listProjects() only validates the top-level array, so
+  // a corrupt/legacy stored entry can lack `estimates`/`versions` — .map/.push
+  // on undefined would throw inside the provider initializer and crash the
+  // whole app (Area 4, 2026-11-21). Zero projects => empty arrays, not a crash.
+  // Extra hardening (Area 4b): a legacy entry can also lack createdAt /
+  // updatedAt — `new Date(undefined).toISOString()` throws RangeError — or
+  // hold a null estimate / non-array materials, which would throw below.
+  const createdAt = Number.isFinite(sp.createdAt) ? sp.createdAt : Date.now();
+  const updatedAt = Number.isFinite(sp.updatedAt) ? sp.updatedAt : createdAt;
+  const id = typeof sp.id === 'string' && sp.id ? sp.id : `proj_${createdAt.toString(36)}`;
+  const estimates = Array.isArray(sp.estimates) ? sp.estimates : [];
   return {
-    id: sp.id,
-    name: sp.name,
+    id,
+    name: sp.name ?? 'Untitled project',
     location: sp.location ?? '',
     type: sp.type ?? 'Residential',
-    startDate: sp.startDate ?? new Date(sp.createdAt).toISOString().split('T')[0],
+    startDate: sp.startDate ?? new Date(createdAt).toISOString().split('T')[0],
     budget: sp.budget,
     ownerId: LOCAL_OWNER,
     memberIds: [LOCAL_OWNER],
     roles: { [LOCAL_OWNER]: 'owner' },
     memberEmails: {},
-    estimates: sp.estimates.map((e) => ({
-      id: e.id, projectId: sp.id, toolId: '', name: e.name, cost: e.cost,
-      materials: Object.fromEntries((e.materials ?? []).map((m) => [m.name, { quantity: m.quantity, unit: m.unit }])),
-      date: new Date(sp.updatedAt).toISOString(), category: 'General',
-      createdAt: sp.createdAt, updatedAt: sp.updatedAt,
+    estimates: estimates.filter((e): e is StoredEstimate => !!e && typeof e === 'object').map((e) => ({
+      id: e.id, projectId: id, toolId: '', name: e.name ?? 'Untitled estimate', cost: e.cost,
+      materials: Object.fromEntries((Array.isArray(e.materials) ? e.materials : []).filter((m) => !!m && typeof m === 'object').map((m) => [m.name, { quantity: m.quantity, unit: m.unit }])),
+      date: new Date(updatedAt).toISOString(), category: 'General',
+      createdAt, updatedAt,
     })),
-    versions: sp.versions,
-    createdAt: sp.createdAt,
-    updatedAt: sp.updatedAt,
+    versions: Array.isArray(sp.versions) ? sp.versions : [],
+    createdAt,
+    updatedAt,
   };
 }
 
@@ -154,7 +165,8 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     const p = all.find((x) => x.id === projectId);
     if (!p) { toast.error("Project not found"); return; }
     const now = Date.now();
-    p.estimates.push({
+    // Guard: a legacy/corrupt stored project may lack `estimates` (Area 4).
+    (p.estimates ??= []).push({
       id: `est_${now.toString(36)}`,
       name: estimate.name,
       cost: estimate.cost,
@@ -169,7 +181,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     const all = listProjects(localAdapter);
     const p = all.find((x) => x.id === projectId);
     if (!p) return;
-    storeUpdate(localAdapter, projectId, { estimates: p.estimates.filter((e) => e.id !== estimateId) });
+    storeUpdate(localAdapter, projectId, { estimates: (p.estimates ?? []).filter((e) => e.id !== estimateId) });
     refresh();
   };
 

@@ -35,10 +35,10 @@ export function CalculationMethodology({ steps, className = '' }: CalculationMet
               <Calculator className="w-6 h-6 md:w-7 md:h-7" strokeWidth={2.5} />
             </div>
             <div>
-              <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-txt-primary dark:text-txt-primary">
+              <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-white">
                 Calculation Logic
               </h3>
-              <p className="text-sm md:text-base font-medium text-txt-tertiary dark:text-txt-tertiary mt-0.5 md:mt-1">
+              <p className="text-sm md:text-base font-medium text-gray-200 mt-0.5 md:mt-1">
                 Transparent breakdown of mathematical formulas
               </p>
             </div>

@@ -979,7 +979,13 @@ export default function App() {
                 </div>
               </ProjectProvider>
           <MasterBOQDrawer isOpen={isBOQOpen} onClose={() => setIsBOQOpen(false)} />
-          <FloatingBOQButton onClick={() => setIsBOQOpen(true)} />
+          {/* Hide the FAB while the drawer is open: it sits at z-60, above the
+              drawer's z-50 overlay, so it covered the drawer's Excel button.
+              The FAB only opens the drawer (which has its own close), so it is
+              redundant while the drawer is open. */}
+          {!isBOQOpen && (
+            <FloatingBOQButton onClick={() => setIsBOQOpen(true)} />
+          )}
           </BOQProvider>
             </TakeoffProvider>
           </MarketRatesProvider>

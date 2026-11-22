@@ -12,7 +12,7 @@ export function zavLine(gs: number, waterPct: number): number {
   return (gs * 1) / (1 + (waterPct / 100) * gs);
 }
 /** Quadratic least-squares fit y = a·x² + b·x + c; vertex = OMC/MDD. */
-export function proctorFit(points: ProctorPoint[], mouldVolumeCm3: number): { omcPct: number; mddGCc: number; curve: { waterPct: number; dryDensity: number }[]; warning: string | null } {
+export function proctorFit(points: ProctorPoint[], mouldVolumeCm3: number): { omcPct: number; mddGCc: number; curve: { waterPct: number; dryDensity: number }[]; fittedCurve: { waterPct: number; dryDensity: number }[]; warning: string | null } {
   if (points.length < 3) throw new Error("Need at least 3 Proctor points.");
   const pts = points.map((p) => ({ x: p.waterPct, y: dryDensity(p.waterPct, p.wetMassG, mouldVolumeCm3) }));
   // Normal equations for quadratic fit (3x3 solve via Gaussian elimination)
@@ -40,11 +40,18 @@ export function proctorFit(points: ProctorPoint[], mouldVolumeCm3: number): { om
     coef[r] = s / A[r][r];
   }
   const [a, b, c] = coef;
-  if (a >= 0) return { omcPct: NaN, mddGCc: NaN, curve: pts.map((p) => ({ waterPct: p.x, dryDensity: p.y })), warning: "Fitted curve has no maximum (a ≥ 0) — add points on both sides of the optimum." };
+  if (a >= 0) return { omcPct: NaN, mddGCc: NaN, curve: pts.map((p) => ({ waterPct: p.x, dryDensity: p.y })), fittedCurve: [], warning: "Fitted curve has no maximum (a ≥ 0) — add points on both sides of the optimum." };
   const omcPct = -b / (2 * a);
   const mddGCc = c - (b * b) / (4 * a);
-  void c;
-  return { omcPct, mddGCc, curve: pts.map((p) => ({ waterPct: p.x, dryDensity: p.y })), warning: null };
+  // Smooth fitted curve for charting: 21 samples of y = a·x² + b·x + c
+  // across the measured water-content range.
+  const xMin = Math.min(...pts.map((p) => p.x));
+  const xMax = Math.max(...pts.map((p) => p.x));
+  const fittedCurve = Array.from({ length: 21 }, (_, i) => {
+    const waterPct = xMin + ((xMax - xMin) * i) / 20;
+    return { waterPct, dryDensity: a * waterPct * waterPct + b * waterPct + c };
+  });
+  return { omcPct, mddGCc, curve: pts.map((p) => ({ waterPct: p.x, dryDensity: p.y })), fittedCurve, warning: null };
 }
 export function coreCutter(diaCm: number, heightCm: number, wetMassG: number, waterPct: number, mddGCc: number): { volumeCm3: number; bulkDensity: number; dryDensity: number; relativeCompactionPct: number } {
   if (diaCm <= 0 || heightCm <= 0 || mddGCc <= 0) throw new Error("Cutter dimensions and MDD must be > 0.");

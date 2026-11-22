@@ -45,7 +45,7 @@ export default function RecentSidebar({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-y-0 right-0 w-80 max-w-[90vw] bg-surface-default shadow-2xl z-[160] flex flex-col border-l border-ui-borderSubtle"
+            className="fixed inset-y-0 right-0 w-80 max-w-[90vw] bg-surface-default shadow-2xl z-[160] flex flex-col border-l border-ui-borderSubtle" role="dialog" aria-modal="true" aria-label="Calculation History"
           >
             <div className="flex items-center justify-between p-4 sm:p-6 border-b border-border-color">
               <h2 className="flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">

@@ -25,7 +25,6 @@ import {
   RefreshCw,
   Sparkles,
 } from "lucide-react";
-import { getMyEstimates, saveEstimate } from "../lib/estimates";
 import CountUp from "react-countup";
 
 
@@ -100,10 +99,13 @@ export default function WorkspaceSection({
     if (recommended.length === 0) recommended = ALL_MODULES.slice(0, 3);
     setRecommendedTools(recommended);
 
-    // Load recent estimates
+    // Load recent estimates (lib/estimates is imported dynamically so
+    // the firebase-backed store stays out of the initial bundle — this
+    // only runs for a signed-in user).
     async function loadData() {
       if (!user) return;
       try {
+        const { getMyEstimates } = await import("../lib/estimates");
         const data: any[] | undefined = await getMyEstimates();
         if (data) {
           data.sort((a, b) => b.createdAt - a.createdAt);
@@ -127,6 +129,7 @@ export default function WorkspaceSection({
     if (!newProjectName.trim()) return;
     try {
       if (user) {
+        const { saveEstimate, getMyEstimates } = await import("../lib/estimates");
         await saveEstimate(newProjectName, {}, "Project Folder");
         const data: any[] | undefined = await getMyEstimates();
         if (data) {

@@ -371,7 +371,7 @@ export default function SettingsModal({
     { id: "currency", label: "Currencies & Rates", icon: Globe },
   ];
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-hover/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-hover/50 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-label="Preferences">
       <div
         className="bg-bg-card/90 text-txt-primary dark:text-white backdrop-blur-2xl border border-ui-borderSubtle dark:border-ink-600 rounded-[2.5rem] w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] sm:h-[650px] relative"
         onClick={(e) => e.stopPropagation()}

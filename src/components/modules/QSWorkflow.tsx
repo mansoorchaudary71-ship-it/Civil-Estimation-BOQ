@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { 
   CheckCircle, ArrowRight, ArrowLeft, Settings, Ruler, Box, Grid2X2, 
   Layers, Map, Sun, Droplet, Paintbrush, FileText, PieChart, Printer, 
-  ClipboardList, Activity, Construction, DollarSign, Building, Shovel
+  ClipboardList, Activity, Construction, DollarSign, Building, Shovel, Percent
 } from 'lucide-react';
 import { ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { CalculationHistory } from '../ui/CalculationHistory';
@@ -12,6 +12,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { useRates } from '../../lib/useRates';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { footingConcrete, volumeFromRows } from '../../lib/qsWorkflow';
+import { taxLabelForRegion } from '../../lib/boq';
 import toast from 'react-hot-toast';
 
 
@@ -125,14 +126,26 @@ export default function QSWorkflow() {
 
   const totalCost = Object.values(categoryTotals).reduce((sum, val) => sum + val, 0);
 
+  // Tax line — same handling as the BOQ Generator (src/lib/boq.ts):
+  // taxable = subtotal + contingency (this workflow has no contingency
+  // line, so taxable = subtotal); tax = taxable x tax %; grand total =
+  // taxable + tax. Region pills switch the label + default % exactly
+  // like BOQGenerator (PK Sales Tax 18%, IN GST 18%, AE VAT 5%); the %
+  // stays editable afterwards.
+  const [taxRegion, setTaxRegion] = useState<"PK" | "IN" | "AE">("PK");
+  const [gstPct, setGstPct] = useState(taxLabelForRegion("PK").defaultPct);
+  const taxInfo = taxLabelForRegion(taxRegion);
+  const taxAmount = Math.round(totalCost * (gstPct / 100) * 100) / 100;
+  const grandTotal = Math.round((totalCost + taxAmount) * 100) / 100;
+
   const pieData = Object.entries(categoryTotals).map(([name, value]) => ({
     name, value
   }));
 
   const COLORS = ['#F2A413', '#1F1D1A', '#B07006', '#6B6862', '#0F766E'];
 
-  useAutoSave('qs-workflow', { projectData, totalPlinthArea, substructure, superstructure, masonry, services, currentStep, rates },
-    { projectData: setProjectData, totalPlinthArea: setTotalPlinthArea, substructure: setSubstructure, superstructure: setSuperstructure, masonry: setMasonry, services: setServices, currentStep: (v: Step) => setCurrentStep(v), rates: setRates });
+  useAutoSave('qs-workflow', { projectData, totalPlinthArea, substructure, superstructure, masonry, services, currentStep, rates, taxRegion, gstPct },
+    { projectData: setProjectData, totalPlinthArea: setTotalPlinthArea, substructure: setSubstructure, superstructure: setSuperstructure, masonry: setMasonry, services: setServices, currentStep: (v: Step) => setCurrentStep(v), rates: setRates, taxRegion: setTaxRegion, gstPct: setGstPct });
 
   const handleNext = () => setCurrentStep(prev => (prev < 8 ? prev + 1 : prev) as Step);
   const handlePrev = () => setCurrentStep(prev => (prev > 1 ? prev - 1 : prev) as Step);
@@ -140,7 +153,10 @@ export default function QSWorkflow() {
   const exportBoqCsv = () => {
     const rows = [["Section", "Item", "Qty", "Unit", "Rate", "Amount"]];
     boqItems.forEach((i) => rows.push([i.section, i.item, String(i.qty), i.unit, String(i.rate), String(i.amount)]));
-    rows.push(["", "TOTAL", "", "", "", String(totalCost)]);
+    rows.push(["", "Subtotal", "", "", "", String(totalCost)]);
+    rows.push(["", "Taxable Amount", "", "", "", String(totalCost)]);
+    rows.push(["", `${taxInfo.label} (${gstPct}%)`, "", "", "", String(taxAmount)]);
+    rows.push(["", "Grand Total", "", "", "", String(grandTotal)]);
     const csv = rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const a = document.createElement("a");
@@ -450,8 +466,32 @@ export default function QSWorkflow() {
                      </tbody>
                      <tfoot>
                         <tr className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
-                           <td colSpan={4} className="p-4 text-right font-semibold tabular-nums tracking-tight uppercase tracking-wider">Estimated Project Total</td>
-                           <td className="p-4 text-right font-semibold tabular-nums tracking-tight text-xl text-ui-successText">{settings.currency} {totalCost.toLocaleString()}</td>
+                           <td colSpan={4} className="p-4 text-right font-semibold tabular-nums tracking-tight uppercase tracking-wider">Subtotal</td>
+                           <td className="p-4 text-right font-semibold tabular-nums tracking-tight text-xl">{settings.currency} {totalCost.toLocaleString()}</td>
+                        </tr>
+                        <tr className="bg-surface-hover text-txt-primary">
+                           <td colSpan={4} className="p-4 text-right font-medium text-txt-tertiary">Taxable Amount <span className="text-xs">(no contingency line in this workflow)</span></td>
+                           <td className="p-4 text-right font-bold tabular-nums">{settings.currency} {totalCost.toLocaleString()}</td>
+                        </tr>
+                        <tr className="bg-surface-hover text-txt-primary">
+                           <td colSpan={4} className="p-4 text-right">
+                              <span className="inline-flex flex-wrap items-center justify-end gap-2">
+                                <span className="font-medium text-txt-tertiary flex items-center gap-1">{taxInfo.label} <Percent className="w-3 h-3" /></span>
+                                <span className="inline-flex gap-1">
+                                  {(["PK", "IN", "AE"] as const).map((r) => (
+                                    <button key={r} type="button" onClick={() => { setTaxRegion(r); setGstPct(taxLabelForRegion(r).defaultPct); }} className={`px-2.5 py-1 rounded-full text-xs font-bold ${taxRegion === r ? 'bg-ink text-white' : 'bg-surface-hover text-txt-secondary'}`}>{r}</button>
+                                  ))}
+                                </span>
+                                <input type="number" inputMode="decimal" min={0} step="any" value={gstPct === 0 ? "" : gstPct} onChange={(e) => { const v = parseFloat(e.target.value); setGstPct(!isNaN(v) ? Math.max(0, v) : 0); }} className="w-16 px-2 py-1 bg-surface-default border border-ui-borderSubtle rounded-full text-right text-sm font-bold" title="Tax % — edit per your contract" />
+                                <span className="font-bold">%</span>
+                              </span>
+                              <span className="block text-xs font-normal text-txt-tertiary mt-1">Tax = Taxable Amount × Tax % — {taxInfo.note}</span>
+                           </td>
+                           <td className="p-4 text-right font-bold tabular-nums text-ui-errorText">+{settings.currency} {taxAmount.toLocaleString()}</td>
+                        </tr>
+                        <tr className="bg-surface-hover rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary overflow-hidden">
+                           <td colSpan={4} className="p-4 text-right font-semibold tabular-nums tracking-tight uppercase tracking-wider">Grand Total</td>
+                           <td className="p-4 text-right font-semibold tabular-nums tracking-tight text-xl text-ui-successText">{settings.currency} {grandTotal.toLocaleString()}</td>
                         </tr>
                      </tfoot>
                   </table>
@@ -505,7 +545,8 @@ export default function QSWorkflow() {
                <div className="grid grid-cols-3 gap-6 mb-10">
                   <div className="p-4 sm:p-6 bg-surface-hover border border-ui-borderSubtle rounded-2xl overflow-hidden">
                      <p className="text-base font-medium mb-2 uppercase tracking-widest">Total Estimated Cost</p>
-                     <p className="text-xl font-semibold tabular-nums tracking-tight text-accent-800">{settings.currency} {totalCost.toLocaleString()}</p>
+                     <p className="text-xl font-semibold tabular-nums tracking-tight text-accent-800">{settings.currency} {grandTotal.toLocaleString()}</p>
+                     <p className="text-xs text-txt-tertiary mt-1">Subtotal {settings.currency} {totalCost.toLocaleString()} + {taxInfo.label} {gstPct}% ({settings.currency} {taxAmount.toLocaleString()})</p>
                   </div>
                   <div className="p-4 sm:p-6 bg-surface-hover border border-ui-borderSubtle rounded-2xl overflow-hidden">
                      <p className="text-base font-medium mb-2 uppercase tracking-widest">Plinth Area</p>
@@ -513,7 +554,7 @@ export default function QSWorkflow() {
                   </div>
                   <div className="p-4 sm:p-6 bg-surface-hover border border-ui-borderSubtle rounded-2xl overflow-hidden">
                      <p className="text-base font-medium mb-2 uppercase tracking-widest">Cost Per Sq.Ft</p>
-                     <p className="text-xl font-semibold tabular-nums tracking-tight">{settings.currency} {totalPlinthArea > 0 ? Math.round(totalCost / totalPlinthArea).toLocaleString() : "—"}</p>
+                     <p className="text-xl font-semibold tabular-nums tracking-tight">{settings.currency} {totalPlinthArea > 0 ? Math.round(grandTotal / totalPlinthArea).toLocaleString() : "—"}</p>
                   </div>
                </div>
 
@@ -624,7 +665,7 @@ export default function QSWorkflow() {
         }
       `}} />
     
-      <CalculationHistory calculatorId="qsworkflow_tool" currentInputs={{ projectData, totalPlinthArea, substructure, superstructure, masonry, services }} currentResults={{ totalCost }} />
+      <CalculationHistory calculatorId="qsworkflow_tool" currentInputs={{ projectData, totalPlinthArea, substructure, superstructure, masonry, services, taxRegion, gstPct }} currentResults={{ totalCost, taxAmount, grandTotal }} />
 </div>
   );
 }

@@ -14,6 +14,7 @@ import { calcAcSizing, acBreakerNote } from "../../lib/acSizing";
 import { DEFAULT_APPLIANCES, calcElectricalLoad, type ElectricalAppliance } from "../../lib/electricalLoad";
 import { PLUMBING_FIXTURE_WSFU, calcPlumbing, type PlumbingFixtureKind } from "../../lib/plumbingFixture";
 import type { MepCity } from "../../lib/mepConstants";
+import { useSettings } from "../../context/SettingsContext";
 
 
 type Tab = "solar" | "water" | "ac" | "electrical" | "plumbing";
@@ -151,8 +152,13 @@ function SolarCalculator() {
 
 function WaterHeaterCalculator() {
   const [people, setPeople] = useState<number | "">(4);
-  const [energyCost, setEnergyCost] = useState<number | "">(50);
-  const [currency, setCurrency] = useState("PKR");
+  // Currency defaults to the global setting (PKR/INR/AED); the picker
+  // still lets the user override it per tool. The 50/kWh default is a PKR
+  // tariff, so it is only prefilled when the starting currency is PKR.
+  const { settings } = useSettings();
+  const initialCurrency: string = ["PKR", "INR", "AED"].includes(settings.currency) ? settings.currency : "PKR";
+  const [energyCost, setEnergyCost] = useState<number | "">(initialCurrency === "PKR" ? 50 : "");
+  const [currency, setCurrency] = useState(initialCurrency);
   const result = useMemo(() => {
     try { return calcSolarWaterHeater({ people: Number(people) || 0, energyCostPerKwh: Number(energyCost) || 0 }); } catch { return null; }
   }, [people, energyCost]);
@@ -196,6 +202,7 @@ function WaterHeaterCalculator() {
 }
 
 function AcCalculator() {
+  const { formatCurrency } = useSettings();
   const [length, setLength] = useState<number | "">(12);
   const [width, setWidth] = useState<number | "">(10);
   const [height, setHeight] = useState<number | "">(10);
@@ -215,7 +222,7 @@ function AcCalculator() {
       });
     } catch { return null; }
   }, [length, width, height, occupants, sunlight, isKitchen, tariff]);
-  const summary = result ? `MEP AC sizing — ${length} x ${width} ft, ${height} ft ceiling, ${occupants} people\nRequired ${result.requiredBtuPerHour.toLocaleString("en-US")} BTU/h (${result.tons.toFixed(2)} tons); nearest standard ${result.standardBtuPerHour.toLocaleString("en-US")} BTU/h\nRunning ${result.runningWatts.toFixed(0)} W; monthly cost ${result.monthlyRunningCost != null ? `Rs ${Math.round(result.monthlyRunningCost).toLocaleString("en-US")}` : "—"}` : "";
+  const summary = result ? `MEP AC sizing — ${length} x ${width} ft, ${height} ft ceiling, ${occupants} people\nRequired ${result.requiredBtuPerHour.toLocaleString("en-US")} BTU/h (${result.tons.toFixed(2)} tons); nearest standard ${result.standardBtuPerHour.toLocaleString("en-US")} BTU/h\nRunning ${result.runningWatts.toFixed(0)} W; monthly cost ${result.monthlyRunningCost != null ? formatCurrency(Math.round(result.monthlyRunningCost)) : "—"}` : "";
   return (
     <div className="animate-in fade-in duration-300">
       <ToolActions summary={summary} />

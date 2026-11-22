@@ -151,15 +151,21 @@ export function muLimKNm(fck: number, bMm: number, dMm: number, fy: number): num
  * Tension steel for a moment Mu (kNm) on a section b x d (mm).
  * Returns Ast (mm2) by the exact LSM quadratic; 0 when Mu <= 0.
  * Returns Infinity when Mu exceeds Mu,lim — the section is overstressed
- * and no singly-reinforced steel area exists. Callers MUST check
- * isFinite() and surface "section overstressed — deepen the section"
- * instead of rendering the value (Infinity, never NaN, so downstream
- * Math.max / comparisons stay well-defined and fail safe).
+ * and no singly-reinforced steel area exists. The guard is the IS 456
+ * limiting moment (xu <= xu,max), NOT the looser discriminant limit
+ * (Mu = fck·b·d²/4.6): a moment between Mu,lim and that limit used to
+ * return a finite but over-reinforced Ast (e.g. the 24-step stair flight:
+ * Mu 81.7 vs Mu,lim 51.4, Ast 2,642 mm²). Every caller shares this one
+ * guard — callers MUST check isFinite() and surface "section
+ * overstressed — deepen the section" instead of rendering the value
+ * (Infinity, never NaN, so downstream Math.max / comparisons stay
+ * well-defined and fail safe).
  */
 export function astForMu(muKNm: number, fck: number, fy: number, bMm: number, dMm: number): number {
   if (muKNm <= 0 || bMm <= 0 || dMm <= 0) return 0;
+  if (muKNm > muLimKNm(fck, bMm, dMm, fy)) return Infinity; // Mu exceeds Mu,lim — caller must deepen the section / go doubly reinforced
   const term = 1 - (4.6 * muKNm * 1e6) / (fck * bMm * dMm * dMm);
-  if (term < 0) return Infinity; // Mu exceeds Mu,lim — caller must deepen the section / go doubly reinforced
+  if (term < 0) return Infinity; // unreachable past the Mu,lim guard above, kept as a belt-and-braces floor
   return (0.5 * fck / fy) * (1 - Math.sqrt(term)) * bMm * dMm;
 }
 

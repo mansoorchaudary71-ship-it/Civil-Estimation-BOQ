@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FlaskConical, Beaker, Layers, Activity, Droplet, Mountain } from "lucide-react";
 import { proctorFit, dryDensity, coreCutter, PROCTOR_MOULD_CM3 } from "../../lib/proctorCalc";
+import { ComposedChart, Line, Scatter, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend, ReferenceDot } from "recharts";
 import { ucs, vaneShear } from "../../lib/ucsVaneCalc";
 import { phaseRelations, freeSwell } from "../../lib/geotechCalc";
 
@@ -66,6 +67,45 @@ function ProctorTab() {
       {fitError && <p className="text-sm text-ui-errorText">{fitError}</p>}
       {fit && !fit.warning && (
         <p className="text-lg font-bold text-txt-primary">OMC {fit.omcPct.toFixed(1)}% · MDD {fit.mddGCc.toFixed(3)} g/cc</p>
+      )}
+      {fit && (
+        <div className="bg-surface-hover rounded-2xl border border-ui-borderSubtle p-4 sm:p-5">
+          <h3 className="text-sm font-bold text-txt-primary mb-4">Compaction curve — dry density vs water content</h3>
+          <div className="h-[320px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
+                <XAxis
+                  dataKey="waterPct"
+                  type="number"
+                  domain={["dataMin", "dataMax"]}
+                  tickCount={6}
+                  tick={{ fontSize: 11 }}
+                  label={{ value: "Water content w (%)", position: "insideBottom", offset: -10, fontSize: 11, fontWeight: "bold", fill: "#6B6862" }}
+                />
+                <YAxis
+                  dataKey="dryDensity"
+                  type="number"
+                  domain={["auto", "auto"]}
+                  tick={{ fontSize: 11 }}
+                  label={{ value: "Dry density γd (g/cc)", angle: -90, position: "insideLeft", fontSize: 11, fontWeight: "bold", fill: "#6B6862" }}
+                />
+                <RechartsTooltip
+                  contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)", fontWeight: "bold" }}
+                  formatter={(value: any, name: any) => [`${Number(value).toFixed(3)} g/cc`, name]}
+                  labelFormatter={(w: any) => `Water content ${Number(w).toFixed(1)}%`}
+                />
+                <Legend wrapperStyle={{ fontSize: "11px", fontWeight: "bold" }} />
+                <Line data={fit.fittedCurve} type="monotone" dataKey="dryDensity" stroke="#F2A413" strokeWidth={2} name="Fitted compaction curve" dot={false} activeDot={false} />
+                <Scatter data={fit.curve} name="Measured points" fill="#1F1D1A" shape="circle" />
+                {!fit.warning && (
+                  <ReferenceDot x={fit.omcPct} y={fit.mddGCc} r={6} fill="#F2A413" stroke="#1F1D1A" strokeWidth={2} label={{ position: "top", value: `OMC ${fit.omcPct.toFixed(1)}% · MDD ${fit.mddGCc.toFixed(3)}`, fill: "#6B6862", fontSize: 11, fontWeight: "bold" }} />
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="text-xs text-txt-tertiary mt-3">Dots are your measured dry densities (γd = wet mass / mould volume ÷ (1 + w)); the amber curve is the quadratic fit — its peak is the optimum moisture content (OMC) and maximum dry density (MDD).</p>
+        </div>
       )}
       {fit?.warning && <p className="text-sm text-accent-800">{fit.warning}</p>}
       <div className="border-t border-border-color pt-4">

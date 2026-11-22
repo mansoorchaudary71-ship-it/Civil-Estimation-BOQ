@@ -206,4 +206,80 @@ Slope angle = arctan(rise / run)`,
   "reinforcement": `Steel weight  W = d^2 / 162.28 kg/m   (d = bar diameter in mm)
 Lap length and development length per code; stirrups closer
 near supports where shear is maximum`,
+
+  "aggregate-blending": `Blended % passing = Σ (proportion of stockpile x its % passing)
+  (per sieve; proportions sum to 1)
+Check the blended curve against the specification envelope on the
+critical sieves (top size, 4.75 mm split, 0.075 mm fines limit)`,
+
+  "anti-termite": `IS 6313-2:2022 diluted emulsion doses:
+Soil under floors / plinth fill  5 L/m2
+Trench bottoms  5 L/m2 of trench-bottom area
+Trench sides  7.5 L per linear metre of trench (to 30 cm depth)
+RCC vertical surfaces in contact with soil  7.5 L/m2`,
+
+  "pavement-mix": `Blended % passing = Σ (proportion of stockpile x its % passing)
+  (per sieve; proportions sum to 1)
+The blend must fall inside the specification envelope (lower and
+upper bound) for every sieve that has a band`,
+
+  "precast-wall": `Spans = ceil(effective wall length / panel width)
+Open run: posts = spans + 1 (one at each end)
+Closed loop: posts = spans (last post is also the first)`,
+
+  "rainwater-harvesting": `Annual yield = roof area (m2) x annual rainfall (mm)
+  x runoff coefficient x filter efficiency
+1 mm of rain on 1 m2 = 1 litre
+Tank = larger of (5% of lesser of yield and demand, BS 8515)
+and (daily use x dry-spell days), rounded up to a standard size`,
+
+  "solar-roof": `Daily demand = monthly units / 30.4   (kWh/day)
+Required kWp = daily demand / peak sun hours / derate
+Panels = ceil(required kWp x 1000 / panel wattage)`,
+
+  "solar-water-heater": `Hot water demand = 50 L per person per day
+Collector area from daily energy demand / solar fraction
+Solar fraction = sun's share of annual hot-water energy
+(typical design range 0.5-0.7); flat plate ~50% yearly
+efficiency, evacuated tube ~65%`,
+
+  "ventilation-checker": `Airflow  m3/h = room volume (m3) x ACH
+CFM = m3/h x 0.5886
+Planning targets: bedrooms/living 4 ACH, offices/classrooms 6,
+bathrooms 8 (exhaust), kitchens 10 (exhaust)`,
+
+  "wastewater-calculator": `Dilution factor  P = sample volume / total bottle volume
+DO depletion  ΔDO = initial DO - final DO
+BOD5 = ΔDO / P
+COD = (ΔV x N x 8000) / sample volume
+  (ΔV = blank - sample titrant volume, N = normality)
+PEQS inland discharge: BOD 80 mg/L, COD 150 mg/L, TSS 200 mg/L`,
+
+  "geotechnical": `Water content  w = (wet mass - dry mass) / dry mass x 100
+  (oven-dry weights, IS 2720 Pt 2)
+Specific gravity (pycnometer)  Gs = (W2-W1) / [(W2-W1) - (W3-W4)]
+Plasticity index  PI = LL - PL   (LL at 25 Casagrande blows;
+PL at 3 mm thread crumbling)`,
+
+  "infra-mep-engine": `This engine calls the shared MEP engines, so its numbers match
+the standalone tools: solar PV sizing (kWp from daily demand /
+peak sun hours / derate), solar water heating (50 L/person/day),
+AC sizing (ENERGY STAR chart), rainwater yield (area x rainfall
+x runoff coefficient x filter efficiency)`,
+
+  "mep-calculator": `AC sizing follows the ENERGY STAR chart (100-150 sq ft: 5,000
+BTU/h; 150-250: 6,000; 250-300: 7,000), adjusted for ceiling
+height, sun, extra people (+600 BTU each over 2) and kitchens
+(+4,000 BTU)
+Breaker: load current x 1.25 continuous-load factor, then next
+standard size (5 kW at 230 V, 0.9 pf -> ~40 A, 6 mm2 copper)`,
+
+  // Alias of "boq": BOQ templates live inside the BOQ generator.
+  "boq-templates": `BOQ heads follow standard civil divisions:
+Substructure, Superstructure, Finishes (material supply rates
+kept separate from labour installation rates)`,
+
+  // Alias of "pakistan-cost-calculator": same page, same method.
+  "cost-guide-pakistan": `Total cost = built-up area x rate per sq ft (by city and finish level)
+Grey structure + finishes are priced separately`,
 };

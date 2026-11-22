@@ -5,6 +5,7 @@ import { FormulaAccordion, type FormulaStep } from "../ui/FormulaAccordion";
 import { calcPrecastWall, validatePrecast, type FootingType, type PrecastLayout } from "../../lib/precastWallCalc";
 import PrecastWallContent from "./PrecastWallContent";
 import { useBOQ } from "../../context/BOQContext";
+import { useSettings } from "../../context/SettingsContext";
 import { Calculator, Check, Copy, Download, Layers, Printer, Share2, Box, Hash, DollarSign, Ruler } from "lucide-react";
 
 type UnitSystem = "metric" | "imperial";
@@ -22,7 +23,13 @@ const money = (v: number | null, c: Currency) =>
 export function PrecastWallEstimator() {
   const { addItem } = useBOQ();
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("metric");
-  const [currency, setCurrency] = useState<Currency>("PKR");
+  // Currency defaults to the global setting; the picker still lets the user
+  // override it per tool. The post/panel/concrete/labour defaults are PKR
+  // rates, so they are only prefilled when the starting currency is PKR
+  // (same rule as onCurrencyChange below).
+  const { settings } = useSettings();
+  const initialCurrency: Currency = (["PKR", "INR", "AED", "USD"] as string[]).includes(settings.currency) ? (settings.currency as Currency) : "PKR";
+  const [currency, setCurrency] = useState<Currency>(initialCurrency);
 
   const [wallLength, setWallLength] = useState("30");
   const [wallHeight, setWallHeight] = useState("2.4");
@@ -38,10 +45,10 @@ export function PrecastWallEstimator() {
   const [stripW, setStripW] = useState("0.45");
   const [mix, setMix] = useState("1:2:4");
   const [wastage, setWastage] = useState("5");
-  const [postRate, setPostRate] = useState("1500"); // indicative default (unverified — see note below)
-  const [panelRate, setPanelRate] = useState("800");
-  const [concreteRate, setConcreteRate] = useState("12000");
-  const [labourRate, setLabourRate] = useState("150");
+  const [postRate, setPostRate] = useState(initialCurrency === "PKR" ? "1500" : ""); // indicative default (unverified — see note below)
+  const [panelRate, setPanelRate] = useState(initialCurrency === "PKR" ? "800" : "");
+  const [concreteRate, setConcreteRate] = useState(initialCurrency === "PKR" ? "12000" : "");
+  const [labourRate, setLabourRate] = useState(initialCurrency === "PKR" ? "150" : "");
   const [transport, setTransport] = useState("0");
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);

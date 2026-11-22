@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSettings } from "../../context/SettingsContext";
 import {
   PieChart,
   Pie,
@@ -64,6 +65,7 @@ const renderActiveShape = (props: any) => {
 };
 
 export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonutChartProps) {
+  const { formatCurrency } = useSettings();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const totalCost = data.reduce((acc, curr) => acc + curr.value, 0);
@@ -84,7 +86,7 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
           <p className="font-semibold text-txt-primary mb-1">{pData.name}</p>
           <div className="flex flex-col gap-1">
             <span className="text-sm text-txt-secondary">
-              Cost: <span className="font-medium text-txt-primary">Rs {pData.value.toLocaleString()}</span>
+              Cost: <span className="font-medium text-txt-primary">{formatCurrency(pData.value)}</span>
             </span>
             <span className="text-sm text-txt-secondary">
               Share: <span className="font-medium text-accent-800">{pData.percentage.toFixed(1)}%</span>
@@ -102,7 +104,7 @@ export function MaterialCostDonutChart({ data = DEFAULT_DATA }: MaterialCostDonu
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
            <span className="text-sm font-medium text-txt-tertiary uppercase tracking-wider mb-1">Total Cost</span>
            <span className="text-2xl lg:text-3xl font-bold text-txt-primary">
-             Rs {totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+             {formatCurrency(totalCost)}
            </span>
         </div>
         

@@ -30,12 +30,19 @@ export default function AppDownloadBanner() {
   return (
     <AnimatePresence>
       {isVisible && (
+        /* Docked at the top on ALL widths (Round 1 W1, 2026-11-22): the old
+           mobile `bottom-4` strip sat on top of all three home FABs
+           (ScrollToTop bottom-4, BOQ bottom-5.5rem, History bottom-10.5rem)
+           until dismissed. top-24 clears the 72px fixed header (--header-h)
+           with 24px to spare, matching the desktop placement. Banner is
+           kept, not removed; "Install Now" still only fires an alert
+           (fake install) — no real install flow built. */
         <motion.div
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-          className="fixed left-4 right-4 bottom-4 md:bottom-auto md:top-24 z-[100] md:left-auto md:right-4 md:w-96 shadow-brand-lg shadow-accent-500/10 rounded-xl overflow-hidden bg-gradient-to-r from-accent-900 to-ink border border-accent-800/30"
+          className="fixed left-4 right-4 top-24 z-[100] md:left-auto md:right-4 md:w-96 shadow-brand-lg shadow-accent-500/10 rounded-xl overflow-hidden bg-gradient-to-r from-accent-900 to-ink border border-accent-800/30"
         >
           <div className="p-4 flex items-start gap-4">
             <div className="bg-accent-500/20 p-2.5 rounded-lg shrink-0">

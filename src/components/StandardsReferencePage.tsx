@@ -81,13 +81,16 @@ export const standardsData: StandardEntry[] = [
  * → Pakistan; /uae-construction-standards → UAE). The title/description
  * come from initialActiveCountry — the route App rendered — not from the
  * live filter state, so the head tags always match the URL. India has two
- * routes and no canonical (they cannot be told apart here); Pakistan and
- * UAE canonicalise to their own route.
+ * routes rendering the identical page (same title, same content), so both
+ * canonicalise to the primary route, /is-codes-reference — a self-canonical
+ * on each would leave two duplicate pages in the index. Pakistan and UAE
+ * canonicalise to their own route.
  */
 const SEO_BY_COUNTRY: Record<string, { title: string; description: string; canonicalPath?: string; h1Main: string; h1Accent: string; h1Suffix: string }> = {
   India: {
     title: "Indian Standards & Codes Reference",
     description: "Indian Standard codes and MoRTH/IRC specifications — IS 456, IS 800, IS 10262 and highway specs, with scope, clauses and linked calculators.",
+    canonicalPath: "/is-codes-reference",
     h1Main: "Indian",
     h1Accent: "Standards & Codes",
     h1Suffix: "",

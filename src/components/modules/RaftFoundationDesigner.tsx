@@ -9,9 +9,11 @@ import { useRates } from '../../lib/useRates';
 import { designRaft, defaultRaftInputs  } from '../../lib/raftCalc';
 import { CalcSteps, EngineNotices, StructuralExportBar } from '../ui/StructuralExportBar';
 import { formatRate } from '../../lib/rates';
+import { useSettings } from '../../context/SettingsContext';
 
 export default function RaftFoundationDesigner() {
   const { rates, setRate, table } = useRates();
+  const { formatCurrency } = useSettings();
   const [length, setLength] = useState<number | "">(defaultRaftInputs.lengthM);
   const [width, setWidth] = useState<number | "">(defaultRaftInputs.widthM);
   const [thickness, setThickness] = useState<number | "">(defaultRaftInputs.thicknessM);
@@ -45,7 +47,7 @@ export default function RaftFoundationDesigner() {
     sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
   }), [length, width, thickness, totalLoad, ex, ey, sbc, es, cc, clayH, e0, sigV0, fck, fy, colSize, colLoad, cover, wastage, depth, barDia, rates]);
 
-  const summary = `Raft ${length}×${width}×${thickness} m; q_avg ${results.qAvgKPa} kPa, qmax ${results.qMaxKPa}, qmin ${results.qMinKPa} (SBC ${sbc}); settlement ${results.settlementTotalMm} mm (immediate ${results.settlementImmediateMm} + consolidation ${results.settlementConsolidationMm}); punching utilisation ${(results.punchingUtil * 100).toFixed(0)}%; Ast ${Number.isFinite(results.astTopMm2PerM) ? results.astTopMm2PerM : "—"} mm²/m top+bottom each way; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
+  const summary = `Raft ${length}×${width}×${thickness} m; q_avg ${results.qAvgKPa} kPa, qmax ${results.qMaxKPa}, qmin ${results.qMinKPa} (SBC ${sbc}); settlement ${results.settlementTotalMm} mm (immediate ${results.settlementImmediateMm} + consolidation ${results.settlementConsolidationMm}); punching utilisation ${(results.punchingUtil * 100).toFixed(0)}%; Ast ${Number.isFinite(results.astTopMm2PerM) ? results.astTopMm2PerM : "—"} mm²/m top+bottom each way; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : formatCurrency(results.totalCost)}.`;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">

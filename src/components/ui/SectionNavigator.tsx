@@ -138,7 +138,7 @@ export default function SectionNavigator() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] sm:pt-[20vh] px-4">
+        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] sm:pt-[20vh] px-4" role="dialog" aria-modal="true" aria-label="Jump to section">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

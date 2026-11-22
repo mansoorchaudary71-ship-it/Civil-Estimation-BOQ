@@ -7,6 +7,7 @@ import {
   DEFAULT_DOOR_WINDOW_ROWS, type DoorWindowRowInput, type DoorWindowKind,
 } from "../../lib/doorWindowCalc";
 import { formatFinishesMoney, type FinishesCurrency } from "../../lib/finishesCalc";
+import { useSettings } from "../../context/SettingsContext";
 import { Columns, Check, Copy, Download, Printer, Share2, Plus } from "lucide-react";
 
 type Unit = "m" | "ft" | "mm";
@@ -16,7 +17,12 @@ const money = (v: number | null, c: FinishesCurrency) => formatFinishesMoney(v, 
 
 export default function DoorWindowSchedule() {
   const [unit, setUnit] = useState<Unit>("m");
-  const [currency, setCurrency] = useState<FinishesCurrency>("PKR");
+  // Currency defaults to the global setting; the picker still lets the user
+  // override it per tool. Default rows carry no rates (null), so no rate
+  // defaults need clearing for other currencies.
+  const { settings } = useSettings();
+  const initialCurrency: FinishesCurrency = (["PKR", "INR", "AED", "USD"] as string[]).includes(settings.currency) ? (settings.currency as FinishesCurrency) : "PKR";
+  const [currency, setCurrency] = useState<FinishesCurrency>(initialCurrency);
   const [rows, setRows] = useState<DoorWindowRowInput[]>(DEFAULT_DOOR_WINDOW_ROWS);
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);

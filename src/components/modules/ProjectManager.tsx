@@ -983,7 +983,7 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Share Project"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 10 }}

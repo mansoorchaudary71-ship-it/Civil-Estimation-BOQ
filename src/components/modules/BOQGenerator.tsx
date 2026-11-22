@@ -963,7 +963,7 @@ export default function BOQGenerator() {
       />
 
       {isExportModalOpen && (
-        <div className="fixed inset-0 bg-surface-hover/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 bg-surface-hover/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-label="Configure PDF Report">
           <div className="bg-surface-default rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="p-4 sm:p-6 border-b border-border-color flex justify-between items-center bg-surface-hover">
               <h2 className="flex items-center gap-2 text-xl font-semibold text-txt-primary tracking-tight mb-4">

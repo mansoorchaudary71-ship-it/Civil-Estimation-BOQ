@@ -12,6 +12,7 @@ import {
   calcAntiTermite,
   validateAntiTermiteInputs,
 } from "../../lib/antiTermiteCalc";
+import { useSettings } from "../../context/SettingsContext";
 
 
 const CUR_SYMBOLS: Record<string, string> = { PKR: "Rs", INR: "₹", AED: "AED" };
@@ -27,7 +28,12 @@ export default function AntiTermiteCalculator() {
   const [packSize, setPackSize] = useState<number | "">(5);
   const [includePeriphery, setIncludePeriphery] = useState(false);
   const [verticalArea, setVerticalArea] = useState<number | "">(0);
-  const [currency, setCurrency] = useState("PKR");
+  // Currency defaults to the global setting (PKR/INR/AED); the picker
+  // still lets the user override it per tool. Rates are user-entered
+  // (blank by default), so no rate defaults need clearing.
+  const { settings } = useSettings();
+  const initialCurrency: string = ["PKR", "INR", "AED"].includes(settings.currency) ? settings.currency : "PKR";
+  const [currency, setCurrency] = useState(initialCurrency);
   const [ratePerLitre, setRatePerLitre] = useState<number | "">("");
   const [labourPerM2, setLabourPerM2] = useState<number | "">("");
   const [equipmentLumpSum, setEquipmentLumpSum] = useState<number | "">("");

@@ -12,7 +12,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolvePath, TOOL_IDS, SEO_SLUG_TO_ID, GROUP_TO_CATEGORY } from "../toolRoutes";
+import { resolvePath, getEffectivePathname, TOOL_IDS, SEO_SLUG_TO_ID, GROUP_TO_CATEGORY } from "../toolRoutes";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -106,6 +106,21 @@ test("static pages and join/team resolve", () => {
   assert.deepEqual(resolvePath("/join/abc123/token456"), { kind: "page", id: "join-project" });
 });
 
+test("/estimate/<n>-<unit>-house-construction-cost-<city> deep links open the House Estimator", () => {
+  assert.deepEqual(resolvePath("/estimate/5-marla-house-construction-cost-lahore"), { kind: "tool", id: "house" });
+  assert.deepEqual(resolvePath("/estimate/10-sqyd-house-construction-cost-karachi"), { kind: "tool", id: "house" });
+  assert.deepEqual(resolvePath("/estimate/2500-sqft-house-construction-cost-islamabad"), { kind: "tool", id: "house" });
+  assert.deepEqual(resolvePath("/estimate/5.5-marla-house-construction-cost-lahore"), { kind: "tool", id: "house" });
+  // Malformed /estimate/ slugs 404 instead of opening the tool with garbage.
+  assert.deepEqual(resolvePath("/estimate/house-construction-cost-lahore"), { kind: "not-found" });
+  assert.deepEqual(resolvePath("/estimate/5-marla-something-else"), { kind: "not-found" });
+  assert.deepEqual(resolvePath("/estimate"), { kind: "not-found" });
+});
+
+test("/calculators/resources has no page, so it 404s (the old home alias was removed)", () => {
+  assert.deepEqual(resolvePath("/calculators/resources"), { kind: "not-found" });
+});
+
 test("unknown paths are not-found (never silently home)", () => {
   assert.deepEqual(resolvePath("/no-such-tool"), { kind: "not-found" });
   assert.deepEqual(resolvePath("/calculators/nope/nope-tool"), { kind: "not-found" });
@@ -119,7 +134,7 @@ test("every sitemap URL resolves to something real", () => {
   for (const p of paths) {
     const r = resolvePath(p);
     if (r.kind === "not-found") bad.push(p);
-    if (r.kind === "page" && r.id === "home" && !["/", "/calculators/resources", "/pk", "/in", "/ae", "/uk"].includes(p)) {
+    if (r.kind === "page" && r.id === "home" && !["/", "/pk", "/in", "/ae", "/uk"].includes(p)) {
       bad.push(`${p} (fell back to home)`);
     }
   }
@@ -134,5 +149,29 @@ test("registry covers every Dashboard card and every renderModule case", () => {
   assert.deepEqual(casesWithoutRegistry, [], `renderModule cases missing from TOOL_IDS: ${casesWithoutRegistry}`);
   for (const id of Object.values(SEO_SLUG_TO_ID)) {
     assert.ok(ids.has(id), `SEO slug maps to unknown tool id ${id}`);
+  }
+});
+
+test("getEffectivePathname() — hash deep links resolve on both hosts (2026-11-22)", () => {
+  const prevWindow = (globalThis as any).window;
+  try {
+    // Root host, hash deep link: the hash IS the route.
+    (globalThis as any).window = { location: { pathname: "/", hash: "#/estimate/5-marla-house-construction-cost-lahore" } };
+    assert.equal(getEffectivePathname(), "/estimate/5-marla-house-construction-cost-lahore");
+    // Project-page host, hash deep link: pathname is the subpath root, hash is the route.
+    (globalThis as any).window = { location: { pathname: "/Civil-Estimation-BOQ/", hash: "#/estimate/10-marla-house-construction-cost-islamabad" } };
+    assert.equal(getEffectivePathname(), "/estimate/10-marla-house-construction-cost-islamabad");
+    // Clean-path deep link wins over any hash.
+    (globalThis as any).window = { location: { pathname: "/estimate/5-marla-house-construction-cost-lahore", hash: "" } };
+    assert.equal(getEffectivePathname(), "/estimate/5-marla-house-construction-cost-lahore");
+    // Plain root with no hash stays root.
+    (globalThis as any).window = { location: { pathname: "/", hash: "" } };
+    assert.equal(getEffectivePathname(), "/");
+    // A hash that is not a route (e.g. #details) is not treated as one.
+    (globalThis as any).window = { location: { pathname: "/", hash: "#details" } };
+    assert.equal(getEffectivePathname(), "/");
+  } finally {
+    if (prevWindow === undefined) delete (globalThis as any).window;
+    else (globalThis as any).window = prevWindow;
   }
 });

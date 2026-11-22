@@ -71,7 +71,7 @@ export function ShareModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 m-auto w-full max-w-sm h-fit bg-surface-default dark:bg-ink rounded-2xl shadow-2xl z-[201] overflow-hidden border border-border-color dark:border-ink"
+            className="fixed inset-0 m-auto w-full max-w-sm h-fit bg-surface-default dark:bg-ink rounded-2xl shadow-2xl z-[201] overflow-hidden border border-border-color dark:border-ink" role="dialog" aria-modal="true" aria-label="Share Tool"
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">

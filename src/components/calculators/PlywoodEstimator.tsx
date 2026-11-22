@@ -5,6 +5,7 @@ import { FormulaAccordion, type FormulaStep } from "../ui/FormulaAccordion";
 import { calcPlywood, validatePlywood, type PlywoodElement, type PlywoodGrade, type PlywoodInputMode } from "../../lib/plywoodCalc";
 import PlywoodContent from "./PlywoodContent";
 import { useBOQ } from "../../context/BOQContext";
+import { useSettings } from "../../context/SettingsContext";
 import { Calculator, Check, Copy, Download, Layers, Printer, Share2, Box, DollarSign, Ruler } from "lucide-react";
 
 type UnitSystem = "metric" | "imperial";
@@ -21,7 +22,13 @@ const money = (v: number | null, c: Currency) =>
 export function PlywoodEstimator() {
   const { addItem } = useBOQ();
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("metric");
-  const [currency, setCurrency] = useState<Currency>("PKR");
+  // Currency defaults to the global setting; the picker still lets the user
+  // override it per tool. The 2,500/sheet default is a PKR rate, so it is
+  // only prefilled when the starting currency is PKR (same rule as
+  // onCurrencyChange below).
+  const { settings } = useSettings();
+  const initialCurrency: Currency = (["PKR", "INR", "AED", "USD"] as string[]).includes(settings.currency) ? (settings.currency as Currency) : "PKR";
+  const [currency, setCurrency] = useState<Currency>(initialCurrency);
   const [inputMode, setInputMode] = useState<PlywoodInputMode>("dimensions");
   const [element, setElement] = useState<PlywoodElement>("general");
   const [length, setLength] = useState("10");
@@ -38,7 +45,7 @@ export function PlywoodEstimator() {
   const [grade, setGrade] = useState<PlywoodGrade>("commercial");
   const [wastage, setWastage] = useState("5");
   const [reuse, setReuse] = useState("1");
-  const [costPerSheet, setCostPerSheet] = useState("2500");
+  const [costPerSheet, setCostPerSheet] = useState(initialCurrency === "PKR" ? "2500" : "");
   const [secSpacing, setSecSpacing] = useState("0.4");
   const [primSpacing, setPrimSpacing] = useState("1.2");
   const [copied, setCopied] = useState(false);

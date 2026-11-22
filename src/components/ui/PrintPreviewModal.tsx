@@ -260,7 +260,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-ink/80 backdrop-blur-md p-4 sm:p-8"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-ink/80 backdrop-blur-md p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="Print Preview"
         >
           <motion.div 
             initial={{ opacity: 0, y: 30, scale: 0.95 }}

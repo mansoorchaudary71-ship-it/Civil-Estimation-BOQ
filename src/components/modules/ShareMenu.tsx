@@ -405,7 +405,7 @@ export default function ShareButtonWithPopup({
       </Button>
 
       {isOpen && typeof document !== "undefined" && createPortal(
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center p-4 font-sans pointer-events-auto px-4 sm:px-6">
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center p-4 font-sans pointer-events-auto px-4 sm:px-6" role="dialog" aria-modal="true" aria-label="Export & Share">
             <div 
               className="absolute inset-0 bg-surface-hover/60 backdrop-blur-[4px]"
               onClick={() => setIsOpen(false)}

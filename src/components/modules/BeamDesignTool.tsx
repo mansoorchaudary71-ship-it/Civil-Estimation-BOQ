@@ -19,7 +19,7 @@ const SUPPORT_CONDITIONS: Record<SupportCondition, { label: string }> = {
 };
 
 export default function BeamDesignTool() {
-  const { settings } = useSettings();
+  const { settings, formatCurrency } = useSettings();
   const { rates, setRate, table } = useRates();
   const [span, setSpan] = useState<number | "">(defaultBeamInputs.spanM);
   const [workingLoad, setWorkingLoad] = useState<number | "">(defaultBeamInputs.workingLoadKNm);
@@ -52,7 +52,7 @@ export default function BeamDesignTool() {
     setSafetyFactor(settings.projectType === 'Commercial' || settings.projectType === 'Industrial' ? 1.6 : 1.5);
   };
 
-  const summary = `Span ${span} m, ${supportCondition}; factored load ${results.factoredLoadKNm} kN/m; Mu ${results.muGoverningKNm} kNm (Mu,lim ${results.muLimKNm}); Ast ${results.astReqMm2} mm² → ${results.barsRequired}×${mainDia} mm (${results.astProvidedMm2} mm²); shear τv ${results.tauVMpa} MPa; Ld ${results.ldMm} mm; steel ${results.totalSteelKg} kg; concrete ${results.concreteVolM3} m³; cost ${results.totalCost == null ? '—' : `Rs ${results.totalCost.toLocaleString()}`}.`;
+  const summary = `Span ${span} m, ${supportCondition}; factored load ${results.factoredLoadKNm} kN/m; Mu ${results.muGoverningKNm} kNm (Mu,lim ${results.muLimKNm}); Ast ${results.astReqMm2} mm² → ${results.barsRequired}×${mainDia} mm (${results.astProvidedMm2} mm²); shear τv ${results.tauVMpa} MPa; Ld ${results.ldMm} mm; steel ${results.totalSteelKg} kg; concrete ${results.concreteVolM3} m³; cost ${results.totalCost == null ? '—' : formatCurrency(results.totalCost)}.`;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in px-4 md:px-0">

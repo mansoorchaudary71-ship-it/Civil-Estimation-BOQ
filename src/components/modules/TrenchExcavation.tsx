@@ -44,6 +44,7 @@ export default function TrenchExcavationEstimator() {
   const [depth, setDepth] = useState<string>("1.5");
   const [pipeDiameter, setPipeDiameter] = useState<string>("");
   const [beddingDepth, setBeddingDepth] = useState<string>("");
+  const [beddingWidth, setBeddingWidth] = useState<string>("");
   
   const [isDimensionsOpen, setIsDimensionsOpen] = useState<boolean>(true);
   const [isBeddingOpen, setIsBeddingOpen] = useState<boolean>(true);
@@ -59,11 +60,14 @@ export default function TrenchExcavationEstimator() {
   const totalExcavationVolume = crossSectionArea * L;
   const D_pipe = parseFloat(pipeDiameter) || 0;
   const D_bedding = parseFloat(beddingDepth) || 0;
+  // Bedding width is its own input: the old calculation silently used the
+  // trench bottom width (W_b) as the bedding width. Blank = bottom width.
+  const W_bedding = parseFloat(beddingWidth) || W_b;
   
   let beddingMaterialVolume = 0;
   if (D_bedding > 0 || D_pipe > 0) {
     const pipeVolume = Math.PI * Math.pow(D_pipe / 2, 2) * L;
-    const beddingBoxVolume = W_b * D_bedding * L;
+    const beddingBoxVolume = W_bedding * D_bedding * L;
     beddingMaterialVolume = Math.max(0, beddingBoxVolume - pipeVolume);
   }
 
@@ -218,6 +222,20 @@ export default function TrenchExcavationEstimator() {
                         placeholder={`e.g. 0.5`}
                       /></>
                     </div>
+                    <div>
+                      <label className="block text-base font-medium dark:text-txt-secondary uppercase tracking-wider mb-2 ml-1 flex items-center">
+                        Bedding Width [{unitL}]
+                        <Tooltip content="The width of the bedding layer under the pipe. Defaults to the trench bottom width when left blank — the old calculation silently assumed the bottom width." />
+                      </label>
+                      <><label htmlFor="a11y-input-529" className="sr-only">Input</label>
+<input id="a11y-input-529"
+                        type="number" inputMode="decimal"
+                        className="w-full bg-surface-default dark:bg-ink border border-border-color text-txt-primary rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/50 focus:border-accent-800 transition-shadow min-h-[44px]"
+                        value={beddingWidth}
+                        onChange={(e) => setBeddingWidth(e.target.value)}
+                        placeholder={`Defaults to bottom width (${bottomWidth || "—"} ${unitL})`}
+                      /></>
+                    </div>
                     <p className="text-sm text-txt-secondary dark:text-txt-secondary font-medium px-1">
                       Leave empty if bedding calculation is not required.
                     </p>
@@ -285,7 +303,7 @@ export default function TrenchExcavationEstimator() {
       <CalculationHistory
         calculatorId="trench_excavation_v1"
         estimationName="Trench Excavation"
-        currentInputs={{ length, bottomWidth, sideSlope, depth, pipeDiameter, beddingDepth }}
+        currentInputs={{ length, bottomWidth, sideSlope, depth, pipeDiameter, beddingDepth, beddingWidth }}
         currentResults={{ totalExcavationVolume: totalExcavationVolume.toFixed(2), crossSectionArea: crossSectionArea.toFixed(2) }}
         summaryGeneration={(inputs, res) => `Excavated Vol: ${res.totalExcavationVolume} ${unitV}`}
         onRestore={(inputs) => {
@@ -295,6 +313,7 @@ export default function TrenchExcavationEstimator() {
           if(inputs.depth) setDepth(inputs.depth);
           if(inputs.pipeDiameter) setPipeDiameter(inputs.pipeDiameter);
           if(inputs.beddingDepth) setBeddingDepth(inputs.beddingDepth);
+          if(inputs.beddingWidth) setBeddingWidth(inputs.beddingWidth);
         }}
       />
     </div>

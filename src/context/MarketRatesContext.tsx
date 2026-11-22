@@ -39,6 +39,49 @@ const defaultRates: MarketRates = {
 };
 
 const COMPANY_RATES_STORAGE_KEY = "company_material_rates";
+/** User rate edits persist across reloads (localStorage, same guarded
+ * pattern as companyRates). Before this, setCustomRate/updateRate edits
+ * lived only in React state and were lost on every reload. Keys are
+ * namespaced `cep_*` like the rates.ts overrides key (`cep-rates-v1`). */
+const CUSTOM_RATES_STORAGE_KEY = "cep_custom_rates";
+const MARKET_RATES_STORAGE_KEY = "cep_market_rates";
+
+const MARKET_RATE_KEYS = [
+  "cement", "steel", "bricks", "sand", "crush", "tiles", "paint",
+  "laborGrey", "laborFinish", "overheadMarkup",
+] as const;
+
+/** Load a stored partial rate table, keeping only known keys with finite
+ * numeric values; corrupt / foreign values are dropped, never thrown. */
+function loadStoredRates(key: string): Partial<MarketRates> {
+  try {
+    const saved = localStorage.getItem(key);
+    if (!saved) return {};
+    const parsed: unknown = JSON.parse(saved);
+    if (parsed == null || typeof parsed !== "object") return {};
+    const out: Partial<MarketRates> = {};
+    for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+      if (
+        (MARKET_RATE_KEYS as readonly string[]).includes(k) &&
+        typeof v === "number" &&
+        isFinite(v)
+      ) {
+        (out as Record<string, number>)[k] = v;
+      }
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+function saveStoredRates(key: string, rates: Partial<MarketRates>): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(rates));
+  } catch {
+    // Storage full / unavailable — edits stay session-only.
+  }
+}
 
 interface MarketRatesContextType {
   marketRates: MarketRates;
@@ -79,8 +122,16 @@ const MarketRatesContext = createContext<MarketRatesContextType | undefined>(und
 
 export function MarketRatesProvider({ children }: { children: ReactNode }) {
   const [region, setRegion] = useState<string>('PK');
-  const [marketRates, setMarketRates] = useState<MarketRates>(defaultRates);
-  const [customRates, setCustomRates] = useState<Partial<MarketRates>>({});
+  // A user's own market-rate edits (RateAnalysis / GlobalSettingsModal)
+  // reload from storage so they survive a refresh; defaults still come
+  // from rates.ts and win for any key the user never edited.
+  const [marketRates, setMarketRates] = useState<MarketRates>(() => ({
+    ...defaultRates,
+    ...loadStoredRates(MARKET_RATES_STORAGE_KEY),
+  }));
+  const [customRates, setCustomRates] = useState<Partial<MarketRates>>(() =>
+    loadStoredRates(CUSTOM_RATES_STORAGE_KEY),
+  );
   const [companyRates, setCompanyRates] = useState<Partial<MarketRates>>(() => {
     try {
       const saved = localStorage.getItem(COMPANY_RATES_STORAGE_KEY);
@@ -100,7 +151,11 @@ export function MarketRatesProvider({ children }: { children: ReactNode }) {
   // future sourced feed sets it.
 
   const updateRate = (key: keyof MarketRates, value: number) => {
-    setMarketRates(prev => ({ ...prev, [key]: value }));
+    setMarketRates(prev => {
+      const updated = { ...prev, [key]: value };
+      saveStoredRates(MARKET_RATES_STORAGE_KEY, updated);
+      return updated;
+    });
   };
 
   const setCustomRate = (key: keyof MarketRates, value: number | null) => {
@@ -111,6 +166,7 @@ export function MarketRatesProvider({ children }: { children: ReactNode }) {
       } else {
         updated[key] = value;
       }
+      saveStoredRates(CUSTOM_RATES_STORAGE_KEY, updated);
       return updated;
     });
   };
@@ -130,6 +186,7 @@ export function MarketRatesProvider({ children }: { children: ReactNode }) {
 
   const resetCustomRates = () => {
     setCustomRates({});
+    saveStoredRates(CUSTOM_RATES_STORAGE_KEY, {});
   };
 
   const isCustomRate = (key: keyof MarketRates) => {

@@ -1,6 +1,7 @@
 import { Button } from '../ui/Button';
 import React, { useState, useEffect } from 'react';
 import { useBOQ } from '../../context/BOQContext';
+import { BOQ_INBOX_KEY, readBoqInbox, clearBoqInbox, type BoqInboxLine } from '../../lib/boq';
 import { useSettings, useGlobalSettings } from '../../context/SettingsContext';
 import { X, FileText, Download, Trash2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,8 +11,39 @@ import EmptyStateIllustration from '../ui/EmptyStateIllustration';
 export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [editingItem, setEditingItem] = useState<any | null>(null);
-  const { items, removeItem, updateItem, clearBOQ, contingency, setContingency, overheadProfit, setOverheadProfit, tax, setTax } = useBOQ();
+  const { items, addItem, removeItem, updateItem, clearBOQ, contingency, setContingency, overheadProfit, setOverheadProfit, tax, setTax } = useBOQ();
   const { settings, formatCurrency } = useSettings();
+
+  // BOQ inbox (cep_boq_inbox_v1): lines sent from Material Takeoff /
+  // Measurement Sheet land here. The drawer used to show only the Master
+  // BOQ items, so lines sent while it was open were invisible until it
+  // was closed and the BOQ Generator tool opened instead. The inbox
+  // section below refreshes live while the drawer stays open: on open,
+  // on `storage` events (lines sent from another tab), on window focus,
+  // and via the Refresh button — never by closing the drawer.
+  const [inboxLines, setInboxLines] = useState<BoqInboxLine[]>([]);
+  const refreshInbox = () => setInboxLines(readBoqInbox());
+  useEffect(() => {
+    if (!isOpen) return;
+    refreshInbox();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === BOQ_INBOX_KEY) refreshInbox();
+    };
+    const onFocus = () => refreshInbox();
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', onFocus);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', onFocus);
+    };
+  }, [isOpen]);
+  const loadInboxIntoBoq = () => {
+    inboxLines.forEach((l) =>
+      addItem({ name: l.description, category: l.source || 'BOQ Inbox', quantity: l.quantity, unit: l.unit, rate: l.rate ?? 0 }),
+    );
+    clearBoqInbox();
+    setInboxLines([]);
+  };
 
   const filteredItems = items.filter(item => 
     item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -120,6 +152,31 @@ export default function MasterBOQDrawer({ isOpen, onClose }: { isOpen: boolean; 
       </div>
     </div>
   
+
+            {inboxLines.length > 0 && (
+              <div className="px-6 py-3 border-b border-border-color bg-surface-hover">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-sm font-semibold text-txt-secondary">
+                    BOQ inbox — {inboxLines.length} line(s) waiting (sent from Material Takeoff / Measurement Sheet)
+                  </span>
+                  <Button onClick={refreshInbox} className="px-3 py-1.5 bg-surface-default border border-ui-borderSubtle rounded-full text-xs font-bold text-txt-secondary shrink-0">
+                    Refresh
+                  </Button>
+                </div>
+                <div className="mt-2 space-y-1">
+                  {inboxLines.map((l, idx) => (
+                    <div key={`${l.description}-${idx}`} className="flex justify-between gap-2 text-sm text-txt-primary">
+                      <span className="truncate">{l.description}</span>
+                      <span className="font-semibold shrink-0">{l.quantity} {l.unit}{l.rate != null ? ` @ ${formatCurrency(l.rate)}` : ''}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <Button onClick={loadInboxIntoBoq} className="flex-1 px-4 py-2 bg-ink text-white rounded-full text-sm font-bold">Load into Master BOQ</Button>
+                  <Button onClick={() => { clearBoqInbox(); setInboxLines([]); }} className="px-4 py-2 bg-surface-default border border-ui-borderSubtle rounded-full text-sm font-semibold text-txt-secondary">Discard</Button>
+                </div>
+              </div>
+            )}
 
             <div className="flex-1 overflow-y-auto p-6">
               {items.length === 0 ? (

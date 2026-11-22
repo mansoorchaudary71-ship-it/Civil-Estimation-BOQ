@@ -27,6 +27,9 @@ import {
   AlertCircle,
   ArrowRight,
   Spline,
+  Sun,
+  Cctv,
+  Leaf,
   Calculator,
   Briefcase,
   X,
@@ -56,9 +59,15 @@ import AdvancedSpecs, { SpecsState, initialSpecs } from "./AdvancedSpecs";
 import GlobalSettingsModal from "./GlobalSettingsModal";
 import MasterRccStructure from "./MasterRccStructure";
 import MasterQuantityEstimator from "./MasterQuantityEstimator";
+import {
+  calcSolarAddOnCost,
+  initialAddOns,
+  type HouseAddOnsState,
+} from "../../lib/houseAddOns";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
+import { getEffectivePathname } from "../../lib/toolRoutes";
 import UnitToggleGroup from "../ui/UnitToggleGroup";
 import { MaskedInput } from "../ui/MaskedInput";
 import { useSchema } from "../../hooks/useSchema";
@@ -316,14 +325,17 @@ export default function HouseEstimator() {
     siteLocation: "",
   });
   const location = useLocation();
-  const [hasParsedRoute, setHasParsedRoute] = useState(false);
 
-  // Parse pSEO routing 
+  // Parse pSEO routing — from the EFFECTIVE path, not location.pathname:
+  // a hash deep link (#/estimate/...) has pathname "/" and would never
+  // match, so its size/unit/city were silently dropped (2026-11-22).
+  // No hasParsedRoute guard: nothing in this file navigates, so the
+  // effect only re-runs on real navigation — which also fixes re-parsing
+  // when moving between two /estimate/... URLs without a remount.
   useEffect(() => {
-    if (hasParsedRoute) return;
-    
     // e.g., /estimate/5-Marla-house-construction-cost-Lahore
-    const match = location.pathname.match(/\/estimate\/(\d+(?:\.\d+)?)-([^-]+)-house-construction-cost-(.+)/i);
+    const effective = getEffectivePathname();
+    const match = effective.match(/\/estimate\/(\d+(?:\.\d+)?)-([^-]+)-house-construction-cost-(.+)/i);
     if (match) {
       const value = parseFloat(match[1]);
       const unit = match[2]; // Marla, Sq.Ft, Sq.Yd
@@ -344,9 +356,8 @@ export default function HouseEstimator() {
         ...prev,
         siteLocation: city.replace(/-/g, " "),
       }));
-      setHasParsedRoute(true);
     }
-  }, [location.pathname, hasParsedRoute]);
+  }, [location.pathname, location.hash]);
 
   useSchema({
     "@context": "https://schema.org",
@@ -391,6 +402,7 @@ export default function HouseEstimator() {
   const [foundationOrder, setFoundationOrder] = useState<string[]>([]);
   const [superstructureOrder, setSuperstructureOrder] = useState<string[]>([]);
   const [finishingOrder, setFinishingOrder] = useState<string[]>([]);
+  const [addOnsOrder, setAddOnsOrder] = useState<string[]>([]);
 
   const handleDuplicateRow = (item: any, section: string) => {
     const baseName = item.name.replace(/\s\(Copy \d+\)$/, '');
@@ -478,7 +490,7 @@ export default function HouseEstimator() {
   const [isSpecsAccordionOpen, setIsSpecsAccordionOpen] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    "grey" | "finishing" | "summary" | "rcc" | "master" | "rates"
+    "grey" | "finishing" | "addons" | "summary" | "rcc" | "master" | "rates"
   >("summary");
   const [isMathOpen, setIsMathOpen] = useState(false);
   const [finishQuality, setFinishQuality] = useState<number>(1);
@@ -517,6 +529,10 @@ export default function HouseEstimator() {
     includeBoundaryWall,
     setIncludeBoundaryWall,
   ] = useState(false);
+  /* House Add-ons State (solar / smart home / landscaping) — off by
+     default so existing totals are unchanged until the user opts in. */
+  const [addOns, setAddOns] = useState<HouseAddOnsState>(initialAddOns);
+  useAutoSave('house-estimator-addons', addOns, setAddOns);
   const [bwLength, setBwLength] = useState(100);
   /* feet */ const [bwHeight, setBwHeight] = useState(6);
   /* feet */ const [bwGateSize, setBwGateSize] = useState(12);
@@ -894,13 +910,67 @@ export default function HouseEstimator() {
   
   finishingCostData.push(...duplicatedItems.filter(i => i._section === 'finishing' && !deletedItems.has(i.name)));
 
+  /* House Add-ons (solar / smart home / landscaping). Solar is priced
+     from the SolarRoofCalculator Lahore preset (panel Rs 90/W, inverter
+     Rs 25,000/kVA, battery Rs 65,000/kWh — see lib/houseAddOns.ts);
+     smart home and landscaping have no CEP rate, so they are
+     user-entered lump sums (0 = not included). */
+  const solarAddOn = useMemo(
+    () => calcSolarAddOnCost(addOns.solarKw, addOns.solarGridType, addOns.solarBatteryKwh),
+    [addOns.solarKw, addOns.solarGridType, addOns.solarBatteryKwh],
+  );
+  let addOnsCostData = [
+    ...(addOns.includeAddOns && solarAddOn.totalCost > 0
+      ? [
+          {
+            name: `Solar PV System (${addOns.solarGridType})`,
+            value: solarAddOn.totalCost,
+            color: "#F2A413",
+            quantity: solarAddOn.actualKw,
+            unit: "kWp",
+            rate: solarAddOn.costPerKwp,
+          },
+        ]
+      : []),
+    ...(addOns.includeAddOns && addOns.smartHomeCost > 0
+      ? [
+          {
+            name: "Smart Home & Security",
+            value: addOns.smartHomeCost,
+            color: "#0F766E",
+            quantity: 1,
+            unit: "Lump Sum",
+            rate: addOns.smartHomeCost,
+          },
+        ]
+      : []),
+    ...(addOns.includeAddOns && addOns.landscapingCost > 0
+      ? [
+          {
+            name: "Landscaping & Exterior",
+            value: addOns.landscapingCost,
+            color: "#15803D",
+            quantity: 1,
+            unit: "Lump Sum",
+            rate: addOns.landscapingCost,
+          },
+        ]
+      : []),
+  ].filter((item) => !deletedItems.has(item.name));
+
+  addOnsCostData.push(...duplicatedItems.filter(i => i._section === 'addons' && !deletedItems.has(i.name)));
+
+  const sortedAddOnsCostData = useSortedData(addOnsCostData, addOnsOrder);
+
+  const filteredTotalAddOns = addOnsCostData.reduce((acc, item) => acc + item.value, 0);
+
   const sortedFoundationData = useSortedData(greyFoundationData.filter(i => !deletedItems.has(i.name)), foundationOrder);
   const sortedSuperstructureData = useSortedData(greySuperstructureData.filter(i => !deletedItems.has(i.name)), superstructureOrder);
   const sortedFinishingCostData = useSortedData(finishingCostData, finishingOrder);
 
   const filteredTotalFinishing = finishingCostData.reduce((acc, item) => acc + item.value, 0);
 
-  const handleExportCSV = (type: "grey" | "finishing") => {
+  const handleExportCSV = (type: "grey" | "finishing" | "addons") => {
     let csvContent = "";
     csvContent += "Category,Material / Item,Quantity,Unit,Notes,Amount\n";
     
@@ -914,6 +984,11 @@ export default function HouseEstimator() {
         csvContent += `${escapeCsv("Above-Ground Work (Walls & Roof)")},${escapeCsv(item.name)},${escapeCsv(typeof item.quantity === "number" ? item.quantity.toLocaleString('en-US') : item.quantity)},${escapeCsv(item.unit)},${escapeCsv(itemNotes[item.name])},${escapeCsv(formatCurrency(item.value))}\n`;
       });
       csvContent += `${escapeCsv("Total")},${escapeCsv("Total Grey Structure")},-,-,-,${escapeCsv(formatCurrency(filteredTotalGrey))}\n`;
+    } else if (type === "addons") {
+      sortedAddOnsCostData.forEach((item) => {
+        csvContent += `${escapeCsv("House Add-ons")},${escapeCsv(item.name)},${escapeCsv(typeof item.quantity === "number" ? Math.round(item.quantity * 100) / 100 : item.quantity)},${escapeCsv(item.unit)},${escapeCsv(itemNotes[item.name])},${escapeCsv(formatCurrency(item.value))}\n`;
+      });
+      csvContent += `${escapeCsv("Total")},${escapeCsv("Total House Add-ons")},-,-,-,${escapeCsv(formatCurrency(filteredTotalAddOns))}\n`;
     } else {
       sortedFinishingCostData.forEach((item) => {
         csvContent += `${escapeCsv("Finishing Works")},${escapeCsv(item.name)},${escapeCsv(typeof item.quantity === "number" ? Math.round(item.quantity).toLocaleString('en-US') : item.quantity)},${escapeCsv(item.unit)},${escapeCsv(itemNotes[item.name])},${escapeCsv(formatCurrency(item.value))}\n`;
@@ -948,8 +1023,15 @@ export default function HouseEstimator() {
       color: "#0F766E",
     });
   }
+  if (addOns.includeAddOns) {
+    summaryData.push({
+      name: "House Add-ons",
+      value: filteredTotalAddOns,
+      color: "#F2A413",
+    });
+  }
   
-  const currentTotalCost = filteredTotalGrey + filteredTotalFinishing + (includeBoundaryWall ? estimates.costBoundaryWall : 0);
+  const currentTotalCost = filteredTotalGrey + filteredTotalFinishing + filteredTotalAddOns + (includeBoundaryWall ? estimates.costBoundaryWall : 0);
   
 
   const combinedCostData = useMemo(() => {
@@ -970,8 +1052,16 @@ export default function HouseEstimator() {
         color: d.color || "#F2A413",
       })
     );
+    addOnsCostData.forEach((d) =>
+      data.push({
+        name: d.name.replace(/\*/g, ""),
+        value: convertAmount(d.value),
+        category: "House Add-ons",
+        color: d.color || "#F2A413",
+      })
+    );
     return data.sort((a, b) => b.value - a.value);
-  }, [greyCostData, finishingCostData, convertAmount]);
+  }, [greyCostData, finishingCostData, addOnsCostData, convertAmount]);
 
   const getQualityLabel = (val: number) => {
     switch (val) {
@@ -987,7 +1077,7 @@ export default function HouseEstimator() {
   };
 
   const pdfExportPayload = useMemo(() => {
-    const customTableData = [...greyCostData, ...finishingCostData].map(d => ({
+    const customTableData = [...greyCostData, ...finishingCostData, ...addOnsCostData].map(d => ({
       item: d.name.replace(/\*/g, ''),
       quantityStr: typeof d.quantity === 'number' ? Math.round(d.quantity).toLocaleString('en-US') : d.quantity,
       unitStr: d.unit,
@@ -1022,12 +1112,13 @@ export default function HouseEstimator() {
         "Total Cost": currentTotalCost.toFixed(2),
         "Grey Structure": filteredTotalGrey.toFixed(2),
         "Finishing": filteredTotalFinishing.toFixed(2),
+        ...(addOns.includeAddOns ? { "House Add-ons": filteredTotalAddOns.toFixed(2) } : {}),
         ...(includeBoundaryWall ? { "Boundary Wall": estimates.costBoundaryWall.toFixed(2) } : {}),
       },
       disclaimer: "Disclaimer: This estimate is algorithmically generated based on benchmark rates and standard assumptions. It should not be used as a substitute for a professional BOQ certified by a licensed structural engineer or quantity surveyor.",
       customTableData
     };
-  }, [greyCostData, finishingCostData, geoState, finishQuality, projectDetails, builtUpArea, estimates, currentTotalCost, filteredTotalGrey, filteredTotalFinishing, includeBoundaryWall]);
+  }, [greyCostData, finishingCostData, addOnsCostData, geoState, finishQuality, projectDetails, builtUpArea, estimates, currentTotalCost, filteredTotalGrey, filteredTotalFinishing, filteredTotalAddOns, addOns.includeAddOns, includeBoundaryWall]);
 
   return (
     <div className="w-full h-full bg-transparent text-txt-primary font-sans p-6 md:p-8">
@@ -1467,6 +1558,116 @@ export default function HouseEstimator() {
                     )}
                   </div>
 
+                  {/* House Add-ons Module (solar / smart home / landscaping) */}
+                  <div className="pt-4 border-t border-border-color">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <h2 className="text-xl font-semibold text-txt-primary tracking-tight mb-4">
+                          House Add-ons
+                        </h2>
+                        <span className="text-sm font-medium text-txt-tertiary">
+                          Solar, smart home &amp; landscaping
+                        </span>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer text-sm font-medium text-txt-secondary mb-1 block">
+                        <><label htmlFor="a11y-input-270" className="sr-only">Input</label>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-270"
+                          type="checkbox"
+                          className="sr-only peer text-base font-normal"
+                          checked={addOns.includeAddOns}
+                          onChange={() =>
+                            setAddOns((prev) => ({ ...prev, includeAddOns: !prev.includeAddOns }))
+                          }
+                        /></>
+                        <div className="w-11 h-6 bg-surface-active peer-focus:outline-none peer-focus:ring-2 focus:ring-accent-500 focus:outline-none peer-focus:ring-accent-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-default after:border-ui-borderDefault after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ink"></div>
+                      </label>
+                    </div>
+                    {addOns.includeAddOns && (
+                      <div className="pt-4 mt-4 border-t border-border-color animate-in fade-in slide-in-from-top-4 duration-300 space-y-4">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          <div>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">
+                              Solar system (kW)
+                            </label>
+                            <><label htmlFor="a11y-input-271" className="sr-only">Input</label>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-271"
+                              type="number" inputMode="decimal"
+                              min="0" step="0.5"
+                              value={addOns.solarKw ?? ""}
+                              onChange={(e) => setAddOns((prev) => ({ ...prev, solarKw: Math.max(0, parseFloat(e.target.value) || 0) }))}
+                              className="w-full bg-surface-hover border border-ui-borderSubtle rounded-full px-3 py-2 text-txt-secondary text-sm font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none"
+                            /></>
+                          </div>
+                          <div>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">
+                              Grid type
+                            </label>
+                            <select
+                              aria-label="Solar grid type"
+                              value={addOns.solarGridType}
+                              onChange={(e) => setAddOns((prev) => ({ ...prev, solarGridType: e.target.value as HouseAddOnsState["solarGridType"] }))}
+                              className="w-full bg-surface-hover border border-ui-borderSubtle rounded-full px-3 py-2 text-txt-secondary text-sm font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none"
+                            >
+                              <option value="Hybrid">Hybrid</option>
+                              <option value="On-Grid">On-Grid</option>
+                              <option value="Off-Grid">Off-Grid</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">
+                              Battery (kWh) — 0 = none
+                            </label>
+                            <><label htmlFor="a11y-input-272" className="sr-only">Input</label>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-272"
+                              type="number" inputMode="decimal"
+                              min="0" step="1"
+                              disabled={addOns.solarGridType === "On-Grid"}
+                              value={addOns.solarBatteryKwh ?? ""}
+                              onChange={(e) => setAddOns((prev) => ({ ...prev, solarBatteryKwh: Math.max(0, parseFloat(e.target.value) || 0) }))}
+                              className="w-full bg-surface-hover border border-ui-borderSubtle rounded-full px-3 py-2 text-txt-secondary text-sm font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none disabled:opacity-50"
+                            /></>
+                          </div>
+                          <div>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">
+                              Smart home cost (Rs)
+                            </label>
+                            <><label htmlFor="a11y-input-273" className="sr-only">Input</label>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-273"
+                              type="number" inputMode="decimal"
+                              min="0" step="any"
+                              value={addOns.smartHomeCost || ""}
+                              onChange={(e) => setAddOns((prev) => ({ ...prev, smartHomeCost: Math.max(0, parseFloat(e.target.value) || 0) }))}
+                              placeholder="0 = not included"
+                              className="w-full bg-surface-hover border border-ui-borderSubtle rounded-full px-3 py-2 text-txt-secondary text-sm font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none"
+                            /></>
+                          </div>
+                          <div>
+                            <label className="block uppercase tracking-widest mb-1.5 text-sm font-medium text-txt-secondary mb-1">
+                              Landscaping cost (Rs)
+                            </label>
+                            <><label htmlFor="a11y-input-274" className="sr-only">Input</label>
+<motion.input initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} id="a11y-input-274"
+                              type="number" inputMode="decimal"
+                              min="0" step="any"
+                              value={addOns.landscapingCost || ""}
+                              onChange={(e) => setAddOns((prev) => ({ ...prev, landscapingCost: Math.max(0, parseFloat(e.target.value) || 0) }))}
+                              placeholder="0 = not included"
+                              className="w-full bg-surface-hover border border-ui-borderSubtle rounded-full px-3 py-2 text-txt-secondary text-sm font-medium focus:ring-2 focus:ring-accent-500 focus:outline-none"
+                            /></>
+                          </div>
+                        </div>
+                        {solarAddOn.totalCost > 0 && (
+                          <p className="text-sm font-medium text-txt-secondary">
+                            Solar: {solarAddOn.panels} × 545 W panels = {solarAddOn.actualKw.toFixed(2)} kWp · {solarAddOn.inverterKva} kVA inverter · {formatCurrency(solarAddOn.totalCost)}
+                          </p>
+                        )}
+                        <p className="text-xs text-txt-tertiary leading-relaxed">
+                          Solar is priced from the SolarRoofCalculator Lahore preset (Nov 2026, indicative — confirm with a supplier): panels Rs 90/W, inverter Rs 25,000/kVA, battery Rs 65,000/kWh, mounting Rs 4,500/panel, wiring 8%, labour 10%, net-metering Rs 100,000, contingency 5%. Smart home (CCTV, smart locks, gate motor, alarms) and landscaping (tuff-tile driveway, lawn, lighting) have no standard rate in the CEP rate table — enter your supplier&apos;s quoted cost; 0 means not included.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
                 </div>
               )}
             </div>
@@ -1564,6 +1765,7 @@ export default function HouseEstimator() {
                     <div className="flex overflow-x-auto gap-2 p-1 border-b border-border-color w-full sm:w-fit [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                       <UniversalTabs tabs={[{id: "grey", label: "Basic Structure", icon: <Layers className="w-[18px] h-[18px]" />}]} activeTab={activeTab === "grey" ? "grey" : ""} onTabChange={() => setActiveTab("grey")} />
                       <UniversalTabs tabs={[{id: "finishing", label: "Finishing", icon: <PaintRoller className="w-[18px] h-[18px]" />}]} activeTab={activeTab === "finishing" ? "finishing" : ""} onTabChange={() => setActiveTab("finishing")} />
+                      <UniversalTabs tabs={[{id: "addons", label: "House Add-ons", icon: <Sun className="w-[18px] h-[18px]" />}]} activeTab={activeTab === "addons" ? "addons" : ""} onTabChange={() => setActiveTab("addons")} />
                       <UniversalTabs tabs={[{id: "rcc", label: "RCC Detailed", icon: <Spline className="w-[18px] h-[18px]" />}]} activeTab={activeTab === "rcc" ? "rcc" : ""} onTabChange={() => setActiveTab("rcc")} />
                       <UniversalTabs tabs={[{id: "master", label: "Master Quantities", icon: <Calculator className="w-[18px] h-[18px]" />}]} activeTab={activeTab === "master" ? "master" : ""} onTabChange={() => setActiveTab("master")} />
                       <UniversalTabs tabs={[{id: "rates", label: "Material Rates", icon: <Database className="w-[18px] h-[18px]" />}]} activeTab={activeTab === "rates" ? "rates" : ""} onTabChange={() => setActiveTab("rates")} />
@@ -2006,6 +2208,132 @@ export default function HouseEstimator() {
                       </div>
                     </div>
                   )}
+                  {activeTab === "addons" && (
+                    <div className="animate-in fade-in slide-in-from-bottom-8 duration-500 h-full flex flex-col pt-4">
+                      <MaterialSummary
+                        title="House Add-ons Breakdown"
+                        totalLabel="Total House Add-ons Cost"
+                        totalValue={formatCurrency(filteredTotalAddOns)}
+                        totalUnit=""
+                        subtitle="Solar, smart home & landscaping — solar priced from the SolarRoofCalculator preset; smart home & landscaping are your entered costs"
+                        relatedToolIds={['solar-roof', 'master-quantity']}
+                        onRecalculate={() => {}}
+                      >
+                         <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4 mt-6">
+                            {addOnsCostData.map((item, idx) => (
+                               <ResultCard
+                                  key={idx}
+                                  title={item.name}
+                                  value={formatCurrency(item.value)}
+                                  unit=""
+                                  variant="neutral"
+                               />
+                            ))}
+                         </div>
+                      </MaterialSummary>
+
+                      {!addOns.includeAddOns ? (
+                        <p className="mt-6 text-base font-normal text-txt-secondary leading-relaxed">
+                          House add-ons are off. Turn on “House Add-ons” in the Quick Estimate panel to price a solar system, smart-home package, or landscaping.
+                        </p>
+                      ) : addOnsCostData.length === 0 ? (
+                        <p className="mt-6 text-base font-normal text-txt-secondary leading-relaxed">
+                          No add-ons priced yet — set a solar size above 0 kW, or enter a smart-home or landscaping cost in the Quick Estimate panel.
+                        </p>
+                      ) : (
+                        <>
+                      <div className="w-full h-[320px] mt-8 mb-4 border border-border-color rounded-2xl bg-surface-hover/30 p-2 sm:p-4 overflow-hidden">
+                        <StyledChart
+                          data={addOnsCostData.map(d => ({ ...d, fill: d.color }))}
+                          type="pie"
+                          title="House Add-ons Cost Distribution"
+                          valueFormatter={(val) => formatCurrency(val, false)}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between mt-8 mb-4">
+                        <h3 className="text-lg font-medium text-txt-primary mb-4">
+                          Detailed Exact BOQ
+                        </h3>
+                        <div className="flex items-center gap-3 relative">
+                          {selectedItems.size > 0 && (
+                            <Button onClick={handleDeleteSelected}
+                              className="flex items-center gap-2 bg-ui-error text-ui-errorText px-3 py-1.5 rounded-full hover:bg-ui-error transition-colors text-base font-semibold active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Delete Selected ({selectedItems.size})
+                            </Button>
+                          )}
+                          <Button
+                            onClick={() => handleExportCSV("addons")}
+                            className="flex items-center gap-2 text-sm bg-accent-50 text-accent-800 px-3 py-1.5 rounded-full font-semibold hover:bg-accent-100 transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
+                          >
+                            <Download className="w-4 h-4" />
+                            Export CSV
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="border border-ui-borderSubtle rounded-2xl overflow-y-auto max-h-[400px] bg-surface-default shadow-brand-sm mb-8 relative hide-scrollbar">
+                        <table className="boq-table-print-breaks w-full text-sm text-left relative whitespace-nowrap md:whitespace-normal">
+                          <thead className="bg-surface-hover text-txt-secondary border-b border-ui-borderSubtle uppercase text-sm tracking-wider sticky top-0 z-10 shadow-brand-sm before:content-[''] before:absolute before:inset-0 before:bg-surface-hover before:-z-10">
+                            <tr>
+                              <th className="px-6 py-4 font-bold">
+                                Material / Item
+                              </th>
+                              <th className="px-6 py-4 font-bold text-center">
+                                Quantity
+                              </th>
+                              <th className="px-6 py-4 font-bold text-center">
+                                Unit
+                              </th>
+                              <th className="px-6 py-4 font-bold text-left hidden md:table-cell w-1/4">
+                                Notes
+                              </th>
+                              <th className="px-6 py-4 font-bold text-right">
+                                Amount (Rs)
+                              </th>
+                            </tr>
+                          </thead>
+                          <Reorder.Group as="tbody" values={sortedAddOnsCostData.map(i => i.name)} onReorder={setAddOnsOrder} className="text-txt-primary divide-y divide-border-color">
+                            {sortedAddOnsCostData.map((item) => (
+                              <AnimatedTableRow
+                                key={item.name}
+                                item={item}
+                                formatCurrency={formatCurrency}
+                                roundQuantity={true}
+                                selected={selectedItems.has(item.name)}
+                                onSelect={handleToggleSelect}
+                                onDuplicate={(item) => handleDuplicateRow(item, 'addons')}
+                                note={itemNotes[item.name]}
+                                onNoteChange={(note) => handleNoteChange(item.name, note)}
+                              />
+                            ))}
+                          </Reorder.Group>
+                          <tfoot className="sticky bottom-0 bg-surface-hover border-t-2 border-ui-borderDefault shadow-[0_-4px_6px_-1px_rgba(31,29,26,0.05)]">
+                            <tr>
+                              <td className="px-6 py-4 font-extrabold text-txt-primary uppercase tracking-widest text-sm">
+                                Total House Add-ons
+                              </td>
+                              <td className="px-6 py-4 text-center font-bold text-txt-secondary">
+                                -
+                              </td>
+                              <td className="px-6 py-4 text-center font-medium text-txt-secondary">
+                                -
+                              </td>
+                              <td className="px-6 py-4 text-left font-medium text-txt-secondary hidden md:table-cell">
+                                -
+                              </td>
+                              <td className="px-6 py-4 text-right font-extrabold text-accent-800 text-lg shadow-inner">
+                                {formatCurrency(addOnsCostData.reduce((acc, item) => acc + item.value, 0))}
+                              </td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                        </>
+                      )}
+                    </div>
+                  )}
                   {activeTab === "rcc" && (
                     <div className="animate-in fade-in slide-in-from-bottom-8 duration-500 h-full flex flex-col pt-4">
                       <MasterRccStructure isEmbedded={true} />
@@ -2140,6 +2468,12 @@ export default function HouseEstimator() {
                   <div className="text-txt-tertiary text-base font-medium uppercase tracking-wider text-sm mb-0.5">Finishings</div>
                   <div className="text-lg font-bold tabular-nums text-txt-primary dark:text-white">{formatCurrency(filteredTotalFinishing)}</div>
                 </div>
+                {addOns.includeAddOns && (
+                  <div>
+                    <div className="text-txt-tertiary text-base font-medium uppercase tracking-wider text-sm mb-0.5">House Add-ons</div>
+                    <div className="text-lg font-bold tabular-nums text-txt-primary dark:text-white">{formatCurrency(filteredTotalAddOns)}</div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -2372,7 +2706,7 @@ export default function HouseEstimator() {
       <FormulaTransparencyCard 
         title="House Estimator Formula Logic"
         formulas={[
-          { name: "Total Cost", formula: "Grey Structure + Finishing", variables: { Grey: formatCurrency(estimates.totalGrey), Finishing: formatCurrency(estimates.totalFinishing) }, result: formatCurrency(estimates.totalCost) }
+          { name: "Total Cost", formula: "Grey Structure + Finishing + House Add-ons", variables: { Grey: formatCurrency(filteredTotalGrey), Finishing: formatCurrency(filteredTotalFinishing), "House Add-ons": formatCurrency(filteredTotalAddOns) }, result: formatCurrency(currentTotalCost) }
         ]}
       />
       <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-4 sm:p-6 text-sm text-txt-secondary">
@@ -2383,22 +2717,25 @@ export default function HouseEstimator() {
           <li>Termite treatment Rs 12/sqft, polythene sheet Rs 8/sqft, underground water tank Rs 150,000 lump sum (indicative market rates, Nov 2026).</li>
           <li>Plaster dry volume uses the 1.33 rule; cement is converted at 1.25 cft/bag (exact 1.226 cft/bag — the difference is under 2%).</li>
           <li>Material rates come from the dated CEP rate table (Nov 2026); steel 270 PKR/kg, cement 1,450 PKR/bag, bricks 23,355 PKR/1,000 (PBS Aug 2026, Lahore).</li>
+          <li>House add-ons (off by default): solar is priced from the SolarRoofCalculator Lahore preset (Nov 2026, indicative) — panels Rs 90/W, inverter Rs 25,000/kVA, battery Rs 65,000/kWh, mounting Rs 4,500/panel, wiring 8%, labour 10%, net-metering Rs 100,000, contingency 5%. Smart home and landscaping have no standard rate in the CEP rate table, so they use the cost you enter (0 = not included).</li>
           <li>BOQ export: the grey-structure and finishing tables download as CSV files (Export CSV buttons above). There is no Excel export.</li>
         </ul>
       </div>
       <CalculationHistory
         calculatorId="house_estimator_v1"
         estimationName="Complete House Estimator"
-        currentInputs={{ activeTab, finishQuality }}
+        currentInputs={{ activeTab, finishQuality, addOns }}
         currentResults={{ 
           totalCost: estimates.totalCost.toFixed(2),
           totalGrey: estimates.totalGrey.toFixed(2),
-          totalFinishing: estimates.totalFinishing.toFixed(2)
+          totalFinishing: estimates.totalFinishing.toFixed(2),
+          totalAddOns: filteredTotalAddOns.toFixed(2)
         }}
         summaryGeneration={(inputs, res) => `Total Cost: ${res.totalCost}`}
         onRestore={(inputs) => {
           if (inputs.activeTab) setActiveTab(inputs.activeTab);
           if (inputs.finishQuality) setFinishQuality(inputs.finishQuality);
+          if (inputs.addOns) setAddOns(inputs.addOns);
         }}
         savePayload={pdfExportPayload}
       />

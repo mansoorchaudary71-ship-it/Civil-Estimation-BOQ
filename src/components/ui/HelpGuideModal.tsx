@@ -11,7 +11,7 @@ export function HelpGuideModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-ink/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-ink/40 backdrop-blur-sm p-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-label="Quick Help Guide">
       <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col relative max-h-[90vh]">
         
         <Button onClick={onClose} className="absolute top-4 right-4 p-2 text-txt-tertiary hover:text-txt-secondary dark:hover:text-txt-primary bg-surface-hover rounded-full transition-colors">

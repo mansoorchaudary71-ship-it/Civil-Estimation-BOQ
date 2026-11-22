@@ -11,6 +11,7 @@ import {
 import { BRICK_PRESETS, THICKNESS_PRESETS, type BrickPreset } from "../../lib/brickCalc";
 import { getRates } from "../../lib/rates";
 import { useBOQ } from "../../context/BOQContext";
+import { useSettings } from "../../context/SettingsContext";
 import { Calculator, Check, Copy, Download, Printer, Share2 } from "lucide-react";
 
 type Unit = "m" | "ft";
@@ -43,7 +44,13 @@ const newOpening = (kind: OpeningInput["kind"]): OpeningInput => ({
 export default function FinishesEstimator() {
   const { addItem } = useBOQ();
   const [unit, setUnit] = useState<Unit>("m");
-  const [currency, setCurrency] = useState<FinishesCurrency>("PKR");
+  // Currency defaults to the global setting; the picker still lets the user
+  // override it per tool. The rate-table defaults below are PKR rates, so
+  // they are only prefilled when the starting currency is PKR (same rule
+  // as onCurrencyChange below).
+  const { settings } = useSettings();
+  const initialCurrency: FinishesCurrency = (["PKR", "INR", "AED", "USD"] as string[]).includes(settings.currency) ? (settings.currency as FinishesCurrency) : "PKR";
+  const [currency, setCurrency] = useState<FinishesCurrency>(initialCurrency);
   const pk = getRates("PK").rates;
   const [activeTab, setActiveTab] = useState<Tab>("masonry");
   const [touched, setTouched] = useState<Set<Tab>>(new Set(["masonry"]));
@@ -100,12 +107,12 @@ export default function FinishesEstimator() {
   const [wallDeductPct, setWallDeductPct] = useState("15");
   const [superAddPct, setSuperAddPct] = useState("20");
 
-  const [rBrick, setRBrick] = useState(String(pk.bricksPer1000 ?? ""));
-  const [rCement, setRCement] = useState(String(pk.cementPerBag ?? ""));
-  const [rSand, setRSand] = useState(String(pk.sandPerCft ?? ""));
+  const [rBrick, setRBrick] = useState(initialCurrency === "PKR" ? String(pk.bricksPer1000 ?? "") : "");
+  const [rCement, setRCement] = useState(initialCurrency === "PKR" ? String(pk.cementPerBag ?? "") : "");
+  const [rSand, setRSand] = useState(initialCurrency === "PKR" ? String(pk.sandPerCft ?? "") : "");
   const [rPaint, setRPaint] = useState("1200");
   const [rPrimer, setRPrimer] = useState("800");
-  const [rTileBox, setRTileBox] = useState(String(pk.tilesPerBox ?? ""));
+  const [rTileBox, setRTileBox] = useState(initialCurrency === "PKR" ? String(pk.tilesPerBox ?? "") : "");
   const [rCounter, setRCounter] = useState("5000");
   const [rEdge, setREdge] = useState("200");
   const [rStud, setRStud] = useState("500");

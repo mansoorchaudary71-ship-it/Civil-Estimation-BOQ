@@ -200,7 +200,7 @@ export default function BottomNavBar({
       </div>
 
       {isShareOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 font-sans px-4 sm:px-6 rounded-full transition-all duration-300 shadow-brand-sm hover:shadow-brand-md hover:-translate-y-0.5">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 font-sans px-4 sm:px-6 rounded-full transition-all duration-300 shadow-brand-sm hover:shadow-brand-md hover:-translate-y-0.5" role="dialog" aria-modal="true" aria-label="Share Result">
           <div 
             className="absolute inset-0 bg-surface-hover/60 backdrop-blur-[4px]"
             onClick={() => setIsShareOpen(false)}

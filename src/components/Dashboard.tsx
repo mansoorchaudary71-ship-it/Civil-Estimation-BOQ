@@ -772,18 +772,6 @@ export const ALL_MODULES = [
  },
 
  {
- id: "cost-guide-pakistan",
- title: "Pakistan House Cost Guide 2026",
- desc: "Latest material and labour rates overview for 2026 — city-wise construction costs, rate trends and budgeting guidance for Pakistan, with 2026 rates.",
- category: "Quantity Takeoff & Costing",
- icon: BookOpen,
- styleStyle: "glass",
- colorClass: "bg-surface-default/80 backdrop-blur-md text-ui-successText",
- difficulty: "Beginner",
- estimatedTime: "Read",
- isNew: true,
- },
- {
  id: "blog",
  title: "Civil Engineering Blog & Guides",
  desc: "Articles, tutorials and case studies on modern construction — estimation methods, site practice and engineering standards explained clearly.",
@@ -1536,6 +1524,9 @@ Open Calculator
 
  {/* AI Chat Bottom Sheet Modal */}
  <div
+ role="dialog"
+ aria-modal="true"
+ aria-label="AI Estimator"
  className={`fixed inset-0 z-50 transition-all duration-500 ${isAiChatOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"}`}
  >
  {/* Backdrop */}

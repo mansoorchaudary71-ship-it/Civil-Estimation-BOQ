@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useSettings } from '../context/SettingsContext';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 import { DollarSign, FolderOpen, TrendingUp, Activity } from 'lucide-react';
 
@@ -13,6 +14,7 @@ const MOCK_DATA = [
 ];
 
 export default function SummaryStatsWidget() {
+  const { formatCurrency } = useSettings();
   const totalCost = useMemo(() => MOCK_DATA.reduce((acc, curr) => acc + curr.cost, 0), []);
   const activeProjects = useMemo(() => MOCK_DATA[MOCK_DATA.length - 1].projects, []);
   
@@ -74,7 +76,7 @@ export default function SummaryStatsWidget() {
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(val) => `${val / 1000}k`} />
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  formatter={(value: any) => [`Rs ${value.toLocaleString()}`, 'Cost']}
+                  formatter={(value: any) => [formatCurrency(value), 'Cost']}
                 />
                 <Area type="monotone" dataKey="cost" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorCost)" />
               </AreaChart>

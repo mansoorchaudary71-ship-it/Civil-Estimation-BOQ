@@ -636,7 +636,7 @@ export function CalculationHistory({
       )}
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
+        <div className="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true" aria-label="Calculation History">
           <div
             className="absolute inset-0 bg-ink/30 backdrop-blur-sm transition-opacity"
             onClick={() => setIsOpen(false)}
@@ -736,7 +736,7 @@ export function CalculationHistory({
       )}
 
       {compareItem && (
-        <div className="fixed inset-0 z-[70] overflow-hidden flex items-center justify-center font-sans p-4">
+        <div className="fixed inset-0 z-[70] overflow-hidden flex items-center justify-center font-sans p-4" role="dialog" aria-modal="true" aria-label="Compare Results">
           <div
             className="absolute inset-0 bg-ink/60 backdrop-blur-sm transition-opacity"
             onClick={() => setCompareItem(null)}
@@ -833,7 +833,7 @@ export function CalculationHistory({
       )}
 
       {isSaveModalOpen && (
-        <div className="fixed inset-0 z-[60] overflow-hidden flex items-center justify-center font-sans px-4">
+        <div className="fixed inset-0 z-[60] overflow-hidden flex items-center justify-center font-sans px-4" role="dialog" aria-modal="true" aria-label="Save Estimate">
           <div
             className="absolute inset-0 bg-ink/40 backdrop-blur-sm transition-opacity"
             onClick={() => setIsSaveModalOpen(false)}

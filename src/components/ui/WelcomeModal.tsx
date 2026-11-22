@@ -65,7 +65,7 @@ export function WelcomeModal() {
   const recommendedTools = getRecommendedTools();
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-surface-hover backdrop-blur-md p-4 animate-in fade-in duration-300 font-sans">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-surface-hover backdrop-blur-md p-4 animate-in fade-in duration-300 font-sans" role="dialog" aria-modal="true" aria-label="Welcome">
       <div className="bg-surface-default border border-border-color rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col min-h-[500px] animate-in zoom-in-95 duration-200 ease-out transform-gpu">
         
         <div className="p-8 pb-4">

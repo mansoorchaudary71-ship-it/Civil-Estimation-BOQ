@@ -453,7 +453,7 @@ export default function LabourCalculator() {
         estimationName="Labour & Workforce Estimate"
         currentInputs={{ tasks, contingencyPct }}
         currentResults={{ total: totalCost, burn: overallBurnRate }}
-        summaryGeneration={(inputs, res) => `Total: Rs ${res.total} - Tasks: ${inputs.tasks?.length ?? 0}`}
+        summaryGeneration={(inputs, res) => `Total: ${formatCurrency(Number(res.total))} - Tasks: ${inputs.tasks?.length ?? 0}`}
         onRestore={(savedInputs) => {
           if (Array.isArray(savedInputs.tasks)) setTasks(savedInputs.tasks);
           if (typeof savedInputs.contingencyPct === "number") setContingencyPct(savedInputs.contingencyPct);

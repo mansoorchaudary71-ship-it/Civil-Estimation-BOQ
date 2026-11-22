@@ -22,6 +22,9 @@
  *      /category/<slug>               (hub form, public/sitemap-categories.xml)
  *      /<country>/                    (pk/in/ae/uk portals -> Dashboard)
  *      /tools/<slug>                  (legacy form -> canonical tool)
+ *      /estimate/<n>-<unit>-house-construction-cost-<city>
+ *                                      (pSEO deep link -> house; the page
+ *                                      itself parses size/unit/city)
  *      /brick-calculator/<variant>    (programmatic brick pages; the page
  *                                      itself reads the variant from the path)
  *      /<static-page>                 (about, pricing, blog, standards, ...)
@@ -332,6 +335,31 @@ export function stripBasename(pathname: string): string {
   return pathname;
 }
 
+/**
+ * The route path for the CURRENT browser URL (2026-11-22 deep-link fix).
+ *
+ * Clean-path URLs use the pathname (minus the hosting basename).
+ * When the app boots at the root (pathname is "/" after stripping the
+ * basename) and the URL carries a hash route (#/estimate/...), the hash
+ * IS the route. This is how deep links work in two cases:
+ *   - after the 404.html redirect sends a 2+-segment clean path
+ *     (/estimate/..., /calculators/<group>/<slug>) to its hash form,
+ *     because those paths cannot boot the app directly (relative asset
+ *     paths resolve under the deep path and the browser refuses them
+ *     as text/html);
+ *   - legacy hash links on the project-page host, where the pathname
+ *     is "/Civil-Estimation-BOQ/" (not "/") so a bare `pathname !== "/"`
+ *     check would never fall back to the hash.
+ * Returns "/" when there is no window (tests / SSR).
+ */
+export function getEffectivePathname(): string {
+  if (typeof window === "undefined") return "/";
+  const stripped = stripBasename(window.location.pathname);
+  if (stripped !== "/" && stripped !== "") return stripped;
+  const hash = window.location.hash.replace(/^#/, "");
+  return hash.startsWith("/") ? hash : "/";
+}
+
 function splitPath(pathname: string): string[] {
   const clean = stripBasename(pathname).replace(/\/+$/, "") || "/";
   if (clean === "/") return [];
@@ -353,13 +381,32 @@ export function resolvePath(pathname: string): ResolvedRoute {
     if (segs.length === 1) return { kind: "tool", id: "calculators" };
     if (segs.length === 2) {
       if (second === "standards") return { kind: "page", id: "standards" };
-      if (second === "resources") return { kind: "page", id: "home" };
+      // NOTE: /calculators/resources used to alias to home. There is no
+      // resources page and no link points here, so the alias was removed
+      // (2026-11-22): the URL now 404s instead of silently showing home.
       const category = GROUP_TO_CATEGORY[second];
       if (category) return { kind: "category", id: "home", category };
       return { kind: "not-found" };
     }
     const id = SEO_SLUG_TO_ID[third] ?? LEGACY_SLUG_TO_ID[third];
     return id ? { kind: "tool", id } : { kind: "not-found" };
+  }
+
+  // /estimate/<n>-<unit>-house-construction-cost-<city>  (pSEO deep link
+  // to the House Estimator, e.g. /estimate/5-marla-house-construction-
+  // cost-lahore). HouseEstimator.tsx parses size/unit/city from the path
+  // itself; this branch only has to route it to the tool — before it, the
+  // URL fell through to not-found and the parser never ran. The slug
+  // shape is validated against the parser's own regex so a malformed
+  // /estimate/... URL 404s instead of opening the tool with garbage.
+  if (first === "estimate") {
+    if (
+      segs.length === 2 &&
+      /^\d+(\.\d+)?-[^-]+-house-construction-cost-.+$/.test(second)
+    ) {
+      return { kind: "tool", id: "house" };
+    }
+    return { kind: "not-found" };
   }
 
   // /category/<slug>  (hub form, public/sitemap-categories.xml)

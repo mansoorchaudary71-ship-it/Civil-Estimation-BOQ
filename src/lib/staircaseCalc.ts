@@ -151,13 +151,12 @@ export function designStaircase(input: Partial<StaircaseInputs> = {}): Staircase
   const mu = (1.5 * load * effSpan * effSpan) / 8; // kNm per m width (factored)
   const d = i.waistM * 1000 - i.coverMm - i.mainDiaMm / 2;
   // No singly-reinforced solution exists past Mu,lim (IS 456: xu ≤
-  // xu,max = 0.46·d for Fe500) — astForMu only returns Infinity past the
-  // looser discriminant limit (Mu = fck·b·d²/4.6), so a moment between
-  // Mu,lim and that limit used to return a finite but over-reinforced
-  // Ast (the 24-step flight: Mu 81.7 vs Mu,lim 51.4, Ast 2,642 mm²).
-  // Treat Mu > Mu,lim as Infinity here so the hard error fires.
+  // xu,max = 0.46·d for Fe500). The guard lives in the shared astForMu
+  // (structuralShared.ts) — it returns Infinity past Mu,lim, so every
+  // caller (staircase, footing, raft, retaining wall) fails the same way
+  // instead of each keeping a local copy of the check.
   const muLim = muLimKNm(i.fck, 1000, d, i.fy);
-  const astFlex = mu > muLim ? Infinity : astForMu(mu, i.fck, i.fy, 1000, d);
+  const astFlex = astForMu(mu, i.fck, i.fy, 1000, d);
   const astMin = (0.12 / 100) * 1000 * i.waistM * 1000;
   const astReq = Math.max(astFlex, astMin);
   if (!isFinite(astFlex)) {

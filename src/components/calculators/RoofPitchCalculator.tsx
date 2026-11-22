@@ -27,6 +27,7 @@ import {
   type RoofType,
 } from "../../lib/architecturalCalc";
 import { formatMoney } from "../../lib/brickCalc";
+import { useSettings } from "../../context/SettingsContext";
 
 type UnitSystem = "metric" | "imperial";
 type PitchMode = "rise" | "x12" | "deg" | "pct";
@@ -185,7 +186,12 @@ export function RoofPitchCalculator() {
   const [roofType, setRoofType] = useState<RoofType>("gable");
   const [wastePct, setWastePct] = useState<number>(10);
   const [spacing, setSpacing] = useState<number>(0.4);
-  const [currency, setCurrency] = useState<Currency>("PKR");
+  // Currency defaults to the global setting (PKR/INR/AED); the picker
+  // still lets the user override it per tool. Rates start empty, so no
+  // rate defaults need clearing for other currencies.
+  const { settings } = useSettings();
+  const initialCurrency: Currency = (["PKR", "INR", "AED"] as string[]).includes(settings.currency) ? (settings.currency as Currency) : "PKR";
+  const [currency, setCurrency] = useState<Currency>(initialCurrency);
   const [rates, setRates] = useState<RoofMaterialRates>(EMPTY_ROOF_RATES);
   const [copied, setCopied] = useState(false);
 

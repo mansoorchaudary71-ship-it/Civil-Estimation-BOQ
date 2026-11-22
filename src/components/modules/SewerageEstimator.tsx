@@ -16,6 +16,7 @@ import {
   Check,
 } from "lucide-react";
 import { useTakeoff } from "../../context/TakeoffContext";
+import { useSettings } from "../../context/SettingsContext";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
@@ -80,8 +81,12 @@ export default function SewerageEstimator() {
   const [septicUsers, setSepticUsers] = useState<number | "">(5);
   const [septicDemand, setSepticDemand] = useState<number | "">(120);
   const [septicPercolation, setSepticPercolation] = useState<number | "">(30);
-  // Cost rates
-  const [currency, setCurrency] = useState("PKR");
+  // Cost rates — currency defaults to the global setting (PKR/INR/AED);
+  // the picker still lets the user override it per tool. Rates here are
+  // user-entered, so no rate defaults need clearing for other currencies.
+  const { settings } = useSettings();
+  const initialCurrency: string = ["PKR", "INR", "AED"].includes(settings.currency) ? settings.currency : "PKR";
+  const [currency, setCurrency] = useState(initialCurrency);
   const [excavationRate, setExcavationRate] = useState<number | "">("");
   const [pipeRatePerM, setPipeRatePerM] = useState<number | "">("");
   const [manholeRate, setManholeRate] = useState<number | "">("");

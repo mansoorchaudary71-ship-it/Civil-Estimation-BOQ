@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useSettings } from "../../context/SettingsContext";
 import { Button } from "../ui/Button";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import {
@@ -71,8 +72,13 @@ export default function BarBendingSchedule() {
   const [grade, setGrade] = useState("grade60");
 
   const [wastagePct, setWastagePct] = useState("5");
-  const [rate, setRate] = useState("270");
-  const [currency, setCurrency] = useState<SteelCurrency>("PKR");
+  // Currency defaults to the global setting; the picker still lets the user
+  // override it per tool. The 270/kg default is a PKR steel rate, so it is
+  // only prefilled when the starting currency is PKR.
+  const { settings } = useSettings();
+  const initialCurrency: SteelCurrency = (["PKR", "INR", "AED", "USD"] as string[]).includes(settings.currency) ? (settings.currency as SteelCurrency) : "PKR";
+  const [rate, setRate] = useState(initialCurrency === "PKR" ? "270" : "");
+  const [currency, setCurrency] = useState<SteelCurrency>(initialCurrency);
   const [stock, setStock] = useState<"12" | "40">("12");
   const [formErrors, setFormErrors] = useState<string[]>([]);
   const [notice, setNotice] = useState<string | null>(null);

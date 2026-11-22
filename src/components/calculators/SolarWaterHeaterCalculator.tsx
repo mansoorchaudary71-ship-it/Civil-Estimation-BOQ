@@ -13,6 +13,7 @@ import {
   validateSolarWaterHeaterInputs,
   type SolarCollectorType,
 } from '../../lib/solarWaterHeaterCalc';
+import { useSettings } from "../../context/SettingsContext";
 
 
 type UnitSystem = 'metric' | 'imperial';
@@ -31,7 +32,12 @@ export function SolarWaterHeaterCalculator() {
   const [efficiency, setEfficiency] = useState<number>(50);
   const [solarFraction, setSolarFraction] = useState<number>(0.6);
   const [energyCost, setEnergyCost] = useState<number>(50);
-  const [currency, setCurrency] = useState("PKR");
+  // Currency defaults to the global setting (PKR/INR/AED); the picker
+  // still lets the user override it per tool. Rates are user-entered
+  // (blank by default), so no rate defaults need clearing.
+  const { settings } = useSettings();
+  const initialCurrency: string = ["PKR", "INR", "AED"].includes(settings.currency) ? settings.currency : "PKR";
+  const [currency, setCurrency] = useState(initialCurrency);
   const [ratePerM2, setRatePerM2] = useState<number | "">("");
   const [tankCostPerLitre, setTankCostPerLitre] = useState<number | "">("");
   const [copied, setCopied] = useState(false);

@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { initAuth, googleSignIn, logoutGoogle } from "../lib/firebase";
+// NOTE: lib/firebase is imported dynamically (below), never statically:
+// a static import would drag the ~500 kB firebase vendor chunk into the
+// initial bundle for every visitor. The chunk loads once, right after
+// mount (session restore) or on first sign-in / sign-out instead.
 
 // Mimic the Firebase User shape minimally to satisfy existing components
 export interface User {
@@ -61,31 +64,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     checkAuth();
 
-    // Init Firebase Auth for Google Workspace
-    const unsubscribe = initAuth(
-      (fbUser, token) => {
-        setWorkspaceToken(token);
-        // If not already logged in via JWT, set user
-        setUser(prev => prev || {
-          uid: fbUser.uid,
-          email: fbUser.email || '',
-          displayName: fbUser.displayName || '',
-          photoURL: fbUser.photoURL || ''
-        });
-        setLoading(false);
-      },
-      () => {
-        setWorkspaceToken(null);
-      }
-    );
-    
+    // Init Firebase Auth for Google Workspace (dynamic import — see note
+    // at the top of this file). `cancelled` guards the case where the
+    // provider unmounts before the chunk arrives.
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+    import("../lib/firebase")
+      .then(({ initAuth }) => {
+        if (cancelled) return;
+        unsubscribe = initAuth(
+          (fbUser, token) => {
+            setWorkspaceToken(token);
+            // If not already logged in via JWT, set user
+            setUser(prev => prev || {
+              uid: fbUser.uid,
+              email: fbUser.email || '',
+              displayName: fbUser.displayName || '',
+              photoURL: fbUser.photoURL || ''
+            });
+            setLoading(false);
+          },
+          () => {
+            setWorkspaceToken(null);
+          }
+        );
+      })
+      .catch((err) => console.error("Error initializing Firebase Auth", err));
+
     return () => {
+      cancelled = true;
       if (unsubscribe) unsubscribe();
     };
   }, []);
 
   const signInWithGoogle = async () => {
     try {
+      const { googleSignIn } = await import("../lib/firebase");
       const result = await googleSignIn();
       if (result) {
         setWorkspaceToken(result.accessToken);
@@ -144,6 +158,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await fetch('/api/auth/logout', { method: 'POST' });
     } catch (e) {}
     localStorage.removeItem('auth_token');
+    const { logoutGoogle } = await import("../lib/firebase");
     await logoutGoogle();
     setUser(null);
     setWorkspaceToken(null);

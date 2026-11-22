@@ -247,7 +247,7 @@ export default function MobileToolsSheet({
                 onClose();
               }
             }}
-            className="w-full fixed bottom-0 left-0 right-0 z-[70] md:hidden flex flex-col bg-surface-default/90 backdrop-blur-2xl border-t border-ui-borderSubtle dark:border-ink-600/50 shadow-[0_-8px_30px_rgba(31,29,26,0.12)] rounded-t-[32px] will-change-transform overflow-hidden"
+            className="w-full fixed bottom-0 left-0 right-0 z-[70] md:hidden flex flex-col bg-surface-default/90 backdrop-blur-2xl border-t border-ui-borderSubtle dark:border-ink-600/50 shadow-[0_-8px_30px_rgba(31,29,26,0.12)] rounded-t-[32px] will-change-transform overflow-hidden" role="dialog" aria-modal="true" aria-label="Tools Directory"
             style={{ maxHeight: "85vh", height: "85vh" }}
           >
             <div className="flex justify-center pt-3 pb-2 w-full touch-none cursor-grab active:cursor-grabbing">

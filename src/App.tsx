@@ -5,11 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { lazyWithRetry } from "./lib/lazyWithRetry";
 import { useLocation, useNavigate } from "react-router-dom";
-import TeamCollaboration from "./components/pages/TeamCollaboration";
-import JoinProject from "./components/pages/JoinProject";
 import Dashboard, { ALL_MODULES as ALL_TOOLS } from "./components/Dashboard";
 import TopNavbar from "./components/TopNavbar";
-import RecentEstimates from "./components/RecentEstimates";
 import AboutUs from "./components/pages/AboutUs";
 import Careers from "./components/pages/Careers";
 import Contact from "./components/pages/Contact";
@@ -21,8 +18,16 @@ const BrickCalculatorPage = lazy(() => lazyWithRetry(() => import("./components/
 const MixDesignCalculatorPage = lazy(() => lazyWithRetry(() => import("./components/pages/MixDesignCalculatorPage")));
 const MarlaConverterPage = lazy(() => lazyWithRetry(() => import("./components/pages/MarlaConverterPage")));
 const PakistanCostCalculatorPage = lazy(() => lazyWithRetry(() => import("./components/pages/PakistanCostCalculatorPage")));
+// Firebase-backed pages/widgets are lazy so the ~500 kB firebase vendor
+// chunk stays out of the initial bundle: each loads only when its page
+// (team / join-project / my-estimates) or a tool page (DiscussionWidget)
+// is actually visited.
+const TeamCollaboration = lazy(() => lazyWithRetry(() => import("./components/pages/TeamCollaboration")));
+const JoinProject = lazy(() => lazyWithRetry(() => import("./components/pages/JoinProject")));
+const RecentEstimates = lazy(() => lazyWithRetry(() => import("./components/RecentEstimates")));
+const DiscussionWidget = lazy(() => lazyWithRetry(() => import("./components/DiscussionWidget")));
 import StandardsReferencePage from "./components/StandardsReferencePage";
-import { resolvePath, pathFromId } from "./lib/toolRoutes";
+import { resolvePath, getEffectivePathname, pathFromId } from "./lib/toolRoutes";
 import { readBoqInbox, sendToBoq } from "./lib/boq";
 import Footer from "./components/Footer";
 import SmoothScroll from "./components/ui/SmoothScroll";
@@ -61,7 +66,6 @@ import { ProTipsWidget } from "./components/ui/ProTipsWidget";
 import { ToolArticleWidget } from "./components/ui/ToolArticleWidget";
 
 import { RelatedCalculators } from "./components/calculators/RelatedCalculators";
-import DiscussionWidget from "./components/DiscussionWidget";
 
 import { GlobalFAQ } from "./components/ui/GlobalFAQ";
 import { FeedbackWidget } from "./components/ui/FeedbackWidget";
@@ -523,18 +527,16 @@ export default function App() {
 
   // Dashboard category preselected by a /calculators/<group> URL (null = "All Tools").
   const [dashboardCategory, setDashboardCategory] = useState<string | null>(() => {
-    const path = window.location.pathname !== "/" ? window.location.pathname : (window.location.hash.replace(/^#/, "") || "/");
-    const resolved = resolvePath(path);
+    const resolved = resolvePath(getEffectivePathname());
     return resolved.kind === "category" ? resolved.category : null;
   });
 
   const [activeModule, setActiveModule] = useState<ModuleId>(() => {
-    // Clean URLs (BrowserRouter): resolve the real path. Legacy hash links
-    // (#/tool-id) still work as a fallback.
-    const path = window.location.pathname && window.location.pathname !== "/"
-      ? window.location.pathname
-      : (window.location.hash.replace(/^#/, "") || "/");
-    const resolved = resolvePath(path);
+    // Clean URLs (BrowserRouter) resolve the real path; hash deep links
+    // (#/estimate/...) resolve via getEffectivePathname() — including on
+    // the project-page host, where the pathname is "/Civil-Estimation-BOQ/"
+    // and a bare `pathname !== "/"` check would never fall back to the hash.
+    const resolved = resolvePath(getEffectivePathname());
     if (resolved.kind === "not-found") return NOT_FOUND_ID;
     if (resolved.kind === "category") return "home";
     return resolved.id as ModuleId;
@@ -544,7 +546,10 @@ export default function App() {
   // (in-app clicks, back/forward, direct loads and refreshes). Unknown
   // paths render the in-app 404 page — they never silently show home.
   useEffect(() => {
-    const resolved = resolvePath(location.pathname);
+    // getEffectivePathname() — not location.pathname: a hash deep link
+    // (#/estimate/...) has pathname "/" and would otherwise resolve to
+    // home on every navigation, including the mount effect itself.
+    const resolved = resolvePath(getEffectivePathname());
     if (resolved.kind === "category") {
       setDashboardCategory(resolved.category);
       setActiveModule("home");
@@ -939,6 +944,7 @@ export default function App() {
                             >
                               <ErrorBoundary onNavigate={handleSelectModule} fallbackModuleId="home">
                               {STATIC_PAGES.includes(activeModule) ? (
+                                <Suspense fallback={<ToolLoadingFallback />}>
                                                                 <motion.div ref={scrollRef} className="flex-1 flex flex-col relative w-full overflow-visible" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.15 } } }}>
                                   <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex flex-col relative w-full">
                                     {activeModule === "home" && <Dashboard previousModule={previousModule} onSelectModule={handleSelectModule} initialCategory={dashboardCategory} onOpenSettings={() => setIsSettingsOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />}
@@ -959,6 +965,7 @@ export default function App() {
                                     <Footer  onNavigate={handleSelectModule} />
                                   </motion.div>
                                 </motion.div>
+                                </Suspense>
                               ) : (
                                 <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex-1 flex flex-col relative w-full bg-transparent">
                                   <div className="w-full flex-1 flex flex-col">

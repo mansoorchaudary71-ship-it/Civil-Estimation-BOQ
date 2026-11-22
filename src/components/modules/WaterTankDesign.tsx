@@ -8,9 +8,11 @@ import { useRates } from '../../lib/useRates';
 import { designWaterTank, defaultWaterTankInputs, type TankShape, type TankPlacement, type BarType  } from '../../lib/waterTankCalc';
 import { CalcSteps, EngineNotices, StructuralExportBar } from '../ui/StructuralExportBar';
 import { formatRate } from '../../lib/rates';
+import { useSettings } from '../../context/SettingsContext';
 
 export default function WaterTankDesign() {
   const { rates, setRate, table } = useRates();
+  const { formatCurrency } = useSettings();
   const [shape, setShape] = useState<TankShape>("rectangular");
   const [placement, setPlacement] = useState<TankPlacement>("overhead");
   const [occupants, setOccupants] = useState<number | "">(5);
@@ -40,7 +42,7 @@ export default function WaterTankDesign() {
     sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
   }), [shape, placement, occupants, lpcd, days, length, width, diameter, depth, freeboard, wallT, baseT, fck, barType, cover, mainDia, wastage, rates]);
 
-  const summary = `Water tank ${shape} ${placement}: capacity ${results.capacityLitres} L (${results.capacityM3} m³, ${results.capacityGallons} gal (Imperial)) vs demand ${results.demandLitres} L — ${results.demandOk ? "covers demand" : "SHORT"}; wall steel ${results.astProvidedMm2PerM} mm²/m (${mainDia} mm @ ${results.barSpacingMm} mm); crack width ${results.crackWidthOk ? "≤ 0.2 mm PASS" : "CHECK"}; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
+  const summary = `Water tank ${shape} ${placement}: capacity ${results.capacityLitres} L (${results.capacityM3} m³, ${results.capacityGallons} gal (Imperial)) vs demand ${results.demandLitres} L — ${results.demandOk ? "covers demand" : "SHORT"}; wall steel ${results.astProvidedMm2PerM} mm²/m (${mainDia} mm @ ${results.barSpacingMm} mm); crack width ${results.crackWidthOk ? "≤ 0.2 mm PASS" : "CHECK"}; concrete ${results.concreteVolM3} m³; steel ${results.steelKg} kg; cost ${results.totalCost == null ? "—" : formatCurrency(results.totalCost)}.`;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">

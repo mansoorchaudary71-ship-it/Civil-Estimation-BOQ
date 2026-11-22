@@ -50,7 +50,7 @@ export function DynamicRateOverrideModal({ isOpen, onClose, currentRates, onSave
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-sm animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-label="Material Rates Override">
       <div className="w-full max-w-md bg-surface-default dark:bg-ink rounded-2xl shadow-2xl border border-ui-borderSubtle dark:border-ink flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
         
         {/* Header */}

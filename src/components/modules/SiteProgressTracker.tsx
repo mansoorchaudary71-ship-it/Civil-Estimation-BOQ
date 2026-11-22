@@ -49,7 +49,6 @@ export default function SiteProgressTracker() {
   });
   const { settings, formatCurrency } = useSettings();
   const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
-  const [isClientDemo, setIsClientDemo] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -375,11 +374,6 @@ export default function SiteProgressTracker() {
             SAMPLE project — dates are relative to today and budgets are illustrative. Replace the phases with your own numbers.
           </div>
        )}
-       {isClientDemo && (
-          <div className="bg-ink text-white p-3 text-center rounded-2xl font-bold text-sm mb-4 animate-pulse overflow-hidden">
-             Client View Active - Read Only Mode
-          </div>
-       )}
 
        <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
           
@@ -584,7 +578,7 @@ export default function SiteProgressTracker() {
                    <div className="flex justify-between items-center mb-6">
                       <h3 className="text-lg font-medium text-txt-primary mb-4">{activePhase.name}</h3>
                       <div className="flex items-center gap-1">
-                        <Button aria-label={`Delete phase ${activePhase.name}`} onClick={() => removePhase(activePhase.id)} className="text-ui-errorText hover:text-ui-errorText rounded-full" disabled={isClientDemo}>Delete</Button>
+                        <Button aria-label={`Delete phase ${activePhase.name}`} onClick={() => removePhase(activePhase.id)} className="text-ui-errorText hover:text-ui-errorText rounded-full">Delete</Button>
                         <Button aria-label="Next" onClick={() => setSelectedPhase(null)} className="text-txt-tertiary hover:text-txt-secondary rounded-full"><ChevronRight className="w-5 h-5 rotate-180" /></Button>
                       </div>
                    </div>
@@ -599,7 +593,6 @@ export default function SiteProgressTracker() {
                             value={activePhase.progress} 
                             onChange={(e) => handleUpdatePhase(activePhase.id, 'progress', parseInt(e.target.value))}
                             className="w-full accent-accent-600 rounded-full"
-                            disabled={isClientDemo}
                          /></>
                          <div className="text-right mt-1 font-bold tabular-nums tracking-tight text-accent-800">{activePhase.progress}%</div>
                       </div>
@@ -613,7 +606,6 @@ export default function SiteProgressTracker() {
                                value={activePhase.startDate} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'startDate', e.target.value)}
                                className="w-full px-2 py-2 bg-surface-hover border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
-                               disabled={isClientDemo}
                             /></>
                          </div>
                          <div>
@@ -624,7 +616,6 @@ export default function SiteProgressTracker() {
                                value={activePhase.endDate} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'endDate', e.target.value)}
                                className="w-full px-2 py-2 bg-surface-hover border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
-                               disabled={isClientDemo}
                             /></>
                          </div>
                       </div>
@@ -640,7 +631,6 @@ export default function SiteProgressTracker() {
                                   value={activePhase.budget} 
                                   onChange={(e) => handleUpdatePhase(activePhase.id, 'budget', parseFloat(e.target.value)||0)}
                                   className="w-full px-2 py-2 bg-surface-hover border border-ui-borderSubtle rounded-r-lg text-sm font-semibold outline-none"
-                                  disabled={isClientDemo}
                                /></>
                             </div>
                          </div>
@@ -654,7 +644,6 @@ export default function SiteProgressTracker() {
                                   value={activePhase.actualCost} 
                                   onChange={(e) => handleUpdatePhase(activePhase.id, 'actualCost', parseFloat(e.target.value)||0)}
                                   className={`w-full px-2 py-2 bg-surface-hover  border border-ui-borderSubtle rounded-r-lg text-sm font-bold outline-none ${activePhase.actualCost > activePhase.budget ? 'text-ui-errorText' : 'text-ui-successText'}`}
-                                  disabled={isClientDemo}
                                /></>
                             </div>
                          </div>
@@ -669,7 +658,6 @@ export default function SiteProgressTracker() {
                                value={activePhase.workersPlanned || 0} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'workersPlanned', parseInt(e.target.value)||0)}
                                className="w-full px-3 py-2 bg-surface-hover border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
-                               disabled={isClientDemo}
                             /></>
                          </div>
                          <div>
@@ -680,7 +668,6 @@ export default function SiteProgressTracker() {
                                value={activePhase.workersActual || 0} 
                                onChange={(e) => handleUpdatePhase(activePhase.id, 'workersActual', parseInt(e.target.value)||0)}
                                className="w-full px-3 py-2 bg-surface-hover border border-ui-borderSubtle rounded-full text-sm font-semibold outline-none"
-                               disabled={isClientDemo}
                             /></>
                          </div>
                       </div>

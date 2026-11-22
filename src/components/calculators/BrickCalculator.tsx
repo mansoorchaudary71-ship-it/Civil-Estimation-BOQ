@@ -127,7 +127,20 @@ interface WallState {
   openingsTotal: string;
 }
 
+/**
+ * Format a unit-converted value written back into input state. Keeps full
+ * precision (6 dp only cleans up float noise) — rounding here used to
+ * inflate quantities on a round trip (10 ft -> 3.05 m -> 10.01 ft, so a
+ * 10x10 ft wall went from 917 to 919 bricks). Round only for display,
+ * at the point of rendering.
+ */
 const fmtConverted = (v: number): string => {
+  if (!isFinite(v)) return "0";
+  return String(Math.round(v * 1e6) / 1e6);
+};
+
+/** Display-only 2 dp formatting for an input echo, never fed back into the engine. */
+const fmtDisplay2dp = (v: number): string => {
   if (!isFinite(v)) return "0";
   return String(Math.round(v * 100) / 100);
 };
@@ -817,7 +830,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
   };
 
   const customBrickDisplay = (dim: "l" | "w" | "h"): string =>
-    customBrickUnit === "mm" ? String(customBrickMm[dim]) : fmtConverted(customBrickMm[dim] / 25.4);
+    customBrickUnit === "mm" ? String(customBrickMm[dim]) : fmtDisplay2dp(customBrickMm[dim] / 25.4);
   const onCustomBrickDisplay = (dim: "l" | "w" | "h", value: string) => {
     const v = parseFloat(value) || 0;
     const mm = customBrickUnit === "mm" ? v : v * 25.4;

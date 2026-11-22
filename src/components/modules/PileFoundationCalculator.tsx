@@ -9,9 +9,11 @@ import { useRates } from '../../lib/useRates';
 import { designPile, defaultPileInputs, type PileType, type SoilType  } from '../../lib/pileCalc';
 import { CalcSteps, EngineNotices, StructuralExportBar } from '../ui/StructuralExportBar';
 import { formatRate } from '../../lib/rates';
+import { useSettings } from '../../context/SettingsContext';
 
 export default function PileFoundationCalculator() {
   const { rates, setRate, table } = useRates();
+  const { formatCurrency } = useSettings();
   const [pileType, setPileType] = useState<PileType>("bored");
   const [soilType, setSoilType] = useState<SoilType>("sand");
   const [diameter, setDiameter] = useState<number | "">(0.5);
@@ -41,7 +43,7 @@ export default function PileFoundationCalculator() {
     sandPerCft: rates.sandPerCft, crushPerCft: rates.crushPerCft,
   }), [pileType, soilType, diameter, length, gamma, cu, phi, fos, totalLoad, rows, cols, spacing, capL, capW, capD, fck, wastage, rates]);
 
-  const summary = `Pile ${pileType} ${soilType} D=${diameter} m L=${length} m: Qb ${results.qbKN} kN, Qs ${results.qsKN} kN, Qu ${results.quKN} kN, Qall ${results.qallKN} kN; piles required ${results.requiredPiles}; group η ${results.groupEta}, group ultimate ${results.groupUltimateKN} kN, group allowable ${results.groupCapacityKN} kN vs load ${totalLoad} kN (${results.groupCapacityKN >= (Number(totalLoad) || 0) ? "PASS" : "FAIL"}) (${results.groupGoverns}); settlement ≈ ${results.settlementMm} mm; concrete ${results.concreteVolM3} m³; steel ${results.totalSteelKg} kg; cost ${results.totalCost == null ? "—" : `Rs ${results.totalCost.toLocaleString()}`}.`;
+  const summary = `Pile ${pileType} ${soilType} D=${diameter} m L=${length} m: Qb ${results.qbKN} kN, Qs ${results.qsKN} kN, Qu ${results.quKN} kN, Qall ${results.qallKN} kN; piles required ${results.requiredPiles}; group η ${results.groupEta}, group ultimate ${results.groupUltimateKN} kN, group allowable ${results.groupCapacityKN} kN vs load ${totalLoad} kN (${results.groupCapacityKN >= (Number(totalLoad) || 0) ? "PASS" : "FAIL"}) (${results.groupGoverns}); settlement ≈ ${results.settlementMm} mm; concrete ${results.concreteVolM3} m³; steel ${results.totalSteelKg} kg; cost ${results.totalCost == null ? "—" : formatCurrency(results.totalCost)}.`;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 px-4 md:px-0">

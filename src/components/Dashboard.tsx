@@ -873,7 +873,7 @@ export const ALL_MODULES = [
  id: "master-sieve",
  title: "Master Sieve Analysis Calculator",
  desc: "Dynamic gradation validator driven by specification databases — sieve analysis results checked against IS, MoRTH and ASTM envelopes, with grading curves.",
- category: "Infrastructure & Highway Engineering",
+ category: "Geotechnical & Soil Lab Suite",
  icon: LineChart,
  styleStyle: "glass",
  colorClass:

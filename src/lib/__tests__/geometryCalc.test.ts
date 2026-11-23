@@ -13,7 +13,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   calcRectangular, calcCircular, calcTube, calcPrecast, calcRoof,
-  calcTrapFooting, calcStaircaseTab, defaultRectInputs,
+  calcTrapFooting, calcStaircaseTab, defaultRectInputs, defaultPrecastInputs,
 } from "../geometryCalc";
 
 const approx = (a: number, e: number, tol: number) =>
@@ -82,4 +82,44 @@ test("materials and cost are shown in-UI", () => {
   const r = calcRectangular(defaultRectInputs);
   assert.ok(r.materials.cementBags > 0);
   assert.ok(r.totalCost != null && r.totalCost > 0);
+});
+
+test("zero-guards: spacing/width 0 errors and stays finite — never Infinity", () => {
+  // Stirrup spacing 0 (rectangular).
+  const rect = calcRectangular({ ...defaultRectInputs, stirrupSpacingM: 0 });
+  assert.ok(rect.errors.some((e) => e.includes("Stirrup spacing")), `errors: ${rect.errors.join("; ")}`);
+  assert.equal(rect.stirrupSteelKg, 0);
+  assert.ok(Number.isFinite(rect.totalSteelKg));
+  // Tie pitch 0 (circular).
+  const circ = calcCircular({ diaM: 0.4, heightM: 3, mainDiaMm: 12, mainBarCount: 6, tieDiaMm: 8, tiePitchM: 0, coverMm: 25, fck: 25, wastagePct: 5 });
+  assert.ok(circ.errors.some((e) => e.includes("Tie pitch")), `errors: ${circ.errors.join("; ")}`);
+  assert.equal(circ.stirrupSteelKg, 0);
+  assert.ok(Number.isFinite(circ.totalSteelKg));
+  // Roof: all three spacings/widths 0.
+  const roof = calcRoof({ spanM: 8, riseM: 2, runM: 12, purlinSpacingM: 0, battenSpacingM: 0, sheetWidthM: 0 });
+  assert.ok(roof.errors.some((e) => e.includes("Purlin spacing")));
+  assert.ok(roof.errors.some((e) => e.includes("Batten spacing")));
+  assert.ok(roof.errors.some((e) => e.includes("Sheet width")));
+  assert.equal(roof.purlinsM, 0);
+  assert.equal(roof.battensM, 0);
+  assert.equal(roof.sheets, 0);
+  assert.ok(Number.isFinite(roof.rafterM) && Number.isFinite(roof.areaM2));
+  // One bad spacing only: the other two still compute.
+  const roof2 = calcRoof({ spanM: 8, riseM: 2, runM: 12, purlinSpacingM: 0, battenSpacingM: 0.6, sheetWidthM: 1.0 });
+  assert.equal(roof2.purlinsM, 0);
+  assert.ok(roof2.battensM > 0 && roof2.sheets > 0);
+});
+
+test("precast: post spacing 0 errors, 0 posts, no Infinity", () => {
+  const r = calcPrecast({ ...defaultPrecastInputs, postSpacingM: 0 });
+  assert.ok(r.errors.some((e) => e.includes("Post spacing")), `errors: ${r.errors.join("; ")}`);
+  assert.equal(r.extra?.postCount, 0);
+  assert.equal(r.extra?.totalPanels, 0);
+  assert.ok(Number.isFinite(r.volM3), `volM3: ${r.volM3}`);
+  assert.ok(Object.values(r.extra ?? {}).every((v) => Number.isFinite(v)), `extra: ${JSON.stringify(r.extra)}`);
+  assert.ok(!JSON.stringify(r).includes("Infinity"));
+  // Valid spacing still computes (30 m wall at 3 m centres = 11 posts).
+  const ok = calcPrecast(defaultPrecastInputs);
+  assert.equal(ok.errors.length, 0);
+  assert.equal(ok.extra?.postCount, 11);
 });

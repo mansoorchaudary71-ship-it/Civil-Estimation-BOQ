@@ -80,9 +80,25 @@ export default function EarthworksEstimator() {
       and squeezed the `flex-1` content area to 0px wide (the whole form
       collapsed to min-content width and the guided tour positioned itself
       off-screen). Rendered here as a full-width block below the hub instead.
-      Every tab already renders its own wired history bar inside the form.
+      The hub itself only owns the active tab and the reference standard —
+      the quantity inputs live in the child estimators, which each render
+      their own wired history bar inside the form (general, grid, trench;
+      chainage imports it but never renders it, slope renders it empty —
+      both noted as later-round items). Saving the hub state (not {}) makes
+      the hub's Save Draft / global-save path store a real entry instead
+      of no-opping on empty inputs.
     */}
-    <CalculationHistory calculatorId="earthworks_tool" currentInputs={{}} />
+    <CalculationHistory
+      calculatorId="earthworks_tool"
+      currentInputs={{ activeTab, designStandard }}
+      currentResults={{}}
+      estimationName="Earthworks"
+      summaryGeneration={(inputs) => `Earthworks — ${String(inputs.activeTab ?? "")} (${String(inputs.designStandard ?? "")})`}
+      onRestore={(savedInputs) => {
+        if (typeof savedInputs.activeTab === "string") setActiveTab(savedInputs.activeTab as HubTab);
+        if (typeof savedInputs.designStandard === "string") setDesignStandard(savedInputs.designStandard);
+      }}
+    />
     </>
   );
 }

@@ -79,11 +79,24 @@ export default function RoadPavementEstimator({ onNavigate }: { onNavigate?: (id
         </div>
       </div>
     
+      {/*
+        Hub-level save: the hub itself only owns the active tab and the
+        design standard — the quantity inputs live in the child estimators,
+        which each render their own wired CalculationHistory (rigid,
+        asphalt x3, sewerage). Saving the hub state (not {}) makes the
+        hub's Save Draft / global-save path store a real entry instead
+        of no-opping on empty inputs.
+      */}
       <CalculationHistory
         calculatorId="roadpavementestimator"
-        currentInputs={{}}
+        currentInputs={{ activeTab, designStandard }}
         currentResults={{}}
         estimationName="Road Pavement Estimator"
+        summaryGeneration={(inputs) => `Road Pavement — ${String(inputs.activeTab ?? "")} (${String(inputs.designStandard ?? "")})`}
+        onRestore={(savedInputs) => {
+          if (typeof savedInputs.activeTab === "string") setActiveTab(savedInputs.activeTab as Tab);
+          if (typeof savedInputs.designStandard === "string") setDesignStandard(savedInputs.designStandard);
+        }}
       />
 </div>
   );

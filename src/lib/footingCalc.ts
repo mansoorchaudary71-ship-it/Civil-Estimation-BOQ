@@ -92,6 +92,10 @@ export function validateFootingInputs(i: FootingInputs): string[] {
   checkRange(e, "Concrete grade (fck)", i.fck, 15, 60);
   checkRange(e, "Steel grade (fy)", i.fy, 250, 550);
   checkRange(e, "Cover", i.coverMm, 25, 100);
+  if (!i.autoDesign) {
+    if (!isFinite(i.manualSpacingMm) || i.manualSpacingMm <= 0) e.push("Manual spacing (X) must be greater than 0.");
+    if (!isFinite(i.manualSpacingYMm) || i.manualSpacingYMm <= 0) e.push("Manual spacing (Y) must be greater than 0.");
+  }
   if (i.topLengthM > i.footingLengthM || i.topWidthM > i.footingWidthM) {
     e.push("Top dimensions cannot exceed the base dimensions — the sloped/stepped portion would be geometrically impossible.");
   }
@@ -207,12 +211,15 @@ export function designFooting(input: Partial<FootingInputs> = {}): FootingResult
   const astXReq = Math.max(astX, astMinX);
   const astYReq = Math.max(astY, astMinY);
   const maxSpacing = Math.min(3 * d, 300);
+  // A zero manual spacing divides by zero in the bar count below — fall
+  // back to the IS 456 cap (the validation error above is the verdict)
+  // so the schedule stays finite instead of Infinity bars.
   const spacingX = i.autoDesign
     ? Math.min(spacingForAst(astXReq / i.footingWidthM, i.barDiaMm), maxSpacing)
-    : Math.min(i.manualSpacingMm, maxSpacing);
+    : isFinite(i.manualSpacingMm) && i.manualSpacingMm > 0 ? Math.min(i.manualSpacingMm, maxSpacing) : maxSpacing;
   const spacingY = i.autoDesign
     ? Math.min(spacingForAst(astYReq / i.footingLengthM, i.barDiaYMm), maxSpacing)
-    : Math.min(i.manualSpacingYMm, maxSpacing);
+    : isFinite(i.manualSpacingYMm) && i.manualSpacingYMm > 0 ? Math.min(i.manualSpacingYMm, maxSpacing) : maxSpacing;
   const barsX = Math.ceil((i.footingWidthM * 1000 - 2 * i.coverMm) / spacingX) + 1;
   const barsY = Math.ceil((i.footingLengthM * 1000 - 2 * i.coverMm) / spacingY) + 1;
   const astXProv = barsX * barAreaMm2(i.barDiaMm);
@@ -246,8 +253,10 @@ export function designFooting(input: Partial<FootingInputs> = {}): FootingResult
   const bottomSteelKg = bottomSteelXKg + bottomSteelYKg;
   const topDiaX = i.topMeshDiaXMm ?? i.barDiaMm;
   const topDiaY = i.topMeshDiaYMm ?? i.barDiaYMm;
-  const topSpacingX = i.topMeshSpacingXMm ?? 150;
-  const topSpacingY = i.topMeshSpacingYMm ?? 150;
+  // Same zero-guard as the bottom mesh: an explicit 0 top spacing would
+  // divide by zero in the top bar count; fall back to the 150 mm default.
+  const topSpacingX = i.topMeshSpacingXMm != null && isFinite(i.topMeshSpacingXMm) && i.topMeshSpacingXMm > 0 ? i.topMeshSpacingXMm : 150;
+  const topSpacingY = i.topMeshSpacingYMm != null && isFinite(i.topMeshSpacingYMm) && i.topMeshSpacingYMm > 0 ? i.topMeshSpacingYMm : 150;
   const topHook = i.totalDepthM * 1000 - 2 * i.coverMm;
   const topCutX = i.footingLengthM * 1000 - 2 * i.coverMm + 2 * topHook;
   const topCutY = i.footingWidthM * 1000 - 2 * i.coverMm + 2 * topHook;

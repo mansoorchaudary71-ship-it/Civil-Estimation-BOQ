@@ -703,10 +703,49 @@ export default function BarBendingSchedule() {
       <CalculationHistory
         calculatorId="bbs_generator_v1"
         estimationName="Bar Bending Schedule"
-        savePayload={{ rows, netWeightKg: totals.netWeightKg }}
-        currentInputs={{}}
+        savePayload={{ rows, netWeightKg: totals.netWeightKg, orderWeightKg: totals.orderWeightKg, cost: totals.cost }}
+        currentInputs={{
+          ...currentInput,
+          grade,
+          wastagePct,
+          rate,
+          currency,
+          stock,
+          rows,
+        }}
+        currentResults={{
+          netWeightKg: totals.netWeightKg,
+          orderWeightKg: totals.orderWeightKg,
+          cost: totals.cost,
+          totalBarsToOrder: totals.totalBarsToOrder,
+        }}
+        summaryGeneration={(_inputs, res) =>
+          `${rows.length} bar${rows.length === 1 ? "" : "s"} — ${Number(res.netWeightKg ?? 0).toFixed(2)} kg net, ${Number(res.orderWeightKg ?? 0).toFixed(2)} kg to order`
+        }
         onRestore={(savedInputs) => {
-          if (savedInputs.rows) setRows(savedInputs.rows);
+          if (Array.isArray(savedInputs.rows))
+            setRows(savedInputs.rows.filter((r: unknown) => r && typeof r === "object" && "cutLengthM" in (r as object)));
+          if (typeof savedInputs.member === "string") setMember(savedInputs.member);
+          if (typeof savedInputs.shape === "string") setShape(savedInputs.shape as BbsShape);
+          if (savedInputs.diaMm != null) setDia(String(savedInputs.diaMm));
+          if (savedInputs.members != null) setMembers(String(savedInputs.members));
+          if (savedInputs.barsPerMember != null) setBarsPerMember(String(savedInputs.barsPerMember));
+          if (savedInputs.coverMm != null) setCover(String(savedInputs.coverMm));
+          if (typeof savedInputs.hookStandard === "string") setHookStandard(savedInputs.hookStandard as HookStandard);
+          if (savedInputs.lapX != null) setLapX(String(savedInputs.lapX));
+          if (savedInputs.spanMm != null) setSpan(String(savedInputs.spanMm));
+          if (savedInputs.widthMm != null) setWidth(String(savedInputs.widthMm));
+          if (savedInputs.depthMm != null) setDepth(String(savedInputs.depthMm));
+          if (savedInputs.slabThicknessMm != null) setSlabThick(String(savedInputs.slabThicknessMm));
+          if (savedInputs.cranks != null) setCranks(String(savedInputs.cranks));
+          if (savedInputs.colDiaMm != null) setSpiralDia(String(savedInputs.colDiaMm));
+          if (savedInputs.pitchMm != null) setSpiralPitch(String(savedInputs.pitchMm));
+          if (savedInputs.heightMm != null) setSpiralHeight(String(savedInputs.heightMm));
+          if (typeof savedInputs.grade === "string") setGrade(savedInputs.grade);
+          if (savedInputs.wastagePct != null) setWastagePct(String(savedInputs.wastagePct));
+          if (savedInputs.rate != null) setRate(String(savedInputs.rate));
+          if (typeof savedInputs.currency === "string") setCurrency(savedInputs.currency as SteelCurrency);
+          if (savedInputs.stock === "12" || savedInputs.stock === "40") setStock(savedInputs.stock);
         }}
       />
     </div>

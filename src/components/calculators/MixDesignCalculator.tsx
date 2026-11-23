@@ -11,6 +11,7 @@ import React, { useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
 import { Calculator, Copy, Check, Share2, Printer, FileText, AlertTriangle } from "lucide-react";
 import { Button } from "../ui/Button";
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 import { useGlobalSettings } from "../../context/SettingsContext";
 import {
   calcMixDesign,
@@ -585,6 +586,38 @@ export default function MixDesignCalculator() {
               <Button onClick={handlePdf} className="flex items-center gap-2 px-4 py-2 bg-surface-hover text-txt-primary text-sm font-bold rounded-full border border-ui-borderSubtle hover:bg-surface-active">
                 <FileText className="w-4 h-4" /> Download PDF
               </Button>
+              <GenericExportButtons
+                filename="concrete-mix-design"
+                data={{
+                  headers: ["Item", "Quantity", "Unit"],
+                  rows: [
+                    ["Method", method === "IS" ? "IS 10262:2019" : "ACI 211.1", ""],
+                    ["Grade", `M${inputs.fck}`, ""],
+                    ["Target strength", result.targetStrength.toFixed(1), "MPa"],
+                    ["Water", String(result.waterKg), "kg/m³"],
+                    ["Governing w/c", result.wcGoverning.toFixed(2), ""],
+                    ["Actual w/c", result.wcActual.toFixed(2), ""],
+                    ["Cement", String(result.cementKg), "kg/m³"],
+                    ["Cement bags (exact)", result.cementBagsExact.toFixed(2), "bags/m³"],
+                    ["Cement bags (order)", String(result.cementBagsOrder), "bags/m³"],
+                    ["Fine aggregate", String(result.faKg), "kg/m³"],
+                    ["Coarse aggregate", String(result.caKg), "kg/m³"],
+                    ["Ratio by mass", `1 : ${result.ratioFA.toFixed(2)} : ${result.ratioCA.toFixed(2)} : ${result.wcActual.toFixed(2)}`, ""],
+                    ["Fresh density", String(result.densityKgM3), "kg/m³"],
+                    ["Batch 0.5 m³ — cement", String(result.batchHalf.cementKg), "kg"],
+                    ["Batch 0.5 m³ — water", String(result.batchHalf.waterL), "L"],
+                    ["Batch 0.5 m³ — fine aggregate", String(result.batchHalf.faKg), "kg"],
+                    ["Batch 0.5 m³ — coarse aggregate", String(result.batchHalf.caKg), "kg"],
+                    ["Batch 1 m³ — cement", String(result.cementKg), "kg"],
+                    ["Batch 1 m³ — water", String(result.waterBatchedKg), "L"],
+                    ["Batch 1 m³ — fine aggregate", String(result.faKg), "kg"],
+                    ["Batch 1 m³ — coarse aggregate", String(result.caKg), "kg"],
+                    ...(costLines.total != null
+                      ? [[`Estimated cost (${currentCurrency})`, money(costLines.total), "per m³"] as (string | number)[]]
+                      : []),
+                  ],
+                }}
+              />
             </div>
           </section>
 

@@ -47,10 +47,12 @@ export default function GlobalSearchModal({
   
   
   
+  // Reference pages (standards) and the blog / cost-guide alias stay
+  // excluded — they are not tools. quick-estimation, master-quantity and
+  // boq-templates are real tools and must NOT be excluded.
   const unsupportedModules = [
-    'boq-templates', 'cost-guide-pakistan', 'blog', 'is-codes-reference', 
-    'morth-irc-specs', 'pakistan-building-codes', 'uae-construction-standards', 
-    'quick-estimation', 'master-quantity'
+    'cost-guide-pakistan', 'blog', 'is-codes-reference',
+    'morth-irc-specs', 'pakistan-building-codes', 'uae-construction-standards'
   ];
 
   const results = ALL_MODULES.filter((mod) => {

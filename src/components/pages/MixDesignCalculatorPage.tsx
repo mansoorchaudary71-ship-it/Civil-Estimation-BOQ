@@ -48,6 +48,7 @@ function buildJsonLd() {
       "Fine and coarse aggregate by absolute volume with Table 5 split",
       "Batch weights for 0.5 m³ and 1 m³ with SSD moisture correction",
       "Cost in PKR, INR, AED or USD with editable rates",
+      "PDF download, print, share, copy and CSV/Excel export of the mix quantities and batch weights",
     ],
   };
   const faqPage = {

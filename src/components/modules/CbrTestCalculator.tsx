@@ -14,7 +14,7 @@ import { CodeTooltip } from "../ui/CodeTooltip";
 
 
 export default function CbrTestCalculator() {
-  const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
+  const { isProcessing, processEstimate } = useEstimateProcessing();
 
   const [minSpec, setMinSpec] = useState("8"); // IRC:37 subgrade — 15% is base-course territory, not subgrade
   const [reportDetails, setReportDetails] = useState<SoilReportDetails>({
@@ -55,7 +55,6 @@ export default function CbrTestCalculator() {
       [field]: parseFloat(value) || 0,
     };
     setTestData(updatedData);
-    if (hasData) resetEstimate();
   };
 
   const addRow = () => {
@@ -65,11 +64,17 @@ export default function CbrTestCalculator() {
   const removeRow = (index: number) => {
     const updatedData = testData.filter((_, i) => i !== index);
     setTestData(updatedData);
-    if (hasData) resetEstimate();
   };
 
+  // Live results: computed from the table on every render, so editing a
+  // load/penetration updates the results and the curve immediately — the
+  // page copy promises results "appear here automatically", and the old
+  // `hasData` gate (set only by the Calculate button) broke that promise.
+  // The Calculate button remains as a harmless recalc (brief processing
+  // skeleton, then the same live values).
   const estimateData = useMemo(() => {
-    if (!hasData) return null;
+    // No rows left (all deleted) — show the empty state, not a 0% result.
+    if (testData.length === 0) return null;
 
     // Sort to be safe
     const sortedData = [...testData].sort((a, b) => a.penetration - b.penetration);
@@ -158,7 +163,7 @@ export default function CbrTestCalculator() {
       mrHeukelom: 17.6 * Math.pow(finalCbr, 0.64),
       mrAashto: 10 * finalCbr,
     };
-  }, [hasData, testData, minSpec]);
+  }, [testData, minSpec]);
 
   const handlePrint = () => window.dispatchEvent(new CustomEvent('global-print-action'));
   const handleSave = async () => {
@@ -209,7 +214,7 @@ export default function CbrTestCalculator() {
           details={reportDetails}
           onChange={handleReportChange}
           onGenerateReport={handleSave}
-          isGenerating={!hasData}
+          isGenerating={isProcessing}
         />
 
         <div className="flex flex-col md:flex-row gap-8">
@@ -314,7 +319,7 @@ export default function CbrTestCalculator() {
           <div className="w-full md:w-[55%]">
             {isProcessing ? (
               <ProcessingSkeleton count={5} />
-            ) : hasData && estimateData ? (
+            ) : estimateData ? (
               <div className="space-y-6">
                 <div className={`p-6 md:p-8 rounded-2xl border shadow-brand-lg relative overflow-hidden transition-all duration-500 ${estimateData.passed ? 'bg-gradient-to-br from-ui-success to-ui-success/30 border-ui-successBorder   ' : 'bg-gradient-to-br from-ui-error to-ui-error/30 border-ui-errorBorder   '}`}>
                   

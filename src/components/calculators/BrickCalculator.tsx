@@ -26,6 +26,7 @@ import {
 } from "../../lib/brickCalc";
 import BrickWallVisualizer, { type VisualizerOpening } from "./BrickWallVisualizer";
 import { ResultCard } from "../ui/ResultCard";
+import { GenericExportButtons } from "../ui/GenericExportButtons";
 import {
   Calculator,
   Check,
@@ -1850,6 +1851,32 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                 {copied ? <Check className="w-4 h-4 text-ui-successText" /> : <Copy className="w-4 h-4" />}
                 {copied ? "Copied" : "Copy BOQ"}
               </button>
+              {computed.ok && results && (
+                <GenericExportButtons
+                  filename="brick-estimate"
+                  data={{
+                    headers: ["Item", "Quantity", "Unit"],
+                    rows: [
+                      ["Bricks to order", formatInt(results.bricks), "pcs"],
+                      ["Bricks before wastage", formatInt(results.bricksBeforeWastage), "pcs"],
+                      ["Wastage bricks", formatInt(results.wastageBricks), "pcs"],
+                      ["Bricks per sq ft", results.bricksPerSqFt.toFixed(1), "pcs/sq ft"],
+                      ["Net wall area", results.netAreaSqFt.toFixed(1), "sq ft"],
+                      ["Net wall area", results.netAreaM2.toFixed(2), "m²"],
+                      ["Masonry volume", results.wallVolumeM3.toFixed(2), "m³"],
+                      ["Wet mortar", results.wetMortarM3.toFixed(2), "m³"],
+                      ["Dry mortar", results.dryMortarM3.toFixed(2), "m³"],
+                      ["Cement", String(results.cementBags), "bags"],
+                      ["Cement", formatInt(results.cementKg), "kg"],
+                      ["Sand", results.sandCft.toFixed(1), "cft"],
+                      ["Sand", results.sandM3.toFixed(2), "m³"],
+                      ...(results.totalCost != null
+                        ? [["Total material cost", formatMoney(results.totalCost, currency), currency] as (string | number)[]]
+                        : []),
+                    ],
+                  }}
+                />
+              )}
               <button
                 type="button"
                 onClick={handleReset}

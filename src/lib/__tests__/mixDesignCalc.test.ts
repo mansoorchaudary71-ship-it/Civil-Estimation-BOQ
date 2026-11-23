@@ -299,3 +299,39 @@ test("w/c strength curve interpolates and clamps flat outside the table", () => 
   assert.equal(wcFromStrengthIS(60).wc, 0.4);
   assert.equal(wcFromStrengthACI(33.3).wc.toFixed(2), "0.49");
 });
+
+test("F3: ACI no-SD f'cr follows ACI 318 Table 5.3.2.2 bands, not +8.3 for all", () => {
+  const aci = (fck: number) => calcMixDesign({ ...defaultMixDesignInputs(), method: "ACI", fck });
+  // +7.0 below 21 MPa, +8.3 for 21–35 MPa, +10.0 above 35 MPa.
+  assert.equal(aci(15).targetStrength, 22.0);
+  assert.equal(aci(20).targetStrength, 27.0);
+  assert.equal(aci(21).targetStrength, 29.3);
+  assert.equal(aci(25).targetStrength, 33.3); // existing M25 vector unchanged
+  assert.equal(aci(35).targetStrength, 43.3);
+  assert.equal(aci(40).targetStrength, 50.0); // was 48.3 with the flat +8.3
+  assert.equal(aci(60).targetStrength, 70.0);
+});
+
+test("zero-guard: vAgg <= 0 errors and zeroes the aggregate split — no NaN/Infinity", () => {
+  // IS: entrapped air 90% leaves no room for aggregate. ACI overrides the
+  // input air with its own table (ACI_AIR), so force it instead with a
+  // very low manual w/c (huge cement volume) at high water.
+  const cases = [
+    { ...defaultMixDesignInputs(), method: "IS" as const, airPct: 90 },
+    { ...defaultMixDesignInputs(), method: "ACI" as const, wcMode: "manual" as const, wcManual: 0.1, slumpMm: 175, maxAggMm: 10 as const },
+  ];
+  for (const inp of cases) {
+    const r = calcMixDesign(inp);
+    assert.ok(r.vAgg <= 0, `vAgg ${r.vAgg} should be <= 0`);
+    assert.ok(r.errors.some((e) => e.includes("No room left for aggregate")), `errors: ${r.errors.join("; ")}`);
+    assert.equal(r.caFraction, 0);
+    assert.equal(r.vCA, 0);
+    assert.equal(r.vFA, 0);
+    assert.equal(r.faKg, 0);
+    assert.equal(r.caKg, 0);
+    for (const [k, v] of Object.entries({ vAgg: r.vAgg, caFraction: r.caFraction, faKg: r.faKg, caKg: r.caKg, densityKgM3: r.densityKgM3, ratioFA: r.ratioFA, ratioCA: r.ratioCA })) {
+      assert.ok(Number.isFinite(v), `${inp.method} ${k} must be finite, got ${v}`);
+    }
+    assert.ok(Number.isFinite(r.batch.waterL) && Number.isFinite(r.batch.faKg) && Number.isFinite(r.batch.caKg));
+  }
+});

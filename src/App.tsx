@@ -217,7 +217,7 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
         <div className="mt-12 space-y-8 pb-16 print:hidden">
           <ModuleSummaryDashboard moduleId={id} />
           <ProTipsWidget moduleId={id} />
-          <ToolArticleWidget toolName={actualTitle} />
+          <ToolArticleWidget toolName={actualTitle} toolId={id} />
           <GlobalFAQ moduleId={id} />
           <RelatedCalculators category={category} currentSlug={id} />
           <FeedbackWidget toolName={actualTitle} />

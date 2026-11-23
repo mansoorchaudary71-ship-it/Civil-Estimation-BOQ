@@ -1,20 +1,24 @@
 import { Button } from '../ui/Button';
 import React, { useState, useMemo } from 'react';
-import { 
-  Building, 
-  MapPin, 
-  Calculator, 
-  Layers, 
-  Grid, 
-  ShieldCheck, 
+import {
+  Building,
+  MapPin,
+  Calculator,
+  Layers,
+  Grid,
+  ShieldCheck,
   ArrowRight,
   Info,
   CheckCircle2,
   AlertTriangle,
   Hammer,
-  ClipboardList
+  ClipboardList,
+  Save,
+  History
 } from 'lucide-react';
 import ToolPageFooter from '../ToolPageFooter';
+import { CalculationHistory } from '../ui/CalculationHistory';
+import { GenericExportButtons } from '../ui/GenericExportButtons';
 import { pakistanCost, pakistanCostBothStandards, PAK_RATES, RATES_LAST_UPDATED, RATE_SOURCE, type PakCity, type PakTier } from '../../lib/pakistanCost';
 import { MARLA_SQFT, type MarlaStandard } from '../../lib/quickEstimate';
 import { GlobalFAQ } from '../ui/GlobalFAQ';
@@ -321,6 +325,88 @@ export default function PakistanCostCalculatorPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Save & export — standalone page has no ToolHeader, so the save /
+            history buttons live here next to the export buttons. They fire
+            the same window events CalculationHistory listens for. */}
+        <div className="mb-20">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <GenericExportButtons
+              filename="pakistan-cost-calculator"
+              data={{
+                headers: ["Cost item", "Amount (PKR)"],
+                rows: result.error ? [
+                  ["Plot", `${area} ${unit} (${marlaStandard === "revenue272" ? "272.25" : "225"} sqft/marla)`],
+                  ["City", CITY_LABELS[city]],
+                  ["Error", result.error],
+                ] : [
+                  ["Plot", `${area} ${unit} (${marlaStandard === "revenue272" ? "272.25" : "225"} sqft/marla)`],
+                  ["City", CITY_LABELS[city]],
+                  ["Finish", TIER_LABELS[constructionType]],
+                  ["Floors", floors],
+                  ["Basement", hasBasement ? "Yes" : "No"],
+                  ["Covered area (sq ft)", String(Math.round(totalCoveredArea))],
+                  ["Rate min (PKR/sqft)", String(rates[0])],
+                  ["Rate max (PKR/sqft)", String(rates[1])],
+                  ["Estimated cost min (PKR)", String(Math.round(minCost))],
+                  ["Estimated cost max (PKR)", String(Math.round(maxCost))],
+                  ["Estimated cost avg (PKR)", String(avgCost)],
+                  ["Cement bags", String(result.materials.cementBags)],
+                  ["Steel (kg)", String(result.materials.steelKg)],
+                  ["Bricks", String(result.materials.bricks)],
+                  ["Sand (cft)", String(result.materials.sandCft)],
+                  ["Aggregate (cft)", String(result.materials.aggregateCft)],
+                  ...getBreakdown(TIER_LABELS[constructionType]).map((item) => [
+                    `${item.label} (${item.percentage}%)`,
+                    String(Math.round(avgCost * (item.percentage / 100))),
+                  ]),
+                ],
+              }}
+            />
+            <Button
+              onClick={() => window.dispatchEvent(new Event("trigger-global-save"))}
+              className="flex items-center gap-2 px-4 py-2 bg-ink text-white rounded-full text-sm font-semibold hover:bg-ink-700 transition-colors active:scale-95"
+            >
+              <Save className="w-4 h-4" /> Save calculation
+            </Button>
+            <Button
+              onClick={() => window.dispatchEvent(new Event("trigger-global-history"))}
+              className="flex items-center gap-2 px-4 py-2 bg-surface-hover text-txt-primary rounded-full text-sm font-semibold border border-ui-borderSubtle hover:bg-surface-active transition-colors active:scale-95"
+            >
+              <History className="w-4 h-4" /> Saved calculations
+            </Button>
+          </div>
+          <CalculationHistory
+            calculatorId="pakistan-cost-calculator"
+            estimationName="Pakistan Cost Calculator"
+            currentInputs={{ area, unit, marlaStandard, city, constructionType, floors, hasBasement }}
+            currentResults={result.error ? { error: result.error } : {
+              coveredSqft: totalCoveredArea,
+              rateMin: rates[0],
+              rateMax: rates[1],
+              costMin: minCost,
+              costMax: maxCost,
+              costAvg: avgCost,
+              cementBags: result.materials.cementBags,
+              steelKg: result.materials.steelKg,
+              bricks: result.materials.bricks,
+              sandCft: result.materials.sandCft,
+              aggregateCft: result.materials.aggregateCft,
+            }}
+            summaryGeneration={(inputs, res) =>
+              `${String(inputs.area ?? "")} ${String(inputs.unit ?? "")} in ${CITY_LABELS[(inputs.city as PakCity) ?? "lahore"] ?? inputs.city}, ${TIER_LABELS[(inputs.constructionType as PakTier) ?? "standard"] ?? inputs.constructionType} — PKR ${Number(res.costMin ?? 0).toLocaleString()} to PKR ${Number(res.costMax ?? 0).toLocaleString()}`
+            }
+            onRestore={(savedInputs) => {
+              if (savedInputs.area != null) setArea(Number(savedInputs.area));
+              if (typeof savedInputs.unit === "string" && (UNIT_OPTIONS as readonly string[]).includes(savedInputs.unit)) setUnit(savedInputs.unit as (typeof UNIT_OPTIONS)[number]);
+              if (savedInputs.marlaStandard === "revenue272" || savedInputs.marlaStandard === "society225") setMarlaStandard(savedInputs.marlaStandard);
+              if (typeof savedInputs.city === "string" && (CITY_KEYS as readonly string[]).includes(savedInputs.city)) setCity(savedInputs.city as PakCity);
+              if (typeof savedInputs.constructionType === "string" && (TIER_KEYS as readonly string[]).includes(savedInputs.constructionType)) setConstructionType(savedInputs.constructionType as PakTier);
+              if (typeof savedInputs.floors === "string" && (FLOOR_OPTIONS as readonly string[]).includes(savedInputs.floors)) setFloors(savedInputs.floors as (typeof FLOOR_OPTIONS)[number]);
+              if (typeof savedInputs.hasBasement === "boolean") setHasBasement(savedInputs.hasBasement);
+            }}
+          />
         </div>
 
         {/* Section 4: Static SEO Content */}

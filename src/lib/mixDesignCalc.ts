@@ -426,8 +426,12 @@ export function calcMixDesign(inp: MixDesignInputs): MixDesignResult {
       fTarget = Math.max(inp.fck + 1.34 * s, inp.fck + 2.33 * s - 3.45);
       steps.push(`Required average strength f'cr = max(${inp.fck} + 1.34 x ${s}, ${inp.fck} + 2.33 x ${s} - 3.45) = ${fTarget.toFixed(2)} MPa (ACI 318).`);
     } else {
-      fTarget = inp.fck + 8.3;
-      steps.push(`No established SD: f'cr = f'c + 8.3 = ${fTarget.toFixed(2)} MPa (ACI 318).`);
+      // ACI 318 Table 5.3.2.2 (no established SD): the increment depends
+      // on f'c — +7.0 below 21 MPa, +8.3 for 21–35 MPa, +10.0 above 35 MPa.
+      // The old code used +8.3 for every grade (f'c 40 gave 48.3, not 50.0).
+      const noSdIncrement = inp.fck < 21 ? 7.0 : inp.fck <= 35 ? 8.3 : 10.0;
+      fTarget = inp.fck + noSdIncrement;
+      steps.push(`No established SD: f'cr = f'c + ${noSdIncrement.toFixed(1)} = ${fTarget.toFixed(2)} MPa (ACI 318 Table 5.3.2.2).`);
     }
     const band = inp.slumpMm <= 50 ? "25-50" : inp.slumpMm <= 100 ? "75-100" : "150-175";
     waterBaseKg = ACI_WATER[band][sizeRow];
@@ -528,6 +532,16 @@ export function calcMixDesign(inp: MixDesignInputs): MixDesignResult {
     vFA = vAgg - vCA;
     caFraction = vCA / vAgg;
     steps.push(`CA (Table 6.3.6, FM ${inp.fm.toFixed(2)}, ${sizeRow} mm) = ${caVolFrac.toFixed(2)} x ${inp.dryRoddedKgM3} kg/m3 dry-rodded = ${Math.round(caKgPre)} kg/m3; FA is the remainder by absolute volume.`);
+  }
+
+  // No room left for aggregate: the error above is the verdict — zero the
+  // split instead of carrying a negative vCA/vFA (IS) or dividing by
+  // vAgg for caFraction (ACI) and sending NaN/negative masses into the
+  // density and batch weights.
+  if (vAgg <= 0) {
+    vCA = 0;
+    vFA = 0;
+    caFraction = 0;
   }
 
   const faKg = Math.round(vFA * inp.sgFA * 1000);

@@ -4,13 +4,26 @@
  * tool silently used d=totalL/2 on unequal spacing. Pyramid V=A·L/3
  * when one end area is zero. */
 export function parseChainage(raw: string | number): number {
-  if (typeof raw === "number") return raw;
-  const s = raw.trim();
-  if (s.includes("+")) {
-    const [km, m] = s.split("+");
-    return Number(km) * 1000 + Number(m);
+  // Non-numeric input must be rejected, not silently turned into NaN and
+  // carried into volumes (the old code returned NaN for "abc"). The
+  // file's other parsers throw Errors the same way (trapezoidalVolumes,
+  // simpsonVolumes); callers that accept free text must catch this.
+  const invalid = (msg: string): never => { throw new Error(msg); };
+  if (typeof raw === "number") {
+    if (!isFinite(raw)) return invalid(`Invalid chainage "${raw}" — enter metres or "km+m" (e.g. 1+200).`);
+    return raw;
   }
-  return Number(s);
+  const s = raw.trim();
+  if (s === "") return invalid(`Invalid chainage "" — enter metres or "km+m" (e.g. 1+200).`);
+  if (s.includes("+")) {
+    const parts = s.split("+");
+    if (parts.length !== 2 || parts.some((p) => p.trim() === "" || !isFinite(Number(p))))
+      return invalid(`Invalid chainage "${raw}" — use "km+m" with numbers on both sides (e.g. 1+200).`);
+    return Number(parts[0]) * 1000 + Number(parts[1]);
+  }
+  const v = Number(s);
+  if (!isFinite(v)) return invalid(`Invalid chainage "${raw}" — enter metres or "km+m" (e.g. 1+200).`);
+  return v;
 }
 export interface Station { chainage: number; ngl: number; formationLevel: number; }
 export function sectionArea(depthM: number, formationWidthM: number, sideSlope: number): number {

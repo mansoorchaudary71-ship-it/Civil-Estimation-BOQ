@@ -109,3 +109,12 @@ test("ft length unit converts (10 m pile entered as 32.81 ft gives the same cage
   assert.equal(r.turns, 67);
   approx(r.spiralLengthM, 110.34, 0.05);
 });
+
+test("zero-guard: pitch outside validateCage's 75–300 mm throws in both modes", () => {
+  assert.throws(() => calcCage({ ...defaultCageInputs(), pitchMm: 0 }), /Pitch \/ spacing must be 75–300 mm/);
+  assert.throws(() => calcCage({ ...defaultCageInputs(), pitchMm: 50 }), /Pitch \/ spacing must be 75–300 mm/);
+  assert.throws(() => calcCage({ ...defaultCageInputs(), cageType: "hoop", pitchMm: 0 }), /Pitch \/ spacing must be 75–300 mm/);
+  // validateCage agrees, and the default pitch still computes.
+  assert.ok(validateCage({ ...defaultCageInputs(), pitchMm: 0 }).some((e) => e.includes("Pitch")));
+  assert.equal(calcCage(defaultCageInputs()).turns, 67);
+});

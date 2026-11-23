@@ -648,9 +648,34 @@ export default function ReinforcementVisualizer() {
 
           <CalculationHistory
             calculatorId="reinforcementvisualizer"
-            currentInputs={{}}
-            currentResults={results ? { totalKg: results.totalNetKg } : {}}
+            currentInputs={{ ...inputs, grade, concreteGrade, currency }}
+            currentResults={results ? { totalNetKg: results.totalNetKg, orderWeightKg: results.orderWeightKg, cost: results.cost, effectiveDepthMm: results.effectiveDepthMm } : {}}
             estimationName="Reinforcement Visualizer"
+            summaryGeneration={(_in, res) =>
+              `${type} — ${Number(res.totalNetKg ?? 0).toFixed(2)} kg net, ${Number(res.orderWeightKg ?? 0).toFixed(2)} kg to order`
+            }
+            onRestore={(savedInputs) => {
+              if (typeof savedInputs.type === "string") onTypeChange(savedInputs.type as ElementType);
+              if (savedInputs.widthMm != null) setWidth(Number(savedInputs.widthMm));
+              if (savedInputs.depthMm != null) setDepth(Number(savedInputs.depthMm));
+              if (savedInputs.coverMm != null) setCover(Number(savedInputs.coverMm));
+              if (savedInputs.lengthM != null) setLengthM(Number(savedInputs.lengthM));
+              if (savedInputs.widthM != null) setSlabWidthM(Number(savedInputs.widthM));
+              if (savedInputs.topCount != null) setTopBarsCount(Number(savedInputs.topCount));
+              if (savedInputs.topDiaMm != null) setTopBarsDia(Number(savedInputs.topDiaMm));
+              if (savedInputs.bottomCount != null) setBottomBarsCount(Number(savedInputs.bottomCount));
+              if (savedInputs.bottomDiaMm != null) setBottomBarsDia(Number(savedInputs.bottomDiaMm));
+              if (savedInputs.stirrupDiaMm != null) setStirrupDia(Number(savedInputs.stirrupDiaMm));
+              if (savedInputs.stirrupSpacingMm != null) setStirrupSpacing(Number(savedInputs.stirrupSpacingMm));
+              if (savedInputs.mainSpacingMm != null) setMainSpacing(Number(savedInputs.mainSpacingMm));
+              if (savedInputs.distDiaMm != null) setDistDia(Number(savedInputs.distDiaMm));
+              if (savedInputs.distSpacingMm != null) setDistSpacing(Number(savedInputs.distSpacingMm));
+              if (typeof savedInputs.grade === "string") setGrade(savedInputs.grade);
+              if (typeof savedInputs.concreteGrade === "string") setConcreteGrade(savedInputs.concreteGrade);
+              if (savedInputs.wastagePct != null) setWastage(String(savedInputs.wastagePct));
+              if (savedInputs.ratePerKg != null) setRate(String(savedInputs.ratePerKg));
+              if (typeof savedInputs.currency === "string") setCurrency(savedInputs.currency as SteelCurrency);
+            }}
           />
         </>
       )}

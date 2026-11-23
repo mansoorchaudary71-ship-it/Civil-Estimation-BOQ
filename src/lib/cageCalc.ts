@@ -138,6 +138,12 @@ export function validateCage(inp: Partial<CageInputs>): string[] {
 }
 
 export function calcCage(inp: CageInputs): CageResults {
+  // Pitch is the divisor in both branches (spiral turns and hoop count) —
+  // enforce validateCage's 75–300 mm range here too, so a direct call
+  // with pitch 0 cannot produce Infinity turns/length. The UI only calls
+  // calcCage when validateCage passes, so this never fires from the UI.
+  if (inp.pitchMm == null || !isFinite(inp.pitchMm) || inp.pitchMm < 75 || inp.pitchMm > 300)
+    throw new Error("Pitch / spacing must be 75–300 mm.");
   const lengthM = inp.lengthUnit === "ft" ? inp.cageLengthM * FT_TO_M : inp.cageLengthM;
   const lengthMm = lengthM * 1000;
   const coreDiaMm = inp.pileDiaMm - 2 * inp.coverMm - inp.spiralDiaMm;

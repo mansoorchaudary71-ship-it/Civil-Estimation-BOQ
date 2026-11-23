@@ -1,5 +1,7 @@
 /** blendCalc.ts — aggregate blending engine (trial-and-error / 0.45-power).
- * P_blend = Σ P_i · prop_i. Blended Gs: G_blend = 100 / Σ(prop_i% / G_i).
+ * P_blend = Σ P_i · prop_i. Blended Gs: G_blend = ΣP_i / Σ(P_i / G_i),
+ * where ΣP_i is the sum of the proportions — they need not sum to 100
+ * (the old 100 / Σ(P_i/G_i) read 3.555 for [50,25] on Gs 2.65/2.70).
  * Defaults are EMPTY (not 100% passing) — the old all-100% defaults drew
  * a misleading flat line until every cell was overwritten. */
 export interface Stockpile { name: string; gs: number; costPerTonne: number | null; passing: Record<number, number>; }
@@ -27,10 +29,15 @@ export function blendPassing(stockpiles: Stockpile[], proportionsPct: number[]):
   return out;
 }
 export function blendedGs(stockpiles: Stockpile[], proportionsPct: number[]): number {
-  // G_blend = 100 / Σ(P_i / G_i), P_i in percent (Alberta / OCW blending method)
+  // G_blend = ΣP / Σ(P_i / G_i) (Alberta / OCW blending method). The
+  // numerator is the actual sum of the proportions, not a hardcoded 100.
+  if (stockpiles.length !== proportionsPct.length) throw new Error("Stockpile count must match proportion count.");
+  const total = proportionsPct.reduce((a, b) => a + b, 0);
+  if (total <= 0) throw new Error("Proportions must sum to more than 0.");
+  if (stockpiles.some((s) => !isFinite(s.gs) || s.gs <= 0)) throw new Error("Specific gravity must be positive (got 0 or invalid).");
   const denom = stockpiles.reduce((acc, s, i) => acc + proportionsPct[i] / s.gs, 0);
-  if (denom <= 0) throw new Error("Proportions / Gs must be positive.");
-  return 100 / denom;
+  if (denom <= 0 || !isFinite(denom)) throw new Error("Proportions / Gs must be positive.");
+  return total / denom;
 }
 /** 0.45-power maximum-density line: % passing = 100·(size/maxSize)^0.45 */
 export function power45Line(sizeMm: number, maxSizeMm: number): number {

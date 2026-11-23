@@ -108,6 +108,9 @@ export function spiralLengthMm(
   lengthMm: number,
   endAllowanceMm: number,
 ): { turns: number; turnLengthMm: number; lengthMm: number } {
+  // A zero pitch divides by zero (turns = Infinity). The row validator
+  // already requires pitch 50–300 mm; direct callers get the same verdict.
+  if (!isFinite(pitchMm) || pitchMm <= 0) throw new Error("Spiral pitch must be greater than 0.");
   const turns = Math.floor(lengthMm / pitchMm) + 1;
   const turnLengthMm = helixTurnLengthMm(coreDiaMm, pitchMm);
   return { turns, turnLengthMm, lengthMm: turns * turnLengthMm + endAllowanceMm };

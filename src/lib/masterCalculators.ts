@@ -218,9 +218,10 @@ export const calculatorsList: CalcItem[] = [
     ],
     compute: (v, shared, isSI) => {
       const vol = v.count * v.L * v.W * v.H;
-      // REBAR_SPACING_COUNT
+      // REBAR_SPACING_COUNT — a zero spacing must not divide: no spacing
+      // means no stirrup count can be formed, so report 0 (finite).
       const spacingM = v.spacing / 1000;
-      const stirrupsPerCol = Math.ceil(v.H / spacingM) + 1;
+      const stirrupsPerCol = spacingM > 0 && isFinite(spacingM) ? Math.ceil(v.H / spacingM) + 1 : 0;
       const totalStirrups = stirrupsPerCol * v.count;
       
       return { 
@@ -330,7 +331,12 @@ export const calculatorsList: CalcItem[] = [
     ],
     compute: (v, shared, isSI) => {
       const stepVol = 0.5 * v.tread * v.riser * v.width * v.steps;
-      const flightLen = Math.sqrt(v.tread*v.tread + v.riser*v.riser) * v.steps;
+      // (n−1) goings horizontally, n risers vertically — the staircaseCalc.ts
+      // convention (a stair with n risers has n−1 goings; the top riser
+      // meets the landing/floor). The old n × tread-per-step length read
+      // 6.708 m for 20 steps at T 0.30 / R 0.15; the corrected length is
+      // √(((n−1)·T)² + (n·R)²) = 6.441 m. Waist volume uses this length.
+      const flightLen = Math.sqrt(((v.steps - 1) * v.tread) ** 2 + (v.steps * v.riser) ** 2);
       const waistVol = flightLen * v.width * v.waist;
       const total = stepVol + waistVol;
       return {

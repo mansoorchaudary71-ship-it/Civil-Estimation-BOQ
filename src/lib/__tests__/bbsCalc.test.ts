@@ -141,6 +141,13 @@ test("cutLengthMm rejects degenerate inputs (L <= 0 is never added)", () => {
   assert.equal(lengthMm, 0);
 });
 
+test("zero-guard: spiral pitch 0 throws — never Infinity turns/length", () => {
+  assert.throws(() => spiralLengthMm(212, 0, 3000, 160), /Spiral pitch must be greater than 0/);
+  assert.throws(() => spiralLengthMm(212, -50, 3000, 160), /Spiral pitch must be greater than 0/);
+  // Valid pitch is unchanged.
+  assert.equal(spiralLengthMm(212, 150, 3000, 160).turns, 21);
+});
+
 test("totals: per-dia subtotals, tonnes, maunds, null rate -> null cost", () => {
   const r1 = row(calcBbsRow(bbsWorkedExample()));
   const r2 = row(calcBbsRow({ ...base, shape: "straight", diaMm: 20, spanMm: 12000, members: 2, barsPerMember: 1 }));

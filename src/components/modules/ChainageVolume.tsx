@@ -57,9 +57,25 @@ export default function ChainageVolumeEstimator() {
 
   // km+m notation ("1+20" = 1 km + 20 m = 1,020 m) uses the engine's
   // parseChainage. The old local version joined the parts ("1+20" → 120 m).
+  // parseChainage THROWS on invalid input ("abc", "1+abc", "") — catch
+  // here so typing invalid text never throws during render/useMemo;
+  // invalid chainages count as 0 and are surfaced via chainageError.
   const parseChainageLocal = (val: string) => {
-    const n = parseChainage(val);
-    return isFinite(n) ? n : 0;
+    try {
+      const n = parseChainage(val);
+      return isFinite(n) ? n : 0;
+    } catch {
+      return 0;
+    }
+  };
+
+  const isValidChainage = (val: string) => {
+    try {
+      parseChainage(val);
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   const handleUpdateStation = (id: string, field: keyof Station, value: string) => {
@@ -252,6 +268,14 @@ export default function ChainageVolumeEstimator() {
       const chs = processedStations.map((st) => st.ch);
       if (new Set(chs).size !== chs.length) duplicateError = "Duplicate chainages entered — a zero-length segment contributes no volume. Give each station a different chainage.";
     }
+    // Invalid (non-empty) chainage text parses to 0 above instead of
+    // throwing — surface it so the user sees why a station reads 0.
+    // A blank field is "not yet entered", not an error.
+    let chainageError: string | null = null;
+    {
+      const invalid = stations.filter((st) => st.chainage.trim() !== "" && !isValidChainage(st.chainage));
+      if (invalid.length > 0) chainageError = `Invalid chainage "${invalid[0].chainage}" — enter metres or "km+m" (e.g. 1+200).`;
+    }
     return {
       segments,
       totalCut,
@@ -262,6 +286,7 @@ export default function ChainageVolumeEstimator() {
       simpsonError,
       sortWarning,
       duplicateError,
+      chainageError,
     };
   }, [stations, formationWidth, cutSlope, fillSlope, method, swellFactor, shrinkFactor]);
 
@@ -336,6 +361,7 @@ export default function ChainageVolumeEstimator() {
                     </select>
                     {results.simpsonError && (<p className="text-sm text-ui-errorText font-medium mt-2">{results.simpsonError}</p>)}
                     {results.duplicateError && (<p className="text-sm text-ui-errorText font-medium mt-2">{results.duplicateError}</p>)}
+                    {results.chainageError && (<p className="text-sm text-ui-errorText font-medium mt-2">{results.chainageError}</p>)}
                     {results.sortWarning && (<p className="text-sm text-accent-800 font-medium mt-2">{results.sortWarning}</p>)}
                     <p className="text-xs text-txt-tertiary mt-2">Chainage accepts km+m notation, e.g. 1+200 = 1200 m.</p>
                     <Button onClick={addStation}

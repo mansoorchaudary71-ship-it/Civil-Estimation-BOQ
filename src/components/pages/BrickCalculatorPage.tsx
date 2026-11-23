@@ -88,7 +88,7 @@ function buildJsonLd(variant: BrickVariant, title: string, description: string, 
       "Stretcher, English and Flemish bond patterns with a live wall drawing",
       "Cement bags and sand quantity",
       "Cost in PKR, INR and AED",
-      "PDF download, print, share and copy results",
+      "PDF download, print, share, copy and CSV/Excel export of the results",
     ],
   };
   const howTo = {

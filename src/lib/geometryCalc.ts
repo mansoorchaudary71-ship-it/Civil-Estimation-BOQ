@@ -143,7 +143,8 @@ export function calcRectangular(i: RectInputs, rates: GeometryRates = defaultGeo
   const formworkAll = 2 * (i.lengthM * i.widthM + i.lengthM * i.depthM + i.widthM * i.depthM);
   const formwork = i.formedOnGround ? formworkSides : formworkBeam;
   const mainKg = unitWeightKgPerM(i.mainDiaMm) * i.lengthM * i.mainBarCount;
-  const stirrupCount = Math.ceil(i.lengthM / i.stirrupSpacingM) + 1;
+  if (!isFinite(i.stirrupSpacingM) || i.stirrupSpacingM <= 0) errors.push("Stirrup spacing must be greater than 0.");
+  const stirrupCount = isFinite(i.stirrupSpacingM) && i.stirrupSpacingM > 0 ? Math.ceil(i.lengthM / i.stirrupSpacingM) + 1 : 0;
   const aMm = i.widthM * 1000 - 2 * i.coverMm - i.stirrupDiaMm;
   const bMm = i.depthM * 1000 - 2 * i.coverMm - i.stirrupDiaMm;
   const stirrupLenMm = stirrupLengthDetailed(aMm, bMm, i.stirrupDiaMm);
@@ -164,7 +165,10 @@ export function calcCircular(i: CircInputs, rates: GeometryRates = defaultGeomet
   const vol = Math.PI * r * r * i.heightM;
   const formwork = Math.PI * i.diaM * i.heightM;
   const mainKg = unitWeightKgPerM(i.mainDiaMm) * i.heightM * i.mainBarCount;
-  const spiralLen = Math.sqrt((Math.PI * (i.diaM - 2 * (i.coverMm / 1000) - (i.tieDiaMm / 1000))) ** 2 + i.tiePitchM ** 2) * (i.heightM / i.tiePitchM);
+  if (!isFinite(i.tiePitchM) || i.tiePitchM <= 0) errors.push("Tie pitch must be greater than 0.");
+  const spiralLen = isFinite(i.tiePitchM) && i.tiePitchM > 0
+    ? Math.sqrt((Math.PI * (i.diaM - 2 * (i.coverMm / 1000) - (i.tieDiaMm / 1000))) ** 2 + i.tiePitchM ** 2) * (i.heightM / i.tiePitchM)
+    : 0;
   const spiralKg = unitWeightKgPerM(i.tieDiaMm) * spiralLen;
   return finish(vol, formwork, mainKg, spiralKg, i.fck, i.wastagePct, rates, [
     { label: "Volume", text: `V = πr²h = π × ${round(r, 2)}² × ${i.heightM} = ${round(vol, 3)} m³` },
@@ -188,9 +192,10 @@ export function calcTube(i: TubeInputs, rates: GeometryRates = defaultGeometryRa
 export function calcPrecast(i: PrecastInputs, rates: GeometryRates = defaultGeometryRates): GeometryResult {
   const errors: string[] = [];
   checkRange(errors, "Wall length", i.wallLengthM, 1, 1000);
-  const postCount = Math.ceil(i.wallLengthM / i.postSpacingM) + 1;
+  if (!isFinite(i.postSpacingM) || i.postSpacingM <= 0) errors.push("Post spacing must be greater than 0.");
+  const postCount = isFinite(i.postSpacingM) && i.postSpacingM > 0 ? Math.ceil(i.wallLengthM / i.postSpacingM) + 1 : 0;
   const panelsPerSpan = Math.ceil(i.wallHeightM / i.panelHeightM);
-  const totalPanels = panelsPerSpan * (postCount - 1);
+  const totalPanels = postCount > 0 ? panelsPerSpan * (postCount - 1) : 0;
   // Panel clear length = post spacing minus the post width (the panel
   // sits BETWEEN posts) — the old code used a magic 0.1 m here.
   const panelClearM = Math.max(0, i.postSpacingM - i.postSizeM);
@@ -208,14 +213,19 @@ export function calcPrecast(i: PrecastInputs, rates: GeometryRates = defaultGeom
 export function calcRoof(i: RoofInputs): { rafterM: number; pitchDeg: number; areaM2: number; purlinsM: number; battensM: number; sheets: number; errors: string[] } {
   const errors: string[] = [];
   checkRange(errors, "Span", i.spanM, 1, 50);
+  if (!isFinite(i.purlinSpacingM) || i.purlinSpacingM <= 0) errors.push("Purlin spacing must be greater than 0.");
+  if (!isFinite(i.battenSpacingM) || i.battenSpacingM <= 0) errors.push("Batten spacing must be greater than 0.");
+  if (!isFinite(i.sheetWidthM) || i.sheetWidthM <= 0) errors.push("Sheet width must be greater than 0.");
   const rafter = Math.sqrt((i.spanM / 2) ** 2 + i.riseM ** 2);
   const pitch = (Math.atan(i.riseM / (i.spanM / 2)) * 180) / Math.PI;
   const area = 2 * rafter * i.runM;
   // Purlins run along the slope on each side: one at the ridge, one at
   // the eave, and one every spacing in between (+1, not just ceil).
-  const purlins = (Math.ceil(rafter / i.purlinSpacingM) + 1) * 2 * i.runM;
-  const battens = Math.ceil((2 * rafter) / i.battenSpacingM) * i.runM;
-  const sheets = Math.ceil(area / (i.sheetWidthM * 2.44));
+  // A zero spacing divides by zero — report 0 m of purlins/battens and
+  // 0 sheets instead of Infinity (the error above is the verdict).
+  const purlins = isFinite(i.purlinSpacingM) && i.purlinSpacingM > 0 ? (Math.ceil(rafter / i.purlinSpacingM) + 1) * 2 * i.runM : 0;
+  const battens = isFinite(i.battenSpacingM) && i.battenSpacingM > 0 ? Math.ceil((2 * rafter) / i.battenSpacingM) * i.runM : 0;
+  const sheets = isFinite(i.sheetWidthM) && i.sheetWidthM > 0 ? Math.ceil(area / (i.sheetWidthM * 2.44)) : 0;
   return { rafterM: round(rafter, 2), pitchDeg: round(pitch, 1), areaM2: round(area, 2), purlinsM: round(purlins, 1), battensM: round(battens, 1), sheets, errors };
 }
 

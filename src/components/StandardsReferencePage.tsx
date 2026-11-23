@@ -2,6 +2,7 @@ import { Button } from './ui/Button';
 import { GlobalFAQ } from './ui/GlobalFAQ';
 import { SEO } from "./SEO";
 import { getSiteUrl } from "../seo/siteConfig";
+import { getEffectivePathname } from "../lib/toolRoutes";
 import React, { useState } from "react";
 import { Search, BookOpen, ShieldCheck, ArrowRight, Download, Eye, X } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -65,6 +66,18 @@ export const standardsData: StandardEntry[] = [
   { id: "irc-58", code: "IRC:58-2015", title: "Rigid Pavement Design", country: "India", category: "Infrastructure", description: "Guidelines for the design of plain jointed rigid pavements for highways.", toolIds: ["earthworks"], toolNames: ["Earthworks & Excavation Calculator"], source: "Indian Roads Congress (IRC)", year: 2015, lastVerified: LV },
   { id: "irc-112", code: "IRC:112-2020", title: "Concrete Road Bridges — Code of Practice", country: "India", category: "Infrastructure", description: "Code of practice for concrete road bridges — limit state design of bridge superstructures and substructures.", toolIds: ["earthworks"], toolNames: ["Earthworks & Excavation Calculator"], source: "Indian Roads Congress (IRC)", year: 2020, lastVerified: LV },
   { id: "irc-sp20", code: "IRC:SP:20-2002", title: "Rural Roads Manual", country: "India", category: "Infrastructure", description: "Rural roads manual — planning, design, construction and maintenance of rural roads.", toolIds: ["earthworks"], toolNames: ["Earthworks & Excavation Calculator"], source: "Indian Roads Congress (IRC)", year: 2002, lastVerified: LV },
+  // Repo-grounded MoRTH/IRC references (descriptions quote what the repo
+  // itself cites — no edition year claimed where the repo gives none):
+  // IRC:66 — the gradient engine is an "AASHTO / IRC:66" engine and cites
+  // the IRC:66 sag-curve comfort check (src/lib/gradientCalc.ts).
+  { id: "irc-66", code: "IRC:66", title: "Geometric Design — Vertical Curves", country: "India", category: "Infrastructure", description: "Geometric design standard for vertical curves and gradients — cited by the gradient engine for the sag-curve comfort check (L ≥ A·V²/46.5).", toolIds: ["gradient-calculator"], toolNames: ["Gradient & Slope Calculator"], source: "Indian Roads Congress (IRC)", lastVerified: LV },
+  // MoRTH Cl. 401/406 — the sieve spec database lists "MoRTH GSB / WMM
+  // (IRC:37 / MoRTH Cl. 401/406)" (src/data/sieveSpecs.ts).
+  { id: "morth-401-406", code: "MoRTH Cl. 401 / 406", title: "Granular Sub-Base & Wet Mix Macadam", country: "India", category: "Infrastructure", description: "Granular pavement layers — Granular Sub-Base (Clause 401) and Wet Mix Macadam (Clause 406) gradation envelopes, checked against IRC:37 / MoRTH.", toolIds: ["master-sieve"], toolNames: ["Master Sieve Analysis Calculator"], source: "Ministry of Road Transport & Highways, India (MoRTH)", lastVerified: LV },
+  // MoRTH bituminous-mix tables — envelopes are "MoRTH, verbatim" in the
+  // pavement-mix engine (src/lib/pavementMixCalc.ts) and the minimum
+  // bitumen contents are stated in the site FAQ (src/components/ui/GlobalFAQ.tsx).
+  { id: "morth-mixes", code: "MoRTH Tables 500-10 / 500-17 · Cl. 515", title: "Bituminous Mix Gradations & Bitumen Content", country: "India", category: "Infrastructure", description: "MoRTH gradation envelopes for pavement mixes — GSB Grade I Table 400-1, DBM Grades 1–2 Table 500-10, SMA Clause 515, Bituminous Concrete Grades 1–2 Table 500-17. Minimum bitumen: 4.5% DBM, 5.8% SMA, 5.0% bituminous concrete.", toolIds: ["pavement-mix"], toolNames: ["Pavement Mix & Aggregate Gradation Calculator"], source: "Ministry of Road Transport & Highways, India (MoRTH)", lastVerified: LV },
   { id: "bcp-2021", code: "BCP-2021", title: "Building Code of Pakistan", country: "Pakistan", category: "Building", description: "Seismic provisions and general building construction guidelines for structural, fire, and life safety in Pakistan. Formulated by the PEC.", toolIds: ["house", "staircase-calculator"], toolNames: ["House Estimator", "Staircase Calculator"], pdfLink: "/assets/standards/bcp-2021.pdf", source: "Pakistan Engineering Council (PEC)", year: 2021, lastVerified: LV },
   { id: "nha-specs", code: "NHA Specs", title: "NHA General Specifications", country: "Pakistan", category: "Infrastructure", description: "Standard specifications for road and bridge works by the National Highway Authority (NHA) of Pakistan, detailing earthwork, sub-base, and asphalt provisions.", toolIds: ["earthworks"], toolNames: ["Earthworks & Excavation Calculator"], source: "National Highway Authority, Pakistan (NHA)", lastVerified: LV },
   { id: "pec-bidding", code: "PEC Documents", title: "Standard Bidding Documents", country: "Pakistan", category: "Management", description: "Pakistan Engineering Council (PEC) standard guidelines for procurement of civil works, contracting, and BOQ formulations.", toolIds: ["qs-workflow"], toolNames: ["BOQ Generator"], source: "Pakistan Engineering Council (PEC)", lastVerified: LV },
@@ -76,15 +89,14 @@ export const standardsData: StandardEntry[] = [
 ];
 
 /**
- * Per-country SEO for the four routes that render this page
- * (/is-codes-reference + /morth-irc-specs → India; /pakistan-building-codes
- * → Pakistan; /uae-construction-standards → UAE). The title/description
- * come from initialActiveCountry — the route App rendered — not from the
- * live filter state, so the head tags always match the URL. India has two
- * routes rendering the identical page (same title, same content), so both
- * canonicalise to the primary route, /is-codes-reference — a self-canonical
- * on each would leave two duplicate pages in the index. Pakistan and UAE
- * canonicalise to their own route.
+ * Per-country SEO for the routes that render this page
+ * (/is-codes-reference → India; /pakistan-building-codes → Pakistan;
+ * /uae-construction-standards → UAE). /morth-irc-specs renders the same
+ * component but in "morth-irc" mode (see MORTH_SEO below): it used to
+ * render the identical IS-codes page and canonicalise to
+ * /is-codes-reference, which is why the route showed the wrong content.
+ * The MoRTH/IRC page now has its own title, description and canonical.
+ * Pakistan and UAE canonicalise to their own route.
  */
 const SEO_BY_COUNTRY: Record<string, { title: string; description: string; canonicalPath?: string; h1Main: string; h1Accent: string; h1Suffix: string }> = {
   India: {
@@ -121,22 +133,63 @@ const SEO_BY_COUNTRY: Record<string, { title: string; description: string; canon
   },
 };
 
-export default function StandardsReferencePage({ onNavigate, initialActiveCountry = "All" }: { onNavigate?: (id: string) => void, initialActiveCountry?: string }) {
+/** The MoRTH/IRC subset of standardsData shown in "morth-irc" mode. */
+const MORTH_IRC_IDS = new Set([
+  "morth", "irc-37", "irc-6", "irc-58", "irc-112", "irc-sp20",
+  "irc-66", "morth-401-406", "morth-mixes",
+]);
+
+/** SEO for /morth-irc-specs — its own title/description/canonical. */
+const MORTH_SEO = {
+  title: "MoRTH & IRC Specifications Guide",
+  description: "MoRTH Specifications for Road and Bridge Works (5th Rev., 2013) and IRC codes — IRC:37-2018 flexible pavements, IRC:58-2015 rigid pavements, IRC:6-2017 bridge loads and IRC:112-2020 concrete bridges, with scope and linked calculators.",
+  canonicalPath: "/morth-irc-specs",
+  h1Main: "MoRTH & IRC",
+  h1Accent: "Specifications",
+  h1Suffix: "",
+};
+
+const MORTH_FAQS = [
+  { question: "Which code governs flexible pavement design in India?", answer: "IRC:37-2018, Guidelines for the Design of Flexible Pavements — it sets the pavement crust (GSB, WMM, DBM, BC) from subgrade CBR and traffic in millions of standard axles (MSA). The Road Pavement Estimator on this site uses IRC:37-2018 / MoRTH layer practice for quantities; thickness is guidance, not a design." },
+  { question: "What are the MoRTH Specifications for Road and Bridge Works?", answer: "The Ministry of Road Transport & Highways specifications (5th Revision, 2013) — the standard for highway construction in India, covering earthwork, granular and bituminous pavement layers and bridge works. The granular and bituminous clauses (e.g. Cl. 401 GSB, Cl. 406 WMM, Tables 500-10/500-17) are what our sieve and pavement-mix tools check against." },
+  { question: "What is the difference between IRC:37 and IRC:58?", answer: "IRC:37-2018 designs flexible (bituminous) pavements; IRC:58-2015 designs plain jointed rigid (concrete) pavements. A rigid-pavement slab must be designed per IRC:58-2015 (cumulative fatigue damage CFD ≤ 1.0) by a pavement engineer — our Rigid Pavement Estimator is quantities only." },
+];
+
+export type StandardsMode = "is-codes" | "morth-irc";
+
+/**
+ * Detect the mode from the URL when no explicit mode prop is given.
+ * App.tsx passes initialActiveCountry="India" for BOTH /is-codes-reference
+ * and /morth-irc-specs, so the country prop cannot distinguish them — the
+ * route itself is the discriminator. Uses getEffectivePathname() so hash
+ * deep links (#/morth-irc-specs, after the 404.html redirect) work too.
+ * App may also pass initialMode="morth-irc" directly; the prop wins.
+ */
+function detectModeFromUrl(): StandardsMode | null {
+  if (typeof window === "undefined") return null;
+  return getEffectivePathname().split("/").includes("morth-irc-specs") ? "morth-irc" : null;
+}
+
+export default function StandardsReferencePage({ onNavigate, initialActiveCountry = "All", initialMode }: { onNavigate?: (id: string) => void, initialActiveCountry?: string, initialMode?: StandardsMode }) {
+  const [mode] = useState<StandardsMode>(() => initialMode ?? detectModeFromUrl() ?? "is-codes");
+  const isMorth = mode === "morth-irc";
   const [activeCountry, setActiveCountry] = useState(initialActiveCountry);
   const [searchTerm, setSearchTerm] = useState("");
   const [yearFilter, setYearFilter] = useState<string>("All");
   const [viewPdfUrl, setViewPdfUrl] = useState<string | null>(null);
-  const seo = SEO_BY_COUNTRY[initialActiveCountry] ?? SEO_BY_COUNTRY.All;
+  const seo = isMorth ? MORTH_SEO : (SEO_BY_COUNTRY[initialActiveCountry] ?? SEO_BY_COUNTRY.All);
 
   const countries = ["All", "India", "Pakistan", "UAE"];
   const years = ["All", ...Array.from(new Set(standardsData.map((s) => s.year).filter((y): y is number => y != null))).sort((a, b) => b - a).map(String)];
 
   const filteredStandards = standardsData.filter(std => {
+    // MoRTH/IRC mode shows only the MoRTH/IRC subset — never the IS codes.
+    const matchesMode = !isMorth || MORTH_IRC_IDS.has(std.id);
     const matchesCountry = activeCountry === "All" || std.country === activeCountry;
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = std.code.toLowerCase().includes(searchLower) || std.title.toLowerCase().includes(searchLower);
     const matchesYear = yearFilter === "All" || (std.year != null && String(std.year) === yearFilter);
-    return matchesCountry && matchesSearch && matchesYear;
+    return matchesMode && matchesCountry && matchesSearch && matchesYear;
   });
 
   return (
@@ -157,15 +210,17 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
             {seo.h1Main} <span className="text-[#B39B72]">{seo.h1Accent}</span>{seo.h1Suffix ? ` ${seo.h1Suffix}` : ""}
           </h1>
           <p className="text-[#8B8476] max-w-2xl mb-10 text-base font-normal text-txt-secondary leading-relaxed">
-            A comprehensive reference library of the civil engineering standards, specifications, and building codes powering our estimation tools across key international markets.
+            {isMorth
+              ? "MoRTH Specifications for Road and Bridge Works and the Indian Roads Congress codes behind our pavement, bridge and earthworks calculators — flexible and rigid pavement design, bridge loads, granular and bituminous layers, and rural roads."
+              : "A comprehensive reference library of the civil engineering standards, specifications, and building codes powering our estimation tools across key international markets."}
           </p>
 
           <div className="w-full max-w-xl relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#A39D93]" />
-            <><label htmlFor="a11y-input-9" className="sr-only">Search by code (e.g. 'IS 456') or title...</label>
+            <><label htmlFor="a11y-input-9" className="sr-only">{isMorth ? "Search MoRTH / IRC specs (e.g. 'IRC:37')..." : "Search by code (e.g. 'IS 456') or title..."}</label>
 <input id="a11y-input-9"
               type="text"
-              placeholder="Search by code (e.g. 'IS 456') or title..."
+              placeholder={isMorth ? "Search MoRTH / IRC specs (e.g. 'IRC:37')..." : "Search by code (e.g. 'IS 456') or title..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-surface-default border border-[#E8E4D9] rounded-full py-4 pl-12 pr-4 text-[#4A443B] placeholder-[#A39D93] focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#B39B72]/50 shadow-brand-sm overflow-hidden"
@@ -183,6 +238,9 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
           </select>
           <span className="text-sm text-txt-tertiary">{filteredStandards.length} standard(s) shown</span>
         </div>
+        {/* Country filter — hidden in MoRTH/IRC mode: every entry there is
+            Indian by definition, so the pills would only re-show IS codes. */}
+        {!isMorth && (
         <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
           {countries.map(country => (
             <Button
@@ -198,6 +256,10 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
             </Button>
           ))}
         </div>
+        )}
+        {isMorth && (
+          <p className="text-center text-sm text-txt-tertiary mb-12">Showing {filteredStandards.length} MoRTH / IRC specification(s) — use the search box or year filter to narrow them down.</p>
+        )}
 
         {/* Standards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
@@ -305,7 +367,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
       <div className="w-full md:max-w-7xl md:mx-auto px-6">
         <GlobalFAQ
           moduleId="standards-reference"
-          faqs={[
+          faqs={isMorth ? MORTH_FAQS : [
             { question: "Which code governs house construction in Pakistan?", answer: "The Building Code of Pakistan (BCP-2021), formulated by the PEC, with local bylaws on top — for example the LDA Building & Zoning Regulations in Lahore or the DHA bye-laws inside DHA schemes." },
             { question: "What is the difference between IS 456 and IS 10262?", answer: "IS 456 is the code of practice for designing reinforced concrete structures; IS 10262 is the guideline for proportioning the concrete mix itself (cement, sand, aggregate and water) to hit a target strength." },
             { question: "Why do some standards have no PDF?", answer: "Only the Building Code of Pakistan PDF is hosted on this site. Other codes are copyrighted publications — their full text must be bought or accessed from the publishing body (BIS, IRC, PEC or NHA)." },

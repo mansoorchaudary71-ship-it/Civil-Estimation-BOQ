@@ -75,3 +75,16 @@ test("frustum volume rule: rectangular and stepped types", () => {
   const rect = footingConcreteVolM3({ ...defaultFootingInputs, footingType: "rectangular", totalDepthM: 0.5 });
   approx(rect, 2.42, 0.01);
 });
+
+test("zero-guard: manual spacing 0 errors and stays finite — never Infinity bars", () => {
+  const r = designFooting({ workingLoadKN: 1000, autoDesign: false, manualSpacingMm: 0, manualSpacingYMm: 0 });
+  assert.ok(r.errors.some((e) => e.includes("Manual spacing (X)")), `errors: ${r.errors.join("; ")}`);
+  assert.ok(r.errors.some((e) => e.includes("Manual spacing (Y)")), `errors: ${r.errors.join("; ")}`);
+  assert.ok(Number.isFinite(r.barsX) && Number.isFinite(r.barsY));
+  assert.ok(Number.isFinite(r.spacingXMm) && Number.isFinite(r.spacingYMm));
+  assert.ok(Number.isFinite(r.steelKg) && r.steelKg > 0);
+  // Top-mesh spacing 0 also falls back to the 150 mm default.
+  const top = designFooting({ workingLoadKN: 1000, autoDesign: false, manualSpacingMm: 150, manualSpacingYMm: 150, topMesh: true, topMeshSpacingXMm: 0, topMeshSpacingYMm: 0 });
+  assert.ok(Number.isFinite(top.topBarsX) && top.topBarsX > 0);
+  assert.ok(Number.isFinite(top.topSteelKg) && top.topSteelKg > 0);
+});

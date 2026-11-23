@@ -75,3 +75,19 @@ test("long straight flight over Mu,lim is a hard error, never a silent NaN", () 
   assert.ok(r.errors.some((e) => e.includes("exceeds the limiting moment")));
   assert.ok(r.errors.some((e) => e.includes("51.5")));
 });
+
+test("zero-guards: main/dist spacing 0 errors and gives 0 bars — never Infinity steel", () => {
+  const r = designStaircase({ mainSpacingMm: 0, distSpacingMm: 0 });
+  assert.ok(r.errors.some((e) => e.includes("Main bar spacing")), `errors: ${r.errors.join("; ")}`);
+  assert.ok(r.errors.some((e) => e.includes("Distribution bar spacing")), `errors: ${r.errors.join("; ")}`);
+  assert.equal(r.mainBars, 0);
+  assert.equal(r.distBars, 0);
+  assert.equal(r.mainSteelKg, 0);
+  assert.equal(r.distSteelKg, 0);
+  assert.equal(r.designedSteelKg, 0);
+  assert.ok(Number.isFinite(r.astProvidedMm2PerM));
+  // One bad spacing only: the other still computes.
+  const r2 = designStaircase({ distSpacingMm: 0 });
+  assert.equal(r2.distBars, 0);
+  assert.ok(r2.mainBars > 0 && r2.mainSteelKg > 0);
+});

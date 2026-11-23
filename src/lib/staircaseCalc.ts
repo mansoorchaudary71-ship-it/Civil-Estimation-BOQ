@@ -82,6 +82,8 @@ export function validateStaircaseInputs(i: StaircaseInputs): string[] {
   checkRange(e, "Stair width", i.widthM, 0.6, 3);
   checkRange(e, "Waist thickness", i.waistM, 0.1, 0.4);
   checkRange(e, "Steps", i.steps, 1, 40);
+  if (!isFinite(i.mainSpacingMm) || i.mainSpacingMm <= 0) e.push("Main bar spacing must be greater than 0.");
+  if (!isFinite(i.distSpacingMm) || i.distSpacingMm <= 0) e.push("Distribution bar spacing must be greater than 0.");
   const twoRT = 2 * i.riseM * 1000 + i.treadM * 1000;
   if (twoRT < 600 || twoRT > 650) e.push(`2R+T = ${round(twoRT)} mm is outside the 600–650 mm comfort band (NBC/Blondel).`);
   return e;
@@ -162,15 +164,15 @@ export function designStaircase(input: Partial<StaircaseInputs> = {}): Staircase
   if (!isFinite(astFlex)) {
     errors.push(`Waist-slab moment Mu = ${round(mu, 1)} kNm/m exceeds the limiting moment Mu,lim = ${round(muLimKNm(i.fck, 1000, d, i.fy), 1)} kNm/m — increase the waist thickness / concrete grade or split the flight.`);
   }
-  const mainBars = Math.ceil((w * 1000 - 2 * i.coverMm) / i.mainSpacingMm) + 1;
-  const astProv = astProvidedPerM(i.mainDiaMm, i.mainSpacingMm);
+  const mainBars = isFinite(i.mainSpacingMm) && i.mainSpacingMm > 0 ? Math.ceil((w * 1000 - 2 * i.coverMm) / i.mainSpacingMm) + 1 : 0;
+  const astProv = astProvidedPerM(i.mainDiaMm, i.mainSpacingMm); // returns 0 for spacing <= 0
   if (isFinite(astFlex) && astProv < astReq) warnings.push(`Main steel provided (${round(astProv)} mm²/m) is below the required ${round(astReq)} mm²/m — reduce the spacing or increase the bar diameter.`);
   const maxSpacing = Math.min(3 * d, 300);
   if (i.mainSpacingMm > maxSpacing) warnings.push(`Main bar spacing ${i.mainSpacingMm} mm exceeds the IS 456 limit min(3d, 300) = ${maxSpacing} mm.`);
   const mainLenM = inclinedLength + 0.3; // + anchorage allowance
   const mainKg = unitWeightKgPerM(i.mainDiaMm) * mainLenM * mainBars;
   const distAst = (0.12 / 100) * 1000 * i.waistM * 1000;
-  const distBars = Math.ceil(inclinedLength * 1000 / i.distSpacingMm) + 1;
+  const distBars = isFinite(i.distSpacingMm) && i.distSpacingMm > 0 ? Math.ceil(inclinedLength * 1000 / i.distSpacingMm) + 1 : 0;
   const distKg = unitWeightKgPerM(i.distDiaMm) * w * distBars;
   const designedSteel = mainKg + distKg;
   const onePctKg = wetVol * 0.01 * 7850;

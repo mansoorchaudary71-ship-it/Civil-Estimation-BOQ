@@ -23,3 +23,15 @@ test("Simpson requires equal spacing + odd count — blocked otherwise", () => {
   const unequal = [{ chainage: 0, cutM2: 0, fillM2: 0 }, { chainage: 20, cutM2: 26, fillM2: 0 }, { chainage: 60, cutM2: 0, fillM2: 28 }];
   assert.throws(() => simpsonVolumes(unequal), /equal station spacing/);
 });
+
+test("zero-guard: non-numeric chainage is rejected, never NaN into volumes", () => {
+  assert.throws(() => parseChainage("abc"), /Invalid chainage/);
+  assert.throws(() => parseChainage("1+abc"), /Invalid chainage/);
+  assert.throws(() => parseChainage(""), /Invalid chainage/);
+  assert.throws(() => parseChainage("1+200+300"), /Invalid chainage/);
+  assert.throws(() => parseChainage(NaN), /Invalid chainage/);
+  // Valid forms are unchanged.
+  assert.equal(parseChainage("1+200"), 1200);
+  assert.equal(parseChainage("0+030"), 30);
+  assert.equal(parseChainage(450), 450);
+});

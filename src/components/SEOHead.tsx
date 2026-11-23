@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { GROUP_TO_CATEGORY, pathFromId } from '../lib/toolRoutes';
 import { getSiteUrl } from '../seo/siteConfig';
+import { SPECIFIC_FAQS } from './ui/GlobalFAQ';
 
 /**
  * Dashboard category label -> /calculators/<group> key (the real group
@@ -47,6 +48,30 @@ export default function SEOHead({ toolId, toolName, category, description, canon
   const categoryGroup = CATEGORY_TO_GROUP[category];
   const categoryUrl = categoryGroup ? `${siteUrl}/calculators/${categoryGroup}` : siteUrl;
 
+  // FAQPage: use the tool's real SPECIFIC_FAQS (first 7) when they exist —
+  // Google requires FAQ content to be visible on the page for rich results,
+  // and GlobalFAQ renders exactly these entries, so the JSON-LD matches
+  // what the user sees. The single templated Q&A stays only as a fallback
+  // for tools with no specific FAQs.
+  const specificFaqs = SPECIFIC_FAQS[toolId] ?? [];
+  const faqMainEntity =
+    specificFaqs.length > 0
+      ? specificFaqs.slice(0, 7).map((f) => ({
+          "@type": "Question",
+          "name": f.question,
+          "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+        }))
+      : [
+          {
+            "@type": "Question",
+            "name": `What is the ${toolName} used for?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": description
+            }
+          }
+        ];
+
   const jsonLdData = [
     {
       "@context": "https://schema.org",
@@ -75,16 +100,7 @@ export default function SEOHead({ toolId, toolName, category, description, canon
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": `What is the ${toolName} used for?`,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": description
-          }
-        }
-      ]
+      "mainEntity": faqMainEntity
     },
     {
       "@context": "https://schema.org",

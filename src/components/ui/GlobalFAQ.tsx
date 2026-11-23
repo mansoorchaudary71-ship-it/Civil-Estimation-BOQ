@@ -51,7 +51,7 @@ const BOQ_FAQS: FAQItem[] = [
  * src/lib/* engine (no import cycle: engines never import components).
  * "boq" and "boq-templates" render the same BOQGenerator, so they share BOQ_FAQS.
  */
-const SPECIFIC_FAQS: Record<string, FAQItem[]> = {
+export const SPECIFIC_FAQS: Record<string, FAQItem[]> = {
   "topsoil-estimator": [
     {
       question: "What is Bulking (Swell) Factor?",
@@ -366,20 +366,24 @@ const SPECIFIC_FAQS: Record<string, FAQItem[]> = {
   ],
   "house": [
     {
-      question: "What engineering formulas does this tool use?",
-      answer: "It strictly uses internationally recognized civil engineering formulas relevant to the quantity estimation field, compliant with standards like NBC Pakistan 2021."
+      question: "How does the House Estimator work out quantities?",
+      answer: "From thumb rules on the covered area: wall length is 15% of the covered area, brickwork is wall length × total height × 0.75 ft with a 0.85 opening deduction at 13.5 bricks per cft, RCC uses the 1:2:4 mix with dry volume = wet × 1.54, plaster uses dry volume = wet × 1.33, cement bags are cement volume ÷ 1.25 cft per bag, and steel is slab volume × 1.25 × 0.015 × 222.2 (× 1.05 for seismic Zone 2B). They are planning rules, not a measured BOQ — confirm quantities from drawings."
     },
     {
-      question: "How accurate is the material estimation?",
-      answer: "Our engine uses standard volume conversions (e.g., 1.54 for concrete dry volume) to compute exact material breakdowns matching professional BOQs."
+      question: "What does a double-storey 5 marla house need for the grey structure?",
+      answer: "For 1,125 sq ft of covered area (G+1, 10.5 ft rooms, 3 ft foundations): 34,856 bricks, 426 bags of cement (124 for brickwork, 248 for RCC, 54 for plaster), 4,922 kg of steel, 1,506 cft of sand and 1,238 cft of crush, over 6,024 sq ft of plaster area. Finishing and add-ons are priced on top of this."
     },
     {
-      question: "Does it support different Plot Units like Marla and Sq.Yd?",
-      answer: "Yes, the calculation automatically scales whether you input your plot in Marlas, Square Yards, or Square Feet."
+      question: "What do Standard, Premium and Luxury finishes change?",
+      answer: "They multiply the finishing rate: Standard ×1.0, Premium ×1.6 and Luxury ×2.5. Finishing covers tiles (35% of the finishing cost), paint (20%), woodwork and MEP, with MEP rising 5% per extra washroom or kitchen. The design standard is NBC Pakistan 2021, the structure is an RCC frame and the seismic zone is 2B."
     },
     {
-      question: "Can I adjust the market rates?",
-      answer: "Absolutely. Click on 'View Market Rates' to customize the cost per unit for cement, steel, bricks, and labor."
+      question: "Does it include solar, smart home and landscaping?",
+      answer: "Yes, as value-added add-ons priced separately from grey structure and finishing: a 5–10 kW solar system (hybrid inverter and batteries), smart-home and security items (CCTV wiring, digital locks, gate motor, smoke detectors) and exterior work (tuff-tile driveway, lawn and mood lighting). Total cost = grey structure + finishing + add-ons."
+    },
+    {
+      question: "Is this estimate a BOQ I can build from?",
+      answer: "No. It is a planning budget from thumb-rule quantities and an editable rate table — open the Material Rates tab to change the cement, steel, brick and labour rates. It must not be used as a substitute for a professional BOQ certified by a licensed structural engineer or quantity surveyor. Confirm quantities from drawings and rates from your contractor before ordering."
     },
   ],
   "aggregate-blending": [
@@ -547,6 +551,58 @@ const SPECIFIC_FAQS: Record<string, FAQItem[]> = {
     {
       question: "Is the slope tool a Bishop analysis?",
       answer: "No — it is an infinite-slope screening calculation. Real slope design needs slip-circle analysis in dedicated software."
+    },
+  ],
+  "marla-converter": [
+    {
+      question: "How many square feet are in one marla?",
+      answer: "It depends on which marla your plot uses. The Punjab revenue marla (the official land-record unit) is 272.25 sq ft (25.293 m²); the society / DHA / Bahria marla is 225 sq ft (20.903 m²). One kanal is 20 marla — 5,445 sq ft on the revenue standard, 4,500 sq ft on the society standard. Check your allotment letter or registry before converting, because the two standards differ by about 17%."
+    },
+    {
+      question: "How do I convert marla to kanal?",
+      answer: "Divide marla by 20 — one kanal is 20 marla. So 10 marla is 0.5 kanal, 5 marla is 0.25 kanal and 40 marla is 2 kanal. The other way, multiply kanal by 20: 1.5 kanal is 30 marla."
+    },
+    {
+      question: "How many marla are in one acre?",
+      answer: "160 marla on the revenue standard (8 kanal = 43,560 sq ft = 1 acre). On the society standard of 225 sq ft per marla, an acre works out to about 193.6 marla, which is why acre conversions must always state the marla standard."
+    },
+    {
+      question: "How many square yards are in one marla?",
+      answer: "One revenue marla (272.25 sq ft) is 30.25 sq yd; one society marla (225 sq ft) is 25 sq yd. One revenue kanal is 605 sq yd and one society kanal is 500 sq yd. Divide square feet by 9 to get square yards."
+    },
+    {
+      question: "What is a 5 marla plot in square feet?",
+      answer: "5 marla is 1,361.25 sq ft on the Punjab revenue standard (5 × 272.25) and 1,125 sq ft on the society / DHA / Bahria standard (5 × 225). At 75% ground coverage, a double-storey (G+1) house on the revenue 5 marla plot has about 2,042 sq ft of covered area; on the society plot about 1,688 sq ft."
+    },
+    {
+      question: "Why do two different marla sizes exist?",
+      answer: "The 272.25 sq ft marla comes from the British-era revenue system (1 marla = 1/160 acre), used in land records across Punjab. Housing societies standardised on the rounder 225 sq ft marla (15 ft × 15 ft) for plotting. The same '5 marla' plot is therefore about 17% larger on paper under the revenue standard — always confirm which standard your plot, your builder and your cost estimate are using."
+    },
+  ],
+  "pakistan-cost-calculator": [
+    {
+      question: "How is the cost of building a house in Pakistan calculated?",
+      answer: "Covered area × rate per sq ft, where the rate depends on the city and the finish tier. Covered area is the plot area × 0.75 (ground coverage) × number of floors — a basement adds one more 75%-coverage floor. So a 5 marla revenue plot (1,361.25 sq ft) built G+1 has about 2,042 sq ft covered, and at the Lahore standard rate of PKR 3,800–4,500/sq ft that is roughly PKR 7.76–9.19 million (Nov 2026 indicative rates)."
+    },
+    {
+      question: "What are the 2026 construction rates per sq ft in Pakistan?",
+      answer: "Indicative November 2026 builder-published ranges for Lahore: grey structure PKR 2,800–3,400, standard complete PKR 3,800–4,500, premium PKR 5,700–6,400 and luxury turnkey PKR 7,000–8,500 per sq ft of covered area. Islamabad and Karachi run a little higher; Faisalabad and Multan a little lower. These are market ranges, not a quotation — confirm with your contractor."
+    },
+    {
+      question: "Why does the marla standard change the cost by so much?",
+      answer: "Because the plot area itself changes: a Punjab revenue marla is 272.25 sq ft while a society / DHA / Bahria marla is 225 sq ft. The same 5 marla G+1 house in Lahore at standard rates costs PKR 7.76–9.19 million on the revenue standard but PKR 6.41–7.59 million on the society standard — about 17% less, for the same '5 marla' label. Always check which standard your plot uses."
+    },
+    {
+      question: "What is the difference between grey structure and complete (turnkey) cost?",
+      answer: "Grey structure is the shell only — foundation, brickwork, RCC, plaster and basic MEP rough-in — and it is roughly 55% of a turnkey total. The remaining ~45% is finishing: flooring, paint, woodwork, fixtures and fittings. A grey-only quote for a 5 marla revenue plot G+1 in Lahore is about PKR 5.72–6.94 million, against PKR 7.76–9.19 million complete at standard finish."
+    },
+    {
+      question: "How much does a 5 marla house cost to build in Lahore?",
+      answer: "At indicative November 2026 rates, a double-storey (G+1) house on a 5 marla revenue plot (about 2,042 sq ft covered) costs roughly PKR 7.76–9.19 million at standard finish, PKR 5.72–6.94 million for grey structure only, and PKR 11.64–13.07 million at premium finish. On a society-standard 5 marla plot (about 1,688 sq ft covered) the standard-finish range is PKR 6.41–7.59 million."
+    },
+    {
+      question: "What materials does a house need per square foot of covered area?",
+      answer: "As thumb rules used by this calculator: about 0.4 bags of cement, 3.5 kg of steel, 10 bricks, 1.5 cft of sand and 1.35 cft of aggregate per sq ft of covered area. For the 5 marla revenue G+1 example (2,042 sq ft) that is about 817 bags of cement, 7,147 kg of steel, 20,419 bricks, 3,063 cft of sand and 2,757 cft of aggregate. These are budgeting rules — measure from the drawings for the final order."
     },
   ],
   "geotechnical": [

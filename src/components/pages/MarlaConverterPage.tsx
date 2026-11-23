@@ -1,17 +1,21 @@
 import { Button } from '../ui/Button';
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  Building, 
-  MapPin, 
-  Calculator, 
-  Layers, 
-  Grid, 
-  ShieldCheck, 
+import {
+  Building,
+  MapPin,
+  Calculator,
+  Layers,
+  Grid,
+  ShieldCheck,
   ArrowRight,
   RefreshCw,
-  Map
+  Map,
+  Save,
+  History
 } from 'lucide-react';
 import ToolPageFooter from '../ToolPageFooter';
+import { CalculationHistory } from '../ui/CalculationHistory';
+import { GenericExportButtons } from '../ui/GenericExportButtons';
 import { GlobalFAQ } from '../ui/GlobalFAQ';
 import { SEO } from "../SEO";
 import { getSiteUrl } from "../../seo/siteConfig";
@@ -252,6 +256,52 @@ export default function MarlaConverterPage() {
                })}
             </div>
           </div>
+        </div>
+
+        {/* Save & export — standalone page has no ToolHeader, so the save /
+            history buttons live here next to the export buttons. They fire
+            the same window events CalculationHistory listens for. */}
+        <div className="mb-16">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <GenericExportButtons
+              filename="marla-converter"
+              data={{
+                headers: ["Unit", "Value"],
+                rows: allUnits.map((u) => [u, convertedValues[u].toFixed(2)]),
+              }}
+            />
+            <Button
+              onClick={() => window.dispatchEvent(new Event("trigger-global-save"))}
+              className="flex items-center gap-2 px-4 py-2 bg-ink text-white rounded-full text-sm font-semibold hover:bg-ink-700 transition-colors active:scale-95"
+            >
+              <Save className="w-4 h-4" /> Save calculation
+            </Button>
+            <Button
+              onClick={() => window.dispatchEvent(new Event("trigger-global-history"))}
+              className="flex items-center gap-2 px-4 py-2 bg-surface-hover text-txt-primary rounded-full text-sm font-semibold border border-ui-borderSubtle hover:bg-surface-active transition-colors active:scale-95"
+            >
+              <History className="w-4 h-4" /> Saved calculations
+            </Button>
+          </div>
+          <CalculationHistory
+            calculatorId="marla-converter"
+            estimationName="Marla Converter"
+            currentInputs={{ inputValue, sourceUnit, marlaStandard, plotLength, plotWidth, fardKanal, fardMarla, fardSarsai }}
+            currentResults={Object.fromEntries(allUnits.map((u) => [u, convertedValues[u]]))}
+            summaryGeneration={(inputs, res) =>
+              `${String(inputs.inputValue ?? "")} ${String(inputs.sourceUnit ?? "")} (${String(inputs.marlaStandard ?? "")}) = ${Number(res["Sq.Ft"] ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 })} Sq.Ft · ${Number(res["Marla"] ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 })} Marla`
+            }
+            onRestore={(savedInputs) => {
+              if (savedInputs.inputValue != null) setInputValue(String(savedInputs.inputValue));
+              if (typeof savedInputs.sourceUnit === "string") setSourceUnit(savedInputs.sourceUnit as keyof UnitMap);
+              if (savedInputs.marlaStandard === "Punjab" || savedInputs.marlaStandard === "KPK") setMarlaStandard(savedInputs.marlaStandard);
+              if (savedInputs.plotLength != null) setPlotLength(String(savedInputs.plotLength));
+              if (savedInputs.plotWidth != null) setPlotWidth(String(savedInputs.plotWidth));
+              if (savedInputs.fardKanal != null) setFardKanal(String(savedInputs.fardKanal));
+              if (savedInputs.fardMarla != null) setFardMarla(String(savedInputs.fardMarla));
+              if (savedInputs.fardSarsai != null) setFardSarsai(String(savedInputs.fardSarsai));
+            }}
+          />
         </div>
 
         {/* Funnel CTA */}

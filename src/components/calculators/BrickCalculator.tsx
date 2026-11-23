@@ -211,6 +211,7 @@ function OpeningsEditor({
             id={`${idPrefix}-openings-total`}
             type="number"
             inputMode="decimal"
+            step="any"
             min="0"
             value={openingsTotal}
             onChange={(e) => setOpeningsTotal(e.target.value)}
@@ -264,6 +265,7 @@ function OpeningsEditor({
                     id={`${idPrefix}-op-len-${op.id}`}
                     type="number"
                     inputMode="decimal"
+                    step="any"
                     min="0"
                     value={op.length}
                     onChange={(e) =>
@@ -284,6 +286,7 @@ function OpeningsEditor({
                     id={`${idPrefix}-op-h-${op.id}`}
                     type="number"
                     inputMode="decimal"
+                    step="any"
                     min="0"
                     value={op.height}
                     onChange={(e) =>
@@ -915,6 +918,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                     id="brick-total-area"
                     type="number"
                     inputMode="decimal"
+                    step="any"
                     min="0"
                     value={area}
                     onChange={(e) => setArea(e.target.value)}
@@ -930,6 +934,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                     id="brick-area-openings"
                     type="number"
                     inputMode="decimal"
+                    step="any"
                     min="0"
                     value={areaOpenings}
                     onChange={(e) => setAreaOpenings(e.target.value)}
@@ -958,6 +963,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   <input
                     type="number"
                     inputMode="decimal"
+                    step="any"
                     min="0"
                     value={areaThicknessMm}
                     onChange={(e) => setAreaThicknessMm(e.target.value)}
@@ -1036,6 +1042,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                           id={`${w.id}-len`}
                           type="number"
                           inputMode="decimal"
+                          step="any"
                           min="0"
                           value={w.length}
                           onChange={(e) => updateWall(w.id, { length: e.target.value })}
@@ -1050,6 +1057,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                           id={`${w.id}-h`}
                           type="number"
                           inputMode="decimal"
+                          step="any"
                           min="0"
                           value={w.height}
                           onChange={(e) => updateWall(w.id, { height: e.target.value })}
@@ -1077,6 +1085,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                         <input
                           type="number"
                           inputMode="decimal"
+                          step="any"
                           min="0"
                           value={w.thicknessMm}
                           onChange={(e) => updateWall(w.id, { thicknessMm: e.target.value })}
@@ -1151,6 +1160,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       id="brick-wall-length"
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={length}
                       onChange={(e) => setLength(e.target.value)}
@@ -1166,6 +1176,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       id="brick-wall-height"
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
@@ -1194,6 +1205,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                     <input
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={thicknessMm}
                       onChange={(e) => setThicknessMm(e.target.value)}
@@ -1288,6 +1300,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                         id={`brick-custom-${dim}`}
                         type="number"
                         inputMode="decimal"
+                        step="any"
                         min="0"
                         value={customBrickDisplay(dim)}
                         onChange={(e) => onCustomBrickDisplay(dim, e.target.value)}
@@ -1307,6 +1320,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   id="brick-joint"
                   type="number"
                   inputMode="decimal"
+                  step="any"
                   min="0"
                   value={jointMm}
                   onChange={(e) => setJointMm(e.target.value)}
@@ -1322,6 +1336,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                   id="brick-bag"
                   type="number"
                   inputMode="decimal"
+                  step="any"
                   min="0"
                   value={cementBagKg}
                   onChange={(e) => setCementBagKg(e.target.value)}
@@ -1366,6 +1381,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                 <input
                   type="number"
                   inputMode="decimal"
+                  step="any"
                   min="0"
                   max="50"
                   value={wastageCustom}
@@ -1414,6 +1430,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       id="brick-cement-parts"
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={cementParts}
                       onChange={(e) => setCementParts(e.target.value)}
@@ -1428,6 +1445,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       id="brick-sand-parts"
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={sandParts}
                       onChange={(e) => setSandParts(e.target.value)}
@@ -1515,6 +1533,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       id="brick-price"
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={brickPrice}
                       onChange={(e) => setRate("brick", e.target.value)}
@@ -1530,6 +1549,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       id="cement-price"
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={cementPrice}
                       onChange={(e) => setRate("cement", e.target.value)}
@@ -1545,6 +1565,7 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
                       id="sand-price"
                       type="number"
                       inputMode="decimal"
+                      step="any"
                       min="0"
                       value={sandPrice}
                       onChange={(e) => setRate("sand", e.target.value)}

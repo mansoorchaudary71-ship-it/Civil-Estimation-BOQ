@@ -255,7 +255,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
             <motion.div layoutId={`icon-${id}`} className="w-14 h-14 bg-surface-default flex items-center justify-center shrink-0 text-ink rounded-2xl border border-ui-borderSubtle/60 shadow-[0_2px_12px_rgba(31,29,26,0.04)]">
               {Icon ? <Icon className="w-7 h-7" strokeWidth={1.5} /> : <ClipboardList className="w-7 h-7" strokeWidth={1.5} />}
             </motion.div>
-            <div className="flex flex-col">
+            <div className="flex min-w-0 flex-col">
               <div className="flex items-center gap-2">
                 <motion.h1 layoutId={`title-${id}`} className="text-[22px] md:text-2xl font-semibold text-txt-primary tracking-tight leading-none pt-1">
                   {displayTitle}
@@ -283,7 +283,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
               </p>
               
               {/* Toggles (Horizontal Row beneath description) */}
-              <div className="flex flex-row items-center gap-2 sm:gap-3 print:hidden w-full mt-4">
+              <div className="flex flex-row flex-wrap items-center gap-2 sm:gap-3 print:hidden w-full mt-4">
                 {/* Unit Toggle */}
                 <div className="flex items-center p-1 bg-surface-hover rounded-full border border-ui-borderSubtle/60 shadow-inner">
                   <Button

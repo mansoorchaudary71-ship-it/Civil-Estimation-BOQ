@@ -1109,11 +1109,15 @@ export default function HouseEstimator() {
       breakdown: {
         // Filtered totals — the same numbers the screen shows (after
         // delete/duplicate edits) and the same rows as customTableData.
-        "Total Cost": currentTotalCost.toFixed(2),
-        "Grey Structure": filteredTotalGrey.toFixed(2),
-        "Finishing": filteredTotalFinishing.toFixed(2),
-        ...(addOns.includeAddOns ? { "House Add-ons": filteredTotalAddOns.toFixed(2) } : {}),
-        ...(includeBoundaryWall ? { "Boundary Wall": estimates.costBoundaryWall.toFixed(2) } : {}),
+        // Whole rupees (toFixed(0)): these strings are rendered verbatim
+        // in saved estimates / history, while the screen renders the
+        // same totals with formatCurrency (PKR: 0 decimals). toFixed(2)
+        // showed e.g. 942074.70 next to the screen's Rs 942,075.
+        "Total Cost": currentTotalCost.toFixed(0),
+        "Grey Structure": filteredTotalGrey.toFixed(0),
+        "Finishing": filteredTotalFinishing.toFixed(0),
+        ...(addOns.includeAddOns ? { "House Add-ons": filteredTotalAddOns.toFixed(0) } : {}),
+        ...(includeBoundaryWall ? { "Boundary Wall": estimates.costBoundaryWall.toFixed(0) } : {}),
       },
       disclaimer: "Disclaimer: This estimate is algorithmically generated based on benchmark rates and standard assumptions. It should not be used as a substitute for a professional BOQ certified by a licensed structural engineer or quantity surveyor.",
       customTableData
@@ -2725,11 +2729,15 @@ export default function HouseEstimator() {
         calculatorId="house_estimator_v1"
         estimationName="Complete House Estimator"
         currentInputs={{ activeTab, finishQuality, addOns }}
-        currentResults={{ 
-          totalCost: estimates.totalCost.toFixed(2),
-          totalGrey: estimates.totalGrey.toFixed(2),
-          totalFinishing: estimates.totalFinishing.toFixed(2),
-          totalAddOns: filteredTotalAddOns.toFixed(2)
+        currentResults={{
+          // Whole rupees, matching the on-screen formatCurrency (PKR:
+          // 0 decimals) — the history summary renders these verbatim
+          // ("Total Cost: <value>"), so toFixed(2) showed 942074.70
+          // next to the screen's Rs 942,075 for the same total.
+          totalCost: estimates.totalCost.toFixed(0),
+          totalGrey: estimates.totalGrey.toFixed(0),
+          totalFinishing: estimates.totalFinishing.toFixed(0),
+          totalAddOns: filteredTotalAddOns.toFixed(0)
         }}
         summaryGeneration={(inputs, res) => `Total Cost: ${res.totalCost}`}
         onRestore={(inputs) => {

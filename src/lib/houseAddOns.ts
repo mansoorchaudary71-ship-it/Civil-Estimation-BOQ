@@ -90,17 +90,25 @@ export function calcSolarAddOnCost(
   const hasBattery = gridType !== "On-Grid";
   const batteryKwhUsed = hasBattery ? Math.max(0, batteryKwh || 0) : 0;
 
-  const panelsCost = actualKw * 1000 * SOLAR_PANEL_COST_PER_W;
-  const inverterCost = inverterKva * SOLAR_INVERTER_COST_PER_KVA;
-  const batteryCost = batteryKwhUsed * SOLAR_BATTERY_COST_PER_KWH;
-  const mountingCost = panels * SOLAR_MOUNTING_COST_PER_PANEL;
-  const wiringCost = panelsCost * (SOLAR_WIRING_PCT / 100);
+  // Whole-rupee rounding: every money figure is rounded to the nearest
+  // rupee at the source, and the total is the sum of the rounded parts
+  // (not a rounding of the raw total), so the parts always add exactly
+  // to the total. The screen renders PKR with formatCurrency at 0
+  // decimals, so an unrounded total (e.g. 942074.70, from the 5%
+  // contingency on 897214) would show as Rs 942,075 in one place and
+  // 942074.70 in the saved-estimate breakdown. No rate is changed here
+  // — rounding only, at most Rs 0.50 per line.
+  const panelsCost = Math.round(actualKw * 1000 * SOLAR_PANEL_COST_PER_W);
+  const inverterCost = Math.round(inverterKva * SOLAR_INVERTER_COST_PER_KVA);
+  const batteryCost = Math.round(batteryKwhUsed * SOLAR_BATTERY_COST_PER_KWH);
+  const mountingCost = Math.round(panels * SOLAR_MOUNTING_COST_PER_PANEL);
+  const wiringCost = Math.round(panelsCost * (SOLAR_WIRING_PCT / 100));
   const hardwareTotal =
     panelsCost + inverterCost + batteryCost + mountingCost + wiringCost;
   const netMeteringFee = gridType !== "Off-Grid" ? SOLAR_NET_METERING_FEE : 0;
-  const labourCost = hardwareTotal * (SOLAR_LABOUR_PCT / 100);
+  const labourCost = Math.round(hardwareTotal * (SOLAR_LABOUR_PCT / 100));
   const preContingency = hardwareTotal + netMeteringFee + labourCost;
-  const contingencyCost = preContingency * (SOLAR_CONTINGENCY_PCT / 100);
+  const contingencyCost = Math.round(preContingency * (SOLAR_CONTINGENCY_PCT / 100));
   const totalCost = preContingency + contingencyCost;
   return {
     panels,

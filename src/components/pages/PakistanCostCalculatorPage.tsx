@@ -21,9 +21,25 @@ import { CalculationHistory } from '../ui/CalculationHistory';
 import { GenericExportButtons } from '../ui/GenericExportButtons';
 import { pakistanCost, pakistanCostBothStandards, PAK_RATES, RATES_LAST_UPDATED, RATE_SOURCE, type PakCity, type PakTier } from '../../lib/pakistanCost';
 import { MARLA_SQFT, type MarlaStandard } from '../../lib/quickEstimate';
-import { GlobalFAQ } from '../ui/GlobalFAQ';
-import { SEO } from "../SEO";
+import { GlobalFAQ, getCombinedFaqs, type FAQItem } from '../ui/GlobalFAQ';
+import { SEO, SITE_WEB_APP } from "../SEO";
 import { getSiteUrl } from "../../seo/siteConfig";
+import { TOOL_GUIDES } from "../../seo/toolGuides";
+import { ToolArticleWidget } from "../ui/ToolArticleWidget";
+
+/**
+ * Page-supplied FAQs, hoisted so the visible GlobalFAQ accordion and the
+ * FAQPage JSON-LD below are built from the same list (via
+ * getCombinedFaqs, which appends this tool's SPECIFIC_FAQS — generic
+ * template questions are excluded from both). This page serves both /pakistan-cost-calculator
+ * and its alias /cost-guide-pakistan, so the one FAQPage covers both.
+ */
+const PAK_COST_FAQS: FAQItem[] = [
+  { question: "What is the construction cost per sqft in Lahore in 2026?", answer: "Grey structure Rs 2,800–3,400/sqft, standard finish Rs 3,800–4,500/sqft, premium Rs 5,700–6,400/sqft and luxury turnkey Rs 7,000–8,500/sqft (Nov 2026, indicative)." },
+  { question: "What does a 5 marla house cost in Lahore?", answer: "On the 272.25-sqft revenue marla, a 5-marla G+1 standard house is about PKR 7,759,125–9,188,438 (covered 2,041.88 sqft). On the 225-sqft society marla it is PKR 6,412,500–7,593,750." },
+  { question: "Grey vs turnkey — what is included?", answer: "Grey is the structure only. Turnkey adds finishing, fixtures, MEP and boundary works. The grey share of a turnkey total is about 55%." },
+  { question: "Marla 225 vs 272.25 — which one applies?", answer: "Societies (DHA, Bahria, LDA schemes) use 225 sqft per marla; Punjab revenue records use 272.25 sqft. Use the toggle and check your plot papers — the same plot differs by ~17%." },
+];
 
 
 const TIER_LABELS: Record<PakTier, string> = {
@@ -74,6 +90,12 @@ export default function PakistanCostCalculatorPage() {
   const avgCost = Math.round(result.costAvg);
   const marlaSqft = MARLA_SQFT[marlaStandard];
 
+  // Per-tool HowTo steps, SEOHead pattern: the worked-example steps
+  // from this page's own verified guide (canonical toolId
+  // "pakistan-cost-calculator" — the alias /cost-guide-pakistan renders
+  // this same component, so its separate guide is NOT also rendered).
+  const guideSteps: string[] = TOOL_GUIDES["pakistan-cost-calculator"]?.workedExample?.steps ?? [];
+
   const formatLakhCrore = (num: number) => {
     if (num >= 10000000) {
       return (num / 10000000).toFixed(2) + " Crore";
@@ -119,6 +141,29 @@ export default function PakistanCostCalculatorPage() {
         title="Pakistan House Cost Calculator 2026"
         description="Estimate house construction cost in PKR with 2026 city rates for Lahore, Karachi, Islamabad, Faisalabad and Multan — grey structure to luxury finish."
         canonicalUrl={`${getSiteUrl()}/pakistan-cost-calculator`}
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            SITE_WEB_APP,
+            ...(guideSteps.length > 0
+              ? [
+                  {
+                    "@type": "HowTo",
+                    "name": "How to use Pakistan House Cost Calculator 2026",
+                    "step": guideSteps.map((text) => ({ "@type": "HowToStep", "text": text })),
+                  },
+                ]
+              : []),
+            {
+              "@type": "FAQPage",
+              "mainEntity": getCombinedFaqs("pakistan-cost-calculator", PAK_COST_FAQS, { includeGeneric: false }).map((f) => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+              })),
+            },
+          ],
+        }}
       />
       <div className="max-w-7xl mx-auto px-4 pt-12 md:pt-20 pb-16">
         
@@ -475,14 +520,15 @@ export default function PakistanCostCalculatorPage() {
            </div>
         </div>
 
+        {/* Guide article — same position as ModuleWrapper (App.tsx):
+            below the main content, above the FAQ. Canonical toolId only;
+            the /cost-guide-pakistan alias renders this same page, so its
+            separate guide is not rendered as well (one guide per page). */}
+        <ToolArticleWidget toolId="pakistan-cost-calculator" toolName="Pakistan House Construction Cost Calculator" />
+
         <GlobalFAQ
           moduleId="pakistan-cost-calculator"
-          faqs={[
-            { question: "What is the construction cost per sqft in Lahore in 2026?", answer: "Grey structure Rs 2,800–3,400/sqft, standard finish Rs 3,800–4,500/sqft, premium Rs 5,700–6,400/sqft and luxury turnkey Rs 7,000–8,500/sqft (Nov 2026, indicative)." },
-            { question: "What does a 5 marla house cost in Lahore?", answer: "On the 272.25-sqft revenue marla, a 5-marla G+1 standard house is about PKR 7,759,125–9,188,438 (covered 2,041.88 sqft). On the 225-sqft society marla it is PKR 6,412,500–7,593,750." },
-            { question: "Grey vs turnkey — what is included?", answer: "Grey is the structure only. Turnkey adds finishing, fixtures, MEP and boundary works. The grey share of a turnkey total is about 55%." },
-            { question: "Marla 225 vs 272.25 — which one applies?", answer: "Societies (DHA, Bahria, LDA schemes) use 225 sqft per marla; Punjab revenue records use 272.25 sqft. Use the toggle and check your plot papers — the same plot differs by ~17%." },
-          ]}
+          faqs={PAK_COST_FAQS}
         />
 
         {/* Section 6: Standard Footer */}

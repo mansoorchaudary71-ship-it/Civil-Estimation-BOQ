@@ -16,10 +16,23 @@ import {
 import ToolPageFooter from '../ToolPageFooter';
 import { CalculationHistory } from '../ui/CalculationHistory';
 import { GenericExportButtons } from '../ui/GenericExportButtons';
-import { GlobalFAQ } from '../ui/GlobalFAQ';
-import { SEO } from "../SEO";
+import { GlobalFAQ, getCombinedFaqs, type FAQItem } from '../ui/GlobalFAQ';
+import { SEO, SITE_WEB_APP } from "../SEO";
 import { getSiteUrl } from "../../seo/siteConfig";
+import { TOOL_GUIDES } from "../../seo/toolGuides";
 import toast from 'react-hot-toast';
+
+/**
+ * Page-supplied FAQs, hoisted so the visible GlobalFAQ accordion and the
+ * FAQPage JSON-LD below are built from the same list (via
+ * getCombinedFaqs, which appends this tool's SPECIFIC_FAQS — generic
+ * template questions are excluded from both).
+ */
+const MARLA_FAQS: FAQItem[] = [
+  { question: "How many marla is 1 kanal?", answer: "20 marla = 1 kanal, under both standards. 1 kanal is 5,445 sq ft (Punjab) or 4,500 sq ft (society)." },
+  { question: "What is a sarsai?", answer: "A sarsai is 1/9 of a marla — 30.25 sq ft (Punjab) or 25 sq ft (society). Revenue records (fard) write land as Kanal – Marla – Sarsai." },
+  { question: "How do I convert a plot's length and width to marla?", answer: "Multiply length × width in feet to get square feet, then divide by 272.25 (Punjab) or 225 (society). The plot-dimension box above does it for you." },
+];
 
 
 type UnitMap = {
@@ -94,12 +107,40 @@ export default function MarlaConverterPage() {
 
   const allUnits: (keyof UnitMap)[] = ["Sq.Ft", "Sq.Yd", "m²", "Marla", "Kanal", "Acre", "Murabba"];
 
+  // Per-tool HowTo steps, SEOHead pattern: the worked-example steps
+  // from this page's own verified guide — never invented. (No widget
+  // added here: the page already renders its own bespoke guide.)
+  const guideSteps: string[] = TOOL_GUIDES["marla-converter"]?.workedExample?.steps ?? [];
+
   return (
     <div className="min-h-screen bg-surface-default font-sans pb-12">
       <SEO
         title="Marla & Kanal Area Converter"
         description="Convert Marla, Kanal, square feet, square yards, m² and acres with Punjab and KPK marla standards — free plot area converter for Pakistan and India."
         canonicalUrl={`${getSiteUrl()}/marla-converter`}
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            SITE_WEB_APP,
+            ...(guideSteps.length > 0
+              ? [
+                  {
+                    "@type": "HowTo",
+                    "name": "How to use Marla & Kanal Area Converter",
+                    "step": guideSteps.map((text) => ({ "@type": "HowToStep", "text": text })),
+                  },
+                ]
+              : []),
+            {
+              "@type": "FAQPage",
+              "mainEntity": getCombinedFaqs("marla-converter", MARLA_FAQS, { includeGeneric: false }).map((f) => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+              })),
+            },
+          ],
+        }}
       />
       <div className="max-w-7xl mx-auto px-4 pt-12 md:pt-20 pb-16">
         
@@ -367,16 +408,27 @@ export default function MarlaConverterPage() {
                 </tbody>
               </table>
            </div>
+
+           <h3 className="text-xl font-bold text-txt-primary mt-10 mb-3">
+             Worked example — a 5 marla plot
+           </h3>
+           <p className="text-txt-secondary mb-3 max-w-4xl leading-relaxed">
+             Take a 5 marla plot and convert it under both standards, using the converter above (it is pre-loaded with 5 marla):
+           </p>
+           <ol className="list-decimal pl-5 space-y-2 text-txt-secondary max-w-4xl leading-relaxed">
+             <li>Punjab revenue standard: 5 × 272.25 = <strong className="text-txt-primary">1,361.25 sq ft</strong>.</li>
+             <li>Square yards: 1,361.25 ÷ 9 = <strong className="text-txt-primary">151.25 sq yd</strong>.</li>
+             <li>Kanal: 5 ÷ 20 = <strong className="text-txt-primary">0.25 kanal</strong> — and back again, 1,361.25 ÷ 272.25 = 5 marla.</li>
+             <li>Society / DHA / Bahria standard: 5 × 225 = <strong className="text-txt-primary">1,125 sq ft</strong>, which is 1,125 ÷ 9 = <strong className="text-txt-primary">125 sq yd</strong>.</li>
+           </ol>
+           <p className="text-txt-secondary mt-3 max-w-4xl leading-relaxed">
+             The same “5 marla” label is 236.25 sq ft larger under the Punjab standard — which is why the standard must be picked before converting.
+           </p>
         </div>
 
         <GlobalFAQ
           moduleId="marla-converter"
-          faqs={[
-            { question: "How many square feet is 1 marla?", answer: "272.25 sq ft under the Punjab revenue standard, or 225 sq ft under the society standard used by most housing societies. Pick the standard above before converting — the same plot differs by about 17%." },
-            { question: "How many marla is 1 kanal?", answer: "20 marla = 1 kanal, under both standards. 1 kanal is 5,445 sq ft (Punjab) or 4,500 sq ft (society)." },
-            { question: "What is a sarsai?", answer: "A sarsai is 1/9 of a marla — 30.25 sq ft (Punjab) or 25 sq ft (society). Revenue records (fard) write land as Kanal – Marla – Sarsai." },
-            { question: "How do I convert a plot's length and width to marla?", answer: "Multiply length × width in feet to get square feet, then divide by 272.25 (Punjab) or 225 (society). The plot-dimension box above does it for you." },
-          ]}
+          faqs={MARLA_FAQS}
         />
 
         {/* Section 6: Standard Footer */}

@@ -7,6 +7,7 @@ import { useRates } from '../../lib/useRates';
 import { formatRate } from '../../lib/rates';
 import { calcRectangular, calcCircular, calcTube, calcPrecast, calcRoof, calcTrapFooting, calcStaircaseTab } from '../../lib/geometryCalc';
 import { CalcSteps, EngineNotices, StructuralExportBar } from '../ui/StructuralExportBar';
+import { CalculationHistory } from '../ui/CalculationHistory';
 
 
 export default function UniversalStructuralGeometryEngine() {
@@ -466,6 +467,13 @@ export default function UniversalStructuralGeometryEngine() {
           totalAmount={activeResult.totalCost ?? null} />
         )}
         {activeResult.steps && <CalcSteps steps={activeResult.steps} />}
+      <CalculationHistory calculatorId="universal_structural_geometry" currentInputs={{ activeTab, formedOnGround, fck, wastage, inputs }} currentResults={{ volumeM3: activeResult.vol ?? activeResult.totalVol, formworkM2: activeResult.formwork, steelKg: activeResult.totalSteel ?? activeResult.steel, totalCost: activeResult.totalCost }} onRestore={(ins) => {
+          if (ins.activeTab != null) setActiveTab(ins.activeTab as typeof activeTab);
+          if (typeof ins.formedOnGround === "boolean") setFormedOnGround(ins.formedOnGround);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+          if (ins.inputs && typeof ins.inputs === "object") setInputs((prev) => ({ ...prev, ...ins.inputs }));
+        }} />
       </div>
     </div>
   );
@@ -498,6 +506,7 @@ function ResultRow({ label, value, unit }: { label: string, value: number, unit:
         </span>
         <span className="text-accent-400 ml-1.5 text-sm">{unit}</span>
       </div>
+      
     </div>
   );
 }

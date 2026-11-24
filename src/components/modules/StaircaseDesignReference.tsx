@@ -280,10 +280,20 @@ export default function StaircaseDesignReference() {
        </div>
     
 
-      <CalculationHistory 
-        calculatorId="staircase_design_reference" 
-        currentInputs={{ totalHeight, riser, going, width, headroom, landingDepth, occupancy }} 
-      />
+      <CalculationHistory
+          calculatorId="staircase_design_reference"
+          currentInputs={{ totalHeight, riser, going, width, headroom, landingDepth, occupancy, handrail }}
+          onRestore={(ins) => {
+            if (ins.totalHeight != null) setTotalHeight(ins.totalHeight as typeof totalHeight);
+            if (ins.riser != null) setRiser(ins.riser as typeof riser);
+            if (ins.going != null) setGoing(ins.going as typeof going);
+            if (ins.width != null) setWidth(ins.width as typeof width);
+            if (ins.headroom != null) setHeadroom(ins.headroom as typeof headroom);
+            if (ins.landingDepth != null) setLandingDepth(ins.landingDepth as typeof landingDepth);
+            if (ins.occupancy != null) setOccupancy(ins.occupancy as typeof occupancy);
+            if (ins.handrail != null) setHandrail(ins.handrail as typeof handrail);
+          }}
+        />
     </div>
   );
 }

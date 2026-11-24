@@ -202,7 +202,33 @@ export default function PrestressedConcreteEstimator() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="prestressed_concrete" currentInputs={{ type, sectionKind, b, d, flangeB, flangeD, spanL, eccentricity, ptForce, areaSteel, fpu, fck, es, slip, mu, k, creep, shrinkage, relaxationPct, serviceM, transferM, pClass, wastage }} />
+      <CalculationHistory calculatorId="prestressed_concrete" currentInputs={{ type, sectionKind, b, d, flangeB, flangeD, spanL, eccentricity, ptForce, areaSteel, fpu, fck, es, slip, mu, k, creep, shrinkage, relaxationPct, serviceM, transferM, pClass, wastage }}
+        onRestore={(ins) => {
+          if (ins.type != null) setType(ins.type as typeof type);
+          if (ins.sectionKind != null) setSectionKind(ins.sectionKind as typeof sectionKind);
+          if (ins.b != null) setB(ins.b as typeof b);
+          if (ins.d != null) setD(ins.d as typeof d);
+          if (ins.flangeB != null) setFlangeB(ins.flangeB as typeof flangeB);
+          if (ins.flangeD != null) setFlangeD(ins.flangeD as typeof flangeD);
+          if (ins.spanL != null) setSpanL(ins.spanL as typeof spanL);
+          if (ins.eccentricity != null) setEccentricity(ins.eccentricity as typeof eccentricity);
+          if (ins.ptForce != null) setPtForce(ins.ptForce as typeof ptForce);
+          if (ins.areaSteel != null) setAreaSteel(ins.areaSteel as typeof areaSteel);
+          if (ins.fpu != null) setFpu(ins.fpu as typeof fpu);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.es != null) setEs(ins.es as typeof es);
+          if (ins.slip != null) setSlip(ins.slip as typeof slip);
+          if (ins.mu != null) setMu(ins.mu as typeof mu);
+          if (ins.k != null) setK(ins.k as typeof k);
+          if (ins.creep != null) setCreep(ins.creep as typeof creep);
+          if (ins.shrinkage != null) setShrinkage(ins.shrinkage as typeof shrinkage);
+          if (ins.relaxationPct != null) setRelaxationPct(ins.relaxationPct as typeof relaxationPct);
+          if (ins.serviceM != null) setServiceM(ins.serviceM as typeof serviceM);
+          if (ins.transferM != null) setTransferM(ins.transferM as typeof transferM);
+          if (ins.pClass != null) setPClass(ins.pClass as typeof pClass);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+        }}
+      />
     </div>
   );
 }

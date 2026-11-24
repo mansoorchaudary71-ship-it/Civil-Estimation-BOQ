@@ -7,6 +7,7 @@ import PrecastWallContent from "./PrecastWallContent";
 import { useBOQ } from "../../context/BOQContext";
 import { useSettings } from "../../context/SettingsContext";
 import { Calculator, Check, Copy, Download, Layers, Printer, Share2, Box, Hash, DollarSign, Ruler } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 type UnitSystem = "metric" | "imperial";
 type Currency = "PKR" | "INR" | "AED" | "USD";
@@ -288,6 +289,29 @@ export function PrecastWallEstimator() {
           <FormulaAccordion steps={steps} />
         </div>
       </div>
+      <CalculationHistory calculatorId="precast_wall" currentInputs={{unitSystem, currency, wallLength, wallHeight, layout, gateDeduction, panelWidth, panelHeight, panelThickness, footingType, footingL, footingW, footingD, stripW, mix, wastage, postRate, panelRate, concreteRate, labourRate, transport}} currentResults={result ? { posts: result.posts, panels: result.panels, orderPanels: result.orderPanels, cementBags: result.cementBags, totalCost: result.totalCost } : {}} onRestore={(ins) => {
+          if (ins.unitSystem != null) setUnitSystem(ins.unitSystem as typeof unitSystem);
+          if (ins.currency != null) setCurrency(ins.currency as typeof currency);
+          if (ins.wallLength != null) setWallLength(ins.wallLength as typeof wallLength);
+          if (ins.wallHeight != null) setWallHeight(ins.wallHeight as typeof wallHeight);
+          if (ins.layout != null) setLayout(ins.layout as typeof layout);
+          if (ins.gateDeduction != null) setGateDeduction(ins.gateDeduction as typeof gateDeduction);
+          if (ins.panelWidth != null) setPanelWidth(ins.panelWidth as typeof panelWidth);
+          if (ins.panelHeight != null) setPanelHeight(ins.panelHeight as typeof panelHeight);
+          if (ins.panelThickness != null) setPanelThickness(ins.panelThickness as typeof panelThickness);
+          if (ins.footingType != null) setFootingType(ins.footingType as typeof footingType);
+          if (ins.footingL != null) setFootingL(ins.footingL as typeof footingL);
+          if (ins.footingW != null) setFootingW(ins.footingW as typeof footingW);
+          if (ins.footingD != null) setFootingD(ins.footingD as typeof footingD);
+          if (ins.stripW != null) setStripW(ins.stripW as typeof stripW);
+          if (ins.mix != null) setMix(ins.mix as typeof mix);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+          if (ins.postRate != null) setPostRate(ins.postRate as typeof postRate);
+          if (ins.panelRate != null) setPanelRate(ins.panelRate as typeof panelRate);
+          if (ins.concreteRate != null) setConcreteRate(ins.concreteRate as typeof concreteRate);
+          if (ins.labourRate != null) setLabourRate(ins.labourRate as typeof labourRate);
+          if (ins.transport != null) setTransport(ins.transport as typeof transport);
+        }} />
       <PrecastWallContent />
     </div>
   );

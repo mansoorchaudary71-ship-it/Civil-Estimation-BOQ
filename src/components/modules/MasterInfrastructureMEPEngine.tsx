@@ -8,6 +8,7 @@ import { calcSolarRoof, defaultSolarRoofInputs } from "../../lib/solarRoofCalc";
 import { calcSolarWaterHeater } from "../../lib/solarWaterHeaterCalc";
 import { calcAcSizing } from "../../lib/acSizing";
 import { calcRainwater } from "../../lib/rainwaterCalc";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 /**
  * Master Infrastructure & MEP Engine — MEP tab only (coordinator
@@ -94,7 +95,10 @@ function SolarCard({ onAdd, added }: { onAdd: (name: string, qty: number, unit: 
         </div>
       )}
       <BoqButton added={added} label="Add Solar System to BOQ" onClick={() => result && onAdd("Solar PV system", result.actualKw, "kWp", result.totalCost / (result.actualKw || 1))} />
-    </Card>
+          <CalculationHistory calculatorId="infra_mep_solar" currentInputs={{ monthlyUnits }} currentResults={result ? { actualKw: result.actualKw, panels: result.panels, totalCost: result.totalCost, paybackYears: result.simplePaybackYears } : {}} onRestore={(ins) => {
+        if (ins.monthlyUnits != null) setMonthlyUnits(ins.monthlyUnits as typeof monthlyUnits);
+      }} />
+</Card>
   );
 }
 
@@ -115,7 +119,10 @@ function WaterHeaterCard({ onAdd, added }: { onAdd: (name: string, qty: number, 
         </div>
       )}
       <BoqButton added={added} label="Add Water Heater to BOQ" onClick={() => result && onAdd("Solar water heater system", result.collectorAreaM2, "m²", result.systemCost / (result.collectorAreaM2 || 1))} />
-    </Card>
+          <CalculationHistory calculatorId="infra_mep_swh" currentInputs={{ people }} currentResults={result ? { collectorAreaM2: result.collectorAreaM2, tankL: result.tankL, systemCost: result.systemCost, paybackYears: result.paybackYears } : {}} onRestore={(ins) => {
+        if (ins.people != null) setPeople(ins.people as typeof people);
+      }} />
+</Card>
   );
 }
 
@@ -149,7 +156,13 @@ function AcCard({ onAdd, added }: { onAdd: (name: string, qty: number, unit: str
       <NumberInput label="AC Unit Rate (Rs each)" value={acRate} onChange={setAcRate} />
       <BoqButton added={added} label="Add AC Unit to BOQ" disabled={acRate === "" || Number(acRate) <= 0} onClick={() => result && onAdd(`Split AC ${result.standardBtuPerHour} BTU/h`, 1, "nos", Number(acRate))} />
       {(acRate === "" || Number(acRate) <= 0) && <p className="text-xs text-txt-tertiary mt-2">Enter a unit rate to enable the BOQ button — no price is assumed (rates vary by brand and tonnage).</p>}
-    </Card>
+          <CalculationHistory calculatorId="infra_mep_ac" currentInputs={{ length, width, height, acRate }} currentResults={result ? { requiredBtuPerHour: result.requiredBtuPerHour, tons: result.tons, runningWatts: result.runningWatts } : {}} onRestore={(ins) => {
+        if (ins.length != null) setLength(ins.length as typeof length);
+        if (ins.width != null) setWidth(ins.width as typeof width);
+        if (ins.height != null) setHeight(ins.height as typeof height);
+        if (ins.acRate != null) setAcRate(ins.acRate as typeof acRate);
+      }} />
+</Card>
   );
 }
 
@@ -170,6 +183,9 @@ function RainwaterCard({ onAdd, added }: { onAdd: (name: string, qty: number, un
         </div>
       )}
       <BoqButton added={added} label="Add Rainwater Tank to BOQ" onClick={() => result && onAdd(`Rainwater storage tank ${result.tankL} L`, result.tankL, "L", result.systemCost / (result.tankL || 1))} />
-    </Card>
+          <CalculationHistory calculatorId="infra_mep_rain" currentInputs={{ roofArea }} currentResults={result ? { yieldLPerYear: result.yieldLPerYear, tankL: result.tankL, systemCost: result.systemCost, coveragePct: result.coveragePct } : {}} onRestore={(ins) => {
+        if (ins.roofArea != null) setRoofArea(ins.roofArea as typeof roofArea);
+      }} />
+</Card>
   );
 }

@@ -38,9 +38,12 @@ import {
   Plus,
   Printer,
   RotateCcw,
+  Save,
+  History,
   Share2,
   Trash2,
 } from "lucide-react";
+import { CalculationHistory } from '../ui/CalculationHistory';
 
 const MIX_PRESETS: { id: string; label: string; mix: [number, number] }[] = [
   { id: "1:3", label: "1:3 — load-bearing", mix: [1, 3] },
@@ -1835,6 +1838,20 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
               </button>
               <button
                 type="button"
+                onClick={() => window.dispatchEvent(new Event("trigger-global-save"))}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-ink text-white hover:bg-ink-700 transition-colors"
+              >
+                <Save className="w-4 h-4" /> Save calculation
+              </button>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("trigger-global-history"))}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-accent-300 transition-colors"
+              >
+                <History className="w-4 h-4" /> Saved calculations
+              </button>
+              <button
+                type="button"
                 onClick={handleShare}
                 disabled={!computed.ok}
                 className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-secondary hover:border-accent-300 transition-colors disabled:opacity-40"
@@ -1893,6 +1910,36 @@ export default function BrickCalculator({ initial, ratesNote }: BrickCalculatorP
           </div>
         </div>
       </div>
+      <CalculationHistory calculatorId="brick_calculator" currentInputs={{mode, lengthUnit, length, height, thicknessId, thicknessMm, openings, openingsMode, openingsTotal, walls, area, areaUnit, areaOpenings, areaThicknessId, areaThicknessMm, brickId, customBrickMm, customBrickUnit, jointMm, bond, wastagePreset, wastageCustom, mixId, cementParts, sandParts, cementBagKg, currency, ratesByCurrency}} currentResults={results ? { bricks: results.bricks, cementBags: results.cementBags, sandCft: results.sandCft, wallVolumeM3: results.wallVolumeM3, totalCost: results.totalCost } : {}} onRestore={(ins) => {
+          if (ins.mode != null) setMode(ins.mode as typeof mode);
+          if (ins.lengthUnit != null) setLengthUnit(ins.lengthUnit as typeof lengthUnit);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.height != null) setHeight(ins.height as typeof height);
+          if (ins.thicknessId != null) setThicknessId(ins.thicknessId as typeof thicknessId);
+          if (ins.thicknessMm != null) setThicknessMm(ins.thicknessMm as typeof thicknessMm);
+          if (ins.openings != null) setOpenings(ins.openings as typeof openings);
+          if (ins.openingsMode != null) setOpeningsMode(ins.openingsMode as typeof openingsMode);
+          if (ins.openingsTotal != null) setOpeningsTotal(ins.openingsTotal as typeof openingsTotal);
+          if (ins.walls != null) setWalls(ins.walls as typeof walls);
+          if (ins.area != null) setArea(ins.area as typeof area);
+          if (ins.areaUnit != null) setAreaUnit(ins.areaUnit as typeof areaUnit);
+          if (ins.areaOpenings != null) setAreaOpenings(ins.areaOpenings as typeof areaOpenings);
+          if (ins.areaThicknessId != null) setAreaThicknessId(ins.areaThicknessId as typeof areaThicknessId);
+          if (ins.areaThicknessMm != null) setAreaThicknessMm(ins.areaThicknessMm as typeof areaThicknessMm);
+          if (ins.brickId != null) setBrickId(ins.brickId as typeof brickId);
+          if (ins.customBrickMm != null) setCustomBrickMm(ins.customBrickMm as typeof customBrickMm);
+          if (ins.customBrickUnit != null) setCustomBrickUnit(ins.customBrickUnit as typeof customBrickUnit);
+          if (ins.jointMm != null) setJointMm(ins.jointMm as typeof jointMm);
+          if (ins.bond != null) setBond(ins.bond as typeof bond);
+          if (ins.wastagePreset != null) setWastagePreset(ins.wastagePreset as typeof wastagePreset);
+          if (ins.wastageCustom != null) setWastageCustom(ins.wastageCustom as typeof wastageCustom);
+          if (ins.mixId != null) setMixId(ins.mixId as typeof mixId);
+          if (ins.cementParts != null) setCementParts(ins.cementParts as typeof cementParts);
+          if (ins.sandParts != null) setSandParts(ins.sandParts as typeof sandParts);
+          if (ins.cementBagKg != null) setCementBagKg(ins.cementBagKg as typeof cementBagKg);
+          if (ins.currency != null) setCurrency(ins.currency as typeof currency);
+          if (ins.ratesByCurrency != null) setRatesByCurrency(ins.ratesByCurrency as typeof ratesByCurrency);
+        }} />
     </div>
   );
 }

@@ -294,7 +294,13 @@ const MaterialTakeoffSheet: React.FC = () => {
         </table>
       </div>
     
-      <CalculationHistory calculatorId="materialtakeoffsheet_tool" currentInputs={{ area, floors, quality }} currentResults={{ grandTotal }} />
+      <CalculationHistory calculatorId="materialtakeoffsheet_tool" currentInputs={{ area, floors, quality }} currentResults={{ grandTotal }}
+        onRestore={(ins) => {
+          if (ins.area != null) setArea(ins.area as typeof area);
+          if (ins.floors != null) setFloors(ins.floors as typeof floors);
+          if (ins.quality != null) setQuality(ins.quality as typeof quality);
+        }}
+      />
 </div>
   );
 };

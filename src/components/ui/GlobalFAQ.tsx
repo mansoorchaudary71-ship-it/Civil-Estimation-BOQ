@@ -1410,17 +1410,31 @@ interface GlobalFAQProps {
   moduleId?: string; 
 }
 
-export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [showAll, setShowAll] = useState(false);
-
-  const moduleDef = ALL_MODULES.find(m => m.id === moduleId);
-
+/**
+ * The exact FAQ list GlobalFAQ renders for a page: page-supplied FAQs
+ * first, then the tool's SPECIFIC_FAQS, then the 5 generic tool FAQs
+ * (only when the moduleId is a Dashboard card), deduplicated by
+ * question. Standalone pages (Marla, Pakistan cost, Standards, home)
+ * build their FAQPage JSON-LD from this same function, so the
+ * structured data always matches the visible accordion — one source
+ * of truth instead of a second hand-maintained copy.
+ *
+ * For JSON-LD, pass { includeGeneric: false }: the structured data
+ * carries the tool's own questions only — the generic template
+ * questions ("Is the X free to use?" …) are not tool-specific
+ * knowledge, and must not pad the FAQPage. GlobalFAQ itself now also
+ * renders with includeGeneric: false, so the visible accordion and
+ * the FAQPage LD are the same list.
+ */
+export function getCombinedFaqs(
+  moduleId: string | undefined,
+  extraFaqs: FAQItem[] = [],
+  opts?: { includeGeneric?: boolean }
+): FAQItem[] {
   const formatToolTitle = (t: string) => t.replace(/^(Calculate|Find) /, '');
-
+  const moduleDef = moduleId ? ALL_MODULES.find((m) => m.id === moduleId) : undefined;
   const specificFaqs = moduleId ? (SPECIFIC_FAQS[moduleId] || []) : [];
-
-  const genericFaqs = moduleDef ? [
+  const genericFaqs: FAQItem[] = (opts?.includeGeneric ?? true) && moduleDef ? [
     {
       question: `Is the ${formatToolTitle(moduleDef.title)} free to use?`,
       answer: `Yes, all core calculation features for the ${moduleDef.title.toLowerCase()} are completely free for all users.`
@@ -1444,20 +1458,23 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
   ] : [];
 
   // Filter out any duplicates based on question exact match (or we can just append)
-  const combinedFaqsMap = new Map();
-  [...faqs, ...specificFaqs, ...genericFaqs].forEach(f => {
+  const combinedFaqsMap = new Map<string, FAQItem>();
+  [...extraFaqs, ...specificFaqs, ...genericFaqs].forEach(f => {
     if(!combinedFaqsMap.has(f.question)) {
       combinedFaqsMap.set(f.question, f);
     }
   });
-  const combinedFaqs = Array.from(combinedFaqsMap.values());
-  // Show every FAQ when the list is short; only collapse long lists.
-  // Previously this sliced to 2, so tools with 5 tool-specific FAQs
-  // (prepended before the generic ones) showed only generic items.
-  const COLLAPSED_LIMIT = 5;
-  const displayedFaqs = showAll || combinedFaqs.length <= COLLAPSED_LIMIT
-    ? combinedFaqs
-    : combinedFaqs.slice(0, COLLAPSED_LIMIT);
+  return Array.from(combinedFaqsMap.values());
+}
+
+export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // Visible list = the tool's own questions only (includeGeneric: false),
+  // the same list the FAQPage JSON-LD is built from — so every LD question
+  // is in the DOM. All rows render; the accordion keeps them collapsed,
+  // so even a 13-row list stays tidy. No collapse cap, no expand button.
+  const combinedFaqs = getCombinedFaqs(moduleId, faqs, { includeGeneric: false });
 
   return (
     <section className="w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-border-color shadow-brand-sm overflow-hidden" aria-label="Frequently Asked Questions">
@@ -1465,7 +1482,7 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
         Frequently Asked Questions
       </h2>
       <div className="space-y-4">
-        {displayedFaqs.map((faq, index) => {
+        {combinedFaqs.map((faq, index) => {
           const isOpen = openIndex === index;
           return (
             <div 
@@ -1498,16 +1515,6 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
           );
         })}
       </div>
-      {combinedFaqs.length > COLLAPSED_LIMIT && (
-        <div className="text-center mt-8">
-          <Button
-            onClick={() => setShowAll(!showAll)}
-            className="px-6 py-3 bg-ink hover:bg-ink-700 text-white font-bold rounded-full transition-colors shadow-brand-sm active:scale-95 hover:-translate-y-0.5"
-          >
-            {showAll ? 'Show Less' : `Show all ${combinedFaqs.length} questions`}
-          </Button>
-        </div>
-      )}
     </section>
   );
 }

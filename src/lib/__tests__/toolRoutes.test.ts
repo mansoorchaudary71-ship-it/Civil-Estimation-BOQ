@@ -58,6 +58,38 @@ test("SEO /calculators/<group>/<slug> URLs resolve (the old bug: all went home)"
   assert.deepEqual(resolvePath("/calculators/geotechnical/cbr-test-calculator"), { kind: "tool", id: "cbr-test" });
 });
 
+// Round 3 infra: the 15 new SEO slugs resolve under their own group
+// (the group segment is ignored by the resolver — the slug is the key).
+test("Round 3 SEO slugs resolve", () => {
+  assert.deepEqual(resolvePath("/calculators/concrete/brick-calculator"), { kind: "tool", id: "brick-calculator" });
+  assert.deepEqual(resolvePath("/calculators/concrete/concrete-mix-design-calculator"), { kind: "tool", id: "mix-design" });
+  assert.deepEqual(resolvePath("/calculators/quantity-estimation/house-construction-estimator"), { kind: "tool", id: "house" });
+  assert.deepEqual(resolvePath("/calculators/mep/master-infrastructure-mep-engine"), { kind: "tool", id: "infra-mep-engine" });
+  assert.deepEqual(resolvePath("/calculators/architectural/complete-finishes-workspace"), { kind: "tool", id: "master-finishes" });
+  assert.deepEqual(resolvePath("/calculators/road-pavement/pavement-mix-gradation-calculator"), { kind: "tool", id: "pavement-mix" });
+  assert.deepEqual(resolvePath("/calculators/geotechnical/soil-mechanics-lab-calculator"), { kind: "tool", id: "soil-mechanics-lab" });
+  assert.deepEqual(resolvePath("/calculators/mep/solar-water-heater-calculator"), { kind: "tool", id: "solar-water-heater" });
+  assert.deepEqual(resolvePath("/calculators/mep/wastewater-bod-cod-calculator"), { kind: "tool", id: "wastewater-calculator" });
+  assert.deepEqual(resolvePath("/calculators/architectural/staircase-design-reference"), { kind: "tool", id: "staircase-design-reference" });
+});
+
+// Round 3 infra: /cost-guide-pakistan is an alias of the Pakistan cost
+// calculator, not a distinct tool — it must resolve to the canonical
+// tool (sitemap URL keeps working, no second card/search/JSON-LD).
+test("/cost-guide-pakistan aliases to pakistan-cost-calculator", () => {
+  assert.deepEqual(resolvePath("/cost-guide-pakistan"), { kind: "tool", id: "pakistan-cost-calculator" });
+});
+
+// Round 3 infra: the 6 tools with no SEO slug are deliberate —
+// boq-templates shares boq's slug, cost-guide-pakistan is an alias,
+// and the 4 standards pages live under /calculators/standards.
+test("no SEO slug maps to the deliberate exclusions", () => {
+  const targets = new Set(Object.values(SEO_SLUG_TO_ID));
+  for (const id of ["boq-templates", "cost-guide-pakistan", "is-codes-reference", "morth-irc-specs", "pakistan-building-codes", "uae-construction-standards"]) {
+    assert.ok(!targets.has(id), `no SEO slug should map to ${id}`);
+  }
+});
+
 test("category URLs land on the Dashboard with that category", () => {
   for (const [group, category] of Object.entries(GROUP_TO_CATEGORY)) {
     assert.deepEqual(resolvePath(`/calculators/${group}`), { kind: "category", id: "home", category });

@@ -48,7 +48,7 @@ export default function ProjectManager() {
   if (view === 'detail' && viewedProjectId) {
     const project = projects.find(p => p.id === viewedProjectId);
     if (!project) return <div className="p-8">Project not found</div>;
-    return <ProjectDetail project={project} onBack={() => setView('list')} />;
+    return <ProjectDetail project={project} onBack={() => setView('list')} onRestoreProject={handleView} />;
   }
 
   if (view === 'compare' && compareIds[0] && compareIds[1]) {
@@ -485,7 +485,7 @@ function ProjectCompare({ p1, p2, onBack }: { p1: Project, p2: Project, onBack: 
     </div>
   );
 }
-function ProjectDetail({ project, onBack }: { project: Project, onBack: () => void }) {
+function ProjectDetail({ project, onBack, onRestoreProject }: { project: Project, onBack: () => void, onRestoreProject: (projectId: string) => void }) {
   const { deleteEstimate, updateProject, removeMember, saveVersion, exportProject } = useProjects();
   const { settings, formatCurrency, getCurrencySymbol } = useSettings();
   const [inflationRate, setInflationRate] = useState<number>(0);
@@ -975,6 +975,11 @@ function ProjectDetail({ project, onBack }: { project: Project, onBack: () => vo
         estimationName="Project Summary"
         currentInputs={{ projectId: project.id, estimates: project.estimates.length }}
         currentResults={{ totalCost }}
+        onRestore={(ins) => {
+          if (typeof ins.projectId === "string") {
+            onRestoreProject(ins.projectId);
+          }
+        }}
       />
 
       <AnimatePresence>

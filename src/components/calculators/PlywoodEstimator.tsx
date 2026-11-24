@@ -7,6 +7,7 @@ import PlywoodContent from "./PlywoodContent";
 import { useBOQ } from "../../context/BOQContext";
 import { useSettings } from "../../context/SettingsContext";
 import { Calculator, Check, Copy, Download, Layers, Printer, Share2, Box, DollarSign, Ruler } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 type UnitSystem = "metric" | "imperial";
 type Currency = "PKR" | "INR" | "AED" | "USD";
@@ -353,6 +354,29 @@ export function PlywoodEstimator() {
           <FormulaAccordion steps={steps} />
         </div>
       </div>
+      <CalculationHistory calculatorId="plywood_estimator" currentInputs={{unitSystem, currency, inputMode, element, length, width, totalArea, faces, beamWidth, beamDepth, openings, sheetSize, customSheetL, customSheetW, thickness, grade, wastage, reuse, costPerSheet, secSpacing, primSpacing}} currentResults={result ? { netAreaM2: result.netAreaM2, grossAreaM2: result.grossAreaM2, sheetsToBuy: result.sheetsToBuy, totalCost: result.totalCost } : {}} onRestore={(ins) => {
+          if (ins.unitSystem != null) setUnitSystem(ins.unitSystem as typeof unitSystem);
+          if (ins.currency != null) setCurrency(ins.currency as typeof currency);
+          if (ins.inputMode != null) setInputMode(ins.inputMode as typeof inputMode);
+          if (ins.element != null) setElement(ins.element as typeof element);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.totalArea != null) setTotalArea(ins.totalArea as typeof totalArea);
+          if (ins.faces != null) setFaces(ins.faces as typeof faces);
+          if (ins.beamWidth != null) setBeamWidth(ins.beamWidth as typeof beamWidth);
+          if (ins.beamDepth != null) setBeamDepth(ins.beamDepth as typeof beamDepth);
+          if (ins.openings != null) setOpenings(ins.openings as typeof openings);
+          if (ins.sheetSize != null) setSheetSize(ins.sheetSize as typeof sheetSize);
+          if (ins.customSheetL != null) setCustomSheetL(ins.customSheetL as typeof customSheetL);
+          if (ins.customSheetW != null) setCustomSheetW(ins.customSheetW as typeof customSheetW);
+          if (ins.thickness != null) setThickness(ins.thickness as typeof thickness);
+          if (ins.grade != null) setGrade(ins.grade as typeof grade);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+          if (ins.reuse != null) setReuse(ins.reuse as typeof reuse);
+          if (ins.costPerSheet != null) setCostPerSheet(ins.costPerSheet as typeof costPerSheet);
+          if (ins.secSpacing != null) setSecSpacing(ins.secSpacing as typeof secSpacing);
+          if (ins.primSpacing != null) setPrimSpacing(ins.primSpacing as typeof primSpacing);
+        }} />
       <PlywoodContent />
     </div>
   );

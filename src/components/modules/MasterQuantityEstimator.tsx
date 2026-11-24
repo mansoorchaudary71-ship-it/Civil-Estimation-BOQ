@@ -322,6 +322,11 @@ export default function MasterQuantityEstimator({
           </ToolLayout>
         </div>
       </div>
+      <CalculationHistory calculatorId="master_quantity_estimator" currentInputs={{activeCalc, calcInputs, sharedState}} currentResults={currentResults} onRestore={(ins) => {
+          if (ins.activeCalc != null) setActiveCalc(ins.activeCalc as typeof activeCalc);
+          if (ins.calcInputs != null) setCalcInputs(ins.calcInputs as typeof calcInputs);
+          if (ins.sharedState != null) setSharedState(ins.sharedState as typeof sharedState);
+        }} />
     </div>
   );
 }

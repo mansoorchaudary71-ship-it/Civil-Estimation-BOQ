@@ -484,7 +484,9 @@ export default function AdvancedSpecs({
       )}
     
       
-      <CalculationHistory calculatorId="advancedspecs_tool" currentInputs={{}} />
+      <CalculationHistory calculatorId="advancedspecs_tool" currentInputs={{ ...specs }} onRestore={(ins) => {
+        setSpecs((prev) => ({ ...prev, ...ins }));
+      }} />
 </div>
   );
 }

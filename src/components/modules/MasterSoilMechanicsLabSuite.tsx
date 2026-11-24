@@ -14,6 +14,7 @@ import { proctorFit, dryDensity, coreCutter, PROCTOR_MOULD_CM3 } from "../../lib
 import { ComposedChart, Line, Scatter, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend, ReferenceDot } from "recharts";
 import { ucs, vaneShear } from "../../lib/ucsVaneCalc";
 import { phaseRelations, freeSwell } from "../../lib/geotechCalc";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 const REAL_TOOLS = [
   { id: "geotechnical", title: "Geotechnical & Soil Tests", desc: "Water content, specific gravity, Atterberg limits, CBR (IS 2720 Pt 16)." },
@@ -121,6 +122,14 @@ function ProctorTab() {
           <p className="mt-3 text-txt-primary">Volume {core.volumeCm3.toFixed(1)} cm³ · bulk {core.bulkDensity.toFixed(3)} g/cc · dry {core.dryDensity.toFixed(3)} g/cc · <strong>relative compaction {core.relativeCompactionPct.toFixed(1)}%</strong></p>
         )}
       </div>
+      <CalculationHistory calculatorId="soil_proctor" currentInputs={{ rows, mdd, dia, height, wetMass, wc }} currentResults={fit || core ? { omcPct: fit?.omcPct ?? null, mddGCc: fit?.mddGCc ?? null, relativeCompactionPct: core?.relativeCompactionPct ?? null } : {}} onRestore={(ins) => {
+        if (Array.isArray(ins.rows)) setRows(ins.rows as typeof rows);
+        if (ins.mdd != null) setMdd(ins.mdd as typeof mdd);
+        if (ins.dia != null) setDia(ins.dia as typeof dia);
+        if (ins.height != null) setHeight(ins.height as typeof height);
+        if (ins.wetMass != null) setWetMass(ins.wetMass as typeof wetMass);
+        if (ins.wc != null) setWc(ins.wc as typeof wc);
+      }} />
     </div>
   );
 }
@@ -162,6 +171,14 @@ function UcsTab() {
         {vaneError && <p className="text-sm text-ui-errorText mt-2">{vaneError}</p>}
         {v && <p className="mt-3 text-txt-primary"><strong>cu {v.cuKpa.toFixed(1)} kPa</strong></p>}
       </div>
+      <CalculationHistory calculatorId="soil_ucs" currentInputs={{ dia, load, strain, torque, vaneD, vaneH }} currentResults={u || v ? { quKpa: u?.quKpa ?? null, cuKpa: u?.cuKpa ?? null, vaneCuKpa: v?.cuKpa ?? null } : {}} onRestore={(ins) => {
+        if (ins.dia != null) setDia(ins.dia as typeof dia);
+        if (ins.load != null) setLoad(ins.load as typeof load);
+        if (ins.strain != null) setStrain(ins.strain as typeof strain);
+        if (ins.torque != null) setTorque(ins.torque as typeof torque);
+        if (ins.vaneD != null) setVaneD(ins.vaneD as typeof vaneD);
+        if (ins.vaneH != null) setVaneH(ins.vaneH as typeof vaneH);
+      }} />
     </div>
   );
 }
@@ -198,6 +215,13 @@ function PhaseTab() {
         </div>
         {swell && <p className="mt-3 text-txt-primary">Free swell <strong>{swell.swellPct.toFixed(1)}%</strong> — {swell.band}</p>}
       </div>
+      <CalculationHistory calculatorId="soil_phase" currentInputs={{ w, gs, bulk, init, fin }} currentResults={phase || swell ? { dryDensity: phase?.dryDensity ?? null, voidRatio: phase?.voidRatio ?? null, saturationPct: phase?.saturationPct ?? null, swellPct: swell?.swellPct ?? null } : {}} onRestore={(ins) => {
+        if (ins.w != null) setW(ins.w as typeof w);
+        if (ins.gs != null) setGs(ins.gs as typeof gs);
+        if (ins.bulk != null) setBulk(ins.bulk as typeof bulk);
+        if (ins.init != null) setInit(ins.init as typeof init);
+        if (ins.fin != null) setFin(ins.fin as typeof fin);
+      }} />
     </div>
   );
 }
@@ -241,6 +265,9 @@ export default function MasterSoilMechanicsLabSuite() {
           {tab === "phase" && <PhaseTab />}
         </div>
       )}
+      <CalculationHistory calculatorId="soillabsuite_tool" currentInputs={{ tab }} onRestore={(ins) => {
+        if (typeof ins.tab === "string") setTab(ins.tab as typeof tab);
+      }} />
     </div>
   );
 }

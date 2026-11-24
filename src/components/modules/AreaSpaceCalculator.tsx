@@ -8,6 +8,7 @@ import {
 } from "../../lib/areaSpaceCalc";
 import { useBOQ } from "../../context/BOQContext";
 import { Ruler, Check, Copy, Download, Printer, Share2, Plus, Trash2 } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 type Unit = "m" | "ft";
 const FT = 3.28084;
@@ -400,6 +401,46 @@ export default function AreaSpaceCalculator() {
           </p>
         </section>
       </article>
+      <CalculationHistory calculatorId="area_space_calculator" currentInputs={{unit, activeTab, shapeType, sLen, sWid, sRad, sA, sB, sC, sH, lOverallL, lOverallW, lArm1, lArm2, tTop, tThick, tLeg, tHeight, polygon, plotN, plotS, plotE, plotW, plotD, propCarpet, propInt, propExt, propBalcony, propCommon, wallLen, wallHt, faces, jambDepth, openings, roofFloor, roofPitch, roofOverhang, roofPerim}} currentResults={{ areaM2: currentAreaM2, shapeAreaM2: shape.areaM2, perimeterM: shape.perimeterM, plotTotalM2: plot.totalM2, superBuiltUpM2: property.superBuiltUpM2, netPlasterM2: plaster.netAreaM2, roofTrueAreaM2: roof.trueAreaM2 }} onRestore={(ins) => {
+          if (ins.unit != null) setUnit(ins.unit as typeof unit);
+          if (ins.activeTab != null) setActiveTab(ins.activeTab as typeof activeTab);
+          if (ins.shapeType != null) setShapeType(ins.shapeType as typeof shapeType);
+          if (ins.sLen != null) setSLen(ins.sLen as typeof sLen);
+          if (ins.sWid != null) setSWid(ins.sWid as typeof sWid);
+          if (ins.sRad != null) setSRad(ins.sRad as typeof sRad);
+          if (ins.sA != null) setSA(ins.sA as typeof sA);
+          if (ins.sB != null) setSB(ins.sB as typeof sB);
+          if (ins.sC != null) setSC(ins.sC as typeof sC);
+          if (ins.sH != null) setSH(ins.sH as typeof sH);
+          if (ins.lOverallL != null) setLOverallL(ins.lOverallL as typeof lOverallL);
+          if (ins.lOverallW != null) setLOverallW(ins.lOverallW as typeof lOverallW);
+          if (ins.lArm1 != null) setLArm1(ins.lArm1 as typeof lArm1);
+          if (ins.lArm2 != null) setLArm2(ins.lArm2 as typeof lArm2);
+          if (ins.tTop != null) setTTop(ins.tTop as typeof tTop);
+          if (ins.tThick != null) setTThick(ins.tThick as typeof tThick);
+          if (ins.tLeg != null) setTLeg(ins.tLeg as typeof tLeg);
+          if (ins.tHeight != null) setTHeight(ins.tHeight as typeof tHeight);
+          if (ins.polygon != null) setPolygon(ins.polygon as typeof polygon);
+          if (ins.plotN != null) setPlotN(ins.plotN as typeof plotN);
+          if (ins.plotS != null) setPlotS(ins.plotS as typeof plotS);
+          if (ins.plotE != null) setPlotE(ins.plotE as typeof plotE);
+          if (ins.plotW != null) setPlotW(ins.plotW as typeof plotW);
+          if (ins.plotD != null) setPlotD(ins.plotD as typeof plotD);
+          if (ins.propCarpet != null) setPropCarpet(ins.propCarpet as typeof propCarpet);
+          if (ins.propInt != null) setPropInt(ins.propInt as typeof propInt);
+          if (ins.propExt != null) setPropExt(ins.propExt as typeof propExt);
+          if (ins.propBalcony != null) setPropBalcony(ins.propBalcony as typeof propBalcony);
+          if (ins.propCommon != null) setPropCommon(ins.propCommon as typeof propCommon);
+          if (ins.wallLen != null) setWallLen(ins.wallLen as typeof wallLen);
+          if (ins.wallHt != null) setWallHt(ins.wallHt as typeof wallHt);
+          if (ins.faces != null) setFaces(ins.faces as typeof faces);
+          if (ins.jambDepth != null) setJambDepth(ins.jambDepth as typeof jambDepth);
+          if (ins.openings != null) setOpenings(ins.openings as typeof openings);
+          if (ins.roofFloor != null) setRoofFloor(ins.roofFloor as typeof roofFloor);
+          if (ins.roofPitch != null) setRoofPitch(ins.roofPitch as typeof roofPitch);
+          if (ins.roofOverhang != null) setRoofOverhang(ins.roofOverhang as typeof roofOverhang);
+          if (ins.roofPerim != null) setRoofPerim(ins.roofPerim as typeof roofPerim);
+        }} />
       <FormulaAccordion steps={steps} />
     </div>
   );

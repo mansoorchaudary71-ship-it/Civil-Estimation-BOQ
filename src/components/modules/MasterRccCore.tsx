@@ -31,6 +31,7 @@ import {
   type RccElementInput,
   type RccElementType,
 } from "../../lib/rccCalc";
+import { CalculationHistory } from '../ui/CalculationHistory';
 
 const ELEMENT_TYPES: Array<{ id: RccElementType; label: string }> = [
   { id: "slab", label: "Slab" },
@@ -588,6 +589,16 @@ export function MasterRccCoreBody() {
             </MaterialSummary>
           </div>
         )}
+      <CalculationHistory calculatorId="master_rcc_engine" currentInputs={{elements, grade, wastage, cementRate, steelRate, sandRate, aggRate, formworkRate}} currentResults={results ? { totalWet: results.totalWet, totalShut: results.totalShut, totalSteel: results.totalSteel, cementBagsOrder: results.materials.cementBagsOrder, sandM3: results.materials.sandM3, aggregateM3: results.materials.aggregateM3 } : {}} onRestore={(ins) => {
+          if (ins.elements != null) setElements(ins.elements as typeof elements);
+          if (ins.grade != null) setGrade(ins.grade as typeof grade);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+          if (ins.cementRate != null) setCementRate(ins.cementRate as typeof cementRate);
+          if (ins.steelRate != null) setSteelRate(ins.steelRate as typeof steelRate);
+          if (ins.sandRate != null) setSandRate(ins.sandRate as typeof sandRate);
+          if (ins.aggRate != null) setAggRate(ins.aggRate as typeof aggRate);
+          if (ins.formworkRate != null) setFormworkRate(ins.formworkRate as typeof formworkRate);
+        }} />
       </div>
     </div>
   );

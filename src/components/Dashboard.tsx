@@ -45,7 +45,8 @@ import { Calculator, Droplets,
  X,
  ArrowUpRight,
  Beaker } from "lucide-react";
-import { SEO } from "./SEO";
+import { SEO, SITE_WEB_APP } from "./SEO";
+import { GlobalFAQ, getCombinedFaqs, type FAQItem } from "./ui/GlobalFAQ";
 import { getSiteUrl } from "../seo/siteConfig";
 import SearchAndFilterBar from "./SearchAndFilterBar";
 import HeroSection from "./HeroSection";
@@ -1144,6 +1145,45 @@ const ToolsSkeleton = () => (
  </div>
 );
 
+/**
+ * HOME_FAQS — site-level questions for the home (landing) FAQ section.
+ * Every answer is true of the site as built: calculators are free with
+ * no sign-up to calculate; saving estimates to My Estimates needs a
+ * signed-in account (Firestore rules require auth); the Standards
+ * Reference library lists the codes behind the tools; most tools
+ * export PDF/CSV/Excel and print and send quantities to the BOQ
+ * Generator; costs work in PKR/INR/AED with 2026 city rates for
+ * Lahore, Karachi, Islamabad, Faisalabad and Multan. The same list
+ * feeds the home FAQPage JSON-LD (logged-out landing only — the
+ * section does not render for signed-in users).
+ */
+const HOME_FAQS: FAQItem[] = [
+  {
+    question: "Are the calculators free to use?",
+    answer: "Yes. Every calculator on this site is free to use, with no sign-up needed to calculate — open any tool and get results straight away."
+  },
+  {
+    question: "Do I need an account to calculate?",
+    answer: "No. You only need to sign in if you want to save estimates to My Estimates, which stores them against your account."
+  },
+  {
+    question: "Which standards do the calculators follow?",
+    answer: "Indian Standards (IS 456, IS 10262 and others), MoRTH and IRC specifications for roads, the Building Code of Pakistan (BCP-2021) and UAE construction standards. The Standards Reference library lists the codes behind each tool, with links to the calculators that use them."
+  },
+  {
+    question: "Can I export my results?",
+    answer: "Most tools let you download a PDF report or export CSV/Excel, print the page, and send quantities straight to the BOQ Generator."
+  },
+  {
+    question: "Are the rates for Pakistan, India or the UAE?",
+    answer: "All three. Costs can be worked out in PKR, INR or AED, with 2026 city rates for Lahore, Karachi, Islamabad, Faisalabad and Multan, and brick and material rates for Pakistan, India and the UAE."
+  },
+  {
+    question: "Can I use the calculators on my phone?",
+    answer: "Yes. Every tool is responsive and works on phones and tablets as well as on desktop."
+  },
+];
+
 export default function Dashboard({
  onSelectModule,
  previousModule,
@@ -1325,6 +1365,20 @@ export default function Dashboard({
  title="BOQ & Construction Cost Calculators"
  description="Civil Estimation Pro: free construction quantity, BOQ and cost estimation calculators for concrete, steel, masonry, finishes, earthworks and more."
  canonicalUrl={getSiteUrl()}
+ schema={!user ? {
+   "@context": "https://schema.org",
+   "@graph": [
+     SITE_WEB_APP,
+     {
+       "@type": "FAQPage",
+       "mainEntity": getCombinedFaqs(undefined, HOME_FAQS).map((f) => ({
+         "@type": "Question",
+         "name": f.question,
+         "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+       })),
+     },
+   ],
+ } : undefined}
  />
 
  {!user ? (
@@ -1355,6 +1409,11 @@ export default function Dashboard({
  <ScrollReveal><SocialProofSection /></ScrollReveal>
  <ScrollReveal yOffset={30}><HowItWorksSection /></ScrollReveal>
  <ScrollReveal yOffset={30}><FeatureComparisonSection onNavigate={handleSelect} /></ScrollReveal>
+ {/* Home FAQ — same GlobalFAQ accordion the tool pages use, with
+     site-level questions (HOME_FAQS above). Plain <ScrollReveal> on
+     purpose: the component takes no yOffset prop (see the two
+     pre-existing tsc errors on the lines above). */}
+ <ScrollReveal><div className="w-full md:max-w-[1400px] md:mx-auto px-4 pb-16"><GlobalFAQ faqs={HOME_FAQS} /></div></ScrollReveal>
  </div>
  ) : (
  <>

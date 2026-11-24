@@ -588,6 +588,15 @@ export default function ChainageVolumeEstimator() {
           </section>
         </div>
       </div>
+      <CalculationHistory calculatorId="chainage_volume" currentInputs={{formationWidth, cutSlope, fillSlope, method, swellFactor, shrinkFactor, stations}} currentResults={{ totalCut: results.totalCut, totalFill: results.totalFill, bulkedCut: results.bulkedCut, shrunkenFill: results.shrunkenFill, finalNet: results.finalNet }} onRestore={(ins) => {
+          if (ins.formationWidth != null) setFormationWidth(ins.formationWidth as typeof formationWidth);
+          if (ins.cutSlope != null) setCutSlope(ins.cutSlope as typeof cutSlope);
+          if (ins.fillSlope != null) setFillSlope(ins.fillSlope as typeof fillSlope);
+          if (ins.method != null) setMethod(ins.method as typeof method);
+          if (ins.swellFactor != null) setSwellFactor(ins.swellFactor as typeof swellFactor);
+          if (ins.shrinkFactor != null) setShrinkFactor(ins.shrinkFactor as typeof shrinkFactor);
+          if (ins.stations != null) setStations(ins.stations as typeof stations);
+        }} />
     </div>
   );
 }

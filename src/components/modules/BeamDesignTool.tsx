@@ -203,7 +203,24 @@ export default function BeamDesignTool() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="beam_design" currentInputs={{ span, workingLoad, safetyFactor, width, depth, cover, fck, fy, supportCondition, mainDia, stirrupDia, stirrupLegs, selfWeight, wastage }} />
+      <CalculationHistory calculatorId="beam_design" currentInputs={{ span, workingLoad, safetyFactor, width, depth, cover, fck, fy, supportCondition, mainDia, stirrupDia, stirrupLegs, selfWeight, wastage }}
+        onRestore={(ins) => {
+          if (ins.span != null) setSpan(ins.span as typeof span);
+          if (ins.workingLoad != null) setWorkingLoad(ins.workingLoad as typeof workingLoad);
+          if (ins.safetyFactor != null) setSafetyFactor(ins.safetyFactor as typeof safetyFactor);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.depth != null) setDepth(ins.depth as typeof depth);
+          if (ins.cover != null) setCover(ins.cover as typeof cover);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.fy != null) setFy(ins.fy as typeof fy);
+          if (ins.supportCondition != null) setSupportCondition(ins.supportCondition as typeof supportCondition);
+          if (ins.mainDia != null) setMainDia(ins.mainDia as typeof mainDia);
+          if (ins.stirrupDia != null) setStirrupDia(ins.stirrupDia as typeof stirrupDia);
+          if (ins.stirrupLegs != null) setStirrupLegs(ins.stirrupLegs as typeof stirrupLegs);
+          if (ins.selfWeight != null) setSelfWeight(ins.selfWeight as typeof selfWeight);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+        }}
+      />
     </div>
   );
 }

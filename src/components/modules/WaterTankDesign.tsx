@@ -154,7 +154,27 @@ export default function WaterTankDesign() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="watertankdesign_tool" currentInputs={{ shape, placement, occupants, lpcd, days, length, width, diameter, depth, freeboard, wallT, baseT, fck, barType, cover, mainDia, wastage }} />
+      <CalculationHistory calculatorId="watertankdesign_tool" currentInputs={{ shape, placement, occupants, lpcd, days, length, width, diameter, depth, freeboard, wallT, baseT, fck, barType, cover, mainDia, wastage }}
+        onRestore={(ins) => {
+          if (ins.shape != null) setShape(ins.shape as typeof shape);
+          if (ins.placement != null) setPlacement(ins.placement as typeof placement);
+          if (ins.occupants != null) setOccupants(ins.occupants as typeof occupants);
+          if (ins.lpcd != null) setLpcd(ins.lpcd as typeof lpcd);
+          if (ins.days != null) setDays(ins.days as typeof days);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.diameter != null) setDiameter(ins.diameter as typeof diameter);
+          if (ins.depth != null) setDepth(ins.depth as typeof depth);
+          if (ins.freeboard != null) setFreeboard(ins.freeboard as typeof freeboard);
+          if (ins.wallT != null) setWallT(ins.wallT as typeof wallT);
+          if (ins.baseT != null) setBaseT(ins.baseT as typeof baseT);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.barType != null) setBarType(ins.barType as typeof barType);
+          if (ins.cover != null) setCover(ins.cover as typeof cover);
+          if (ins.mainDia != null) setMainDia(ins.mainDia as typeof mainDia);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+        }}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { SITE_NAME, SITE_URL } from "./siteConfig";
+import { usePageJsonLd } from "./usePageJsonLd";
 import { ChevronRight } from "lucide-react";
 
 export interface RelatedCalculatorLink {
@@ -54,6 +55,11 @@ export default function CalculatorPageShell({
   children,
 }: CalculatorPageShellProps) {
   const jsonLdArray = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+  // Single managed JSON-LD node for this page (see usePageJsonLd):
+  // Helmet never removes inline JSON-LD scripts on in-app navigation,
+  // so the shell's set is written here instead of in <Helmet> — one
+  // node, replaced on every navigation, never accumulated.
+  usePageJsonLd(jsonLdArray);
   return (
     <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-8">
       <Helmet>
@@ -76,11 +82,7 @@ export default function CalculatorPageShell({
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         {ogImage && <meta name="twitter:image" content={ogImage} />}
-        {jsonLdArray.map((obj, i) => (
-          <script key={i} type="application/ld+json">
-            {JSON.stringify(obj)}
-          </script>
-        ))}
+        {/* No <script> here on purpose — see usePageJsonLd above. */}
       </Helmet>
 
       <nav aria-label="Breadcrumb" className="mb-6">

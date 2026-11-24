@@ -137,29 +137,6 @@ function DimInput({
   );
 }
 
-const ROOF_FAQS: { q: string; a: string }[] = [
-  {
-    q: "What does roof pitch in X:12 mean, and how does it relate to degrees?",
-    a: "X:12 is the rise over a 12-unit run: 6:12 means the roof rises 6 units for every 12 units of horizontal run. In degrees that is arctan(6/12) = 26.6°, and in percent it is 50%. All three describe the same slope — this calculator keeps them live-synced, so you can enter whichever one your drawings give you.",
-  },
-  {
-    q: "How many bundles of shingles are in one square?",
-    a: "One roofing square covers 100 sq ft, and a square of composition shingles is normally 3 bundles (about 33 ft² per bundle). So 22 squares need 66 bundles. This calculator rounds squares up — you cannot buy part of a square — and applies your wastage percentage before rounding.",
-  },
-  {
-    q: "How many felt rolls do I need?",
-    a: "One roll of #15 felt covers about 432 sq ft (36 in × 144 ft) and one roll of #30 felt about 216 sq ft (36 in × 72 ft). Divide the roof area by the coverage and round up. #30 is thicker and used under heavier shingles or on low slopes; most homes use #15.",
-  },
-  {
-    q: "How is a hip roof area different from a gable roof?",
-    a: "A gable roof is two rectangles: 2 × rafter length × building length. A hip roof slopes on all four sides, so its area is the horizontal projection (including the overhangs on all sides) divided by cos θ — the same pitch multiplier, applied to a bigger footprint. The hip and valley rafters are longer than common rafters; this calculator approximates them at 1.5 × the common run and says so, because the exact length depends on the hip geometry.",
-  },
-  {
-    q: "My roof in Pakistan is flat — can I use this calculator?",
-    a: "No — this calculator is for pitched roofs. Most houses in Pakistan have a flat RCC slab roof, and a pitch of 0 gives a flat result on purpose. For a flat roof, use the Concrete / Slab tools on this site to estimate the slab, and use this calculator only if you are adding a pitched roof, a pergola, or a sloped sheet roof.",
-  },
-];
-
 const RATE_FIELDS: {
   key: keyof RoofMaterialRates;
   label: string;
@@ -785,20 +762,6 @@ export function RoofPitchCalculator() {
 
           <p className="text-sm text-txt-tertiary leading-relaxed">{ARCHITECTURAL_DISCLAIMER}</p>
 
-          <section aria-labelledby="roof-faq-heading">
-            <h3 id="roof-faq-heading" className="text-lg font-semibold text-txt-primary mb-3">
-              Frequently asked questions
-            </h3>
-            <div className="space-y-2">
-              {ROOF_FAQS.map((f) => (
-                <details key={f.q} className="bg-surface-default border border-ui-borderSubtle rounded-2xl px-4 py-3 shadow-brand-sm">
-                  <summary className="font-medium text-txt-primary cursor-pointer">{f.q}</summary>
-                  <p className="text-sm text-txt-secondary leading-relaxed mt-2">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
           <div className="flex flex-wrap gap-2">
             <span className="text-sm text-txt-tertiary mr-1">Related:</span>
             <Link to="/building-setback-calculator" className="text-sm font-medium text-accent-800 hover:underline">Building Setback Calculator</Link>
@@ -813,6 +776,21 @@ export function RoofPitchCalculator() {
         calculatorId="roofcalculator_tool"
         currentInputs={currentInputs}
         currentResults={currentResults}
+        onRestore={(ins) => {
+          if (ins.unitSystem != null) setUnitSystem(ins.unitSystem as typeof unitSystem);
+          if (ins.span != null) setSpan(ins.span as typeof span);
+          if (ins.rise != null) setRise(ins.rise as typeof rise);
+          if (ins.pitchMode != null) setPitchMode(ins.pitchMode as typeof pitchMode);
+          if (ins.pitchVal != null) setPitchVal(ins.pitchVal as typeof pitchVal);
+          if (ins.overhang != null) setOverhang(ins.overhang as typeof overhang);
+          if (ins.buildingLength != null) setBuildingLength(ins.buildingLength as typeof buildingLength);
+          if (ins.rakeOverhang != null) setRakeOverhang(ins.rakeOverhang as typeof rakeOverhang);
+          if (ins.roofType != null) setRoofType(ins.roofType as typeof roofType);
+          if (ins.wastePct != null) setWastePct(ins.wastePct as typeof wastePct);
+          if (ins.spacing != null) setSpacing(ins.spacing as typeof spacing);
+          if (ins.currency != null) setCurrency(ins.currency as typeof currency);
+          if (ins.rates != null) setRates(ins.rates as typeof rates);
+        }}
       />
     </div>
   );

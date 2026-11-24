@@ -151,6 +151,7 @@ export const SEO_SLUG_TO_ID: Readonly<Record<string, string>> = {
   "master-quantity-estimator": "master-quantity",
   "area-plot-converter-marla-kanal": "marla-converter",
   "house-construction-cost-calculator": "pakistan-cost-calculator",
+  "house-construction-estimator": "house",
   "material-takeoff-generator": "material-takeoff",
   "cost-summary-generator": "cost-summary",
   "measurement-sheet-calculator": "measurement-sheet",
@@ -176,12 +177,20 @@ export const SEO_SLUG_TO_ID: Readonly<Record<string, string>> = {
   "staircase-calculator": "staircase-calculator",
   "aggregate-tests-calculator": "aggregate-tests",
   "formwork-scaffold-estimator": "formwork",
+  "brick-calculator": "brick-calculator",
+  "concrete-mix-design-calculator": "mix-design",
+  "plywood-formwork-estimator": "plywood-estimator",
+  "precast-compound-wall-estimator": "precast-wall",
+  "roof-pitch-calculator": "roof-calculator",
+  "universal-structural-geometry-calculator": "universal-structural-geometry",
   // road-pavement
   "road-pavement-estimator": "road-pavement",
   "earthworks-excavation-calculator": "earthworks",
   "chainage-volume-calculator": "chainage",
   "gradient-slope-calculator": "gradient-calculator",
   "anti-termite-calculator": "anti-termite",
+  "pavement-mix-gradation-calculator": "pavement-mix",
+  "topsoil-landscaping-estimator": "topsoil-estimator",
   // geotechnical
   "sieve-analysis-grading-calculator": "master-sieve",
   "geotechnical-soil-tests-calculator": "geotechnical",
@@ -189,10 +198,14 @@ export const SEO_SLUG_TO_ID: Readonly<Record<string, string>> = {
   "aggregate-blending-calculator": "aggregate-blending",
   "direct-shear-test-calculator": "direct-shear",
   "permeability-calculator": "permeability-test",
+  "soil-mechanics-lab-calculator": "soil-mechanics-lab",
   // mep
   "energy-mep-calculator": "mep-calculator",
   "solar-roof-calculator": "solar-roof",
   "rainwater-harvesting-calculator": "rainwater-harvesting",
+  "master-infrastructure-mep-engine": "infra-mep-engine",
+  "solar-water-heater-calculator": "solar-water-heater",
+  "wastewater-bod-cod-calculator": "wastewater-calculator",
   // structural-design
   "beam-design-tool": "beam-design",
   "column-design-tool": "column-design",
@@ -206,7 +219,23 @@ export const SEO_SLUG_TO_ID: Readonly<Record<string, string>> = {
   "far-fsi-calculator": "far-fsi-calculator",
   "door-window-schedule-generator": "door-window-schedule",
   "ventilation-lighting-checker-tool": "ventilation-checker",
+  "complete-finishes-workspace": "master-finishes",
+  "staircase-design-reference": "staircase-design-reference",
 };
+
+/**
+ * No SEO slug, by design (Round 3 infra):
+ * - "boq-templates": the same BOQGenerator as "boq" — the existing
+ *   "boq-generator" slug covers both; a second slug would split the
+ *   canonical between two URLs for one tool.
+ * - "cost-guide-pakistan": an alias of "pakistan-cost-calculator"
+ *   (resolved to it in resolvePath below; the page canonicalises
+ *   onto /pakistan-cost-calculator). A slug would be a third URL for
+ *   the same page.
+ * - "is-codes-reference", "morth-irc-specs", "pakistan-building-codes",
+ *   "uae-construction-standards": reference pages served under the
+ *   /calculators/standards hub, not calculators in a tool group.
+ */
 
 /** /calculators/<group> -> the Dashboard category label it filters to. */
 export const GROUP_TO_CATEGORY: Readonly<Record<string, string>> = {
@@ -437,6 +466,15 @@ export function resolvePath(pathname: string): ResolvedRoute {
 
   // /brick-calculator[/<variant>] — the page reads the variant itself.
   if (first === "brick-calculator") return { kind: "tool", id: "brick-calculator" };
+
+  // /cost-guide-pakistan is an alias, not a distinct tool: it renders
+  // the same PakistanCostCalculatorPage as /pakistan-cost-calculator
+  // (which canonicalises onto itself). Resolve the alias to the
+  // canonical tool so the published URL keeps working (sitemap, shared
+  // links) without a second Dashboard card, a second search entry or a
+  // second set of structured data. Must sit BEFORE the TOOL_ID_SET
+  // check below: the alias id is still registered in TOOL_IDS.
+  if (first === "cost-guide-pakistan") return { kind: "tool", id: "pakistan-cost-calculator" };
 
   // /<tool-id>  (canonical short form) or /<legacy-slug> (sitemap-tools.xml)
   if (TOOL_ID_SET.has(first)) return { kind: "tool", id: first };

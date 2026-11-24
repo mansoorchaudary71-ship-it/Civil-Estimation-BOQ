@@ -359,6 +359,11 @@ export default function HouseEstimator() {
     }
   }, [location.pathname, location.hash]);
 
+  // One JSON-LD source per tool: ModuleWrapper's central SEOHead already
+  // emits this tool's FAQPage (from its real SPECIFIC_FAQS), so this
+  // hook emits ONLY the SoftwareApplication node. The FAQPage node that
+  // used to live here duplicated the central one (two FAQPage blocks on
+  // /house) and has been removed.
   useSchema({
     "@context": "https://schema.org",
     "@graph": [
@@ -378,19 +383,6 @@ export default function HouseEstimator() {
           "ratingValue": "4.8",
           "ratingCount": "124"
         }
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What engineering formulas does this tool use?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "It strictly uses internationally recognized civil engineering formulas relevant to the quantity estimation field, compliant with standards like NBC."
-            }
-          }
-        ]
       }
     ]
   });
@@ -2728,7 +2720,7 @@ export default function HouseEstimator() {
       <CalculationHistory
         calculatorId="house_estimator_v1"
         estimationName="Complete House Estimator"
-        currentInputs={{ activeTab, finishQuality, addOns }}
+        currentInputs={{ activeTab, finishQuality, addOns, geometry: geoState, siteLocation: projectDetails.siteLocation }}
         currentResults={{
           // Whole rupees, matching the on-screen formatCurrency (PKR:
           // 0 decimals) — the history summary renders these verbatim
@@ -2744,6 +2736,26 @@ export default function HouseEstimator() {
           if (inputs.activeTab) setActiveTab(inputs.activeTab);
           if (inputs.finishQuality) setFinishQuality(inputs.finishQuality);
           if (inputs.addOns) setAddOns(inputs.addOns);
+          // Geometry (plot size/unit, covered area, room height,
+          // stories, rooms) is what determines the estimate; restore it
+          // through the same RESTORE_ALL path the auto-save hook uses.
+          // Merged over initialGeometry so an older/partial save cannot
+          // leave a required field undefined.
+          if (inputs.geometry && typeof inputs.geometry === "object") {
+            dispatch({
+              type: "RESTORE_ALL",
+              payload: { ...initialGeometry, ...inputs.geometry },
+            });
+          }
+          // City: held as projectDetails.siteLocation (set from the
+          // /estimate/... deep link); the estimate itself is city-agnostic
+          // in this tool, but the location label is part of the project.
+          if (typeof inputs.siteLocation === "string") {
+            setProjectDetails((prev) => ({
+              ...prev,
+              siteLocation: inputs.siteLocation,
+            }));
+          }
         }}
         savePayload={pdfExportPayload}
       />

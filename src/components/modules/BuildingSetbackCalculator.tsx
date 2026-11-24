@@ -145,29 +145,6 @@ const AREA_FACTORS: Record<AreaUnit, number> = {
   kanal: KANAL_M2,
 };
 
-const SETBACK_FAQS: { q: string; a: string }[] = [
-  {
-    q: "What is a building setback?",
-    a: "A setback is the minimum distance a building must sit back from the plot boundary — front (towards the road), rear, and sides. Setbacks keep light and air reaching the building, leave room for access and services, and stop buildings crowding the street. The area left after all setbacks is the buildable footprint.",
-  },
-  {
-    q: "Do I need side setbacks on a 5 marla plot in Lahore?",
-    a: "Under the LDA figures used here, a plot under 5 marla typically has 5 ft front and 5 ft rear setbacks and no side setback — houses are built continuously along the sides. This comes from society-practice summaries, not from a verified LDA setback table, so confirm it with LDA or your housing society before building.",
-  },
-  {
-    q: "What changes on a corner plot?",
-    a: "A corner plot faces a road on two sides, so the side facing the second road needs an extra setback on top of the normal side margin. No sourced value for that extra setback was found, so this calculator leaves it for you to enter from your authority's figures — the buildable frontage shrinks by exactly the amount you enter.",
-  },
-  {
-    q: "Setback footprint vs ground coverage — what is the difference?",
-    a: "They are two different limits. The setback footprint is the area left after front, rear and side setbacks — pure geometry. Ground coverage is a separate regulatory cap (for example 70% of the plot for a 10 marla LDA plot). Your real buildable footprint is whichever is smaller. A plot can pass its setbacks yet breach coverage, or pass coverage yet fail its setbacks — this calculator reports both numbers separately so you can see which one binds.",
-  },
-  {
-    q: "Who approves setbacks, and is this calculator a permission?",
-    a: "In Lahore the Lahore Development Authority (LDA) approves building plans; in India your municipal corporation or development authority applies the state bye-laws; in Dubai the plot's Affection Plan and the master developer's rules govern. This tool is a planning screen only — it is not a building permission, and its preset figures are secondary summaries that must be confirmed with the approving authority.",
-  },
-];
-
 export default function BuildingSetbackCalculator() {
   const [region, setRegion] = useState<Region>("PK");
   const [presetId, setPresetId] = useState<string>("general-planning");
@@ -727,20 +704,6 @@ export default function BuildingSetbackCalculator() {
         <p className="text-sm text-txt-tertiary mt-6 leading-relaxed">{PLANNING_NOTE}</p>
         <p className="text-sm text-txt-tertiary leading-relaxed">{ARCHITECTURAL_DISCLAIMER}</p>
 
-        <section aria-labelledby="setback-faq-heading" className="mt-8">
-          <h3 id="setback-faq-heading" className="text-lg font-semibold text-txt-primary mb-3">
-            Frequently asked questions
-          </h3>
-          <div className="space-y-2">
-            {SETBACK_FAQS.map((f) => (
-              <details key={f.q} className="bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 py-3">
-                <summary className="font-medium text-txt-primary cursor-pointer">{f.q}</summary>
-                <p className="text-sm text-txt-secondary leading-relaxed mt-2">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
         <div className="flex flex-wrap gap-2 mt-8">
           <span className="text-sm text-txt-tertiary mr-1">Related:</span>
           <Link to="/far-fsi-calculator" className="text-sm font-medium text-accent-800 hover:underline">FAR / FSI Calculator</Link>
@@ -754,6 +717,24 @@ export default function BuildingSetbackCalculator() {
         calculatorId="buildingsetbackcalculator_tool"
         currentInputs={currentInputs}
         currentResults={currentResults}
+        onRestore={(ins) => {
+          if (ins.region != null) setRegion(ins.region as typeof region);
+          if (ins.presetId != null) setPresetId(ins.presetId as typeof presetId);
+          if (ins.plotMode != null) setPlotMode(ins.plotMode as typeof plotMode);
+          if (ins.frontage != null) setFrontage(ins.frontage as typeof frontage);
+          if (ins.depth != null) setDepth(ins.depth as typeof depth);
+          if (ins.areaValue != null) setAreaValue(ins.areaValue as typeof areaValue);
+          if (ins.areaUnit != null) setAreaUnit(ins.areaUnit as typeof areaUnit);
+          if (ins.buildingType != null) setBuildingType(ins.buildingType as typeof buildingType);
+          if (ins.roadWidth != null) setRoadWidth(ins.roadWidth as typeof roadWidth);
+          if (ins.front != null) setFront(ins.front as typeof front);
+          if (ins.rear != null) setRear(ins.rear as typeof rear);
+          if (ins.side != null) setSide(ins.side as typeof side);
+          if (ins.sideBoth != null) setSideBoth(ins.sideBoth as typeof sideBoth);
+          if (ins.cornerPlot != null) setCornerPlot(ins.cornerPlot as typeof cornerPlot);
+          if (ins.cornerExtra != null) setCornerExtra(ins.cornerExtra as typeof cornerExtra);
+          if (ins.unit != null) setUnit(ins.unit as typeof unit);
+        }}
       />
     </div>
   );

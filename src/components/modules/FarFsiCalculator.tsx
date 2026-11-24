@@ -35,29 +35,6 @@ const AREA_FACTORS: Record<AreaUnit, number> = {
   kanal: KANAL_M2,
 };
 
-const FAR_FAQS: { q: string; a: string }[] = [
-  {
-    q: "What is the difference between FAR and FSI?",
-    a: "There is none in practice — FAR (Floor Area Ratio) and FSI (Floor Space Index) are the same number expressed differently. FSI 2.0 means FAR 200%: you may build floor area equal to twice your plot area. This calculator uses FAR and FSI interchangeably.",
-  },
-  {
-    q: "What counts in the gross floor area (GFA)?",
-    a: "It depends on the authority. Under LDA 2019 basements count toward FAR. Under the India Model Bye-Laws 2016, FAR uses the covered area on all floors excluding specified exemptions such as stilt parking, balconies within limits and service areas. Under the Dubai Building Code, Table A.3 lists explicit GFA inclusions and exclusions. Always check what your authority counts before sizing floors — a basement or a stilt floor can change the answer.",
-  },
-  {
-    q: "Why does the calculator say 0 floors?",
-    a: "Because the FAR is below the ground coverage. Floors are roughly FAR ÷ coverage: with FSI 0.4 and 50% coverage you get 0.8 floors, which floors down to 0 — no full floor is possible at that coverage. Raise the permitted FAR or lower the ground coverage (a smaller footprint spread over more floors) to get a whole number of floors.",
-  },
-  {
-    q: "Does a basement count toward FAR?",
-    a: "Under LDA 2019, yes — basements count toward FAR in Lahore. In India it depends on the state bye-laws and the basement's use. In Dubai it depends on the DBC GFA rules for your plot. If your basement counts, it eats into the same built-up allowance as the floors above ground.",
-  },
-  {
-    q: "What FAR applies in Dubai?",
-    a: "Dubai has no single residential FAR table. FAR is plot-specific and comes from your plot's Affection Plan and the master developer's planning documents — it can be around 0.6 in a villa community like Al Barari and 12 or more downtown. This calculator ships the Al Barari example only as an illustration, and asks you to enter your own plot's figures for a real answer.",
-  },
-];
-
 export default function FarFsiCalculator() {
   const [region, setRegion] = useState<Region>("PK");
   const [presetId, setPresetId] = useState<string>("");
@@ -493,20 +470,6 @@ export default function FarFsiCalculator() {
         <p className="text-sm text-txt-tertiary mt-6 leading-relaxed">{PLANNING_NOTE}</p>
         <p className="text-sm text-txt-tertiary leading-relaxed">{ARCHITECTURAL_DISCLAIMER}</p>
 
-        <section aria-labelledby="far-faq-heading" className="mt-8">
-          <h3 id="far-faq-heading" className="text-lg font-semibold text-txt-primary mb-3">
-            Frequently asked questions
-          </h3>
-          <div className="space-y-2">
-            {FAR_FAQS.map((f) => (
-              <details key={f.q} className="bg-surface-hover border border-ui-borderSubtle rounded-2xl px-4 py-3">
-                <summary className="font-medium text-txt-primary cursor-pointer">{f.q}</summary>
-                <p className="text-sm text-txt-secondary leading-relaxed mt-2">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
         <div className="flex flex-wrap gap-2 mt-8">
           <span className="text-sm text-txt-tertiary mr-1">Related:</span>
           <Link to="/building-setback-calculator" className="text-sm font-medium text-accent-800 hover:underline">Building Setback Calculator</Link>
@@ -520,6 +483,17 @@ export default function FarFsiCalculator() {
         calculatorId="farfsicalculator_tool"
         currentInputs={currentInputs}
         currentResults={currentResults}
+        onRestore={(ins) => {
+          if (ins.region != null) setRegion(ins.region as typeof region);
+          if (ins.presetId != null) setPresetId(ins.presetId as typeof presetId);
+          if (ins.plotArea != null) setPlotArea(ins.plotArea as typeof plotArea);
+          if (ins.areaUnit != null) setAreaUnit(ins.areaUnit as typeof areaUnit);
+          if (ins.far != null) setFar(ins.far as typeof far);
+          if (ins.coverage != null) setCoverage(ins.coverage as typeof coverage);
+          if (ins.maxHeight != null) setMaxHeight(ins.maxHeight as typeof maxHeight);
+          if (ins.maxStoreys != null) setMaxStoreys(ins.maxStoreys as typeof maxStoreys);
+          if (ins.floorHeight != null) setFloorHeight(ins.floorHeight as typeof floorHeight);
+        }}
       />
     </div>
   );

@@ -1,9 +1,11 @@
 import { Button } from './ui/Button';
-import { GlobalFAQ } from './ui/GlobalFAQ';
-import { SEO } from "./SEO";
+import { GlobalFAQ, getCombinedFaqs } from './ui/GlobalFAQ';
+import { SEO, SITE_WEB_APP } from "./SEO";
 import { getSiteUrl } from "../seo/siteConfig";
+import { TOOL_GUIDES } from "../seo/toolGuides";
+import { ToolArticleWidget } from "./ui/ToolArticleWidget";
 import { getEffectivePathname } from "../lib/toolRoutes";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, BookOpen, ShieldCheck, ArrowRight, Download, Eye, X } from "lucide-react";
 import { createPortal } from "react-dom";
 
@@ -155,6 +157,37 @@ const MORTH_FAQS = [
   { question: "What is the difference between IRC:37 and IRC:58?", answer: "IRC:37-2018 designs flexible (bituminous) pavements; IRC:58-2015 designs plain jointed rigid (concrete) pavements. A rigid-pavement slab must be designed per IRC:58-2015 (cumulative fatigue damage CFD ≤ 1.0) by a pavement engineer — our Rigid Pavement Estimator is quantities only." },
 ];
 
+/**
+ * FAQs for the non-MoRTH standards pages — one set per page, because
+ * the old single set led with a Pakistan question on the Indian and
+ * UAE pages too. Each set is grounded in that page's own standards
+ * entries above. The FAQPage JSON-LD below is built from the same
+ * list the visible accordion shows (see pageFaqs).
+ */
+const IS_STANDARDS_FAQS = [
+  { question: "What is IS 456?", answer: "IS 456:2000 is the primary Indian Standard code of practice for plain and reinforced concrete — design clauses, material specifications and workmanship for general structural use. It is published by the Bureau of Indian Standards (BIS)." },
+  { question: "What is the difference between IS 456 and IS 10262?", answer: "IS 456 is the code of practice for designing reinforced concrete structures; IS 10262 is the guideline for proportioning the concrete mix itself (cement, sand, aggregate and water) to hit a target strength." },
+  { question: "Why do some standards have no PDF?", answer: "Only the Building Code of Pakistan PDF is hosted on this site. Other codes are copyrighted publications — their full text must be bought or accessed from the publishing body (BIS, IRC, PEC or NHA)." },
+];
+
+const PAK_STANDARDS_FAQS = [
+  { question: "Which code governs house construction in Pakistan?", answer: "The Building Code of Pakistan (BCP-2021), formulated by the PEC, with local bylaws on top — for example the LDA Building & Zoning Regulations in Lahore or the DHA bye-laws inside DHA schemes." },
+  { question: "Do local bylaws apply on top of the Building Code of Pakistan?", answer: "Yes. BCP-2021 is the national code, and local bylaws sit on top of it — the LDA Building & Zoning Regulations cover plot coverage, setbacks, height limits and approval procedure in Lahore, and the DHA building control bye-laws govern construction inside DHA schemes. Those are local bylaws, not a national code." },
+  { question: "Why do some standards have no PDF?", answer: "Only the Building Code of Pakistan PDF is hosted on this site. Other codes are copyrighted publications — their full text must be bought or accessed from the publishing body (BIS, IRC, PEC or NHA)." },
+];
+
+const UAE_STANDARDS_FAQS = [
+  { question: "Which code governs building construction in Dubai?", answer: "The Dubai Building Code (DBC), published by Dubai Municipality — one code unifying building design across Dubai, covering structural stability, safety, sustainability and accessibility." },
+  { question: "What is the Abu Dhabi International Building Code?", answer: "The Abu Dhabi International Building Code (ADIBC) is based on the International Building Code (IBC), with tailored amendments for the Emirate of Abu Dhabi." },
+  { question: "What fire safety code applies in the UAE?", answer: "The UAE Fire and Life Safety Code of Practice (2018), issued by Civil Defence — mandatory requirements for fire protection systems, egress and facade safety across all Emirates." },
+];
+
+const HUB_STANDARDS_FAQS = [
+  { question: "What standards does this library cover?", answer: "Indian Standards (IS 456, IS 800, IS 10262, IS 1200 and others), MoRTH Specifications and IRC codes for roads, the Building Code of Pakistan (BCP-2021) with NHA specifications and LDA/DHA bylaws, and the UAE codes — Dubai Building Code, Abu Dhabi International Building Code and the UAE Fire and Life Safety Code." },
+  { question: "What is the difference between IS 456 and IS 10262?", answer: "IS 456 is the code of practice for designing reinforced concrete structures; IS 10262 is the guideline for proportioning the concrete mix itself (cement, sand, aggregate and water) to hit a target strength." },
+  { question: "Why do some standards have no PDF?", answer: "Only the Building Code of Pakistan PDF is hosted on this site. Other codes are copyrighted publications — their full text must be bought or accessed from the publishing body (BIS, IRC, PEC or NHA)." },
+];
+
 export type StandardsMode = "is-codes" | "morth-irc";
 
 /**
@@ -171,13 +204,68 @@ function detectModeFromUrl(): StandardsMode | null {
 }
 
 export default function StandardsReferencePage({ onNavigate, initialActiveCountry = "All", initialMode }: { onNavigate?: (id: string) => void, initialActiveCountry?: string, initialMode?: StandardsMode }) {
-  const [mode] = useState<StandardsMode>(() => initialMode ?? detectModeFromUrl() ?? "is-codes");
+  // Mode is DERIVED on every render from the prop (or the URL) — never
+  // captured once in a useState initializer. In-app navigation reuses
+  // this component across the four standards routes, and an initializer
+  // would keep the mode of the first route visited (stale MoRTH /
+  // IS-codes) whenever React reuses the mounted instance. App passes
+  // initialMode explicitly per route; the URL is the fallback for
+  // direct loads and the /standards hub.
+  const mode: StandardsMode = initialMode ?? detectModeFromUrl() ?? "is-codes";
   const isMorth = mode === "morth-irc";
   const [activeCountry, setActiveCountry] = useState(initialActiveCountry);
+  // The country filter is user state, but its starting value comes from
+  // the route — resync when the route changes, so the Pakistan / UAE
+  // pages cannot keep India's filter from the previous route.
+  useEffect(() => { setActiveCountry(initialActiveCountry); }, [initialActiveCountry]);
   const [searchTerm, setSearchTerm] = useState("");
   const [yearFilter, setYearFilter] = useState<string>("All");
   const [viewPdfUrl, setViewPdfUrl] = useState<string | null>(null);
   const seo = isMorth ? MORTH_SEO : (SEO_BY_COUNTRY[initialActiveCountry] ?? SEO_BY_COUNTRY.All);
+  // The visible FAQ list for this page — one set per route, selected
+  // by mode and country. The FAQPage JSON-LD below is built from this
+  // same list via getCombinedFaqs.
+  const pageFaqs = isMorth
+    ? MORTH_FAQS
+    : initialActiveCountry === "Pakistan"
+      ? PAK_STANDARDS_FAQS
+      : initialActiveCountry === "UAE"
+        ? UAE_STANDARDS_FAQS
+        : initialActiveCountry === "India"
+          ? IS_STANDARDS_FAQS
+          : HUB_STANDARDS_FAQS;
+
+  /**
+   * The guide toolId for THIS route — derived from the same route props
+   * as `mode` above, never from the user-editable country filter state
+   * (`activeCountry`): clicking a filter pill must not swap the guide.
+   * App.tsx passes initialMode explicitly per route and the URL is the
+   * fallback (detectModeFromUrl), so mode wins over country:
+   *   morth-irc mode            -> "morth-irc-specs" (both IS-codes and
+   *                                MoRTH routes pass country "India")
+   *   country "Pakistan"        -> "pakistan-building-codes"
+   *   country "UAE"             -> "uae-construction-standards"
+   *   country "India"           -> "is-codes-reference"
+   *   hub (country "All", /standards, no props) -> undefined: no guide
+   *                                exists for the hub, so no widget and
+   *                                no HowTo are rendered there.
+   * All four ids have a verified R3A guide with workedExample.steps in
+   * TOOL_GUIDES (src/seo/toolGuides.ts).
+   */
+  const standardsToolId: string | undefined = isMorth
+    ? "morth-irc-specs"
+    : initialActiveCountry === "Pakistan"
+      ? "pakistan-building-codes"
+      : initialActiveCountry === "UAE"
+        ? "uae-construction-standards"
+        : initialActiveCountry === "India"
+          ? "is-codes-reference"
+          : undefined;
+  // Per-tool HowTo steps, SEOHead pattern: the worked-example steps
+  // from this route's own verified guide, if one exists — never invented.
+  const guideSteps: string[] = standardsToolId
+    ? TOOL_GUIDES[standardsToolId]?.workedExample?.steps ?? []
+    : [];
 
   const countries = ["All", "India", "Pakistan", "UAE"];
   const years = ["All", ...Array.from(new Set(standardsData.map((s) => s.year).filter((y): y is number => y != null))).sort((a, b) => b - a).map(String)];
@@ -198,6 +286,29 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
         title={seo.title}
         description={seo.description}
         canonicalUrl={seo.canonicalPath ? `${getSiteUrl()}${seo.canonicalPath}` : undefined}
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            SITE_WEB_APP,
+            ...(guideSteps.length > 0
+              ? [
+                  {
+                    "@type": "HowTo",
+                    "name": `How to use ${seo.title}`,
+                    "step": guideSteps.map((text) => ({ "@type": "HowToStep", "text": text })),
+                  },
+                ]
+              : []),
+            {
+              "@type": "FAQPage",
+              "mainEntity": getCombinedFaqs("standards-reference", pageFaqs).map((f) => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+              })),
+            },
+          ],
+        }}
       />
       {/* Header Section */}
       <div className="bg-[#FAF8F5] border-b border-[#E8E4D9] pt-20 pb-16 px-6 relative overflow-hidden">
@@ -365,13 +476,15 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
       </div>
 
       <div className="w-full md:max-w-7xl md:mx-auto px-6">
+        {/* Guide article — same position as ModuleWrapper (App.tsx):
+            below the main content, above the FAQ. Only the four routed
+            pages have a guide; the /standards hub renders none. */}
+        {standardsToolId && (
+          <ToolArticleWidget toolId={standardsToolId} toolName={seo.title} />
+        )}
         <GlobalFAQ
           moduleId="standards-reference"
-          faqs={isMorth ? MORTH_FAQS : [
-            { question: "Which code governs house construction in Pakistan?", answer: "The Building Code of Pakistan (BCP-2021), formulated by the PEC, with local bylaws on top — for example the LDA Building & Zoning Regulations in Lahore or the DHA bye-laws inside DHA schemes." },
-            { question: "What is the difference between IS 456 and IS 10262?", answer: "IS 456 is the code of practice for designing reinforced concrete structures; IS 10262 is the guideline for proportioning the concrete mix itself (cement, sand, aggregate and water) to hit a target strength." },
-            { question: "Why do some standards have no PDF?", answer: "Only the Building Code of Pakistan PDF is hosted on this site. Other codes are copyrighted publications — their full text must be bought or accessed from the publishing body (BIS, IRC, PEC or NHA)." },
-          ]}
+          faqs={pageFaqs}
         />
       </div>
 

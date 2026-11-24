@@ -7,6 +7,7 @@ import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { SEO } from "../SEO";
 import { CodeTooltip } from "../ui/CodeTooltip";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 
 export default function RoadEstimator({ designStandard }: { designStandard?: string }) {
@@ -340,6 +341,27 @@ export default function RoadEstimator({ designStandard }: { designStandard?: str
                 </div>
             </div>
         </div>
+      <CalculationHistory calculatorId="road_estimator_flexible" currentInputs={{ length, width, camber, shoulderWidth, shoulderFall, sideSlope, sgT, gsbT, wmmT, dbmT, bcT, sgD, gsbD, wmmD, dbmD, bcD, primeRate, tackRate, bitumenSG, designStandard }} currentResults={{ volBC: results.volBC, volDBM: results.volDBM, volWMM: results.volWMM, volGSB: results.volGSB, volSG: results.volSG, tonBC: results.tonBC, tonDBM: results.tonDBM, tonWMM: results.tonWMM, tonGSB: results.tonGSB, tonSG: results.tonSG }} onRestore={(ins) => {
+        if (ins.length != null) setLength(ins.length as typeof length);
+        if (ins.width != null) setWidth(ins.width as typeof width);
+        if (ins.camber != null) setCamber(ins.camber as typeof camber);
+        if (ins.shoulderWidth != null) setShoulderWidth(ins.shoulderWidth as typeof shoulderWidth);
+        if (ins.shoulderFall != null) setShoulderFall(ins.shoulderFall as typeof shoulderFall);
+        if (ins.sideSlope != null) setSideSlope(ins.sideSlope as typeof sideSlope);
+        if (ins.sgT != null) setSgT(ins.sgT as typeof sgT);
+        if (ins.gsbT != null) setGsbT(ins.gsbT as typeof gsbT);
+        if (ins.wmmT != null) setWmmT(ins.wmmT as typeof wmmT);
+        if (ins.dbmT != null) setDbmT(ins.dbmT as typeof dbmT);
+        if (ins.bcT != null) setBcT(ins.bcT as typeof bcT);
+        if (ins.sgD != null) setSgD(ins.sgD as typeof sgD);
+        if (ins.gsbD != null) setGsbD(ins.gsbD as typeof gsbD);
+        if (ins.wmmD != null) setWmmD(ins.wmmD as typeof wmmD);
+        if (ins.dbmD != null) setDbmD(ins.dbmD as typeof dbmD);
+        if (ins.bcD != null) setBcD(ins.bcD as typeof bcD);
+        if (ins.primeRate != null) setPrimeRate(ins.primeRate as typeof primeRate);
+        if (ins.tackRate != null) setTackRate(ins.tackRate as typeof tackRate);
+        if (ins.bitumenSG != null) setBitumenSG(ins.bitumenSG as typeof bitumenSG);
+      }} />
     </div>
   );
 }

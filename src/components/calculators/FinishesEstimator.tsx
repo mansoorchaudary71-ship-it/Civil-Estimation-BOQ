@@ -13,6 +13,7 @@ import { getRates } from "../../lib/rates";
 import { useBOQ } from "../../context/BOQContext";
 import { useSettings } from "../../context/SettingsContext";
 import { Calculator, Check, Copy, Download, Printer, Share2 } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 type Unit = "m" | "ft";
 const FT = 3.28084;
@@ -669,6 +670,71 @@ export default function FinishesEstimator() {
         </section>
       </article>
 
+      <CalculationHistory calculatorId="finishes_estimator" currentInputs={{unit, currency, activeTab, roomL, roomW, roomH, faces, openings, jambDepth, brickId, thicknessId, thicknessMm, jointMm, mWastage, mMix, pIntThick, pExtThick, pMix, pUneven, pWastage, pCeiling, paintPreset, coverage, primerCoverage, coats, primerCoats, puttyCoats, paintWastage, ceilingPaint, skirtingDeduct, tileL, tileW, groutMm, pattern, tilesPerBox, skirtH, bedThick, cShape, cLA, cLB, cLC, cDepth, cThick, sinkOn, hobOn, cWastage, studSpacing, purpose, reuse, openRun, woodWastage, wallDeductPct, superAddPct, rBrick, rCement, rSand, rPaint, rPrimer, rTileBox, rCounter, rEdge, rStud, rPly}} currentResults={{ masonryBricks: masonry.bricks, masonryCementBags: masonry.cementBags, plasterCementBags: plaster.cementBags, paintLitres: paint.paintLitres, totalTiles: flooring.totalTiles, tileBoxes: flooring.boxes }} onRestore={(ins) => {
+          if (ins.unit != null) setUnit(ins.unit as typeof unit);
+          if (ins.currency != null) setCurrency(ins.currency as typeof currency);
+          if (ins.activeTab != null) setActiveTab(ins.activeTab as typeof activeTab);
+          if (ins.roomL != null) setRoomL(ins.roomL as typeof roomL);
+          if (ins.roomW != null) setRoomW(ins.roomW as typeof roomW);
+          if (ins.roomH != null) setRoomH(ins.roomH as typeof roomH);
+          if (ins.faces != null) setFaces(ins.faces as typeof faces);
+          if (ins.openings != null) setOpenings(ins.openings as typeof openings);
+          if (ins.jambDepth != null) setJambDepth(ins.jambDepth as typeof jambDepth);
+          if (ins.brickId != null) setBrickId(ins.brickId as typeof brickId);
+          if (ins.thicknessId != null) setThicknessId(ins.thicknessId as typeof thicknessId);
+          if (ins.thicknessMm != null) setThicknessMm(ins.thicknessMm as typeof thicknessMm);
+          if (ins.jointMm != null) setJointMm(ins.jointMm as typeof jointMm);
+          if (ins.mWastage != null) setMWastage(ins.mWastage as typeof mWastage);
+          if (ins.mMix != null) setMMix(ins.mMix as typeof mMix);
+          if (ins.pIntThick != null) setPIntThick(ins.pIntThick as typeof pIntThick);
+          if (ins.pExtThick != null) setPExtThick(ins.pExtThick as typeof pExtThick);
+          if (ins.pMix != null) setPMix(ins.pMix as typeof pMix);
+          if (ins.pUneven != null) setPUneven(ins.pUneven as typeof pUneven);
+          if (ins.pWastage != null) setPWastage(ins.pWastage as typeof pWastage);
+          if (ins.pCeiling != null) setPCeiling(ins.pCeiling as typeof pCeiling);
+          if (ins.paintPreset != null) setPaintPreset(ins.paintPreset as typeof paintPreset);
+          if (ins.coverage != null) setCoverage(ins.coverage as typeof coverage);
+          if (ins.primerCoverage != null) setPrimerCoverage(ins.primerCoverage as typeof primerCoverage);
+          if (ins.coats != null) setCoats(ins.coats as typeof coats);
+          if (ins.primerCoats != null) setPrimerCoats(ins.primerCoats as typeof primerCoats);
+          if (ins.puttyCoats != null) setPuttyCoats(ins.puttyCoats as typeof puttyCoats);
+          if (ins.paintWastage != null) setPaintWastage(ins.paintWastage as typeof paintWastage);
+          if (ins.ceilingPaint != null) setCeilingPaint(ins.ceilingPaint as typeof ceilingPaint);
+          if (ins.skirtingDeduct != null) setSkirtingDeduct(ins.skirtingDeduct as typeof skirtingDeduct);
+          if (ins.tileL != null) setTileL(ins.tileL as typeof tileL);
+          if (ins.tileW != null) setTileW(ins.tileW as typeof tileW);
+          if (ins.groutMm != null) setGroutMm(ins.groutMm as typeof groutMm);
+          if (ins.pattern != null) setPattern(ins.pattern as typeof pattern);
+          if (ins.tilesPerBox != null) setTilesPerBox(ins.tilesPerBox as typeof tilesPerBox);
+          if (ins.skirtH != null) setSkirtH(ins.skirtH as typeof skirtH);
+          if (ins.bedThick != null) setBedThick(ins.bedThick as typeof bedThick);
+          if (ins.cShape != null) setCShape(ins.cShape as typeof cShape);
+          if (ins.cLA != null) setCLA(ins.cLA as typeof cLA);
+          if (ins.cLB != null) setCLB(ins.cLB as typeof cLB);
+          if (ins.cLC != null) setCLC(ins.cLC as typeof cLC);
+          if (ins.cDepth != null) setCDepth(ins.cDepth as typeof cDepth);
+          if (ins.cThick != null) setCThick(ins.cThick as typeof cThick);
+          if (ins.sinkOn != null) setSinkOn(ins.sinkOn as typeof sinkOn);
+          if (ins.hobOn != null) setHobOn(ins.hobOn as typeof hobOn);
+          if (ins.cWastage != null) setCWastage(ins.cWastage as typeof cWastage);
+          if (ins.studSpacing != null) setStudSpacing(ins.studSpacing as typeof studSpacing);
+          if (ins.purpose != null) setPurpose(ins.purpose as typeof purpose);
+          if (ins.reuse != null) setReuse(ins.reuse as typeof reuse);
+          if (ins.openRun != null) setOpenRun(ins.openRun as typeof openRun);
+          if (ins.woodWastage != null) setWoodWastage(ins.woodWastage as typeof woodWastage);
+          if (ins.wallDeductPct != null) setWallDeductPct(ins.wallDeductPct as typeof wallDeductPct);
+          if (ins.superAddPct != null) setSuperAddPct(ins.superAddPct as typeof superAddPct);
+          if (ins.rBrick != null) setRBrick(ins.rBrick as typeof rBrick);
+          if (ins.rCement != null) setRCement(ins.rCement as typeof rCement);
+          if (ins.rSand != null) setRSand(ins.rSand as typeof rSand);
+          if (ins.rPaint != null) setRPaint(ins.rPaint as typeof rPaint);
+          if (ins.rPrimer != null) setRPrimer(ins.rPrimer as typeof rPrimer);
+          if (ins.rTileBox != null) setRTileBox(ins.rTileBox as typeof rTileBox);
+          if (ins.rCounter != null) setRCounter(ins.rCounter as typeof rCounter);
+          if (ins.rEdge != null) setREdge(ins.rEdge as typeof rEdge);
+          if (ins.rStud != null) setRStud(ins.rStud as typeof rStud);
+          if (ins.rPly != null) setRPly(ins.rPly as typeof rPly);
+        }} />
       <FormulaAccordion steps={steps} />
     </div>
   );

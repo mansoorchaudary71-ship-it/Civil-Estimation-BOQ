@@ -300,6 +300,10 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
     case "boq-templates":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="BOQGenerator"><BOQGenerator /></ModuleWrapper>;
 
+    // Alias fallback: resolvePath() maps /cost-guide-pakistan onto
+    // /pakistan-cost-calculator, so this case is normally unreachable —
+    // it stays so a stale stored activeModule id still renders the
+    // same page instead of the 404.
     case "cost-guide-pakistan":
       return <PakistanCostCalculatorPage />;
 
@@ -468,16 +472,16 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="VentilationChecker"><VentilationChecker /></ModuleWrapper>;
 
     case "is-codes-reference":
-      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="India" />;
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="India" initialMode="is-codes" />;
 
     case "morth-irc-specs":
-      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="India" />;
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="India" initialMode="morth-irc" />;
 
     case "pakistan-building-codes":
-      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="Pakistan" />;
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="Pakistan" initialMode="is-codes" />;
 
     case "uae-construction-standards":
-      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="UAE" />;
+      return <StandardsReferencePage onNavigate={onNavigate} initialActiveCountry="UAE" initialMode="is-codes" />;
 
     default:
       return (

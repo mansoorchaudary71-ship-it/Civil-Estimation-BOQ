@@ -144,7 +144,27 @@ export default function PileFoundationCalculator() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="pilefoundationcalculator_tool" currentInputs={{ pileType, soilType, diameter, length, gamma, cu, phi, fos, totalLoad, rows, cols, spacing, capL, capW, capD, fck, wastage }} />
+      <CalculationHistory calculatorId="pilefoundationcalculator_tool" currentInputs={{ pileType, soilType, diameter, length, gamma, cu, phi, fos, totalLoad, rows, cols, spacing, capL, capW, capD, fck, wastage }}
+        onRestore={(ins) => {
+          if (ins.pileType != null) setPileType(ins.pileType as typeof pileType);
+          if (ins.soilType != null) setSoilType(ins.soilType as typeof soilType);
+          if (ins.diameter != null) setDiameter(ins.diameter as typeof diameter);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.gamma != null) setGamma(ins.gamma as typeof gamma);
+          if (ins.cu != null) setCu(ins.cu as typeof cu);
+          if (ins.phi != null) setPhi(ins.phi as typeof phi);
+          if (ins.fos != null) setFos(ins.fos as typeof fos);
+          if (ins.totalLoad != null) setTotalLoad(ins.totalLoad as typeof totalLoad);
+          if (ins.rows != null) setRows(ins.rows as typeof rows);
+          if (ins.cols != null) setCols(ins.cols as typeof cols);
+          if (ins.spacing != null) setSpacing(ins.spacing as typeof spacing);
+          if (ins.capL != null) setCapL(ins.capL as typeof capL);
+          if (ins.capW != null) setCapW(ins.capW as typeof capW);
+          if (ins.capD != null) setCapD(ins.capD as typeof capD);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+        }}
+      />
     </div>
   );
 }

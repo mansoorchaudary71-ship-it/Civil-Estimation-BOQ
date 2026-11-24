@@ -292,10 +292,26 @@ export default function GradientCalculator() {
         </div>
        </div>
     
-      <CalculationHistory 
-        calculatorId="gradient_slope_calculator" 
-        currentInputs={{ activeTab, startChainage, endChainage, startElevation, longGradient, centerElevation, roadWidth, camberSlope, g1, g2, designSpeed }} 
-      />
+      <CalculationHistory
+          calculatorId="gradient_slope_calculator"
+          currentInputs={{ activeTab, startChainage, endChainage, startElevation, longGradient, centerElevation, roadWidth, camberSlope, g1, g2, designSpeed, ssdOverride, pvcChainage, pvcElevation }}
+          onRestore={(ins) => {
+            if (ins.activeTab != null) setActiveTab(ins.activeTab as typeof activeTab);
+            if (ins.startChainage != null) setStartChainage(ins.startChainage as typeof startChainage);
+            if (ins.endChainage != null) setEndChainage(ins.endChainage as typeof endChainage);
+            if (ins.startElevation != null) setStartElevation(ins.startElevation as typeof startElevation);
+            if (ins.longGradient != null) setLongGradient(ins.longGradient as typeof longGradient);
+            if (ins.centerElevation != null) setCenterElevation(ins.centerElevation as typeof centerElevation);
+            if (ins.roadWidth != null) setRoadWidth(ins.roadWidth as typeof roadWidth);
+            if (ins.camberSlope != null) setCamberSlope(ins.camberSlope as typeof camberSlope);
+            if (ins.g1 != null) setG1(ins.g1 as typeof g1);
+            if (ins.g2 != null) setG2(ins.g2 as typeof g2);
+            if (ins.designSpeed != null) setDesignSpeed(ins.designSpeed as typeof designSpeed);
+            if (ins.ssdOverride != null) setSsdOverride(ins.ssdOverride as typeof ssdOverride);
+            if (ins.pvcChainage != null) setPvcChainage(ins.pvcChainage as typeof pvcChainage);
+            if (ins.pvcElevation != null) setPvcElevation(ins.pvcElevation as typeof pvcElevation);
+          }}
+        />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
 } from "../../lib/volumeCalc";
 import { useBOQ } from "../../context/BOQContext";
 import { Box, Check, Copy, Download, Printer, Share2 } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 type Unit = "m" | "ft";
 const FT = 3.28084;
@@ -321,6 +322,33 @@ export default function VolumeEstimator() {
           </p>
         </section>
       </article>
+      <CalculationHistory calculatorId="volume_estimator" currentInputs={{unit, shape, gallon, radiusMode, length, width, height, radius, radius2, innerRadius, base, slopeHeight, outletArea, sides, sideLen, family, perPerson, days, freeboard, freeboardUnit, deadDepth, fillPct, tankBase, densitySel, densityCustom}} currentResults={{ volumeM3: result.volumeM3, litres: result.litres, cuFt: result.cuFt, weightKg: result.weightKg, usableVolumeM3: result.usableVolumeM3, standardTankL: tankSize.nextSizeL }} onRestore={(ins) => {
+          if (ins.unit != null) setUnit(ins.unit as typeof unit);
+          if (ins.shape != null) setShape(ins.shape as typeof shape);
+          if (ins.gallon != null) setGallon(ins.gallon as typeof gallon);
+          if (ins.radiusMode != null) setRadiusMode(ins.radiusMode as typeof radiusMode);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.height != null) setHeight(ins.height as typeof height);
+          if (ins.radius != null) setRadius(ins.radius as typeof radius);
+          if (ins.radius2 != null) setRadius2(ins.radius2 as typeof radius2);
+          if (ins.innerRadius != null) setInnerRadius(ins.innerRadius as typeof innerRadius);
+          if (ins.base != null) setBase(ins.base as typeof base);
+          if (ins.slopeHeight != null) setSlopeHeight(ins.slopeHeight as typeof slopeHeight);
+          if (ins.outletArea != null) setOutletArea(ins.outletArea as typeof outletArea);
+          if (ins.sides != null) setSides(ins.sides as typeof sides);
+          if (ins.sideLen != null) setSideLen(ins.sideLen as typeof sideLen);
+          if (ins.family != null) setFamily(ins.family as typeof family);
+          if (ins.perPerson != null) setPerPerson(ins.perPerson as typeof perPerson);
+          if (ins.days != null) setDays(ins.days as typeof days);
+          if (ins.freeboard != null) setFreeboard(ins.freeboard as typeof freeboard);
+          if (ins.freeboardUnit != null) setFreeboardUnit(ins.freeboardUnit as typeof freeboardUnit);
+          if (ins.deadDepth != null) setDeadDepth(ins.deadDepth as typeof deadDepth);
+          if (ins.fillPct != null) setFillPct(ins.fillPct as typeof fillPct);
+          if (ins.tankBase != null) setTankBase(ins.tankBase as typeof tankBase);
+          if (ins.densitySel != null) setDensitySel(ins.densitySel as typeof densitySel);
+          if (ins.densityCustom != null) setDensityCustom(ins.densityCustom as typeof densityCustom);
+        }} />
       <FormulaAccordion steps={steps} />
     </div>
   );

@@ -459,8 +459,12 @@ export default function RateAnalysis() {
           overheadCost: compositeCalc.overheadCost.toFixed(2),
         }}
         summaryGeneration={(inputs, res) => `Analyzed Rate: ${res.finalRate}/m³`}
-        onRestore={(inputs) => {
-          // Complex state - rates context handles values, might not be fully restorable
+        onRestore={(ins) => {
+          if (ins.rates && typeof ins.rates === "object") {
+            Object.entries(ins.rates as Record<string, unknown>).forEach(([k, v]) => {
+              if (typeof v === "number") updateRate(k as keyof MarketRates, v);
+            });
+          }
         }}
       />
     </div>

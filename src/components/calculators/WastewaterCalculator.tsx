@@ -223,7 +223,20 @@ export function WastewaterCalculator() {
         </div>
       )}
 
-      <CalculationHistory calculatorId="wastewater_calculator" currentInputs={{ initialDO, finalDO, bodSampleVol, bottleVol, vBlank, vSample, normality, codSampleVol }} currentResults={bod.result || cod.result ? { bodMgL: bod.result?.bodMgL, codMgL: cod.result?.codMgL } : {}} />
+      <CalculationHistory calculatorId="wastewater_calculator" currentInputs={{ activeTab, initialDO, finalDO, bodSampleVol, bottleVol, blankInitialDO, blankFinalDO, vBlank, vSample, normality, codSampleVol, tss }} currentResults={bod.result || cod.result ? { bodMgL: bod.result?.bodMgL, codMgL: cod.result?.codMgL } : {}} onRestore={(ins) => {
+          if (ins.activeTab != null) setActiveTab(ins.activeTab as typeof activeTab);
+          if (ins.initialDO != null) setInitialDO(ins.initialDO as typeof initialDO);
+          if (ins.finalDO != null) setFinalDO(ins.finalDO as typeof finalDO);
+          if (ins.bodSampleVol != null) setBodSampleVol(ins.bodSampleVol as typeof bodSampleVol);
+          if (ins.bottleVol != null) setBottleVol(ins.bottleVol as typeof bottleVol);
+          if (ins.blankInitialDO != null) setBlankInitialDO(ins.blankInitialDO as typeof blankInitialDO);
+          if (ins.blankFinalDO != null) setBlankFinalDO(ins.blankFinalDO as typeof blankFinalDO);
+          if (ins.vBlank != null) setVBlank(ins.vBlank as typeof vBlank);
+          if (ins.vSample != null) setVSample(ins.vSample as typeof vSample);
+          if (ins.normality != null) setNormality(ins.normality as typeof normality);
+          if (ins.codSampleVol != null) setCodSampleVol(ins.codSampleVol as typeof codSampleVol);
+          if (ins.tss != null) setTss(ins.tss as typeof tss);
+        }} />
     </div>
   );
 }

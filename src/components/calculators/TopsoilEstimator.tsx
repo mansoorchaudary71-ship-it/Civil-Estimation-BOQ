@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { topsoilCalc, TOPSOIL_MATERIALS, type TopsoilMaterial } from '../../lib/topsoilCalc';
 import { Shovel, Ruler, Box, Package, Truck, Scale, Download, Printer } from 'lucide-react';
 import { FormulaAccordion, FormulaStep } from '../ui/FormulaAccordion';
+import { CalculationHistory } from '../ui/CalculationHistory';
 
 
 type UnitSystem = 'metric' | 'imperial';
@@ -366,6 +367,16 @@ export function TopsoilEstimator() {
             )}
           </div>
 
+          <CalculationHistory calculatorId="topsoil_estimator" currentInputs={{unitSystem, inputMode, length, width, totalArea, depth, soilType, customDensity}} currentResults={result ? { volumeNet: result.volumeNet, volumeGross: result.volumeGross, weightKg: result.weightKg, weightTons: result.weightTons } : {}} onRestore={(ins) => {
+          if (ins.unitSystem != null) setUnitSystem(ins.unitSystem as typeof unitSystem);
+          if (ins.inputMode != null) setInputMode(ins.inputMode as typeof inputMode);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.totalArea != null) setTotalArea(ins.totalArea as typeof totalArea);
+          if (ins.depth != null) setDepth(ins.depth as typeof depth);
+          if (ins.soilType != null) setSoilType(ins.soilType as typeof soilType);
+          if (ins.customDensity != null) setCustomDensity(ins.customDensity as typeof customDensity);
+        }} />
           {result && <FormulaAccordion steps={formulaSteps} />}
         </div>
       </div>

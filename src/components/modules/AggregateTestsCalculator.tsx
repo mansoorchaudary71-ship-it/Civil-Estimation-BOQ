@@ -1,7 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useState, useMemo } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
-import { SEO } from "../SEO";
 import { Hammer, Weight, Circle, Droplets, Download, Box, Copy, Printer, FileText, Check } from "lucide-react";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { jsPDF } from "jspdf";
@@ -214,10 +213,10 @@ export default function AggregateTestsCalculator() {
 
   return (
     <div className="w-full h-full bg-transparent text-txt-primary p-6 md:p-8">
-      <SEO
-        title="Aggregate Tests Calculator"
-        description="Calculate aggregate impact value, crushing value, abrasion, and water absorption."
-      />
+      {/* No per-component SEO here on purpose — ModuleWrapper's central
+          SEOHead owns this route's title/description/canonical and its
+          JSON-LD. The <SEO> block that used to live here emitted a
+          second bare WebApplication script on top of the central one. */}
 
       <div className="w-full md:max-w-7xl md:mx-auto px-4 md:px-0">
 

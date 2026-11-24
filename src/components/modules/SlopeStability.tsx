@@ -186,7 +186,15 @@ export default function SlopeStability() {
         </div>
       </div>
     
-      <CalculationHistory calculatorId="slopestability_tool" currentInputs={{}} />
+      <CalculationHistory calculatorId="slopestability_tool" currentInputs={{ cohesion, frictionAngle, unitWeight, slopeHeight, slopeAngle, slipDepth, porePressureRatio }} currentResults={results ? { fos: results.fos, status: results.status } : {}} onRestore={(ins) => {
+        if (ins.cohesion != null) setCohesion(ins.cohesion as typeof cohesion);
+        if (ins.frictionAngle != null) setFrictionAngle(ins.frictionAngle as typeof frictionAngle);
+        if (ins.unitWeight != null) setUnitWeight(ins.unitWeight as typeof unitWeight);
+        if (ins.slopeHeight != null) setSlopeHeight(ins.slopeHeight as typeof slopeHeight);
+        if (ins.slopeAngle != null) setSlopeAngle(ins.slopeAngle as typeof slopeAngle);
+        if (ins.slipDepth != null) setSlipDepth(ins.slipDepth as typeof slipDepth);
+        if (ins.porePressureRatio != null) setPorePressureRatio(ins.porePressureRatio as typeof porePressureRatio);
+      }} />
 </div>
   );
 }

@@ -401,7 +401,12 @@ const MeasurementSheetCalculator: React.FC = () => {
       </div>
 
     
-      <CalculationHistory calculatorId="measurementsheetcalculator_tool" currentInputs={{ activeTab, unit }} currentResults={{ subtotal: getSubtotal(activeTab) }} />
+      <CalculationHistory calculatorId="measurementsheetcalculator_tool" currentInputs={{ activeTab, unit }} currentResults={{ subtotal: getSubtotal(activeTab) }}
+        onRestore={(ins) => {
+          if (ins.activeTab != null) setActiveTab(ins.activeTab as typeof activeTab);
+          if (ins.unit != null) setUnit(ins.unit as typeof unit);
+        }}
+      />
 </div>
   );
 };

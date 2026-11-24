@@ -287,7 +287,17 @@ export default function SolarRoofCalculator() {
       </div>
       <div className="p-4 md:p-8 pt-0">
         <div className="mt-6">
-          <CalculationHistory calculatorId="solar_roof" currentInputs={{ city, monthlyUnits: inputs.monthlyUnitsKwh, psh: inputs.psh, gridType: inputs.gridType }} currentResults={result ? { actualKw: result.actualKw, panels: result.panels, totalCost: result.totalCost, paybackYears: result.simplePaybackYears } : {}} />
+          <CalculationHistory calculatorId="solar_roof" currentInputs={{ city, monthlyUnits: inputs.monthlyUnitsKwh, psh: inputs.psh, gridType: inputs.gridType }} currentResults={result ? { actualKw: result.actualKw, panels: result.panels, totalCost: result.totalCost, paybackYears: result.simplePaybackYears } : {}}
+        onRestore={(ins) => {
+          if (ins.city != null) setCity(ins.city as typeof city);
+          setInputs((prev) => ({
+            ...prev,
+            ...(ins.monthlyUnits != null ? { monthlyUnitsKwh: Number(ins.monthlyUnits) } : {}),
+            ...(ins.psh != null ? { psh: Number(ins.psh) } : {}),
+            ...(ins.gridType != null ? { gridType: ins.gridType as typeof prev.gridType } : {}),
+          }));
+        }}
+      />
         </div>
       </div>
     </div>

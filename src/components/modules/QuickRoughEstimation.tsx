@@ -331,7 +331,17 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
         Rates: grey Rs {QUICK_RATES[constType].grey.toLocaleString()}/sqft + finish Rs {QUICK_RATES[constType].finish.toLocaleString()}/sqft (Lahore base, {RATES_LAST_UPDATED}; {RATE_SOURCE}). City multiplier {CITY_MULTIPLIERS[location].label} ×{CITY_MULTIPLIERS[location].multiplier}. Covered area uses 100% plot coverage per floor — the Pakistan Cost Calculator uses 75%, so the same plot gives a larger area and total here. {areaUnit === "marla" ? `Marla standard: ${marlaStandard === "society225" ? "225 sqft (society/DHA/Bahria)" : "272.25 sqft (Punjab revenue)"} — the other standard changes this estimate by ~17%.` : ""}
         {validationError && <span className="block text-red-600 font-semibold mt-1">{validationError}</span>}
       </div>
-      <CalculationHistory calculatorId="quickroughestimation_tool" currentInputs={{ areaInput, areaUnit, marlaStandard, floors, constType, location, basement }} currentResults={results ? { totalCost: results.totalCost } : undefined} />
+      <CalculationHistory calculatorId="quickroughestimation_tool" currentInputs={{ areaInput, areaUnit, marlaStandard, floors, constType, location, basement }} currentResults={results ? { totalCost: results.totalCost } : undefined}
+        onRestore={(ins) => {
+          if (ins.areaInput != null) setAreaInput(ins.areaInput as typeof areaInput);
+          if (ins.areaUnit != null) setAreaUnit(ins.areaUnit as typeof areaUnit);
+          if (ins.marlaStandard != null) setMarlaStandard(ins.marlaStandard as typeof marlaStandard);
+          if (ins.floors != null) setFloors(ins.floors as typeof floors);
+          if (ins.constType != null) setConstType(ins.constType as typeof constType);
+          if (ins.location != null) setLocation(ins.location as typeof location);
+          if (ins.basement != null) setBasement(ins.basement as typeof basement);
+        }}
+      />
 </div>
   );
 }

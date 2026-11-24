@@ -210,7 +210,26 @@ export default function ColumnDesignTool() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="column_interaction" currentInputs={{ workingLoad, workingMoment, workingMomentY, safetyFactor, length, endCondition, width, depth, fck, fy, rebarDia, rebarCount, stirrupDia, cover, shape, wastage }} />
+      <CalculationHistory calculatorId="column_interaction" currentInputs={{ workingLoad, workingMoment, workingMomentY, safetyFactor, length, endCondition, width, depth, fck, fy, rebarDia, rebarCount, stirrupDia, cover, shape, wastage }}
+        onRestore={(ins) => {
+          if (ins.workingLoad != null) setWorkingLoad(ins.workingLoad as typeof workingLoad);
+          if (ins.safetyFactor != null) setSafetyFactor(ins.safetyFactor as typeof safetyFactor);
+          if (ins.workingMoment != null) setWorkingMoment(ins.workingMoment as typeof workingMoment);
+          if (ins.workingMomentY != null) setWorkingMomentY(ins.workingMomentY as typeof workingMomentY);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.endCondition != null) setEndCondition(ins.endCondition as typeof endCondition);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.depth != null) setDepth(ins.depth as typeof depth);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.fy != null) setFy(ins.fy as typeof fy);
+          if (ins.rebarDia != null) setRebarDia(ins.rebarDia as typeof rebarDia);
+          if (ins.rebarCount != null) setRebarCount(ins.rebarCount as typeof rebarCount);
+          if (ins.stirrupDia != null) setStirrupDia(ins.stirrupDia as typeof stirrupDia);
+          if (ins.cover != null) setCover(ins.cover as typeof cover);
+          if (ins.shape != null) setShape(ins.shape as typeof shape);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+        }}
+      />
     </div>
   );
 }

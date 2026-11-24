@@ -188,6 +188,7 @@ export default function Takeoff() {
     boqItems,
     measurements,
     setMeasurements,
+    setBoqItems,
     addMeasurement,
     removeMeasurement,
     scalePxPerUnit,
@@ -1420,9 +1421,14 @@ export default function Takeoff() {
       </div>
       <CalculationHistory
         calculatorId="takeoff"
-        currentInputs={{ measurements: measurements.length, boqItems: boqItems.length, scale: scalePxPerUnit, unit: unitName }}
+        currentInputs={{ measurements, boqItems, scale: scalePxPerUnit, unit: unitName }}
         currentResults={{ total: boqItems.reduce((sum, it) => sum + getMappedQty(it, measurements, scalePxPerUnit, unitName) * it.rate, 0) }}
-        onRestore={() => {}}
+        onRestore={(ins) => {
+          if (Array.isArray(ins.measurements)) setMeasurements(ins.measurements as typeof measurements);
+          if (Array.isArray(ins.boqItems)) setBoqItems(ins.boqItems as typeof boqItems);
+          if (ins.scale != null && !Number.isNaN(Number(ins.scale))) setScalePxPerUnit(Number(ins.scale));
+          if (typeof ins.unit === "string") setUnitName(ins.unit);
+        }}
       />
     </div>
   );

@@ -960,6 +960,13 @@ export default function BOQGenerator() {
         currentInputs={{ projectName, items: items.length, contingencyPct, gstPct, measurementStandard, taxRegion }}
         currentResults={{ subtotal, grandTotal, unpricedCount }}
         estimationName="B O Q Generator"
+        onRestore={(ins) => {
+          if (ins.projectName != null) setProjectName(ins.projectName as typeof projectName);
+          if (ins.contingencyPct != null) setContingencyPct(ins.contingencyPct as typeof contingencyPct);
+          if (ins.gstPct != null) setGstPct(ins.gstPct as typeof gstPct);
+          if (ins.measurementStandard != null) setMeasurementStandard(ins.measurementStandard as typeof measurementStandard);
+          if (ins.taxRegion != null) setTaxRegion(ins.taxRegion as typeof taxRegion);
+        }}
       />
 
       {isExportModalOpen && (

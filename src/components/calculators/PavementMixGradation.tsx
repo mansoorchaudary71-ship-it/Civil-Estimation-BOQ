@@ -22,6 +22,7 @@ import {
   type Proportions,
   type Stockpiles,
 } from '../../lib/pavementMixCalc';
+import { CalculationHistory } from '../ui/CalculationHistory';
 
 // Client-side only: the old component POSTed to /api/tools/pavement-gradation,
 // which does not exist on static GitHub Pages — the chart was always 0% and
@@ -557,6 +558,15 @@ export function PavementMixGradation() {
           </div>
         </div>
       </div>
+      <CalculationHistory calculatorId="pavement_mix" currentInputs={{preset, props, stockpiles, bitumenPct, bitumenEdited, areaM2, thicknessMm}} currentResults={{ allPass, rmse, totalTonnes: quantities?.totalTonnes, bitumenKg: quantities?.bitumenKg }} onRestore={(ins) => {
+          if (ins.preset != null) setPreset(ins.preset as typeof preset);
+          if (ins.props != null) setProps(ins.props as typeof props);
+          if (ins.stockpiles != null) setStockpiles(ins.stockpiles as typeof stockpiles);
+          if (ins.bitumenPct != null) setBitumenPct(ins.bitumenPct as typeof bitumenPct);
+          if (ins.bitumenEdited != null) setBitumenEdited(ins.bitumenEdited as typeof bitumenEdited);
+          if (ins.areaM2 != null) setAreaM2(ins.areaM2 as typeof areaM2);
+          if (ins.thicknessMm != null) setThicknessMm(ins.thicknessMm as typeof thicknessMm);
+        }} />
     </div>
   );
 }

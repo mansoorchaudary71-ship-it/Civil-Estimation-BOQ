@@ -723,6 +723,10 @@ export default function SiteProgressTracker() {
         currentInputs={{ phases: phases.length, statusDate }}
         currentResults={{ overallProgress: metrics.overallProgress, spi: metrics.SPI, cpi: metrics.CPI, eac: metrics.eacCpi }}
         estimationName="Site Progress Tracker"
+        onRestore={(ins) => {
+          if (ins.phases != null) setPhases(ins.phases as typeof phases);
+          if (ins.statusDate != null) setStatusDate(ins.statusDate as typeof statusDate);
+        }}
       />
 </div>
   );

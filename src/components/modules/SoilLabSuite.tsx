@@ -122,10 +122,10 @@ function AtterbergLimitsCalc() {
       <div className="w-full bg-surface-default p-4 sm:p-6 rounded-2xl shadow-brand-sm border border-ui-borderSubtle overflow-hidden">
         <h3 className="font-bold border-b pb-2 mb-4">Liquid Limit (One-Point)</h3>
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div><label className="text-xs font-bold text-txt-tertiary uppercase">Blows (N)</label><><label htmlFor="a11y-input-593" className="sr-only">Input</label>
-<input id="a11y-input-593" type="number" inputMode="decimal" value={llBlows} onChange={e => setLlBlows(e.target.value)} className="w-full mt-1 bg-surface-hover border p-2 rounded-full" /></></div>
-          <div><label className="text-xs font-bold text-txt-tertiary uppercase">Water Content (%)</label><><label htmlFor="a11y-input-594" className="sr-only">Input</label>
-<input id="a11y-input-594" type="number" inputMode="decimal" value={llWater} onChange={e => setLlWater(e.target.value)} className="w-full mt-1 bg-surface-hover border p-2 rounded-full" /></></div>
+          <div><label className="text-xs font-bold text-txt-tertiary uppercase">Blows (N)</label><><label htmlFor="a11y-input-503" className="sr-only">Input</label>
+<input id="a11y-input-503" type="number" inputMode="decimal" value={llBlows} onChange={e => setLlBlows(e.target.value)} className="w-full mt-1 bg-surface-hover border p-2 rounded-full" /></></div>
+          <div><label className="text-xs font-bold text-txt-tertiary uppercase">Water Content (%)</label><><label htmlFor="a11y-input-504" className="sr-only">Input</label>
+<input id="a11y-input-504" type="number" inputMode="decimal" value={llWater} onChange={e => setLlWater(e.target.value)} className="w-full mt-1 bg-surface-hover border p-2 rounded-full" /></></div>
         </div>
 
         <h3 className="font-bold border-b pb-2 mb-4">Plastic Limit</h3>

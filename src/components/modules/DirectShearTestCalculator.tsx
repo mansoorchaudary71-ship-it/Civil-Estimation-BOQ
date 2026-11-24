@@ -453,7 +453,21 @@ export default function DirectShearTestCalculator() {
                 "Equation": estimateData.eq
               } : undefined}
               estimationName="Direct Shear Test"
-            />
+        onRestore={(ins) => {
+          if (Array.isArray(ins.testData)) {
+            setTestData(ins.testData as typeof testData);
+            return;
+          }
+          const rows = Object.entries(ins)
+            .filter(([k]) => k.startsWith("Sample "))
+            .map(([, v]) => {
+              const m = String(v).match(/Normal:\s*([0-9.]+).*Shear:\s*([0-9.]+)/);
+              return m ? { normalStress: parseFloat(m[1]), shearStress: parseFloat(m[2]) } : null;
+            })
+            .filter((r): r is { normalStress: number; shearStress: number } => r !== null);
+          if (rows.length > 0) setTestData(rows);
+        }}
+      />
           </div>
         </div>
       </div>

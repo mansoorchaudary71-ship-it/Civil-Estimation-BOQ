@@ -7,6 +7,7 @@ import {
   type RoomType,
 } from "../../lib/roomAreaCalc";
 import { Layout, Check, Copy, Download, Printer, Share2 } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 type Unit = "m" | "ft";
 const FT = 3.28084;
@@ -227,6 +228,17 @@ export default function RoomAreaCalculator() {
           </p>
         </section>
       </article>
+      <CalculationHistory calculatorId="room_area_calculator" currentInputs={{unit, roomType, length, width, wallThickness, ceilingHeight, loadingFactor, mode, superBuiltUp}} currentResults={{ carpetAreaM2: result.carpetAreaM2, builtUpAreaM2: result.builtUpAreaM2, superBuiltUpAreaM2: result.superBuiltUpAreaM2, passes: result.passes }} onRestore={(ins) => {
+          if (ins.unit != null) setUnit(ins.unit as typeof unit);
+          if (ins.roomType != null) setRoomType(ins.roomType as typeof roomType);
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.wallThickness != null) setWallThickness(ins.wallThickness as typeof wallThickness);
+          if (ins.ceilingHeight != null) setCeilingHeight(ins.ceilingHeight as typeof ceilingHeight);
+          if (ins.loadingFactor != null) setLoadingFactor(ins.loadingFactor as typeof loadingFactor);
+          if (ins.mode != null) setMode(ins.mode as typeof mode);
+          if (ins.superBuiltUp != null) setSuperBuiltUp(ins.superBuiltUp as typeof superBuiltUp);
+        }} />
       <FormulaAccordion steps={steps} />
     </div>
   );

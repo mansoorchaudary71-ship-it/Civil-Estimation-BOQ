@@ -177,7 +177,22 @@ export default function RainwaterHarvesting() {
       <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 text-sm text-txt-secondary">
         Planning estimate only — not a substitute for a licensed engineer. Rainfall figures are long-term city averages; verify with PMD/IMD before sizing a tank.
       </div>
-      <CalculationHistory calculatorId="rainwater_harvesting" currentInputs={{ roofArea, rainfall, roofType, people, dryDays }} currentResults={result ? { yieldLPerYear: result.yieldLPerYear, tankL: result.tankL, systemCost: result.systemCost } : {}} />
+      <CalculationHistory calculatorId="rainwater_harvesting" currentInputs={{ roofArea, areaUnit, city, rainfall, roofType, people, usePerPerson, dryDays, filterEff, firstFlushEvents, waterCost, tankRate, fixedCost, currency }} currentResults={result ? { yieldLPerYear: result.yieldLPerYear, tankL: result.tankL, systemCost: result.systemCost } : {}} onRestore={(ins) => {
+          if (ins.roofArea != null) setRoofArea(ins.roofArea as typeof roofArea);
+          if (ins.areaUnit != null) setAreaUnit(ins.areaUnit as typeof areaUnit);
+          if (ins.city != null) setCity(ins.city as typeof city);
+          if (ins.rainfall != null) setRainfall(ins.rainfall as typeof rainfall);
+          if (ins.roofType != null) setRoofType(ins.roofType as typeof roofType);
+          if (ins.people != null) setPeople(ins.people as typeof people);
+          if (ins.usePerPerson != null) setUsePerPerson(ins.usePerPerson as typeof usePerPerson);
+          if (ins.dryDays != null) setDryDays(ins.dryDays as typeof dryDays);
+          if (ins.filterEff != null) setFilterEff(ins.filterEff as typeof filterEff);
+          if (ins.firstFlushEvents != null) setFirstFlushEvents(ins.firstFlushEvents as typeof firstFlushEvents);
+          if (ins.waterCost != null) setWaterCost(ins.waterCost as typeof waterCost);
+          if (ins.tankRate != null) setTankRate(ins.tankRate as typeof tankRate);
+          if (ins.fixedCost != null) setFixedCost(ins.fixedCost as typeof fixedCost);
+          if (typeof ins.currency === "string") setCurrency(ins.currency);
+        }} />
     </div>
   );
 }

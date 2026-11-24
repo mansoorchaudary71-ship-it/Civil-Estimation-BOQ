@@ -9,6 +9,7 @@ import {
 import { formatFinishesMoney, type FinishesCurrency } from "../../lib/finishesCalc";
 import { useSettings } from "../../context/SettingsContext";
 import { Columns, Check, Copy, Download, Printer, Share2, Plus } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 type Unit = "m" | "ft" | "mm";
 const inputCls = "w-full bg-surface-hover border border-ui-borderSubtle px-3 py-2 rounded-xl text-sm focus:ring-2 focus:ring-accent-500 outline-none";
@@ -222,6 +223,11 @@ export default function DoorWindowSchedule() {
           </p>
         </section>
       </article>
+      <CalculationHistory calculatorId="door_window_schedule" currentInputs={{unit, currency, rows}} currentResults={{ totalLeafAreaM2: totals.totalLeafAreaM2, totalFrameLengthM: totals.totalFrameLengthM, totalGlassAreaM2: totals.totalGlassAreaM2, totalLintelVolumeM3: totals.totalLintelVolumeM3, totalHardwareSets: totals.totalHardwareSets, totalCost: totals.totalCost }} onRestore={(ins) => {
+          if (ins.unit != null) setUnit(ins.unit as typeof unit);
+          if (ins.currency != null) setCurrency(ins.currency as typeof currency);
+          if (ins.rows != null) setRows(ins.rows as typeof rows);
+        }} />
       <FormulaAccordion steps={steps} />
     </div>
   );

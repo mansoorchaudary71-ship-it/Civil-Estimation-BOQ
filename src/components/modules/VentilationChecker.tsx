@@ -184,7 +184,17 @@ export default function VentilationChecker() {
         Planning estimate only — not a substitute for a licensed mechanical engineer. Glazing ratios are labelled as applicable guidance; verify the exact NBC / Pakistan Building Code clause before relying on them for approval.
       </div>
 
-      <CalculationHistory calculatorId="ventilation_checker" currentInputs={{ roomType, climate, floorArea: result?.floorAreaM2, windowArea, openableFraction }} currentResults={result ? { requiredGlazingM2: result.requiredGlazingM2, requiredAirflowM3h: result.requiredAirflowM3h } : {}} />
+      <CalculationHistory calculatorId="ventilation_checker" currentInputs={{ roomType, climate, lengthM, widthM, heightM, occupants, windowArea, openableFraction, existingAirflow }} currentResults={result ? { requiredGlazingM2: result.requiredGlazingM2, requiredAirflowM3h: result.requiredAirflowM3h } : {}} onRestore={(ins) => {
+          if (ins.roomType != null) setRoomType(ins.roomType as typeof roomType);
+          if (ins.climate != null) setClimate(ins.climate as typeof climate);
+          if (ins.lengthM != null) setLengthM(ins.lengthM as typeof lengthM);
+          if (ins.widthM != null) setWidthM(ins.widthM as typeof widthM);
+          if (ins.heightM != null) setHeightM(ins.heightM as typeof heightM);
+          if (ins.occupants != null) setOccupants(ins.occupants as typeof occupants);
+          if (ins.windowArea != null) setWindowArea(ins.windowArea as typeof windowArea);
+          if (ins.openableFraction != null) setOpenableFraction(ins.openableFraction as typeof openableFraction);
+          if (ins.existingAirflow != null) setExistingAirflow(ins.existingAirflow as typeof existingAirflow);
+        }} />
     </div>
   );
 }

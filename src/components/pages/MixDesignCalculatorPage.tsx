@@ -3,8 +3,9 @@
  * H1, meta, FAQ JSON-LD, HowTo, BreadcrumbList, 1,200+ words
  * of original content, worked M25 example, tables, trial-mix disclaimer.
  */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 import CalculatorPageShell from "../../seo/CalculatorPageShell";
 import { getSiteUrl, getOrganizationJsonLd } from "../../seo/siteConfig";
 import MixDesignCalculator from "../calculators/MixDesignCalculator";
@@ -84,6 +85,40 @@ function buildJsonLd() {
     ],
   };
   return [webApp, faqPage, howTo, breadcrumb, getOrganizationJsonLd()];
+}
+
+/**
+ * FAQ accordion — same pattern as BrickCalculatorContent's FaqAccordion:
+ * first question open by default, one open at a time, chevron rotates.
+ * Driven by MIX_DESIGN_FAQS so the visible answers and the FAQPage
+ * JSON-LD above stay the same list.
+ */
+function FaqAccordion() {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <div className="divide-y divide-ui-borderSubtle border border-ui-borderSubtle rounded-2xl overflow-hidden bg-surface-default">
+      {MIX_DESIGN_FAQS.map((faq, i) => (
+        <div key={faq.q}>
+          <button
+            type="button"
+            onClick={() => setOpen(open === i ? null : i)}
+            aria-expanded={open === i}
+            className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-accent-50 transition-colors"
+          >
+            <span className="font-semibold text-txt-primary">{faq.q}</span>
+            <ChevronDown
+              className={`w-5 h-5 shrink-0 text-txt-tertiary transition-transform ${open === i ? "rotate-180" : ""}`}
+            />
+          </button>
+          {open === i && (
+            <p className="px-5 pb-5 text-base leading-relaxed text-txt-secondary">
+              {faq.a}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function MixDesignCalculatorPage() {
@@ -259,14 +294,7 @@ export default function MixDesignCalculatorPage() {
 
         <section aria-labelledby="md-faq">
           <h2 id="md-faq" className="text-2xl font-bold text-txt-primary mb-3">Frequently asked questions</h2>
-          <div className="space-y-4">
-            {MIX_DESIGN_FAQS.map((f) => (
-              <div key={f.q} className="border border-ui-borderSubtle rounded-2xl p-4 bg-surface-default">
-                <h3 className="font-bold text-txt-primary mb-1">{f.q}</h3>
-                <p className="text-sm">{f.a}</p>
-              </div>
-            ))}
-          </div>
+          <FaqAccordion />
         </section>
       </div>
     </CalculatorPageShell>

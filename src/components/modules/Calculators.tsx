@@ -35,6 +35,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, L
 import { CodeTooltip } from "../ui/CodeTooltip";
 import { jsPDF } from "jspdf";
 import { Check, Printer, FileText, Share2 } from "lucide-react";
+import { CalculationHistory } from "../ui/CalculationHistory";
 
 
 export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }: { forcedTab?: "master" | "concrete" | "bricks" | "blocks" | "plaster" | "bricks-blocks" | "steel"; hideHeader?: boolean } = {}) {
@@ -1724,6 +1725,55 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
            </p>
          </div>
        )}
+      <CalculationHistory calculatorId="calculators_tool" currentInputs={{activeTab, concreteType, finishesType, isBatchMode, cart, elementName, wastage, cLength, cWidth, cDepth, cColDia, cColHeight, cStairSteps, cStairTread, cStairRiser, cStairWidth, cStairWaist, cMix, cWcRatio, bWallL, bWallH, bWallT, openings, brickL, brickW, brickH, bJoint, bMix, blockL, blockW, blockH, blockJoint, pArea, pThick, pMix, pLocation, paintArea, paintCoats, termiteArea, sDia, sSpan, sSpace, sBarL, sOverlap, wCementKg, wWcRatio, rates}} currentResults={{ totalCement: totalCement, totalSand: totalSand, totalAgg: totalAgg, totalWater: totalWater, cartCostTotal: cartCostTotal }} onRestore={(ins) => {
+          if (ins.activeTab != null) setActiveTab(ins.activeTab as typeof activeTab);
+          if (ins.concreteType != null) setConcreteType(ins.concreteType as typeof concreteType);
+          if (ins.finishesType != null) setFinishesType(ins.finishesType as typeof finishesType);
+          if (ins.isBatchMode != null) setIsBatchMode(ins.isBatchMode as typeof isBatchMode);
+          if (ins.cart != null) setCart(ins.cart as typeof cart);
+          if (ins.elementName != null) setElementName(ins.elementName as typeof elementName);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+          if (ins.cLength != null) setCLength(ins.cLength as typeof cLength);
+          if (ins.cWidth != null) setCWidth(ins.cWidth as typeof cWidth);
+          if (ins.cDepth != null) setCDepth(ins.cDepth as typeof cDepth);
+          if (ins.cColDia != null) setCColDia(ins.cColDia as typeof cColDia);
+          if (ins.cColHeight != null) setCColHeight(ins.cColHeight as typeof cColHeight);
+          if (ins.cStairSteps != null) setCStairSteps(ins.cStairSteps as typeof cStairSteps);
+          if (ins.cStairTread != null) setCStairTread(ins.cStairTread as typeof cStairTread);
+          if (ins.cStairRiser != null) setCStairRiser(ins.cStairRiser as typeof cStairRiser);
+          if (ins.cStairWidth != null) setCStairWidth(ins.cStairWidth as typeof cStairWidth);
+          if (ins.cStairWaist != null) setCStairWaist(ins.cStairWaist as typeof cStairWaist);
+          if (ins.cMix != null) setCMix(ins.cMix as typeof cMix);
+          if (ins.cWcRatio != null) setCWcRatio(ins.cWcRatio as typeof cWcRatio);
+          if (ins.bWallL != null) setBWallL(ins.bWallL as typeof bWallL);
+          if (ins.bWallH != null) setBWallH(ins.bWallH as typeof bWallH);
+          if (ins.bWallT != null) setBWallT(ins.bWallT as typeof bWallT);
+          if (ins.openings != null) setOpenings(ins.openings as typeof openings);
+          if (ins.brickL != null) setBrickL(ins.brickL as typeof brickL);
+          if (ins.brickW != null) setBrickW(ins.brickW as typeof brickW);
+          if (ins.brickH != null) setBrickH(ins.brickH as typeof brickH);
+          if (ins.bJoint != null) setBJoint(ins.bJoint as typeof bJoint);
+          if (ins.bMix != null) setBMix(ins.bMix as typeof bMix);
+          if (ins.blockL != null) setBlockL(ins.blockL as typeof blockL);
+          if (ins.blockW != null) setBlockW(ins.blockW as typeof blockW);
+          if (ins.blockH != null) setBlockH(ins.blockH as typeof blockH);
+          if (ins.blockJoint != null) setBlockJoint(ins.blockJoint as typeof blockJoint);
+          if (ins.pArea != null) setPArea(ins.pArea as typeof pArea);
+          if (ins.pThick != null) setPThick(ins.pThick as typeof pThick);
+          if (ins.pMix != null) setPMix(ins.pMix as typeof pMix);
+          if (ins.pLocation != null) setPLocation(ins.pLocation as typeof pLocation);
+          if (ins.paintArea != null) setPaintArea(ins.paintArea as typeof paintArea);
+          if (ins.paintCoats != null) setPaintCoats(ins.paintCoats as typeof paintCoats);
+          if (ins.termiteArea != null) setTermiteArea(ins.termiteArea as typeof termiteArea);
+          if (ins.sDia != null) setSDia(ins.sDia as typeof sDia);
+          if (ins.sSpan != null) setSSpan(ins.sSpan as typeof sSpan);
+          if (ins.sSpace != null) setSSpace(ins.sSpace as typeof sSpace);
+          if (ins.sBarL != null) setSBarL(ins.sBarL as typeof sBarL);
+          if (ins.sOverlap != null) setSOverlap(ins.sOverlap as typeof sOverlap);
+          if (ins.wCementKg != null) setWCementKg(ins.wCementKg as typeof wCementKg);
+          if (ins.wWcRatio != null) setWWcRatio(ins.wWcRatio as typeof wWcRatio);
+          if (ins.rates != null) setRates(ins.rates as typeof rates);
+        }} />
     </div>
   </div>
   );

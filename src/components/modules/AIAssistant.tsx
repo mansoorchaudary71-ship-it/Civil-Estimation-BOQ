@@ -271,8 +271,43 @@ export default function AIAssistant() {
       <CalculationHistory
         calculatorId="ai_assistant"
         estimationName="AI Assistant Chat"
-        currentInputs={{ messages: messages.length }}
+        // The transcript IS the tool's input state: saving only the
+        // message count made a restore a no-op. Save the full
+        // transcript + the draft input + the last estimate, and restore
+        // all three (the chat itself has no other settings to restore).
+        currentInputs={{ messages, input, lastEstimate }}
         currentResults={lastEstimate ?? {}}
+        summaryGeneration={(inputs) => {
+          const msgs = Array.isArray(inputs.messages) ? inputs.messages : [];
+          const lastUser = [...msgs]
+            .reverse()
+            .find((m: any) => m && m.role === "user");
+          return lastUser
+            ? `AI Assistant — "${String(lastUser.content).slice(0, 80)}"`
+            : "AI Assistant chat";
+        }}
+        onRestore={(inputs) => {
+          if (Array.isArray(inputs.messages)) {
+            // Never restore mid-stream: a streaming message would never
+            // complete, so every restored message renders finished.
+            setMessages(
+              inputs.messages
+                .filter((m: any) => m && typeof m.content === "string")
+                .map((m: any) => ({
+                  role: m.role === "user" ? "user" : "model",
+                  content: m.content,
+                  isStreaming: false,
+                })),
+            );
+          }
+          if (typeof inputs.input === "string") setInput(inputs.input);
+          if (
+            inputs.lastEstimate &&
+            typeof inputs.lastEstimate.total === "number"
+          ) {
+            setLastEstimate(inputs.lastEstimate);
+          }
+        }}
       />
     </div>
   );

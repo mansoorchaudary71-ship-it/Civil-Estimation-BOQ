@@ -501,7 +501,27 @@ export default function CageEstimator() {
         <GlobalFAQ faqs={CAGE_FAQS.map((f) => ({ question: f.q, answer: f.a }))} />
       </div>
 
-      <CalculationHistory calculatorId="cageestimator_tool" currentInputs={{}} currentResults={results ? { weightKg: results.netKgTotal } : {}} estimationName="Pile Cage Estimator" />
+      <CalculationHistory calculatorId="cageestimator_tool" currentInputs={{ cageType, piles, mainCount, mainDia, anchorage, lapX, pileDia, cageLength, lengthUnit, cover, spiralDia, pitch, spiralLapX, stiffenerCount, stiffenerDia, grade, wastage, rate, currency }} currentResults={results ? { weightKg: results.netKgTotal } : {}} estimationName="Pile Cage Estimator" onRestore={(ins) => {
+        if (ins.cageType != null) setCageType(ins.cageType as typeof cageType);
+        if (ins.piles != null) setPiles(ins.piles as typeof piles);
+        if (ins.mainCount != null) setMainCount(ins.mainCount as typeof mainCount);
+        if (ins.mainDia != null) setMainDia(ins.mainDia as typeof mainDia);
+        if (ins.anchorage != null) setAnchorage(ins.anchorage as typeof anchorage);
+        if (ins.lapX != null) setLapX(ins.lapX as typeof lapX);
+        if (ins.pileDia != null) setPileDia(ins.pileDia as typeof pileDia);
+        if (ins.cageLength != null) setCageLength(ins.cageLength as typeof cageLength);
+        if (ins.lengthUnit != null) setLengthUnit(ins.lengthUnit as typeof lengthUnit);
+        if (ins.cover != null) setCover(ins.cover as typeof cover);
+        if (ins.spiralDia != null) setSpiralDia(ins.spiralDia as typeof spiralDia);
+        if (ins.pitch != null) setPitch(ins.pitch as typeof pitch);
+        if (ins.spiralLapX != null) setSpiralLapX(ins.spiralLapX as typeof spiralLapX);
+        if (ins.stiffenerCount != null) setStiffenerCount(ins.stiffenerCount as typeof stiffenerCount);
+        if (ins.stiffenerDia != null) setStiffenerDia(ins.stiffenerDia as typeof stiffenerDia);
+        if (ins.grade != null) setGrade(ins.grade as typeof grade);
+        if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+        if (ins.rate != null) setRate(ins.rate as typeof rate);
+        if (typeof ins.currency === "string") setCurrency(ins.currency as typeof currency);
+      }} />
     </div>
   );
 }

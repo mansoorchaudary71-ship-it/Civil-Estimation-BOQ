@@ -9,7 +9,7 @@
  */
 import React, { useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
-import { Calculator, Copy, Check, Share2, Printer, FileText, AlertTriangle } from "lucide-react";
+import { Calculator, Copy, Check, Share2, Printer, FileText, AlertTriangle, Save, History } from "lucide-react";
 import { Button } from "../ui/Button";
 import { GenericExportButtons } from "../ui/GenericExportButtons";
 import { useGlobalSettings } from "../../context/SettingsContext";
@@ -27,6 +27,7 @@ import {
   type CementType,
   type AciExposure,
 } from "../../lib/mixDesignCalc";
+import { CalculationHistory } from '../ui/CalculationHistory';
 
 const labelCls = "text-sm font-bold text-txt-secondary mb-1 block";
 const inputCls =
@@ -583,6 +584,12 @@ export default function MixDesignCalculator() {
               <Button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-surface-hover text-txt-primary text-sm font-bold rounded-full border border-ui-borderSubtle hover:bg-surface-active">
                 <Printer className="w-4 h-4" /> Print
               </Button>
+              <Button onClick={() => window.dispatchEvent(new Event("trigger-global-save"))} className="flex items-center gap-2 px-4 py-2 bg-ink text-white text-sm font-bold rounded-full hover:bg-ink-700">
+                <Save className="w-4 h-4" /> Save calculation
+              </Button>
+              <Button onClick={() => window.dispatchEvent(new Event("trigger-global-history"))} className="flex items-center gap-2 px-4 py-2 bg-surface-hover text-txt-primary text-sm font-bold rounded-full border border-ui-borderSubtle hover:bg-surface-active">
+                <History className="w-4 h-4" /> Saved calculations
+              </Button>
               <Button onClick={handlePdf} className="flex items-center gap-2 px-4 py-2 bg-surface-hover text-txt-primary text-sm font-bold rounded-full border border-ui-borderSubtle hover:bg-surface-active">
                 <FileText className="w-4 h-4" /> Download PDF
               </Button>
@@ -644,6 +651,35 @@ export default function MixDesignCalculator() {
           </div>
         </div>
       </div>
+      <CalculationHistory calculatorId="mix_design_calculator" currentInputs={{method, fck, sdMode, sdCustom, exposure, aciExposure, maxAggMm, aggType, slumpMm, cementType, sgCem, sgFA, sgCA, faZone, caOverride, fm, dryRodded, wcMode, wcManual, pceReduction, pceDose, moistureFA, moistureCA, batchVolume, airPct, pumped, rates}} currentResults={{ targetStrength: result.targetStrength, cementKg: result.cementKg, cementBagsOrder: result.cementBagsOrder, faKg: result.faKg, caKg: result.caKg, waterKg: result.waterKg, wcActual: result.wcActual }} onRestore={(ins) => {
+          if (ins.method != null) setMethod(ins.method as typeof method);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.sdMode != null) setSdMode(ins.sdMode as typeof sdMode);
+          if (ins.sdCustom != null) setSdCustom(ins.sdCustom as typeof sdCustom);
+          if (ins.exposure != null) setExposure(ins.exposure as typeof exposure);
+          if (ins.aciExposure != null) setAciExposure(ins.aciExposure as typeof aciExposure);
+          if (ins.maxAggMm != null) setMaxAggMm(ins.maxAggMm as typeof maxAggMm);
+          if (ins.aggType != null) setAggType(ins.aggType as typeof aggType);
+          if (ins.slumpMm != null) setSlumpMm(ins.slumpMm as typeof slumpMm);
+          if (ins.cementType != null) setCementType(ins.cementType as typeof cementType);
+          if (ins.sgCem != null) setSgCem(ins.sgCem as typeof sgCem);
+          if (ins.sgFA != null) setSgFA(ins.sgFA as typeof sgFA);
+          if (ins.sgCA != null) setSgCA(ins.sgCA as typeof sgCA);
+          if (ins.faZone != null) setFaZone(ins.faZone as typeof faZone);
+          if (ins.caOverride != null) setCaOverride(ins.caOverride as typeof caOverride);
+          if (ins.fm != null) setFm(ins.fm as typeof fm);
+          if (ins.dryRodded != null) setDryRodded(ins.dryRodded as typeof dryRodded);
+          if (ins.wcMode != null) setWcMode(ins.wcMode as typeof wcMode);
+          if (ins.wcManual != null) setWcManual(ins.wcManual as typeof wcManual);
+          if (ins.pceReduction != null) setPceReduction(ins.pceReduction as typeof pceReduction);
+          if (ins.pceDose != null) setPceDose(ins.pceDose as typeof pceDose);
+          if (ins.moistureFA != null) setMoistureFA(ins.moistureFA as typeof moistureFA);
+          if (ins.moistureCA != null) setMoistureCA(ins.moistureCA as typeof moistureCA);
+          if (ins.batchVolume != null) setBatchVolume(ins.batchVolume as typeof batchVolume);
+          if (ins.airPct != null) setAirPct(ins.airPct as typeof airPct);
+          if (ins.pumped != null) setPumped(ins.pumped as typeof pumped);
+          if (ins.rates != null) setRates(ins.rates as typeof rates);
+        }} />
     </div>
   );
 }

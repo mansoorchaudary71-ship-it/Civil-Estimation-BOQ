@@ -194,7 +194,21 @@ export function SolarWaterHeaterCalculator() {
       <div className="bg-surface-default border border-ui-borderSubtle rounded-2xl p-5 text-sm text-txt-secondary">
         Planning estimate only — not a substitute for a licensed engineer. Rates are indicative (Nov 2026) — confirm collector and tank prices with your supplier. On freezing nights and in hard-water areas, follow the manufacturer&apos;s freeze and scaling guidance.
       </div>
-      <CalculationHistory calculatorId="solar_water_heater" currentInputs={{ occupants, usagePerPerson, targetTemp, inletTemp, solarRadiation, efficiency, solarFraction, energyCost }} currentResults={result ? { collectorAreaM2: result.collectorAreaM2, tankL: result.tankL, systemCost: result.systemCost } : {}} />
+      <CalculationHistory calculatorId="solar_water_heater" currentInputs={{ unitSystem, occupants, usagePerPerson, targetTemp, inletTemp, solarRadiation, collectorType, efficiency, solarFraction, energyCost, currency, ratePerM2, tankCostPerLitre }} currentResults={result ? { collectorAreaM2: result.collectorAreaM2, tankL: result.tankL, systemCost: result.systemCost } : {}} onRestore={(ins) => {
+          if (ins.unitSystem != null) setUnitSystem(ins.unitSystem as typeof unitSystem);
+          if (ins.occupants != null) setOccupants(ins.occupants as typeof occupants);
+          if (ins.usagePerPerson != null) setUsagePerPerson(ins.usagePerPerson as typeof usagePerPerson);
+          if (ins.targetTemp != null) setTargetTemp(ins.targetTemp as typeof targetTemp);
+          if (ins.inletTemp != null) setInletTemp(ins.inletTemp as typeof inletTemp);
+          if (ins.solarRadiation != null) setSolarRadiation(ins.solarRadiation as typeof solarRadiation);
+          if (ins.collectorType != null) setCollectorType(ins.collectorType as typeof collectorType);
+          if (ins.efficiency != null) setEfficiency(ins.efficiency as typeof efficiency);
+          if (ins.solarFraction != null) setSolarFraction(ins.solarFraction as typeof solarFraction);
+          if (ins.energyCost != null) setEnergyCost(ins.energyCost as typeof energyCost);
+          if (typeof ins.currency === "string") setCurrency(ins.currency);
+          if (ins.ratePerM2 != null) setRatePerM2(ins.ratePerM2 as typeof ratePerM2);
+          if (ins.tankCostPerLitre != null) setTankCostPerLitre(ins.tankCostPerLitre as typeof tankCostPerLitre);
+        }} />
     </div>
   );
 }

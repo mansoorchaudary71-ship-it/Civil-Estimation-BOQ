@@ -82,9 +82,9 @@ export default function EarthworksEstimator() {
       off-screen). Rendered here as a full-width block below the hub instead.
       The hub itself only owns the active tab and the reference standard —
       the quantity inputs live in the child estimators, which each render
-      their own wired history bar inside the form (general, grid, trench;
-      chainage imports it but never renders it, slope renders it empty —
-      both noted as later-round items). Saving the hub state (not {}) makes
+      their own wired history bar inside the form (general, grid, trench,
+      chainage and slope all render full CalculationHistory with real
+      inputs — see ChainageVolume and SlopeStability). Saving the hub state (not {}) makes
       the hub's Save Draft / global-save path store a real entry instead
       of no-opping on empty inputs.
     */}

@@ -355,12 +355,12 @@ export default function CbrTestCalculator() {
                     <div className="w-full bg-surface-default/60 p-4 rounded-2xl border border-ui-borderDefault/5 shadow-brand-sm overflow-hidden">
                       <span className="text-txt-tertiary text-base font-medium uppercase tracking-widest block mb-1">Resilient Modulus (Heukelom)</span>
                       <div className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-txt-primary">{estimateData.mrHeukelom.toFixed(0)} MPa</div>
-                      <span className="text-sm text-txt-secondary font-mono mt-1 block">Mr = 10.34 × CBR₂.₅</span>
+                      <span className="text-sm text-txt-secondary font-mono mt-1 block">Mr = 17.6 × CBR₂.₅^0.64</span>
                     </div>
                     <div className="w-full bg-surface-default/60 p-4 rounded-2xl border border-ui-borderDefault/5 shadow-brand-sm overflow-hidden">
                       <span className="text-txt-tertiary text-base font-medium uppercase tracking-widest block mb-1">Resilient Modulus (AASHTO)</span>
                       <div className="text-xl font-semibold text-txt-primary tabular-nums tracking-tight text-txt-primary">{estimateData.mrAashto.toFixed(0)} MPa</div>
-                      <span className="text-sm text-txt-secondary font-mono mt-1 block">Mr = 17.6 × CBR₂.₅^0.64</span>
+                      <span className="text-sm text-txt-secondary font-mono mt-1 block">Mr = 10 × CBR₂.₅</span>
                     </div>
                   </div>
                   {estimateData.repeatTest && (
@@ -458,7 +458,22 @@ export default function CbrTestCalculator() {
                 "Status": estimateData.passed ? "PASSED" : "FAILED"
               } : undefined}
               estimationName="CBR Test Result"
-            />
+        onRestore={(ins) => {
+          if (ins.minSpec != null) setMinSpec(ins.minSpec as typeof minSpec);
+          if (Array.isArray(ins.testData)) {
+            setTestData(ins.testData as typeof testData);
+            return;
+          }
+          const rows = Object.entries(ins)
+            .filter(([k]) => k.startsWith("Penetration "))
+            .map(([k, v]) => ({
+              penetration: Number(k.replace("Penetration ", "").replace("mm", "")),
+              load: parseFloat(String(v).replace(/[^0-9.]/g, "")) || 0,
+            }))
+            .filter((r) => !Number.isNaN(r.penetration));
+          if (rows.length > 0) setTestData(rows);
+        }}
+      />
           </div>
         </div>
       </div>

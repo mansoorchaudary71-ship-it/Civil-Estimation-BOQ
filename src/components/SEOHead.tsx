@@ -2,6 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { GROUP_TO_CATEGORY, pathFromId } from '../lib/toolRoutes';
 import { getSiteUrl } from '../seo/siteConfig';
+import { usePageJsonLd } from '../seo/usePageJsonLd';
+import { TOOL_GUIDES } from '../seo/toolGuides';
 import { SPECIFIC_FAQS } from './ui/GlobalFAQ';
 
 /**
@@ -48,15 +50,22 @@ export default function SEOHead({ toolId, toolName, category, description, canon
   const categoryGroup = CATEGORY_TO_GROUP[category];
   const categoryUrl = categoryGroup ? `${siteUrl}/calculators/${categoryGroup}` : siteUrl;
 
-  // FAQPage: use the tool's real SPECIFIC_FAQS (first 7) when they exist —
-  // Google requires FAQ content to be visible on the page for rich results,
-  // and GlobalFAQ renders exactly these entries, so the JSON-LD matches
-  // what the user sees. The single templated Q&A stays only as a fallback
-  // for tools with no specific FAQs.
+  // FAQPage: use ALL of the tool's real SPECIFIC_FAQS — no slice cap.
+  // Google requires FAQ content to be visible on the page for rich
+  // results, and GlobalFAQ renders exactly these entries, so the
+  // JSON-LD matches what the user sees (15 tools have more than 7
+  // specific questions; the old slice(0, 7) truncated them). The
+  // generic template questions GlobalFAQ appends visibly are page
+  // furniture, not tool-specific knowledge, so they stay out of the
+  // structured data. The single templated Q&A stays only as a fallback
+  // for tools with no specific FAQs; every ModuleWrapper tool has an
+  // entry now, so it is unreachable in practice (brick / mix-design use
+  // their shell pages, marla / pakistan-cost / standards use standalone
+  // pages with their own FAQPage — see those files).
   const specificFaqs = SPECIFIC_FAQS[toolId] ?? [];
   const faqMainEntity =
     specificFaqs.length > 0
-      ? specificFaqs.slice(0, 7).map((f) => ({
+      ? specificFaqs.map((f) => ({
           "@type": "Question",
           "name": f.question,
           "acceptedAnswer": { "@type": "Answer", "text": f.answer },
@@ -71,6 +80,11 @@ export default function SEOHead({ toolId, toolName, category, description, canon
             }
           }
         ];
+
+  // Per-tool HowTo steps: the worked-example steps from the tool's own
+  // verified guide (TOOL_GUIDES), if one exists. Empty for tools with
+  // no guide — those emit no HowTo block (HowTo-pending).
+  const guideSteps: string[] = TOOL_GUIDES[toolId]?.workedExample?.steps ?? [];
 
   const jsonLdData = [
     {
@@ -87,16 +101,25 @@ export default function SEOHead({ toolId, toolName, category, description, canon
       },
       "url": canonicalUrl
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": `How to use ${toolName}`,
-      "step": [
-        { "@type": "HowToStep", "text": "Enter your required dimensions and specifications into the input fields." },
-        { "@type": "HowToStep", "text": "Review the live calculated results in the output section." },
-        { "@type": "HowToStep", "text": "Add the items to your BOQ or export the report." }
-      ]
-    },
+    // HowTo: per-tool steps ONLY where they exist — the worked-example
+    // steps from the tool's own verified guide (src/seo/toolGuides.ts),
+    // which the ToolArticleWidget renders visibly on the same page, so
+    // the JSON-LD matches visible content. Tools with no guide are
+    // HowTo-pending: no HowTo block is emitted rather than inventing
+    // steps (the old generic 3-step template is gone). Brick and
+    // mix-design do not use this component — their shell pages carry
+    // their own specific HowTo. Specific HowTo coverage: 75/75 —
+    // every tool now has a verified guide (Round 3 merge).
+    ...(guideSteps.length > 0
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            "name": `How to use ${toolName}`,
+            "step": guideSteps.map((text) => ({ "@type": "HowToStep", "text": text })),
+          },
+        ]
+      : []),
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -128,6 +151,11 @@ export default function SEOHead({ toolId, toolName, category, description, canon
     }
   ];
 
+  // Single managed JSON-LD node for this page (see usePageJsonLd).
+  // Must run before the return so the node is written on mount and
+  // replaced — never accumulated — on in-app navigation.
+  usePageJsonLd(jsonLdData);
+
   return (
     <>
       <Helmet>
@@ -138,9 +166,10 @@ export default function SEOHead({ toolId, toolName, category, description, canon
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLdData)}
-        </script>
+        {/* No <script> here on purpose: Helmet never removes inline
+            JSON-LD scripts on in-app navigation (they accumulate), so
+            the structured data is written by usePageJsonLd into the
+            single #cep-jsonld node instead — see that hook. */}
       </Helmet>
       
       {/* Dynamic Breadcrumbs rendered to the DOM as well */}

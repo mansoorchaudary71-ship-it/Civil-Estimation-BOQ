@@ -206,7 +206,22 @@ export default function AntiTermiteCalculator() {
         <p className="flex gap-2"><FlaskConical className="w-4 h-4 shrink-0 text-accent-800" /> Planning estimate only — not a substitute for a licensed pest-control operator or structural engineer. Always follow the product label; quantities assume the label dilution shown above.</p>
       </div>
 
-      <CalculationHistory calculatorId="anti_termite_calculator" currentInputs={{ floorArea, perimeter, trenchDepth, Chemical: chemical.name, "Custom Ratio": customRatio }} currentResults={result ? { totalEmulsionL: result.totalEmulsionL, concentrateL: result.concentrateL } : {}} />
+      <CalculationHistory calculatorId="anti_termite_calculator" currentInputs={{ floorArea, perimeter, trenchWidth, trenchDepth, chemicalId, customRatio, wastagePct, packSize, includePeriphery, verticalArea, currency, ratePerLitre, labourPerM2, equipmentLumpSum }} currentResults={result ? { totalEmulsionL: result.totalEmulsionL, concentrateL: result.concentrateL } : {}} onRestore={(ins) => {
+          if (ins.floorArea != null) setFloorArea(ins.floorArea as typeof floorArea);
+          if (ins.perimeter != null) setPerimeter(ins.perimeter as typeof perimeter);
+          if (ins.trenchWidth != null) setTrenchWidth(ins.trenchWidth as typeof trenchWidth);
+          if (ins.trenchDepth != null) setTrenchDepth(ins.trenchDepth as typeof trenchDepth);
+          if (typeof ins.chemicalId === "string") setChemicalId(ins.chemicalId);
+          if (ins.customRatio != null) setCustomRatio(ins.customRatio as typeof customRatio);
+          if (ins.wastagePct != null) setWastagePct(ins.wastagePct as typeof wastagePct);
+          if (ins.packSize != null) setPackSize(ins.packSize as typeof packSize);
+          if (typeof ins.includePeriphery === "boolean") setIncludePeriphery(ins.includePeriphery);
+          if (ins.verticalArea != null) setVerticalArea(ins.verticalArea as typeof verticalArea);
+          if (typeof ins.currency === "string") setCurrency(ins.currency);
+          if (ins.ratePerLitre != null) setRatePerLitre(ins.ratePerLitre as typeof ratePerLitre);
+          if (ins.labourPerM2 != null) setLabourPerM2(ins.labourPerM2 as typeof labourPerM2);
+          if (ins.equipmentLumpSum != null) setEquipmentLumpSum(ins.equipmentLumpSum as typeof equipmentLumpSum);
+        }} />
     </div>
   );
 }

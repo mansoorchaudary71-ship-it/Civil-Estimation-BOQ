@@ -51,7 +51,9 @@ export default function MasterRccStructure({ isEmbedded = false, onNavigate }: M
       </div>
     
       
-      <CalculationHistory calculatorId="masterrccstructure_tool" currentInputs={{}} />
+      <CalculationHistory calculatorId="masterrccstructure_tool" currentInputs={{ activeTab }} onRestore={(ins) => {
+        if (typeof ins.activeTab === "string") setActiveTab(ins.activeTab as typeof activeTab);
+      }} />
 </div>
   );
 }

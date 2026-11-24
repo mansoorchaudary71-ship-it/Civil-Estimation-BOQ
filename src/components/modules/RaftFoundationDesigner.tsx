@@ -146,7 +146,30 @@ export default function RaftFoundationDesigner() {
           </div>
         </div>
       </div>
-      <CalculationHistory calculatorId="raftfoundationdesigner_tool" currentInputs={{ length, width, thickness, totalLoad, ex, ey, sbc, es, cc, clayH, e0, sigV0, fck, fy, colSize, colLoad, cover, wastage, depth, barDia }} />
+      <CalculationHistory calculatorId="raftfoundationdesigner_tool" currentInputs={{ length, width, thickness, totalLoad, ex, ey, sbc, es, cc, clayH, e0, sigV0, fck, fy, colSize, colLoad, cover, wastage, depth, barDia }}
+        onRestore={(ins) => {
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.thickness != null) setThickness(ins.thickness as typeof thickness);
+          if (ins.totalLoad != null) setTotalLoad(ins.totalLoad as typeof totalLoad);
+          if (ins.ex != null) setEx(ins.ex as typeof ex);
+          if (ins.ey != null) setEy(ins.ey as typeof ey);
+          if (ins.sbc != null) setSbc(ins.sbc as typeof sbc);
+          if (ins.es != null) setEs(ins.es as typeof es);
+          if (ins.cc != null) setCc(ins.cc as typeof cc);
+          if (ins.clayH != null) setClayH(ins.clayH as typeof clayH);
+          if (ins.e0 != null) setE0(ins.e0 as typeof e0);
+          if (ins.sigV0 != null) setSigV0(ins.sigV0 as typeof sigV0);
+          if (ins.fck != null) setFck(ins.fck as typeof fck);
+          if (ins.fy != null) setFy(ins.fy as typeof fy);
+          if (ins.colSize != null) setColSize(ins.colSize as typeof colSize);
+          if (ins.colLoad != null) setColLoad(ins.colLoad as typeof colLoad);
+          if (ins.cover != null) setCover(ins.cover as typeof cover);
+          if (ins.depth != null) setDepth(ins.depth as typeof depth);
+          if (ins.barDia != null) setBarDia(ins.barDia as typeof barDia);
+          if (ins.wastage != null) setWastage(ins.wastage as typeof wastage);
+        }}
+      />
     </div>
   );
 }

@@ -47,9 +47,12 @@ export default function GlobalSearchModal({
   
   
   
-  // Reference pages (standards) and the blog / cost-guide alias stay
-  // excluded — they are not tools. quick-estimation, master-quantity and
-  // boq-templates are real tools and must NOT be excluded.
+  // Reference pages (standards) and the blog stay excluded — they are
+  // not tools. 'cost-guide-pakistan' is an alias route for
+  // pakistan-cost-calculator (not a Dashboard card), so it is excluded
+  // here too — its content is found by searching for the Pakistan cost
+  // calculator. quick-estimation, master-quantity and boq-templates
+  // are real tools and must NOT be excluded.
   const unsupportedModules = [
     'cost-guide-pakistan', 'blog', 'is-codes-reference',
     'morth-irc-specs', 'pakistan-building-codes', 'uae-construction-standards'
@@ -201,7 +204,12 @@ export default function GlobalSearchModal({
                     
                     onClose();
                   }}
-                  className="group flex items-start gap-5 p-4 sm:p-5 rounded-2xl bg-surface-hover/50 hover:bg-accent-50 dark:bg-ink/30 dark:hover:bg-accent-900/20 border border-transparent hover:border-accent-100 dark:hover:border-accent-800/50 transition-all duration-300 text-left w-full hover:-translate-y-1 hover:shadow-brand-lg hover:shadow-accent-500/5"
+                  // whitespace-normal: the Button base style is
+                  // whitespace-nowrap, which the result title inherits —
+                  // long titles then could not wrap and the flex row
+                  // overflowed the 360px dialog, clipping the title's
+                  // left edge off-viewport (verified by geometry).
+                  className="group flex items-start whitespace-normal gap-5 p-4 sm:p-5 rounded-2xl bg-surface-hover/50 hover:bg-accent-50 dark:bg-ink/30 dark:hover:bg-accent-900/20 border border-transparent hover:border-accent-100 dark:hover:border-accent-800/50 transition-all duration-300 text-left w-full hover:-translate-y-1 hover:shadow-brand-lg hover:shadow-accent-500/5"
                 >
                   <div className="w-14 h-14 rounded-2xl bg-surface-default dark:bg-ink shadow-brand-sm border border-border-color dark:border-ink-600 flex items-center justify-center shrink-0 text-txt-tertiary group-hover:text-accent-800 dark:group-hover:text-accent-400 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-300">
                     <mod.icon className="w-6 h-6" strokeWidth={1.5} />

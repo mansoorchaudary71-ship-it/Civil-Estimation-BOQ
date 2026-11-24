@@ -206,7 +206,20 @@ export default function PermeabilityCalculator() {
                 "Viscosity Correction": results.Rt.toFixed(3),
                 "Soil Classification": results.soilClass
             }}
-        />
+        onRestore={(ins) => {
+          if (ins.testMethod != null) setTestMethod(ins.testMethod as typeof testMethod);
+          if (ins.lengthSample != null) setLengthSample(ins.lengthSample as typeof lengthSample);
+          if (ins.areaSample != null) setAreaSample(ins.areaSample as typeof areaSample);
+          if (ins.temperature != null) setTemperature(ins.temperature as typeof temperature);
+          if (ins.qVolume != null) setQVolume(ins.qVolume as typeof qVolume);
+          if (ins.constantHead != null) setConstantHead(ins.constantHead as typeof constantHead);
+          if (ins.timeConstant != null) setTimeConstant(ins.timeConstant as typeof timeConstant);
+          if (ins.areaStandpipe != null) setAreaStandpipe(ins.areaStandpipe as typeof areaStandpipe);
+          if (ins.headInitial != null) setHeadInitial(ins.headInitial as typeof headInitial);
+          if (ins.headFinal != null) setHeadFinal(ins.headFinal as typeof headFinal);
+          if (ins.timeFalling != null) setTimeFalling(ins.timeFalling as typeof timeFalling);
+        }}
+      />
     </div>
   );
 }

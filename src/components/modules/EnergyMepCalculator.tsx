@@ -67,7 +67,9 @@ export default function EnergyMepCalculator() {
         </div>
       </div>
       <div className="mt-6">
-        <CalculationHistory calculatorId="mep_calculator" currentInputs={{ tab: activeTab }} currentResults={{}} onRestore={() => {}} />
+        <CalculationHistory calculatorId="mep_calculator" currentInputs={{ tab: activeTab }} currentResults={{}} onRestore={(ins) => {
+          if (typeof ins.tab === "string") setActiveTab(ins.tab as typeof activeTab);
+        }} />
       </div>
     </div>
   );
@@ -146,6 +148,12 @@ function SolarCalculator() {
           )}
         </div>
       </div>
+      <CalculationHistory calculatorId="mep_solar" currentInputs={{ city, monthlyUnits, gridType, roofArea }} currentResults={result ? { actualKw: result.actualKw, panels: result.panels, totalCost: result.totalCost, paybackYears: result.simplePaybackYears } : {}} onRestore={(ins) => {
+          if (ins.city != null) setCity(ins.city as typeof city);
+          if (ins.monthlyUnits != null) setMonthlyUnits(ins.monthlyUnits as typeof monthlyUnits);
+          if (ins.gridType != null) setGridType(ins.gridType as typeof gridType);
+          if (ins.roofArea != null) setRoofArea(ins.roofArea as typeof roofArea);
+        }} />
     </div>
   );
 }
@@ -197,6 +205,11 @@ function WaterHeaterCalculator() {
           )}
         </div>
       </div>
+      <CalculationHistory calculatorId="mep_water_heater" currentInputs={{ people, energyCost, currency }} currentResults={result ? { demandLPerDay: result.demandLPerDay, collectorAreaM2: result.collectorAreaM2, systemCost: result.systemCost, paybackYears: result.paybackYears } : {}} onRestore={(ins) => {
+          if (ins.people != null) setPeople(ins.people as typeof people);
+          if (ins.energyCost != null) setEnergyCost(ins.energyCost as typeof energyCost);
+          if (typeof ins.currency === "string") setCurrency(ins.currency);
+        }} />
     </div>
   );
 }
@@ -263,6 +276,15 @@ function AcCalculator() {
           )}
         </div>
       </div>
+      <CalculationHistory calculatorId="mep_ac_sizing" currentInputs={{ length, width, height, occupants, sunlight, isKitchen, tariff }} currentResults={result ? { requiredBtuPerHour: result.requiredBtuPerHour, tons: result.tons, runningWatts: result.runningWatts, monthlyRunningCost: result.monthlyRunningCost } : {}} onRestore={(ins) => {
+          if (ins.length != null) setLength(ins.length as typeof length);
+          if (ins.width != null) setWidth(ins.width as typeof width);
+          if (ins.height != null) setHeight(ins.height as typeof height);
+          if (ins.occupants != null) setOccupants(ins.occupants as typeof occupants);
+          if (ins.sunlight != null) setSunlight(ins.sunlight as typeof sunlight);
+          if (typeof ins.isKitchen === "boolean") setIsKitchen(ins.isKitchen);
+          if (ins.tariff != null) setTariff(ins.tariff as typeof tariff);
+        }} />
     </div>
   );
 }
@@ -345,6 +367,13 @@ function ElectricalCalculator() {
           )}
         </div>
       </div>
+      <CalculationHistory calculatorId="mep_electrical" currentInputs={{ appliances, phase, cableLength, ambient, currency }} currentResults={result ? { connectedKw: result.connectedKw, demandKva: result.demandKva, currentA: result.currentA, breakerA: result.breakerA, cableMm2: result.cableMm2, voltageDropPct: result.voltageDropPct } : {}} onRestore={(ins) => {
+          if (Array.isArray(ins.appliances)) setAppliances(ins.appliances as typeof appliances);
+          if (ins.phase != null) setPhase(ins.phase as typeof phase);
+          if (ins.cableLength != null) setCableLength(ins.cableLength as typeof cableLength);
+          if (ins.ambient != null) setAmbient(ins.ambient as typeof ambient);
+          if (typeof ins.currency === "string") setCurrency(ins.currency);
+        }} />
     </div>
   );
 }
@@ -419,6 +448,12 @@ function PlumbingCalculator() {
           )}
         </div>
       </div>
+      <CalculationHistory calculatorId="mep_plumbing" currentInputs={{ counts, tankLitres, staticHead, frictionHead }} currentResults={result ? { designFlowLs: result.designFlowLs, mainDiameterMm: result.mainDiameterMm, branchDiameterMm: result.branchDiameterMm, tankLitres: result.tankLitres, pumpHeadM: result.pumpHeadM, pumpKw: result.pumpKw } : {}} onRestore={(ins) => {
+          if (ins.counts && typeof ins.counts === "object") setCounts(ins.counts as typeof counts);
+          if (ins.tankLitres != null) setTankLitres(ins.tankLitres as typeof tankLitres);
+          if (ins.staticHead != null) setStaticHead(ins.staticHead as typeof staticHead);
+          if (ins.frictionHead != null) setFrictionHead(ins.frictionHead as typeof frictionHead);
+        }} />
     </div>
   );
 }

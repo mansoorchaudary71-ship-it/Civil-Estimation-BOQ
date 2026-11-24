@@ -665,7 +665,20 @@ export default function QSWorkflow() {
         }
       `}} />
     
-      <CalculationHistory calculatorId="qsworkflow_tool" currentInputs={{ projectData, totalPlinthArea, substructure, superstructure, masonry, services, taxRegion, gstPct }} currentResults={{ totalCost, taxAmount, grandTotal }} />
+      <CalculationHistory calculatorId="qsworkflow_tool" currentInputs={{ projectData, totalPlinthArea, substructure, superstructure, masonry, services, taxRegion, gstPct }} currentResults={{ totalCost, taxAmount, grandTotal }}
+        onRestore={(ins) => {
+          if (ins.projectData != null) setProjectData(ins.projectData as typeof projectData);
+          if (ins.totalPlinthArea != null) setTotalPlinthArea(ins.totalPlinthArea as typeof totalPlinthArea);
+          if (ins.footingDims != null) setFootingDims(ins.footingDims as typeof footingDims);
+          if (ins.substructure != null) setSubstructure(ins.substructure as typeof substructure);
+          if (ins.superstructure != null) setSuperstructure(ins.superstructure as typeof superstructure);
+          if (ins.masonry != null) setMasonry(ins.masonry as typeof masonry);
+          if (ins.services != null) setServices(ins.services as typeof services);
+          if (ins.rates != null) setRates(ins.rates as typeof rates);
+          if (ins.taxRegion != null) setTaxRegion(ins.taxRegion as typeof taxRegion);
+          if (ins.gstPct != null) setGstPct(ins.gstPct as typeof gstPct);
+        }}
+      />
 </div>
   );
 }

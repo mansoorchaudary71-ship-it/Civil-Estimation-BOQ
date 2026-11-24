@@ -340,7 +340,36 @@ export default function SewerageEstimator() {
         </div>
 
         <GlobalFAQ faqs={SEWERAGE_FAQS} moduleId="wastewater-calculator" />
-        <CalculationHistory calculatorId="sewerage_estimator" currentInputs={{ population, flowDia, flowGradient, septicUsers }} currentResults={calc.manning ? { velocityMs: calc.manning.velocityMs, dischargeLPerS: calc.manning.dischargeLPerS } : {}} />
+        <CalculationHistory calculatorId="sewerage_estimator" currentInputs={{ population, litresPerPerson, flowDia, flowGradient, flowMaterial, trenchLength, trenchWidth, trenchDepth, trenchSloped, trenchSlopeRatio, pipeOuterDia, startIL, ilLength, ilGradient, pipeLength, pipeSectionLen, beddingType, beddingUnderPipe, beddingHaunch, septicUsers, septicDemand, septicPercolation, currency, excavationRate, pipeRatePerM, manholeRate, septicRatePerM3, soakPitRate }} currentResults={calc.manning ? { velocityMs: calc.manning.velocityMs, dischargeLPerS: calc.manning.dischargeLPerS } : {}} onRestore={(ins) => {
+          if (ins.population != null) setPopulation(ins.population as typeof population);
+          if (ins.litresPerPerson != null) setLitresPerPerson(ins.litresPerPerson as typeof litresPerPerson);
+          if (ins.flowDia != null) setFlowDia(ins.flowDia as typeof flowDia);
+          if (ins.flowGradient != null) setFlowGradient(ins.flowGradient as typeof flowGradient);
+          if (ins.flowMaterial != null) setFlowMaterial(ins.flowMaterial as typeof flowMaterial);
+          if (ins.trenchLength != null) setTrenchLength(ins.trenchLength as typeof trenchLength);
+          if (ins.trenchWidth != null) setTrenchWidth(ins.trenchWidth as typeof trenchWidth);
+          if (ins.trenchDepth != null) setTrenchDepth(ins.trenchDepth as typeof trenchDepth);
+          if (typeof ins.trenchSloped === "boolean") setTrenchSloped(ins.trenchSloped);
+          if (ins.trenchSlopeRatio != null) setTrenchSlopeRatio(ins.trenchSlopeRatio as typeof trenchSlopeRatio);
+          if (ins.pipeOuterDia != null) setPipeOuterDia(ins.pipeOuterDia as typeof pipeOuterDia);
+          if (ins.startIL != null) setStartIL(ins.startIL as typeof startIL);
+          if (ins.ilLength != null) setIlLength(ins.ilLength as typeof ilLength);
+          if (ins.ilGradient != null) setIlGradient(ins.ilGradient as typeof ilGradient);
+          if (ins.pipeLength != null) setPipeLength(ins.pipeLength as typeof pipeLength);
+          if (ins.pipeSectionLen != null) setPipeSectionLen(ins.pipeSectionLen as typeof pipeSectionLen);
+          if (ins.beddingType != null) setBeddingType(ins.beddingType as typeof beddingType);
+          if (ins.beddingUnderPipe != null) setBeddingUnderPipe(ins.beddingUnderPipe as typeof beddingUnderPipe);
+          if (ins.beddingHaunch != null) setBeddingHaunch(ins.beddingHaunch as typeof beddingHaunch);
+          if (ins.septicUsers != null) setSepticUsers(ins.septicUsers as typeof septicUsers);
+          if (ins.septicDemand != null) setSepticDemand(ins.septicDemand as typeof septicDemand);
+          if (ins.septicPercolation != null) setSepticPercolation(ins.septicPercolation as typeof septicPercolation);
+          if (typeof ins.currency === "string") setCurrency(ins.currency);
+          if (ins.excavationRate != null) setExcavationRate(ins.excavationRate as typeof excavationRate);
+          if (ins.pipeRatePerM != null) setPipeRatePerM(ins.pipeRatePerM as typeof pipeRatePerM);
+          if (ins.manholeRate != null) setManholeRate(ins.manholeRate as typeof manholeRate);
+          if (ins.septicRatePerM3 != null) setSepticRatePerM3(ins.septicRatePerM3 as typeof septicRatePerM3);
+          if (ins.soakPitRate != null) setSoakPitRate(ins.soakPitRate as typeof soakPitRate);
+        }} />
       </div>
     </div>
   );

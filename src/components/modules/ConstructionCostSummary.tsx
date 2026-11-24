@@ -570,7 +570,15 @@ const ConstructionCostSummary: React.FC = () => {
       
       <p className="mt-8 text-sm text-txt-tertiary">Cost trend is not shown: the history this chart read was always empty (no real past calculations were saved). Use the per-line quantities above and the BOQ Generator for comparable estimates.</p>
       
-      <CalculationHistory calculatorId="constructioncostsummary_tool" currentInputs={{ totalArea, overheadProfitPct, contingencyPct, taxPct }} currentResults={{ grandTotal, costPerSqFt }} />
+      <CalculationHistory calculatorId="constructioncostsummary_tool" currentInputs={{ totalArea, overheadProfitPct, contingencyPct, taxPct }} currentResults={{ grandTotal, costPerSqFt }}
+        onRestore={(ins) => {
+          if (ins.totalArea != null) setTotalArea(ins.totalArea as typeof totalArea);
+          if (ins.overheadProfitPct != null) setOverheadProfitPct(ins.overheadProfitPct as typeof overheadProfitPct);
+          if (ins.contingencyPct != null) setContingencyPct(ins.contingencyPct as typeof contingencyPct);
+          if (ins.taxPct != null) setTaxPct(ins.taxPct as typeof taxPct);
+          if (ins.taxLabel != null) setTaxLabel(ins.taxLabel as typeof taxLabel);
+        }}
+      />
 
       {/* View Toggle Floating Action Button */}
       <motion.button

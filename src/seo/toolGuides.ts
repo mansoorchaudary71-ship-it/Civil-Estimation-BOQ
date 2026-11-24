@@ -1164,6 +1164,59 @@ export const TOOL_GUIDES: Record<string, ToolGuide> = {
       { id: "isolated-footing", title: "Isolated Footing Design Calculator — IS 456", desc: "Footing size, depth and reinforcement from column load and safe bearing capacity." },
     ],
   },
+  "standards": {
+    id: "standards",
+    intro:
+      "The Standards Hub is the index of this site's reference library — 47 standards and building codes in one place, covering India, Pakistan and the UAE. It is not a calculator and it does not design anything: each entry states the code's designation, title, publishing body, edition year where verified, and what it governs, and links to the calculators on this site that apply it. The 47 entries split four ways: 30 Indian Standards (IS codes — concrete, steel, masonry, seismic, measurement), 9 MoRTH/IRC specifications for roads and bridges, 5 Pakistan codes and bylaws, and 3 UAE construction standards. Use the search box to find a code by designation or title (for example 'IS 456'), the country pills (All, India, Pakistan, UAE) and the year filter to narrow the list, and each entry's Integrations buttons to open the calculator that uses that standard. Only one document's full text is hosted here — the Building Code of Pakistan (BCP-2021) PDF. Every other code is a copyrighted publication: its full text must be bought or accessed from the publishing body (BIS, IRC, PEC or NHA).",
+    // No formula belongs to an index page: the hub states which document
+    // governs a question, it does not calculate. ToolArticleWidget hides
+    // the "Formulas used" block when this list is empty.
+    formulas: [],
+    tables: [
+      {
+        title: "The four sections of the hub",
+        headers: ["Section", "Entries", "What it covers"],
+        rows: [
+          ["Indian Standards & Codes", "30", "BIS codes: concrete (IS 456, IS 10262), steel (IS 800, IS 1786), masonry, seismic (IS 1893, IS 13920), measurement (IS 1200)"],
+          ["MoRTH & IRC Specifications", "9", "Highway construction and pavement/bridge design: MoRTH Specs 5th Rev., IRC:37, IRC:58, IRC:6, IRC:112, IRC:SP:20, IRC:66, Cl. 401/406, Tables 500-10/500-17"],
+          ["Pakistan Building Codes", "5", "BCP-2021 (PEC), NHA specifications, PEC bidding documents, LDA regulations (Lahore), DHA bye-laws"],
+          ["UAE Construction Standards", "3", "Dubai Building Code (DBC), Abu Dhabi International Building Code (ADIBC), UAE Fire and Life Safety Code 2018"],
+        ],
+      },
+      {
+        title: "Which page answers which question",
+        headers: ["Question", "Open this page", "Start with"],
+        rows: [
+          ["Which code governs an RCC beam?", "Indian Standards & Codes", "IS 456:2000 — Plain and Reinforced Concrete"],
+          ["How is a flexible pavement designed?", "MoRTH & IRC Specifications", "IRC:37-2018 — Flexible Pavement Design"],
+          ["What governs a house in Lahore?", "Pakistan Building Codes", "BCP-2021, then the LDA Building & Zoning Regulations"],
+          ["Which code governs a building in Dubai?", "UAE Construction Standards", "Dubai Building Code (DBC)"],
+          ["Which code governs fire safety in the UAE?", "UAE Construction Standards", "UAE Fire and Life Safety Code 2018"],
+        ],
+      },
+    ],
+    workedExample: {
+      title: "Worked example — using the hub to answer three questions",
+      inputs:
+        "Questions: (1) which code governs an RCC beam? (2) how is a flexible pavement designed? (3) what governs a house in Lahore?",
+      steps: [
+        "Start on the hub with the country filter on All: 47 standards are listed — 39 Indian (30 IS codes + 9 MoRTH/IRC), 5 Pakistani, 3 from the UAE. Search by code or title, or filter by country or year.",
+        "Question 1 — search '456' or open the Indian Standards page: IS 456:2000, Plain and Reinforced Concrete (Bureau of Indian Standards, 2000). Its card links the Concrete Mix Design Calculator and the House Estimator.",
+        "Question 2 — open the MoRTH & IRC page. The country pills are hidden there because all nine entries are Indian: IRC:37-2018 designs the flexible-pavement crust from CBR and traffic, and the MoRTH Specifications (Cl. 401 GSB, Cl. 406 WMM, Tables 500-10/500-17) supply the layer specifications.",
+        "Question 3 — open the Pakistan page: BCP-2021 (Pakistan Engineering Council, 2021) sets the seismic provisions and life-safety requirements — its PDF is the one hosted on this site — and the LDA Building & Zoning Regulations set the plot coverage, setbacks, height limit and approval procedure for Lahore.",
+        "Every card's Integrations buttons open the calculators that apply that standard. The hub is the index; the linked calculator is where the number comes from.",
+      ],
+      result:
+        "Three questions, three pages, one index: the hub tells you which document governs and which calculator applies it. The full text of a code is never on the hub except for BCP-2021 — the rest must come from the publishing body (BIS, IRC, PEC or NHA).",
+    },
+    related: [
+      { id: "is-codes-reference", title: "Indian Standards Codes Reference", desc: "IS 456, IS 800, IS 10262 and more, with clauses and scope, searchable by code." },
+      { id: "morth-irc-specs", title: "MoRTH & IRC Specifications Guide", desc: "MoRTH and IRC specifications — road, bridge and pavement standards in one reference." },
+      { id: "pakistan-building-codes", title: "Pakistan Building Codes Reference", desc: "Building Code of Pakistan (BCP) requirements and guidelines — seismic provisions, bylaws and approval rules." },
+      { id: "uae-construction-standards", title: "UAE Construction Standards Reference", desc: "Dubai Building Code, Abu Dhabi International Building Code and the UAE Fire and Life Safety Code." },
+    ],
+  },
+
   "is-codes-reference": {
     id: "is-codes-reference",
     intro:

@@ -479,6 +479,14 @@ const ConstructionCostSummary: React.FC = () => {
             <Download className="w-4 h-4" />
             <span className="text-sm font-medium">Export PDF</span>
           </Button>
+          <Button
+            onClick={() => setIsTableView(!isTableView)}
+            title={isTableView ? "Switch to Card View" : "Switch to Table View"}
+            className="flex items-center gap-2 px-4 py-2 bg-surface-default dark:bg-ink text-txt-primary dark:text-white rounded-lg border border-ui-borderSubtle hover:bg-surface-hover transition-colors shadow-brand-sm"
+          >
+            {isTableView ? <LayoutGrid className="w-4 h-4" /> : <List className="w-4 h-4" />}
+            <span className="text-sm font-medium">{isTableView ? "Card View" : "Table View"}</span>
+          </Button>
         </div>
       </div>
 
@@ -580,16 +588,7 @@ const ConstructionCostSummary: React.FC = () => {
         }}
       />
 
-      {/* View Toggle Floating Action Button */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsTableView(!isTableView)}
-        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-ink text-white rounded-full shadow-[0_10px_25px_-5px_rgba(37,99,235,0.5)] hover:bg-ink-700 transition-colors"
-        title={isTableView ? "Switch to Card View" : "Switch to Table View"}
-      >
-        {isTableView ? <LayoutGrid className="w-6 h-6" /> : <List className="w-6 h-6" />}
-      </motion.button>
+
     </div>
   );
 };

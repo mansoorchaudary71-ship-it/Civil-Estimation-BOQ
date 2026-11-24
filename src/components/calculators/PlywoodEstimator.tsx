@@ -316,7 +316,7 @@ export function PlywoodEstimator() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-ink rounded-2xl p-6 shadow-brand-lg text-white space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none"><Layers size={120} /></div>
-            <h2 className="text-xl font-bold flex items-center gap-2 relative z-10"><Calculator size={24} className="text-accent-400" /> Material Takeoff</h2>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2 relative z-10"><Calculator size={24} className="text-accent-400" /> Material Takeoff</h2>
             <div className="grid grid-cols-2 gap-4 relative z-10">
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Total sheets</div><div className="text-4xl font-black">{result.sheetsToBuy}</div><div className="text-xs text-gray-200 mt-1">Exact {result.exactSheets.toFixed(2)} · reuse {inputs.reuseFactor}</div></div>
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Gross area</div><div className="text-2xl font-bold">{area(result.grossAreaM2).toFixed(2)} <span className="text-sm font-normal text-gray-200">{unitA}</span></div><div className="text-xs text-gray-200 mt-1">Inc. {wastage}% waste</div></div>
@@ -326,10 +326,10 @@ export function PlywoodEstimator() {
               )}
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 col-span-2">
                 <div className="text-accent-200 text-sm font-medium mb-2">Coverage grid</div>
-                <div className="w-full bg-black/30 rounded-xl border border-white/5 overflow-hidden p-2">
+                <div className="w-full bg-ink-900/30 rounded-xl border border-white/5 overflow-hidden p-2">
                   <div className="relative w-full flex flex-wrap content-start gap-[1px]">
                     {Array.from({ length: tiles }).map((_, i) => (
-                      <div key={i} className={`rounded-sm border border-black/40 ${tileClass(i)}`} style={{ width: "12%", height: 18, minWidth: 8 }} title={`Sheet ${i + 1}`} />
+                      <div key={i} className={`rounded-sm border border-ink-900/40 ${tileClass(i)}`} style={{ width: "12%", height: 18, minWidth: 8 }} title={`Sheet ${i + 1}`} />
                     ))}
                     {result.sheetsToBuy > 200 && <div className="text-xs text-white/50 w-full text-center mt-1">…and {result.sheetsToBuy - 200} more</div>}
                   </div>

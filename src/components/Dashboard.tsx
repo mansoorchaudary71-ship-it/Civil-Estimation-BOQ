@@ -46,6 +46,7 @@ import { Calculator, Droplets,
  ArrowUpRight,
  Beaker } from "lucide-react";
 import { SEO, SITE_WEB_APP } from "./SEO";
+import { lazyWithRetry } from "../lib/lazyWithRetry";
 import { GlobalFAQ, getCombinedFaqs, type FAQItem } from "./ui/GlobalFAQ";
 import { getSiteUrl } from "../seo/siteConfig";
 import SearchAndFilterBar from "./SearchAndFilterBar";
@@ -56,9 +57,12 @@ import CategoryHub from "./CategoryHub";
 import WorkspaceSection from "./WorkspaceSection";
 // Lazily loaded: both pull in recharts (~376 kB). They render below the
 // fold on the home page, so they must not ride in the eager graph.
-const SummaryStatsWidget = lazy(() => import("./SummaryStatsWidget"));
+// Wrapped in lazyWithRetry (Round 4 WS1): a stale chunk after a deploy
+// retries once, then reloads once, instead of surfacing the
+// ErrorBoundary "Component Rendering Error".
+const SummaryStatsWidget = lazy(() => lazyWithRetry(() => import("./SummaryStatsWidget")));
 const MaterialCostDonutChart = lazy(() =>
-  import("./ui/MaterialCostDonutChart").then((m) => ({ default: m.MaterialCostDonutChart }))
+  lazyWithRetry(() => import("./ui/MaterialCostDonutChart")).then((m) => ({ default: m.MaterialCostDonutChart }))
 );
 
 import { HowItWorksSection,
@@ -1336,11 +1340,7 @@ export default function Dashboard({
  `}</style>
  
   <RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} />
-  
-  {/* History FAB sits ABOVE the app-wide BOQ FAB (FloatingBOQButton,
-      fixed bottom-6 right-6): the two 56px buttons used to share the exact
-      same spot and the BOQ button (z-60) covered this one completely. */}
-  <button onClick={() => setIsRecentOpen(true)} aria-label="Calculation History" className="fixed right-4 bottom-[10.5rem] z-50 w-10 h-10 pointer-events-auto md:right-6 md:bottom-[11.5rem] md:w-14 md:h-14 rounded-full bg-ink text-white shadow-2xl hover:bg-ink-700 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-accent-500/30 group p-0 flex items-center justify-center" title="Calculation History"><History className="w-6 h-6 group-hover:-rotate-12 transition-transform" /><span className="absolute -top-1 -right-1 flex h-4 w-4"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span><span className="relative inline-flex rounded-full h-4 w-4 bg-ink border-2 border-white"></span></span></button>
+
 <div className="relative w-full flex flex-col font-sans bg-surface-default text-txt-primary border-none">
 
   <div 
@@ -1401,18 +1401,24 @@ export default function Dashboard({
  onSelectModule={handleSelect}
                   />
                 </div>
+ <div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex justify-end">
+   {/* Inline Calculation History trigger (Round 4): the guest home has no
+       Recent Tools section, so the history drawer needs a trigger here too —
+       same RecentSidebar the floating History FAB used to open. */}
+   <Button onClick={() => setIsRecentOpen(true)} aria-label="Calculation History" variant="outline" size="sm">Calculation History</Button>
+ </div>
  <CategoryHub groupedModules={groupedModules} groupsToDisplay={groupsToDisplay} handleSelect={handleSelect} isComputing={isComputing} />
                 <div className="w-full md:max-w-[1400px] md:mx-auto px-4 py-8"><AIEstimatorBanner onOpenChat={() => setIsAiChatOpen(true)} /></div>
  </div>
  </div>
  </div>
  <ScrollReveal><SocialProofSection /></ScrollReveal>
- <ScrollReveal yOffset={30}><HowItWorksSection /></ScrollReveal>
- <ScrollReveal yOffset={30}><FeatureComparisonSection onNavigate={handleSelect} /></ScrollReveal>
+ <ScrollReveal><HowItWorksSection /></ScrollReveal>
+ <ScrollReveal><FeatureComparisonSection onNavigate={handleSelect} /></ScrollReveal>
  {/* Home FAQ — same GlobalFAQ accordion the tool pages use, with
      site-level questions (HOME_FAQS above). Plain <ScrollReveal> on
-     purpose: the component takes no yOffset prop (see the two
-     pre-existing tsc errors on the lines above). */}
+     purpose: the component's default 'up' variant already animates
+     from y:30 (see ScrollReveal.tsx). */}
  <ScrollReveal><div className="w-full md:max-w-[1400px] md:mx-auto px-4 pb-16"><GlobalFAQ faqs={HOME_FAQS} /></div></ScrollReveal>
  </div>
  ) : (
@@ -1440,10 +1446,13 @@ export default function Dashboard({
 
  {/* Recently Used section */}
  <div className="mb-12 flex flex-col gap-5 w-full md:max-w-[1400px] md:mx-auto px-4">
- <h2 id="section-recent-tools" className="md: flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight mb-4">
+ <div className="flex items-center justify-between gap-3 mb-4">
+ <h2 id="section-recent-tools" className="md: flex items-center gap-3 text-xl font-semibold text-txt-primary tracking-tight">
  <History className="w-6 h-6 text-accent-800" />
  Recent Tools
  </h2>
+ <Button onClick={() => setIsRecentOpen(true)} aria-label="Calculation History" variant="outline" size="sm" className="shrink-0">Calculation History</Button>
+ </div>
  {recentTools.length > 0 ? (
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
  {recentTools.map(t => {
@@ -1490,14 +1499,13 @@ Open Calculator
  return (
  <motion.div
     key={`fav-${mod.id}`}
-    id={`module-card-${mod.id}`}
     className="flex flex-col h-full"
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
     transition={{ duration: 0.4, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
   >
- <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-fav-${mod.id}`} categoryColor={'#f8fafc'} />
+ <ToolCard mod={mod} onSelect={handleSelect} layoutId={`card-fav-${mod.id}`} categoryColor={'#f8fafc'} cardIdSuffix="-fav" />
  </motion.div>
  );
  })}
@@ -1556,7 +1564,6 @@ Open Calculator
  {toolsInGroup.map((mod, modIdx) => (
  <motion.div
     key={mod.id}
-    id={`module-card-${mod.id}`}
     className="flex flex-col h-full"
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}

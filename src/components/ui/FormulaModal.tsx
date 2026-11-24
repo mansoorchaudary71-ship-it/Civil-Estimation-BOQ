@@ -1,13 +1,15 @@
 import { Button } from './/Button';
 import React, { lazy, Suspense, useEffect, useRef } from 'react';
 import { X, Calculator, Info } from 'lucide-react';
+import { lazyWithRetry } from '../../lib/lazyWithRetry';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Lazily loaded: the visualizer pulls in recharts (~376 kB), which must
 // not ride along with the eager ToolHeader just because the modal exists.
 // It only downloads when the user actually opens the Formulas modal.
+// Wrapped in lazyWithRetry (Round 4 WS1): stale-chunk retry + one guarded reload.
 const FormulaVisualizer = lazy(() =>
-  import('./FormulaVisualizer').then((m) => ({ default: m.FormulaVisualizer }))
+  lazyWithRetry(() => import('./FormulaVisualizer')).then((m) => ({ default: m.FormulaVisualizer }))
 );
 
 

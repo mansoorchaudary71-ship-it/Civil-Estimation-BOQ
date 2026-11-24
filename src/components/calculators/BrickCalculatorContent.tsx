@@ -52,29 +52,47 @@ function Section({ id, title, children }: { id: string; title: string; children:
 }
 
 function FaqAccordion() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | 'all' | null>(0);
+  const [showAll, setShowAll] = useState(false);
+  const isOpen = (i: number) => showAll || open === 'all' || open === i;
   return (
-    <div className="divide-y divide-ui-borderSubtle dark:divide-ink-600 border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden bg-bg-card">
-      {BRICK_FAQS.map((faq, i) => (
-        <div key={faq.q}>
-          <button
-            type="button"
-            onClick={() => setOpen(open === i ? null : i)}
-            aria-expanded={open === i}
-            className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-accent-50 dark:hover:bg-accent-900/10 transition-colors"
-          >
-            <span className="font-semibold text-txt-primary dark:text-white">{faq.q}</span>
-            <ChevronDown
-              className={`w-5 h-5 shrink-0 text-txt-tertiary transition-transform ${open === i ? "rotate-180" : ""}`}
-            />
-          </button>
-          {open === i && (
-            <p className="px-5 pb-5 text-base leading-relaxed text-txt-secondary dark:text-txt-tertiary">
-              {faq.a}
-            </p>
-          )}
-        </div>
-      ))}
+    <div>
+      <div className="divide-y divide-[#F1F5F9] border border-[#E5E7EB] rounded-[16px] overflow-hidden bg-white">
+        {BRICK_FAQS.map((faq, i) => (
+          <div key={faq.q} className="bg-white">
+            <button
+              type="button"
+              onClick={() => {
+                if (showAll) { setShowAll(false); setOpen(i); }
+                else setOpen(open === i ? null : i);
+              }}
+              aria-expanded={isOpen(i)}
+              className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-[#FAFAF9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+            >
+              <span className="font-semibold text-[15px] leading-snug text-[#111827]">{faq.q}</span>
+              <ChevronDown
+                className={`w-[18px] h-[18px] shrink-0 text-[#6B7280] transition-transform ${isOpen(i) ? "rotate-180 text-[#F2A413]" : ""}`}
+              />
+            </button>
+            {isOpen(i) && (
+              <p className="px-5 pb-5 text-[14px] leading-[1.6] text-[#4B5563]">
+                {faq.a}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+      {BRICK_FAQS.length > 3 && (
+        <button
+          type="button"
+          onClick={() => setShowAll(!showAll)}
+          aria-expanded={showAll}
+          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] text-[#1F1D1A] text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-[#F1F5F9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+        >
+          {showAll ? 'Show fewer questions' : `Show all ${BRICK_FAQS.length} questions`}
+          <ChevronDown className={`w-4 h-4 text-[#6B7280] transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+        </button>
+      )}
     </div>
   );
 }

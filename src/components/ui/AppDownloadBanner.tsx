@@ -31,12 +31,11 @@ export default function AppDownloadBanner() {
     <AnimatePresence>
       {isVisible && (
         /* Docked at the top on ALL widths (Round 1 W1, 2026-11-22): the old
-           mobile `bottom-4` strip sat on top of all three home FABs
-           (ScrollToTop bottom-4, BOQ bottom-5.5rem, History bottom-10.5rem)
-           until dismissed. top-24 clears the 72px fixed header (--header-h)
-           with 24px to spare, matching the desktop placement. Banner is
-           kept, not removed; "Install Now" still only fires an alert
-           (fake install) — no real install flow built. */
+           mobile `bottom-4` strip sat on top of the home FABs until
+           dismissed. (Round 4 removed all floating buttons.) top-24 clears
+           the 72px fixed header (--header-h) with 24px to spare, matching
+           the desktop placement. Banner is kept, not removed; "Install Now"
+           still only fires an alert (fake install) — no real install flow built. */
         <motion.div
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

@@ -377,12 +377,7 @@ export default function HouseEstimator() {
           "price": "0",
           "priceCurrency": "PKR"
         },
-        "description": "Generate highly accurate civil engineering estimates and BOQs in seconds. Features standard NBC Pakistan 2021 compliance.",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "ratingCount": "124"
-        }
+        "description": "Generate highly accurate civil engineering estimates and BOQs in seconds. Features standard NBC Pakistan 2021 compliance."
       }
     ]
   });

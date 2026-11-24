@@ -1,6 +1,5 @@
-import { Button } from './/Button';
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 import { ALL_MODULES } from '../Dashboard';
 import { BBS_FAQS } from "../../lib/bbsCalc";
 import { BEAM_FAQS } from "../../lib/beamDesign";
@@ -1469,45 +1468,53 @@ export function getCombinedFaqs(
 
 export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   // Visible list = the tool's own questions only (includeGeneric: false),
   // the same list the FAQPage JSON-LD is built from — so every LD question
-  // is in the DOM. All rows render; the accordion keeps them collapsed,
-  // so even a 13-row list stays tidy. No collapse cap, no expand button.
+  // is in the DOM. ALL rows render (no cap, no hiding); the "Show all"
+  // button expands every answer at once instead of removing rows.
   const combinedFaqs = getCombinedFaqs(moduleId, faqs, { includeGeneric: false });
 
   return (
-    <section className="w-full bg-surface-default rounded-2xl p-4 sm:p-4 sm:p-4 sm:p-6 md:p-4 sm:p-4 sm:p-4 sm:p-8 border border-border-color shadow-brand-sm overflow-hidden" aria-label="Frequently Asked Questions">
-      <h2 className="text-xl md:text-2xl font-bold text-txt-primary tracking-tight mb-6">
-        Frequently Asked Questions
-      </h2>
-      <div className="space-y-4">
+    <section className="w-full bg-white rounded-[16px] p-5 border border-[#E5E7EB] shadow-sm overflow-hidden" aria-label="Frequently Asked Questions">
+      <div className="flex items-center gap-3 mb-5">
+        <span className="w-9 h-9 rounded-[10px] bg-[#F2A413] flex items-center justify-center shrink-0" aria-hidden="true">
+          <HelpCircle className="w-5 h-5 text-white" />
+        </span>
+        <h2 className="text-[20px] md:text-[22px] font-semibold text-[#111827] tracking-tight leading-tight">
+          Frequently Asked Questions
+        </h2>
+      </div>
+      <div className="rounded-[12px] border border-[#E5E7EB] overflow-hidden bg-white divide-y divide-[#F1F5F9]">
         {combinedFaqs.map((faq, index) => {
-          const isOpen = openIndex === index;
+          const isOpen = showAll || openIndex === index;
           return (
-            <div 
-              key={index}
-              className="w-full border border-ui-borderSubtle rounded-2xl bg-surface-default/80 backdrop-blur-xl overflow-hidden shadow-brand-sm hover:shadow transition-shadow"
-            >
-              <Button className="w-full text-left px-6 py-4 md:py-5 flex items-center justify-between whitespace-normal focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-500/20 rounded-full transition-all duration-300 active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
-                onClick={() => setOpenIndex(isOpen ? null : index)}
+            <div key={index} className="w-full bg-white overflow-hidden">
+              <button
+                type="button"
+                className="w-full text-left px-5 py-4 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413] transition-colors hover:bg-[#FAFAF9]"
+                onClick={() => {
+                  if (showAll) { setShowAll(false); setOpenIndex(index); }
+                  else setOpenIndex(isOpen ? null : index);
+                }}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${index}`}
               >
-                <span className="font-semibold text-white text-lg pr-8 min-w-0 flex-1">
+                <span className="font-semibold text-[15px] leading-snug text-[#111827] pr-2 min-w-0 flex-1">
                   {faq.question}
                 </span>
-                <ChevronDown 
-                  className={`w-5 h-5 shrink-0 text-gray-200 transform transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-400' : ''}`}
+                <ChevronDown
+                  className={`w-[18px] h-[18px] shrink-0 text-[#6B7280] transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#F2A413]' : ''}`}
                 />
-              </Button>
-              
-              <div 
+              </button>
+
+              <div
                 id={`faq-answer-${index}`}
                 className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100 pb-5' : 'max-h-0 opacity-0 overflow-hidden'}`}
                 aria-hidden={!isOpen}
               >
-                <div className="px-6 text-txt-secondary leading-relaxed">
+                <div className="px-5 text-[14px] leading-[1.6] text-[#4B5563]">
                   {faq.answer}
                 </div>
               </div>
@@ -1515,6 +1522,17 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
           );
         })}
       </div>
+      {combinedFaqs.length > 3 && (
+        <button
+          type="button"
+          onClick={() => setShowAll(!showAll)}
+          aria-expanded={showAll}
+          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] text-[#1F1D1A] text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-[#F1F5F9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+        >
+          {showAll ? 'Show fewer questions' : `Show all ${combinedFaqs.length} questions`}
+          <ChevronDown className={`w-4 h-4 text-[#6B7280] transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+        </button>
+      )}
     </section>
   );
 }

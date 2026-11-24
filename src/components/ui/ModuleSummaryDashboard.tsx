@@ -1,11 +1,13 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { BarChart2, TrendingUp, TrendingDown } from "lucide-react";
+import { lazyWithRetry } from "../../lib/lazyWithRetry";
 
 // Lazily loaded: the charts pull in recharts (~376 kB). The summary
 // header + data extraction stay eager; the charts download only when
 // this tool page has numeric data to chart.
+// Wrapped in lazyWithRetry (Round 4 WS1): stale-chunk retry + one guarded reload.
 const ModuleSummaryCharts = lazy(() =>
-  import("./ModuleSummaryCharts").then((m) => ({ default: m.ModuleSummaryCharts }))
+  lazyWithRetry(() => import("./ModuleSummaryCharts")).then((m) => ({ default: m.ModuleSummaryCharts }))
 );
 
 export default function ModuleSummaryDashboard({ moduleId }: { moduleId: string }) {

@@ -246,10 +246,11 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
    *   country "Pakistan"        -> "pakistan-building-codes"
    *   country "UAE"             -> "uae-construction-standards"
    *   country "India"           -> "is-codes-reference"
-   *   hub (country "All", /standards, no props) -> undefined: no guide
-   *                                exists for the hub, so no widget and
-   *                                no HowTo are rendered there.
-   * All four ids have a verified R3A guide with workedExample.steps in
+   *   hub (country "All", /standards, no props) -> "standards": the hub
+   *                                guide (src/seo/toolGuides.ts) is
+   *                                about the hub itself, not a copy of
+   *                                the IS-codes or MoRTH guide.
+   * All five ids have a verified R3A guide with workedExample.steps in
    * TOOL_GUIDES (src/seo/toolGuides.ts).
    */
   const standardsToolId: string | undefined = isMorth
@@ -260,7 +261,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
         ? "uae-construction-standards"
         : initialActiveCountry === "India"
           ? "is-codes-reference"
-          : undefined;
+          : "standards";
   // Per-tool HowTo steps, SEOHead pattern: the worked-example steps
   // from this route's own verified guide, if one exists — never invented.
   const guideSteps: string[] = standardsToolId
@@ -477,8 +478,8 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
 
       <div className="w-full md:max-w-7xl md:mx-auto px-6">
         {/* Guide article — same position as ModuleWrapper (App.tsx):
-            below the main content, above the FAQ. Only the four routed
-            pages have a guide; the /standards hub renders none. */}
+            below the main content, above the FAQ. All five standards
+            routes have a guide, including the /standards hub. */}
         {standardsToolId && (
           <ToolArticleWidget toolId={standardsToolId} toolName={seo.title} />
         )}

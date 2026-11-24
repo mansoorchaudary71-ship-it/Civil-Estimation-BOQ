@@ -4,7 +4,6 @@ import { NumberInput } from "../ui/NumberInput";
 import { ResultCard } from "../ui/ResultCard";
 import { MaterialSummary } from "../ui/MaterialSummary";
 import { CalculationHistory } from "../ui/CalculationHistory";
-import { SEO } from "../SEO";
 
 export default function MoistureGravityCalculator() {
   // Moisture Content Inputs
@@ -80,11 +79,6 @@ export default function MoistureGravityCalculator() {
 
   return (
     <div className="w-full flex flex-col gap-8 animate-in fade-in">
-        <SEO 
-            title="Moisture & Gravity Test Tool | Geotechnical Estimator" 
-            description="Process raw pycnometer and oven-dry weights to calculate natural moisture content, specific gravity, dry density, void ratio, and degree of saturation."
-        />
-
         <div className="w-full bg-surface-default border border-ui-borderSubtle p-4 sm:p-6 rounded-2xl shadow-brand-sm overflow-hidden">
             <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-txt-primary">
                 <FlaskConical className="w-6 h-6 text-accent-800" />

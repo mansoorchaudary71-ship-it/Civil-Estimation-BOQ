@@ -134,9 +134,21 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/quantity-estimation/area-plot-converter-marla-kanal</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/quantity-estimation/house-construction-cost-calculator</loc>
     <lastmod>2026-11-21</lastmod>
     <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/quantity-estimation/house-construction-estimator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
@@ -290,6 +302,42 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/concrete/brick-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/concrete/concrete-mix-design-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/concrete/plywood-formwork-estimator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/concrete/precast-compound-wall-estimator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/concrete/roof-pitch-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/concrete/universal-structural-geometry-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/road-pavement/road-pavement-estimator</loc>
     <lastmod>2026-11-21</lastmod>
     <priority>0.9</priority>
@@ -317,6 +365,18 @@
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/road-pavement/anti-termite-calculator</loc>
     <lastmod>2026-11-21</lastmod>
     <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/road-pavement/pavement-mix-gradation-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/road-pavement/topsoil-landscaping-estimator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
@@ -356,6 +416,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/geotechnical/soil-mechanics-lab-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/mep/energy-mep-calculator</loc>
     <lastmod>2026-11-21</lastmod>
     <priority>0.8</priority>
@@ -370,6 +436,24 @@
   <url>
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/mep/rainwater-harvesting-calculator</loc>
     <lastmod>2026-11-21</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/mep/master-infrastructure-mep-engine</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/mep/solar-water-heater-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/mep/wastewater-bod-cod-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -439,8 +523,18 @@
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
-
-  <!-- Brick Calculator (added 2026-11-10) -->
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/architectural/complete-finishes-workspace</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/calculators/architectural/staircase-design-reference</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
   <url>
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/brick-calculator</loc>
     <lastmod>2026-11-21</lastmod>
@@ -543,7 +637,6 @@
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
-  <!-- Tools added 2026-11-12 (rebuild): every Dashboard tool now has a sitemap entry. -->
   <url>
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/boq-templates</loc>
     <lastmod>2026-11-21</lastmod>

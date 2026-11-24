@@ -106,9 +106,9 @@ export function RelatedCalculators({ category, currentSlug }: RelatedCalculators
 
         {/* Render Category Hubs */}
         {categoryHubLinks.map((link, idx) => (
-          <a key={`hub-${idx}`} href={link.url} className="group px-4 py-3 bg-ink rounded-2xl border border-ink hover:bg-ink-700 shadow-brand-lg shadow-accent-600/30 transition-all flex flex-col justify-center items-start overflow-hidden">
-            <span className="text-base font-medium text-white/80 uppercase tracking-wider mb-2">{link.label}</span>
-            <span className="text-base font-medium text-white capitalize leading-snug">{link.title}</span>
+          <a key={`hub-${idx}`} href={link.url} className="group px-4 py-3 bg-white dark:bg-surface-default rounded-2xl border border-[#E2E8F0] dark:border-ui-borderSubtle hover:border-accent-400 hover:bg-accent-50 dark:hover:bg-ink-700 shadow-brand-sm transition-all flex flex-col justify-center items-start overflow-hidden">
+            <span className="text-base font-medium text-accent-800 dark:text-accent-400 uppercase tracking-wider mb-2 inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#F2A413]" aria-hidden="true" />{link.label}</span>
+            <span className="text-base font-medium text-[#111827] dark:text-txt-primary capitalize leading-snug">{link.title}</span>
           </a>
         ))}
       </div>

@@ -508,11 +508,11 @@ export function PavementMixGradation() {
                         {row.status === null ? (
                           <span className="text-[#948D82]">—</span>
                         ) : row.status === 'pass' ? (
-                          <span className="inline-flex items-center gap-1 text-ui-successText bg-ui-successText/10 px-2 py-0.5 rounded text-xs font-bold">
+                          <span className="inline-flex items-center gap-1 text-[#6EE7B7] bg-ui-successText/10 px-2 py-0.5 rounded text-xs font-bold">
                             PASS
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-ui-errorText bg-ui-errorText/10 px-2 py-0.5 rounded text-xs font-bold">
+                          <span className="inline-flex items-center gap-1 text-[#FCA5A5] bg-ui-errorText/10 px-2 py-0.5 rounded text-xs font-bold">
                             FAIL
                           </span>
                         )}

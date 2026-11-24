@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Menu, Search, X, Building2, ArrowRight, ChevronRight } from "lucide-react";
+import { ChevronDown, Menu, Search, X, Building2, ArrowRight, ChevronRight, FileText } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { ALL_MODULES } from "./Dashboard";
@@ -24,6 +24,8 @@ type NavProps = {
   onNavigate?: (id: string) => void;
   onOpenAuth?: () => void;
   onOpenProfile?: () => void;
+  /** Opens the Master BOQ drawer (inline header button; Round 4 removed the floating BOQ FAB). */
+  onOpenBOQ?: () => void;
 };
 
 const PRIMARY_LINKS: { id: string; label: string }[] = [
@@ -34,7 +36,7 @@ const PRIMARY_LINKS: { id: string; label: string }[] = [
 
 const hrefFor = (id: string) => (id === "home" ? "#/" : `#/${id}`);
 
-export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: NavProps) {
+export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile, onOpenBOQ }: NavProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
@@ -322,6 +324,16 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
 
           {/* Auth */}
           <div className="hidden lg:flex items-center gap-2 ml-auto lg:ml-2">
+            {/* Inline Master BOQ trigger (Round 4): replaces the deleted
+                floating BOQ FAB — same drawer, opened from the header. */}
+            <button
+              type="button"
+              onClick={() => onOpenBOQ?.()}
+              className="h-10 px-3 rounded-lg text-[15px] font-semibold text-txt-primary hover:bg-surface-hover transition-colors flex items-center gap-2"
+            >
+              <FileText className="w-4 h-4 text-accent-800" aria-hidden="true" />
+              Master BOQ
+            </button>
             {user ? (
               <button
                 type="button"
@@ -454,6 +466,18 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile }: Nav
               className="shrink-0 p-4 border-t border-border-color flex flex-col gap-2"
               style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
             >
+              {/* Inline Master BOQ trigger (Round 4): replaces the deleted
+                  floating BOQ FAB — same drawer, opened from the menu. */}
+              <Button
+                fullWidth
+                variant="outline"
+                onClick={() => {
+                  setMobileOpen(false);
+                  onOpenBOQ?.();
+                }}
+              >
+                <FileText className="w-4 h-4" aria-hidden="true" /> Master BOQ
+              </Button>
               {user ? (
                 <Button
                   fullWidth

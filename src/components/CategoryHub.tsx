@@ -33,7 +33,6 @@ export default function CategoryHub({ groupedModules, groupsToDisplay, handleSel
                 {toolsInGroup.map((mod, modIdx) => (
                   <motion.div
                     key={mod.id}
-                    id={`module-card-${mod.id}`}
                     className="flex flex-col h-full"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}

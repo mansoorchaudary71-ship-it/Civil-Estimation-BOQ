@@ -256,17 +256,17 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* High Contrast Theme */
 html.high-contrast {
-  background-color: #000000 !important;
+  background-color: #1F1D1A !important;
   color: #ffff00 !important; /* Yellow on black for extreme contrast */
 }
 
 html.high-contrast body {
-  background-color: #000000 !important;
+  background-color: #1F1D1A !important;
   color: #ffff00 !important;
 }
 
 html.high-contrast * {
-  background-color: #000000 !important;
+  background-color: #1F1D1A !important;
   color: #ffff00 !important;
   border-color: #ffff00 !important;
   box-shadow: none !important;
@@ -283,7 +283,7 @@ html.high-contrast select,
 html.high-contrast textarea, 
 html.high-contrast button {
   border: 2px solid #ffff00 !important;
-  background-color: #000000 !important;
+  background-color: #1F1D1A !important;
   color: #ffff00 !important;
 }
 
@@ -692,10 +692,10 @@ html.theme-modern .border-slate-200, html.theme-modern .border-slate-300 {
 }
 
 html.high-contrast body {
-  @apply bg-black text-yellow-400;
+  @apply bg-ink text-yellow-400;
 }
 html.high-contrast .surface-light, html.high-contrast .bg-white, html.high-contrast .bg-slate-50, html.high-contrast .bg-slate-100, html.high-contrast .bg-slate-800, html.high-contrast .bg-slate-900 {
-  @apply bg-black border-2 border-yellow-400 text-yellow-400 !important;
+  @apply bg-ink border-2 border-yellow-400 text-yellow-400 !important;
 }
 html.high-contrast .text-slate-900, html.high-contrast .text-slate-800, html.high-contrast .text-slate-700, html.high-contrast .text-slate-600, html.high-contrast .text-slate-500 {
   @apply text-yellow-400 !important;
@@ -704,16 +704,16 @@ html.high-contrast .text-indigo-600, html.high-contrast .text-indigo-700, html.h
   @apply text-cyan-300 !important;
 }
 html.high-contrast .bg-indigo-600, html.high-contrast .bg-indigo-700, html.high-contrast .bg-blue-600 {
-  @apply bg-yellow-400 text-black border-none !important;
+  @apply bg-yellow-400 text-ink border-none !important;
 }
 html.high-contrast .bg-indigo-50, html.high-contrast .bg-indigo-100 {
-  @apply bg-black border-yellow-400 border text-yellow-400 !important;
+  @apply bg-ink border-yellow-400 border text-yellow-400 !important;
 }
 html.high-contrast .border-slate-200, html.high-contrast .border-slate-300 {
   @apply border-yellow-400 !important;
 }
 html.high-contrast input, html.high-contrast select, html.high-contrast textarea {
-  @apply bg-black border-2 border-yellow-400 text-yellow-400 placeholder-yellow-600 !important;
+  @apply bg-ink border-2 border-yellow-400 text-yellow-400 placeholder-yellow-600 !important;
 }
 html.high-contrast .shadow-sm, html.high-contrast .shadow-md, html.high-contrast .shadow-lg, html.high-contrast .shadow-xl {
   box-shadow: none !important;

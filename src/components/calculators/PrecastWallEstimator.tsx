@@ -265,7 +265,7 @@ export function PrecastWallEstimator() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-ink rounded-2xl p-6 shadow-brand-lg text-white space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none"><Box size={120} /></div>
-            <h2 className="text-xl font-bold flex items-center gap-2 relative z-10"><Calculator size={24} className="text-accent-400" /> Material Quantities</h2>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2 relative z-10"><Calculator size={24} className="text-accent-400" /> Material Quantities</h2>
             <div className="grid grid-cols-2 gap-4 relative z-10">
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1 flex items-center gap-1.5"><Hash size={14} /> Posts</div><div className="text-3xl font-bold">{result.posts}</div><div className="text-xs text-gray-200 mt-1">{result.orderPosts} to order @ {wastage}%</div></div>
               <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1 flex items-center gap-1.5"><Layers size={14} /> Panels</div><div className="text-3xl font-bold">{result.panels}</div><div className="text-xs text-gray-200 mt-1">{result.orderPanels} to order @ {wastage}%</div></div>

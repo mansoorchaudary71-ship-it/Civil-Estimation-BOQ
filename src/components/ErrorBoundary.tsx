@@ -1,6 +1,7 @@
 import { Button } from './ui/Button';
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, Home, RefreshCw } from "lucide-react";
+import { isChunkLoadError } from "../lib/lazyWithRetry";
 
 
 interface Props {
@@ -71,6 +72,19 @@ export class ErrorBoundary extends Component<Props, State> {
             )}
             <Button
               onClick={() => {
+                // Round 4 WS1: for a chunk-load failure a soft reset is a dead
+                // button — React.lazy caches the rejected promise and the
+                // browser module map holds the failed fetch, so the boundary
+                // re-trips instantly. Only a full reload (fresh document +
+                // fresh module map, re-reading the current index.html chunk
+                // hashes) can recover. This is a deliberate user click, not
+                // an automatic reload, so the sessionStorage guard does not
+                // apply and there is no loop risk. Real render bugs keep the
+                // soft reset so they stay diagnosable.
+                if (this.state.error && isChunkLoadError(this.state.error)) {
+                  window.location.reload();
+                  return;
+                }
                 this.setState({ hasError: false, error: null, errorInfo: null });
               }}
               className="flex items-center gap-2 px-6 py-3 bg-surface-active dark:bg-ink hover:bg-secondary-300 dark:hover:bg-ink-600 text-txt-primary dark:text-txt-primary rounded-xl font-semibold transition-colors shadow-brand-sm hover:shadow"

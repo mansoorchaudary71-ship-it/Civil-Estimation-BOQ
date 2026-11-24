@@ -1,6 +1,5 @@
-import { Button } from './/Button';
 import React, { useState } from 'react';
-import { Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
+import { Lightbulb, ChevronDown } from 'lucide-react';
 import { ALL_MODULES } from '../Dashboard';
 
 // Per-tool tips. Every key MUST be a live module id from ALL_MODULES
@@ -185,37 +184,31 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
     DEFAULT_TIPS;
 
   return (
-    <div className="w-full overflow-hidden bg-surface-default rounded-2xl border border-border-color shadow-brand-sm">
-      <Button 
+    <div className="w-full overflow-hidden bg-[#FFFBEB] rounded-[16px] border border-[#FDE68A] shadow-sm">
+      <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between whitespace-normal p-5 sm:p-6 text-left hover:bg-surface-hover transition-colors"
+        aria-expanded={isOpen}
+        className="w-full flex items-center justify-between gap-3 p-5 text-left hover:bg-[#FEF3C7]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
       >
         <div className="flex items-center gap-3 min-w-0">
-          <div 
-            className="w-10 h-10 rounded-full bg-surface-hover flex items-center justify-center shrink-0"
-            style={{ color: 'var(--tool-theme-color, #4f46e5)' }}
-          >
-            <Lightbulb className="w-5 h-5" />
-          </div>
-          <div className="min-w-0">
-            <h3 className="font-semibold text-white leading-none mb-1">Engineering Pro Tips</h3>
-            <p className="text-sm text-gray-200 font-medium">Best practices & principles for this calculation</p>
-          </div>
+          <span className="w-9 h-9 rounded-[10px] bg-[#F2A413] flex items-center justify-center shrink-0" aria-hidden="true">
+            <Lightbulb className="w-5 h-5 text-white" />
+          </span>
+          <span className="min-w-0">
+            <span className="block font-semibold text-[15px] text-[#1F1D1A] leading-tight">Engineering Pro Tips</span>
+            <span className="block text-sm text-[#92400E] font-medium mt-0.5">Best practices &amp; principles for this calculation</span>
+          </span>
         </div>
-        <div className="text-gray-200 shrink-0 ml-4">
-          {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-        </div>
-      </Button>
+        <ChevronDown className={`w-[18px] h-[18px] shrink-0 ml-4 text-[#6B7280] transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#F2A413]' : ''}`} />
+      </button>
 
       {isOpen && (
-        <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-border-color bg-surface-hover/50">
+        <div className="px-5 pb-5 pt-4 border-t border-[#FDE68A]">
           <ul className="space-y-4">
             {tips.map((tip, idx) => (
-              <li key={idx} className="flex gap-3 text-txt-secondary text-sm">
-                <span 
-                  className="shrink-0 w-6 h-6 rounded-full bg-surface-active/60 flex items-center justify-center font-bold text-xs mt-0.5"
-                  style={{ color: 'var(--tool-theme-color, #4f46e5)' }}
-                >
+              <li key={idx} className="flex gap-3 text-[#1F1D1A] text-sm">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-white border border-[#FDE68A] flex items-center justify-center font-bold text-xs mt-0.5 text-[#92400E]">
                   {idx + 1}
                 </span>
                 <span className="leading-relaxed font-medium">{tip}</span>

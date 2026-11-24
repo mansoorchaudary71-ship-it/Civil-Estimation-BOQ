@@ -58,12 +58,21 @@ export default function ToolCard({
   mod,
   onSelect,
   layoutId,
+  cardIdSuffix,
 }: {
   mod: any;
   onSelect: (id: string, layoutId?: string) => void;
   layoutId?: string;
   /** kept for backwards compatibility with existing callers; the card no longer uses it */
   categoryColor?: string;
+  /**
+   * Suffix appended to the card's DOM id (`module-card-<id><suffix>`).
+   * The "Personalized Shortcuts" (favorites) rail renders the same tool a
+   * second time, so it passes "-fav" to keep every id unique in the DOM.
+   * The main grid keeps the bare id so the Dashboard scroll-into-view
+   * lookup (`getElementById('module-card-<id>')`) still finds it.
+   */
+  cardIdSuffix?: string;
 }) {
   const { settings, updateSettings } = useSettings();
   if (!mod) return null;
@@ -97,7 +106,7 @@ export default function ToolCard({
 
   return (
     <article
-      id={`module-card-${mod.id}`}
+      id={`module-card-${mod.id}${cardIdSuffix ?? ""}`}
       className={cn(
         "group relative flex h-full flex-col rounded-[28px] p-2.5",
         "border border-[#885202]/15 bg-[#FBF0DC] dark:border-white/10 dark:bg-[#2b1d0e]",

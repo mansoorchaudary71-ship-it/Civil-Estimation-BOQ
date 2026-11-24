@@ -42,7 +42,7 @@ function shouldReloadOnce(): boolean {
   }
 }
 
-function isChunkLoadError(error: unknown): boolean {
+export function isChunkLoadError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error);
   return (
     message.includes('Failed to fetch dynamically imported module') ||

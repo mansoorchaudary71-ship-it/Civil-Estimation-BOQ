@@ -307,7 +307,7 @@ export function TopsoilEstimator() {
               <Shovel size={120} />
             </div>
             
-            <h2 className="text-xl font-bold flex items-center gap-2 relative z-10">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2 relative z-10">
               <Box size={24} className="text-accent-400" />
               Required Volume
             </h2>

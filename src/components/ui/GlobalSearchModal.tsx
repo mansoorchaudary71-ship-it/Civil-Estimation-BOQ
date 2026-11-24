@@ -141,7 +141,7 @@ export default function GlobalSearchModal({
 
   return createPortal(
     <div 
-      className="fixed inset-0 z-[9999] flex items-start justify-center pt-[10vh] sm:pt-[15vh] px-4 bg-ink/40 dark:bg-black/60 backdrop-blur-md animate-in fade-in duration-300" role="dialog" aria-modal="true" aria-label="Search"
+      className="fixed inset-0 z-[9999] flex items-start justify-center pt-[10vh] sm:pt-[15vh] px-4 bg-ink/40 dark:bg-ink-900/60 backdrop-blur-md animate-in fade-in duration-300" role="dialog" aria-modal="true" aria-label="Search"
       onClick={handleBackdropClick}
     >
       <div className="w-full max-w-2xl bg-surface-default/95 dark:bg-ink/95 backdrop-blur-2xl rounded-2xl sm:rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] border border-white/40 dark:border-ink overflow-hidden flex flex-col animate-in slide-in-from-top-8 sm:zoom-in-95 duration-300">

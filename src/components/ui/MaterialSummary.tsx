@@ -251,7 +251,7 @@ export function MaterialSummary({
             >
               <RefreshCw className={`w-5 h-5 ${isRecalculating ? 'animate-spin' : ''}`} />
               Recalculate Values
-              <span className="ml-1 text-xs font-medium opacity-70 bg-surface-default/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded px-1.5 py-0.5 hidden sm:inline-block pointer-events-none">Ctrl+Enter</span>
+              <span className="ml-1 text-xs font-medium opacity-70 bg-surface-default/10 dark:bg-ink-900/20 border border-white/20 dark:border-white/10 rounded px-1.5 py-0.5 hidden sm:inline-block pointer-events-none">Ctrl+Enter</span>
             </Button>
           )}
         </div>

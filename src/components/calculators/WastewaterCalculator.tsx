@@ -192,7 +192,7 @@ export function WastewaterCalculator() {
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-ink rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none"><Droplets size={120} /></div>
-              <h2 className="text-xl font-bold flex items-center gap-2 relative z-10">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2 relative z-10">
                 <Beaker size={24} className="text-accent-400" />
                 {activeTab === 'bod' ? 'BOD₅ Results' : 'COD Results'}
               </h2>

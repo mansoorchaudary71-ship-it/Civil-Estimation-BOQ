@@ -38,16 +38,20 @@ export function ToolArticleWidget({ toolName, toolId }: { toolName: string; tool
       </h2>
       <p className="text-base text-txt-secondary leading-relaxed mb-8 max-w-3xl">{guide.intro}</p>
 
-      <h3 className="text-lg font-bold text-txt-primary tracking-tight mb-3">Formulas used</h3>
-      <ul className="space-y-4 mb-8 max-w-3xl">
-        {guide.formulas.map((f) => (
-          <li key={f.formula} className="border border-ui-borderSubtle rounded-2xl p-4 bg-surface-default">
-            <p className="font-mono text-sm font-bold text-txt-primary break-words">{f.formula}</p>
-            <p className="text-sm text-txt-secondary leading-relaxed mt-1">{f.variables}</p>
-            {f.note && <p className="text-sm text-txt-tertiary leading-relaxed mt-1">{f.note}</p>}
-          </li>
-        ))}
-      </ul>
+      {guide.formulas.length > 0 && (
+        <>
+          <h3 className="text-lg font-bold text-txt-primary tracking-tight mb-3">Formulas used</h3>
+          <ul className="space-y-4 mb-8 max-w-3xl">
+            {guide.formulas.map((f) => (
+              <li key={f.formula} className="border border-ui-borderSubtle rounded-2xl p-4 bg-surface-default">
+                <p className="font-mono text-sm font-bold text-txt-primary break-words">{f.formula}</p>
+                <p className="text-sm text-txt-secondary leading-relaxed mt-1">{f.variables}</p>
+                {f.note && <p className="text-sm text-txt-tertiary leading-relaxed mt-1">{f.note}</p>}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       {guide.tables.map((t) => (
         <div key={t.title} className="mb-8 max-w-3xl">

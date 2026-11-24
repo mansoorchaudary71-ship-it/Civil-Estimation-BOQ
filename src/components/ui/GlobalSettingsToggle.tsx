@@ -118,7 +118,7 @@ export function GlobalSettingsToggle({ align = "right", showCurrency = true, act
               {[
                 { val: "modern", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-surface-hover border border-border-color" />, label: "Modern" },
                 { val: "engineering-blueprint", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-ink border border-accent-800" />, label: "Blueprint" },
-                { val: "high-contrast", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-black border border-accent-400" />, label: "Contrast" }
+                { val: "high-contrast", icon: <div className="w-4 h-4 mx-auto mb-1 rounded bg-ink border border-accent-400" />, label: "Contrast" }
               ].map(({ val, icon, label }) => {
                 const isActive = settings.theme === val;
                 return (

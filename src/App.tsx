@@ -33,11 +33,9 @@ import Footer from "./components/Footer";
 import SmoothScroll from "./components/ui/SmoothScroll";
 import SkipToContent from "./components/ui/SkipToContent";
 import LoadingScreen from "./components/ui/LoadingScreen";
-import ScrollToTop from "./components/ui/ScrollToTop";
 import SectionNavigator from "./components/ui/SectionNavigator";
 import ScrollProgressBar from "./components/ui/ScrollProgressBar";
 import ReadingTimeIndicator from "./components/ui/ReadingTimeIndicator";
-import BackButton from "./components/ui/BackButton";
 import { ToolHeader } from "./components/ui/ToolHeader";
 import ModuleSummaryDashboard from "./components/ui/ModuleSummaryDashboard";
 import Breadcrumb from "./components/Breadcrumb";
@@ -47,7 +45,6 @@ import { ProductTour } from "./components/ui/ProductTour";
 import { ThemeProvider } from "./context/ThemeContext";
 import { BOQProvider } from "./context/BOQContext";
 import MasterBOQDrawer from "./components/boq/MasterBOQDrawer";
-import FloatingBOQButton from "./components/ui/FloatingBOQButton";
 import { FileText } from "lucide-react";
 import { SettingsProvider } from "./context/SettingsContext";
 import { HouseSpecsProvider } from "./context/HouseSpecsContext";
@@ -884,10 +881,8 @@ export default function App() {
     <SmoothScroll>
       <SkipToContent />
       <LoadingScreen />
-      <ScrollToTop isHome={activeModule === "home"} />
       <SectionNavigator />
       <ScrollProgressBar />
-      <BackButton isVisible={activeModule !== "home"} onNavigate={() => handleSelectModule("home")} />
       <ThemeProvider>
       <AuthProvider>
       <SettingsProvider>
@@ -911,6 +906,7 @@ export default function App() {
                     
                     onOpenAuth={() => setIsAuthOpen(true)}
                     onOpenProfile={() => setIsProfileOpen(true)}
+                    onOpenBOQ={() => setIsBOQOpen(true)}
                     onNavigate={handleSelectModule}
                   />
 
@@ -991,13 +987,6 @@ export default function App() {
                 </div>
               </ProjectProvider>
           <MasterBOQDrawer isOpen={isBOQOpen} onClose={() => setIsBOQOpen(false)} />
-          {/* Hide the FAB while the drawer is open: it sits at z-60, above the
-              drawer's z-50 overlay, so it covered the drawer's Excel button.
-              The FAB only opens the drawer (which has its own close), so it is
-              redundant while the drawer is open. */}
-          {!isBOQOpen && (
-            <FloatingBOQButton onClick={() => setIsBOQOpen(true)} />
-          )}
           </BOQProvider>
             </TakeoffProvider>
           </MarketRatesProvider>

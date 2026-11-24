@@ -358,7 +358,7 @@ export default function FinishesEstimator() {
       )}
 
       <div className="bg-ink rounded-2xl p-5 text-white shadow-brand-lg">
-        <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Room / zone dimensions</h3>
+        <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Room / zone dimensions</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-end">
           <div><label className="text-xs text-[#948D82]">Length ({unit})</label><input type="number" min="0" value={roomL} onChange={(e) => setRoomL(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
           <div><label className="text-xs text-[#948D82]">Width ({unit})</label><input type="number" min="0" value={roomW} onChange={(e) => setRoomW(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
@@ -384,7 +384,7 @@ export default function FinishesEstimator() {
               <span className="text-[#948D82] text-sm">{unit}</span>
               <input type="number" min="1" step="1" value={o.count} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, count: parseInt(e.target.value, 10) || 0 } : x))} className="w-16 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening count" />
               <span className="text-[#948D82] text-sm">× {(o.widthM * o.heightM).toFixed(2)} m² each — {geometry.openings.find((d) => d.id === o.id)?.rule ?? ""}</span>
-              <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-ui-errorText px-2 py-1 text-sm">✕</Button>
+              <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-[#FCA5A5] px-2 py-1 text-sm">✕</Button>
             </div>
           ))}
           <div className="flex flex-wrap items-center gap-2 mt-2">

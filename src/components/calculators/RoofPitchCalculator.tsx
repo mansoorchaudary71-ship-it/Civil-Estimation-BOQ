@@ -642,7 +642,7 @@ export function RoofPitchCalculator() {
           )}
 
           <div className="bg-ink rounded-2xl p-6 shadow-xl text-white space-y-6 relative overflow-hidden">
-            <h3 className="text-xl font-bold flex items-center gap-2 relative z-10">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2 relative z-10">
               <Calculator size={24} className="text-accent-400" />
               Roof Geometry Results
             </h3>

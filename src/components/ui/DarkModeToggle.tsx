@@ -54,7 +54,7 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
       onClick={toggleTheme}
       className={`w-10 h-10 rounded-full shadow-brand-sm flex items-center justify-center transition-all duration-300 ${
         isHighContrast
-          ? 'bg-black border border-accent-500 text-accent-700 hover:bg-ink hover:shadow-brand-md hover:-translate-y-0.5'
+          ? 'bg-ink border border-accent-500 text-accent-700 hover:bg-ink hover:shadow-brand-md hover:-translate-y-0.5'
           : isDarkMode 
           ? 'bg-ink border border-ink-600 text-accent-400 hover:bg-ink-600 hover:shadow-brand-md hover:-translate-y-0.5' 
           : 'bg-surface-default border border-ui-borderSubtle text-accent-700 hover:bg-surface-hover hover:shadow-brand-md hover:-translate-y-0.5'

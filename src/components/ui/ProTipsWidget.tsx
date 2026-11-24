@@ -87,6 +87,11 @@ const TIPS_DATABASE: Record<string, string[]> = {
     'Formwork for vertical structures (columns, walls) can usually be stripped earlier (16-24 hrs) than for slabs or beams.',
     'Use standard multipliers depending on the surface area to estimate centering materials.'
   ],
+  'plywood-estimator': [
+    'Match the grade to the job: Commercial for dry indoor panelling, BWR (boiling-water resistant) for kitchens and bathrooms, Marine for constant wet exposure, and Shuttering / film-faced (HDO/MDO) for formwork. Grade labels the order only — it does not change the sheet count, so enter the rate for your grade.',
+    'The standard sheet is 2.44 × 1.22 m (8 × 4 ft); the smaller 1.83 × 0.91 m (6 × 3 ft) sheet suits small panels. Thickness defaults to 18 mm (Standard). Start with 5% wastage for simple rectangular work and 10% for formwork, and raise it toward 15% for diagonal or complex cutting with many openings.',
+    'For formwork, the reuse factor divides the sheets to buy — one set of sheets serves several pours (reuse 1–8). Check the face condition before each reuse; a damaged face means the sheet cannot be reused, whatever the factor says.'
+  ],
   'earthworks': [
     'Account for the "swell factor" (typically 15-20%) when estimating the volume of excavated soil for hauling.',
     'For filling, use the "shrinkage factor" to ensure adequate material is ordered.'

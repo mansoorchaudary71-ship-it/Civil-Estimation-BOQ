@@ -8,7 +8,7 @@ import { Search, Sparkles, X } from "lucide-react";
  * Fixes vs. previous bar
  *  - `sticky top-[60px]` assumed a 60px header, but the header was 64-80px, so the bar either hid under it
  *    or floated with a gap. It now pins to the shared `--header-h` token.
- *  - Hard-coded light colours (#f8f9fa) had no dark variant.
+ *  - Hard-coded light colours (rgb(248, 249, 250)) had no dark variant.
  *  - Suggestions were only reachable by mouse. Added combobox/listbox semantics and arrow-key navigation.
  *  - Suggestions closed on a 200ms blur timer (race with click). Uses mouse-down selection instead.
  *  - Tapping a category now also shows the active state via aria-pressed; count line is aria-live.
@@ -226,7 +226,7 @@ export default function SearchAndFilterBar({
                   {cat.name}
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-bold tabular-nums ${
-                      on ? "bg-white/20 text-white" : "bg-surface-hover text-txt-secondary"
+                      on ? "bg-surface-default/20 text-white" : "bg-surface-hover text-txt-secondary"
                     }`}
                   >
                     {cat.count}

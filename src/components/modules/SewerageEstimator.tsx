@@ -174,7 +174,7 @@ export default function SewerageEstimator() {
           <div className="p-2 bg-accent-50 text-accent-800 rounded-2xl overflow-hidden">{icon}</div>
           <h2 className="text-xl font-bold text-white">{title}</h2>
         </div>
-        <ChevronDown className={`w-5 h-5 text-gray-200 transition-transform duration-300 ${openSection === id ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-5 h-5 text-white/80 transition-transform duration-300 ${openSection === id ? "rotate-180" : ""}`} />
       </Button>
       {openSection === id && <div className="px-6 pb-6 border-t border-border-color pt-4">{children}</div>}
     </div>

@@ -58,7 +58,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       // Gradient names are kept for API compatibility; all render in the amber system.
       blue: "bg-gradient-to-r from-accent-500 to-accent-600",
       orange: "bg-gradient-to-r from-accent-300 to-accent-600",
-      teal: "bg-gradient-to-r from-[#14B8A6] to-[#0F766E]",
+      teal: "bg-gradient-to-r from-primary-600 to-ui-successText",
       purple: "bg-gradient-to-r from-accent-400 to-accent-700",
     };
 

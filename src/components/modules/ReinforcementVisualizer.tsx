@@ -530,41 +530,41 @@ export default function ReinforcementVisualizer() {
                     <svg ref={svgRef} viewBox={`0 0 ${vWidth} ${vHeight}`} className="max-w-full max-h-[600px] drop-shadow-md relative z-10" xmlns="http://www.w3.org/2000/svg" style={{ backgroundColor: "white" }}>
                       <defs>
                         <pattern id="concrete-hatch" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                          <path d="M 0 0 L 0 40 M 10 0 L 10 40 M 20 0 L 20 40 M 30 0 L 30 40" stroke="#6B6862" strokeWidth="0.5" strokeDasharray="3 3" />
+                          <path d="M 0 0 L 0 40 M 10 0 L 10 40 M 20 0 L 20 40 M 30 0 L 30 40" stroke="rgb(107, 104, 98)" strokeWidth="0.5" strokeDasharray="3 3" />
                         </pattern>
                         <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#6B6862" />
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(107, 104, 98)" />
                         </marker>
                       </defs>
-                      <rect x={startX} y={startY} width={svgWidthMm} height={depth} fill="#F4F2EE" stroke="#6B6862" strokeWidth="2" />
+                      <rect x={startX} y={startY} width={svgWidthMm} height={depth} fill="rgb(244, 242, 238)" stroke="rgb(107, 104, 98)" strokeWidth="2" />
                       <rect x={startX} y={startY} width={svgWidthMm} height={depth} fill="url(#concrete-hatch)" />
-                      <rect x={startX + cover} y={startY + cover} width={Math.max(10, svgWidthMm - 2 * cover)} height={Math.max(10, depth - 2 * cover)} fill="none" stroke="#F2A413" strokeWidth={stirrupDia} rx={stirrupDia * 1.5} />
-                      <path d={`M ${startX + cover + stirrupDia * 1.5} ${startY + cover} L ${startX + cover + stirrupDia * 3 + 10} ${startY + cover + stirrupDia * 3 + 10} M ${startX + cover} ${startY + cover + stirrupDia * 1.5} L ${startX + cover + stirrupDia * 3 + 10} ${startY + cover + stirrupDia * 3 + 10}`} stroke="#F2A413" strokeWidth={stirrupDia} fill="none" />
+                      <rect x={startX + cover} y={startY + cover} width={Math.max(10, svgWidthMm - 2 * cover)} height={Math.max(10, depth - 2 * cover)} fill="none" stroke="rgb(242, 164, 19)" strokeWidth={stirrupDia} rx={stirrupDia * 1.5} />
+                      <path d={`M ${startX + cover + stirrupDia * 1.5} ${startY + cover} L ${startX + cover + stirrupDia * 3 + 10} ${startY + cover + stirrupDia * 3 + 10} M ${startX + cover} ${startY + cover + stirrupDia * 1.5} L ${startX + cover + stirrupDia * 3 + 10} ${startY + cover + stirrupDia * 3 + 10}`} stroke="rgb(242, 164, 19)" strokeWidth={stirrupDia} fill="none" />
                       {Array.from({ length: topBarsCount }).map((_, i) => {
                         const barSpacing = topBarsCount > 1 ? (svgWidthMm - 2 * cover - 2 * stirrupDia - topBarsDia) / (topBarsCount - 1) : 0;
                         const cx = startX + cover + stirrupDia + topBarsDia / 2 + i * barSpacing;
                         const cy = startY + cover + stirrupDia + topBarsDia / 2;
-                        return <circle key={`t-${i}`} cx={cx} cy={cy} r={topBarsDia / 2} fill="#F2A413" stroke="#855307" strokeWidth="1" />;
+                        return <circle key={`t-${i}`} cx={cx} cy={cy} r={topBarsDia / 2} fill="rgb(242, 164, 19)" stroke="rgb(133, 83, 7)" strokeWidth="1" />;
                       })}
                       {Array.from({ length: bottomBarsCount }).map((_, i) => {
                         const actualWidthForBars = svgWidthMm - 2 * cover - 2 * stirrupDia;
                         const barSpacing = bottomBarsCount > 1 ? (actualWidthForBars - bottomBarsDia) / (bottomBarsCount - 1) : 0;
                         const cx = startX + cover + stirrupDia + bottomBarsDia / 2 + i * barSpacing;
                         const cy = startY + depth - cover - stirrupDia - bottomBarsDia / 2;
-                        return <circle key={`b-${i}`} cx={cx} cy={cy} r={bottomBarsDia / 2} fill="#F2A413" stroke="#855307" strokeWidth="1" />;
+                        return <circle key={`b-${i}`} cx={cx} cy={cy} r={bottomBarsDia / 2} fill="rgb(242, 164, 19)" stroke="rgb(133, 83, 7)" strokeWidth="1" />;
                       })}
-                      <line x1={startX} y1={startY - 30} x2={startX + svgWidthMm} y2={startY - 30} stroke="#6B6862" strokeWidth="1.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
-                      <text x={startX + svgWidthMm / 2} y={startY - 38} textAnchor="middle" fill="#1F1D1A" fontSize="14" fontWeight="bold" fontFamily="sans-serif">{svgWidthMm} mm</text>
-                      <line x1={startX + svgWidthMm + 30} y1={startY} x2={startX + svgWidthMm + 30} y2={startY + depth} stroke="#6B6862" strokeWidth="1.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
-                      <text x={startX + svgWidthMm + 38} y={startY + depth / 2} dominantBaseline="middle" fill="#1F1D1A" fontSize="14" fontWeight="bold" fontFamily="sans-serif">{depth} mm</text>
-                      <line x1={startX - 30} y1={startY + depth - cover} x2={startX - 30} y2={startY + depth} stroke="#F2A413" strokeWidth="1.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
-                      <text x={startX - 38} y={startY + depth - cover / 2} dominantBaseline="middle" textAnchor="end" fill="#F2A413" fontSize="14" fontWeight="bold" fontFamily="sans-serif">C: {cover}</text>
-                      <text x="20" y="30" fill="#1F1D1A" fontSize="16" fontWeight="bold" fontFamily="sans-serif">{type} Cross Section</text>
-                      <text x="20" y="55" fill="#6B6862" fontSize="12" fontFamily="sans-serif">Main Bottom: {bottomBarsCount} - Ø{bottomBarsDia}</text>
-                      <text x="20" y="75" fill="#6B6862" fontSize="12" fontFamily="sans-serif">Main Top: {topBarsCount} - Ø{topBarsDia}</text>
-                      <text x="20" y="95" fill="#6B6862" fontSize="12" fontFamily="sans-serif">Stirrups: Ø{stirrupDia} @ {stirrupSpacing} c/c</text>
+                      <line x1={startX} y1={startY - 30} x2={startX + svgWidthMm} y2={startY - 30} stroke="rgb(107, 104, 98)" strokeWidth="1.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                      <text x={startX + svgWidthMm / 2} y={startY - 38} textAnchor="middle" fill="rgb(31, 29, 26)" fontSize="14" fontWeight="bold" fontFamily="sans-serif">{svgWidthMm} mm</text>
+                      <line x1={startX + svgWidthMm + 30} y1={startY} x2={startX + svgWidthMm + 30} y2={startY + depth} stroke="rgb(107, 104, 98)" strokeWidth="1.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                      <text x={startX + svgWidthMm + 38} y={startY + depth / 2} dominantBaseline="middle" fill="rgb(31, 29, 26)" fontSize="14" fontWeight="bold" fontFamily="sans-serif">{depth} mm</text>
+                      <line x1={startX - 30} y1={startY + depth - cover} x2={startX - 30} y2={startY + depth} stroke="rgb(242, 164, 19)" strokeWidth="1.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                      <text x={startX - 38} y={startY + depth - cover / 2} dominantBaseline="middle" textAnchor="end" fill="rgb(242, 164, 19)" fontSize="14" fontWeight="bold" fontFamily="sans-serif">C: {cover}</text>
+                      <text x="20" y="30" fill="rgb(31, 29, 26)" fontSize="16" fontWeight="bold" fontFamily="sans-serif">{type} Cross Section</text>
+                      <text x="20" y="55" fill="rgb(107, 104, 98)" fontSize="12" fontFamily="sans-serif">Main Bottom: {bottomBarsCount} - Ø{bottomBarsDia}</text>
+                      <text x="20" y="75" fill="rgb(107, 104, 98)" fontSize="12" fontFamily="sans-serif">Main Top: {topBarsCount} - Ø{topBarsDia}</text>
+                      <text x="20" y="95" fill="rgb(107, 104, 98)" fontSize="12" fontFamily="sans-serif">Stirrups: Ø{stirrupDia} @ {stirrupSpacing} c/c</text>
                       {results && (
-                        <text x="20" y="115" fill="#6B6862" fontSize="12" fontFamily="sans-serif">
+                        <text x="20" y="115" fill="rgb(107, 104, 98)" fontSize="12" fontFamily="sans-serif">
                           Effective depth d = {results.effectiveDepthMm} mm · Stirrup {results.stirrupLengthSimpleMm} mm
                         </text>
                       )}
@@ -693,18 +693,18 @@ function SlabGridSvg({ lengthM, widthM, mainCount, distCount, mainDia, distDia }
   const nDist = Math.max(0, Math.min(distCount, 30));
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="max-w-full max-h-[600px] relative z-10" style={{ backgroundColor: "white" }} role="img" aria-label="Slab reinforcement grid plan">
-      <rect x={pad} y={pad} width={iw} height={ih} fill="#F4F2EE" stroke="#6B6862" strokeWidth="2" />
+      <rect x={pad} y={pad} width={iw} height={ih} fill="rgb(244, 242, 238)" stroke="rgb(107, 104, 98)" strokeWidth="2" />
       {Array.from({ length: nMain }).map((_, i) => {
         const x = nMain === 1 ? pad + iw / 2 : pad + (iw * i) / (nMain - 1);
-        return <line key={`m-${i}`} x1={x} y1={pad} x2={x} y2={pad + ih} stroke="#F2A413" strokeWidth={Math.max(1.5, mainDia / 6)} />;
+        return <line key={`m-${i}`} x1={x} y1={pad} x2={x} y2={pad + ih} stroke="rgb(242, 164, 19)" strokeWidth={Math.max(1.5, mainDia / 6)} />;
       })}
       {Array.from({ length: nDist }).map((_, i) => {
         const y = nDist === 1 ? pad + ih / 2 : pad + (ih * i) / (nDist - 1);
-        return <line key={`d-${i}`} x1={pad} y1={y} x2={pad + iw} y2={y} stroke="#0D0C22" strokeWidth={Math.max(1, distDia / 6)} opacity="0.7" />;
+        return <line key={`d-${i}`} x1={pad} y1={y} x2={pad + iw} y2={y} stroke="rgb(13, 12, 34)" strokeWidth={Math.max(1, distDia / 6)} opacity="0.7" />;
       })}
-      <text x={pad + iw / 2} y={pad - 10} textAnchor="middle" fontSize="13" fontWeight="bold" fill="#1F1D1A">{lengthM} m</text>
-      <text x={pad - 8} y={pad + ih / 2} textAnchor="end" fontSize="13" fontWeight="bold" fill="#1F1D1A" transform={`rotate(-90 ${pad - 8} ${pad + ih / 2})`}>{widthM} m</text>
-      <text x={pad} y={H - 8} fontSize="12" fill="#6B6862">Main Ø{mainDia} (vertical) · Distribution Ø{distDia} (horizontal) — {nMain} × {nDist} bars</text>
+      <text x={pad + iw / 2} y={pad - 10} textAnchor="middle" fontSize="13" fontWeight="bold" fill="rgb(31, 29, 26)">{lengthM} m</text>
+      <text x={pad - 8} y={pad + ih / 2} textAnchor="end" fontSize="13" fontWeight="bold" fill="rgb(31, 29, 26)" transform={`rotate(-90 ${pad - 8} ${pad + ih / 2})`}>{widthM} m</text>
+      <text x={pad} y={H - 8} fontSize="12" fill="rgb(107, 104, 98)">Main Ø{mainDia} (vertical) · Distribution Ø{distDia} (horizontal) — {nMain} × {nDist} bars</text>
     </svg>
   );
 }

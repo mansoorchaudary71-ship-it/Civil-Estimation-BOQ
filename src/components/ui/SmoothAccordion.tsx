@@ -27,7 +27,7 @@ export function SmoothAccordion({ title, children, defaultExpanded = false }: Sm
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="text-gray-200 p-1"
+          className="text-white/80 p-1"
         >
           <ChevronDown className="w-5 h-5" />
         </motion.div>

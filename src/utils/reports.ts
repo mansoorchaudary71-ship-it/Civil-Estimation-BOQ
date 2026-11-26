@@ -56,7 +56,7 @@ export const generatePDFReport = async (boqItems: BOQItem[], measurements: Measu
   let grandTotal = 0;
   const chartData: { label: string; value: number; color: string }[] = [];
 
-  const colors = ["#8b5cf6", "#ec4899", "#0ea5e9", "#10b981", "#f59e0b", "#64748b", "#3b82f6"];
+  const colors = ["rgb(139, 92, 246)", "rgb(236, 72, 153)", "rgb(14, 165, 233)", "rgb(16, 185, 129)", "rgb(245, 158, 11)", "rgb(100, 116, 139)", "rgb(59, 130, 246)"];
 
   boqItems.forEach((item, index) => {
     const qty = getMappedQty(item, measurements, scalePxPerUnit, globalUnitName);

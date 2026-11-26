@@ -282,11 +282,11 @@ export default function ProjectManager() {
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={globalTotals.projectCosts}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
-                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} dy={10} />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} tickFormatter={(val) => `${getCurrencySymbol(settings.currency)}${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
-                      <Tooltip formatter={(val: any) => formatCurrency(val)} contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: '#F4F2EE', opacity: 0.5 }} />
-                      <Bar dataKey="cost" fill="#F2A413" radius={[4, 4, 0, 0]} maxBarSize={50} />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} dy={10} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} tickFormatter={(val) => `${getCurrencySymbol(settings.currency)}${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
+                      <Tooltip formatter={(val: any) => formatCurrency(val)} contentStyle={{ borderRadius: '16px', border: '1px solid rgb(231, 228, 222)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: 'rgb(244, 242, 238)', opacity: 0.5 }} />
+                      <Bar dataKey="cost" fill="rgb(242, 164, 19)" radius={[4, 4, 0, 0]} maxBarSize={50} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -296,11 +296,11 @@ export default function ProjectManager() {
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={topGlobalMaterials} layout="vertical" margin={{ top: 0, right: 30, left: 20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E7E4DE" />
-                      <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} />
-                      <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} width={80} />
-                      <Tooltip formatter={(val: any, name: any, props: any) => [`${val.toLocaleString()} ${props.payload.unit}`, 'Quantity']} contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: '#F4F2EE', opacity: 0.5 }} />
-                      <Bar dataKey="quantity" fill="#1F1D1A" radius={[0, 4, 4, 0]} maxBarSize={30} />
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgb(231, 228, 222)" />
+                      <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} />
+                      <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} width={80} />
+                      <Tooltip formatter={(val: any, name: any, props: any) => [`${val.toLocaleString()} ${props.payload.unit}`, 'Quantity']} contentStyle={{ borderRadius: '16px', border: '1px solid rgb(231, 228, 222)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: 'rgb(244, 242, 238)', opacity: 0.5 }} />
+                      <Bar dataKey="quantity" fill="rgb(31, 29, 26)" radius={[0, 4, 4, 0]} maxBarSize={30} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -539,7 +539,7 @@ function ProjectDetail({ project, onBack, onRestoreProject }: { project: Project
      name: key,
      value: categoryCosts[key]
   }));
-  const COLORS = ['#F2A413', '#1F1D1A', '#B07006', '#6B6862', '#0F766E', '#F2A413'];
+  const COLORS = ['rgb(242, 164, 19)', 'rgb(31, 29, 26)', 'rgb(176, 112, 6)', 'rgb(107, 104, 98)', 'rgb(15, 118, 110)', 'rgb(242, 164, 19)'];
 
   const handleExportProject = () => {
     const json = exportProject(project.id);
@@ -612,7 +612,7 @@ function ProjectDetail({ project, onBack, onRestoreProject }: { project: Project
       return dataPoint;
   });
   
-  const chartColors = ['#F2A413', '#1F1D1A', '#B07006'];
+  const chartColors = ['rgb(242, 164, 19)', 'rgb(31, 29, 26)', 'rgb(176, 112, 6)'];
 
   return (
     <div className="w-full max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-in fade-in duration-500 px-4 md:px-0">
@@ -702,11 +702,11 @@ function ProjectDetail({ project, onBack, onRestoreProject }: { project: Project
                       <div className="h-64">
                          <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={cumulativeTimelineData}>
-                               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
-                               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} dy={10} />
-                               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} tickFormatter={(val) => `${getCurrencySymbol(settings.currency)}${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
-                               <Tooltip formatter={(val: any) => formatCurrency(val)} contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                               <Line type="monotone" dataKey="cumulativeCost" name="Cumulative Cost" stroke="#F2A413" strokeWidth={3} dot={{ r: 4, fill: '#F2A413', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6 }} />
+                               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" />
+                               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} dy={10} />
+                               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} tickFormatter={(val) => `${getCurrencySymbol(settings.currency)}${val >= 1000 ? (val/1000).toFixed(0)+'k' : val}`} width={60} />
+                               <Tooltip formatter={(val: any) => formatCurrency(val)} contentStyle={{ borderRadius: '16px', border: '1px solid rgb(231, 228, 222)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                               <Line type="monotone" dataKey="cumulativeCost" name="Cumulative Cost" stroke="rgb(242, 164, 19)" strokeWidth={3} dot={{ r: 4, fill: 'rgb(242, 164, 19)', strokeWidth: 2, stroke: 'rgb(255, 255, 255)' }} activeDot={{ r: 6 }} />
                             </LineChart>
                          </ResponsiveContainer>
                       </div>
@@ -717,10 +717,10 @@ function ProjectDetail({ project, onBack, onRestoreProject }: { project: Project
                       <div className="h-64">
                          <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={materialTrendData}>
-                               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
-                               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} dy={10} />
-                               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B6862' }} width={40} />
-                               <Tooltip contentStyle={{ borderRadius: '16px', border: '1px solid #E7E4DE', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: '#F4F2EE', opacity: 0.5 }} />
+                               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" />
+                               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} dy={10} />
+                               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} width={40} />
+                               <Tooltip contentStyle={{ borderRadius: '16px', border: '1px solid rgb(231, 228, 222)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} cursor={{ fill: 'rgb(244, 242, 238)', opacity: 0.5 }} />
                                <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
                                {topMaterialKeys.map((key, i) => {
                                   const [matName] = key.split('_');

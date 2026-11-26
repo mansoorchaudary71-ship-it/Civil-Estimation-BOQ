@@ -124,7 +124,7 @@ export default function LegalPages({ page, onNavigate }: LegalPageProps) {
 
         {/* Content Area */}
         <main className="flex-1 bg-bg-card p-8 md:p-12 lg:p-16 rounded-[2.5rem] border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm min-w-0">
-          <div className="prose prose-slate dark:prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-accent-800 dark:prose-a:text-accent-400 transition-colors">
+          <div className="prose prose-ink dark:prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-accent-800 dark:prose-a:text-accent-400 transition-colors">
             {page === 'privacy' && <PrivacyContent />}
             {page === 'terms' && <TermsContent />}
             {page === 'cookies' && <CookiesContent />}

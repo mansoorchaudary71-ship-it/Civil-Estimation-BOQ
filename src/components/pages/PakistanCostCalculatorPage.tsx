@@ -1,5 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Building,
   MapPin,
@@ -22,6 +23,7 @@ import { GenericExportButtons } from '../ui/GenericExportButtons';
 import { pakistanCost, pakistanCostBothStandards, PAK_RATES, RATES_LAST_UPDATED, RATE_SOURCE, type PakCity, type PakTier } from '../../lib/pakistanCost';
 import { MARLA_SQFT, type MarlaStandard } from '../../lib/quickEstimate';
 import { GlobalFAQ, getCombinedFaqs, type FAQItem } from '../ui/GlobalFAQ';
+import { ToolActionsBar, ToolFormulaSection, ToolBreadcrumb } from '../ui/ToolPageTemplate';
 import { SEO, SITE_WEB_APP } from "../SEO";
 import { getSiteUrl } from "../../seo/siteConfig";
 import { TOOL_GUIDES } from "../../seo/toolGuides";
@@ -63,6 +65,7 @@ const UNIT_OPTIONS = ["Sq.Ft", "Sq.Yards", "Marla", "Kanal"] as const;
 const FLOOR_OPTIONS = ["G", "G+1", "G+2", "G+3", "G+4+"] as const;
 
 export default function PakistanCostCalculatorPage() {
+  const navigate = useNavigate();
   const [area, setArea] = useState<number>(5);
   const [unit, setUnit] = useState<(typeof UNIT_OPTIONS)[number]>("Marla");
   const [marlaStandard, setMarlaStandard] = useState<MarlaStandard>("revenue272");
@@ -129,7 +132,7 @@ export default function PakistanCostCalculatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-default font-sans pb-12">
+    <div className="tool-page-standalone min-h-screen bg-surface-default font-sans pb-12">
       {/*
         One shared title for both routes this page serves
         (/pakistan-cost-calculator and /cost-guide-pakistan — App renders
@@ -166,7 +169,13 @@ export default function PakistanCostCalculatorPage() {
         }}
       />
       <div className="max-w-7xl mx-auto px-4 pt-12 md:pt-20 pb-16">
-        
+        <ToolBreadcrumb
+          toolId="pakistan-cost-calculator"
+          category="Quantity Estimation"
+          title="Pakistan House Construction Cost Calculator"
+          onNavigate={(id) => navigate(id === 'home' ? '/' : `/${id}`)}
+        />
+
         {/* Section 1: H1 SEO Header */}
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-3 mb-6">
@@ -452,6 +461,15 @@ export default function PakistanCostCalculatorPage() {
               if (typeof savedInputs.hasBasement === "boolean") setHasBasement(savedInputs.hasBasement);
             }}
           />
+        </div>
+
+        {/* Template §3 then §4 — formula/methodology, then the canonical
+            actions row (Copy, Print, PDF, Excel, Add to BOQ, Share).
+            Excel delegates to this page's own GenericExportButtons above;
+            Add to BOQ is disabled with a reason (not wired for this tool). */}
+        <div className="mb-16 space-y-8 print:hidden">
+          <ToolFormulaSection toolId="pakistan-cost-calculator" />
+          <ToolActionsBar toolId="pakistan-cost-calculator" toolName="Pakistan House Construction Cost Calculator" />
         </div>
 
         {/* Section 4: Static SEO Content */}

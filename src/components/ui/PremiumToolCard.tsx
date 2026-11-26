@@ -9,7 +9,7 @@ export default function PremiumToolCard() {
       <div 
         className="absolute inset-0 opacity-[0.02] pointer-events-none" 
         style={{ 
-          backgroundImage: 'radial-gradient(circle at 20% 30%, #FFFFFF 1px, transparent 1px), radial-gradient(circle at 80% 70%, #FFFFFF 1px, transparent 1px)', 
+          backgroundImage: 'radial-gradient(circle at 20% 30%, rgb(255, 255, 255) 1px, transparent 1px), radial-gradient(circle at 80% 70%, rgb(255, 255, 255) 1px, transparent 1px)', 
           backgroundSize: '30px 30px' 
         }}
       ></div>
@@ -20,7 +20,7 @@ export default function PremiumToolCard() {
         style={{
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0) 50%)',
           padding: '14px',
-          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMask: 'linear-gradient(rgb(255, 255, 255) 0 0) content-box, linear-gradient(rgb(255, 255, 255) 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
         }} 

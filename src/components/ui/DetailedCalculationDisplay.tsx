@@ -122,8 +122,8 @@ function StepCard({ step, idx }: { step: CalcStep; idx: number }) {
              <div className={`px-5 py-2 rounded-full inline-flex items-baseline gap-1.5 w-fit border ${
                /* Single system: decorative result colours collapse to amber;
                   the emerald (success) result keeps its green treatment. */
-               step.resultColor === "emerald" ? "bg-[#166534]/20 text-[#6EE7B7] border-[#166534]/30" :
-               "bg-[#F2A413]/20 text-[#F8C95A] border-[#F2A413]/30"
+               step.resultColor === "emerald" ? "bg-secondary-800/20 text-ui-successText border-border-strong/30" :
+               "bg-accent-500/20 text-accent-700 border-accent-500/30"
              }`}>
                <span className="font-mono text-xl sm:text-2xl font-black whitespace-nowrap">{step.result}</span>
                {step.resultUnit && <span className="font-bold text-sm sm:text-base">{step.resultUnit}</span>}
@@ -163,7 +163,7 @@ export function DetailedCalculationDisplay({
               <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
                 {title}
               </h3>
-              <p className="text-sm sm:text-base font-medium text-gray-200 mt-1">
+              <p className="text-sm sm:text-base font-medium text-white/80 mt-1">
                 {subtitle}
               </p>
             </div>

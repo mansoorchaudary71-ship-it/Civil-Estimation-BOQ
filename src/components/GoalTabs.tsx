@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
 import { ArrowRight, Clock } from "lucide-react";
+import { getBasename } from "../lib/toolRoutes";
+
+/** Clean-path hrefs (Step 4): BrowserRouter + prerendered clean URLs, so
+ *  goal links use `/${id}` with the project-page basename — not `#/${id}`.
+ *  The onClick handler still intercepts plain clicks for in-app navigation. */
+const hrefFor = (id: string) =>
+  `${getBasename()}${id === "home" ? "/" : `/${id}`}`;
 
 /**
  * "What brings you here today?" - modelled on Coursera's goal selector.
@@ -69,7 +76,7 @@ export default function GoalTabs({
   const tools = goal.ids.map((id) => modules.find((m) => m.id === id)).filter(Boolean) as Mod[];
 
   return (
-    <section aria-labelledby="goal-title" className="w-full bg-white dark:bg-ink-900 py-12 md:py-16 border-y border-border-color">
+    <section aria-labelledby="goal-title" className="w-full bg-surface-default dark:bg-ink-900 py-12 md:py-16 border-y border-border-color">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
         <h2 id="goal-title" className="text-2xl md:text-3xl font-bold tracking-tight text-txt-primary">
           What brings you here today?
@@ -117,7 +124,7 @@ export default function GoalTabs({
               return (
                 <li key={t.id}>
                   <a
-                    href={`#/${t.id}`}
+                    href={hrefFor(t.id)}
                     onClick={(e) => {
                       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
                       e.preventDefault();

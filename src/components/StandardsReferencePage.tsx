@@ -4,6 +4,7 @@ import { SEO, SITE_WEB_APP } from "./SEO";
 import { getSiteUrl } from "../seo/siteConfig";
 import { TOOL_GUIDES } from "../seo/toolGuides";
 import { ToolArticleWidget } from "./ui/ToolArticleWidget";
+import { ToolActionsBar, ToolBreadcrumb } from "./ui/ToolPageTemplate";
 import { getEffectivePathname } from "../lib/toolRoutes";
 import React, { useState, useEffect } from "react";
 import { Search, BookOpen, ShieldCheck, ArrowRight, Download, Eye, X } from "lucide-react";
@@ -282,7 +283,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
   });
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] font-sans pb-24">
+    <div className="min-h-screen bg-surface-hover font-sans pb-24">
       <SEO
         title={seo.title}
         description={seo.description}
@@ -311,41 +312,63 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
           ],
         }}
       />
+      {/* Template §1 — breadcrumb (this is a reference page, not a
+          calculator: no formula section, and the actions row below has
+          Excel / Add to BOQ disabled with a reason). */}
+      {onNavigate && (
+        <div className="w-full md:max-w-7xl md:mx-auto px-6 pt-24">
+          <ToolBreadcrumb
+            toolId={standardsToolId ?? "standards"}
+            title={`${seo.h1Main} ${seo.h1Accent}`}
+            category="Standards & Codes"
+            onNavigate={onNavigate}
+          />
+        </div>
+      )}
       {/* Header Section */}
-      <div className="bg-[#FAF8F5] border-b border-[#E8E4D9] pt-20 pb-16 px-6 relative overflow-hidden">
+      <div className="bg-surface-hover border-b border-border-color pt-20 pb-16 px-6 relative overflow-hidden">
         {/* Background glow */}
-        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full bg-[#E8E4D9]/20 blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full bg-surface-active/20 blur-[120px] pointer-events-none"></div>
 
         <div className="w-full md:max-w-7xl md:mx-auto flex flex-col items-center text-center relative z-10 px-4 md:px-0">
-          <BookOpen className="w-12 h-12 text-[#B39B72] mb-6" />
-          <h1 className="md: lg: text-[#4A443B] mb-4 relative text-xl font-semibold text-txt-primary tracking-tight mb-6">
-            {seo.h1Main} <span className="text-[#B39B72]">{seo.h1Accent}</span>{seo.h1Suffix ? ` ${seo.h1Suffix}` : ""}
+          <BookOpen className="w-12 h-12 text-accent-700 mb-6" />
+          <h1 className="md: lg: text-txt-primary mb-4 relative text-xl font-semibold text-txt-primary tracking-tight mb-6">
+            {seo.h1Main} <span className="text-accent-700">{seo.h1Accent}</span>{seo.h1Suffix ? ` ${seo.h1Suffix}` : ""}
           </h1>
-          <p className="text-[#8B8476] max-w-2xl mb-10 text-base font-normal text-txt-secondary leading-relaxed">
+          <p className="text-txt-tertiary max-w-2xl mb-10 text-base font-normal text-txt-secondary leading-relaxed">
             {isMorth
               ? "MoRTH Specifications for Road and Bridge Works and the Indian Roads Congress codes behind our pavement, bridge and earthworks calculators — flexible and rigid pavement design, bridge loads, granular and bituminous layers, and rural roads."
               : "A comprehensive reference library of the civil engineering standards, specifications, and building codes powering our estimation tools across key international markets."}
           </p>
 
           <div className="w-full max-w-xl relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#A39D93]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-txt-tertiary" />
             <><label htmlFor="a11y-input-9" className="sr-only">{isMorth ? "Search MoRTH / IRC specs (e.g. 'IRC:37')..." : "Search by code (e.g. 'IS 456') or title..."}</label>
 <input id="a11y-input-9"
               type="text"
               placeholder={isMorth ? "Search MoRTH / IRC specs (e.g. 'IRC:37')..." : "Search by code (e.g. 'IS 456') or title..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-surface-default border border-[#E8E4D9] rounded-full py-4 pl-12 pr-4 text-[#4A443B] placeholder-[#A39D93] focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#B39B72]/50 shadow-brand-sm overflow-hidden"
+              className="w-full bg-surface-default border border-border-color rounded-full py-4 pl-12 pr-4 text-txt-primary placeholder-[rgb(163, 157, 147)] focus:outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-accent-700/50 shadow-brand-sm overflow-hidden"
             /></>
           </div>
         </div>
       </div>
 
       <div className="w-full md:max-w-7xl md:mx-auto px-6 pt-10">
+        {/* Template §4 — canonical actions row (Copy, Print, PDF, Excel,
+            Add to BOQ, Share). Excel / Add to BOQ are disabled with a
+            reason on this reference page — it has no calculable result. */}
+        <div className="mb-10 print:hidden">
+          <ToolActionsBar
+            toolId={standardsToolId ?? "standards"}
+            toolName={`${seo.h1Main} ${seo.h1Accent}`}
+          />
+        </div>
         {/* Country + Year Filters */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
           <label className="text-sm font-bold text-txt-secondary">Year:</label>
-          <select value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} className="px-4 py-2.5 bg-surface-default border border-[#E8E4D9] rounded-full text-base font-medium text-[#4A443B] outline-none">
+          <select value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} className="px-4 py-2.5 bg-surface-default border border-border-color rounded-full text-base font-medium text-txt-primary outline-none">
             {years.map((y) => (<option key={y} value={y}>{y === "All" ? "All years" : y}</option>))}
           </select>
           <span className="text-sm text-txt-tertiary">{filteredStandards.length} standard(s) shown</span>
@@ -361,7 +384,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
               className={`px-5 py-2.5 rounded-full text-base font-medium transition-all shadow-brand-sm
                 ${activeCountry === country 
                   ? 'bg-ink text-white shadow-brand-md' 
-                  : 'bg-surface-default text-[#8B8476] border border-[#E8E4D9] hover:bg-[#F2EFE9] hover:text-[#4A443B]'
+                  : 'bg-surface-default text-txt-tertiary border border-border-color hover:bg-surface-hover hover:text-txt-primary'
                 }`}
             >
               {country}
@@ -379,14 +402,14 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
             filteredStandards.map(std => (
               <div 
                 key={std.id} 
-                className="w-full bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-6 flex flex-col group hover:border-[#B39B72] hover:shadow-brand-lg transition-all duration-300 overflow-hidden"
+                className="w-full bg-surface-default border border-border-color rounded-2xl p-4 sm:p-6 flex flex-col group hover:border-accent-700 hover:shadow-brand-lg transition-all duration-300 overflow-hidden"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="font-mono text-base font-medium bg-accent-50 text-accent-800 border border-accent-100 px-3 py-1 rounded-lg">
                     {std.code}
                   </div>
-                  <div className="flex items-center gap-1.5 text-sm uppercase tracking-wider font-bold text-[#A39D93] bg-[#FAF8F5] px-2 py-1 rounded border border-[#E8E4D9]">
-                    <ShieldCheck className="w-3 h-3 text-[#B39B72]" />
+                  <div className="flex items-center gap-1.5 text-sm uppercase tracking-wider font-bold text-txt-tertiary bg-surface-hover px-2 py-1 rounded border border-border-color">
+                    <ShieldCheck className="w-3 h-3 text-accent-700" />
                     {std.country}
                   </div>
                 </div>
@@ -402,21 +425,21 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                    }`}>
                     {std.category}
                    </span>
-                   <h3 className="text-[#4A443B] group-hover:text-accent-800 transition-colors text-lg font-medium text-txt-primary mb-4">
+                   <h3 className="text-txt-primary group-hover:text-accent-800 transition-colors text-lg font-medium text-txt-primary mb-4">
                     {std.title}
                    </h3>
                 </div>
 
-                <p className="text-[#8B8476] mb-2 flex-grow text-base font-normal text-txt-secondary leading-relaxed">
+                <p className="text-txt-tertiary mb-2 flex-grow text-base font-normal text-txt-secondary leading-relaxed">
                   {std.description}
                 </p>
-                <p className="text-xs text-[#A39D93] mb-6">Source: {std.source}{std.year ? ` · Edition ${std.year}` : ""} · Verified {std.lastVerified}{std.pdfLink ? "" : " · Full text from the publishing body — no PDF hosted here"}</p>
+                <p className="text-xs text-txt-tertiary mb-6">Source: {std.source}{std.year ? ` · Edition ${std.year}` : ""} · Verified {std.lastVerified}{std.pdfLink ? "" : " · Full text from the publishing body — no PDF hosted here"}</p>
 
                 {std.pdfLink && (
                   <div className="mb-6 flex gap-2 flex-wrap">
                     <Button
                       onClick={() => setViewPdfUrl(std.pdfLink ?? null)}
-                      className="inline-flex items-center gap-2 px-3 py-2 bg-[#F2EFE9] hover:bg-ink-700 hover:text-txt-primary border border-[#E8E4D9] rounded-full text-base font-medium text-[#4A443B] transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-surface-hover hover:bg-ink-700 hover:text-txt-primary border border-border-color rounded-full text-base font-medium text-txt-primary transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                     >
                       <Eye className="w-4 h-4" />
                       Read PDF
@@ -426,7 +449,7 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                       target="_blank"
                       rel="noopener noreferrer"
                       download
-                      className="inline-flex items-center gap-2 px-3 py-2 bg-surface-default hover:bg-[#F2EFE9] border border-[#E8E4D9] rounded-lg text-base font-medium text-[#6A6458] transition-colors"
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-surface-default hover:bg-surface-hover border border-border-color rounded-lg text-base font-medium text-txt-secondary transition-colors"
                     >
                       <Download className="w-4 h-4" />
                       Download
@@ -434,14 +457,14 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
                   </div>
                 )}
 
-                <div className="pt-5 border-t border-[#E8E4D9]">
-                  <p className="text-[#A39D93] uppercase tracking-widest mb-3 text-base font-normal text-txt-secondary leading-relaxed">Integrations</p>
+                <div className="pt-5 border-t border-border-color">
+                  <p className="text-txt-tertiary uppercase tracking-widest mb-3 text-base font-normal text-txt-secondary leading-relaxed">Integrations</p>
                   <div className="flex flex-wrap gap-2">
                     {std.toolNames.map((tool, idx) => (
                       <Button
                         key={idx}
                         onClick={() => onNavigate?.(std.toolIds[idx])}
-                        className="text-base font-medium px-2.5 py-1.5 bg-[#FAF8F5] hover:bg-accent-50 hover:text-accent-800 border border-[#E8E4D9] hover:border-accent-200 rounded-full text-[#6A6458] transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
+                        className="text-base font-medium px-2.5 py-1.5 bg-surface-hover hover:bg-accent-50 hover:text-accent-800 border border-border-color hover:border-accent-200 rounded-full text-txt-secondary transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                       >
                         {tool}
                         <ArrowRight className="w-3 h-3 opacity-50" />
@@ -453,17 +476,17 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
             ))
           ) : (
              <div className="col-span-full py-20 text-center">
-               <BookOpen className="w-12 h-12 text-[#A39D93] mx-auto mb-4" />
-               <h3 className="text-[#6A6458] mb-2 text-lg font-medium text-txt-primary mb-4">No standards found</h3>
-               <p className="text-[#A39D93] text-base font-normal text-txt-secondary leading-relaxed">Try adjusting your search term or country filter.</p>
+               <BookOpen className="w-12 h-12 text-txt-tertiary mx-auto mb-4" />
+               <h3 className="text-txt-secondary mb-2 text-lg font-medium text-txt-primary mb-4">No standards found</h3>
+               <p className="text-txt-tertiary text-base font-normal text-txt-secondary leading-relaxed">Try adjusting your search term or country filter.</p>
              </div>
           )}
         </div>
 
         {/* Bottom CTA */}
-        <div className="w-full mt-20 bg-surface-default border border-[#E8E4D9] rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 text-center md:max-w-4xl md:mx-auto shadow-brand-sm overflow-hidden">
-           <h2 className="md: text-[#4A443B] mb-4 text-xl font-semibold text-txt-primary tracking-tight">Ready to put these standards into practice?</h2>
-           <p className="w-full text-[#8B8476] mb-8 md:max-w-xl md:mx-auto text-base font-normal text-txt-secondary leading-relaxed px-4 md:px-0">Access 75+ professional civil engineering calculators and tools that automatically apply these specific country codes to your estimates.</p>
+        <div className="w-full mt-20 bg-surface-default border border-border-color rounded-2xl p-4 sm:p-8 md:p-5 sm:p-12 text-center md:max-w-4xl md:mx-auto shadow-brand-sm overflow-hidden">
+           <h2 className="md: text-txt-primary mb-4 text-xl font-semibold text-txt-primary tracking-tight">Ready to put these standards into practice?</h2>
+           <p className="w-full text-txt-tertiary mb-8 md:max-w-xl md:mx-auto text-base font-normal text-txt-secondary leading-relaxed px-4 md:px-0">Access 75+ professional civil engineering calculators and tools that automatically apply these specific country codes to your estimates.</p>
            <Button onClick={() => {
               if (onNavigate) {
                  onNavigate('home');
@@ -490,28 +513,28 @@ export default function StandardsReferencePage({ onNavigate, initialActiveCountr
       </div>
 
       {viewPdfUrl && createPortal(
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#FAF8F5]/90 backdrop-blur-sm p-4 sm:p-8">
-          <div className="bg-surface-default rounded-2xl w-full max-w-5xl h-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative border border-[#E8E4D9]">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E4D9] bg-[#FAF8F5]">
-              <h2 className="text-[#4A443B] text-xl font-semibold text-txt-primary tracking-tight mb-4">Reading Mode</h2>
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-surface-hover/90 backdrop-blur-sm p-4 sm:p-8">
+          <div className="bg-surface-default rounded-2xl w-full max-w-5xl h-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative border border-border-color">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border-color bg-surface-hover">
+              <h2 className="text-txt-primary text-xl font-semibold text-txt-primary tracking-tight mb-4">Reading Mode</h2>
               <div className="flex items-center gap-3">
                 <a
                   href={viewPdfUrl}
                   download
-                  className="flex items-center gap-2 px-4 py-2 bg-surface-default border border-[#E8E4D9] text-[#4A443B] hover:bg-[#F2EFE9] font-semibold rounded-xl transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-surface-default border border-border-color text-txt-primary hover:bg-surface-hover font-semibold rounded-xl transition-colors"
                 >
                   <Download className="w-4 h-4" />
                   Download
                 </a>
                 <Button
                   onClick={() => setViewPdfUrl(null)}
-                  className="p-2 text-[#A39D93] hover:text-[#4A443B] hover:bg-[#E8E4D9]/50 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
+                  className="p-2 text-txt-tertiary hover:text-txt-primary hover:bg-surface-active/50 rounded-full transition-colors active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                 >
                   <X className="w-5 h-5" />
                 </Button>
               </div>
             </div>
-            <div className="flex-1 bg-[#F2EFE9] overflow-hidden relative">
+            <div className="flex-1 bg-surface-hover overflow-hidden relative">
                <iframe
                   src={viewPdfUrl}
                   className="w-full h-full border-none"

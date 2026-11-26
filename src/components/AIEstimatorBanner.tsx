@@ -20,7 +20,7 @@ export default function AIEstimatorBanner({ onOpenChat }: AIEstimatorBannerProps
         Your Civil Engineering Copilot
       </p>
       
-      <h2 className="text-[36px] sm:text-[44px] md:text-[52px] leading-[1.05] font-extrabold text-[#0a0f25] dark:text-white tracking-tight mb-6 relative z-10 max-w-2xl mx-auto animate-float">
+      <h2 className="text-[36px] sm:text-[44px] md:text-[52px] leading-[1.05] font-extrabold text-txt-primary dark:text-white tracking-tight mb-6 relative z-10 max-w-2xl mx-auto animate-float">
         Meet Your AI Estimator
       </h2>
       

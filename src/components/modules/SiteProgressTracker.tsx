@@ -476,29 +476,29 @@ export default function SiteProgressTracker() {
                         <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                           <defs>
                             <linearGradient id="colorPV" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#6B6862" stopOpacity={0.3}/>
-                              <stop offset="95%" stopColor="#6B6862" stopOpacity={0}/>
+                              <stop offset="5%" stopColor="rgb(107, 104, 98)" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="rgb(107, 104, 98)" stopOpacity={0}/>
                             </linearGradient>
                             <linearGradient id="colorEV" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#F2A413" stopOpacity={0.3}/>
-                              <stop offset="95%" stopColor="#F2A413" stopOpacity={0}/>
+                              <stop offset="5%" stopColor="rgb(242, 164, 19)" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="rgb(242, 164, 19)" stopOpacity={0}/>
                             </linearGradient>
                             <linearGradient id="colorAC" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#B07006" stopOpacity={0.3}/>
-                              <stop offset="95%" stopColor="#B07006" stopOpacity={0}/>
+                              <stop offset="5%" stopColor="rgb(176, 112, 6)" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="rgb(176, 112, 6)" stopOpacity={0}/>
                             </linearGradient>
                           </defs>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" strokeOpacity={0.5} />
-                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B6862' }} />
-                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B6862' }} tickFormatter={(v) => `${settings.currency} ${(v/1000).toFixed(0)}k`} />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" strokeOpacity={0.5} />
+                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgb(107, 104, 98)' }} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgb(107, 104, 98)' }} tickFormatter={(v) => `${settings.currency} ${(v/1000).toFixed(0)}k`} />
                           <RechartsTooltip 
                             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                           />
                           <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                          <Area type="monotone" dataKey="PlannedValue" name="Planned Value (PV)" stroke="#6B6862" strokeWidth={2} fillOpacity={1} fill="url(#colorPV)" />
-                          {baseline && <Area type="monotone" dataKey="BaselinePV" name="Baseline PV" stroke="#1F1D1A" strokeWidth={2} strokeDasharray="6 4" fillOpacity={0} />}
-                          <Area type="monotone" dataKey="EarnedValue" name="Earned Value (EV)" stroke="#F2A413" strokeWidth={3} fillOpacity={1} fill="url(#colorEV)" />
-                          <Area type="monotone" dataKey="ActualCost" name="Actual Cost (AC)" stroke="#B07006" strokeWidth={2} fillOpacity={1} fill="url(#colorAC)" />
+                          <Area type="monotone" dataKey="PlannedValue" name="Planned Value (PV)" stroke="rgb(107, 104, 98)" strokeWidth={2} fillOpacity={1} fill="url(#colorPV)" />
+                          {baseline && <Area type="monotone" dataKey="BaselinePV" name="Baseline PV" stroke="rgb(31, 29, 26)" strokeWidth={2} strokeDasharray="6 4" fillOpacity={0} />}
+                          <Area type="monotone" dataKey="EarnedValue" name="Earned Value (EV)" stroke="rgb(242, 164, 19)" strokeWidth={3} fillOpacity={1} fill="url(#colorEV)" />
+                          <Area type="monotone" dataKey="ActualCost" name="Actual Cost (AC)" stroke="rgb(176, 112, 6)" strokeWidth={2} fillOpacity={1} fill="url(#colorAC)" />
                         </AreaChart>
                       </ResponsiveContainer>
                    </div>
@@ -509,13 +509,13 @@ export default function SiteProgressTracker() {
                    <div className="h-64 w-full" id="resource-histogram">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={workerChartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" strokeOpacity={0.5} />
-                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B6862' }} />
-                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B6862' }} />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" strokeOpacity={0.5} />
+                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgb(107, 104, 98)' }} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgb(107, 104, 98)' }} />
                           <RechartsTooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                           <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                          <Bar dataKey="WorkersPlanned" name="Planned Workers" fill="#6B6862" radius={[4, 4, 0, 0]} barSize={20} />
-                          <Bar dataKey="WorkersActual" name="Actual Workers" fill="#F2A413" radius={[4, 4, 0, 0]} barSize={20} />
+                          <Bar dataKey="WorkersPlanned" name="Planned Workers" fill="rgb(107, 104, 98)" radius={[4, 4, 0, 0]} barSize={20} />
+                          <Bar dataKey="WorkersActual" name="Actual Workers" fill="rgb(242, 164, 19)" radius={[4, 4, 0, 0]} barSize={20} />
                         </BarChart>
                       </ResponsiveContainer>
                    </div>
@@ -552,7 +552,7 @@ export default function SiteProgressTracker() {
                                <div className="flex-1 h-10 relative bg-surface-hover/50 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-txt-primary rounded-2xl border border-transparent group-hover:border-ui-borderSubtle : transition">
                                   <div 
                                      className={`absolute h-6 top-2 rounded-2xl shadow-brand-sm overflow-hidden border border-ui-borderDefault/5 transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-ui-successText ring-offset-white ' : ''}`}
-                                     style={{ left: `${leftPct}%`, width: `${widthPct}%`, backgroundColor: '#E7E4DE' }}
+                                     style={{ left: `${leftPct}%`, width: `${widthPct}%`, backgroundColor: 'rgb(231, 228, 222)' }}
                                   >
                                      <div 
                                         className={`h-full transition-all ${phase.progress === 100 ? 'bg-ui-successText' : 'bg-ink'}`}

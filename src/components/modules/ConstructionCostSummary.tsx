@@ -27,7 +27,7 @@ interface CostItem {
 }
 const itemAmount = (item: CostItem) => item.qty * item.rate;
 
-const COLORS = ["#F2A413", "#F2A413", "#1F1D1A", "#0F766E", "#B07006", "#1F1D1A"];
+const COLORS = ["rgb(242, 164, 19)", "rgb(242, 164, 19)", "rgb(31, 29, 26)", "rgb(15, 118, 110)", "rgb(176, 112, 6)", "rgb(31, 29, 26)"];
 
 const ConstructionCostSummary: React.FC = () => {
   const [totalArea, setTotalArea] = useState<number>(2000);
@@ -154,7 +154,7 @@ const ConstructionCostSummary: React.FC = () => {
         head: [['Item Description', 'Qty x Rate', 'Cost']],
         body: tableData,
         theme: 'striped',
-        headStyles: { fillColor: [242, 164, 19] }, // amber #F2A413
+        headStyles: { fillColor: [242, 164, 19] }, // amber rgb(242, 164, 19)
         columnStyles: { 1: { halign: 'right' } },
         didParseCell: (data: any) => {
           if (data.row.index === tableData.length - 1) {

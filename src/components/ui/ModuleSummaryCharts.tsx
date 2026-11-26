@@ -15,7 +15,7 @@ import {
 import { Activity, BarChart2, TrendingUp } from "lucide-react";
 import { formatNumber } from "../../lib/currencyFormat";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8b5cf6", "#ec4899", "#14b8a6", "#f43f5e"];
+const COLORS = ["rgb(0, 136, 254)", "rgb(0, 196, 159)", "rgb(255, 187, 40)", "rgb(255, 128, 66)", "rgb(139, 92, 246)", "rgb(236, 72, 153)", "rgb(20, 184, 166)", "rgb(244, 63, 94)"];
 
 /**
  * ModuleSummaryCharts — the recharts half of ModuleSummaryDashboard,
@@ -88,12 +88,12 @@ export function ModuleSummaryCharts({
             <div className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={varianceData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(226, 232, 240)" />
                   <XAxis 
                     dataKey="name" 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 11, fill: '#64748b' }} 
+                    tick={{ fontSize: 11, fill: 'rgb(100, 116, 139)' }} 
                     dy={10}
                     angle={-25}
                     textAnchor="end"
@@ -101,7 +101,7 @@ export function ModuleSummaryCharts({
                   <YAxis 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 11, fill: '#64748b' }}
+                    tick={{ fontSize: 11, fill: 'rgb(100, 116, 139)' }}
                     tickFormatter={(val) => {
                       if (Math.abs(val) >= 1000) return `${(val/1000).toFixed(1)}k`;
                       return val.toString();
@@ -114,7 +114,7 @@ export function ModuleSummaryCharts({
                   />
                   <Bar dataKey="diff" radius={[4, 4, 4, 4]}>
                     {varianceData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.diff > 0 ? '#10b981' : entry.diff < 0 ? '#f43f5e' : '#cbd5e1'} />
+                      <Cell key={`cell-${index}`} fill={entry.diff > 0 ? 'rgb(16, 185, 129)' : entry.diff < 0 ? 'rgb(244, 63, 94)' : 'rgb(203, 213, 225)'} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -135,12 +135,12 @@ export function ModuleSummaryCharts({
             <div className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data.outputs} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(226, 232, 240)" />
                   <XAxis 
                     dataKey="name" 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 12, fill: '#64748b' }} 
+                    tick={{ fontSize: 12, fill: 'rgb(100, 116, 139)' }} 
                     dy={10}
                     angle={-25}
                     textAnchor="end"
@@ -150,7 +150,7 @@ export function ModuleSummaryCharts({
                     domain={['auto', 'auto']} 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 12, fill: '#64748b' }}
+                    tick={{ fontSize: 12, fill: 'rgb(100, 116, 139)' }}
                     tickFormatter={(val) => {
                       if (val >= 1000000) return `${(val/1000000).toFixed(1)}M`;
                       if (val >= 1000) return `${(val/1000).toFixed(1)}k`;
@@ -162,7 +162,7 @@ export function ModuleSummaryCharts({
                     formatter={(value) => [formatNumber(Number(value), 0), "Result"]}
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                   />
-                  <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
+                  <Bar dataKey="value" fill="rgb(59, 130, 246)" radius={[4, 4, 0, 0]}>
                     {data.outputs.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[(index + 4) % COLORS.length]} />
                     ))}

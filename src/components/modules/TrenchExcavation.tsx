@@ -97,7 +97,7 @@ export default function TrenchExcavationEstimator() {
                   </h2>
                 </div>
                 <ChevronDown
-                  className={`w-5 h-5 text-gray-200 transition-transform duration-300 ${isDimensionsOpen ? "rotate-180" : ""}`}
+                  className={`w-5 h-5 text-white/80 transition-transform duration-300 ${isDimensionsOpen ? "rotate-180" : ""}`}
                 />
               </Button>
               
@@ -185,7 +185,7 @@ export default function TrenchExcavationEstimator() {
                   </h2>
                 </div>
                 <ChevronDown
-                  className={`w-5 h-5 text-gray-200 transition-transform duration-300 ${isBeddingOpen ? "rotate-180" : ""}`}
+                  className={`w-5 h-5 text-white/80 transition-transform duration-300 ${isBeddingOpen ? "rotate-180" : ""}`}
                 />
               </Button>
               

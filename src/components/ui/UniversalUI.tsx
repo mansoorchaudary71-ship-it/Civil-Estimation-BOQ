@@ -9,7 +9,7 @@ export function Card({
   className?: string; 
 }) {
   return (
-    <div className={`bg-surface-default/80 dark:bg-[#151821]/80 backdrop-blur-md rounded-2xl sm:rounded-2xl shadow-[0_4px_24px_-8px_rgba(31,29,26,0.06)] border-0 p-6 sm:p-8 w-full min-w-0 ${className}`}>
+    <div className={`bg-surface-default/80 dark:bg-ink-900/80 backdrop-blur-md rounded-2xl sm:rounded-2xl shadow-[0_4px_24px_-8px_rgba(31,29,26,0.06)] border-0 p-6 sm:p-8 w-full min-w-0 ${className}`}>
       {children}
     </div>
   );
@@ -39,7 +39,7 @@ export function MetricCard({
   };
   
   return (
-    <div className="bg-surface-default dark:bg-[#151821] rounded-xl sm:rounded-2xl shadow-brand-sm border border-ui-borderSubtle/60 dark:border-ink/60 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-brand-md overflow-hidden">
+    <div className="bg-surface-default dark:bg-ink-900 rounded-xl sm:rounded-2xl shadow-brand-sm border border-ui-borderSubtle/60 dark:border-ink/60 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-brand-md overflow-hidden">
       <div className="text-xs text-txt-tertiary dark:text-txt-tertiary font-semibold tracking-wide uppercase mb-4">
         {label}
       </div>

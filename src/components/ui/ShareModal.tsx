@@ -25,8 +25,8 @@ export function ShareModal({
         width: 256,
         margin: 2,
         color: {
-          dark: '#0f172a',
-          light: '#ffffff'
+          dark: 'rgb(15, 23, 42)',
+          light: 'rgb(255, 255, 255)'
         }
       }, (error) => {
         if (error) console.error('Error generating QR code', error);

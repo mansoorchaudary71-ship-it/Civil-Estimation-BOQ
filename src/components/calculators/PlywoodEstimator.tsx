@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
 import { Button } from "../ui/Button";
 import { FormulaAccordion, type FormulaStep } from "../ui/FormulaAccordion";
@@ -22,12 +22,17 @@ const money = (v: number | null, c: Currency) =>
 
 export function PlywoodEstimator() {
   const { addItem } = useBOQ();
+  // The tool's unit system follows the GLOBAL setting (header toggle) — the
+  // two toggles must never disagree. On mount the effect below converts the
+  // metric defaults to imperial when the saved global setting is FPS, so the
+  // physical job (18 sheets) is preserved either way. Wastage/reuse are
+  // never converted: switchUnit only touches lengths and areas.
+  const { settings, updateSettings } = useSettings();
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("metric");
   // Currency defaults to the global setting; the picker still lets the user
   // override it per tool. The 2,500/sheet default is a PKR rate, so it is
   // only prefilled when the starting currency is PKR (same rule as
   // onCurrencyChange below).
-  const { settings } = useSettings();
   const initialCurrency: Currency = (["PKR", "INR", "AED", "USD"] as string[]).includes(settings.currency) ? (settings.currency as Currency) : "PKR";
   const [currency, setCurrency] = useState<Currency>(initialCurrency);
   const [inputMode, setInputMode] = useState<PlywoodInputMode>("dimensions");
@@ -100,8 +105,11 @@ export function PlywoodEstimator() {
   const result = useMemo(() => calcPlywood(inputs), [inputs]);
 
   const unitL = unitSystem === "metric" ? "m" : "ft";
-  const unitA = unitSystem === "metric" ? "m²" : "sq ft";
+  const unitA = unitSystem === "metric" ? "m²" : "ft²";
+  const unitV = unitSystem === "metric" ? "m³" : "ft³";
   const area = (m2: number) => (unitSystem === "metric" ? m2 : m2 * FT * FT);
+  const vol = (m3: number) => (unitSystem === "metric" ? m3 : m3 * FT * FT * FT);
+  const costPerArea = (perM2: number | null) => (perM2 == null ? null : unitSystem === "metric" ? perM2 : perM2 / (FT * FT));
 
   const switchUnit = (u: UnitSystem) => {
     if (u === unitSystem) return;
@@ -122,6 +130,30 @@ export function PlywoodEstimator() {
     setUnitSystem(u);
   };
 
+  // Follow the GLOBAL unit setting (header Metric/Imperial toggle). Runs on
+  // mount too: with a saved FPS setting it converts the metric defaults once
+  // (10 m → 32.808 ft) so the job stays identical; with the SI default it is
+  // a no-op. switchUnit never touches wastage/reuse/cost, so percentages
+  // survive every toggle. The App-level DOM converter skips this tool
+  // (data-local-units), so nothing converts twice.
+  useEffect(() => {
+    const target: UnitSystem = settings.measurement === "SI" ? "metric" : "imperial";
+    if (target !== unitSystem) switchUnit(target);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.measurement]);
+
+  // Inner toggle: convert the tool AND write the global setting, so the
+  // header toggle follows. switchUnit early-returns when already equal, and
+  // the effect above no-ops on the echo, so there is no loop.
+  const onInnerUnitChange = (u: UnitSystem) => {
+    switchUnit(u);
+    updateSettings({ measurement: u === "metric" ? "SI" : "FPS" });
+  };
+
+  // Nominal inch equivalents of the stocked metric thicknesses (exact mm kept
+  // in the value and in the engine — the label only switches mm → in).
+  const THICKNESS_IN: Record<string, string> = { "9": "3/8", "12": "1/2", "16": "5/8", "18": "3/4", "21": "13/16" };
+
   const onCurrencyChange = (c: Currency) => {
     setCurrency(c);
     setCostPerSheet(c === "PKR" ? "2500" : "");
@@ -132,8 +164,8 @@ export function PlywoodEstimator() {
     `Surface: ${inputMode === "dimensions" ? `${length} × ${width} ${unitL}` : `${totalArea} ${unitA}`} (${element}${element === "wall" ? `, ${faces} face(s)` : ""})`,
     `Net area: ${area(result.netAreaM2).toFixed(2)} ${unitA} · Gross (inc. ${wastage}% waste): ${area(result.grossAreaM2).toFixed(2)} ${unitA}`,
     `Sheets: ${result.sheetsToBuy} to buy (exact ${result.exactSheets.toFixed(2)}; reuse ${inputs.reuseFactor}) · Sheet ${inputs.sheetLengthM.toFixed(2)} × ${inputs.sheetWidthM.toFixed(2)} m, ${thickness} mm ${grade}`,
-    `Total order volume: ${result.totalOrderVolumeM3.toFixed(2)} m³ (one sheet ${result.sheetVolumeM3.toFixed(4)} m³)`,
-    result.totalCost != null ? `Estimated cost: ${money(result.totalCost, currency)} (${money(result.costPerM2, currency)} per m²)` : "Cost incomplete — enter a cost per sheet.",
+    `Total order volume: ${vol(result.totalOrderVolumeM3).toFixed(2)} ${unitV} (one sheet ${vol(result.sheetVolumeM3).toFixed(4)} ${unitV})`,
+    result.totalCost != null ? `Estimated cost: ${money(result.totalCost, currency)} (${money(costPerArea(result.costPerM2), currency)} per ${unitA})` : "Cost incomplete — enter a cost per sheet.",
     "Rates are indicative — confirm with your supplier.",
   ].join("\n");
 
@@ -164,8 +196,8 @@ export function PlywoodEstimator() {
   const steps: FormulaStep[] = [
     { id: 1, label: "1. Net surface area", theoretical: element === "wall" ? "Contact area = Length × Height × Faces; openings deducted once per face" : element === "slab" ? "Contact area = Length × Width" : element === "beam" ? "Contact area = (2 × Depth + Width) × Length" : element === "column" ? "Contact area = 2 × (Side A + Side B) × Height" : "Net area = Length × Width (or your direct area)", applied: `Contact area = ${area(result.contactAreaM2).toFixed(2)} ${unitA}\nNet = contact − openings = ${area(result.netAreaM2).toFixed(2)} ${unitA}` },
     { id: 2, label: "2. Gross area (incl. wastage)", theoretical: "Gross = Net × (1 + Wastage% / 100)", applied: `Gross = ${area(result.netAreaM2).toFixed(2)} × (1 + ${wastage}/100) = ${area(result.grossAreaM2).toFixed(2)} ${unitA}` },
-    { id: 3, label: "3. Sheets", theoretical: "Sheet area = Sheet L × Sheet W\nExact sheets = Gross / Sheet area\nTo buy = ceil(Exact / Reuse) for formwork, else ceil(Exact)", applied: `Sheet area = ${result.sheetAreaM2.toFixed(2)} m²\nExact = ${result.exactSheets.toFixed(2)} → ${result.sheetsToBuy} sheets to buy (reuse ${inputs.reuseFactor})` },
-    { id: 4, label: "4. Cost & volume", theoretical: "Total cost = Sheets to buy × Cost per sheet\nOne-sheet volume = Sheet area × Thickness; order volume = Sheets × One-sheet volume", applied: `Cost = ${result.sheetsToBuy} × ${costPerSheet || "—"} = ${money(result.totalCost, currency)}\nOrder volume = ${result.totalOrderVolumeM3.toFixed(2)} m³` },
+    { id: 3, label: "3. Sheets", theoretical: "Sheet area = Sheet L × Sheet W\nExact sheets = Gross / Sheet area\nTo buy = ceil(Exact / Reuse) for formwork, else ceil(Exact)", applied: `Sheet area = ${area(result.sheetAreaM2).toFixed(2)} ${unitA}\nExact = ${result.exactSheets.toFixed(2)} → ${result.sheetsToBuy} sheets to buy (reuse ${inputs.reuseFactor})` },
+    { id: 4, label: "4. Cost & volume", theoretical: "Total cost = Sheets to buy × Cost per sheet\nOne-sheet volume = Sheet area × Thickness; order volume = Sheets × One-sheet volume", applied: `Cost = ${result.sheetsToBuy} × ${costPerSheet || "—"} = ${money(result.totalCost, currency)}\nOrder volume = ${vol(result.totalOrderVolumeM3).toFixed(2)} ${unitV}` },
   ];
 
   // Coverage grid: distinct colours — net (accent), cut/waste (amber-ish via accent-300), extra (red).
@@ -182,7 +214,7 @@ export function PlywoodEstimator() {
     : [{ value: "8x4", label: "8 ft × 4 ft (Standard)" }, { value: "6x3", label: "6 ft × 3 ft" }, { value: "custom", label: "Custom size" }];
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
+    <div className="w-full max-w-6xl mx-auto space-y-6" data-local-units="true">
       <div className="bg-surface-default/80 backdrop-blur-xl rounded-2xl border border-ui-borderSubtle p-6 shadow-brand-sm">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex items-center gap-4">
@@ -195,7 +227,7 @@ export function PlywoodEstimator() {
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex bg-surface-hover p-1 rounded-xl">
               {(["metric", "imperial"] as const).map((u) => (
-                <Button key={u} onClick={() => switchUnit(u)} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${unitSystem === u ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-secondary"}`}>{u === "metric" ? "Metric (m)" : "Imperial (ft)"}</Button>
+                <Button key={u} onClick={() => onInnerUnitChange(u)} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${unitSystem === u ? "bg-surface-default text-txt-primary shadow-brand-sm" : "text-txt-secondary"}`}>{u === "metric" ? "Metric (m)" : "Imperial (ft)"}</Button>
               ))}
             </div>
             <select value={currency} onChange={(e) => onCurrencyChange(e.target.value as Currency)} className="bg-surface-hover border border-ui-borderSubtle rounded-xl px-3 py-2 text-sm font-semibold" aria-label="Currency">
@@ -278,9 +310,9 @@ export function PlywoodEstimator() {
                     <div className="space-y-2"><label className={labelCls}>Custom width ({unitL})</label><input type="number" min="0" value={customSheetW} onChange={(e) => setCustomSheetW(e.target.value)} className={inputCls} /></div>
                   </>
                 )}
-                <div className="space-y-2"><label className={labelCls}>Thickness (mm) — display &amp; volume only</label>
+                <div className="space-y-2"><label className={labelCls}>Thickness ({unitSystem === "metric" ? "mm" : "in"}) — display &amp; volume only</label>
                   <select value={thickness} onChange={(e) => setThickness(e.target.value)} className={inputCls}>
-                    {[9, 12, 16, 18, 21].map((t) => <option key={t} value={t}>{t} mm{t === 18 ? " (Standard)" : ""}</option>)}
+                    {[9, 12, 16, 18, 21].map((t) => <option key={t} value={t}>{unitSystem === "metric" ? `${t} mm${t === 18 ? " (Standard)" : ""}` : `${THICKNESS_IN[String(t)]} in — ${t} mm${t === 18 ? " (Standard)" : ""}`}</option>)}
                   </select>
                 </div>
                 <div className="space-y-2"><label className={labelCls}>Grade</label>
@@ -313,14 +345,14 @@ export function PlywoodEstimator() {
           </div>
         </div>
 
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24 lg:self-start">
           <div className="bg-ink rounded-2xl p-6 shadow-brand-lg text-white space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none"><Layers size={120} /></div>
             <h2 className="text-xl font-bold text-white flex items-center gap-2 relative z-10"><Calculator size={24} className="text-accent-400" /> Material Takeoff</h2>
             <div className="grid grid-cols-2 gap-4 relative z-10">
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Total sheets</div><div className="text-4xl font-black">{result.sheetsToBuy}</div><div className="text-xs text-gray-200 mt-1">Exact {result.exactSheets.toFixed(2)} · reuse {inputs.reuseFactor}</div></div>
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Gross area</div><div className="text-2xl font-bold">{area(result.grossAreaM2).toFixed(2)} <span className="text-sm font-normal text-gray-200">{unitA}</span></div><div className="text-xs text-gray-200 mt-1">Inc. {wastage}% waste</div></div>
-              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 col-span-2"><div className="text-accent-200 text-sm font-medium mb-1">Order volume</div><div className="text-2xl font-bold">{result.totalOrderVolumeM3.toFixed(2)} m³</div><div className="text-xs text-gray-200 mt-1">One sheet {result.sheetVolumeM3.toFixed(4)} m³ ({thickness} mm) · Cost per m² {money(result.costPerM2, currency)}</div></div>
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Total sheets</div><div className="text-4xl font-black">{result.sheetsToBuy}</div><div className="text-xs text-white/80 mt-1">Exact {result.exactSheets.toFixed(2)} · reuse {inputs.reuseFactor}</div></div>
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10"><div className="text-accent-200 text-sm font-medium mb-1">Gross area</div><div className="text-2xl font-bold">{area(result.grossAreaM2).toFixed(2)} <span className="text-sm font-normal text-white/80">{unitA}</span></div><div className="text-xs text-white/80 mt-1">Inc. {wastage}% waste</div></div>
+              <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 col-span-2"><div className="text-accent-200 text-sm font-medium mb-1">Order volume</div><div className="text-2xl font-bold">{vol(result.totalOrderVolumeM3).toFixed(2)} {unitV}</div><div className="text-xs text-white/80 mt-1">One sheet {vol(result.sheetVolumeM3).toFixed(4)} {unitV} ({thickness} mm) · Cost per {unitA} {money(costPerArea(result.costPerM2), currency)}</div></div>
               {element === "slab" && (
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 col-span-2"><div className="text-accent-200 text-sm font-medium mb-1">Slab beams</div><div className="text-2xl font-bold">{result.secondaryBeamM.toFixed(0)} m secondary · {result.primaryBeamM.toFixed(0)} m primary</div></div>
               )}
@@ -334,7 +366,7 @@ export function PlywoodEstimator() {
                     {result.sheetsToBuy > 200 && <div className="text-xs text-white/50 w-full text-center mt-1">…and {result.sheetsToBuy - 200} more</div>}
                   </div>
                 </div>
-                <div className="flex gap-4 mt-2 text-xs text-gray-200 justify-center">
+                <div className="flex gap-4 mt-2 text-xs text-white/80 justify-center">
                   <div className="flex items-center gap-1"><div className="w-2 h-2 bg-accent-500/80 rounded-sm" /> Net</div>
                   <div className="flex items-center gap-1"><div className="w-2 h-2 bg-accent-300 rounded-sm" /> Cut / waste</div>
                   <div className="flex items-center gap-1"><div className="w-2 h-2 bg-ui-errorText/50 rounded-sm" /> Extra sheets</div>
@@ -355,7 +387,7 @@ export function PlywoodEstimator() {
         </div>
       </div>
       <CalculationHistory calculatorId="plywood_estimator" currentInputs={{unitSystem, currency, inputMode, element, length, width, totalArea, faces, beamWidth, beamDepth, openings, sheetSize, customSheetL, customSheetW, thickness, grade, wastage, reuse, costPerSheet, secSpacing, primSpacing}} currentResults={result ? { netAreaM2: result.netAreaM2, grossAreaM2: result.grossAreaM2, sheetsToBuy: result.sheetsToBuy, totalCost: result.totalCost } : {}} onRestore={(ins) => {
-          if (ins.unitSystem != null) setUnitSystem(ins.unitSystem as typeof unitSystem);
+          if (ins.unitSystem != null) { setUnitSystem(ins.unitSystem as typeof unitSystem); updateSettings({ measurement: ins.unitSystem === "metric" ? "SI" : "FPS" }); }
           if (ins.currency != null) setCurrency(ins.currency as typeof currency);
           if (ins.inputMode != null) setInputMode(ins.inputMode as typeof inputMode);
           if (ins.element != null) setElement(ins.element as typeof element);

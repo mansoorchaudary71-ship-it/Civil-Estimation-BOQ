@@ -33,7 +33,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { getImperialConversion } from '../../utils/autoConverter';
 
 
-const COLORS = ['#F2A413', '#D98F0B', '#0F766E', '#1F1D1A', '#6B6862', '#F5B731', '#A8A29A'];
+const COLORS = ['rgb(242, 164, 19)', 'rgb(217, 143, 11)', 'rgb(15, 118, 110)', 'rgb(31, 29, 26)', 'rgb(107, 104, 98)', 'rgb(245, 183, 49)', 'rgb(168, 162, 154)'];
 
 function extractNumeric(str: string | number) {
   const s = String(str).replace(/,/g, '');
@@ -313,7 +313,7 @@ export function MaterialSummary({
                             wrapperStyle={{ fontSize: '11px', paddingTop: '20px' }}
                             // Recharts colours legend text with the series
                             // colour by default — the first slice is amber
-                            // (#F2A413 / #F5B731), which is unreadable on
+                            // (rgb(242, 164, 19) / rgb(245, 183, 49)), which is unreadable on
                             // white. Force theme-aware dark text instead;
                             // the coloured icon still identifies the slice.
                             formatter={(value: any) => (
@@ -323,18 +323,18 @@ export function MaterialSummary({
                         </PieChart>
                       ) : (
                         <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(226, 232, 240)" />
                           <XAxis 
                             dataKey="name" 
                             axisLine={false} 
                             tickLine={false} 
-                            tick={{ fontSize: 11, fill: '#64748b' }}
+                            tick={{ fontSize: 11, fill: 'rgb(100, 116, 139)' }}
                             tickFormatter={(value) => value.length > 10 ? value.substring(0, 10) + '...' : value}
                           />
                           <YAxis 
                             axisLine={false} 
                             tickLine={false} 
-                            tick={{ fontSize: 11, fill: '#64748b' }}
+                            tick={{ fontSize: 11, fill: 'rgb(100, 116, 139)' }}
                             tickFormatter={(value) => {
                               if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
                               if (value >= 1000) return (value / 1000).toFixed(1) + 'k';
@@ -344,7 +344,7 @@ export function MaterialSummary({
                           <RechartsTooltip 
                             formatter={(value: any) => value.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
-                            cursor={{ fill: '#f1f5f9' }}
+                            cursor={{ fill: 'rgb(241, 245, 249)' }}
                           />
                           <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                             {chartData.map((entry, index) => (

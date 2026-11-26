@@ -294,10 +294,10 @@ export default function FormworkEstimator() {
 
   const breakdownData = useMemo(() => {
     return [
-      { name: "Columns", value: results.perTypeM2.column, color: "#F2A413" },
-      { name: "Slabs", value: results.perTypeM2.slab, color: "#1F1D1A" },
-      { name: "Beams", value: results.perTypeM2.beam, color: "#6B6862" },
-      { name: "Footings", value: results.perTypeM2.footing, color: "#8A7D6B" },
+      { name: "Columns", value: results.perTypeM2.column, color: "rgb(242, 164, 19)" },
+      { name: "Slabs", value: results.perTypeM2.slab, color: "rgb(31, 29, 26)" },
+      { name: "Beams", value: results.perTypeM2.beam, color: "rgb(107, 104, 98)" },
+      { name: "Footings", value: results.perTypeM2.footing, color: "rgb(138, 125, 107)" },
     ].filter((d: any) => d.value > 0);
   }, [results]);
   return (
@@ -357,7 +357,7 @@ export default function FormworkEstimator() {
                     Settings &amp; Repetition
                   </h3>
                 </div>
-                <ChevronDown className={`w-5 h-5 text-gray-200 transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 text-white/80 transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
               </Button>
 
               {isSettingsOpen && (
@@ -613,12 +613,12 @@ export default function FormworkEstimator() {
                             `${value.toFixed(1)} m²`
                           }
                           contentStyle={{
-                            backgroundColor: "#1F1D1A",
-                            borderColor: "#3A3630",
-                            color: "#F5F2EC",
+                            backgroundColor: "rgb(31, 29, 26)",
+                            borderColor: "rgb(58, 54, 48)",
+                            color: "rgb(245, 242, 236)",
                             borderRadius: "12px",
                           }}
-                          itemStyle={{ color: "#F5F2EC" }}
+                          itemStyle={{ color: "rgb(245, 242, 236)" }}
                         />
                       </PieChart>
                     </ResponsiveContainer>
@@ -638,7 +638,7 @@ export default function FormworkEstimator() {
                       Beams
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#8A7D6B" }} />
+                      <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "rgb(138, 125, 107)" }} />
                       Footings
                     </span>
                   </div>

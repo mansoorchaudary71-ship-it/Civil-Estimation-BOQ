@@ -120,7 +120,7 @@ export default function ShareButtonWithPopup({
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${title}</title>
 </head>
-<body style="margin: 0; padding: 20px; background-color: #F4F2EE; font-family: Helvetica, Arial, sans-serif;"> <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(31,29,26,0.1); overflow: hidden;"> <div style="background-color: #1F1D1A; color: #ffffff; padding: 20px; text-align: center;"> <h1 style="margin: 0; font-size: 24px;">${title}</h1> </div> <div style="padding: 20px;"> <p style="color: #1F1D1A; font-size: 16px;">Hello,</p> <p style="color: #1F1D1A; font-size: 16px;">Here is the requested estimate for <strong>${title}</strong>.</p> <table style="width: 100%; border-collapse: collapse; margin-top: 20px;"> <thead> <tr> <th style="background-color: #1F1D1A; color: #ffffff; padding: 12px; text-align: left; border: 1px solid #E7E4DE;">Material / Item</th> <th style="background-color: #1F1D1A; color: #ffffff; padding: 12px; text-align: right; border: 1px solid #E7E4DE;">Quantity</th> <th style="background-color: #1F1D1A; color: #ffffff; padding: 12px; text-align: right; border: 1px solid #E7E4DE;">Amount (Rs)</th> </tr> </thead> <tbody>`;
+<body style="margin: 0; padding: 20px; background-color: rgb(244, 242, 238); font-family: Helvetica, Arial, sans-serif;"> <div style="max-width: 600px; margin: 0 auto; background-color: rgb(255, 255, 255); border-radius: 8px; box-shadow: 0 4px 6px rgba(31,29,26,0.1); overflow: hidden;"> <div style="background-color: rgb(31, 29, 26); color: rgb(255, 255, 255); padding: 20px; text-align: center;"> <h1 style="margin: 0; font-size: 24px;">${title}</h1> </div> <div style="padding: 20px;"> <p style="color: rgb(31, 29, 26); font-size: 16px;">Hello,</p> <p style="color: rgb(31, 29, 26); font-size: 16px;">Here is the requested estimate for <strong>${title}</strong>.</p> <table style="width: 100%; border-collapse: collapse; margin-top: 20px;"> <thead> <tr> <th style="background-color: rgb(31, 29, 26); color: rgb(255, 255, 255); padding: 12px; text-align: left; border: 1px solid rgb(231, 228, 222);">Material / Item</th> <th style="background-color: rgb(31, 29, 26); color: rgb(255, 255, 255); padding: 12px; text-align: right; border: 1px solid rgb(231, 228, 222);">Quantity</th> <th style="background-color: rgb(31, 29, 26); color: rgb(255, 255, 255); padding: 12px; text-align: right; border: 1px solid rgb(231, 228, 222);">Amount (Rs)</th> </tr> </thead> <tbody>`;
     const cItem = exportFormat?.cartItem as any;
     const customTableData = exportFormat?.customTableData;
     const rates: any = (exportFormat as any)?.rates || {};
@@ -135,15 +135,15 @@ export default function ShareButtonWithPopup({
       if (qty > 0) {
         const cost = qty * (rates[typeRateId] || 0);
         grandTotal += cost;
-        const bg = isEven ? "#F4F2EE" : "#ffffff";
-        html += ` <tr style="background-color: ${bg};"> <td style="padding: 10px; border: 1px solid #E7E4DE; color: #1F1D1A;">${item}</td> <td style="padding: 10px; border: 1px solid #E7E4DE; text-align: right; color: #1F1D1A;">${qty.toFixed(2)} ${unitLabel}</td> <td style="padding: 10px; border: 1px solid #E7E4DE; text-align: right; color: #1F1D1A;">${cost.toFixed(2)}</td> </tr>`;
+        const bg = isEven ? "rgb(244, 242, 238)" : "rgb(255, 255, 255)";
+        html += ` <tr style="background-color: ${bg};"> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); color: rgb(31, 29, 26);">${item}</td> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); text-align: right; color: rgb(31, 29, 26);">${qty.toFixed(2)} ${unitLabel}</td> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); text-align: right; color: rgb(31, 29, 26);">${cost.toFixed(2)}</td> </tr>`;
         isEven = !isEven;
       }
     };
     if (customTableData) {
       customTableData.forEach((row) => {
-        const bg = isEven ? "#F4F2EE" : "#ffffff";
-        html += ` <tr style="background-color: ${bg};"> <td style="padding: 10px; border: 1px solid #E7E4DE; color: #1F1D1A;">${row.item}</td> <td style="padding: 10px; border: 1px solid #E7E4DE; text-align: right; color: #1F1D1A;">${row.quantityStr} ${row.unitStr}</td> <td style="padding: 10px; border: 1px solid #E7E4DE; text-align: right; color: #1F1D1A;">${row.cost.toFixed(2)}</td> </tr>`;
+        const bg = isEven ? "rgb(244, 242, 238)" : "rgb(255, 255, 255)";
+        html += ` <tr style="background-color: ${bg};"> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); color: rgb(31, 29, 26);">${row.item}</td> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); text-align: right; color: rgb(31, 29, 26);">${row.quantityStr} ${row.unitStr}</td> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); text-align: right; color: rgb(31, 29, 26);">${row.cost.toFixed(2)}</td> </tr>`;
         grandTotal += row.cost;
         isEven = !isEven;
       });
@@ -177,13 +177,13 @@ export default function ShareButtonWithPopup({
           cost = rawNum * rates[inferredKey];
         }
 
-        const bg = isEven ? "#F4F2EE" : "#ffffff";
-        html += ` <tr style="background-color: ${bg};"> <td style="padding: 10px; border: 1px solid #E7E4DE; color: #1F1D1A;">${formatCapitalize(k.replace(/\*/g, ''))}</td> <td style="padding: 10px; border: 1px solid #E7E4DE; text-align: right; color: #1F1D1A;">${v}</td> <td style="padding: 10px; border: 1px solid #E7E4DE; text-align: right; color: #1F1D1A;">${cost > 0 ? cost.toFixed(2) : "-"}</td> </tr>`;
+        const bg = isEven ? "rgb(244, 242, 238)" : "rgb(255, 255, 255)";
+        html += ` <tr style="background-color: ${bg};"> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); color: rgb(31, 29, 26);">${formatCapitalize(k.replace(/\*/g, ''))}</td> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); text-align: right; color: rgb(31, 29, 26);">${v}</td> <td style="padding: 10px; border: 1px solid rgb(231, 228, 222); text-align: right; color: rgb(31, 29, 26);">${cost > 0 ? cost.toFixed(2) : "-"}</td> </tr>`;
         if (cost > 0) grandTotal += cost;
         isEven = !isEven;
       });
     }
-    html += ` <tr> <td colspan="2" style="padding: 12px; border: 1px solid #E7E4DE; text-align: right; font-weight: bold; background-color: #F4F2EE; color: #1F1D1A;">Grand Total</td> <td style="padding: 12px; border: 1px solid #E7E4DE; text-align: right; font-weight: bold; background-color: #F4F2EE; color: #1F1D1A;">Rs ${grandTotal.toFixed(2)}</td> </tr> </tbody> </table> <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"> <a href="#" style="background-color: #1F1D1A; color: #ffffff; padding: 14px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Download Full PDF Report</a> </div> <p style="color: #6B6862; font-size: 12px; text-align: center; margin-top: 20px;">* This is a system-generated estimate. Actual prices may vary based on market conditions.</p> </div> </div>
+    html += ` <tr> <td colspan="2" style="padding: 12px; border: 1px solid rgb(231, 228, 222); text-align: right; font-weight: bold; background-color: rgb(244, 242, 238); color: rgb(31, 29, 26);">Grand Total</td> <td style="padding: 12px; border: 1px solid rgb(231, 228, 222); text-align: right; font-weight: bold; background-color: rgb(244, 242, 238); color: rgb(31, 29, 26);">Rs ${grandTotal.toFixed(2)}</td> </tr> </tbody> </table> <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;"> <a href="#" style="background-color: rgb(31, 29, 26); color: rgb(255, 255, 255); padding: 14px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Download Full PDF Report</a> </div> <p style="color: rgb(107, 104, 98); font-size: 12px; text-align: center; margin-top: 20px;">* This is a system-generated estimate. Actual prices may vary based on market conditions.</p> </div> </div>
 </body>
 </html>`;
     const blob = new Blob([html], { type: "text/html" });
@@ -212,7 +212,7 @@ export default function ShareButtonWithPopup({
           amount: row.cost
         });
         grandTotal += row.cost;
-        chartData.push({ label: row.item, value: row.cost, color: row.color || "#F2A413" });
+        chartData.push({ label: row.item, value: row.cost, color: row.color || "rgb(242, 164, 19)" });
       });
     } else if (cItem) {
       const isSI = cItem.unitVol === "m³";
@@ -230,14 +230,14 @@ export default function ShareButtonWithPopup({
             amount: cost
           });
           grandTotal += cost;
-          let color = "#6B6862";
-          if (item.includes("Cement")) color = "#1F1D1A";
-          else if (item.includes("Sand")) color = "#F2A413";
-          else if (item.includes("Aggregate")) color = "#6B6862";
-          else if (item.includes("Water")) color = "#0F766E";
-          else if (item.includes("Steel")) color = "#B07006";
-          else if (item.includes("Brick")) color = "#F2A413";
-          else if (item.includes("Block")) color = "#B07006";
+          let color = "rgb(107, 104, 98)";
+          if (item.includes("Cement")) color = "rgb(31, 29, 26)";
+          else if (item.includes("Sand")) color = "rgb(242, 164, 19)";
+          else if (item.includes("Aggregate")) color = "rgb(107, 104, 98)";
+          else if (item.includes("Water")) color = "rgb(15, 118, 110)";
+          else if (item.includes("Steel")) color = "rgb(176, 112, 6)";
+          else if (item.includes("Brick")) color = "rgb(242, 164, 19)";
+          else if (item.includes("Block")) color = "rgb(176, 112, 6)";
           chartData.push({ label: item, value: cost, color });
         }
       };

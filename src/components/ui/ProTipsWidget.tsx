@@ -189,31 +189,31 @@ export function ProTipsWidget({ moduleId }: { moduleId: string }) {
     DEFAULT_TIPS;
 
   return (
-    <div className="w-full overflow-hidden bg-[#FFFBEB] rounded-[16px] border border-[#FDE68A] shadow-sm">
+    <div className="w-full overflow-hidden bg-accent-50 rounded-[16px] border border-accent-200 shadow-sm">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
-        className="w-full flex items-center justify-between gap-3 p-5 text-left hover:bg-[#FEF3C7]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+        className="w-full flex items-center justify-between gap-3 p-5 text-left hover:bg-surface-hover/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
       >
         <div className="flex items-center gap-3 min-w-0">
-          <span className="w-9 h-9 rounded-[10px] bg-[#F2A413] flex items-center justify-center shrink-0" aria-hidden="true">
+          <span className="w-9 h-9 rounded-[10px] bg-accent-500 flex items-center justify-center shrink-0" aria-hidden="true">
             <Lightbulb className="w-5 h-5 text-white" />
           </span>
           <span className="min-w-0">
-            <span className="block font-semibold text-[15px] text-[#1F1D1A] leading-tight">Engineering Pro Tips</span>
-            <span className="block text-sm text-[#92400E] font-medium mt-0.5">Best practices &amp; principles for this calculation</span>
+            <span className="block font-semibold text-[15px] text-txt-primary leading-tight">Engineering Pro Tips</span>
+            <span className="block text-sm text-accent-800 font-medium mt-0.5">Best practices &amp; principles for this calculation</span>
           </span>
         </div>
-        <ChevronDown className={`w-[18px] h-[18px] shrink-0 ml-4 text-[#6B7280] transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#F2A413]' : ''}`} />
+        <ChevronDown className={`w-[18px] h-[18px] shrink-0 ml-4 text-txt-secondary transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-700' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="px-5 pb-5 pt-4 border-t border-[#FDE68A]">
+        <div className="px-5 pb-5 pt-4 border-t border-accent-200">
           <ul className="space-y-4">
             {tips.map((tip, idx) => (
-              <li key={idx} className="flex gap-3 text-[#1F1D1A] text-sm">
-                <span className="shrink-0 w-6 h-6 rounded-full bg-white border border-[#FDE68A] flex items-center justify-center font-bold text-xs mt-0.5 text-[#92400E]">
+              <li key={idx} className="flex gap-3 text-txt-primary text-sm">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-surface-default border border-accent-200 flex items-center justify-center font-bold text-xs mt-0.5 text-accent-800">
                   {idx + 1}
                 </span>
                 <span className="leading-relaxed font-medium">{tip}</span>

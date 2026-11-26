@@ -11,7 +11,7 @@ interface CostBreakdownChartProps {
   formatCurrency: (value: number, includeSymbol?: boolean) => string;
 }
 
-const COLORS = ["#F2A413", "#1F1D1A", "#B07006", "#6B6862", "#0F766E"];
+const COLORS = ["rgb(242, 164, 19)", "rgb(31, 29, 26)", "rgb(176, 112, 6)", "rgb(107, 104, 98)", "rgb(15, 118, 110)"];
 
 export const CostBreakdownChart: React.FC<CostBreakdownChartProps> = ({ data, formatCurrency }) => {
   return (
@@ -36,10 +36,10 @@ export const CostBreakdownChart: React.FC<CostBreakdownChartProps> = ({ data, fo
             borderRadius: '12px', 
             border: 'none', 
             boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-            backgroundColor: 'var(--tw-colors-white, #fff)',
-            color: 'var(--tw-colors-slate-900, #1F1D1A)'
+            backgroundColor: 'var(--tw-colors-white, rgb(255, 255, 255))',
+            color: 'var(--tw-colors-slate-900, rgb(31, 29, 26))'
           }}
-          itemStyle={{ color: 'var(--tw-colors-slate-700, #6B6862)', fontWeight: 500 }}
+          itemStyle={{ color: 'var(--tw-colors-slate-700, rgb(107, 104, 98))', fontWeight: 500 }}
         />
         <Legend 
           verticalAlign="bottom" 

@@ -48,7 +48,7 @@ export default function CustomCursor() {
     <div
       ref={dot}
       aria-hidden="true"
-      className={`fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none z-[9999] bg-white mix-blend-difference transition-[width,height,opacity] duration-200 ${
+      className={`fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none z-[9999] bg-surface-default mix-blend-difference transition-[width,height,opacity] duration-200 ${
         hovering ? "w-8 h-8 opacity-60" : "opacity-90"
       }`}
     />

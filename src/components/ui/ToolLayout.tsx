@@ -30,8 +30,10 @@ export function ToolLayoutInputs({ children }: { children: React.ReactNode }) {
 
 export function ToolLayoutResults({ children }: { children: React.ReactNode }) {
   return (
-    <div className="lg:col-span-8 space-y-8 flex flex-col">
-      {/* <!-- Universal Results & Visualization Grid (col-span-8) --> */}
+    <div className="lg:col-span-8 space-y-8 flex flex-col lg:sticky lg:top-24 lg:self-start">
+      {/* <!-- Universal Results & Visualization Grid (col-span-8) — sticky on
+           desktop so results stay visible while scrolling long inputs;
+           stacked below the inputs on mobile (ToolPageTemplate §2). --> */}
       {children}
     </div>
   );

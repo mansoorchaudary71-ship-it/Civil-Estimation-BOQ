@@ -43,21 +43,21 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
         let themeStyles = '';
         if (pdfTheme === 'minimalist') {
           themeStyles = `
-            body { font-family: 'Inter', sans-serif !important; color: #333 !important; }
-            * { border-color: #ddd !important; border-radius: 0 !important; box-shadow: none !important; background-color: transparent !important; }
-            h1, h2, h3, h4, h5, h6 { color: #111 !important; font-weight: 400 !important; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px; }
-            .bg-slate-50, .bg-surface-default, .bg-indigo-50, .bg-blue-50 { background-color: transparent !important; }
+            body { font-family: 'Inter', sans-serif !important; color: rgb(51, 51, 51) !important; }
+            * { border-color: rgb(221, 221, 221) !important; border-radius: 0 !important; box-shadow: none !important; background-color: transparent !important; }
+            h1, h2, h3, h4, h5, h6 { color: rgb(17, 17, 17) !important; font-weight: 400 !important; border-bottom: 1px solid rgb(0, 0, 0); padding-bottom: 4px; margin-bottom: 12px; }
+            .bg-surface-hover, .bg-surface-default, .bg-indigo-50, .bg-blue-50 { background-color: transparent !important; }
             .shadow-sm, .shadow-md, .shadow-lg { shadow: none !important; }
-            .text-indigo-600, .text-blue-600, .text-emerald-600, .text-amber-500, .text-rose-600 { color: #333 !important; }
+            .text-indigo-600, .text-blue-600, .text-emerald-600, .text-amber-500, .text-rose-600 { color: rgb(51, 51, 51) !important; }
             table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+            th, td { border: 1px solid rgb(204, 204, 204); padding: 8px; text-align: left; }
             .rounded-xl, .rounded-2xl, .rounded-2xl, .rounded-full { border-radius: 0 !important; }
           `;
         } else if (pdfTheme === 'detailed') {
           themeStyles = `
-            body { font-family: 'JetBrains Mono', monospace !important; font-size: 10px !important; line-height: 1.3 !important; color: #000 !important; }
-            h1, h2, h3, h4, h5, h6 { font-size: 14px !important; font-weight: bold !important; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #000; padding-bottom: 2px; }
-            * { border-color: #999 !important; border-radius: 0 !important; box-shadow: none !important; }
+            body { font-family: 'JetBrains Mono', monospace !important; font-size: 10px !important; line-height: 1.3 !important; color: rgb(0, 0, 0) !important; }
+            h1, h2, h3, h4, h5, h6 { font-size: 14px !important; font-weight: bold !important; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid rgb(0, 0, 0); padding-bottom: 2px; }
+            * { border-color: rgb(153, 153, 153) !important; border-radius: 0 !important; box-shadow: none !important; }
             .p-4, .p-5, .p-6, .p-8 { padding: 8px !important; }
             .gap-4, .gap-6, .gap-8 { gap: 8px !important; }
             .mb-4, .mb-6, .mb-8 { margin-bottom: 8px !important; }
@@ -65,15 +65,15 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             .text-xl, .text-2xl, .text-3xl, .text-4xl, .text-[clamp(1.25rem,4cqw,2.5rem)] { font-size: 16px !important; }
             .text-sm { font-size: 10px !important; }
             .text-xs { font-size: 9px !important; }
-            .rounded-xl, .rounded-2xl, .rounded-2xl, .rounded-full { border-radius: 0 !important; border: 1px solid #ccc !important; }
+            .rounded-xl, .rounded-2xl, .rounded-2xl, .rounded-full { border-radius: 0 !important; border: 1px solid rgb(204, 204, 204) !important; }
           `;
         } else {
           // modern
           themeStyles = `
             body { font-family: 'Inter', sans-serif !important; }
-            .tool-card { border-top: 4px solid #4f46e5 !important; }
-            h1, h2 { color: #1e293b !important; }
-            .bg-slate-50 { background-color: #f8fafc !important; }
+            .tool-card { border-top: 4px solid rgb(79, 70, 229) !important; }
+            h1, h2 { color: rgb(30, 41, 59) !important; }
+            .bg-surface-hover { background-color: rgb(248, 250, 252) !important; }
           `;
         }
         
@@ -168,7 +168,7 @@ export default function PrintPreviewModal({ isOpen, onClose }: { isOpen: boolean
             </head>
             <body>
               ${showVersionStamp ? `
-                <div style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; font-family: sans-serif; font-size: 11px; color: #555; display: flex; justify-content: space-between;" class="no-print-override">
+                <div style="border-bottom: 1px solid rgb(204, 204, 204); padding-bottom: 10px; margin-bottom: 20px; font-family: sans-serif; font-size: 11px; color: rgb(85, 85, 85); display: flex; justify-content: space-between;" class="no-print-override">
                   <span><strong>Rev:</strong> ${revision}</span>
                   <span><strong>Date:</strong> ${new Date().toLocaleDateString()}</span>
                   <span><strong>Author:</strong> ${author || 'System'}</span>

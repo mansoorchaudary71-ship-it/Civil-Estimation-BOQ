@@ -323,7 +323,7 @@ export function TopsoilEstimator() {
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
                   <div className="text-accent-200 text-sm font-medium mb-1">Total Loose Volume</div>
                   <div className="text-4xl font-black">{displayVolume(result.volumeGross)}</div>
-                  <div className="text-xs text-gray-200 mt-1">Loose volume — net × {calc.swellFactor} swell factor ({TOPSOIL_MATERIALS[soilType].label})</div>
+                  <div className="text-xs text-white/80 mt-1">Loose volume — net × {calc.swellFactor} swell factor ({TOPSOIL_MATERIALS[soilType].label})</div>
                 </div>
                 
                 <div className="bg-surface-default/10 rounded-2xl p-4 border border-white/10 backdrop-blur-md">
@@ -346,7 +346,7 @@ export function TopsoilEstimator() {
                         ? `${Math.ceil(result.weightKg / 25)} ` 
                         : `${Math.ceil(result.weightKg / (50 * 0.453592))} `}
                     </div>
-                    <div className="text-xs text-gray-200">{unitSystem === 'metric' ? '25 kg bags' : '50 lb bags'}</div>
+                    <div className="text-xs text-white/80">{unitSystem === 'metric' ? '25 kg bags' : '50 lb bags'}</div>
                   </div>
                   
                   <div className="bg-surface-default/5 rounded-2xl p-3 border border-white/5">
@@ -360,7 +360,7 @@ export function TopsoilEstimator() {
                         ? Math.ceil(result.volumeGross / 10) 
                         : Math.ceil((result.volumeGross * 1.30795) / 12)}
                     </div>
-                    <div className="text-xs text-gray-200">{unitSystem === 'metric' ? '10 m³ trucks' : '12 yd³ trucks'}</div>
+                    <div className="text-xs text-white/80">{unitSystem === 'metric' ? '10 m³ trucks' : '12 yd³ trucks'}</div>
                   </div>
                 </div>
               </div>

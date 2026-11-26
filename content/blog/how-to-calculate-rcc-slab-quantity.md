@@ -62,7 +62,7 @@ Let's assume we are casting a roof slab with the following dimensions:
 For residential slabs, steel is generally estimated at 1% of the total concrete volume.
 - Steel Weight = $1\% \times 7.5 \text{ m³} \times 7850 \text{ kg/m³ (density of steel)}$ = **588.75 kg**
 
-*(Note: For exact Bar Bending Schedules, you must use clear cover deductions and effective depth. You can check our [BBS Generator](#/dashboard) for precise outputs).*
+*(Note: For exact Bar Bending Schedules, you must use clear cover deductions and effective depth. You can check our [BBS Generator](/bbs-generator) for precise outputs).*
 
 ## Common Mistakes When You Calculate RCC Slab Quantity
 
@@ -76,7 +76,7 @@ Even experienced engineers can make errors during manual estimation. Watch out f
 
 Why do tedious manual calculations when you can let software do the heavy lifting? The Civil Estimation Pro platform features a dedicated calculator to automate this entirely.
 
-1. Navigate to the **[RCC Slab Estimator](#/dashboard)** from our main tools menu.
+1. Navigate to the **[RCC Slab Estimator](/master-rcc)** from our main tools menu.
 2. Enter your slab's length, width, and thickness.
 3. Select your desired concrete mix grade (e.g., M15, M20).
 4. Enter your main and distribution steel bar diameters alongside their spacing.
@@ -87,9 +87,9 @@ The software will instantly generate the exact dry volume, bag counts for cement
 
 ### Recommended Internal Tools
 Once you have your slab estimated, consider using these related calculators to complete your project BOQ:
-- **[Professional BOQ Generator](#/dashboard):** Transfer your calculated material quantities directly into a formalized Bill of Quantities export.
-- **[Concrete Mix Design](#/dashboard):** If you need customized mixed-proportions that deviate from standard nominal mixes.
-- **[House Construction Cost Estimator](#/dashboard):** To get an overview of how the slab's cost fits into the general grey structure budget.
+- **[Professional BOQ Generator](/boq):** Transfer your calculated material quantities directly into a formalized Bill of Quantities export.
+- **[Concrete Mix Design](/mix-design):** If you need customized mixed-proportions that deviate from standard nominal mixes.
+- **[House Construction Cost Estimator](/house):** To get an overview of how the slab's cost fits into the general grey structure budget.
 
 ## Conclusion
 

@@ -193,7 +193,7 @@ export default function WorkspaceSection({
               </div>
             </div>
           </div>
-          <div className="bg-surface-default/10 border border-[#FFFFFF]/20 rounded-2xl px-5 py-4 flex items-center gap-4 shadow-brand-sm min-w-[200px] overflow-hidden flex-wrap">
+          <div className="bg-surface-default/10 border border-white/20 rounded-2xl px-5 py-4 flex items-center gap-4 shadow-brand-sm min-w-[200px] overflow-hidden flex-wrap">
             <div className="w-10 h-10 rounded-full bg-surface-default flex items-center justify-center text-txt-primary">
               <TrendingUp className="w-5 h-5" />
             </div>
@@ -236,7 +236,7 @@ export default function WorkspaceSection({
                   <Button
                     key={`your-${mod.id}`}
                     onClick={() => onSelect(mod.id)}
-                    className="w-full flex items-center gap-3 px-4 py-3 bg-surface-default border border-ui-borderSubtle hover:border-[#FFFFFF]/40 text-txt-primary hover:shadow-brand-md hover:-translate-y-0.5 rounded-full text-base font-medium transition-all text-left active:scale-95 overflow-hidden"
+                    className="w-full flex items-center gap-3 px-4 py-3 bg-surface-default border border-ui-borderSubtle hover:border-white/40 text-txt-primary hover:shadow-brand-md hover:-translate-y-0.5 rounded-full text-base font-medium transition-all text-left active:scale-95 overflow-hidden"
                   >
                     <div className="w-8 h-8 rounded-full bg-surface-default/10 flex items-center justify-center text-txt-primary shrink-0">
                        <mod.icon className="w-4 h-4" />
@@ -267,7 +267,7 @@ export default function WorkspaceSection({
             <div className="w-full bg-surface-default border border-ui-borderSubtle rounded-2xl overflow-hidden flex flex-col shadow-brand-sm">
                {loading ? (
                  <div className="p-8 text-center text-txt-secondary flex flex-col items-center">
-                   <div className="w-8 h-8 rounded-full border-2 border-[#FFFFFF] border-t-transparent animate-spin mb-3"></div>
+                   <div className="w-8 h-8 rounded-full border-2 border-white border-t-transparent animate-spin mb-3"></div>
                    Loading recent...
                  </div>
                ) : savedProjects.length > 0 ? (
@@ -341,7 +341,7 @@ export default function WorkspaceSection({
                         <><label htmlFor="a11y-input-10" className="sr-only">e.g. Tower Block Phase 1</label>
 <input id="a11y-input-10" type="text"
                           placeholder="e.g. Tower Block Phase 1"
-                          className="flex-1 bg-surface-default dark:bg-ink border border-ui-borderSubtle rounded-full px-3 py-2 outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-[#FFFFFF]/50 min-h-[44px] text-base font-normal"
+                          className="flex-1 bg-surface-default dark:bg-ink border border-ui-borderSubtle rounded-full px-3 py-2 outline-none focus:ring-2 focus:ring-accent-500 focus:outline-none focus:ring-white/50 min-h-[44px] text-base font-normal"
                           value={newProjectName}
                           onChange={(e) => setNewProjectName(e.target.value)}
                           onKeyDown={(e) =>
@@ -371,7 +371,7 @@ export default function WorkspaceSection({
                 
                 {loading ? (
                   <div className="p-8 text-center text-txt-secondary flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full border-2 border-[#FFFFFF] border-t-transparent animate-spin mb-3"></div>
+                    <div className="w-8 h-8 rounded-full border-2 border-white border-t-transparent animate-spin mb-3"></div>
                     Loading folders...
                   </div>
                 ) : savedProjects.length > 0 ? (
@@ -441,7 +441,7 @@ export default function WorkspaceSection({
            </div>
 
            {/* Notifications */}
-           <div className="bg-surface-default/10 rounded-2xl border border-[#FFFFFF]/20 p-4 sm:p-6 relative overflow-hidden">
+           <div className="bg-surface-default/10 rounded-2xl border border-white/20 p-4 sm:p-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10">
                  <Bell className="w-32 h-32 text-txt-primary -rotate-12" />
               </div>

@@ -598,35 +598,35 @@ export default function UnitConverter() {
                 <div className="w-full h-48 md:h-64 mt-2 px-2 pb-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#6B6862" vertical={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgb(107, 104, 98)" vertical={false} />
                       <XAxis 
                         dataKey="from" 
-                        stroke="#6B6862" 
+                        stroke="rgb(107, 104, 98)" 
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
                         tickFormatter={(value) => `${value}`}
                       />
                       <YAxis 
-                        stroke="#6B6862" 
+                        stroke="rgb(107, 104, 98)" 
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
                         tickFormatter={(value) => value.toLocaleString(undefined, { maximumFractionDigits: 1 })}
                       />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: '#1F1D1A', borderColor: '#3A3630', borderRadius: '8px', color: '#F5F2EC' }}
-                        itemStyle={{ color: '#F2A413' }}
+                        contentStyle={{ backgroundColor: 'rgb(31, 29, 26)', borderColor: 'rgb(58, 54, 48)', borderRadius: '8px', color: 'rgb(245, 242, 236)' }}
+                        itemStyle={{ color: 'rgb(242, 164, 19)' }}
                         formatter={(value: any) => [value.toLocaleString(undefined, { maximumFractionDigits: 3 }) + ' ' + toUnit, 'Result']}
                         labelFormatter={(label) => `${label} ${fromUnit}`}
                       />
                       <Line 
                         type="monotone" 
                         dataKey="to" 
-                        stroke="#F2A413" 
+                        stroke="rgb(242, 164, 19)" 
                         strokeWidth={3}
-                        dot={{ r: 4, fill: '#F2A413', strokeWidth: 2, stroke: '#1F1D1A' }}
-                        activeDot={{ r: 6, fill: '#F2A413' }}
+                        dot={{ r: 4, fill: 'rgb(242, 164, 19)', strokeWidth: 2, stroke: 'rgb(31, 29, 26)' }}
+                        activeDot={{ r: 6, fill: 'rgb(242, 164, 19)' }}
                       />
                     </LineChart>
                   </ResponsiveContainer>

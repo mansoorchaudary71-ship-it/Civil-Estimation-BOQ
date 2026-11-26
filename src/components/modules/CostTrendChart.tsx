@@ -82,8 +82,8 @@ export function CostTrendChart() {
       .attr('x1', '0%').attr('y1', '0%')
       .attr('x2', '0%').attr('y2', '100%');
     
-    gradient.append('stop').attr('offset', '0%').attr('stop-color', '#F2A413').attr('stop-opacity', 0.4);
-    gradient.append('stop').attr('offset', '100%').attr('stop-color', '#F2A413').attr('stop-opacity', 0.0);
+    gradient.append('stop').attr('offset', '0%').attr('stop-color', 'rgb(242, 164, 19)').attr('stop-opacity', 0.4);
+    gradient.append('stop').attr('offset', '100%').attr('stop-color', 'rgb(242, 164, 19)').attr('stop-opacity', 0.0);
 
     const x = d3.scaleTime()
       .domain(d3.extent(data, d => d.date) as [Date, Date])
@@ -115,7 +115,7 @@ export function CostTrendChart() {
     container.append('path')
       .datum(data)
       .attr('fill', 'none')
-      .attr('stroke', '#F2A413')
+      .attr('stroke', 'rgb(242, 164, 19)')
       .attr('stroke-width', 3)
       .attr('d', line);
 
@@ -127,8 +127,8 @@ export function CostTrendChart() {
       .attr('cx', d => x(d.date))
       .attr('cy', d => y(d.value))
       .attr('r', 5)
-      .attr('fill', '#fff')
-      .attr('stroke', '#F2A413')
+      .attr('fill', 'rgb(255, 255, 255)')
+      .attr('stroke', 'rgb(242, 164, 19)')
       .attr('stroke-width', 2);
 
     // Axes
@@ -147,13 +147,13 @@ export function CostTrendChart() {
 
     container.append('g')
       .attr('transform', `translate(0,${height})`)
-      .attr('color', '#6B6862')
+      .attr('color', 'rgb(107, 104, 98)')
       .call(xAxis)
       .selectAll('text')
       .style('font-family', 'var(--font-sans)');
 
     container.append('g')
-      .attr('color', '#6B6862')
+      .attr('color', 'rgb(107, 104, 98)')
       .call(yAxis)
       .selectAll('text')
       .style('font-family', 'var(--font-sans)');
@@ -198,7 +198,7 @@ export function CostTrendChart() {
         .attr('y1', 0)
         .attr('x2', ann.dx)
         .attr('y2', ann.dy)
-        .attr('stroke', '#F2A413')
+        .attr('stroke', 'rgb(242, 164, 19)')
         .attr('stroke-width', 1.5)
         .attr('stroke-dasharray', '3,3')
         .attr('opacity', 0.6);
@@ -206,7 +206,7 @@ export function CostTrendChart() {
       // Draw circle at connection point
       g.append('circle')
         .attr('r', 3)
-        .attr('fill', '#F2A413');
+        .attr('fill', 'rgb(242, 164, 19)');
 
       // Draw annotation box/text
       const textGroup = g.append('g')
@@ -235,8 +235,8 @@ export function CostTrendChart() {
       .append('div')
       .attr('class', 'tooltip')
       .style('position', 'absolute')
-      .style('background', '#1F1D1A')
-      .style('color', '#fff')
+      .style('background', 'rgb(31, 29, 26)')
+      .style('color', 'rgb(255, 255, 255)')
       .style('padding', '8px 12px')
       .style('border-radius', '8px')
       .style('font-size', '12px')
@@ -274,7 +274,7 @@ export function CostTrendChart() {
       tooltip.style('opacity', 1)
         .style('left', `${cx + margin.left}px`)
         .style('top', `${cy + margin.top}px`)
-        .html(`${d3.timeFormat('%b %d, %Y')(d.date)}<br/><span style="color:#F2A413">${formatCurrency(d.value, false)}</span>`);
+        .html(`${d3.timeFormat('%b %d, %Y')(d.date)}<br/><span style="color:rgb(242, 164, 19)">${formatCurrency(d.value, false)}</span>`);
         
     }).on('mouseout', () => {
       tooltip.style('opacity', 0);

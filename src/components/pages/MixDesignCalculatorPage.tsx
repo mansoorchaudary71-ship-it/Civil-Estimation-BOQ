@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import CalculatorPageShell from "../../seo/CalculatorPageShell";
+import { ToolActionsBar, ToolFormulaSection } from "../ui/ToolPageTemplate";
 import { getSiteUrl, getOrganizationJsonLd } from "../../seo/siteConfig";
 import MixDesignCalculator from "../calculators/MixDesignCalculator";
 import { MIX_DESIGN_FAQS, DURABILITY, WATER_TABLE_IS, CA_FRACTION_IS } from "../../lib/mixDesignCalc";
@@ -99,9 +100,9 @@ function FaqAccordion() {
   const isOpen = (i: number) => showAll || open === 'all' || open === i;
   return (
     <div>
-      <div className="divide-y divide-[#F1F5F9] border border-[#E5E7EB] rounded-[16px] overflow-hidden bg-white">
+      <div className="divide-y divide-border-color border border-border-color rounded-[16px] overflow-hidden bg-surface-default">
         {MIX_DESIGN_FAQS.map((faq, i) => (
-          <div key={faq.q} className="bg-white">
+          <div key={faq.q} className="bg-surface-default">
             <button
               type="button"
               onClick={() => {
@@ -109,15 +110,15 @@ function FaqAccordion() {
                 else setOpen(open === i ? null : i);
               }}
               aria-expanded={isOpen(i)}
-              className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-[#FAFAF9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+              className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-surface-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
             >
-              <span className="font-semibold text-[15px] leading-snug text-[#111827]">{faq.q}</span>
+              <span className="font-semibold text-[15px] leading-snug text-txt-primary">{faq.q}</span>
               <ChevronDown
-                className={`w-[18px] h-[18px] shrink-0 text-[#6B7280] transition-transform ${isOpen(i) ? "rotate-180 text-[#F2A413]" : ""}`}
+                className={`w-[18px] h-[18px] shrink-0 text-txt-secondary transition-transform ${isOpen(i) ? "rotate-180 text-accent-700" : ""}`}
               />
             </button>
             {isOpen(i) && (
-              <p className="px-5 pb-5 text-[14px] leading-[1.6] text-[#4B5563]">
+              <p className="px-5 pb-5 text-[14px] leading-[1.6] text-txt-secondary">
                 {faq.a}
               </p>
             )}
@@ -129,10 +130,10 @@ function FaqAccordion() {
           type="button"
           onClick={() => setShowAll(!showAll)}
           aria-expanded={showAll}
-          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] text-[#1F1D1A] text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-[#F1F5F9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-surface-hover border border-border-color text-txt-primary text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-surface-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
         >
           {showAll ? 'Show fewer questions' : `Show all ${MIX_DESIGN_FAQS.length} questions`}
-          <ChevronDown className={`w-4 h-4 text-[#6B7280] transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 text-txt-secondary transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
         </button>
       )}
     </div>
@@ -162,7 +163,17 @@ export default function MixDesignCalculatorPage() {
       related={RELATED}
       lastUpdated={LAST_UPDATED}
     >
-      <MixDesignCalculator />
+      {/* Template §2 — inputs + results workspace (wrapper scopes the
+          44px input rule and the actions-bar delegation). Template §3
+          (formula) then §4 (actions row) sit between the calculator and
+          the explanatory content below. */}
+      <div className="global-form-card-wrapper">
+        <MixDesignCalculator />
+      </div>
+      <div className="mt-8 space-y-8 print:hidden">
+        <ToolFormulaSection toolId="mix-design" />
+        <ToolActionsBar toolId="mix-design" toolName="Concrete Mix Design Calculator" />
+      </div>
 
       <div className="mt-14 space-y-10 text-txt-secondary leading-relaxed max-w-3xl">
         <section aria-labelledby="md-how">

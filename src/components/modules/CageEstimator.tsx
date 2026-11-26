@@ -542,14 +542,14 @@ function CageSvg({ pileDiaMm, lengthM, coreDiaMm, turns, mainCount }: { pileDiaM
   }
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-[260px] mx-auto" role="img" aria-label="Pile cage elevation">
-      <rect x={cx - halfW - 14} y={top} width={(halfW + 14) * 2} height={bottom - top} fill="none" stroke="#6B6862" strokeWidth="1.5" strokeDasharray="5 4" />
+      <rect x={cx - halfW - 14} y={top} width={(halfW + 14) * 2} height={bottom - top} fill="none" stroke="rgb(107, 104, 98)" strokeWidth="1.5" strokeDasharray="5 4" />
       {Array.from({ length: mainCount }).map((_, i) => {
         const angle = (i / Math.max(1, mainCount)) * Math.PI * 2;
         const x = cx + Math.cos(angle) * halfW * 0.92;
-        return <line key={i} x1={x} y1={top} x2={x} y2={bottom} stroke="#F2A413" strokeWidth="3" />;
+        return <line key={i} x1={x} y1={top} x2={x} y2={bottom} stroke="rgb(242, 164, 19)" strokeWidth="3" />;
       })}
-      <polyline points={pts.join(" ")} fill="none" stroke="#0D0C22" strokeWidth="2" />
-      <text x={cx} y={H - 4} textAnchor="middle" fontSize="11" fill="#6B6862">
+      <polyline points={pts.join(" ")} fill="none" stroke="rgb(13, 12, 34)" strokeWidth="2" />
+      <text x={cx} y={H - 4} textAnchor="middle" fontSize="11" fill="rgb(107, 104, 98)">
         Ø{pileDiaMm} mm · {lengthM.toFixed(1)} m · core {coreDiaMm} mm
       </text>
     </svg>

@@ -1,9 +1,11 @@
 import { Button } from '../ui/Button';
 import React, { useState, useEffect, useMemo } from 'react';
 import { Clock, User, ArrowLeft, Loader2 } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { SEO } from '../SEO';
+import { getBasename, getEffectivePathname } from '../../lib/toolRoutes';
 
 
 interface BlogPost {
@@ -90,31 +92,41 @@ export default function Blog() {
   const posts = useMemo(loadPosts, []);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Simple routing for SPA based on Hash
+  // Clean-URL routing (Step 4): a single post lives at /blog/<slug> and
+  // the prerender serves the full post at that URL. The slug is read from
+  // the pathname first (getEffectivePathname strips the project-page
+  // basename); a legacy #/blog/<slug> hash deep link still resolves via
+  // the same helper's hash fallback. Post links below are real <a> hrefs
+  // to the clean URL, intercepted for SPA navigation on plain clicks.
+  const openPost = (slug: string) => {
+    navigate(`/blog/${slug}`);
+  };
+  const openListing = () => {
+    navigate('/blog');
+  };
+
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#/blog/')) {
-        const slug = hash.replace('#/blog/', '');
-        const post = posts.find(p => p.slug === slug);
-        if (post) {
-          setSelectedPost(post);
-        } else {
-          setSelectedPost(null);
-          window.location.hash = '#/blog';
-        }
+    const resolve = () => {
+      const path = getEffectivePathname();
+      const match = path.match(/^\/blog\/([^/]+)\/?$/);
+      const slug = match ? decodeURIComponent(match[1]) : null;
+      if (slug) {
+        const post = posts.find((p) => p.slug === slug);
+        setSelectedPost(post ?? null);
       } else {
         setSelectedPost(null);
       }
       setLoading(false);
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // Initial check
+    window.addEventListener('hashchange', resolve);
+    resolve(); // Initial check
 
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [posts]);
+    return () => window.removeEventListener('hashchange', resolve);
+  }, [posts, location]);
 
   if (loading) {
     return (
@@ -133,8 +145,8 @@ export default function Blog() {
         />
 
         <Button
-          onClick={() => window.location.hash = '#/blog'}
-          className="flex items-center gap-2 text-base font-medium hover:text-gray-200 transition-colors"
+          onClick={openListing}
+          className="flex items-center gap-2 text-base font-medium hover:text-white/80 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to all posts
@@ -210,9 +222,14 @@ export default function Blog() {
           </div>
         ) : (
           posts.map(post => (
-            <article
+            <a
               key={post.slug}
-              onClick={() => window.location.hash = `#/blog/${post.slug}`}
+              href={`${getBasename()}/blog/${post.slug}`}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                e.preventDefault();
+                openPost(post.slug);
+              }}
               className="bg-bg-card rounded-2xl border border-ui-borderSubtle dark:border-ink-600 shadow-brand-sm overflow-hidden flex flex-col group cursor-pointer hover:shadow-brand-lg transition-all duration-300 hover:-translate-y-1"
             >
               {post.image && (
@@ -246,7 +263,7 @@ export default function Blog() {
                   </div>
                 </div>
               </div>
-            </article>
+            </a>
           ))
         )}
       </div>

@@ -411,29 +411,29 @@ export default function HouseEstimator() {
     if (type === "grey") {
       if (templateName === "residential") {
         newItems = [
-          { name: "Porch Column Footings", value: 45000, color: "#6B6862", quantity: 4, unit: "Nos", rate: 11250, _section: "foundation", _id: Date.now() + 1 },
-          { name: "Septic Tank", value: 65000, color: "#1F1D1A", quantity: 1, unit: "Lump Sum", rate: 65000, _section: "foundation", _id: Date.now() + 2 }
+          { name: "Porch Column Footings", value: 45000, color: "rgb(107, 104, 98)", quantity: 4, unit: "Nos", rate: 11250, _section: "foundation", _id: Date.now() + 1 },
+          { name: "Septic Tank", value: 65000, color: "rgb(31, 29, 26)", quantity: 1, unit: "Lump Sum", rate: 65000, _section: "foundation", _id: Date.now() + 2 }
         ];
       } else if (templateName === "commercial") {
         newItems = [
-          { name: "Basement Excavation", value: 250000, color: "#6B6862", quantity: 5000, unit: "Cft", rate: 50, _section: "foundation", _id: Date.now() + 1 },
-          { name: "Pile Foundations", value: 450000, color: "#1F1D1A", quantity: 12, unit: "Nos", rate: 37500, _section: "foundation", _id: Date.now() + 2 },
-          { name: "Steel Structure Core", value: 850000, color: "#6B6862", quantity: 5, unit: "Tons", rate: 170000, _section: "superstructure", _id: Date.now() + 3 }
+          { name: "Basement Excavation", value: 250000, color: "rgb(107, 104, 98)", quantity: 5000, unit: "Cft", rate: 50, _section: "foundation", _id: Date.now() + 1 },
+          { name: "Pile Foundations", value: 450000, color: "rgb(31, 29, 26)", quantity: 12, unit: "Nos", rate: 37500, _section: "foundation", _id: Date.now() + 2 },
+          { name: "Steel Structure Core", value: 850000, color: "rgb(107, 104, 98)", quantity: 5, unit: "Tons", rate: 170000, _section: "superstructure", _id: Date.now() + 3 }
         ];
       }
     } else {
       if (templateName === "residential") {
         newItems = [
-          { name: "Kitchen Cabinets", value: 180000, color: "#0F766E", quantity: 1, unit: "Lump Sum", rate: 180000, _section: "finishing", _id: Date.now() + 1 },
-          { name: "Wardrobes", value: 220000, color: "#B07006", quantity: 3, unit: "Nos", rate: 73333, _section: "finishing", _id: Date.now() + 2 },
-          { name: "Aluminum Windows", value: 150000, color: "#B07006", quantity: 250, unit: "Sq.ft", rate: 600, _section: "finishing", _id: Date.now() + 3 }
+          { name: "Kitchen Cabinets", value: 180000, color: "rgb(15, 118, 110)", quantity: 1, unit: "Lump Sum", rate: 180000, _section: "finishing", _id: Date.now() + 1 },
+          { name: "Wardrobes", value: 220000, color: "rgb(176, 112, 6)", quantity: 3, unit: "Nos", rate: 73333, _section: "finishing", _id: Date.now() + 2 },
+          { name: "Aluminum Windows", value: 150000, color: "rgb(176, 112, 6)", quantity: 250, unit: "Sq.ft", rate: 600, _section: "finishing", _id: Date.now() + 3 }
         ];
       } else if (templateName === "commercial") {
         newItems = [
-          { name: "Glass Partitions", value: 350000, color: "#1F1D1A", quantity: 500, unit: "Sq.ft", rate: 700, _section: "finishing", _id: Date.now() + 1 },
-          { name: "Grid False Ceiling", value: 120000, color: "#0F766E", quantity: 1500, unit: "Sq.ft", rate: 80, _section: "finishing", _id: Date.now() + 2 },
-          { name: "HVAC Ducting", value: 450000, color: "#B07006", quantity: 1, unit: "Lump Sum", rate: 450000, _section: "finishing", _id: Date.now() + 3 },
-          { name: "Network Cabling", value: 85000, color: "#6B6862", quantity: 40, unit: "Points", rate: 2125, _section: "finishing", _id: Date.now() + 4 }
+          { name: "Glass Partitions", value: 350000, color: "rgb(31, 29, 26)", quantity: 500, unit: "Sq.ft", rate: 700, _section: "finishing", _id: Date.now() + 1 },
+          { name: "Grid False Ceiling", value: 120000, color: "rgb(15, 118, 110)", quantity: 1500, unit: "Sq.ft", rate: 80, _section: "finishing", _id: Date.now() + 2 },
+          { name: "HVAC Ducting", value: 450000, color: "rgb(176, 112, 6)", quantity: 1, unit: "Lump Sum", rate: 450000, _section: "finishing", _id: Date.now() + 3 },
+          { name: "Network Cabling", value: 85000, color: "rgb(107, 104, 98)", quantity: 40, unit: "Points", rate: 2125, _section: "finishing", _id: Date.now() + 4 }
         ];
       }
     }
@@ -746,7 +746,7 @@ export default function HouseEstimator() {
     {
       name: "Excavation & Backfilling",
       value: estimates.costTerms.costExcavation,
-      color: "#6B6862",
+      color: "rgb(107, 104, 98)",
       quantity: estimates.excavationCft,
       unit: "Cft",
       rate: rates.laborGrey * 0.15,
@@ -754,7 +754,7 @@ export default function HouseEstimator() {
     {
       name: "Termite Treatment",
       value: estimates.costTerms.costTermite,
-      color: "#F2A413",
+      color: "rgb(242, 164, 19)",
       quantity: estimates.termiteAreaSqft,
       unit: "Sq.ft",
       rate: 12,
@@ -763,7 +763,7 @@ export default function HouseEstimator() {
   greyFoundationData.push({
     name: "Water Tank (UG & OH)",
     value: estimates.costTerms.costWaterTank,
-    color: "#1F1D1A",
+    color: "rgb(31, 29, 26)",
     quantity: 1,
     unit: "Lump Sum",
     rate: estimates.costTerms.costWaterTank,
@@ -772,7 +772,7 @@ export default function HouseEstimator() {
     {
       name: `Cement${isCustomRate("cement") ? "*" : ""}`,
       value: estimates.costCement,
-      color: "#6B6862",
+      color: "rgb(107, 104, 98)",
       quantity: estimates.cementBags,
       unit: "Bags",
       rate: rates.cement,
@@ -781,7 +781,7 @@ export default function HouseEstimator() {
     {
       name: `Steel${isCustomRate("steel") ? "*" : ""}`,
       value: estimates.costSteel,
-      color: "#1F1D1A",
+      color: "rgb(31, 29, 26)",
       quantity: parseFloat(estimates.steelTons.toFixed(3)),
       unit: "Tons",
       rate: rates.steel * 1000,
@@ -790,7 +790,7 @@ export default function HouseEstimator() {
     {
       name: `Bricks${isCustomRate("bricks") ? "*" : ""}`,
       value: estimates.costBricks,
-      color: "#B07006",
+      color: "rgb(176, 112, 6)",
       quantity: estimates.bricksCount,
       unit: "Nos",
       rate: rates.bricks,
@@ -799,7 +799,7 @@ export default function HouseEstimator() {
     {
       name: `Sand${isCustomRate("sand") ? "*" : ""}`,
       value: estimates.costSand,
-      color: "#F2A413",
+      color: "rgb(242, 164, 19)",
       quantity: estimates.sandCft,
       unit: "Cft",
       rate: rates.sand,
@@ -808,7 +808,7 @@ export default function HouseEstimator() {
     {
       name: `Crush${isCustomRate("crush") ? "*" : ""}`,
       value: estimates.costCrush,
-      color: "#6B6862",
+      color: "rgb(107, 104, 98)",
       quantity: estimates.crushCft,
       unit: "Cft",
       rate: rates.crush,
@@ -817,7 +817,7 @@ export default function HouseEstimator() {
     {
       name: "Polythene Sheet & DPC",
       value: estimates.costTerms.costPolythene,
-      color: "#0F766E",
+      color: "rgb(15, 118, 110)",
       quantity: estimates.polytheneAreaSqft,
       unit: "Sq.ft",
       rate: 8,
@@ -825,7 +825,7 @@ export default function HouseEstimator() {
     {
       name: `Labor${isCustomRate("laborGrey") ? "*" : ""}`,
       value: estimates.costLabor,
-      color: "#B07006",
+      color: "rgb(176, 112, 6)",
       quantity: builtUpArea,
       unit: "Sq.ft",
       rate: rates.laborGrey,
@@ -850,7 +850,7 @@ export default function HouseEstimator() {
     {
       name: `Tiles & Floor${isCustomRate("laborFinish") ? "*" : ""}`,
       value: estimates.costTiles,
-      color: "#B07006",
+      color: "rgb(176, 112, 6)",
       quantity: builtUpArea,
       unit: "Sq.ft",
       rate: finishRate * 0.35,
@@ -859,7 +859,7 @@ export default function HouseEstimator() {
     {
       name: `Paint & Ceiling${isCustomRate("laborFinish") ? "*" : ""}`,
       value: estimates.costPaint,
-      color: "#F2A413",
+      color: "rgb(242, 164, 19)",
       quantity: builtUpArea,
       unit: "Sq.ft",
       rate: finishRate * 0.2,
@@ -868,7 +868,7 @@ export default function HouseEstimator() {
     {
       name: `Woodwork${isCustomRate("laborFinish") ? "*" : ""}`,
       value: estimates.costWoodwork,
-      color: "#F2A413",
+      color: "rgb(242, 164, 19)",
       quantity: builtUpArea,
       unit: "Sq.ft",
       rate: finishRate * 0.25 * (1 + geoState.rooms.bedrooms * 0.02),
@@ -877,7 +877,7 @@ export default function HouseEstimator() {
     {
       name: `Electric & Plumbing${isCustomRate("laborFinish") ? "*" : ""}`,
       value: estimates.costMep,
-      color: "#0F766E",
+      color: "rgb(15, 118, 110)",
       quantity: builtUpArea,
       unit: "Sq.ft",
       rate: estimates.costMep / builtUpArea,
@@ -886,7 +886,7 @@ export default function HouseEstimator() {
     {
       name: `Roofing & Insulation${isCustomRate("laborFinish") ? "*" : ""}`,
       value: estimates.costRoofing,
-      color: "#F2A413",
+      color: "rgb(242, 164, 19)",
       quantity:
         geoState.stories > 0 ? builtUpArea / geoState.stories : builtUpArea,
       unit: "Sq.ft",
@@ -912,7 +912,7 @@ export default function HouseEstimator() {
           {
             name: `Solar PV System (${addOns.solarGridType})`,
             value: solarAddOn.totalCost,
-            color: "#F2A413",
+            color: "rgb(242, 164, 19)",
             quantity: solarAddOn.actualKw,
             unit: "kWp",
             rate: solarAddOn.costPerKwp,
@@ -924,7 +924,7 @@ export default function HouseEstimator() {
           {
             name: "Smart Home & Security",
             value: addOns.smartHomeCost,
-            color: "#0F766E",
+            color: "rgb(15, 118, 110)",
             quantity: 1,
             unit: "Lump Sum",
             rate: addOns.smartHomeCost,
@@ -936,7 +936,7 @@ export default function HouseEstimator() {
           {
             name: "Landscaping & Exterior",
             value: addOns.landscapingCost,
-            color: "#15803D",
+            color: "rgb(21, 128, 61)",
             quantity: 1,
             unit: "Lump Sum",
             rate: addOns.landscapingCost,
@@ -996,25 +996,25 @@ export default function HouseEstimator() {
 
 
   const summaryData = [
-    { name: "Grey Structure", value: filteredTotalGrey, color: "#6B6862" },
+    { name: "Grey Structure", value: filteredTotalGrey, color: "rgb(107, 104, 98)" },
     {
       name: "Finishing Works",
       value: filteredTotalFinishing,
-      color: "#F2A413",
+      color: "rgb(242, 164, 19)",
     },
   ];
   if (includeBoundaryWall) {
     summaryData.push({
       name: "Boundary Wall",
       value: estimates.costBoundaryWall,
-      color: "#0F766E",
+      color: "rgb(15, 118, 110)",
     });
   }
   if (addOns.includeAddOns) {
     summaryData.push({
       name: "House Add-ons",
       value: filteredTotalAddOns,
-      color: "#F2A413",
+      color: "rgb(242, 164, 19)",
     });
   }
   
@@ -1028,7 +1028,7 @@ export default function HouseEstimator() {
         name: d.name.replace(/\*/g, ""),
         value: convertAmount(d.value),
         category: "Grey Structure",
-        color: d.color || "#6B6862",
+        color: d.color || "rgb(107, 104, 98)",
       })
     );
     finishingCostData.forEach((d) =>
@@ -1036,7 +1036,7 @@ export default function HouseEstimator() {
         name: d.name.replace(/\*/g, ""),
         value: convertAmount(d.value),
         category: "Finishing Works",
-        color: d.color || "#F2A413",
+        color: d.color || "rgb(242, 164, 19)",
       })
     );
     addOnsCostData.forEach((d) =>
@@ -1044,7 +1044,7 @@ export default function HouseEstimator() {
         name: d.name.replace(/\*/g, ""),
         value: convertAmount(d.value),
         category: "House Add-ons",
-        color: d.color || "#F2A413",
+        color: d.color || "rgb(242, 164, 19)",
       })
     );
     return data.sort((a, b) => b.value - a.value);
@@ -1079,7 +1079,7 @@ export default function HouseEstimator() {
         unitStr: "Lump Sum",
         rate: estimates.costBoundaryWall,
         cost: estimates.costBoundaryWall,
-        color: "#0F766E",
+        color: "rgb(15, 118, 110)",
       });
     }
 
@@ -1966,14 +1966,14 @@ export default function HouseEstimator() {
                             <CartesianGrid
                               strokeDasharray="3 3"
                               vertical={false}
-                              stroke="#E7E4DE"
+                              stroke="rgb(231, 228, 222)"
                             />
                             <XAxis
                               dataKey="name"
                               axisLine={false}
                               tickLine={false}
                               tick={{
-                                fill: "#6B6862",
+                                fill: "rgb(107, 104, 98)",
                                 fontSize: 10,
                                 fontWeight: 600,
                               }}
@@ -1981,16 +1981,16 @@ export default function HouseEstimator() {
                             <YAxis
                               axisLine={false}
                               tickLine={false}
-                              tick={{ fill: "#6B6862", fontSize: 10 }}
+                              tick={{ fill: "rgb(107, 104, 98)", fontSize: 10 }}
                               tickFormatter={(val) =>
                                 `${settings.currency === "PKR" ? "RS" : settings.currency} ${(val / 1000).toFixed(0)}k`
                               }
                             />
                             <Tooltip
-                              cursor={{ fill: "#F4F2EE" }}
+                              cursor={{ fill: "rgb(244, 242, 238)" }}
                               contentStyle={{
                                 borderRadius: "12px",
-                                border: "1px solid #E7E4DE",
+                                border: "1px solid rgb(231, 228, 222)",
                                 boxShadow: "0 10px 30px rgba(31,29,26,0.05)",
                                 fontWeight: "bold",
                               }}
@@ -2150,14 +2150,14 @@ export default function HouseEstimator() {
                             <CartesianGrid
                               strokeDasharray="3 3"
                               vertical={false}
-                              stroke="#E7E4DE"
+                              stroke="rgb(231, 228, 222)"
                             />
                             <XAxis
                               dataKey="name"
                               axisLine={false}
                               tickLine={false}
                               tick={{
-                                fill: "#6B6862",
+                                fill: "rgb(107, 104, 98)",
                                 fontSize: 10,
                                 fontWeight: 600,
                               }}
@@ -2165,16 +2165,16 @@ export default function HouseEstimator() {
                             <YAxis
                               axisLine={false}
                               tickLine={false}
-                              tick={{ fill: "#6B6862", fontSize: 10 }}
+                              tick={{ fill: "rgb(107, 104, 98)", fontSize: 10 }}
                               tickFormatter={(val) =>
                                 `${settings.currency === "PKR" ? "RS" : settings.currency} ${(val / 1000).toFixed(0)}k`
                               }
                             />
                             <Tooltip
-                              cursor={{ fill: "#F4F2EE" }}
+                              cursor={{ fill: "rgb(244, 242, 238)" }}
                               contentStyle={{
                                 borderRadius: "12px",
-                                border: "1px solid #E7E4DE",
+                                border: "1px solid rgb(231, 228, 222)",
                                 boxShadow: "0 10px 30px rgba(31,29,26,0.05)",
                                 fontWeight: "bold",
                               }}

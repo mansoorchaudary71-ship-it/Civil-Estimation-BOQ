@@ -49,7 +49,7 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
   // Chart comes from the engine: grey + finishing + labour shares sum to 100% of the total.
   const chartData = results ? results.chart : [];
 
-  const CHART_COLORS = ['#1F1D1A', '#0F766E', '#F2A413'];
+  const CHART_COLORS = ['rgb(31, 29, 26)', 'rgb(15, 118, 110)', 'rgb(242, 164, 19)'];
 
   return (
     <div className="w-full mx-auto space-y-6">
@@ -244,9 +244,9 @@ export default function QuickRoughEstimation({ onNavigate }: { onNavigate?: (id:
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={chartData} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E7E4DE" />
-                        <XAxis type="number" fontSize={12} tickFormatter={(val) => `${val/1000000}M`} stroke="#6B6862" />
-                        <YAxis dataKey="name" type="category" width={100} fontSize={12} stroke="#6B6862" fontWeight="600" />
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgb(231, 228, 222)" />
+                        <XAxis type="number" fontSize={12} tickFormatter={(val) => `${val/1000000}M`} stroke="rgb(107, 104, 98)" />
+                        <YAxis dataKey="name" type="category" width={100} fontSize={12} stroke="rgb(107, 104, 98)" fontWeight="600" />
                         <Tooltip 
                           formatter={(value: any) => settings.currency + " " + value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                           cursor={{fill: 'rgba(31,29,26,0.05)'}}

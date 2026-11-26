@@ -360,37 +360,37 @@ export default function FinishesEstimator() {
       <div className="bg-ink rounded-2xl p-5 text-white shadow-brand-lg">
         <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Room / zone dimensions</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-end">
-          <div><label className="text-xs text-[#948D82]">Length ({unit})</label><input type="number" min="0" value={roomL} onChange={(e) => setRoomL(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
-          <div><label className="text-xs text-[#948D82]">Width ({unit})</label><input type="number" min="0" value={roomW} onChange={(e) => setRoomW(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
-          <div><label className="text-xs text-[#948D82]">Height ({unit})</label><input type="number" min="0" value={roomH} onChange={(e) => setRoomH(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
-          <div><label className="text-xs text-[#948D82]">Faces plastered</label>
+          <div><label className="text-xs text-txt-tertiary">Length ({unit})</label><input type="number" min="0" value={roomL} onChange={(e) => setRoomL(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-txt-tertiary">Width ({unit})</label><input type="number" min="0" value={roomW} onChange={(e) => setRoomW(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-txt-tertiary">Height ({unit})</label><input type="number" min="0" value={roomH} onChange={(e) => setRoomH(e.target.value)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white font-mono" /></div>
+          <div><label className="text-xs text-txt-tertiary">Faces plastered</label>
             <select value={faces} onChange={(e) => setFaces(Number(e.target.value) as 1 | 2)} className="w-full bg-ink border border-ink-600 rounded-lg px-3 py-2 text-white">
               <option value={1}>1 face</option>
               <option value={2}>2 faces</option>
             </select>
           </div>
-          <div className="bg-ink p-3 rounded-xl border border-ink-600 flex justify-between items-center"><span className="text-[#948D82] text-sm">Net wall</span><span className="text-2xl font-bold text-accent-400">{geometry.netWallM2.toFixed(2)} <span className="text-sm">m²</span></span></div>
+          <div className="bg-ink p-3 rounded-xl border border-ink-600 flex justify-between items-center"><span className="text-txt-tertiary text-sm">Net wall</span><span className="text-2xl font-bold text-accent-400">{geometry.netWallM2.toFixed(2)} <span className="text-sm">m²</span></span></div>
         </div>
         <div className="mt-4">
-          <h4 className="text-xs uppercase tracking-wider text-[#948D82] mb-2">Openings (IS 1200 deductions applied per opening)</h4>
+          <h4 className="text-xs uppercase tracking-wider text-txt-tertiary mb-2">Openings (IS 1200 deductions applied per opening)</h4>
           {openings.map((o) => (
             <div key={o.id} className="flex flex-wrap gap-2 items-center mb-2">
               <select value={o.kind} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, kind: e.target.value as OpeningInput["kind"] } : x))} className="bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white text-sm">
                 <option value="door">Door</option><option value="window">Window</option><option value="other">Other</option>
               </select>
               <input type="number" min="0" step="any" value={fromM(o.widthM).toFixed(2)} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, widthM: toM(parseFloat(e.target.value) || 0) } : x))} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening width" />
-              <span className="text-[#948D82]">×</span>
+              <span className="text-txt-tertiary">×</span>
               <input type="number" min="0" step="any" value={fromM(o.heightM).toFixed(2)} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, heightM: toM(parseFloat(e.target.value) || 0) } : x))} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening height" />
-              <span className="text-[#948D82] text-sm">{unit}</span>
+              <span className="text-txt-tertiary text-sm">{unit}</span>
               <input type="number" min="1" step="1" value={o.count} onChange={(e) => setOpenings(openings.map((x) => x.id === o.id ? { ...x, count: parseInt(e.target.value, 10) || 0 } : x))} className="w-16 bg-ink border border-ink-600 rounded-lg px-2 py-2 text-white font-mono text-sm" aria-label="Opening count" />
-              <span className="text-[#948D82] text-sm">× {(o.widthM * o.heightM).toFixed(2)} m² each — {geometry.openings.find((d) => d.id === o.id)?.rule ?? ""}</span>
-              <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-[#FCA5A5] px-2 py-1 text-sm">✕</Button>
+              <span className="text-txt-tertiary text-sm">× {(o.widthM * o.heightM).toFixed(2)} m² each — {geometry.openings.find((d) => d.id === o.id)?.rule ?? ""}</span>
+              <Button onClick={() => setOpenings(openings.filter((x) => x.id !== o.id))} className="text-ui-errorText px-2 py-1 text-sm">✕</Button>
             </div>
           ))}
           <div className="flex flex-wrap items-center gap-2 mt-2">
             <Button onClick={() => setOpenings([...openings, newOpening("door")])} className="text-accent-400 text-sm font-semibold">+ Add door</Button>
             <Button onClick={() => setOpenings([...openings, newOpening("window")])} className="text-accent-400 text-sm font-semibold">+ Add window</Button>
-            <label className="text-xs text-[#948D82] ml-2">Jamb depth (m)<input type="number" min="0" step="any" value={jambDepth} onChange={(e) => setJambDepth(e.target.value)} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-1 text-white font-mono text-sm ml-1" /></label>
+            <label className="text-xs text-txt-tertiary ml-2">Jamb depth (m)<input type="number" min="0" step="any" value={jambDepth} onChange={(e) => setJambDepth(e.target.value)} className="w-20 bg-ink border border-ink-600 rounded-lg px-2 py-1 text-white font-mono text-sm ml-1" /></label>
           </div>
         </div>
       </div>
@@ -637,11 +637,11 @@ export default function FinishesEstimator() {
 
       <div className="bg-ink rounded-2xl p-6 text-white flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
-          <p className="text-sm text-gray-200">Estimated material cost (tabs you have opened)</p>
+          <p className="text-sm text-white/80">Estimated material cost (tabs you have opened)</p>
           <p className="text-3xl font-bold">{money(grandCost, currency)}</p>
           {grandCost == null && <p className="text-sm text-accent-400">Enter all rates to see a total — unknown rates show as “—”, never as 0.</p>}
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-200">
+        <div className="flex items-center gap-2 text-sm text-white/80">
           <Calculator size={18} /> Rates are indicative — confirm with your supplier.
         </div>
       </div>

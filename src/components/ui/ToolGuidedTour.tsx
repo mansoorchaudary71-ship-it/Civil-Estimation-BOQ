@@ -214,7 +214,7 @@ export function ToolGuidedTour({ steps, tourId, onComplete }: ToolGuidedTourProp
       
       {targetRect && (
         <div 
-          className="fixed border-2 border-[#FF5F15] rounded-xl z-[9998] pointer-events-none transition-all duration-300 shadow-[0_0_0_9999px_rgba(31,29,26,0.4)]"
+          className="fixed border-2 border-accent-500 rounded-xl z-[9998] pointer-events-none transition-all duration-300 shadow-[0_0_0_9999px_rgba(31,29,26,0.4)]"
           style={{
             top: targetRect.top - 8,
             left: targetRect.left - 8,

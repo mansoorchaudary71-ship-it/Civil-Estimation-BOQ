@@ -16,7 +16,7 @@ interface D3PieChartProps {
 
 export default function D3PieChart({
   data,
-  colors = ['#F2A413', '#1F1D1A', '#6B6862', '#0F766E', '#D98F0B'],
+  colors = ['rgb(242, 164, 19)', 'rgb(31, 29, 26)', 'rgb(107, 104, 98)', 'rgb(15, 118, 110)', 'rgb(217, 143, 11)'],
   currency = '$',
   width = 300,
   height = 300
@@ -61,15 +61,15 @@ export default function D3PieChart({
       .attr('class', 'd3-tooltip')
       .style('position', 'absolute')
       .style('visibility', 'hidden')
-      .style('background', '#fff')
-      .style('border', '1px solid #E7E4DE')
+      .style('background', 'rgb(255, 255, 255)')
+      .style('border', '1px solid rgb(231, 228, 222)')
       .style('border-radius', '8px')
       .style('padding', '8px 12px')
       .style('box-shadow', '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)')
       .style('pointer-events', 'none')
       .style('z-index', '1000')
       .style('font-size', '14px')
-      .style('color', '#1F1D1A');
+      .style('color', 'rgb(31, 29, 26)');
 
     arcs.append('path')
       .attr('d', arc as any)

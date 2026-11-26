@@ -211,7 +211,7 @@ const MeasurementSheetCalculator: React.FC = () => {
         head: [["Item No", "Description", "Nos", "L", "W", "H/D", "Qty/Area", "Rate", "Amount"]],
         body: tableData,
         theme: "grid",
-        headStyles: { fillColor: [242, 164, 19] }, // amber #F2A413 (was legacy purple) 
+        headStyles: { fillColor: [242, 164, 19] }, // amber rgb(242, 164, 19) (was legacy purple) 
       });
 
       currentY = doc.lastAutoTable.finalY + 15;

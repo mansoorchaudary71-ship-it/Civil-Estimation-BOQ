@@ -198,6 +198,25 @@
   }
 }
 
+/* ToolPageTemplate §2 (Step 4, 2026-11-26) — identical touch targets on
+   every migrated tool: text/number inputs, selects and textareas inside a
+   tool page are at least 44px tall at every width. The mobile rule above
+   already pads them to ~48px below 768px; this covers desktop too.
+   Buttons are deliberately excluded: segmented pill toggles are ~28-36px
+   by design and must not be stretched. */
+.global-form-card-wrapper input[type="number"],
+.global-form-card-wrapper input[type="text"],
+.global-form-card-wrapper input:not([type]),
+.global-form-card-wrapper select,
+.global-form-card-wrapper textarea,
+.tool-page-standalone input[type="number"],
+.tool-page-standalone input[type="text"],
+.tool-page-standalone input:not([type]),
+.tool-page-standalone select,
+.tool-page-standalone textarea {
+  min-height: 44px;
+}
+
 /* Round 1 W1 mobile UX fixes (2026-11-22) — horizontally scrolling rows. */
 @media (max-width: 768px) {
   /* Tab / chip / filter rows (Master RCC UniversalTabs, home GoalTabs,

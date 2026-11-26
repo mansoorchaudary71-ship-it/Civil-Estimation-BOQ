@@ -386,7 +386,7 @@ export function PavementMixGradation() {
                   data={chartData}
                   margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E7E4DE" vertical={true} horizontal={true} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgb(231, 228, 222)" vertical={true} horizontal={true} />
                   <XAxis
                     dataKey="sieve"
                     type="number"
@@ -394,12 +394,12 @@ export function PavementMixGradation() {
                     domain={[0.075, 75]}
                     tickFormatter={(val) => val.toString()}
                     label={{ value: 'Sieve Size (mm) [Log Scale]', position: 'insideBottom', offset: -10 }}
-                    stroke="#6B6862"
+                    stroke="rgb(107, 104, 98)"
                   />
                   <YAxis
                     domain={[0, 100]}
                     label={{ value: 'Percent Passing (%)', angle: -90, position: 'insideLeft' }}
-                    stroke="#6B6862"
+                    stroke="rgb(107, 104, 98)"
                   />
                   <RechartsTooltip content={<CustomTooltip />} />
                   <Legend verticalAlign="top" height={36} />
@@ -409,7 +409,7 @@ export function PavementMixGradation() {
                     type="monotone"
                     dataKey="min"
                     name="Lower Spec"
-                    stroke="#1F1D1A"
+                    stroke="rgb(31, 29, 26)"
                     strokeWidth={2}
                     strokeDasharray="5 5"
                     connectNulls
@@ -420,7 +420,7 @@ export function PavementMixGradation() {
                     type="monotone"
                     dataKey="max"
                     name="Upper Spec"
-                    stroke="#B07006"
+                    stroke="rgb(176, 112, 6)"
                     strokeWidth={2}
                     strokeDasharray="5 5"
                     connectNulls
@@ -431,9 +431,9 @@ export function PavementMixGradation() {
                     type="monotone"
                     dataKey="blended"
                     name="Blended Mix"
-                    stroke="#F2A413"
+                    stroke="rgb(242, 164, 19)"
                     strokeWidth={3}
-                    dot={{ r: 4, strokeWidth: 2, fill: '#fff' }}
+                    dot={{ r: 4, strokeWidth: 2, fill: 'rgb(255, 255, 255)' }}
                     activeDot={{ r: 6 }}
                     isAnimationActive={true}
                     animationDuration={500}
@@ -481,11 +481,11 @@ export function PavementMixGradation() {
           </div>
 
           <div className="bg-ink rounded-2xl p-6 shadow-xl text-white">
-            <h3 className="text-sm font-bold text-[#948D82] mb-4 uppercase tracking-wider">Calculation Table</h3>
+            <h3 className="text-sm font-bold text-txt-tertiary mb-4 uppercase tracking-wider">Calculation Table</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm whitespace-nowrap">
                 <thead>
-                  <tr className="border-b border-white/10 text-[#948D82]">
+                  <tr className="border-b border-white/10 text-txt-tertiary">
                     <th className="pb-3 px-2 font-medium">Sieve (mm)</th>
                     <th className="pb-3 px-2 font-medium">Lower Bound</th>
                     <th className="pb-3 px-2 font-medium">Combined Mix</th>
@@ -497,22 +497,22 @@ export function PavementMixGradation() {
                   {chartData.map((row) => (
                     <tr key={row.sieve} className="border-b border-white/5 last:border-0 hover:bg-surface-default/5 transition-colors">
                       <td className="py-3 px-2 font-medium text-txt-inverse">{row.sieve}</td>
-                      <td className="py-3 px-2 text-[#948D82]">
+                      <td className="py-3 px-2 text-txt-tertiary">
                         {row.min !== null ? row.min : '-'}
                       </td>
                       <td className="py-3 px-2 font-bold text-accent-400">{row.blended.toFixed(1)}%</td>
-                      <td className="py-3 px-2 text-[#948D82]">
+                      <td className="py-3 px-2 text-txt-tertiary">
                         {row.max !== null ? row.max : '-'}
                       </td>
                       <td className="py-3 px-2">
                         {row.status === null ? (
-                          <span className="text-[#948D82]">—</span>
+                          <span className="text-txt-tertiary">—</span>
                         ) : row.status === 'pass' ? (
-                          <span className="inline-flex items-center gap-1 text-[#6EE7B7] bg-ui-successText/10 px-2 py-0.5 rounded text-xs font-bold">
+                          <span className="inline-flex items-center gap-1 text-ui-successText bg-ui-successText/10 px-2 py-0.5 rounded text-xs font-bold">
                             PASS
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[#FCA5A5] bg-ui-errorText/10 px-2 py-0.5 rounded text-xs font-bold">
+                          <span className="inline-flex items-center gap-1 text-ui-errorText bg-ui-errorText/10 px-2 py-0.5 rounded text-xs font-bold">
                             FAIL
                           </span>
                         )}

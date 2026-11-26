@@ -21,12 +21,12 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
   ];
 
   const materialData = [
-    { name: 'Cement', percentage: 16.4, amount: totalCost * 0.164, color: '#94a3b8' },
-    { name: 'Sand', percentage: 12.3, amount: totalCost * 0.123, color: '#fcd34d' },
-    { name: 'Aggregate', percentage: 7.4, amount: totalCost * 0.074, color: '#64748b' },
-    { name: 'Steel', percentage: 24.6, amount: totalCost * 0.246, color: '#3b82f6' },
-    { name: 'Finishes', percentage: 16.5, amount: totalCost * 0.165, color: '#10b981', details: 'Paint 4.1% + Tiles 8.0% + Bricks 4.4%' },
-    { name: 'Fittings', percentage: 22.8, amount: totalCost * 0.228, color: '#f43f5e', details: 'Windows 3.0% + Doors 3.4% + Plumbing 5.5% + Electrical 6.8% + Sanitary 4.1%' },
+    { name: 'Cement', percentage: 16.4, amount: totalCost * 0.164, color: 'rgb(148, 163, 184)' },
+    { name: 'Sand', percentage: 12.3, amount: totalCost * 0.123, color: 'rgb(252, 211, 77)' },
+    { name: 'Aggregate', percentage: 7.4, amount: totalCost * 0.074, color: 'rgb(100, 116, 139)' },
+    { name: 'Steel', percentage: 24.6, amount: totalCost * 0.246, color: 'rgb(59, 130, 246)' },
+    { name: 'Finishes', percentage: 16.5, amount: totalCost * 0.165, color: 'rgb(16, 185, 129)', details: 'Paint 4.1% + Tiles 8.0% + Bricks 4.4%' },
+    { name: 'Fittings', percentage: 22.8, amount: totalCost * 0.228, color: 'rgb(244, 63, 94)', details: 'Windows 3.0% + Doors 3.4% + Plumbing 5.5% + Electrical 6.8% + Sanitary 4.1%' },
   ];
 
   const formatCurrency = (value: number) => {
@@ -60,15 +60,15 @@ export default function ThumbRuleDistributionEngine({ totalCost }: ThumbRuleDist
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={cashflowData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" opacity={0.1} vertical={false} />
-                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                  <YAxis tickFormatter={(val) => `$${(val/1000)}k`} tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'rgb(100, 116, 139)' }} axisLine={false} tickLine={false} />
+                  <YAxis tickFormatter={(val) => `$${(val/1000)}k`} tick={{ fontSize: 12, fill: 'rgb(100, 116, 139)' }} axisLine={false} tickLine={false} />
                   <RechartsTooltip 
                     formatter={(value: any, name: any, props: any) => [formatCurrency(value), `${props.payload.percentage}%`]}
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
                   />
                   <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
                     {cashflowData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={index === 0 || index === 4 ? '#4f46e5' : '#818cf8'} />
+                      <Cell key={`cell-${index}`} fill={index === 0 || index === 4 ? 'rgb(79, 70, 229)' : 'rgb(129, 140, 248)'} />
                     ))}
                   </Bar>
                 </BarChart>

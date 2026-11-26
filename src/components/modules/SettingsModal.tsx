@@ -780,7 +780,7 @@ export default function SettingsModal({
                             setImportHistory([]);
                             localStorage.removeItem("company_rates_import_history");
                           }}
-                          className="text-base font-medium hover:text-gray-200 transition-colors rounded-full"
+                          className="text-base font-medium hover:text-white/80 transition-colors rounded-full"
                         >
                           Clear History
                         </Button>

@@ -368,25 +368,25 @@ export default function RetainingWallCalculator({ isEmbedded = false }: { isEmbe
               <svg width="100%" height="280" viewBox="-50 -50 400 350" className="max-w-full overflow-visible">
                 <defs>
                   <pattern id="soil" width="10" height="10" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="1.5" fill="#d2b48c" opacity="0.6" />
-                    <circle cx="7" cy="8" r="1.0" fill="#d2b48c" opacity="0.6" />
+                    <circle cx="2" cy="2" r="1.5" fill="rgb(210, 180, 140)" opacity="0.6" />
+                    <circle cx="7" cy="8" r="1.0" fill="rgb(210, 180, 140)" opacity="0.6" />
                   </pattern>
                 </defs>
                 <g transform="translate(0, 50)">
                   <rect x={tp*40 + sb*40} y={-h*40} width={heelProj*40 + 50} height={h*40} fill="url(#soil)" />
-                  <line x1={tp*40 + sb*40} y1={-h*40} x2={350} y2={-h*40} stroke="#8b5a2b" strokeWidth="2" />
+                  <line x1={tp*40 + sb*40} y1={-h*40} x2={350} y2={-h*40} stroke="rgb(139, 90, 43)" strokeWidth="2" />
                    <rect x={-30} y={-20} width={tp*40 + 30} height={20} fill="url(#soil)" />
-                   <line x1={-30} y1={-20} x2={tp*40} y2={-20} stroke="#8b5a2b" strokeWidth="2" />
-                  <rect x={0} y={0} width={b*40} height={bd*40} fill="#E7E4DE" stroke="#6B6862" strokeWidth="2" />
-                  <polygon points={`${tp*40},0 ${(tp + sb - st)*40},${-h*40} ${(tp + sb)*40},${-h*40} ${(tp + sb)*40},0`} fill="#E7E4DE" stroke="#6B6862" strokeWidth="2" />
-                  <line x1={-15} y1={0} x2={-15} y2={-h*40} stroke="#6B6862" strokeWidth="1" />
-                  <line x1={-20} y1={0} x2={-10} y2={0} stroke="#6B6862" strokeWidth="1" />
-                  <line x1={-20} y1={-h*40} x2={-10} y2={-h*40} stroke="#6B6862" strokeWidth="1" />
-                  <text x="-25" y={-h*20} fill="#6B6862" fontSize="12" textAnchor="end">H={h}m</text>
-                  <line x1={0} y1={bd*40 + 15} x2={b*40} y2={bd*40 + 15} stroke="#6B6862" strokeWidth="1" />
-                  <line x1={0} y1={bd*40 + 10} x2={0} y2={bd*40 + 20} stroke="#6B6862" strokeWidth="1" />
-                  <line x1={b*40} y1={bd*40 + 10} x2={b*40} y2={bd*40 + 20} stroke="#6B6862" strokeWidth="1" />
-                  <text x={b*20} y={bd*40 + 30} fill="#6B6862" fontSize="12" textAnchor="middle">B={b}m</text>
+                   <line x1={-30} y1={-20} x2={tp*40} y2={-20} stroke="rgb(139, 90, 43)" strokeWidth="2" />
+                  <rect x={0} y={0} width={b*40} height={bd*40} fill="rgb(231, 228, 222)" stroke="rgb(107, 104, 98)" strokeWidth="2" />
+                  <polygon points={`${tp*40},0 ${(tp + sb - st)*40},${-h*40} ${(tp + sb)*40},${-h*40} ${(tp + sb)*40},0`} fill="rgb(231, 228, 222)" stroke="rgb(107, 104, 98)" strokeWidth="2" />
+                  <line x1={-15} y1={0} x2={-15} y2={-h*40} stroke="rgb(107, 104, 98)" strokeWidth="1" />
+                  <line x1={-20} y1={0} x2={-10} y2={0} stroke="rgb(107, 104, 98)" strokeWidth="1" />
+                  <line x1={-20} y1={-h*40} x2={-10} y2={-h*40} stroke="rgb(107, 104, 98)" strokeWidth="1" />
+                  <text x="-25" y={-h*20} fill="rgb(107, 104, 98)" fontSize="12" textAnchor="end">H={h}m</text>
+                  <line x1={0} y1={bd*40 + 15} x2={b*40} y2={bd*40 + 15} stroke="rgb(107, 104, 98)" strokeWidth="1" />
+                  <line x1={0} y1={bd*40 + 10} x2={0} y2={bd*40 + 20} stroke="rgb(107, 104, 98)" strokeWidth="1" />
+                  <line x1={b*40} y1={bd*40 + 10} x2={b*40} y2={bd*40 + 20} stroke="rgb(107, 104, 98)" strokeWidth="1" />
+                  <text x={b*20} y={bd*40 + 30} fill="rgb(107, 104, 98)" fontSize="12" textAnchor="middle">B={b}m</text>
                 </g>
               </svg>
             </div>

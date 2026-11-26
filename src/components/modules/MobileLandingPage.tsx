@@ -19,11 +19,11 @@ export default function MobileLandingPage() {
         */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           {/* Light Lavender-Purple */}
-          <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[50%] bg-[#E7E4DE] rounded-full mix-blend-multiply filter blur-[80px]" />
+          <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[50%] bg-surface-active rounded-full mix-blend-multiply filter blur-[80px]" />
           {/* Misty Coral-Pink */}
-          <div className="absolute top-[20%] right-[-20%] w-[70%] h-[60%] bg-[#F2A413] rounded-full mix-blend-multiply filter blur-[80px]" />
+          <div className="absolute top-[20%] right-[-20%] w-[70%] h-[60%] bg-accent-500 rounded-full mix-blend-multiply filter blur-[80px]" />
           {/* Soft Peach */}
-          <div className="absolute bottom-[-10%] left-[10%] w-[80%] h-[50%] bg-[#B07006] rounded-full mix-blend-multiply filter blur-[80px]" />
+          <div className="absolute bottom-[-10%] left-[10%] w-[80%] h-[50%] bg-accent-700 rounded-full mix-blend-multiply filter blur-[80px]" />
         </div>
 
         {/* Content Layer */}

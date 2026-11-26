@@ -75,21 +75,21 @@ function ProctorTab() {
           <div className="h-[320px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" />
                 <XAxis
                   dataKey="waterPct"
                   type="number"
                   domain={["dataMin", "dataMax"]}
                   tickCount={6}
                   tick={{ fontSize: 11 }}
-                  label={{ value: "Water content w (%)", position: "insideBottom", offset: -10, fontSize: 11, fontWeight: "bold", fill: "#6B6862" }}
+                  label={{ value: "Water content w (%)", position: "insideBottom", offset: -10, fontSize: 11, fontWeight: "bold", fill: "rgb(107, 104, 98)" }}
                 />
                 <YAxis
                   dataKey="dryDensity"
                   type="number"
                   domain={["auto", "auto"]}
                   tick={{ fontSize: 11 }}
-                  label={{ value: "Dry density γd (g/cc)", angle: -90, position: "insideLeft", fontSize: 11, fontWeight: "bold", fill: "#6B6862" }}
+                  label={{ value: "Dry density γd (g/cc)", angle: -90, position: "insideLeft", fontSize: 11, fontWeight: "bold", fill: "rgb(107, 104, 98)" }}
                 />
                 <RechartsTooltip
                   contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)", fontWeight: "bold" }}
@@ -97,10 +97,10 @@ function ProctorTab() {
                   labelFormatter={(w: any) => `Water content ${Number(w).toFixed(1)}%`}
                 />
                 <Legend wrapperStyle={{ fontSize: "11px", fontWeight: "bold" }} />
-                <Line data={fit.fittedCurve} type="monotone" dataKey="dryDensity" stroke="#F2A413" strokeWidth={2} name="Fitted compaction curve" dot={false} activeDot={false} />
-                <Scatter data={fit.curve} name="Measured points" fill="#1F1D1A" shape="circle" />
+                <Line data={fit.fittedCurve} type="monotone" dataKey="dryDensity" stroke="rgb(242, 164, 19)" strokeWidth={2} name="Fitted compaction curve" dot={false} activeDot={false} />
+                <Scatter data={fit.curve} name="Measured points" fill="rgb(31, 29, 26)" shape="circle" />
                 {!fit.warning && (
-                  <ReferenceDot x={fit.omcPct} y={fit.mddGCc} r={6} fill="#F2A413" stroke="#1F1D1A" strokeWidth={2} label={{ position: "top", value: `OMC ${fit.omcPct.toFixed(1)}% · MDD ${fit.mddGCc.toFixed(3)}`, fill: "#6B6862", fontSize: 11, fontWeight: "bold" }} />
+                  <ReferenceDot x={fit.omcPct} y={fit.mddGCc} r={6} fill="rgb(242, 164, 19)" stroke="rgb(31, 29, 26)" strokeWidth={2} label={{ position: "top", value: `OMC ${fit.omcPct.toFixed(1)}% · MDD ${fit.mddGCc.toFixed(3)}`, fill: "rgb(107, 104, 98)", fontSize: 11, fontWeight: "bold" }} />
                 )}
               </ComposedChart>
             </ResponsiveContainer>

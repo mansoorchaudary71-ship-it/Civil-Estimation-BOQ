@@ -826,14 +826,14 @@ export default function IsolatedFootingCalculator({
                       y1="50"
                       x2="290"
                       y2="50"
-                      stroke="#8b5a2b"
+                      stroke="rgb(139, 90, 43)"
                       strokeWidth="2"
                       strokeDasharray="5,5"
                     />
                     <text
                       x="15"
                       y="45"
-                      fill="#8b5a2b"
+                      fill="rgb(139, 90, 43)"
                       fontSize="10"
                       fontWeight="bold"
                     >
@@ -847,7 +847,7 @@ export default function IsolatedFootingCalculator({
                       width="240"
                       height="150"
                       fill="rgba(139, 90, 43, 0.05)"
-                      stroke="#d2b48c"
+                      stroke="rgb(210, 180, 140)"
                       strokeWidth="1"
                       strokeDasharray="4,4"
                     />
@@ -858,7 +858,7 @@ export default function IsolatedFootingCalculator({
                       y1="20"
                       x2="150"
                       y2="220"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                       strokeDasharray="10,5,2,5"
                     />
@@ -869,8 +869,8 @@ export default function IsolatedFootingCalculator({
                       y="30"
                       width="30"
                       height="130"
-                      fill="#F4F2EE"
-                      stroke="#6B6862"
+                      fill="rgb(244, 242, 238)"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="2"
                     />
 
@@ -881,8 +881,8 @@ export default function IsolatedFootingCalculator({
                         y="160"
                         width="160"
                         height="40"
-                        fill="#E7E4DE"
-                        stroke="#6B6862"
+                        fill="rgb(231, 228, 222)"
+                        stroke="rgb(107, 104, 98)"
                         strokeWidth="2"
                       />
                     )}
@@ -893,8 +893,8 @@ export default function IsolatedFootingCalculator({
                           y="140"
                           width="80"
                           height="20"
-                          fill="#E7E4DE"
-                          stroke="#6B6862"
+                          fill="rgb(231, 228, 222)"
+                          stroke="rgb(107, 104, 98)"
                           strokeWidth="2"
                         />
                         <rect
@@ -902,8 +902,8 @@ export default function IsolatedFootingCalculator({
                           y="160"
                           width="160"
                           height="40"
-                          fill="#E7E4DE"
-                          stroke="#6B6862"
+                          fill="rgb(231, 228, 222)"
+                          stroke="rgb(107, 104, 98)"
                           strokeWidth="2"
                         />
                       </>
@@ -912,8 +912,8 @@ export default function IsolatedFootingCalculator({
                       <>
                         <polygon
                           points="110,140 190,140 230,160 70,160"
-                          fill="#E7E4DE"
-                          stroke="#6B6862"
+                          fill="rgb(231, 228, 222)"
+                          stroke="rgb(107, 104, 98)"
                           strokeWidth="2"
                           strokeLinejoin="round"
                         />
@@ -922,8 +922,8 @@ export default function IsolatedFootingCalculator({
                           y="160"
                           width="160"
                           height="40"
-                          fill="#E7E4DE"
-                          stroke="#6B6862"
+                          fill="rgb(231, 228, 222)"
+                          stroke="rgb(107, 104, 98)"
                           strokeWidth="2"
                         />
                       </>
@@ -935,7 +935,7 @@ export default function IsolatedFootingCalculator({
                       y1="190"
                       x2="225"
                       y2="190"
-                      stroke="#F2A413"
+                      stroke="rgb(242, 164, 19)"
                       strokeWidth="3"
                       strokeLinecap="round"
                     />
@@ -944,7 +944,7 @@ export default function IsolatedFootingCalculator({
                       y1="190"
                       x2="75"
                       y2="170"
-                      stroke="#F2A413"
+                      stroke="rgb(242, 164, 19)"
                       strokeWidth="3"
                       strokeLinecap="round"
                     />
@@ -953,17 +953,17 @@ export default function IsolatedFootingCalculator({
                       y1="190"
                       x2="225"
                       y2="170"
-                      stroke="#F2A413"
+                      stroke="rgb(242, 164, 19)"
                       strokeWidth="3"
                       strokeLinecap="round"
                     />
 
                     {/* Dots for cross bars */}
-                    <circle cx="85" cy="190" r="2.5" fill="#855307" />
-                    <circle cx="115" cy="190" r="2.5" fill="#855307" />
-                    <circle cx="150" cy="190" r="2.5" fill="#855307" />
-                    <circle cx="185" cy="190" r="2.5" fill="#855307" />
-                    <circle cx="215" cy="190" r="2.5" fill="#855307" />
+                    <circle cx="85" cy="190" r="2.5" fill="rgb(133, 83, 7)" />
+                    <circle cx="115" cy="190" r="2.5" fill="rgb(133, 83, 7)" />
+                    <circle cx="150" cy="190" r="2.5" fill="rgb(133, 83, 7)" />
+                    <circle cx="185" cy="190" r="2.5" fill="rgb(133, 83, 7)" />
+                    <circle cx="215" cy="190" r="2.5" fill="rgb(133, 83, 7)" />
 
                     {hasTopMesh && (
                       <>
@@ -972,7 +972,7 @@ export default function IsolatedFootingCalculator({
                           y1="170"
                           x2="225"
                           y2="170"
-                          stroke="#1F1D1A"
+                          stroke="rgb(31, 29, 26)"
                           strokeWidth="3"
                           strokeLinecap="round"
                         />
@@ -981,7 +981,7 @@ export default function IsolatedFootingCalculator({
                           y1="170"
                           x2="75"
                           y2="190"
-                          stroke="#1F1D1A"
+                          stroke="rgb(31, 29, 26)"
                           strokeWidth="3"
                           strokeLinecap="round"
                         />
@@ -990,15 +990,15 @@ export default function IsolatedFootingCalculator({
                           y1="170"
                           x2="225"
                           y2="190"
-                          stroke="#1F1D1A"
+                          stroke="rgb(31, 29, 26)"
                           strokeWidth="3"
                           strokeLinecap="round"
                         />
-                        <circle cx="85" cy="170" r="2.5" fill="#6B6862" />
-                        <circle cx="115" cy="170" r="2.5" fill="#6B6862" />
-                        <circle cx="150" cy="170" r="2.5" fill="#6B6862" />
-                        <circle cx="185" cy="170" r="2.5" fill="#6B6862" />
-                        <circle cx="215" cy="170" r="2.5" fill="#6B6862" />
+                        <circle cx="85" cy="170" r="2.5" fill="rgb(107, 104, 98)" />
+                        <circle cx="115" cy="170" r="2.5" fill="rgb(107, 104, 98)" />
+                        <circle cx="150" cy="170" r="2.5" fill="rgb(107, 104, 98)" />
+                        <circle cx="185" cy="170" r="2.5" fill="rgb(107, 104, 98)" />
+                        <circle cx="215" cy="170" r="2.5" fill="rgb(107, 104, 98)" />
                       </>
                     )}
 
@@ -1006,7 +1006,7 @@ export default function IsolatedFootingCalculator({
                     {/* Width */}
                     <path
                       d="M 70 215 L 230 215"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                     />
                     <line
@@ -1014,7 +1014,7 @@ export default function IsolatedFootingCalculator({
                       y1="210"
                       x2="70"
                       y2="220"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                     />
                     <line
@@ -1022,13 +1022,13 @@ export default function IsolatedFootingCalculator({
                       y1="210"
                       x2="230"
                       y2="220"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                     />
                     <text
                       x="150"
                       y="230"
-                      fill="#6B6862"
+                      fill="rgb(107, 104, 98)"
                       fontSize="12"
                       textAnchor="middle"
                     >
@@ -1038,7 +1038,7 @@ export default function IsolatedFootingCalculator({
                     {/* Depth */}
                     <path
                       d="M 55 140 L 55 200"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                     />
                     <line
@@ -1046,7 +1046,7 @@ export default function IsolatedFootingCalculator({
                       y1="140"
                       x2="60"
                       y2="140"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                     />
                     <line
@@ -1054,13 +1054,13 @@ export default function IsolatedFootingCalculator({
                       y1="200"
                       x2="60"
                       y2="200"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                     />
                     <text
                       x="45"
                       y="174"
-                      fill="#6B6862"
+                      fill="rgb(107, 104, 98)"
                       fontSize="12"
                       textAnchor="end"
                     >
@@ -1070,14 +1070,14 @@ export default function IsolatedFootingCalculator({
                     {/* Working Space */}
                     <path
                       d="M 30 215 L 70 215"
-                      stroke="#6B6862"
+                      stroke="rgb(107, 104, 98)"
                       strokeWidth="1"
                       strokeDasharray="2,2"
                     />
                     <text
                       x="50"
                       y="230"
-                      fill="#6B6862"
+                      fill="rgb(107, 104, 98)"
                       fontSize="10"
                       textAnchor="middle"
                     >

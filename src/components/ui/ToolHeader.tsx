@@ -107,7 +107,7 @@ export function ToolHeader({ id, title, toolName, subtitle, icon: Icon, onNaviga
     navigator.clipboard.writeText(summary);
     toast.success('Copied calculation summary to clipboard', {
       position: 'bottom-center',
-      style: { borderRadius: '100px', background: '#333', color: '#fff' }
+      style: { borderRadius: '100px', background: 'rgb(51, 51, 51)', color: 'rgb(255, 255, 255)' }
     });
   };
 

@@ -20,12 +20,12 @@ interface MaterialCostDonutChartProps {
 }
 
 const CIVIL_COLORS = [
-  '#F2A413', // Amber (Cement)
-  '#D4A373', // Sand/Earth (Sand)
-  '#A8A29A', // Warm Gray (Aggregate)
-  '#1F1D1A', // Ink (Steel)
-  '#0F766E', // Teal (Fittings/Plumbing)
-  '#6B6862', // Muted (Finishers/Glass)
+  'rgb(242, 164, 19)', // Amber (Cement)
+  'rgb(212, 163, 115)', // Sand/Earth (Sand)
+  'rgb(168, 162, 154)', // Warm Gray (Aggregate)
+  'rgb(31, 29, 26)', // Ink (Steel)
+  'rgb(15, 118, 110)', // Teal (Fittings/Plumbing)
+  'rgb(107, 104, 98)', // Muted (Finishers/Glass)
 ];
 
 const DEFAULT_DATA: MaterialCostData[] = [

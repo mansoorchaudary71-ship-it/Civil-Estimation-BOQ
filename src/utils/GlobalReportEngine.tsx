@@ -15,11 +15,11 @@ const createDonutBase64React = async (data: any[]): Promise<string> => {
       container.style.height = "300px";
       container.style.position = "fixed";
       container.style.top = "-9999px";
-      container.style.background = "#ffffff";
+      container.style.background = "rgb(255, 255, 255)";
       document.body.appendChild(container);
 
       const root = createRoot(container);
-      const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#06B6D4"];
+      const COLORS = ["rgb(59, 130, 246)", "rgb(16, 185, 129)", "rgb(245, 158, 11)", "rgb(239, 68, 68)", "rgb(139, 92, 246)", "rgb(236, 72, 153)", "rgb(6, 182, 212)"];
 
       const mappedData = data.map((d, i) => ({
         ...d,
@@ -44,7 +44,7 @@ const createDonutBase64React = async (data: any[]): Promise<string> => {
             ))}
           </Pie>
           <Legend 
-            wrapperStyle={{ fontSize: "12px", fontFamily: "helvetica, sans-serif", color: "#1e293b" }}
+            wrapperStyle={{ fontSize: "12px", fontFamily: "helvetica, sans-serif", color: "rgb(30, 41, 59)" }}
             layout="horizontal" 
             verticalAlign="bottom" 
             align="center" 
@@ -112,7 +112,7 @@ export interface ReportData {
 }
 
 const DEFAULT_COLORS = [
-  "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#06B6D4"
+  "rgb(59, 130, 246)", "rgb(16, 185, 129)", "rgb(245, 158, 11)", "rgb(239, 68, 68)", "rgb(139, 92, 246)", "rgb(236, 72, 153)", "rgb(6, 182, 212)"
 ];
 
 const generateBarChartBase64 = async (data: { label: string; value: number; color?: string }[]): Promise<string | null> => {
@@ -124,8 +124,8 @@ const generateBarChartBase64 = async (data: { label: string; value: number; colo
           <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.1" />
         </filter>
       </defs>
-      <rect width="800" height="400" fill="#ffffff" />
-      <text x="400" y="40" text-anchor="middle" font-family="helvetica, sans-serif" font-size="24" fill="#1e293b" font-weight="bold">Top Costs Breakdown</text>
+      <rect width="800" height="400" fill="rgb(255, 255, 255)" />
+      <text x="400" y="40" text-anchor="middle" font-family="helvetica, sans-serif" font-size="24" fill="rgb(30, 41, 59)" font-weight="bold">Top Costs Breakdown</text>
       <g transform="translate(250, 80)">`;
 
     const maxValue = Math.max(...data.map(d => d.value), 1);
@@ -137,9 +137,9 @@ const generateBarChartBase64 = async (data: { label: string; value: number; colo
       const width = Math.max(10, (d.value / maxValue) * 450);
       const color = d.color || DEFAULT_COLORS[i % DEFAULT_COLORS.length];
 
-      svg += `<text x="-20" y="${y + barHeight / 2 + 6}" text-anchor="end" font-family="helvetica, sans-serif" font-size="16" fill="#475569" font-weight="bold">${d.label}</text>`;
+      svg += `<text x="-20" y="${y + barHeight / 2 + 6}" text-anchor="end" font-family="helvetica, sans-serif" font-size="16" fill="rgb(71, 85, 105)" font-weight="bold">${d.label}</text>`;
       svg += `<rect x="0" y="${y}" width="${width}" height="${barHeight}" fill="${color}" rx="6" filter="url(#shadow)" />`;
-      svg += `<text x="${width + 15}" y="${y + barHeight / 2 + 6}" font-family="helvetica, sans-serif" font-size="16" fill="#1e293b" font-weight="bold">Rs ${Math.round(d.value).toLocaleString('en-US')}</text>`;
+      svg += `<text x="${width + 15}" y="${y + barHeight / 2 + 6}" font-family="helvetica, sans-serif" font-size="16" fill="rgb(30, 41, 59)" font-weight="bold">Rs ${Math.round(d.value).toLocaleString('en-US')}</text>`;
     });
 
     svg += `</g></svg>`;
@@ -153,7 +153,7 @@ const generateBarChartBase64 = async (data: { label: string; value: number; colo
       canvas.height = 400;
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = "rgb(255, 255, 255)";
         ctx.fillRect(0, 0, 800, 400);
         ctx.drawImage(img, 0, 0);
       }
@@ -177,7 +177,7 @@ export const createDonutChartBase64New = (
           <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.15" />
         </filter>
       </defs>
-      <rect width="1200" height="800" fill="#ffffff" />
+      <rect width="1200" height="800" fill="rgb(255, 255, 255)" />
       <g filter="url(#shadow)">`;
     let total = data.reduce((sum, d) => sum + d.value, 0);
     if (total <= 0) return resolve(null);
@@ -217,8 +217,8 @@ export const createDonutChartBase64New = (
     });
 
     svg += `</g>
-      <text x="${center}" y="380" text-anchor="middle" font-family="helvetica, sans-serif" font-size="40" fill="#64748b" font-weight="bold">Total Cost</text>
-      <text x="${center}" y="440" text-anchor="middle" font-family="helvetica, sans-serif" font-size="56" fill="#1e293b" font-weight="bold">${totalText}</text>
+      <text x="${center}" y="380" text-anchor="middle" font-family="helvetica, sans-serif" font-size="40" fill="rgb(100, 116, 139)" font-weight="bold">Total Cost</text>
+      <text x="${center}" y="440" text-anchor="middle" font-family="helvetica, sans-serif" font-size="56" fill="rgb(30, 41, 59)" font-weight="bold">${totalText}</text>
       
       <g transform="translate(800, 150)">`;
 
@@ -229,12 +229,12 @@ export const createDonutChartBase64New = (
       const color = d.color || DEFAULT_COLORS[i % DEFAULT_COLORS.length];
 
       svg += `<rect x="0" y="${y - 20}" width="24" height="24" rx="6" fill="${color}" />`;
-      svg += `<text x="40" y="${y}" font-family="helvetica, sans-serif" font-size="28" fill="#1e293b" font-weight="bold">${d.label}</text>`;
-      svg += `<text x="40" y="${y + 30}" font-family="helvetica, sans-serif" font-size="22" fill="#64748b" font-weight="normal">Rs ${Math.round(d.value).toLocaleString('en-US')} (${pct}%)</text>`;
+      svg += `<text x="40" y="${y}" font-family="helvetica, sans-serif" font-size="28" fill="rgb(30, 41, 59)" font-weight="bold">${d.label}</text>`;
+      svg += `<text x="40" y="${y + 30}" font-family="helvetica, sans-serif" font-size="22" fill="rgb(100, 116, 139)" font-weight="normal">Rs ${Math.round(d.value).toLocaleString('en-US')} (${pct}%)</text>`;
     });
 
     if (data.length > 8) {
-       svg += `<text x="40" y="${8 * 60}" font-family="helvetica, sans-serif" font-size="24" fill="#94a3b8" font-style="italic">...and others</text>`;
+       svg += `<text x="40" y="${8 * 60}" font-family="helvetica, sans-serif" font-size="24" fill="rgb(148, 163, 184)" font-style="italic">...and others</text>`;
     }
 
     svg += `</g></svg>`;
@@ -248,7 +248,7 @@ export const createDonutChartBase64New = (
       canvas.height = 800;
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = "rgb(255, 255, 255)";
         ctx.fillRect(0, 0, 1200, 800);
         ctx.drawImage(img, 0, 0);
       }
@@ -284,7 +284,7 @@ export const GlobalReportEngine = {
       const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://ais-dev.web.app/';
       qrCodeDataURL = await QRCode.toDataURL(currentUrl, {
         margin: 1,
-        color: { dark: '#0F172A', light: '#ffffff' }
+        color: { dark: 'rgb(15, 23, 42)', light: 'rgb(255, 255, 255)' }
       });
     } catch (err) {
       console.error(err);

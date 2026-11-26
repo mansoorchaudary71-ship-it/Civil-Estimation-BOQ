@@ -97,7 +97,7 @@ export function UniversalTabs({
                 rounded-t-xl rounded-b-none
                 ${
                   isActive
-                    ? `bg-surface-default dark:bg-[#151821] shadow-[0_-4px_12px_rgba(31,29,26,0.03)] dark:shadow-ink/20 z-20 ${colorTheme.text}`
+                    ? `bg-surface-default dark:bg-ink-900 shadow-[0_-4px_12px_rgba(31,29,26,0.03)] dark:shadow-ink/20 z-20 ${colorTheme.text}`
                     : "bg-transparent hover:bg-surface-hover/50 text-txt-tertiary dark:text-txt-tertiary z-10"
                 }
               `}

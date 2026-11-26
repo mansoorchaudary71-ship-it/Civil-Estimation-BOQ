@@ -1,5 +1,6 @@
 import { Button } from '../ui/Button';
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Building,
   MapPin,
@@ -17,6 +18,7 @@ import ToolPageFooter from '../ToolPageFooter';
 import { CalculationHistory } from '../ui/CalculationHistory';
 import { GenericExportButtons } from '../ui/GenericExportButtons';
 import { GlobalFAQ, getCombinedFaqs, type FAQItem } from '../ui/GlobalFAQ';
+import { ToolActionsBar, ToolFormulaSection, ToolBreadcrumb } from '../ui/ToolPageTemplate';
 import { SEO, SITE_WEB_APP } from "../SEO";
 import { getSiteUrl } from "../../seo/siteConfig";
 import { TOOL_GUIDES } from "../../seo/toolGuides";
@@ -46,6 +48,7 @@ type UnitMap = {
 };
 
 export default function MarlaConverterPage() {
+  const navigate = useNavigate();
   const [marlaStandard, setMarlaStandard] = useState<"Punjab" | "KPK">("Punjab");
   const [plotLength, setPlotLength] = useState("");
   const [plotWidth, setPlotWidth] = useState("");
@@ -113,7 +116,7 @@ export default function MarlaConverterPage() {
   const guideSteps: string[] = TOOL_GUIDES["marla-converter"]?.workedExample?.steps ?? [];
 
   return (
-    <div className="min-h-screen bg-surface-default font-sans pb-12">
+    <div className="tool-page-standalone min-h-screen bg-surface-default font-sans pb-12">
       <SEO
         title="Marla & Kanal Area Converter"
         description="Convert Marla, Kanal, square feet, square yards, m² and acres with Punjab and KPK marla standards — free plot area converter for Pakistan and India."
@@ -143,7 +146,13 @@ export default function MarlaConverterPage() {
         }}
       />
       <div className="max-w-7xl mx-auto px-4 pt-12 md:pt-20 pb-16">
-        
+        <ToolBreadcrumb
+          toolId="marla-converter"
+          category="Quantity Estimation"
+          title="Marla & Kanal Area Converter"
+          onNavigate={(id) => navigate(id === 'home' ? '/' : `/${id}`)}
+        />
+
         {/* Section 1: H1 SEO Header */}
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-3 mb-6">
@@ -173,7 +182,7 @@ export default function MarlaConverterPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           <div className="lg:col-span-7 flex flex-col gap-6">
             {/* Standard Toggle & Master Input */}
-            <div className="bg-gradient-to-br from-[#FFFFFF] to-[#152136] border border-ui-borderSubtle rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+            <div className="bg-gradient-to-br from-surface-default to-ink-900 border border-ui-borderSubtle rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
                {/* Background Accent */}
                <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/5 rounded-full blur-[80px] pointer-events-none"></div>
                
@@ -357,6 +366,15 @@ export default function MarlaConverterPage() {
             </div>
           </div>
         </a>
+
+        {/* Template §3 then §4 — formula/methodology, then the canonical
+            actions row (Copy, Print, PDF, Excel, Add to BOQ, Share).
+            Excel delegates to this page's own GenericExportButtons above;
+            Add to BOQ is disabled with a reason (not wired for this tool). */}
+        <div className="mb-16 space-y-8 print:hidden">
+          <ToolFormulaSection toolId="marla-converter" />
+          <ToolActionsBar toolId="marla-converter" toolName="Marla & Kanal Area Converter" />
+        </div>
 
         {/* Section 4: Static SEO Content */}
         <div className="mb-20">

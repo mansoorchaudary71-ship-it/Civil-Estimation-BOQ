@@ -67,18 +67,18 @@ export function CashFlowTimeline({
             }}
             onMouseLeave={() => setHoverIndex(null)}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(226, 232, 240)" />
             <XAxis 
               dataKey="name" 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fill: '#64748B', fontSize: 12 }} 
+              tick={{ fill: 'rgb(100, 116, 139)', fontSize: 12 }} 
               dy={10}
             />
             <YAxis 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fill: '#64748B', fontSize: 12 }}
+              tick={{ fill: 'rgb(100, 116, 139)', fontSize: 12 }}
               tickFormatter={(value) => `${(value / 1000000).toFixed(1)}M`}
               dx={-10}
             />
@@ -94,7 +94,7 @@ export function CashFlowTimeline({
               {data.map((entry, index) => (
                 <Cell 
                   key={`cell-${index}`} 
-                  fill={hoverIndex === index ? '#2563EB' : '#3B82F6'} 
+                  fill={hoverIndex === index ? 'rgb(37, 99, 235)' : 'rgb(59, 130, 246)'} 
                   className="transition-colors duration-300"
                 />
               ))}

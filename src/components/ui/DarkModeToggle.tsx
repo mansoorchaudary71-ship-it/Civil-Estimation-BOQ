@@ -36,7 +36,7 @@ export function DarkModeToggle({ isMobile }: { isMobile?: boolean }) {
     return (
       <Button
         onClick={toggleTheme}
-        className="flex items-center justify-between text-left text-[18px] font-bold text-[#111111] dark:text-white group"
+        className="flex items-center justify-between text-left text-[18px] font-bold text-txt-primary dark:text-white group"
       >
         <div className="flex items-center gap-3">
           {getThemeIcon()}

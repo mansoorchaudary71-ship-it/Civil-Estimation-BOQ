@@ -174,13 +174,13 @@ export default function ColumnDesignTool() {
               <h3 className="mb-4 text-lg font-medium text-txt-primary">P-M Interaction Diagram (IS 456)</h3>
               <ResponsiveContainer width="100%" height={350}>
                 <ComposedChart margin={{ top: 10, right: 20, left: 10, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E7E4DE" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgb(231, 228, 222)" />
                   <XAxis type="number" dataKey="M" name="Moment" label={{ value: 'Moment (kNm)', position: 'insideBottom', offset: -10 }} />
                   <YAxis type="number" dataKey="P" name="Axial Load" label={{ value: 'Axial Load (kN)', angle: -90, position: 'insideLeft' }} />
                   <RechartsTooltip cursor={{ strokeDasharray: '3 3' }} formatter={(value: any) => Number(value).toFixed(1)} />
                   <Legend verticalAlign="top" height={36} />
-                  <Line data={results.curve} type="monotone" dataKey="P" stroke="#B91C1C" strokeWidth={3} dot={false} name="Capacity Envelope" isAnimationActive={false} />
-                  <Scatter name="Applied Load (Pu, Mu)" data={[{ M: results.designMomentKNm, P: results.puKN }]} fill={results.isSafe ? "#16A34A" : "#B91C1C"} shape="circle" />
+                  <Line data={results.curve} type="monotone" dataKey="P" stroke="rgb(185, 28, 28)" strokeWidth={3} dot={false} name="Capacity Envelope" isAnimationActive={false} />
+                  <Scatter name="Applied Load (Pu, Mu)" data={[{ M: results.designMomentKNm, P: results.puKN }]} fill={results.isSafe ? "rgb(22, 163, 74)" : "rgb(185, 28, 28)"} shape="circle" />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>

@@ -543,8 +543,8 @@ export default function SlabEstimator() {
                 <div className="w-full bg-surface-default/50 rounded-2xl p-4 shadow-brand-sm text-txt-primary border border-ui-borderSubtle/50 backdrop-blur-md overflow-hidden">
                   <StyledChart 
                     data={[
-                      { name: results.type === "one-way" ? "Main Bars" : "Short Span", value: Math.round(results.shortBarsTotalLength), fill: '#F2A413' },
-                      { name: results.type === "one-way" ? "Dist Bars" : "Long Span", value: Math.round(results.longBarsTotalLength), fill: '#0F766E' }
+                      { name: results.type === "one-way" ? "Main Bars" : "Short Span", value: Math.round(results.shortBarsTotalLength), fill: 'rgb(242, 164, 19)' },
+                      { name: results.type === "one-way" ? "Dist Bars" : "Long Span", value: Math.round(results.longBarsTotalLength), fill: 'rgb(15, 118, 110)' }
                     ]}
                     type="bar"
                     title="Length Breakdown"

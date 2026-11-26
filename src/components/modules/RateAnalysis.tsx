@@ -276,41 +276,41 @@ export default function RateAnalysis() {
                           {
                             name: "Cement",
                             value: compositeCalc.costCement,
-                            color: "#6B6862",
+                            color: "rgb(107, 104, 98)",
                           },
                           {
                             name: "Sand",
                             value: compositeCalc.costSand,
-                            color: "#F2A413",
+                            color: "rgb(242, 164, 19)",
                           },
                           {
                             name: "Crush",
                             value: compositeCalc.costCrush,
-                            color: "#6B6862",
+                            color: "rgb(107, 104, 98)",
                           },
                           {
                             name: "Labor/Eq",
                             value:
                               compositeCalc.costLabor +
                               compositeCalc.costEquipment,
-                            color: "#0F766E",
+                            color: "rgb(15, 118, 110)",
                           },
                           {
                             name: "Overhead",
                             value: compositeCalc.overheadCost,
-                            color: "#0F766E",
+                            color: "rgb(15, 118, 110)",
                           },
                         ]}
                         margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                       >
                         <XAxis
                           dataKey="name"
-                          tick={{ fill: "#6B6862", fontSize: 10 }}
+                          tick={{ fill: "rgb(107, 104, 98)", fontSize: 10 }}
                           axisLine={false}
                           tickLine={false}
                         />
                         <YAxis
-                          tick={{ fill: "#6B6862", fontSize: 10 }}
+                          tick={{ fill: "rgb(107, 104, 98)", fontSize: 10 }}
                           axisLine={false}
                           tickLine={false}
                           tickFormatter={(value) =>
@@ -320,10 +320,10 @@ export default function RateAnalysis() {
                         <Tooltip
                           cursor={{ fill: "rgba(255,255,255,0.05)" }}
                           contentStyle={{
-                            backgroundColor: "#1F1D1A",
-                            borderColor: "#6B6862",
+                            backgroundColor: "rgb(31, 29, 26)",
+                            borderColor: "rgb(107, 104, 98)",
                             borderRadius: "12px",
-                            color: "#fff",
+                            color: "rgb(255, 255, 255)",
                           }}
                           formatter={(value: any) => formatCurrency(value)}
                         />
@@ -332,29 +332,29 @@ export default function RateAnalysis() {
                             {
                               name: "Cement",
                               value: compositeCalc.costCement,
-                              color: "#6B6862",
+                              color: "rgb(107, 104, 98)",
                             },
                             {
                               name: "Sand",
                               value: compositeCalc.costSand,
-                              color: "#F2A413",
+                              color: "rgb(242, 164, 19)",
                             },
                             {
                               name: "Crush",
                               value: compositeCalc.costCrush,
-                              color: "#6B6862",
+                              color: "rgb(107, 104, 98)",
                             },
                             {
                               name: "Labor/Eq",
                               value:
                                 compositeCalc.costLabor +
                                 compositeCalc.costEquipment,
-                              color: "#0F766E",
+                              color: "rgb(15, 118, 110)",
                             },
                             {
                               name: "Overhead",
                               value: compositeCalc.overheadCost,
-                              color: "#0F766E",
+                              color: "rgb(15, 118, 110)",
                             },
                           ].map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />

@@ -95,13 +95,13 @@ export function StyledChart({ data, type, title, valueFormatter }: ChartProps) {
                 dataKey="name" 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fontSize: 11, fontWeight: 600, fill: '#64748b' }} 
+                tick={{ fontSize: 11, fontWeight: 600, fill: 'rgb(100, 116, 139)' }} 
                 dy={10}
               />
               <YAxis 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fontSize: 11, fontWeight: 500, fill: '#94a3b8' }}
+                tick={{ fontSize: 11, fontWeight: 500, fill: 'rgb(148, 163, 184)' }}
                 tickFormatter={(value) => {
                   if (value >= 1000) return (value / 1000) + 'k';
                   return value;

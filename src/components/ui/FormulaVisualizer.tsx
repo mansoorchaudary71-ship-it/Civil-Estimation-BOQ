@@ -102,7 +102,7 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
             <CartesianGrid
               strokeDasharray="3 3"
               vertical={false}
-              stroke="#334155"
+              stroke="rgb(51, 65, 85)"
               opacity={0.2}
             />
             <XAxis
@@ -110,28 +110,28 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
               fontSize={10}
               tickLine={false}
               axisLine={false}
-              stroke="#64748b"
+              stroke="rgb(100, 116, 139)"
               tickFormatter={(v) => `${v}`}
             />
             <YAxis
               fontSize={10}
               tickLine={false}
               axisLine={false}
-              stroke="#64748b"
+              stroke="rgb(100, 116, 139)"
               tickFormatter={(v) =>
                 v >= 1000 ? (v / 1000).toFixed(1) + "k" : Math.round(v).toString()
               }
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1e293b",
-                borderColor: "#334155",
+                backgroundColor: "rgb(30, 41, 59)",
+                borderColor: "rgb(51, 65, 85)",
                 borderRadius: "8px",
-                color: "#f8fafc",
+                color: "rgb(248, 250, 252)",
                 fontSize: "12px",
               }}
-              itemStyle={{ color: "#818cf8", fontWeight: "bold" }}
-              labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
+              itemStyle={{ color: "rgb(129, 140, 248)", fontWeight: "bold" }}
+              labelStyle={{ color: "rgb(148, 163, 184)", marginBottom: "4px" }}
               formatter={(value: any) => [
                 Math.round(value).toLocaleString(),
                 yLabel,
@@ -141,13 +141,13 @@ export function FormulaVisualizer({ title }: VisualizerProps) {
             <Line
               type="monotone"
               dataKey="y"
-              stroke="#6366f1"
+              stroke="rgb(99, 102, 241)"
               strokeWidth={3}
               dot={false}
               activeDot={{
                 r: 5,
-                fill: "#818cf8",
-                stroke: "#1e293b",
+                fill: "rgb(129, 140, 248)",
+                stroke: "rgb(30, 41, 59)",
                 strokeWidth: 2,
               }}
               animationDuration={300}

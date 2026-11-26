@@ -3,13 +3,14 @@ import { Bookmark, BookmarkCheck, ArrowUpRight, Box, Clock, Flame, Sparkles } fr
 import { useSettings } from "../context/SettingsContext";
 import { cn } from "../lib/utils";
 import { getToolImage, getShortCategory } from "../lib/toolImages";
+import { getBasename } from "../lib/toolRoutes";
 
 /**
  * ToolCard - photo-first card.
  *
  *  - Soft tinted card with an inset rounded cover image (what the tool is about: bricks, concrete, rebar...).
  *  - Category badge on the image, three colour-coded pills below (highlight / time / difficulty).
- *  - Brand colour: #885202.
+ *  - Brand colour: rgb(136, 82, 2).
  *  - Hover (pointer devices): card lifts and scales slightly, shadow deepens, image zooms gently.
  *    Honors prefers-reduced-motion.
  *
@@ -19,7 +20,7 @@ import { getToolImage, getShortCategory } from "../lib/toolImages";
  *  - Only real catalogue data is shown (difficulty, estimatedTime, isNew, isPopular) - nothing is invented.
  */
 
-export const BRAND = "#885202";
+export const BRAND = "rgb(136, 82, 2)";
 
 // getCategorySpec keeps its signature for SmartSearch; it always returns the brand spec.
 const CAT_COLORS: Record<string, { c: string; glow: string }> = {
@@ -109,14 +110,14 @@ export default function ToolCard({
       id={`module-card-${mod.id}${cardIdSuffix ?? ""}`}
       className={cn(
         "group relative flex h-full flex-col rounded-[28px] p-2.5",
-        "border border-[#885202]/15 bg-[#FBF0DC] dark:border-white/10 dark:bg-[#2b1d0e]",
+        "border border-accent-800/15 bg-surface-hover dark:border-white/10 dark:bg-secondary-900",
         "shadow-[0_2px_10px_-4px_rgba(136,82,2,0.25)] will-change-transform",
         "transition-[transform,box-shadow] duration-300 ease-out",
         pop
       )}
     >
       {/* Cover image */}
-      <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] bg-[#e9d3a8]">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] bg-surface-active">
         <img
           src={getToolImage(mod)}
           alt={mod.title}
@@ -134,7 +135,7 @@ export default function ToolCard({
           onClick={toggleFavorite}
           aria-pressed={saved}
           aria-label={saved ? `Remove ${mod.title} from saved tools` : `Save ${mod.title}`}
-          className="absolute left-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF6E6]/95 text-[#885202] shadow-sm backdrop-blur transition-colors hover:bg-white"
+          className="absolute left-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-surface-hover/95 text-accent-800 shadow-sm backdrop-blur transition-colors hover:bg-surface-default"
         >
           {saved ? <BookmarkCheck size={18} aria-hidden="true" /> : <Bookmark size={18} aria-hidden="true" />}
         </button>
@@ -142,13 +143,13 @@ export default function ToolCard({
         {/* Hover affordance (pointer devices only) */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-3 right-3 hidden h-10 w-10 translate-y-2 items-center justify-center rounded-full bg-[#885202] text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:flex"
+          className="pointer-events-none absolute bottom-3 right-3 hidden h-10 w-10 translate-y-2 items-center justify-center rounded-full bg-accent-800 text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:flex"
         >
           <ArrowUpRight size={20} />
         </span>
 
         {/* Category badge */}
-        <span className="absolute right-3 top-3 inline-flex max-w-[60%] items-center gap-1.5 rounded-full bg-[#FFF1D6]/95 px-3 py-1.5 text-[13px] font-semibold text-[#6b3f00] shadow-sm backdrop-blur">
+        <span className="absolute right-3 top-3 inline-flex max-w-[60%] items-center gap-1.5 rounded-full bg-surface-hover/95 px-3 py-1.5 text-[13px] font-semibold text-accent-900 shadow-sm backdrop-blur">
           <Icon size={15} strokeWidth={2.2} aria-hidden="true" className="shrink-0" />
           <span className="truncate">{getShortCategory(mod.category)}</span>
         </span>
@@ -156,23 +157,28 @@ export default function ToolCard({
 
       {/* Body */}
       <div className="flex flex-1 flex-col px-2.5 pb-2 pt-4">
-        <h3 className="text-[19px] font-bold leading-snug tracking-tight text-[#3a2200] line-clamp-2 dark:text-[#fbeed6]">
+        <h3 className="text-[19px] font-bold leading-snug tracking-tight text-accent-900 line-clamp-2 dark:text-accent-800">
+          {/* Real clean-path link (Step 3): crawlers and new-tab gestures
+              get /<tool-id> (which now has a prerendered file); a plain
+              left-click is still intercepted below for SPA navigation.
+              getBasename() keeps the GitHub Pages project-page subpath in
+              the href — a bare "/<id>" would lose it. */}
           <a
-            href={`#/${mod.id}`}
+            href={`${getBasename()}/${mod.id}`}
             onClick={open}
-            className="after:absolute after:inset-0 after:rounded-[28px] after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-[#885202]"
+            className="after:absolute after:inset-0 after:rounded-[28px] after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent-800"
           >
             {mod.title}
           </a>
         </h3>
-        <p className="mt-1.5 text-[14.5px] leading-snug text-[#6b4a1f] line-clamp-2 dark:text-[#d9c19a]">
+        <p className="mt-1.5 text-[14.5px] leading-snug text-accent-800 line-clamp-2 dark:text-accent-700">
           {mod.desc || "Engineering calculator."}
         </p>
 
         <div className="mt-auto pt-4">
           <div className="flex flex-wrap gap-1.5">
             {(mod.isPopular || mod.isNew) && (
-              <span className={cn(pill, "bg-[#F4C36A] text-[#3a2200]")}>
+              <span className={cn(pill, "bg-surface-active text-accent-900")}>
                 {mod.isPopular ? (
                   <Flame size={14} aria-hidden="true" className="shrink-0" />
                 ) : (
@@ -182,13 +188,13 @@ export default function ToolCard({
               </span>
             )}
             {mod.estimatedTime && (
-              <span className={cn(pill, "bg-[#E7D2AF] text-[#4d2f00] dark:bg-[#4a3519] dark:text-[#f3dcb0]")}>
+              <span className={cn(pill, "bg-surface-active text-accent-900 dark:bg-accent-900 dark:text-accent-800")}>
                 <Clock size={14} aria-hidden="true" className="shrink-0" />
                 {mod.estimatedTime.replace(/^~\s*/, "")}
               </span>
             )}
             {mod.difficulty && (
-              <span className={cn(pill, "bg-[#885202] text-white")}>
+              <span className={cn(pill, "bg-accent-800 text-white")}>
                 <LevelBars level={levelOf(mod.difficulty)} />
                 {mod.difficulty}
               </span>

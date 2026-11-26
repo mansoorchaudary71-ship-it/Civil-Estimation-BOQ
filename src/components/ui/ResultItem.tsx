@@ -216,7 +216,7 @@ export function ResultItem({
           >
             <div className="mt-3 pt-3 border-t border-border-color">
               <div className="flex items-start gap-2 text-txt-secondary">
-                <Info className="w-4 h-4 mt-0.5 opacity-80 text-[#6B46C1]" />
+                <Info className="w-4 h-4 mt-0.5 opacity-80 text-primary-700" />
                 <p className="text-sm opacity-90 leading-relaxed font-medium">
                   {explanation}
                 </p>

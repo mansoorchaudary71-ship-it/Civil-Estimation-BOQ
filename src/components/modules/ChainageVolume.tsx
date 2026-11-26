@@ -480,20 +480,20 @@ export default function ChainageVolumeEstimator() {
                   <AreaChart data={results.segments} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                     <defs>
                       <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#F2A413" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#D98F0B" stopOpacity={0.3} />
+                        <stop offset="5%" stopColor="rgb(242, 164, 19)" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="rgb(217, 143, 11)" stopOpacity={0.3} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.3} vertical={false} />
-                    <XAxis dataKey="chainage" tick={{ fontSize: 12, fill: '#6B6862' }} tickMargin={12} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fontSize: 12, fill: '#6B6862' }} tickMargin={12} axisLine={false} tickLine={false} />
+                    <XAxis dataKey="chainage" tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} tickMargin={12} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 12, fill: 'rgb(107, 104, 98)' }} tickMargin={12} axisLine={false} tickLine={false} />
                     <Tooltip
-                      contentStyle={{ borderRadius: '12px', border: '1px solid #E7E4DE', boxShadow: '0 4px 6px -1px rgba(31, 29, 26, 0.1)' }}
+                      contentStyle={{ borderRadius: '12px', border: '1px solid rgb(231, 228, 222)', boxShadow: '0 4px 6px -1px rgba(31, 29, 26, 0.1)' }}
                       formatter={(value: any) => [`${value.toFixed(2)} ${unitV}`, "Net Volume"]}
-                      labelStyle={{ color: '#1F1D1A', fontWeight: 'bold', marginBottom: '4px' }}
+                      labelStyle={{ color: 'rgb(31, 29, 26)', fontWeight: 'bold', marginBottom: '4px' }}
                     />
-                    <ReferenceLine y={0} stroke="#6B6862" strokeDasharray="3 3" />
-                    <Area type="monotone" dataKey="netVolume" stroke="#F2A413" strokeWidth={3} fill="url(#splitColor)" activeDot={{ r: 6 }} />
+                    <ReferenceLine y={0} stroke="rgb(107, 104, 98)" strokeDasharray="3 3" />
+                    <Area type="monotone" dataKey="netVolume" stroke="rgb(242, 164, 19)" strokeWidth={3} fill="url(#splitColor)" activeDot={{ r: 6 }} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

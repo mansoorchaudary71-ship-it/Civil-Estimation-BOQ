@@ -1477,23 +1477,23 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
   const combinedFaqs = getCombinedFaqs(moduleId, faqs, { includeGeneric: false });
 
   return (
-    <section className="w-full bg-white rounded-[16px] p-5 border border-[#E5E7EB] shadow-sm overflow-hidden" aria-label="Frequently Asked Questions">
+    <section className="w-full bg-surface-default rounded-[16px] p-5 border border-border-color shadow-sm overflow-hidden" aria-label="Frequently Asked Questions">
       <div className="flex items-center gap-3 mb-5">
-        <span className="w-9 h-9 rounded-[10px] bg-[#F2A413] flex items-center justify-center shrink-0" aria-hidden="true">
+        <span className="w-9 h-9 rounded-[10px] bg-accent-500 flex items-center justify-center shrink-0" aria-hidden="true">
           <HelpCircle className="w-5 h-5 text-white" />
         </span>
-        <h2 className="text-[20px] md:text-[22px] font-semibold text-[#111827] tracking-tight leading-tight">
+        <h2 className="text-[20px] md:text-[22px] font-semibold text-txt-primary tracking-tight leading-tight">
           Frequently Asked Questions
         </h2>
       </div>
-      <div className="rounded-[12px] border border-[#E5E7EB] overflow-hidden bg-white divide-y divide-[#F1F5F9]">
+      <div className="rounded-[12px] border border-border-color overflow-hidden bg-surface-default divide-y divide-border-color">
         {combinedFaqs.map((faq, index) => {
           const isOpen = showAll || openIndex === index;
           return (
-            <div key={index} className="w-full bg-white overflow-hidden">
+            <div key={index} className="w-full bg-surface-default overflow-hidden">
               <button
                 type="button"
-                className="w-full text-left px-5 py-4 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413] transition-colors hover:bg-[#FAFAF9]"
+                className="w-full text-left px-5 py-4 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 transition-colors hover:bg-surface-hover"
                 onClick={() => {
                   if (showAll) { setShowAll(false); setOpenIndex(index); }
                   else setOpenIndex(isOpen ? null : index);
@@ -1501,11 +1501,11 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${index}`}
               >
-                <span className="font-semibold text-[15px] leading-snug text-[#111827] pr-2 min-w-0 flex-1">
+                <span className="font-semibold text-[15px] leading-snug text-txt-primary pr-2 min-w-0 flex-1">
                   {faq.question}
                 </span>
                 <ChevronDown
-                  className={`w-[18px] h-[18px] shrink-0 text-[#6B7280] transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#F2A413]' : ''}`}
+                  className={`w-[18px] h-[18px] shrink-0 text-txt-secondary transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-700' : ''}`}
                 />
               </button>
 
@@ -1514,7 +1514,7 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
                 className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100 pb-5' : 'max-h-0 opacity-0 overflow-hidden'}`}
                 aria-hidden={!isOpen}
               >
-                <div className="px-5 text-[14px] leading-[1.6] text-[#4B5563]">
+                <div className="px-5 text-[14px] leading-[1.6] text-txt-secondary">
                   {faq.answer}
                 </div>
               </div>
@@ -1527,10 +1527,10 @@ export function GlobalFAQ({ faqs = [], moduleId }: GlobalFAQProps) {
           type="button"
           onClick={() => setShowAll(!showAll)}
           aria-expanded={showAll}
-          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] text-[#1F1D1A] text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-[#F1F5F9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-surface-hover border border-border-color text-txt-primary text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-surface-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
         >
           {showAll ? 'Show fewer questions' : `Show all ${combinedFaqs.length} questions`}
-          <ChevronDown className={`w-4 h-4 text-[#6B7280] transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 text-txt-secondary transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
         </button>
       )}
     </section>

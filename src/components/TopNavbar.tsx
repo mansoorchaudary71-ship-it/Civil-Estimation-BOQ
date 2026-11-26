@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Menu, Search, X, Building2, ArrowRight, ChevronRight, FileText } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { getBasename } from "../lib/toolRoutes";
 import { useAuth } from "../contexts/AuthContext";
 import { ALL_MODULES } from "./Dashboard";
 import { Button } from "./ui/Button";
@@ -34,7 +35,12 @@ const PRIMARY_LINKS: { id: string; label: string }[] = [
   { id: "blog", label: "Blog" },
 ];
 
-const hrefFor = (id: string) => (id === "home" ? "#/" : `#/${id}`);
+/** Real clean-path href (Step 3): every tool/page now has a prerendered
+ * file, so the href is the URL itself, not a hash. getBasename() keeps the
+ * GitHub Pages project-page subpath in the href — a bare "/<id>" would lose
+ * it. Plain clicks are still intercepted by linkClick() for SPA navigation;
+ * modifier/middle-clicks follow the href natively. */
+const hrefFor = (id: string) => `${getBasename()}${id === "home" ? "/" : `/${id}`}`;
 
 export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile, onOpenBOQ }: NavProps) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -171,14 +177,14 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile, onOpe
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-[120] h-[var(--header-h)] bg-white/95 dark:bg-ink/95 backdrop-blur-md border-b transition-colors duration-200 ${
+        className={`fixed top-0 inset-x-0 z-[120] h-[var(--header-h)] bg-surface-default/95 dark:bg-ink/95 backdrop-blur-md border-b transition-colors duration-200 ${
           isScrolled || exploreOpen ? "border-border-color" : "border-transparent"
         }`}
       >
         <nav aria-label="Primary" className="max-w-[1400px] h-full mx-auto px-4 sm:px-6 flex items-center gap-2 lg:gap-4">
           {/* Logo */}
           <a
-            href="#/"
+            href={hrefFor("home")}
             onClick={linkClick("home")}
             aria-label="Civil Estimation Pro - home"
             className="flex items-center gap-2.5 shrink-0 rounded-lg pr-2"
@@ -228,7 +234,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile, onOpe
                             className={`w-full flex items-center justify-between gap-2 text-left px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
                               on
                                 ? "bg-surface-default text-accent-800 dark:text-accent-400 shadow-brand-sm"
-                                : "text-txt-primary hover:bg-white/70 dark:hover:bg-ink-700/60"
+                                : "text-txt-primary hover:bg-surface-default/70 dark:hover:bg-ink-700/60"
                             }`}
                           >
                             <span className="truncate">{c.name}</span>
@@ -268,7 +274,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile, onOpe
                       })}
                     </ul>
                     <a
-                      href="#/"
+                      href={hrefFor("home")}
                       onClick={(e) => {
                         linkClick("home")(e);
                         setTimeout(() => document.getElementById("tools")?.scrollIntoView({ behavior: "smooth" }), 250);
@@ -428,7 +434,7 @@ export default function TopNavbar({ onNavigate, onOpenAuth, onOpenProfile, onOpe
                                 <a
                                   href={hrefFor(t.id)}
                                   onClick={linkClick(t.id)}
-                                  className="block px-3 py-2.5 rounded-lg text-sm font-medium text-txt-primary dark:text-txt-primary hover:bg-white dark:hover:bg-ink-700"
+                                  className="block px-3 py-2.5 rounded-lg text-sm font-medium text-txt-primary dark:text-txt-primary hover:bg-surface-default dark:hover:bg-ink-700"
                                 >
                                   {t.title}
                                 </a>

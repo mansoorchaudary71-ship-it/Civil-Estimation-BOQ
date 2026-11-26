@@ -340,35 +340,35 @@ export default function MasterSieveAnalysis() {
                ) : (
                  <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#6B6862" opacity={0.2} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgb(107, 104, 98)" opacity={0.2} />
                       <XAxis 
                         dataKey="logSize" 
                         scale="log" 
                         domain={['auto', 'auto']} 
                         type="number"
                         tickFormatter={(val) => val === 0.001 ? "Pan" : val.toString()}
-                        stroke="#6B6862"
-                        label={{ value: "IS Sieve Size (mm)", position: "insideBottom", offset: -15, fill: "#6B6862", fontSize: 12 }}
+                        stroke="rgb(107, 104, 98)"
+                        label={{ value: "IS Sieve Size (mm)", position: "insideBottom", offset: -15, fill: "rgb(107, 104, 98)", fontSize: 12 }}
                       />
                       <YAxis 
                         domain={[0, 100]} 
-                        stroke="#6B6862"
-                        label={{ value: "% Passing", angle: -90, position: 'insideLeft', fill: "#6B6862", fontSize: 12 }}
+                        stroke="rgb(107, 104, 98)"
+                        label={{ value: "% Passing", angle: -90, position: 'insideLeft', fill: "rgb(107, 104, 98)", fontSize: 12 }}
                       />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: "#1F1D1A", borderColor: "#3A3630", borderRadius: "8px", color: "#F5F2EC" }}
-                        itemStyle={{ color: "#F5F2EC" }}
+                        contentStyle={{ backgroundColor: "rgb(31, 29, 26)", borderColor: "rgb(58, 54, 48)", borderRadius: "8px", color: "rgb(245, 242, 236)" }}
+                        itemStyle={{ color: "rgb(245, 242, 236)" }}
                         labelFormatter={(val) => val === 0.001 ? "Pan" : `Sieve: ${val}mm`}
                       />
                       <Legend verticalAlign="top" height={36} iconType="circle" />
                       
-                      <Line type="stepAfter" dataKey="Max" stroke="#B07006" strokeWidth={2} strokeDasharray="5 5" name="Upper Limit" dot={false} />
-                      <Line type="stepAfter" dataKey="Min" stroke="#1F1D1A" strokeWidth={2} strokeDasharray="5 5" name="Lower Limit" dot={false} />
-                      <Line type="monotone" dataKey="Actual" stroke="#F2A413" strokeWidth={3} name="Actual Gradation" dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                      <Line type="stepAfter" dataKey="Max" stroke="rgb(176, 112, 6)" strokeWidth={2} strokeDasharray="5 5" name="Upper Limit" dot={false} />
+                      <Line type="stepAfter" dataKey="Min" stroke="rgb(31, 29, 26)" strokeWidth={2} strokeDasharray="5 5" name="Lower Limit" dot={false} />
+                      <Line type="monotone" dataKey="Actual" stroke="rgb(242, 164, 19)" strokeWidth={3} name="Actual Gradation" dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
                       
-                      {d10 && <ReferenceLine x={d10} stroke="#6B6862" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: `D10: ${d10.toFixed(2)}`, fill: '#6B6862', fontSize: 10 }} />}
-                      {d30 && <ReferenceLine x={d30} stroke="#6B6862" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: `D30: ${d30.toFixed(2)}`, fill: '#6B6862', fontSize: 10 }} />}
-                      {d60 && <ReferenceLine x={d60} stroke="#6B6862" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: `D60: ${d60.toFixed(2)}`, fill: '#6B6862', fontSize: 10 }} />}
+                      {d10 && <ReferenceLine x={d10} stroke="rgb(107, 104, 98)" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: `D10: ${d10.toFixed(2)}`, fill: 'rgb(107, 104, 98)', fontSize: 10 }} />}
+                      {d30 && <ReferenceLine x={d30} stroke="rgb(107, 104, 98)" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: `D30: ${d30.toFixed(2)}`, fill: 'rgb(107, 104, 98)', fontSize: 10 }} />}
+                      {d60 && <ReferenceLine x={d60} stroke="rgb(107, 104, 98)" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: `D60: ${d60.toFixed(2)}`, fill: 'rgb(107, 104, 98)', fontSize: 10 }} />}
                     </LineChart>
                   </ResponsiveContainer>
                )}

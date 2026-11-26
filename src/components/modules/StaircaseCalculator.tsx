@@ -67,13 +67,13 @@ const StaircaseVisualizer = ({ rise, tread, numSteps, uLen }: { rise: number, tr
               
               {stepsCount > 1 && (
                   <g className="animate-in fade-in duration-500">
-                      <path d={`M ${tPx} ${viewBoxH - rPx} L ${tPx} ${viewBoxH - 2*rPx} L ${2*tPx} ${viewBoxH - 2*rPx}`} fill="none" stroke="#F2A413" strokeWidth="3.5" />
+                      <path d={`M ${tPx} ${viewBoxH - rPx} L ${tPx} ${viewBoxH - 2*rPx} L ${2*tPx} ${viewBoxH - 2*rPx}`} fill="none" stroke="rgb(242, 164, 19)" strokeWidth="3.5" />
                       
-                      <line x1={tPx - (viewBoxW*0.02)} y1={viewBoxH - rPx} x2={tPx - (viewBoxW*0.02)} y2={viewBoxH - 2*rPx} stroke="#F2A413" strokeWidth="1.5" strokeDasharray="4,2" />
-                      <text x={tPx - (viewBoxW*0.03)} y={viewBoxH - 1.5*rPx} fontSize={Math.max(12, viewBoxW * 0.05)} fill="#B07006" textAnchor="end" dominantBaseline="middle" fontWeight="bold">{r.toFixed(2)}</text>
+                      <line x1={tPx - (viewBoxW*0.02)} y1={viewBoxH - rPx} x2={tPx - (viewBoxW*0.02)} y2={viewBoxH - 2*rPx} stroke="rgb(242, 164, 19)" strokeWidth="1.5" strokeDasharray="4,2" />
+                      <text x={tPx - (viewBoxW*0.03)} y={viewBoxH - 1.5*rPx} fontSize={Math.max(12, viewBoxW * 0.05)} fill="rgb(176, 112, 6)" textAnchor="end" dominantBaseline="middle" fontWeight="bold">{r.toFixed(2)}</text>
                       
-                      <line x1={tPx} y1={viewBoxH - 2*rPx - (viewBoxH*0.04)} x2={2*tPx} y2={viewBoxH - 2*rPx - (viewBoxH*0.04)} stroke="#F2A413" strokeWidth="1.5" strokeDasharray="4,2" />
-                      <text x={1.5*tPx} y={viewBoxH - 2*rPx - (viewBoxH*0.05)} fontSize={Math.max(12, viewBoxW * 0.05)} fill="#B07006" textAnchor="middle" fontWeight="bold">{t.toFixed(2)}</text>
+                      <line x1={tPx} y1={viewBoxH - 2*rPx - (viewBoxH*0.04)} x2={2*tPx} y2={viewBoxH - 2*rPx - (viewBoxH*0.04)} stroke="rgb(242, 164, 19)" strokeWidth="1.5" strokeDasharray="4,2" />
+                      <text x={1.5*tPx} y={viewBoxH - 2*rPx - (viewBoxH*0.05)} fontSize={Math.max(12, viewBoxW * 0.05)} fill="rgb(176, 112, 6)" textAnchor="middle" fontWeight="bold">{t.toFixed(2)}</text>
                   </g>
               )}
            </svg>

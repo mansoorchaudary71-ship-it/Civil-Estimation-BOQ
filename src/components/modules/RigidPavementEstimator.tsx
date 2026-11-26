@@ -491,7 +491,7 @@ export default function RigidPavementEstimator({ designStandard }: { designStand
                subtitle={`DLC: ${volDLC.toFixed(2)} m³ | PQC: ${volPQC.toFixed(2)} m³`}
              >
               <div className="space-y-4 font-mono text-sm mb-6 mt-6">
-                <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                <div className="bg-surface-default/5 p-3 rounded-xl border border-white/10">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-white/60 font-sans font-medium">DLC Sub-base</span>
                     <span className="font-bold text-white text-lg">

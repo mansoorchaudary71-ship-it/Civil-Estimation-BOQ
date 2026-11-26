@@ -6,20 +6,20 @@ import { Check } from 'lucide-react';
 // Exact color mappings tailored to match the background hues of your tool cards
 const themeStyles = {
   brown: {
-    selectedBg: 'bg-[#f4ebe1]', // Matches the warm light brown/beige card fill
-    selectedText: 'text-[#5c4d3c]',
+    selectedBg: 'bg-surface-hover', // Matches the warm light brown/beige card fill
+    selectedText: 'text-txt-secondary',
     borderColor: 'border-ui-borderDefault',
     divideColor: 'divide-border-color'
   },
   blue: {
-    selectedBg: 'bg-[#e8f0fe]', // Matches the soft light blue card fill
-    selectedText: 'text-[#1a73e8]',
+    selectedBg: 'bg-surface-hover', // Matches the soft light blue card fill
+    selectedText: 'text-primary-700',
     borderColor: 'border-ui-borderDefault',
     divideColor: 'divide-border-color'
   },
   green: {
-    selectedBg: 'bg-[#e6f4ea]', // Matches the soft environmental green card fill
-    selectedText: 'text-[#137333]',
+    selectedBg: 'bg-surface-hover', // Matches the soft environmental green card fill
+    selectedText: 'text-ui-successText',
     borderColor: 'border-ui-borderDefault',
     divideColor: 'divide-border-color'
   }

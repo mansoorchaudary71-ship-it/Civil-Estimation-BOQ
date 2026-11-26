@@ -83,7 +83,7 @@ export function HowItWorksSection() {
             <div className="w-full bg-surface-default rounded-2xl border border-ui-borderSubtle shadow-brand-sm p-6 sm:p-8 relative h-full flex flex-col items-center text-center group hover:-translate-y-1 hover:shadow-brand-md transition-all duration-300 mt-6 md:mt-0">
               
               {/* Large numbered badge */}
-              <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-[48px] h-[48px] rounded-full bg-accent-400 flex items-center justify-center text-txt-primary text-xl font-black shadow-brand-sm border-[4px] border-[#F8F9FB] z-20 group-hover:scale-110 group-hover:bg-ink-700 group-hover:text-white transition-all duration-300">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-[48px] h-[48px] rounded-full bg-accent-400 flex items-center justify-center text-txt-primary text-xl font-black shadow-brand-sm border-[4px] border-border-color z-20 group-hover:scale-110 group-hover:bg-ink-700 group-hover:text-white transition-all duration-300">
                 {idx + 1}
               </div>
 
@@ -178,7 +178,7 @@ export function FeatureComparisonSection({
 
       <div className="w-full md:max-w-6xl md:mx-auto px-4 relative z-10">
         <div className="text-center md:mb-12 mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent-600/10 text-accent-800 rounded-full text-base font-medium tracking-widest uppercase mb-3 border border-[#FF5F15]/20 shadow-brand-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent-600/10 text-accent-800 rounded-full text-base font-medium tracking-widest uppercase mb-3 border border-accent-500/20 shadow-brand-sm">
             Compare
           </div>
           <h2
@@ -247,9 +247,9 @@ export function FeatureComparisonSection({
 
           {/* CE Pro Card */}
           <div
-            className="w-full bg-surface-default border-2 border-[#FFFFFF] rounded-2xl shadow-brand-md p-4 sm:p-6 flex flex-col relative mt-6 md:mt-0 md:-translate-y-1"
+            className="w-full bg-surface-default border-2 border-white rounded-2xl shadow-brand-md p-4 sm:p-6 flex flex-col relative mt-6 md:mt-0 md:-translate-y-1"
           >
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent-400 text-txt-primary font-black text-sm rounded-full px-3 py-1 shadow-[0_0_15px_rgba(255,192,0,0.4)] border border-[#FFC000]">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent-400 text-txt-primary font-black text-sm rounded-full px-3 py-1 shadow-[0_0_15px_rgba(255,192,0,0.4)] border border-border-default">
               RECOMMENDED
             </div>
 
@@ -269,7 +269,7 @@ export function FeatureComparisonSection({
                       </div>
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-surface-default text-txt-primary text-sm p-2.5 rounded-2xl text-center shadow-brand-lg z-50 pointer-events-none">
                         {feature.tooltip}
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-surface-default border-b border-r border-[#FFFFFF] rotate-45"></div>
+                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-surface-default border-b border-r border-white rotate-45"></div>
                       </div>
                     </div>
                   </div>

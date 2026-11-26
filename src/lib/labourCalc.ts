@@ -44,7 +44,7 @@ export interface LabourTaskResult {
 }
 
 /** Deterministic chart palette — never Math.random() per render. */
-export const LABOUR_PALETTE = ["#1F1D1A", "#F2A413", "#0F766E", "#EA4C89", "#7C6AAE", "#3B82F6", "#92400E", "#15803D"];
+export const LABOUR_PALETTE = ["rgb(31, 29, 26)", "rgb(242, 164, 19)", "rgb(15, 118, 110)", "rgb(234, 76, 137)", "rgb(124, 106, 174)", "rgb(59, 130, 246)", "rgb(146, 64, 14)", "rgb(21, 128, 61)"];
 
 export function calcLabourTask(t: LabourTaskInput, contingencyPct: number): LabourTaskResult {
   const keyWorkers = Math.max(t.keyWorkers, 0);

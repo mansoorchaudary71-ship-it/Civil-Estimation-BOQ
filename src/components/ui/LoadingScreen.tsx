@@ -30,7 +30,7 @@ export default function LoadingScreen() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0A0F1E] text-white"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink-900 text-white"
         >
           <div className="relative flex items-center justify-center">
             {/* Ambient glow */}

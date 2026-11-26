@@ -2,6 +2,14 @@ import React from 'react';
 import { Building2, ArrowUp, Mail } from 'lucide-react';
 import NewsletterSignupCard from './NewsletterSignupCard';
 import { ModuleId } from './Dashboard';
+import { getBasename } from '../lib/toolRoutes';
+
+/** Clean-path hrefs (Step 4): the app is BrowserRouter-based and the
+ *  prerender serves real files at clean URLs, so footer links use
+ *  `/${id}` with the project-page basename — not `#/${id}`. The onClick
+ *  handler still intercepts plain clicks for in-app navigation. */
+const hrefFor = (id: string) =>
+  `${getBasename()}${id === "home" ? "/" : `/${id}`}`;
 
 /**
  * Footer - Coursera-style dense, scannable link directory.
@@ -11,7 +19,7 @@ import { ModuleId } from './Dashboard';
  *  - Social icons pointed at "#" with target=_blank. They render only when a real URL is configured
  *    (VITE_SOCIAL_TWITTER / _LINKEDIN / _GITHUB), plus the working mailto link.
  *  - The language <select> did nothing (no i18n exists), which is a misleading control. Removed.
- *  - Links are real anchors (`#/route`) so open-in-new-tab and copy-link work.
+ *  - Links are real anchors (`/route`) so open-in-new-tab and copy-link work.
  *  - Global `footer h4 { text-transform: uppercase !important }` / `footer a { font-size !important }`
  *    CSS fought this component; that CSS was removed in index.css.
  */
@@ -100,7 +108,7 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-10">
           {/* Brand + contact (Coursera puts the app/social block in the last column) */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <a href="#/" onClick={go('home')} className="inline-flex items-center gap-2.5 mb-3" aria-label="Civil Estimation Pro - home">
+            <a href={hrefFor('home')} onClick={go('home')} className="inline-flex items-center gap-2.5 mb-3" aria-label="Civil Estimation Pro - home">
               <span className="w-9 h-9 rounded-lg bg-ink text-white flex items-center justify-center">
                 <Building2 className="w-5 h-5" aria-hidden="true" />
               </span>
@@ -146,7 +154,7 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
               <ul>
                 {col.links.map((l) => (
                   <li key={l.id}>
-                    <a href={`#/${l.id}`} onClick={go(l.id)} className={linkClass}>
+                    <a href={hrefFor(l.id)} onClick={go(l.id)} className={linkClass}>
                       {l.label}
                       {l.badge && (
                         <span className="px-1.5 py-0.5 rounded-md text-xs font-bold bg-accent-100 text-accent-800 dark:bg-accent-600/20 dark:text-accent-400">
@@ -174,7 +182,7 @@ export default function Footer({ onNavigate }: { activeModule?: ModuleId; onNavi
             <ul className="flex items-center gap-4">
               {LEGAL.map((l) => (
                 <li key={l.id}>
-                  <a href={`#/${l.id}`} onClick={go(l.id)} className="text-sm text-txt-secondary hover:text-accent-800 dark:hover:text-accent-400 hover:underline underline-offset-4">
+                  <a href={hrefFor(l.id)} onClick={go(l.id)} className="text-sm text-txt-secondary hover:text-accent-800 dark:hover:text-accent-400 hover:underline underline-offset-4">
                     {l.label}
                   </a>
                 </li>

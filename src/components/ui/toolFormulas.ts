@@ -149,6 +149,20 @@ Contingency 10-15% for site-condition variation`,
 Substructure, Superstructure, Finishes (material supply rates
 kept separate from labour installation rates)`,
 
+  "tracker": `Earned value (PMBOK):  SPI = EV / PV,  CPI = EV / AC
+CV = EV - AC (negative = over budget),  SV = EV - PV (negative = behind)
+EAC (CPI method) = BAC / CPI = AC + (BAC - EV) / CPI
+VAC = BAC - EAC,  TCPI = (BAC - EV) / (BAC - AC)
+Forecast delay (days) = (1 / SPI - 1) x remaining planned days`,
+
+  "qs-workflow": `Quantity = Nos x L x W x D for each measured item (IS 1200)
+Plaster deductions (IS 1200): opening < 0.5 m2 no deduction;
+0.5-3 m2 deduct one face only; > 3 m2 deduct both faces
+Footing concrete 1:2:4: dry volume = wet x 1.54;
+cement bags = dry x (1/7) / 0.0347
+Rate = material + labour + overheads/profit; tax is charged on
+subtotal + contingency (PK Sales Tax 18% / IN GST 18% / AE VAT 5%)`,
+
   "takeoff": `Deduct openings (doors, windows) from wall areas;
 openings < 0.5 sq m are usually ignored by standard codes
 Plaster area  A = (L x H) - A_openings`,
@@ -278,8 +292,4 @@ standard size (5 kW at 230 V, 0.9 pf -> ~40 A, 6 mm2 copper)`,
   "boq-templates": `BOQ heads follow standard civil divisions:
 Substructure, Superstructure, Finishes (material supply rates
 kept separate from labour installation rates)`,
-
-  // Alias of "pakistan-cost-calculator": same page, same method.
-  "cost-guide-pakistan": `Total cost = built-up area x rate per sq ft (by city and finish level)
-Grey structure + finishes are priced separately`,
 };

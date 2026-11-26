@@ -12,7 +12,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolvePath, getEffectivePathname, TOOL_IDS, SEO_SLUG_TO_ID, GROUP_TO_CATEGORY } from "../toolRoutes";
+import { resolvePath, getEffectivePathname, TOOL_IDS, SEO_SLUG_TO_ID, LEGACY_SLUG_TO_ID, GROUP_TO_CATEGORY } from "../toolRoutes";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -78,6 +78,21 @@ test("Round 3 SEO slugs resolve", () => {
 // tool (sitemap URL keeps working, no second card/search/JSON-LD).
 test("/cost-guide-pakistan aliases to pakistan-cost-calculator", () => {
   assert.deepEqual(resolvePath("/cost-guide-pakistan"), { kind: "tool", id: "pakistan-cost-calculator" });
+});
+
+// Step 5 merge: the alias id is retired from the registry — the honest
+// tool count is 74, not 75 — while the published URL keeps aliasing to
+// the canonical tool (previous test). No Dashboard card and no
+// renderModule case may re-register it (the registry-coverage test
+// below would fail if one did).
+test("cost-guide-pakistan is retired as a tool id (74 tools)", () => {
+  assert.ok(!TOOL_IDS.includes("cost-guide-pakistan"), "alias id must not be in TOOL_IDS");
+  assert.equal(TOOL_IDS.length, 74, `expected 74 tools, got ${TOOL_IDS.length}`);
+  assert.ok(TOOL_IDS.includes("pakistan-cost-calculator"), "canonical id stays registered");
+  // ...but the published URL stays live: it is kept in LEGACY_SLUG_TO_ID
+  // so scripts/routes.ts still emits it (prerendered + sitemap) with
+  // canonical /pakistan-cost-calculator, without counting as a tool.
+  assert.equal(LEGACY_SLUG_TO_ID["cost-guide-pakistan"], "pakistan-cost-calculator");
 });
 
 // Round 3 infra: the 6 tools with no SEO slug are deliberate —

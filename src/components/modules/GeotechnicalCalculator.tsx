@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { UniversalTabs } from "../ui/UniversalTabs";
 import { useGlobalSettings } from "../../context/SettingsContext";
 import { Droplet, Layers, Beaker, ArrowDownToLine, Flame, Download } from "lucide-react";
-import { useEstimateProcessing } from "../../hooks/useEstimateProcessing";
-import { ProcessingSkeleton } from "../ui/ProcessingSkeleton";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { SoilReportHeader } from "../ui/SoilReportHeader";
 import { SoilReportDetails, generateGeotechReportPDF } from "../../utils/soilReports";
@@ -13,34 +11,41 @@ import { cbrFromLoads } from "../../lib/geotechCalc";
 
 // Sub-components for each Geotechnical test
 export default function GeotechnicalCalculator() {
-  const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
   const { currentUnit } = useGlobalSettings();
   const [activeTab, setActiveTab] = useState<"water-content" | "specific-gravity" | "sieve" | "liquid-limit" | "cbr">("water-content");
   
+  // Step 5 ungating: every tab ships with a realistic lab example as its
+  // defaults, so a correct result renders on load and updates live as you
+  // type. The old "Generate Lab Report" gate (fake 500 ms delay, results
+  // hidden until the button) is removed; the button is now a PDF download.
+  // Defaults (worked examples, IS 2720): water content 25/135/118 g ->
+  // w 18.28%; pycnometer 600/800/1624.5/1500 g -> Gs 2.65; sieve
+  // 1000 g (250 gravel / 600 sand / 150 fines); LL 25 blows at 42% ->
+  // 42.0%; CBR 200 kg @ 2.5 mm / 280 kg @ 5.0 mm -> 14.60%.
   // States for Water Content
-  const [wcW1, setWcW1] = useState("");
-  const [wcW2, setWcW2] = useState("");
-  const [wcW3, setWcW3] = useState("");
+  const [wcW1, setWcW1] = useState("25");
+  const [wcW2, setWcW2] = useState("135");
+  const [wcW3, setWcW3] = useState("118");
 
   // States for Specific Gravity
-  const [sgW1, setSgW1] = useState("");
-  const [sgW2, setSgW2] = useState("");
-  const [sgW3, setSgW3] = useState("");
-  const [sgW4, setSgW4] = useState("");
+  const [sgW1, setSgW1] = useState("600");
+  const [sgW2, setSgW2] = useState("800");
+  const [sgW3, setSgW3] = useState("1624.5");
+  const [sgW4, setSgW4] = useState("1500");
 
   // States for Sieve Analysis (Simplified - % passing)
-  const [sieveTotal, setSieveTotal] = useState("");
-  const [sieveRetainedGravel, setSieveRetainedGravel] = useState(""); // Retained on 4.75mm
-  const [sieveRetainedSand, setSieveRetainedSand] = useState(""); // Retained on 75 microns (Sand)
+  const [sieveTotal, setSieveTotal] = useState("1000");
+  const [sieveRetainedGravel, setSieveRetainedGravel] = useState("250"); // Retained on 4.75mm
+  const [sieveRetainedSand, setSieveRetainedSand] = useState("600"); // Retained on 75 microns (Sand)
   // Passing 75 microns goes to Silt/Clay implicitly
 
   // States for Liquid Limit
-  const [llBlows, setLlBlows] = useState("");
-  const [llWaterContent, setLlWaterContent] = useState("");
+  const [llBlows, setLlBlows] = useState("25");
+  const [llWaterContent, setLlWaterContent] = useState("42");
 
   // States for CBR
-  const [cbrLoad25, setCbrLoad25] = useState("");
-  const [cbrLoad50, setCbrLoad50] = useState("");
+  const [cbrLoad25, setCbrLoad25] = useState("200");
+  const [cbrLoad50, setCbrLoad50] = useState("280");
 
   const [reportDetails, setReportDetails] = useState<SoilReportDetails>({
     projectName: "Foundation Reconnaissance",
@@ -155,7 +160,6 @@ export default function GeotechnicalCalculator() {
   }
 
   const handleSave = async () => {
-     if (!hasData) return;
      const results = Object.entries(currentExportData).map(([k, v]) => ({ label: k, value: v }));
      let title = activeTab.split("-").map(k => k.charAt(0).toUpperCase() + k.slice(1)).join(" ");
      await generateGeotechReportPDF(title, reportDetails, results, interpretationText);
@@ -179,14 +183,13 @@ export default function GeotechnicalCalculator() {
         <UniversalTabs 
           tabs={tabs.map(t => ({ id: t.id, label: t.label, icon: t.icon ? <t.icon className="w-5 h-5" /> : undefined }))} 
           activeTab={activeTab} 
-          onTabChange={(id) => { setActiveTab(id as any); resetEstimate(); }} 
+          onTabChange={(id) => { setActiveTab(id as any); }} 
         />
         
         <SoilReportHeader 
           details={reportDetails}
           onChange={handleReportChange}
           onGenerateReport={handleSave}
-          isGenerating={!hasData}
         />
 
         {/* Calculator Grid */}
@@ -195,11 +198,6 @@ export default function GeotechnicalCalculator() {
           {/* Inputs Section */}
           <div 
             className="bg-bg-card p-6 md:p-8 rounded-2xl shadow-brand-md border border-ui-borderSubtle dark:border-ink-600 flex flex-col gap-6 overflow-hidden"
-            onChange={(e) => {
-              if ((e.target as HTMLElement).tagName === 'INPUT') {
-                if (hasData) resetEstimate();
-              }
-            }}
           >
             <h3 className="border-b border-ui-borderSubtle dark:border-ink-600 pb-3 text-txt-primary dark:text-white text-lg font-medium text-txt-primary mb-4">
               Laboratory Data Inputs
@@ -309,21 +307,19 @@ export default function GeotechnicalCalculator() {
               </div>
             )}
 
+            {/* Results are live from the defaults above — no gate, no fake
+                delay (Step 5). This button downloads the same lab report
+                as a PDF instead of unlocking the results. */}
             <Button
-              onClick={() => processEstimate(() => {})}
-              disabled={isProcessing}
+              onClick={handleSave}
               className="w-full bg-ink hover:bg-ink-700 text-white font-bold py-4 px-6 rounded-full shadow-brand-md transition-all mt-2 active:scale-95 hover:-translate-y-0.5"
             >
-              {isProcessing ? "Generating Report..." : "Generate Lab Report"}
+              Download Lab Report (PDF)
             </Button>
           </div>
 
-          {/* Results Section */}
-          {isProcessing ? (
-            <div className="w-full">
-              <ProcessingSkeleton count={4} />
-            </div>
-          ) : hasData ? (
+          {/* Results Section — live from the defaults; no gate (Step 5). */}
+          {(
             <div className="bg-surface-default border border-ui-borderSubtle border-l-[4px] border-l-accent-500 p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl shadow-brand-sm sticky top-6 z-10 w-full transition-all overflow-hidden">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="uppercase st text-lg font-medium text-txt-primary mb-4">
@@ -342,14 +338,6 @@ export default function GeotechnicalCalculator() {
                   </div>
                 ))}
               </div>
-            </div>
-          ) : (
-            <div className="bg-surface-default rounded-2xl p-4 sm:p-8 md:p-8 border-2 border-dashed border-ui-borderSubtle dark:border-ink-600 flex flex-col items-center justify-center text-center sticky top-6 self-start h-full min-h-[300px] w-full overflow-hidden">
-              <Beaker className="w-12 h-12 text-txt-secondary mb-4" />
-              <h3 className="text-lg font-medium text-txt-primary mb-4">Waiting for Input</h3>
-              <p className="mt-2 max-w-sm text-base font-normal text-txt-secondary leading-relaxed">
-                Enter your test values on the left and generate a summarized lab report.
-              </p>
             </div>
           )}
           

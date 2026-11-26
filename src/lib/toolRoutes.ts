@@ -60,7 +60,6 @@ export const TOOL_IDS: readonly string[] = [
   "cbr-test",
   "chainage",
   "column-design",
-  "cost-guide-pakistan",
   "cost-summary",
   "direct-shear",
   "door-window-schedule",
@@ -254,8 +253,19 @@ export const GROUP_TO_CATEGORY: Readonly<Record<string, string>> = {
  * Ambiguity calls (documented): "area-calculator" is the generic Area &
  * Space tool; "property-area-calculator" is the plot-area (Marla/Kanal)
  * converter, the PK-market meaning of "property area".
+ *
+ * Step 5: "cost-guide-pakistan" lives here too, although it is not a
+ * legacy slug — it is the retired alias of "pakistan-cost-calculator".
+ * It is NOT a tool id (TOOL_IDS has 74 tools), but the published URL
+ * must keep its prerendered file and sitemap entry: scripts/routes.ts
+ * emits a route for every LEGACY_SLUG_TO_ID entry (kind "legacy-slug",
+ * canonical /pakistan-cost-calculator via canonicalToolPath), and the
+ * sitemap guard fails the build if a published URL disappears. The
+ * resolver's explicit alias branch above still handles /cost-guide-
+ * pakistan first, so this entry only keeps the URL published.
  */
 export const LEGACY_SLUG_TO_ID: Readonly<Record<string, string>> = {
+  "cost-guide-pakistan": "pakistan-cost-calculator",
   "rcc-slab-calculator": "master-rcc",
   "column-concrete-estimator": "column-design",
   "beam-calculator": "beam-design",
@@ -472,8 +482,10 @@ export function resolvePath(pathname: string): ResolvedRoute {
   // (which canonicalises onto itself). Resolve the alias to the
   // canonical tool so the published URL keeps working (sitemap, shared
   // links) without a second Dashboard card, a second search entry or a
-  // second set of structured data. Must sit BEFORE the TOOL_ID_SET
-  // check below: the alias id is still registered in TOOL_IDS.
+  // second set of structured data. Step 5: the alias id was retired
+  // from TOOL_IDS (74 tools, not 75) — this branch sits BEFORE the
+  // TOOL_ID_SET check below precisely because the id is no longer
+  // registered there.
   if (first === "cost-guide-pakistan") return { kind: "tool", id: "pakistan-cost-calculator" };
 
   // /<tool-id>  (canonical short form) or /<legacy-slug> (sitemap-tools.xml)

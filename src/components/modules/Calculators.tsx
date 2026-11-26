@@ -19,7 +19,6 @@ import {
   Scaling,
 } from "lucide-react";
 import { useGlobalSettings } from "../../context/SettingsContext";
-import { useEstimateProcessing } from "../../hooks/useEstimateProcessing";
 import { BatchInputMode, BatchColumn } from "../ui/BatchInputMode";
 import {
   ConcreteMortarCalculator,
@@ -41,7 +40,6 @@ import { CalculationHistory } from "../ui/CalculationHistory";
 export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }: { forcedTab?: "master" | "concrete" | "bricks" | "blocks" | "plaster" | "bricks-blocks" | "steel"; hideHeader?: boolean } = {}) {
   const { formatCurrency, currentUnit, setCurrentUnit, currentCurrency } = useGlobalSettings();
   const { user } = useAuth();
-  const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
 
   // NOTE: the old <SEO> import and `schema` const were dead code (never
   // rendered) — deleted. The ModuleWrapper already emits SEOHead.
@@ -312,7 +310,6 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
                 key={type}
                 onClick={() => { 
                   setConcreteType(type); 
-                  if(hasData) resetEstimate(); 
                   
                   // Suggest standard concrete grades based on structural member
                   if (type === "slab") setCMix("1:1.5:3"); // M20 is standard for slabs
@@ -1111,7 +1108,7 @@ export default function ConstructionMaterialEstimator({ forcedTab, hideHeader }:
             {(["plaster", "paint", "antitermite"] as const).map((type) => (
               <Button
                 key={type}
-                onClick={() => { setFinishesType(type); if(hasData) resetEstimate(); }}
+                onClick={() => { setFinishesType(type); }}
                 className={`flex-1 sm:flex-none px-4 py-2 rounded-2xl text-base font-medium transition-all ${
                   finishesType === type 
                     ? "bg-surface-default  shadow-brand-sm text-accent-800 " 

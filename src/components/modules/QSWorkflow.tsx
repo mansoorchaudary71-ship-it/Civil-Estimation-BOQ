@@ -12,7 +12,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { useRates } from '../../lib/useRates';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { footingConcrete, volumeFromRows } from '../../lib/qsWorkflow';
-import { taxLabelForRegion } from '../../lib/boq';
+import { sendToBoq, taxLabelForRegion } from '../../lib/boq';
 import toast from 'react-hot-toast';
 
 
@@ -142,7 +142,7 @@ export default function QSWorkflow() {
     name, value
   }));
 
-  const COLORS = ['#F2A413', '#1F1D1A', '#B07006', '#6B6862', '#0F766E'];
+  const COLORS = ['rgb(242, 164, 19)', 'rgb(31, 29, 26)', 'rgb(176, 112, 6)', 'rgb(107, 104, 98)', 'rgb(15, 118, 110)'];
 
   useAutoSave('qs-workflow', { projectData, totalPlinthArea, substructure, superstructure, masonry, services, currentStep, rates, taxRegion, gstPct },
     { projectData: setProjectData, totalPlinthArea: setTotalPlinthArea, substructure: setSubstructure, superstructure: setSuperstructure, masonry: setMasonry, services: setServices, currentStep: (v: Step) => setCurrentStep(v), rates: setRates, taxRegion: setTaxRegion, gstPct: setGstPct });
@@ -169,6 +169,21 @@ export default function QSWorkflow() {
   const copyBoq = () => {
     const tsv = boqItems.map((i) => [i.section, i.item, i.qty, i.unit, i.rate, i.amount].join("\t")).join("\n");
     navigator.clipboard.writeText(tsv).then(() => toast.success("BOQ copied as TSV")).catch(() => toast.error("Copy failed"));
+  };
+
+  // Step 5: send this workflow's compiled BOQ lines to the BOQ Generator
+  // via the shared inbox (lib/boq sendToBoq) — same mechanism as
+  // Material Takeoff / Measurement Sheet. Rates are the (labelled
+  // example) rates from Step 7; the BOQ workspace shows them for review.
+  const sendBoqToGenerator = () => {
+    sendToBoq(boqItems.map((i) => ({
+      description: `${i.section} — ${i.item}`,
+      unit: i.unit,
+      quantity: Math.round(i.qty * 100) / 100,
+      rate: i.rate,
+      source: "QS Workflow",
+    })));
+    toast.success("Sent to the BOQ Generator — open the BOQ tool and load the inbox lines.");
   };
 
   const steps = [
@@ -499,6 +514,7 @@ export default function QSWorkflow() {
                <div className="flex flex-wrap gap-3 mt-4">
                  <Button onClick={exportBoqCsv} className="px-4 py-2 rounded-full bg-ink text-white text-sm font-bold">Download CSV</Button>
                  <Button onClick={copyBoq} className="px-4 py-2 rounded-full bg-surface-hover text-sm font-bold">Copy BOQ (TSV)</Button>
+                 <Button onClick={sendBoqToGenerator} className="px-4 py-2 rounded-full bg-ui-success text-ui-successText text-sm font-bold border border-ui-successBorder">Send to BOQ</Button>
                </div>
                <p className="text-xs text-txt-tertiary mt-2">Quantities are derived from the dimensions you entered; the pie in Step 8 sums the same category totals — no double-counting. Rainwater harvesting at Rs 15/litre is an example rate carried over from the legacy template — confirm with your vendor.</p>
             </div>
@@ -648,7 +664,7 @@ export default function QSWorkflow() {
           body * {
             visibility: hidden;
             background: transparent;
-            color: #1F1D1A;
+            color: rgb(31, 29, 26);
           }
           .no-print { display: none !important; }
           .print-container, .print-container * {

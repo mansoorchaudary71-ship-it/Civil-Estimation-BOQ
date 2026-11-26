@@ -1,18 +1,22 @@
 import AppDownloadBanner from "./components/ui/AppDownloadBanner";
 
 import { ArrowLeft } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { lazyWithRetry } from "./lib/lazyWithRetry";
 import { useLocation, useNavigate } from "react-router-dom";
 import Dashboard, { ALL_MODULES as ALL_TOOLS } from "./components/Dashboard";
 import TopNavbar from "./components/TopNavbar";
-import AboutUs from "./components/pages/AboutUs";
-import Careers from "./components/pages/Careers";
-import Contact from "./components/pages/Contact";
-import Blog from "./components/pages/Blog";
-import LegalPages from "./components/pages/LegalPages";
-import PricingPage from "./components/pages/PricingPage";
+// Static pages render only when their route is active, so they are lazy
+// (Leg 3): on the home first paint they must not ride in the entry chunk.
+// Blog alone pulls react-markdown + the blog markdown content.
+const AboutUs = lazy(() => lazyWithRetry(() => import("./components/pages/AboutUs")));
+const Careers = lazy(() => lazyWithRetry(() => import("./components/pages/Careers")));
+const Contact = lazy(() => lazyWithRetry(() => import("./components/pages/Contact")));
+const Blog = lazy(() => lazyWithRetry(() => import("./components/pages/Blog")));
+const LegalPages = lazy(() => lazyWithRetry(() => import("./components/pages/LegalPages")));
+const PricingPage = lazy(() => lazyWithRetry(() => import("./components/pages/PricingPage")));
+const StandardsReferencePage = lazy(() => lazyWithRetry(() => import("./components/StandardsReferencePage")));
 // Full-page tools loaded on demand (see the lazy tool block below).
 const BrickCalculatorPage = lazy(() => lazyWithRetry(() => import("./components/pages/BrickCalculatorPage")));
 const MixDesignCalculatorPage = lazy(() => lazyWithRetry(() => import("./components/pages/MixDesignCalculatorPage")));
@@ -26,7 +30,6 @@ const TeamCollaboration = lazy(() => lazyWithRetry(() => import("./components/pa
 const JoinProject = lazy(() => lazyWithRetry(() => import("./components/pages/JoinProject")));
 const RecentEstimates = lazy(() => lazyWithRetry(() => import("./components/RecentEstimates")));
 const DiscussionWidget = lazy(() => lazyWithRetry(() => import("./components/DiscussionWidget")));
-import StandardsReferencePage from "./components/StandardsReferencePage";
 import { resolvePath, getEffectivePathname, pathFromId } from "./lib/toolRoutes";
 import { readBoqInbox, sendToBoq } from "./lib/boq";
 import Footer from "./components/Footer";
@@ -36,15 +39,34 @@ import LoadingScreen from "./components/ui/LoadingScreen";
 import SectionNavigator from "./components/ui/SectionNavigator";
 import ScrollProgressBar from "./components/ui/ScrollProgressBar";
 import ReadingTimeIndicator from "./components/ui/ReadingTimeIndicator";
-import { ToolHeader } from "./components/ui/ToolHeader";
-import ModuleSummaryDashboard from "./components/ui/ModuleSummaryDashboard";
-import Breadcrumb from "./components/Breadcrumb";
+// Tool-page chrome renders only on tool routes (inside ModuleWrapper,
+// which itself renders inside the tool-branch <Suspense>), so it is lazy
+// (Leg 3). ToolHeader alone pulls qrcode.react + the formula/reference
+// tables; SEOHead pulls the 448 kB toolGuides data; GlobalFAQ pulls the
+// per-tool FAQ constants out of a dozen src/lib/*Calc engines — together
+// they were ~700 kB rendered inside the entry chunk. Breadcrumb and
+// CodeReferences were imported here but never used — removed (Leg 3).
+const ToolHeader = lazy(() => lazyWithRetry(() => import("./components/ui/ToolHeader")).then((m) => ({ default: m.ToolHeader })));
+// Canonical tool-page template (Step 4): breadcrumb, standards badge,
+// canonical actions row and formula section. One shared module, so the
+// four pieces land in a single chunk.
+const ToolBreadcrumb = lazy(() => lazyWithRetry(() => import("./components/ui/ToolPageTemplate")).then((m) => ({ default: m.ToolBreadcrumb })));
+const ToolStandardsBadge = lazy(() => lazyWithRetry(() => import("./components/ui/ToolPageTemplate")).then((m) => ({ default: m.ToolStandardsBadge })));
+const ToolActionsBar = lazy(() => lazyWithRetry(() => import("./components/ui/ToolPageTemplate")).then((m) => ({ default: m.ToolActionsBar })));
+const ToolFormulaSection = lazy(() => lazyWithRetry(() => import("./components/ui/ToolPageTemplate")).then((m) => ({ default: m.ToolFormulaSection })));
+const ModuleSummaryDashboard = lazy(() => lazyWithRetry(() => import("./components/ui/ModuleSummaryDashboard")));
+const SEOHead = lazy(() => lazyWithRetry(() => import("./components/SEOHead")));
+const ProTipsWidget = lazy(() => lazyWithRetry(() => import("./components/ui/ProTipsWidget")).then((m) => ({ default: m.ProTipsWidget })));
+const ToolArticleWidget = lazy(() => lazyWithRetry(() => import("./components/ui/ToolArticleWidget")).then((m) => ({ default: m.ToolArticleWidget })));
+const GlobalFAQ = lazy(() => lazyWithRetry(() => import("./components/ui/GlobalFAQ")).then((m) => ({ default: m.GlobalFAQ })));
+const RelatedCalculators = lazy(() => lazyWithRetry(() => import("./components/calculators/RelatedCalculators")).then((m) => ({ default: m.RelatedCalculators })));
+const FeedbackWidget = lazy(() => lazyWithRetry(() => import("./components/ui/FeedbackWidget")).then((m) => ({ default: m.FeedbackWidget })));
+const ToolPageFooter = lazy(() => lazyWithRetry(() => import("./components/ToolPageFooter")));
 import { Toaster } from "react-hot-toast";
 import { ProductTour } from "./components/ui/ProductTour";
 
 import { ThemeProvider } from "./context/ThemeContext";
 import { BOQProvider } from "./context/BOQContext";
-import MasterBOQDrawer from "./components/boq/MasterBOQDrawer";
 import { FileText } from "lucide-react";
 import { SettingsProvider } from "./context/SettingsContext";
 import { HouseSpecsProvider } from "./context/HouseSpecsContext";
@@ -55,21 +77,16 @@ import { useRecentTools } from "./hooks/useRecentTools";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 
-import { CodeReferences } from "./components/ui/CodeReferences";
-import { ProTipsWidget } from "./components/ui/ProTipsWidget";
-
-
-
-import { ToolArticleWidget } from "./components/ui/ToolArticleWidget";
-
-import { RelatedCalculators } from "./components/calculators/RelatedCalculators";
-
-import { GlobalFAQ } from "./components/ui/GlobalFAQ";
-import { FeedbackWidget } from "./components/ui/FeedbackWidget";
-import ToolPageFooter from "./components/ToolPageFooter";
-import PrintPreviewModal from "./components/ui/PrintPreviewModal";
-import GlobalSearchModal from "./components/ui/GlobalSearchModal";
-import AuthModal from "./components/auth/AuthModal";
+// Modals/drawer are lazy AND conditionally rendered (Leg 3): each returns
+// null (or renders nothing) while closed and all of their effects are
+// isOpen-gated, so mounting them only when opened keeps their code out of
+// first paint entirely — a bare lazy() would still fetch on mount, because
+// they sit in the App tree unconditionally. ProductTour stays eager: it
+// mounts listeners on every load to decide whether to show.
+const AuthModal = lazy(() => lazyWithRetry(() => import("./components/auth/AuthModal")));
+const PrintPreviewModal = lazy(() => lazyWithRetry(() => import("./components/ui/PrintPreviewModal")));
+const GlobalSearchModal = lazy(() => lazyWithRetry(() => import("./components/ui/GlobalSearchModal")));
+const MasterBOQDrawer = lazy(() => lazyWithRetry(() => import("./components/boq/MasterBOQDrawer")));
 
 type ModuleId = string;
 // Tool modules are loaded on demand with React.lazy so the home page ships a
@@ -140,7 +157,6 @@ const UniversalStructuralGeometryEngine = lazy(() => lazyWithRetry(() => import(
 const MasterSoilMechanicsLabSuite = lazy(() => lazyWithRetry(() => import("./components/modules/MasterSoilMechanicsLabSuite")));
 const MasterInfrastructureMEPEngine = lazy(() => lazyWithRetry(() => import("./components/modules/MasterInfrastructureMEPEngine")));
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import SEOHead from "./components/SEOHead";
 const PrecastWallEstimator = lazy(() => lazyWithRetry(() => import("./components/calculators/PrecastWallEstimator")).then((m) => ({ default: m.PrecastWallEstimator })));
 const PlywoodEstimator = lazy(() => lazyWithRetry(() => import("./components/calculators/PlywoodEstimator")).then((m) => ({ default: m.PlywoodEstimator })));
 
@@ -204,19 +220,35 @@ const ModuleWrapper = ({ id, title, onNavigate, children }: { id: string, title:
     <div className="flex-1 flex flex-col relative w-full bg-transparent">
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col">
         <SEOHead toolId={id} toolName={actualTitle} category={category} description={subtitle} />
+        {/* Template §1 — breadcrumb first, then H1/description/unit+currency
+            (ToolHeader), then the standards badge. */}
+        <ToolBreadcrumb toolId={id} title={actualTitle} category={category} onNavigate={onNavigate} />
         <ToolHeader id={id} title={actualTitle} themeType={themeType} subtitle={subtitle} icon={Icon} onNavigate={onNavigate} />
+        <div className="mb-6 print:hidden">
+          <ToolStandardsBadge toolId={id} />
+        </div>
         <div className="global-form-card-wrapper w-full flex-1">
           <ErrorBoundary onNavigate={onNavigate} fallbackModuleId="home">
             {children}
           </ErrorBoundary>
         </div>
-        
+
+        {/* Template §3 then §4 — formula/methodology section (renders
+            nothing for tools with no verified formula), then the canonical
+            actions row (Copy, Print, PDF, Excel, Add to BOQ, Share). */}
+        <div className="mt-8 space-y-8 print:hidden">
+          <ToolFormulaSection toolId={id} />
+          <ToolActionsBar toolId={id} toolName={actualTitle} />
+        </div>
+
+        {/* Template §5 — related calculators, FAQ, SEO article (central
+            components, already 75/75), then feedback/discussion/footer. */}
         <div className="mt-12 space-y-8 pb-16 print:hidden">
           <ModuleSummaryDashboard moduleId={id} />
           <ProTipsWidget moduleId={id} />
-          <ToolArticleWidget toolName={actualTitle} toolId={id} />
-          <GlobalFAQ moduleId={id} />
           <RelatedCalculators category={category} currentSlug={id} />
+          <GlobalFAQ moduleId={id} />
+          <ToolArticleWidget toolName={actualTitle} toolId={id} />
           <FeedbackWidget toolName={actualTitle} />
           <DiscussionWidget moduleId={id} toolName={actualTitle} />
           <ToolPageFooter 
@@ -296,13 +328,6 @@ function renderModule(activeModule: string, onNavigate: (id: string) => void) {
     // reference pre-filtered to the right country.
     case "boq-templates":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="BOQGenerator"><BOQGenerator /></ModuleWrapper>;
-
-    // Alias fallback: resolvePath() maps /cost-guide-pakistan onto
-    // /pakistan-cost-calculator, so this case is normally unreachable —
-    // it stays so a stale stored activeModule id still renders the
-    // same page instead of the 404.
-    case "cost-guide-pakistan":
-      return <PakistanCostCalculatorPage />;
 
     case "takeoff":
       return <ModuleWrapper id={activeModule} onNavigate={onNavigate} title="Takeoff"><Takeoff /></ModuleWrapper>;
@@ -749,13 +774,34 @@ export default function App() {
         const val = parseFloat(target.value);
         if (isNaN(val) || val === 0) return;
 
-        const identifiers = (target.id + " " + target.name + " " + target.placeholder + " " + target.className).toLowerCase();
+        // Tools that manage their own unit state (e.g. plywood, brick) convert
+        // their own values in their local toggle — a DOM-level rewrite here
+        // cannot know the tool's current unit, so it corrupted values (plywood
+        // Length 10 m became 3.048, wastage 5% became 1.524%). Skip any input
+        // inside a container that declares local unit ownership.
+        if (target.closest('[data-local-units]')) return;
+
+        // Field semantics live in the LABEL as well as id/name/placeholder
+        // (e.g. "Wastage & overlap (%)" — the input itself carries no hint),
+        // so read the associated label text before classifying the field.
+        const labelTexts: string[] = [];
+        if (target.labels) labelTexts.push(...Array.from(target.labels).map((l) => l.textContent || ''));
+        const prev = target.previousElementSibling;
+        if (prev && prev.tagName === 'LABEL') labelTexts.push(prev.textContent || '');
+        const wrapLabel = target.closest('div')?.querySelector(':scope > label');
+        if (wrapLabel) labelTexts.push(wrapLabel.textContent || '');
+        const identifiers = (target.id + " " + target.name + " " + target.placeholder + " " + target.className + " " + labelTexts.join(" ")).toLowerCase();
         
         if (
           identifiers.includes('price') || 
           identifiers.includes('cost') || 
           identifiers.includes('rate') || 
           identifiers.includes('percent') || 
+          identifiers.includes('%') ||
+          identifiers.includes('wastage') ||
+          identifiers.includes('overlap') ||
+          identifiers.includes('factor') ||
+          identifiers.includes('reuse') ||
           identifiers.includes('ratio') || 
           identifiers.includes('count') || 
           identifiers.includes('quantity') ||
@@ -879,6 +925,25 @@ export default function App() {
 
   return (
     <SmoothScroll>
+    {/* MotionConfig reducedMotion="user" (Leg 3): framer-motion now honours
+        the OS prefers-reduced-motion setting instead of animating regardless. */}
+    <MotionConfig reducedMotion="user">
+      <style>{`
+        /* Route visibility guard (Leg 3): framer-motion mounts route
+           content at opacity 0 and animates it in. If JS stalls
+           mid-animation the page could stay invisible. This CSS animation
+           is NOT gated on JS (it runs on the compositor): 1.2s after the
+           route container mounts it forces opacity to 1. It sits on
+           motion.main — the one animated ancestor with no exit animation
+           — so it can never fight a route exit fade, and it only ever
+           raises opacity, never hides anything. Under
+           prefers-reduced-motion it fires immediately (no fade at all). */
+        @keyframes cep-route-visible { to { opacity: 1; } }
+        .cep-route-guard { animation: cep-route-visible 0.01s linear 1.2s forwards; }
+        @media (prefers-reduced-motion: reduce) {
+          .cep-route-guard { animation-delay: 0s; }
+        }
+      `}</style>
       <SkipToContent />
       <LoadingScreen />
       <SectionNavigator />
@@ -894,9 +959,9 @@ export default function App() {
                 <div className="flex flex-col min-h-screen w-full bg-surface-hover dark:bg-ink-900 font-sans text-txt-primary dark:text-txt-primary transition-colors duration-300">
                   <Toaster position="bottom-right" />
                   {activeModule === "home" && <AppDownloadBanner />}
-                  <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
-                  <PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} />
-                  <GlobalSearchModal isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} onNavigate={handleSelectModule} />
+                  {isAuthOpen && (<Suspense fallback={null}><AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} /></Suspense>)}
+                  {isPrintPreviewOpen && (<Suspense fallback={null}><PrintPreviewModal isOpen={isPrintPreviewOpen} onClose={() => setIsPrintPreviewOpen(false)} /></Suspense>)}
+                  {isGlobalSearchOpen && (<Suspense fallback={null}><GlobalSearchModal isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} onNavigate={handleSelectModule} /></Suspense>)}
                   
 
                   
@@ -924,12 +989,17 @@ export default function App() {
                           transition: { staggerChildren: 0.15, delayChildren: 0.1 }
                         }
                       }}
-                      className="flex-1 flex flex-col bg-transparent relative w-full transition-all duration-300"
+                      className="cep-route-guard flex-1 flex flex-col bg-transparent relative w-full transition-all duration-300"
                     >
                       <ReadingTimeIndicator activeModule={activeModule} />
                       <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="w-full flex-1 flex flex-col relative transition-all duration-300">
                         <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="flex-1 flex flex-col relative w-full transition-colors duration-300">
-                          <AnimatePresence mode="wait">
+                          {/* Leg 3: mode="wait" removed — it held the incoming
+                              route invisible until the outgoing route's exit
+                              animation finished, so any stall left a blank
+                              page. Default (sync) mode renders the new route
+                              immediately; the old one still fades out. */}
+                          <AnimatePresence>
                             <motion.div
                               key={activeModule}
                               initial="hidden"
@@ -986,7 +1056,7 @@ export default function App() {
                   </div>
                 </div>
               </ProjectProvider>
-          <MasterBOQDrawer isOpen={isBOQOpen} onClose={() => setIsBOQOpen(false)} />
+          {isBOQOpen && (<Suspense fallback={null}><MasterBOQDrawer isOpen={isBOQOpen} onClose={() => setIsBOQOpen(false)} /></Suspense>)}
           </BOQProvider>
             </TakeoffProvider>
           </MarketRatesProvider>
@@ -994,6 +1064,7 @@ export default function App() {
       </SettingsProvider>
       </AuthProvider>
       </ThemeProvider>
+    </MotionConfig>
     </SmoothScroll>
   );
 }

@@ -71,12 +71,37 @@ const BRICKWORK_RATE = Math.round(
 const PLASTER_RATE = Math.round(analyseMix(MIXES.find((m) => m.id === "plaster14")!, PK_IN).finalRate / 10);
 const STEEL_RATE = PK_TABLE.rates.steelPerKg ?? 270;
 
+/** Step 5: safe parse for the `recent_blueprints` localStorage value.
+ *  The old code did a bare JSON.parse and handed the result straight to
+ *  state — a corrupt value (or a non-array, e.g. a string) crashed the
+ *  Recent Blueprints list at render time (.map on a non-array). Only a
+ *  validated array of {name, dataUrl, date} entries is ever accepted;
+ *  anything else loads as an empty list. */
+export function parseRecentBlueprints(
+  raw: string | null,
+): { name: string; dataUrl: string; date: string }[] {
+  if (!raw) return [];
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (b): b is { name: string; dataUrl: string; date: string } =>
+        !!b &&
+        typeof b === "object" &&
+        typeof (b as { name?: unknown }).name === "string" &&
+        typeof (b as { dataUrl?: unknown }).dataUrl === "string",
+    );
+  } catch {
+    return [];
+  }
+}
+
 const ASSEMBLIES = [
   {
     id: "asm-foundation",
     name: "Foundation Strip",
     icon: "🏗️",
-    color: "#F2A413",
+    color: "rgb(242, 164, 19)",
     inputs: [
       { key: "length", label: "Length (m)", type: "number", placeholder: "e.g. 10" },
       { key: "width", label: "Width (m)", type: "number", placeholder: "e.g. 0.6" },
@@ -98,7 +123,7 @@ const ASSEMBLIES = [
     id: "asm-colpad",
     name: "Column Pad",
     icon: "⏹️",
-    color: "#F2A413",
+    color: "rgb(242, 164, 19)",
     inputs: [
       { key: "side", label: "Side (m)", type: "number", placeholder: "e.g. 1.2" },
       { key: "depth", label: "Depth (m)", type: "number", placeholder: "e.g. 1.5" },
@@ -119,7 +144,7 @@ const ASSEMBLIES = [
     id: "asm-brickwall",
     name: "Brick Wall",
     icon: "🧱",
-    color: "#B07006",
+    color: "rgb(176, 112, 6)",
     inputs: [
       { key: "length", label: "Length (m)", type: "number", placeholder: "e.g. 5" },
       { key: "height", label: "Height (m)", type: "number", placeholder: "e.g. 3" },
@@ -141,7 +166,7 @@ const ASSEMBLIES = [
     id: "asm-slab",
     name: "RCC Slab",
     icon: "⬜",
-    color: "#0F766E",
+    color: "rgb(15, 118, 110)",
     inputs: [
       { key: "area", label: "Area (m²)", type: "number", placeholder: "e.g. 20" },
       { key: "thick", label: "Thickness (m)", type: "number", placeholder: "e.g. 0.15" },
@@ -162,7 +187,7 @@ const ASSEMBLIES = [
     id: "asm-road",
     name: "Road Section",
     icon: "🛣️",
-    color: "#6B6862",
+    color: "rgb(107, 104, 98)",
     inputs: [
       { key: "length", label: "Length (m)", type: "number", placeholder: "e.g. 100" },
       { key: "width", label: "Width (m)", type: "number", placeholder: "e.g. 7" },
@@ -288,7 +313,10 @@ export default function Takeoff() {
   }, [showTutorial]);
 
   const handleLoadDemo = () => {
-    setFilename("Demo Blueprint");
+    // Clearly-labelled SAMPLE — the page loads with no blueprint ("No file
+    // loaded" empty state); this is opt-in, and Clear blueprint below
+    // removes it again (Step 5).
+    setFilename("Sample Blueprint (demo — not a real plan)");
     const img = new Image();
     img.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZmZmIj48cmVjdCB4PSIxMDAiIHk9IjEwMCIgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxMCIvPjxyZWN0IHg9IjQwMCIgeT0iMTAwIiB3aWR0aD0iMTAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMDAwIi8+PHRleHQgeD0iMjUwIiB5PSIzMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Sb29tIDE8L3RleHQ+PHRleHQgeD0iNTUwIiB5PSIzMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Sb29tIDI8L3RleHQ+PGxpbmUgeDE9IjIwMCIgeTE9IjE1MCIgeDI9IjIwMCIgeTI9IjQ1MCIgc3Ryb2tlPSIjY2NjIiBzdHJva2UtZGFzaGFycmF5PSI1LDUiLz48dGV4dCB4PSIyMjAiIHk9IjI1MCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM2NjYiPjEwbTwvdGV4dD48L3N2Zz4=";
     img.onload = () => {
@@ -296,6 +324,20 @@ export default function Takeoff() {
       setStageScale(1);
       setStagePos({ x: 0, y: 0 });
     };
+  };
+
+  // Step 5: clear the loaded blueprint (upload or sample) back to the
+  // neutral empty state — image, measurements, BOQ lines and scale all
+  // reset, so a stale scale can never leak into the next blueprint.
+  const handleClearBlueprint = () => {
+    setImage(null);
+    setFilename("No file loaded");
+    setMeasurements([]);
+    setBoqItems([]);
+    setStageScale(1);
+    setStagePos({ x: 0, y: 0 });
+    setScalePxPerUnit(1);
+    setUnitName("m");
   };
 
   const handleRenameMeasurement = (id: string) => {
@@ -325,16 +367,12 @@ export default function Takeoff() {
   const [recentBlueprints, setRecentBlueprints] = useState<{name: string, dataUrl: string, date: string}[]>([]);
   
   useEffect(() => {
-    try {
-      const recent = JSON.parse(localStorage.getItem("recent_blueprints") || "[]");
-      setRecentBlueprints(recent);
-    } catch(e) {}
+    setRecentBlueprints(parseRecentBlueprints(localStorage.getItem("recent_blueprints")));
   }, []);
 
   const saveRecentBlueprint = (name: string, dataUrl: string) => {
     try {
-      const recentStr = localStorage.getItem("recent_blueprints") || "[]";
-      let recent = JSON.parse(recentStr);
+      let recent = parseRecentBlueprints(localStorage.getItem("recent_blueprints"));
       recent = recent.filter((r: any) => r.name !== name);
       recent.unshift({ name, dataUrl, date: new Date().toISOString() });
       recent = recent.slice(0, 3);
@@ -459,7 +497,7 @@ export default function Takeoff() {
         id: crypto.randomUUID(),
         type: "line",
         points: [...drawingPoints],
-        color: "#F2A413",
+        color: "rgb(242, 164, 19)",
         name: `Line ${measurements.length + 1}`,
       };
       addMeasurement(newMeasurement);
@@ -469,7 +507,7 @@ export default function Takeoff() {
           id: crypto.randomUUID(),
           type: "area",
           points: [...drawingPoints],
-          color: "#F2A413",
+          color: "rgb(242, 164, 19)",
           name: `Area ${measurements.length + 1}`,
         };
         addMeasurement(newMeasurement);
@@ -670,9 +708,17 @@ export default function Takeoff() {
                   className="flex items-center gap-2 cursor-pointer text-xs bg-accent-50 border border-accent-200 hover:bg-accent-100 text-accent-800 px-3 py-1.5 rounded transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm"
                   title="Load a sample blueprint to try the features"
                 >
-                  Try Demo
+                  Try Sample
                 </Button>
               </div>
+            )}
+            {image && (
+              <Button onClick={handleClearBlueprint}
+                className="flex items-center gap-2 cursor-pointer text-xs bg-surface-default border border-ui-borderSubtle hover:bg-surface-active text-txt-secondary px-3 py-1.5 rounded transition-colors"
+                title="Remove the loaded blueprint and return to the empty state"
+              >
+                <Trash2 className="w-[14px] h-[14px]" /> Clear blueprint
+              </Button>
             )}
             <div className="h-4 w-px bg-surface-active" />
             <div className="flex items-center gap-1">
@@ -819,7 +865,7 @@ export default function Takeoff() {
                   <Button onClick={handleLoadDemo}
                     className="pointer-events-auto flex items-center gap-2 cursor-pointer text-sm font-bold bg-accent-50 border border-accent-200 hover:bg-accent-100 text-accent-800 px-6 py-3 rounded-full transition-all shadow-brand-sm hover:shadow-brand-md active:scale-95 hover:-translate-y-0.5"
                   >
-                    Try Demo Blueprint
+                    Try Sample Blueprint
                   </Button>
                 </div>
                 {recentBlueprints.length > 0 && (
@@ -828,8 +874,8 @@ export default function Takeoff() {
                     <div className="flex flex-col gap-2">
                        {recentBlueprints.map((b, i) => (
                          <Button key={i} onClick={() => handleLoadRecent(b)} className="px-4 py-2 border border-border-color rounded text-left hover:bg-accent-50 flex justify-between items-center group transition-colors rounded-full active:scale-95 hover:-translate-y-0.5 hover:shadow-brand-lg shadow-brand-sm">
-                           <span className="truncate flex-1 text-sm text-gray-200 group-hover:text-accent-800 font-medium">{b.name}</span>
-                           <span className="text-xs uppercase font-bold text-gray-200 group-hover:text-accent-800">Load</span>
+                           <span className="truncate flex-1 text-sm text-white/80 group-hover:text-accent-800 font-medium">{b.name}</span>
+                           <span className="text-xs uppercase font-bold text-white/80 group-hover:text-accent-800">Load</span>
                          </Button>
                        ))}
                     </div>
@@ -889,7 +935,7 @@ export default function Takeoff() {
                           {isLinked && (
                             <Circle
                               radius={18 / stageScale}
-                              stroke="#F2A413"
+                              stroke="rgb(242, 164, 19)"
                               strokeWidth={2 / stageScale}
                               dash={[4 / stageScale, 4 / stageScale]}
                             />
@@ -903,7 +949,7 @@ export default function Takeoff() {
                           <KonvaText
                             text={m.name}
                             fontSize={10 / stageScale}
-                            fill="#fff"
+                            fill="rgb(255, 255, 255)"
                             y={18 / stageScale}
                             offsetX={
                               20 / stageScale
@@ -913,7 +959,7 @@ export default function Takeoff() {
                             <Group x={12 / stageScale} y={-12 / stageScale}>
                               <Circle
                                 radius={5 / stageScale}
-                                fill="#F2A413"
+                                fill="rgb(242, 164, 19)"
                               />
                               <KonvaText
                                 text="🔗"
@@ -945,8 +991,8 @@ export default function Takeoff() {
                           <Group x={m.points[0].x} y={m.points[0].y}>
                             <Circle
                               radius={6 / stageScale}
-                              fill="#F2A413"
-                              stroke="#1F1D1A"
+                              fill="rgb(242, 164, 19)"
+                              stroke="rgb(31, 29, 26)"
                               strokeWidth={2 / stageScale}
                             />
                             <KonvaText
@@ -966,10 +1012,10 @@ export default function Takeoff() {
                         points={drawingPoints.flatMap((p) => [p.x, p.y])}
                         stroke={
                           mode === "scale"
-                            ? "#0F766E"
+                            ? "rgb(15, 118, 110)"
                             : mode === "area"
-                              ? "#F2A413"
-                              : "#F2A413"
+                              ? "rgb(242, 164, 19)"
+                              : "rgb(242, 164, 19)"
                         }
                         strokeWidth={2 / stageScale}
                       />
@@ -983,10 +1029,10 @@ export default function Takeoff() {
                           ]}
                           stroke={
                             mode === "scale"
-                              ? "#0F766E"
+                              ? "rgb(15, 118, 110)"
                               : mode === "area"
-                                ? "#F2A413"
-                                : "#F2A413"
+                                ? "rgb(242, 164, 19)"
+                                : "rgb(242, 164, 19)"
                           }
                           strokeWidth={2 / stageScale}
                           dash={[5 / stageScale, 5 / stageScale]}
@@ -999,7 +1045,7 @@ export default function Takeoff() {
                           x={snapPoint.x}
                           y={snapPoint.y}
                           radius={6 / stageScale}
-                          stroke="#B07006"
+                          stroke="rgb(176, 112, 6)"
                           strokeWidth={2 / stageScale}
                           fill="rgba(239, 68, 68, 0.2)"
                         />
@@ -1011,8 +1057,8 @@ export default function Takeoff() {
                           x={p.x}
                           y={p.y}
                           radius={3 / stageScale}
-                          fill="#ffffff"
-                          stroke="#1F1D1A"
+                          fill="rgb(255, 255, 255)"
+                          stroke="rgb(31, 29, 26)"
                           strokeWidth={1 / stageScale}
                         />
                       ))}

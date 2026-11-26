@@ -1,10 +1,8 @@
 import { Button } from '../ui/Button';
 import React, { useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Calculator, ArrowRight, Save, Printer, Share2, Plus, Trash2, Clock, HelpCircle, Activity, Layers } from "lucide-react";
+import { Calculator, Save, Printer, Share2, Plus, Trash2, Clock, HelpCircle, Activity, Layers } from "lucide-react";
 import { ComposedChart, Line, Scatter, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from "recharts";
-import { useEstimateProcessing } from "../../hooks/useEstimateProcessing";
-import { ProcessingSkeleton } from "../ui/ProcessingSkeleton";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { directShearFit, terzaghiSbc } from "../../lib/directShearCalc";
 import { SoilReportHeader } from "../ui/SoilReportHeader";
@@ -12,8 +10,6 @@ import { SoilReportDetails, generateGeotechReportPDF } from "../../utils/soilRep
 
 
 export default function DirectShearTestCalculator() {
-  const { isProcessing, hasData, processEstimate, resetEstimate } = useEstimateProcessing();
-
   const [reportDetails, setReportDetails] = useState<SoilReportDetails>({
     projectName: "Commercial Plaza Construction",
     clientName: "ABC Builders",
@@ -43,7 +39,6 @@ export default function DirectShearTestCalculator() {
       [field]: parseFloat(value) || 0,
     };
     setTestData(updatedData);
-    if (hasData) resetEstimate();
   };
 
   const addRow = () => {
@@ -53,12 +48,13 @@ export default function DirectShearTestCalculator() {
   const removeRow = (index: number) => {
     const updatedData = testData.filter((_, i) => i !== index);
     setTestData(updatedData);
-    if (hasData) resetEstimate();
   };
 
+  // Step 5 ungating: results are a live useMemo over the table — they
+  // render on load from the 3 default samples and update as you type.
+  // The old `hasData` gate (set only by "Determine Shear Parameters"
+  // after a fake 500 ms delay) is removed, with the button.
   const estimateData = useMemo(() => {
-    if (!hasData) return null;
-
     let validData = [...testData].filter(d => d.normalStress !== 0 || d.shearStress !== 0);
     if (validData.length < 2) return null;
 
@@ -146,7 +142,7 @@ export default function DirectShearTestCalculator() {
       outlierCount: outliers.size,
       eq: `τ = ${cohesion.toFixed(2)} + σ × tan(${angleOfFriction.toFixed(1)}°)`
     };
-  }, [hasData, testData]);
+  }, [testData]);
 
   const handlePrint = () => window.dispatchEvent(new CustomEvent('global-print-action'));
 
@@ -231,7 +227,6 @@ export default function DirectShearTestCalculator() {
           details={reportDetails}
           onChange={handleReportChange}
           onGenerateReport={handleSave}
-          isGenerating={!hasData}
         />
 
         <div className="flex flex-col md:flex-row gap-8">
@@ -294,14 +289,8 @@ export default function DirectShearTestCalculator() {
                 )}
               </div>
 
-              <Button
-                onClick={() => processEstimate(() => {})}
-                disabled={isProcessing || testData.length < 2}
-                className="w-full mt-6 bg-ink hover:bg-ink-700 text-white font-bold py-3.5 px-6 rounded-full shadow-brand-md shadow-accent-200 transition-all flex justify-center items-center gap-2 group border border-ink disabled:opacity-60 active:scale-95 hover:-translate-y-0.5"
-              >
-                {isProcessing ? "Processing Envelopes..." : "Determine Shear Parameters"}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              {/* Results are live (see estimateData above) — no Calculate
+                  button and no fake processing delay (Step 5 ungating). */}
             </div>
 
             <div className="p-5 rounded-2xl border border-accent-200 bg-accent-50/50 shadow-brand-sm overflow-hidden">
@@ -323,9 +312,7 @@ export default function DirectShearTestCalculator() {
 
           {/* Results Panel */}
           <div className="w-full md:w-[55%]">
-            {isProcessing ? (
-              <ProcessingSkeleton count={5} />
-            ) : hasData && estimateData ? (
+            {estimateData ? (
               <div className="space-y-6">
                 <div className="w-full bg-surface-default p-4 sm:p-6 md:p-4 sm:p-8 rounded-2xl border border-ui-borderSubtle shadow-brand-lg relative overflow-hidden transition-all duration-500">
                   
@@ -366,7 +353,7 @@ export default function DirectShearTestCalculator() {
                      <h3 className="text-sm uppercase st mb-4 text-center text-lg font-medium text-txt-primary">Mohr-Coulomb Failure Envelope</h3>
                      <ResponsiveContainer width="100%" height="85%">
                        <ComposedChart>
-                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
+                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" />
                          <XAxis 
                            dataKey="normalStress" 
                            type="number" 
@@ -377,7 +364,7 @@ export default function DirectShearTestCalculator() {
                            tickLine={false} 
                            axisLine={true} 
                            tickMargin={10}
-                           label={{ value: 'Normal Stress (σ)', position: 'insideBottom', offset: -5, fontSize: 11, fontWeight: 'bold', fill: '#6B6862' }}
+                           label={{ value: 'Normal Stress (σ)', position: 'insideBottom', offset: -5, fontSize: 11, fontWeight: 'bold', fill: 'rgb(107, 104, 98)' }}
                          />
                          <YAxis 
                            dataKey="shearStress"
@@ -388,7 +375,7 @@ export default function DirectShearTestCalculator() {
                            axisLine={true} 
                            tickMargin={5}
                            domain={[0, 'auto']}
-                           label={{ value: 'Shear Stress (τ)', angle: -90, position: 'insideLeft', fontSize: 11, fontWeight: 'bold', fill: '#6B6862' }}
+                           label={{ value: 'Shear Stress (τ)', angle: -90, position: 'insideLeft', fontSize: 11, fontWeight: 'bold', fill: 'rgb(107, 104, 98)' }}
                          />
                          <RechartsTooltip 
                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontWeight: 'bold' }}
@@ -399,7 +386,7 @@ export default function DirectShearTestCalculator() {
                             data={estimateData.regressionLine}
                             type="linear" 
                             dataKey="regShearStress" 
-                            stroke="#F2A413" 
+                            stroke="rgb(242, 164, 19)" 
                             strokeWidth={2} 
                             name="Failure Envelope"
                             dot={false}
@@ -408,7 +395,7 @@ export default function DirectShearTestCalculator() {
                          <Scatter 
                             data={estimateData.chartData} 
                             name="Valid Test Samples" 
-                            fill="#F2A413"
+                            fill="rgb(242, 164, 19)"
                             shape="circle"
                             isAnimationActive={false}
                          />
@@ -416,7 +403,7 @@ export default function DirectShearTestCalculator() {
                              <Scatter 
                                 data={estimateData.outlierData} 
                                 name="Rejected Outliers" 
-                                fill="#B07006"
+                                fill="rgb(176, 112, 6)"
                                 shape="cross"
                                 isAnimationActive={false}
                              />

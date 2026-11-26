@@ -1,11 +1,9 @@
 import { Button } from '../ui/Button';
 import React, { useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Calculator, ArrowRight, Save, Printer, Share2, Plus, Trash2, Clock, HelpCircle, Activity } from "lucide-react";
+import { Calculator, Save, Printer, Share2, Plus, Trash2, Clock, HelpCircle, Activity } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine, ReferenceDot } from "recharts";
-import { useEstimateProcessing } from "../../hooks/useEstimateProcessing";
 import { MaterialSummary } from "../ui/MaterialSummary";
-import { ProcessingSkeleton } from "../ui/ProcessingSkeleton";
 import { CalculationHistory } from "../ui/CalculationHistory";
 import { SoilReportHeader } from "../ui/SoilReportHeader";
 import { SoilReportDetails, generateGeotechReportPDF } from "../../utils/soilReports";
@@ -14,8 +12,6 @@ import { CodeTooltip } from "../ui/CodeTooltip";
 
 
 export default function CbrTestCalculator() {
-  const { isProcessing, processEstimate } = useEstimateProcessing();
-
   const [minSpec, setMinSpec] = useState("8"); // IRC:37 subgrade — 15% is base-course territory, not subgrade
   const [reportDetails, setReportDetails] = useState<SoilReportDetails>({
     projectName: "Highway Rehabilitation Phase 2",
@@ -68,10 +64,9 @@ export default function CbrTestCalculator() {
 
   // Live results: computed from the table on every render, so editing a
   // load/penetration updates the results and the curve immediately — the
-  // page copy promises results "appear here automatically", and the old
-  // `hasData` gate (set only by the Calculate button) broke that promise.
-  // The Calculate button remains as a harmless recalc (brief processing
-  // skeleton, then the same live values).
+  // page copy promises results "appear here automatically". Step 5
+  // ungating: the old Calculate button and its fake 500 ms processing
+  // skeleton are removed; results render on load from the defaults.
   const estimateData = useMemo(() => {
     // No rows left (all deleted) — show the empty state, not a 0% result.
     if (testData.length === 0) return null;
@@ -214,7 +209,6 @@ export default function CbrTestCalculator() {
           details={reportDetails}
           onChange={handleReportChange}
           onGenerateReport={handleSave}
-          isGenerating={isProcessing}
         />
 
         <div className="flex flex-col md:flex-row gap-8">
@@ -290,14 +284,10 @@ export default function CbrTestCalculator() {
                  </div>
               </div>
 
-              <Button
-                onClick={() => processEstimate(() => {})}
-                disabled={isProcessing}
-                className="w-full mt-6 bg-ink hover:bg-ink-700 text-white font-bold py-3.5 px-6 rounded-full shadow-brand-md shadow-accent-200 transition-all flex justify-center items-center gap-2 group border border-ink active:scale-95 hover:-translate-y-0.5"
-              >
-                {isProcessing ? "Processing Curve..." : "Calculate CBR Result"}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              {/* Results are live: estimateData is a useMemo over the table,
+                  so the CBR curve and verdict render on load from the
+                  default readings and update as you type — no Calculate
+                  button, no fake processing delay (Step 5 ungating). */}
             </div>
 
             <div className="p-5 rounded-2xl border border-accent-200 bg-accent-50/50 shadow-brand-sm overflow-hidden">
@@ -317,9 +307,7 @@ export default function CbrTestCalculator() {
 
           {/* Results Panel */}
           <div className="w-full md:w-[55%]">
-            {isProcessing ? (
-              <ProcessingSkeleton count={5} />
-            ) : estimateData ? (
+            {estimateData ? (
               <div className="space-y-6">
                 <div className={`p-6 md:p-8 rounded-2xl border shadow-brand-lg relative overflow-hidden transition-all duration-500 ${estimateData.passed ? 'bg-gradient-to-br from-ui-success to-ui-success/30 border-ui-successBorder   ' : 'bg-gradient-to-br from-ui-error to-ui-error/30 border-ui-errorBorder   '}`}>
                   
@@ -382,11 +370,11 @@ export default function CbrTestCalculator() {
                        <AreaChart data={[...testData].sort((a, b) => a.penetration - b.penetration)}>
                          <defs>
                            <linearGradient id="colorLoad" x1="0" y1="0" x2="0" y2="1">
-                             <stop offset="5%" stopColor="#F2A413" stopOpacity={0.3}/>
-                             <stop offset="95%" stopColor="#F2A413" stopOpacity={0}/>
+                             <stop offset="5%" stopColor="rgb(242, 164, 19)" stopOpacity={0.3}/>
+                             <stop offset="95%" stopColor="rgb(242, 164, 19)" stopOpacity={0}/>
                            </linearGradient>
                          </defs>
-                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E4DE" />
+                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgb(231, 228, 222)" />
                          <XAxis 
                            dataKey="penetration" 
                            type="number" 
@@ -411,16 +399,16 @@ export default function CbrTestCalculator() {
                            formatter={(value) => [`${value} kg`, 'Load']}
                          />
                          {estimateData.originOffset > 0 && (
-                             <ReferenceLine x={estimateData.originOffset} stroke="#B07006" strokeDasharray="3 3" label={{ position: "insideTopLeft", value: "Origin Shift", fill: "#B07006", fontSize: 10 }} />
+                             <ReferenceLine x={estimateData.originOffset} stroke="rgb(176, 112, 6)" strokeDasharray="3 3" label={{ position: "insideTopLeft", value: "Origin Shift", fill: "rgb(176, 112, 6)", fontSize: 10 }} />
                          )}
-                         <ReferenceLine x={2.5 + estimateData.originOffset} stroke="#6B6862" strokeDasharray="3 3" />
-                         <ReferenceLine x={5.0 + estimateData.originOffset} stroke="#6B6862" strokeDasharray="3 3" />
-                         <ReferenceDot x={2.5 + estimateData.originOffset} y={estimateData.load25} r={4} fill="#F2A413" stroke="white" />
-                         <ReferenceDot x={5.0 + estimateData.originOffset} y={estimateData.load50} r={4} fill="#F2A413" stroke="white" />
+                         <ReferenceLine x={2.5 + estimateData.originOffset} stroke="rgb(107, 104, 98)" strokeDasharray="3 3" />
+                         <ReferenceLine x={5.0 + estimateData.originOffset} stroke="rgb(107, 104, 98)" strokeDasharray="3 3" />
+                         <ReferenceDot x={2.5 + estimateData.originOffset} y={estimateData.load25} r={4} fill="rgb(242, 164, 19)" stroke="white" />
+                         <ReferenceDot x={5.0 + estimateData.originOffset} y={estimateData.load50} r={4} fill="rgb(242, 164, 19)" stroke="white" />
                          <Area 
                            type="monotone" 
                            dataKey="load" 
-                           stroke="#F2A413" 
+                           stroke="rgb(242, 164, 19)" 
                            strokeWidth={3} 
                            fillOpacity={1} 
                            fill="url(#colorLoad)" 

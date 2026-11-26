@@ -47,14 +47,15 @@ import { Calculator, Droplets,
  Beaker } from "lucide-react";
 import { SEO, SITE_WEB_APP } from "./SEO";
 import { lazyWithRetry } from "../lib/lazyWithRetry";
-import { GlobalFAQ, getCombinedFaqs, type FAQItem } from "./ui/GlobalFAQ";
+// FAQItem is a TYPE-only import (erased at compile time): it cannot pull
+// GlobalFAQ's module — and the dozen src/lib/*Calc engines it imports
+// for per-tool FAQ constants — into the entry chunk.
+import type { FAQItem } from "./ui/GlobalFAQ";
 import { getSiteUrl } from "../seo/siteConfig";
 import SearchAndFilterBar from "./SearchAndFilterBar";
 import HeroSection from "./HeroSection";
-import SocialProofSection from "./SocialProofSection";
 import GoalTabs from "./GoalTabs";
 import CategoryHub from "./CategoryHub";
-import WorkspaceSection from "./WorkspaceSection";
 // Lazily loaded: both pull in recharts (~376 kB). They render below the
 // fold on the home page, so they must not ride in the eager graph.
 // Wrapped in lazyWithRetry (Round 4 WS1): a stale chunk after a deploy
@@ -65,18 +66,63 @@ const MaterialCostDonutChart = lazy(() =>
   lazyWithRetry(() => import("./ui/MaterialCostDonutChart")).then((m) => ({ default: m.MaterialCostDonutChart }))
 );
 
-import { HowItWorksSection,
- FeatureComparisonSection,
-} from "./LandingSections";
+// Below-the-fold home sections (Leg 3): SocialProof / HowItWorks /
+// FeatureComparison / home FAQ / AI banner / Workspace render below the
+// fold, so they are lazy — AND scroll-gated (see BelowFold). A bare
+// lazy() would NOT save first-paint bytes here: these sections render on
+// the home page immediately, so the import would fire on mount anyway.
+// BelowFold mounts them only when the user scrolls within 600px, which is
+// what actually keeps their code (notably GlobalFAQ + the src/lib/*Calc
+// FAQ constants it pulls in) out of first paint. RecentSidebar is a
+// drawer: it mounts only when opened.
+const SocialProofSection = lazy(() => lazyWithRetry(() => import("./SocialProofSection")));
+const WorkspaceSection = lazy(() => lazyWithRetry(() => import("./WorkspaceSection")));
+const RecentSidebar = lazy(() => lazyWithRetry(() => import("./RecentSidebar")));
+const AIEstimatorBanner = lazy(() => lazyWithRetry(() => import("./AIEstimatorBanner")));
+const HowItWorksSection = lazy(() =>
+  lazyWithRetry(() => import("./LandingSections")).then((m) => ({ default: m.HowItWorksSection }))
+);
+const FeatureComparisonSection = lazy(() =>
+  lazyWithRetry(() => import("./LandingSections")).then((m) => ({ default: m.FeatureComparisonSection }))
+);
+const GlobalFAQ = lazy(() =>
+  lazyWithRetry(() => import("./ui/GlobalFAQ")).then((m) => ({ default: m.GlobalFAQ }))
+);
+
+/** Mounts `children` only once the placeholder scrolls within `rootMargin`
+ * of the viewport. The placeholder reserves a rough min-height so the page
+ * does not jump when the section mounts (600px rootMargin means it is
+ * usually mounted before the user reaches it). */
+function BelowFold({ children, label, minHeight = 240 }: { children: React.ReactNode; label: string; minHeight?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") { setVisible(true); return; }
+    const io = new IntersectionObserver(
+      (entries) => { if (entries.some((e) => e.isIntersecting)) { setVisible(true); io.disconnect(); } },
+      { rootMargin: "600px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} aria-label={label} style={visible ? undefined : { minHeight }}>
+      {visible ? children : null}
+    </div>
+  );
+}
+
+const BelowFoldFallback = ({ label }: { label: string }) => (
+  <div className="h-24 w-full rounded-2xl bg-surface-hover/50 animate-pulse" role="status" aria-label={label} />
+);
 
 import { useSettings } from "../context/SettingsContext";
 import ToolCard from "./ToolCard";
 import { ScrollReveal } from "./ui/ScrollReveal";
 import { useRecentTools } from "../hooks/useRecentTools";
-import RecentSidebar from "./RecentSidebar";
 import { History } from "lucide-react";
-
-import AIEstimatorBanner from "./AIEstimatorBanner";
 
 function formatTimeAgo(timestamp: number) {
  const diff = Date.now() - timestamp;
@@ -92,7 +138,7 @@ function formatTimeAgo(timestamp: number) {
 export type ModuleId = string;
 export const ALL_MODULES = [
   { id: "master-finishes", title: "Complete Finishes Workspace", desc: "Estimate bricks, plaster, paint, flooring, countertops, woodwork and carpet in one multi-tab workspace, with quantities and costs worked out per room.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Intermediate", estimatedTime: "~4 mins" },
-  { id: "brick-calculator", title: "Brick Calculator Pakistan & India", desc: "Bricks, cement bags, sand and total cost for any wall in PKR, INR or AED — with openings, wastage, brick types and city rates for Pakistan, India and UAE.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Beginner", estimatedTime: "~2 mins", isPopular: true },
+  { id: "brick-calculator", title: "Brick Calculator — Pakistan, India, UAE, UK & US", desc: "Bricks, cement bags, sand, packs and total cost for any wall in PKR, INR, AED, GBP or USD — openings, wastage, gable & curved walls, reverse & budget modes, brick types and city rates.", category: "Masonry, Surfaces & Finishes", icon: Layers, styleStyle: "solid", colorClass: "bg-ink text-white shadow-brand-lg", difficulty: "Beginner", estimatedTime: "~2 mins", isPopular: true },
  // 🚀 Guided Workflows
  {
  id: "qs-workflow",
@@ -1339,7 +1385,7 @@ export default function Dashboard({
  ::-webkit-scrollbar-thumb { background: rgba(31,29,26,0.15); border-radius: 10px; }
  `}</style>
  
-  <RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} />
+  {isRecentOpen && (<Suspense fallback={null}><RecentSidebar isOpen={isRecentOpen} onClose={() => setIsRecentOpen(false)} onNavigate={handleSelect} /></Suspense>)}
 
 <div className="relative w-full flex flex-col font-sans bg-surface-default text-txt-primary border-none">
 
@@ -1371,7 +1417,12 @@ export default function Dashboard({
      SITE_WEB_APP,
      {
        "@type": "FAQPage",
-       "mainEntity": getCombinedFaqs(undefined, HOME_FAQS).map((f) => ({
+       // HOME_FAQS directly: getCombinedFaqs(undefined, HOME_FAQS) returns
+       // exactly these (no moduleId => no specific/generic FAQs, only the
+       // extras, deduplicated). Inlined so this JSON-LD does not import
+       // GlobalFAQ's module — and the src/lib/*Calc FAQ constants — into
+       // the entry chunk.
+       "mainEntity": HOME_FAQS.map((f) => ({
          "@type": "Question",
          "name": f.question,
          "acceptedAnswer": { "@type": "Answer", "text": f.answer },
@@ -1401,6 +1452,23 @@ export default function Dashboard({
  onSelectModule={handleSelect}
                   />
                 </div>
+ {/* Popular tools — direct home-page links, including the brick calculator
+     (also listed under the Masonry, Surfaces & Finishes category below). */}
+ <div className="w-full md:max-w-[1400px] md:mx-auto px-4">
+   <div className="flex items-center gap-2 overflow-x-auto pb-1" role="navigation" aria-label="Popular tools">
+     <span className="shrink-0 text-xs font-semibold uppercase tracking-wider text-txt-tertiary px-1">Popular:</span>
+     {ALL_MODULES.filter((m) => m.isPopular).slice(0, 8).map((m) => (
+       <button
+         key={m.id}
+         type="button"
+         onClick={() => handleSelect(m.id)}
+         className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-bg-card border border-ui-borderSubtle text-txt-primary hover:border-accent-300 hover:shadow-brand-sm transition-all whitespace-nowrap"
+       >
+         {m.title}
+       </button>
+     ))}
+   </div>
+ </div>
  <div className="w-full md:max-w-[1400px] md:mx-auto px-4 flex justify-end">
    {/* Inline Calculation History trigger (Round 4): the guest home has no
        Recent Tools section, so the history drawer needs a trigger here too —
@@ -1408,18 +1476,18 @@ export default function Dashboard({
    <Button onClick={() => setIsRecentOpen(true)} aria-label="Calculation History" variant="outline" size="sm">Calculation History</Button>
  </div>
  <CategoryHub groupedModules={groupedModules} groupsToDisplay={groupsToDisplay} handleSelect={handleSelect} isComputing={isComputing} />
-                <div className="w-full md:max-w-[1400px] md:mx-auto px-4 py-8"><AIEstimatorBanner onOpenChat={() => setIsAiChatOpen(true)} /></div>
+                <div className="w-full md:max-w-[1400px] md:mx-auto px-4 py-8"><BelowFold label="AI Estimator banner"><Suspense fallback={<BelowFoldFallback label="Loading AI Estimator banner" />}><AIEstimatorBanner onOpenChat={() => setIsAiChatOpen(true)} /></Suspense></BelowFold></div>
  </div>
  </div>
  </div>
- <ScrollReveal><SocialProofSection /></ScrollReveal>
- <ScrollReveal><HowItWorksSection /></ScrollReveal>
- <ScrollReveal><FeatureComparisonSection onNavigate={handleSelect} /></ScrollReveal>
+ <BelowFold label="Social proof"><ScrollReveal><Suspense fallback={<BelowFoldFallback label="Loading social proof" />}><SocialProofSection /></Suspense></ScrollReveal></BelowFold>
+ <BelowFold label="How it works"><ScrollReveal><Suspense fallback={<BelowFoldFallback label="Loading how it works" />}><HowItWorksSection /></Suspense></ScrollReveal></BelowFold>
+ <BelowFold label="Feature comparison"><ScrollReveal><Suspense fallback={<BelowFoldFallback label="Loading feature comparison" />}><FeatureComparisonSection onNavigate={handleSelect} /></Suspense></ScrollReveal></BelowFold>
  {/* Home FAQ — same GlobalFAQ accordion the tool pages use, with
      site-level questions (HOME_FAQS above). Plain <ScrollReveal> on
      purpose: the component's default 'up' variant already animates
      from y:30 (see ScrollReveal.tsx). */}
- <ScrollReveal><div className="w-full md:max-w-[1400px] md:mx-auto px-4 pb-16"><GlobalFAQ faqs={HOME_FAQS} /></div></ScrollReveal>
+ <BelowFold label="Frequently asked questions"><ScrollReveal><div className="w-full md:max-w-[1400px] md:mx-auto px-4 pb-16"><Suspense fallback={<BelowFoldFallback label="Loading FAQ" />}><GlobalFAQ faqs={HOME_FAQS} /></Suspense></div></ScrollReveal></BelowFold>
  </div>
  ) : (
  <>
@@ -1441,7 +1509,7 @@ export default function Dashboard({
                 <MaterialCostDonutChart />
               </Suspense>
             </div>
-            <WorkspaceSection onSelect={handleSelect} />
+            <BelowFold label="Workspace"><Suspense fallback={<BelowFoldFallback label="Loading workspace" />}><WorkspaceSection onSelect={handleSelect} /></Suspense></BelowFold>
  </div>
 
  {/* Recently Used section */}
@@ -1579,7 +1647,7 @@ Open Calculator
             );
           })}
  </div>
-          <div className="w-full md:max-w-[1400px] md:mx-auto px-4 py-8"><AIEstimatorBanner onOpenChat={() => setIsAiChatOpen(true)} /></div>
+          <div className="w-full md:max-w-[1400px] md:mx-auto px-4 py-8"><BelowFold label="AI Estimator banner"><Suspense fallback={<BelowFoldFallback label="Loading AI Estimator banner" />}><AIEstimatorBanner onOpenChat={() => setIsAiChatOpen(true)} /></Suspense></BelowFold></div>
  </div>
  </div>
  </div>

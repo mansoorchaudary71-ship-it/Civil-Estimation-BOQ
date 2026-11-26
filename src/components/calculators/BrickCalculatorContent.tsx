@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   BRICK_FAQS,
   BRICK_PRESETS,
+  CURRENCY_META,
   bricksPerArea,
   calcBrickwork,
   defaultBrickInputs,
@@ -17,7 +18,7 @@ import {
 import { REVIEWER } from "../../seo/siteConfig";
 import { ChevronDown } from "lucide-react";
 
-export const BRICK_CONTENT_LAST_UPDATED = "20 November 2026";
+export const BRICK_CONTENT_LAST_UPDATED = "26 November 2026";
 
 /** Worked-example figures below are computed from the same engine as the
  * calculator (single source of truth), not hand-typed. */
@@ -57,9 +58,9 @@ function FaqAccordion() {
   const isOpen = (i: number) => showAll || open === 'all' || open === i;
   return (
     <div>
-      <div className="divide-y divide-[#F1F5F9] border border-[#E5E7EB] rounded-[16px] overflow-hidden bg-white">
+      <div className="divide-y divide-border-color border border-border-color rounded-[16px] overflow-hidden bg-surface-default">
         {BRICK_FAQS.map((faq, i) => (
-          <div key={faq.q} className="bg-white">
+          <div key={faq.q} className="bg-surface-default">
             <button
               type="button"
               onClick={() => {
@@ -67,15 +68,15 @@ function FaqAccordion() {
                 else setOpen(open === i ? null : i);
               }}
               aria-expanded={isOpen(i)}
-              className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-[#FAFAF9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+              className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-surface-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
             >
-              <span className="font-semibold text-[15px] leading-snug text-[#111827]">{faq.q}</span>
+              <span className="font-semibold text-[15px] leading-snug text-txt-primary">{faq.q}</span>
               <ChevronDown
-                className={`w-[18px] h-[18px] shrink-0 text-[#6B7280] transition-transform ${isOpen(i) ? "rotate-180 text-[#F2A413]" : ""}`}
+                className={`w-[18px] h-[18px] shrink-0 text-txt-secondary transition-transform ${isOpen(i) ? "rotate-180 text-accent-700" : ""}`}
               />
             </button>
             {isOpen(i) && (
-              <p className="px-5 pb-5 text-[14px] leading-[1.6] text-[#4B5563]">
+              <p className="px-5 pb-5 text-[14px] leading-[1.6] text-txt-secondary">
                 {faq.a}
               </p>
             )}
@@ -87,10 +88,10 @@ function FaqAccordion() {
           type="button"
           onClick={() => setShowAll(!showAll)}
           aria-expanded={showAll}
-          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] text-[#1F1D1A] text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-[#F1F5F9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A413]"
+          className="w-full mt-4 min-h-[44px] rounded-[12px] bg-surface-hover border border-border-color text-txt-primary text-sm font-semibold px-4 py-2.5 flex items-center justify-center gap-2 hover:bg-surface-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
         >
           {showAll ? 'Show fewer questions' : `Show all ${BRICK_FAQS.length} questions`}
-          <ChevronDown className={`w-4 h-4 text-[#6B7280] transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 text-txt-secondary transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
         </button>
       )}
     </div>
@@ -128,14 +129,23 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           </li>
           <li>
             <strong className="text-txt-primary dark:text-white">Add wastage and read the cost.</strong>{" "}
-            5% covers a normal rectangular wall; 10% covers kiln bricks or cut work. Enter your
-            supplier's rates to see the material cost in PKR, INR or AED.
+            5% covers a normal rectangular wall; 10% covers kiln bricks or cut work, 12%
+            covers a curved wall. Enter your supplier&apos;s rates to see the material cost
+            in PKR, INR, AED, GBP or USD — and the packs to order.
           </li>
         </ol>
         <p>
           The single most common mistake is estimating with the bare brick size instead of the
           nominal size — the brick plus one mortar joint. Using the bare size over-orders by
           roughly 15–20%. This calculator always uses the nominal (with-mortar) size.
+        </p>
+        <p>
+          Three more ways to use it: the quick answer at the top gives just the brick count
+          from three inputs; Reverse mode tells you how much wall a quantity of bricks covers;
+          Budget mode tells you what price per square foot and per 1,000 bricks a budget
+          allows. The results also convert the count into packs, pallets and truckloads, and
+          labour cost can be added as an option — the headline total stays materials-only
+          unless you turn it on.
         </p>
       </Section>
 
@@ -261,6 +271,14 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           foot for a 9-inch wall and about 13.1 per square foot for a 13½-inch wall, before
           wastage. The commonly quoted rules — 4.5, 9 and 13.6 — round those up slightly, which
           is safe; the calculator uses the exact figure for your brick size.
+        </p>
+        <p>
+          Single vs double, in three lines. A single (4½-inch) wall is one brick leaf thick:
+          about 4.4 bricks per square foot, for partitions that carry no load above them. A
+          double (9-inch) wall is two leaves bonded together: about 8.7 bricks per square
+          foot, for external and load-bearing walls. Doubling the thickness doubles the bricks
+          almost exactly — so a wall that is half single and half double is priced leaf by
+          leaf, not by an average thickness.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm border border-ui-borderSubtle dark:border-ink-600 rounded-2xl overflow-hidden">
@@ -402,17 +420,17 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
                     </td>
                     <td className="px-4 py-3">
                       {c.brickPer1000 != null
-                        ? `${c.currency === "PKR" ? "PKR" : c.currency === "INR" ? "₹" : "AED"} ${c.brickPer1000.toLocaleString("en-US")}`
+                        ? `${CURRENCY_META[c.currency].symbol} ${c.brickPer1000.toLocaleString("en-US")}`
                         : "Enter your supplier's rate"}
                     </td>
                     <td className="px-4 py-3">
                       {c.cementPerBag != null
-                        ? `${c.currency === "PKR" ? "PKR" : c.currency === "INR" ? "₹" : "AED"} ${c.cementPerBag.toLocaleString("en-US")}`
+                        ? `${CURRENCY_META[c.currency].symbol} ${c.cementPerBag.toLocaleString("en-US")}`
                         : "—"}
                     </td>
                     <td className="px-4 py-3">
                       {c.sandPerUnit != null
-                        ? `${c.currency === "AED" ? "AED" : c.currency === "INR" ? "₹" : "PKR"} ${c.sandPerUnit} / ${c.currency === "AED" ? "m³" : "cft"}`
+                        ? `${CURRENCY_META[c.currency].symbol} ${c.sandPerUnit} / ${CURRENCY_META[c.currency].sandUnit}`
                         : "Enter your rate"}
                     </td>
                   </tr>
@@ -420,6 +438,12 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
               </tbody>
             </table>
           </div>
+          <p className="text-sm">
+            Model: November 2026 — Pakistan figures from the Pakistan Bureau of Statistics
+            August 2026 city survey for first-class bricks; India, UAE, UK and US figures from
+            published November 2026 market guides (see city pages for per-city sources). Rates
+            are indicative and change frequently — confirm with your supplier.
+          </p>
           {variant.kind === "city" && (
             <>
               <p>
@@ -480,6 +504,11 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
               </tbody>
             </table>
           </div>
+          <p className="text-sm">
+            Model: Q4 2026 cost model — November 2026 rates with the stated method above.
+            Your design will differ; use the calculator with your own wall lengths for the
+            final figure.
+          </p>
           {variant.kind === "size" && (
             <p>
               <strong className="text-txt-primary dark:text-white">Method for {variant.data.name}. </strong>
@@ -528,6 +557,18 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
             <dd>Plot units in Pakistan: 1 marla = 225 sq ft (in Lahore/DHA convention), 1 kanal = 20 marla = 4,500 sq ft.</dd>
           </div>
           <div>
+            <dt className="font-semibold text-txt-primary dark:text-white">Gable end</dt>
+            <dd>The triangular top of a wall under a pitched roof — its area is base × rise ÷ 2, added to the rectangular wall below it.</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-txt-primary dark:text-white">Pack / pallet</dt>
+            <dd>Bricks are delivered in packs (commonly 400–520 bricks in the UK and US) stacked on pallets. Order packs, not loose bricks — a count of 917 bricks needs 2 packs of 500.</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-txt-primary dark:text-white">Centre-line length</dt>
+            <dd>The length of a curved wall measured along its middle — average radius × angle in radians. A straight-wall estimate using the centre-line length is close enough for ordering.</dd>
+          </div>
+          <div>
             <dt className="font-semibold text-txt-primary dark:text-white">Dry volume</dt>
             <dd>The volume of dry ingredients before water is added. Dry mortar volume is about 1.33× the wet volume.</dd>
           </div>
@@ -548,8 +589,10 @@ export default function BrickCalculatorContent({ variant }: { variant: BrickVari
           Sources: IS 1077 (Common Burnt Clay Building Bricks); BS EN 771-1; Pakistan Bureau of
           Statistics August 2026 city survey for first-class bricks; published November 2026
           market guides for cement, sand and brick rates in Pakistan, India and the UAE (see city
-          pages for per-city sources). Rates are indicative and change frequently — confirm with
-          your supplier.
+          pages for per-city sources); UK facing-brick and labour rates from bestbuilders.co.uk
+          (Q3 2026) and Travis Perkins (November 2026); US brick and labour rates from Angi
+          (July 2026) and designestimation.com (October 2026). Rates are indicative and change
+          frequently — confirm with your supplier.
         </p>
         <p>
           Disclaimer: this is a planning estimate based on the sizes and rates you enter. It is

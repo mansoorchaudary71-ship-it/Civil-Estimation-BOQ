@@ -12,7 +12,28 @@ import {
   THICKNESS_PRESETS,
   BOND_PATTERNS,
   defaultBrickInputs,
+  parseCompositeLength,
+  parseLengthValue,
+  gableTriangleAreaM2,
+  arcLengthM,
+  courseCount,
+  reverseBricksToArea,
+  budgetMode,
+  packingFor,
+  calcLabourCost,
+  rateStrip,
+  CURRENCY_META,
+  DEFAULT_CEMENT_BAG_KG,
+  INDICATIVE_RATES,
+  BRICK_FAQS,
 } from "../brickCalc";
+import {
+  CITY_VARIANTS,
+  BRICK_TYPE_VARIANTS,
+  HOUSE_SIZE_VARIANTS,
+  parseBrickVariant,
+  allBrickProgrammaticUrls,
+} from "../../seo/brickProgrammatic";
 
 const approx = (a: number, b: number, tol = 0.01) =>
   assert.ok(Math.abs(a - b) <= tol, `expected ${a} ≈ ${b} (±${tol})`);
@@ -180,5 +201,168 @@ test("edge cases: zero / negative / empty inputs never produce NaN or Infinity",
       if (typeof v === "number") assert.ok(isFinite(v), `non-finite in ${JSON.stringify(bad)}`);
     }
     assert.ok(r.bricks >= 0 && r.cementBags >= 0);
+  }
+});
+
+test("ft+in composite entry: 10'6\" = 10.5 ft, in ft and in units", () => {
+  assert.equal(parseCompositeLength("10'6\"", "ft"), 10.5);
+  assert.equal(parseCompositeLength("10' 6\"", "ft"), 10.5);
+  assert.equal(parseCompositeLength("10 ft 6 in", "ft"), 10.5);
+  assert.equal(parseCompositeLength("10ft 6in", "ft"), 10.5);
+  assert.equal(parseCompositeLength("10", "ft"), 10);
+  assert.equal(parseCompositeLength("10'6\"", "in"), 126);
+  assert.equal(parseCompositeLength('126"', "ft"), 10.5);
+  assert.equal(parseLengthValue("10'6\"", "ft"), 10.5);
+  assert.equal(parseLengthValue("junk", "ft"), 0);
+  // A 10'6" x 10 ft wall needs more bricks than the 10x10 default.
+  const r = calcBrickwork({ ...defaultBrickInputs("PKR"), length: 10.5, height: 10 });
+  assert.ok(r.bricks > 917);
+  approx(r.bricksBeforeWastage, 872.86 * 1.05, 1);
+});
+
+test("UK preset (215x102.5x65, BS EN 771-1) + GBP/USD currencies and bag sizes", () => {
+  const uk = BRICK_PRESETS.find((p) => p.id === "uk-clay");
+  assert.ok(uk && uk.l === 215 && uk.w === 102.5 && uk.h === 65);
+  assert.ok(uk.standard.includes("BS EN 771-1"));
+  assert.equal(CURRENCY_META.GBP.symbol, "£");
+  assert.equal(CURRENCY_META.USD.symbol, "$");
+  assert.equal(CURRENCY_META.GBP.sandUnit, "m3");
+  assert.equal(DEFAULT_CEMENT_BAG_KG.GBP, 25);
+  assert.equal(DEFAULT_CEMENT_BAG_KG.USD, 42.6);
+  assert.equal(DEFAULT_CEMENT_BAG_KG.PKR, 50);
+  // Indicative Nov 2026 defaults: UK £650/1,000, US $550/1,000.
+  assert.equal(INDICATIVE_RATES.GBP.brickPer1000, 650);
+  assert.equal(INDICATIVE_RATES.GBP.cementPerBag, 8);
+  assert.equal(INDICATIVE_RATES.USD.brickPer1000, 550);
+  assert.equal(INDICATIVE_RATES.USD.cementPerBag, null);
+  const r = calcBrickwork({ ...defaultBrickInputs("GBP"), brick: uk, cementBagKg: 25 });
+  assert.ok(r.bricksBeforeWastage > 0 && r.cementBags > 0);
+});
+
+test("gable end: triangle base x rise / 2 is extra wall area", () => {
+  approx(gableTriangleAreaM2(3.048, 0.9144), 3.048 * 0.9144 / 2, 1e-9);
+  const base = calcBrickwork(defaultBrickInputs("PKR"));
+  const gable = calcBrickwork({
+    ...defaultBrickInputs("PKR"),
+    extraAreaM2: gableTriangleAreaM2(3.048, 0.9144),
+  });
+  // 15 sq ft of extra 9-inch wall = ~131 bricks before wastage.
+  approx(gable.bricksBeforeWastage - base.bricksBeforeWastage, 15 * 8.7286, 1);
+  assert.equal(gable.bricks, Math.ceil(gable.bricksBeforeWastage * 1.05));
+});
+
+test("curved wall: centre-line length is radius x angle in radians", () => {
+  approx(arcLengthM(2, 90), Math.PI, 1e-9);
+  approx(arcLengthM(1, 360), 2 * Math.PI, 1e-9);
+  approx(arcLengthM(1.8288, 90), 2.873, 0.001); // 6 ft radius, quarter circle
+  assert.equal(arcLengthM(-2, 90), 0);
+});
+
+test("reverse mode: 1,000 bricks cover ~115 sq ft of 9-inch wall before wastage", () => {
+  const rev = reverseBricksToArea(1000, 230, BRICK_PRESETS[0], { jointMm: 10 });
+  approx(rev.areaSqFt, 1000 / 8.7286, 0.5);
+  approx(rev.areaM2, 10.64, 0.05);
+  approx(rev.bricksPerSqFt, 8.73, 0.01);
+  const rev2 = reverseBricksToArea(1000, 115, BRICK_PRESETS[0], { jointMm: 10 });
+  approx(rev2.areaSqFt, 1000 / 4.36, 1);
+});
+
+test("budget mode: PKR 20,000 for 100 sq ft -> 200/sq ft, ~21,810/1,000, buys 1,000", () => {
+  const b = budgetMode(9.2903, 20000, 230, BRICK_PRESETS[0], {
+    jointMm: 10,
+    wastagePct: 5,
+    rates: { brickPer1000: 20000, cementPerBag: 1550, sandPerUnit: 50 },
+  });
+  assert.equal(b.bricks, 917);
+  approx(b.pricePerSqFt ?? 0, 200, 0.01);
+  approx(b.pricePer1000 ?? 0, (20000 / 917) * 1000, 1);
+  assert.equal(b.bricksAffordable, 1000);
+  const noRate = budgetMode(9.2903, 20000, 230, BRICK_PRESETS[0], {});
+  assert.equal(noRate.bricksAffordable, null);
+});
+
+test("packs / pallets / trucks: 917 bricks = 2 packs of 500 (83 spare), 2 pallets", () => {
+  const p = packingFor(917);
+  assert.equal(p.packs, 2);
+  assert.equal(p.spareBricks, 83);
+  assert.equal(p.pallets, 2);
+  assert.equal(p.trucks, null); // no truck capacity entered
+  assert.equal(packingFor(917, { packSize: 400 }).packs, 3);
+  assert.equal(packingFor(25000, { truckCapacity: 10000 }).trucks, 3);
+  assert.equal(packingFor(0).packs, 0);
+});
+
+test("labour cost: per-1,000, per-sq-ft and per-day bases; null rate = null", () => {
+  approx(calcLabourCost({ netAreaSqFt: 100, bricks: 917, basis: "per1000", rate: 550 }) ?? 0, 504.35, 0.01);
+  assert.equal(calcLabourCost({ netAreaSqFt: 100, bricks: 917, basis: "perSqFt", rate: 10 }), 1000);
+  assert.equal(calcLabourCost({ netAreaSqFt: 100, bricks: 917, basis: "perDay", rate: 300, days: 5 }), 1500);
+  assert.equal(calcLabourCost({ netAreaSqFt: 100, bricks: 917, basis: "per1000", rate: null }), null);
+});
+
+test("rate strip + per-1,000 figures on the default wall", () => {
+  const r = calcBrickwork(defaultBrickInputs("PKR"));
+  const strip = rateStrip(r);
+  approx(strip.bricksPerCft, 11.57, 0.01);
+  approx(strip.cementBagsPerCft, 5 / 75.46, 0.001);
+  approx(strip.sandCftPerCft, 21.8 / 75.46, 0.01);
+  approx(r.bricksPerCft, 11.57, 0.01);
+  approx(r.cementKgPer1000, (250 / 872.86) * 1000, 1);
+  approx(r.sandCftPer1000, (21.8 / 872.86) * 1000, 0.5);
+});
+
+test("course count: 10 ft wall with 75 mm brick + 10 mm joint = 36 courses", () => {
+  assert.equal(courseCount(3.048, 75, 10), 36);
+  assert.equal(courseCount(0, 75, 10), 0);
+});
+
+test("programmatic variants: 18 total (10 city + 4 type + 4 size), all unique", () => {
+  assert.equal(CITY_VARIANTS.length, 10);
+  assert.equal(BRICK_TYPE_VARIANTS.length, 4);
+  assert.equal(HOUSE_SIZE_VARIANTS.length, 4);
+  assert.equal(allBrickProgrammaticUrls("https://example.com").length, 18);
+  const titles = [
+    ...CITY_VARIANTS.map((c) => c.title),
+    ...BRICK_TYPE_VARIANTS.map((t) => t.title),
+    ...HOUSE_SIZE_VARIANTS.map((s) => s.title),
+  ];
+  assert.equal(new Set(titles).size, titles.length, "duplicate variant title");
+  const descs = [
+    ...CITY_VARIANTS.map((c) => c.description),
+    ...BRICK_TYPE_VARIANTS.map((t) => t.description),
+    ...HOUSE_SIZE_VARIANTS.map((s) => s.description),
+  ];
+  assert.equal(new Set(descs).size, descs.length, "duplicate variant description");
+  const london = parseBrickVariant("/brick-calculator/london");
+  assert.equal(london.kind, "city");
+  if (london.kind === "city") {
+    assert.equal(london.data.currency, "GBP");
+    assert.equal(london.data.brickPresetId, "uk-clay");
+    assert.equal(london.data.cementBagKg, 25);
+  }
+  const ny = parseBrickVariant("/brick-calculator/new-york");
+  assert.equal(ny.kind, "city");
+  if (ny.kind === "city") {
+    assert.equal(ny.data.currency, "USD");
+    assert.equal(ny.data.cementBagKg, 42.6);
+  }
+  assert.deepEqual(parseBrickVariant("/brick-calculator/unknown-slug"), { kind: "main" });
+});
+
+test("FAQs cover the new modes (21 total, all non-empty)", () => {
+  assert.equal(BRICK_FAQS.length, 21);
+  for (const f of BRICK_FAQS) {
+    assert.ok(f.q.length > 10 && f.a.length > 40, `thin FAQ: ${f.q}`);
+  }
+  const qs = BRICK_FAQS.map((f) => f.q);
+  for (const needle of [
+    "packs or pallets",
+    "labour cost",
+    "wall area will my bricks cover",
+    "budget",
+    "gable end or a curved wall",
+    "standard brick size in the uk",
+    "standard brick size in the us",
+  ]) {
+    assert.ok(qs.some((q) => q.toLowerCase().includes(needle)), `missing FAQ: ${needle}`);
   }
 });

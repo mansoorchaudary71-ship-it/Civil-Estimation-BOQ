@@ -5,6 +5,7 @@ import BrickCalculatorContent, {
   BRICK_CONTENT_LAST_UPDATED,
 } from "../calculators/BrickCalculatorContent";
 import CalculatorPageShell from "../../seo/CalculatorPageShell";
+import { ToolActionsBar, ToolFormulaSection } from "../ui/ToolPageTemplate";
 import { getSiteUrl, getOrganizationJsonLd } from "../../seo/siteConfig";
 import {
   parseBrickVariant,
@@ -13,6 +14,7 @@ import {
 import {
   BRICK_FAQS,
   BRICK_PRESETS,
+  CURRENCY_META,
   type BrickInputs,
 } from "../../lib/brickCalc";
 
@@ -66,6 +68,8 @@ function hreflangFor(variant: BrickVariant): { lang: string; href: string }[] {
     { lang: "en-PK", href: `${getSiteUrl()}/brick-calculator/lahore` },
     { lang: "en-IN", href: `${getSiteUrl()}/brick-calculator/delhi` },
     { lang: "en-AE", href: `${getSiteUrl()}/brick-calculator/dubai` },
+    { lang: "en-GB", href: `${getSiteUrl()}/brick-calculator/london` },
+    { lang: "en-US", href: `${getSiteUrl()}/brick-calculator/new-york` },
     { lang: "x-default", href: main },
   ];
 }
@@ -84,10 +88,13 @@ function buildJsonLd(variant: BrickVariant, title: string, description: string, 
       "Wall length, height and thickness (4.5, 9, 13.5 and 18 inch)",
       "Multi-wall room projects and total wall area mode",
       "Doors and windows deduction, per opening or by total area",
-      "Pakistani, Indian, US and UAE brick sizes plus custom size",
+      "Pakistani, Indian, US, UAE and UK brick sizes plus custom size",
       "Stretcher, English and Flemish bond patterns with a live wall drawing",
       "Cement bags and sand quantity",
-      "Cost in PKR, INR and AED",
+      "Cost in PKR, INR, AED, GBP and USD, with optional labour cost",
+      "Packs, pallets and truckloads to order",
+      "Reverse mode (bricks to wall area) and budget mode (area and budget to price)",
+      "Gable-end and curved-wall input",
       "PDF download, print, share, copy and CSV/Excel export of the results",
     ],
   };
@@ -150,7 +157,7 @@ function buildJsonLd(variant: BrickVariant, title: string, description: string, 
   return [webApp, howTo, faqPage, breadcrumb, getOrganizationJsonLd()];
 }
 
-/** Prefill for the calculator from the variant (currency, rates, brick preset). */
+/** Prefill for the calculator from the variant (currency, rates, brick preset, bag size). */
 function initialInputs(variant: BrickVariant): Partial<BrickInputs> {
   if (variant.kind === "city") {
     const c = variant.data;
@@ -158,6 +165,7 @@ function initialInputs(variant: BrickVariant): Partial<BrickInputs> {
     return {
       currency: c.currency,
       brick: preset,
+      cementBagKg: c.cementBagKg ?? undefined,
       rates: {
         brickPer1000: c.brickPer1000,
         cementPerBag: c.cementPerBag,
@@ -175,12 +183,40 @@ function initialInputs(variant: BrickVariant): Partial<BrickInputs> {
 
 function ratesNoteFor(variant: BrickVariant): string | undefined {
   if (variant.kind === "city") {
-    return `Indicative rates for ${variant.data.name} — ${variant.data.rateDate}. Source: ${variant.data.rateSource} Confirm with your supplier.`;
+    const bagNote =
+      variant.data.cementBagKg != null
+        ? ` Cement comes in ${variant.data.cementBagKg} kg bags on this market, so the bag size is pre-set to ${variant.data.cementBagKg} kg.`
+        : "";
+    return `Indicative rates for ${variant.data.name} — ${variant.data.rateDate}. Source: ${variant.data.rateSource}${bagNote} Confirm with your supplier.`;
   }
   if (variant.kind === "type") {
     return `Indicative rate: ${variant.data.pricePer1000Range}. Confirm with your supplier.`;
   }
   return undefined;
+}
+
+/** One-sentence answer above the fold for the main page, using the exact
+ * volume method (8.7 bricks/sq ft for a 9-inch wall; 873 before / 917 to
+ * order for the 10 ft × 10 ft default) — never a competitor's thumb rule.
+ * Variant pages carry their own answer as the first sentence of their intro
+ * (brickProgrammatic.ts), so the prerendered HTML shows it too. */
+function answerFor(variant: BrickVariant): string {
+  if (variant.kind === "main")
+    return "About 8.7 bricks per sq ft for a 9-inch wall — a 10 ft × 10 ft wall needs 917 bricks to order with 5% wastage.";
+  if (variant.kind === "city") {
+    const c = variant.data;
+    const symbol = CURRENCY_META[c.currency].symbol;
+    if (c.country === "UK")
+      return `A single-leaf UK wall needs about 60 bricks per square metre of face — in London, facing bricks run about ${symbol}650 per 1,000 (${c.rateDate}).`;
+    if (c.country === "US")
+      return `A single-leaf US face-brick wall needs about 6.9 bricks per square foot — in New York, standard bricks average about ${symbol}550 per 1,000 (${c.rateDate}).`;
+    if (c.brickPer1000 != null)
+      return `About 8.7 bricks per sq ft for a 9-inch wall — in ${c.name}, first-class bricks run about ${symbol}${c.brickPer1000.toLocaleString("en-US")} per 1,000 (${c.rateDate}).`;
+    return `About 8.7 bricks per sq ft for a 9-inch wall — in ${c.name}, clay bricks are imported, so enter your supplier's rate for the cost.`;
+  }
+  if (variant.kind === "type")
+    return `About 8.7 bricks per sq ft for a 9-inch wall — ${variant.data.name} run ${variant.data.pricePer1000Range}.`;
+  return `A ${variant.data.name} needs about ${variant.data.totalBricks.toLocaleString("en-US")} bricks including the boundary wall and 5% wastage.`;
 }
 
 export default function BrickCalculatorPage() {
@@ -219,10 +255,8 @@ export default function BrickCalculatorPage() {
           : `Bricks for a ${variant.data.name}`;
   const intro =
     variant.kind === "main"
-      ? "Calculate bricks, cement bags, sand and total cost for any wall — in PKR, INR or AED. Deduct doors and windows, pick your brick size and mortar mix, and download the result as a PDF."
-      : variant.kind === "city"
-        ? variant.data.intro
-        : variant.data.intro;
+      ? `${answerFor(variant)} Calculate bricks, cement bags, sand and total cost for any wall — in PKR, INR, AED, GBP or USD. Deduct doors and windows, pick your brick size and mortar mix, and download the result as a PDF.`
+      : variant.data.intro;
 
   const breadcrumbs =
     variant.kind === "main"
@@ -259,11 +293,21 @@ export default function BrickCalculatorPage() {
       related={RELATED}
       lastUpdated={BRICK_CONTENT_LAST_UPDATED}
     >
-      <BrickCalculator
-        key={canonical}
-        initial={initialInputs(variant)}
-        ratesNote={ratesNoteFor(variant)}
-      />
+      {/* Template §2 — the calculator is the inputs + results workspace;
+          the wrapper also scopes the 44px input rule and the actions-bar
+          delegation below. Template §3 (formula) then §4 (actions row)
+          sit between the calculator and the SEO article content. */}
+      <div className="global-form-card-wrapper">
+        <BrickCalculator
+          key={canonical}
+          initial={initialInputs(variant)}
+          ratesNote={ratesNoteFor(variant)}
+        />
+      </div>
+      <div className="mt-8 space-y-8 print:hidden">
+        <ToolFormulaSection toolId="brick-calculator" />
+        <ToolActionsBar toolId="brick-calculator" toolName="Brick Calculator" />
+      </div>
       <BrickCalculatorContent variant={variant} />
     </CalculatorPageShell>
   );

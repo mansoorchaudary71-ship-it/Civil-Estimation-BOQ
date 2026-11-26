@@ -8,7 +8,7 @@
  * They are editable in the UI and must be confirmed with a local supplier.
  */
 
-export type Currency = "PKR" | "INR" | "AED";
+export type Currency = "PKR" | "INR" | "AED" | "GBP" | "USD";
 
 export const CURRENCY_META: Record<
   Currency,
@@ -17,6 +17,53 @@ export const CURRENCY_META: Record<
   PKR: { symbol: "Rs", label: "Pakistani Rupee", sandUnit: "cft" },
   INR: { symbol: "₹", label: "Indian Rupee", sandUnit: "cft" },
   AED: { symbol: "AED", label: "UAE Dirham", sandUnit: "m3" },
+  GBP: { symbol: "£", label: "British Pound", sandUnit: "m3" },
+  USD: { symbol: "$", label: "US Dollar", sandUnit: "cft" },
+};
+
+/**
+ * Standard cement bag size on each market (kg). Pakistan / India / UAE
+ * sell 50 kg bags; the UK sells 25 kg bags; the US sells 94 lb bags
+ * (42.6 kg, ASTM C150). The bag-count maths scales the 0.0347 m³ per
+ * 50 kg volume linearly, so the bag size is an input, not a constant.
+ */
+export const DEFAULT_CEMENT_BAG_KG: Record<Currency, number> = {
+  PKR: 50,
+  INR: 50,
+  AED: 50,
+  GBP: 25,
+  USD: 42.6,
+};
+
+/**
+ * Indicative default rates (November 2026) — editable in the UI, never a
+ * quote. Sources: PK/IN/AE as in brickProgrammatic.ts; UK facing bricks
+ * £400–900 per 1,000 and cement ~£8 per 25 kg bag (bestbuilders.co.uk
+ * Q3 2026 bricklaying guide; Travis Perkins Blue Circle 25 kg, Nov 2026);
+ * US standard brick ~$550 per 1,000 (Angi, Jul 2026; designestimation.com,
+ * Oct 2026). UK sand is sold per tonne / bulk bag and US cement/sand
+ * prices were not verified — those fields stay blank for the user to fill.
+ */
+export const INDICATIVE_RATES: Record<
+  Currency,
+  { brickPer1000: number | null; cementPerBag: number | null; sandPerUnit: number | null }
+> = {
+  PKR: { brickPer1000: 20000, cementPerBag: 1550, sandPerUnit: 50 },
+  INR: { brickPer1000: 10000, cementPerBag: 400, sandPerUnit: 80 },
+  AED: { brickPer1000: null, cementPerBag: 25, sandPerUnit: null },
+  GBP: { brickPer1000: 650, cementPerBag: 8, sandPerUnit: null },
+  USD: { brickPer1000: 550, cementPerBag: null, sandPerUnit: null },
+};
+
+/** Indicative labour defaults (November 2026, editable, off by default). */
+export const INDICATIVE_LABOUR_PER_1000: Record<Currency, number | null> = {
+  PKR: null,
+  INR: null,
+  AED: null,
+  // UK: £400–700 per 1,000 bricks laid (bestbuilders.co.uk, Q3 2026).
+  GBP: 550,
+  // US: $1,500–2,000 per 1,000 laid, labour only (2026 US guides).
+  USD: 1750,
 };
 
 /** Wall length units. The engine converts every unit to metres internally. */
@@ -46,7 +93,59 @@ export function convertLength(value: number, from: LengthUnit, to: LengthUnit): 
   return (value * LENGTH_UNIT_TO_M[from]) / LENGTH_UNIT_TO_M[to];
 }
 
-/** Area of 1 unit² in m², for converting area entries. */
+/** Parse a wall length that may be written ft+in, e.g. `10'6"`, `10 ft 6 in`,
+ * `10' 6"` — the way Pakistani and US users actually measure — into a value
+ * in `unit`. A plain number is returned unchanged. Returns NaN for junk. */
+export function parseCompositeLength(input: string, unit: LengthUnit): number {
+  const s = input.trim().toLowerCase();
+  if (s === "") return NaN;
+  const plain = Number(s);
+  if (isFinite(plain)) return plain;
+  // 10'6" / 10' 6" / 10 ft 6 in / 10ft 6in
+  const m = s.match(
+    /^(\d+(?:\.\d+)?)\s*(?:'|ft|feet)\s*(\d+(?:\.\d+)?)?\s*(?:"|in|inch|inches)?$/,
+  );
+  if (m) {
+    const feet = parseFloat(m[1]);
+    const inches = m[2] ? parseFloat(m[2]) : 0;
+    const totalFt = feet + inches / 12;
+    if (unit === "in") return totalFt * 12;
+    if (unit === "ft") return totalFt;
+    return convertLength(totalFt, "ft", unit);
+  }
+  // Bare inches written as 126" — only meaningful when the unit is ft/in.
+  const inchesOnly = s.match(/^(\d+(?:\.\d+)?)\s*(?:"|in|inch|inches)$/);
+  if (inchesOnly) {
+    const inches = parseFloat(inchesOnly[1]);
+    if (unit === "in") return inches;
+    if (unit === "ft") return inches / 12;
+    return convertLength(inches, "in", unit);
+  }
+  return NaN;
+}
+
+/** Parse a length input box: composite ft+in notation, else a plain number. */
+export function parseLengthValue(input: string, unit: LengthUnit): number {
+  const v = parseCompositeLength(input, unit);
+  return isFinite(v) ? v : 0;
+}
+
+/** Area of a gable-end triangle (base × rise ÷ 2), in m². */
+export function gableTriangleAreaM2(baseM: number, riseM: number): number {
+  return Math.max(0, baseM) * Math.max(0, riseM) / 2;
+}
+
+/** Centre-line length of a curved wall: radius × angle (degrees → radians). */
+export function arcLengthM(radiusM: number, angleDeg: number): number {
+  return Math.max(0, radiusM) * ((Math.max(0, angleDeg) * Math.PI) / 180);
+}
+
+/** Courses in a wall of `heightM` with bricks `brickHeightMm` + `jointMm`. */
+export function courseCount(heightM: number, brickHeightMm: number, jointMm: number): number {
+  const courseM = (Math.max(0, brickHeightMm) + Math.max(0, jointMm)) / 1000;
+  if (courseM <= 0 || heightM <= 0) return 0;
+  return Math.ceil(heightM / courseM);
+}
 export const AREA_UNIT_TO_M2: Record<"sqft" | "m2" | "sqyd", number> = {
   sqft: 0.092903,
   m2: 1,
@@ -147,6 +246,15 @@ export const BRICK_PRESETS: BrickPreset[] = [
     note: "Clay bricks in the UAE are mostly imported. Concrete blocks are the common local walling unit.",
   },
   {
+    id: "uk-clay",
+    label: "UK clay brick — 215 × 102.5 × 65 mm",
+    l: 215,
+    w: 102.5,
+    h: 65,
+    standard: "BS EN 771-1 (UK standard clay brick)",
+    note: "The standard UK facing brick, sold in packs of about 400–520. UK cement comes in 25 kg bags, so the bag size defaults to 25 kg with this preset's currency (GBP).",
+  },
+  {
     id: "aac-600",
     label: "AAC block — 600 × 200 × 150 mm",
     l: 600,
@@ -223,6 +331,12 @@ export interface BrickInputs {
    * (the two modes are mutually exclusive per wall).
    */
   openingsTotalAreaM2?: number | null;
+  /**
+   * Extra net wall area in m² beyond length × height — the gable-end
+   * triangle (base × rise ÷ 2). Added to the gross area before openings
+   * are deducted.
+   */
+  extraAreaM2?: number | null;
   brick: BrickPreset;
   /** custom brick size in mm (used when brick.id === "custom") */
   customBrick?: { l: number; w: number; h: number };
@@ -255,6 +369,12 @@ export interface BrickResults {
   bricks: number;
   bricksPerSqFt: number;
   bricksPerM2: number;
+  /** bricks per cubic foot of wall volume (before wastage) */
+  bricksPerCft: number;
+  /** cement (kg) needed per 1,000 bricks (before wastage) */
+  cementKgPer1000: number;
+  /** sand (cft) needed per 1,000 bricks (before wastage) */
+  sandCftPer1000: number;
   wetMortarM3: number;
   wetMortarCft: number;
   dryMortarM3: number;
@@ -291,7 +411,7 @@ export function calcBrickwork(inp: BrickInputs): BrickResults {
   const H = Math.max(0, inp.height) * toM;
   const thicknessM = Math.max(0, inp.thicknessMm) / 1000;
 
-  const grossAreaM2 = L * H;
+  const grossAreaM2 = L * H + Math.max(0, inp.extraAreaM2 ?? 0);
   const openingsAreaM2 =
     inp.openingsTotalAreaM2 != null
       ? Math.max(0, inp.openingsTotalAreaM2)
@@ -341,6 +461,12 @@ export function calcBrickwork(inp: BrickInputs): BrickResults {
   const netAreaSqFt = netAreaM2 * sqFtPerM2;
   const bricksPerSqFt = netAreaSqFt > 0 ? bricksBeforeWastage / netAreaSqFt : 0;
   const bricksPerM2 = netAreaM2 > 0 ? bricksBeforeWastage / netAreaM2 : 0;
+  const wallVolumeCft = wallVolumeM3 * M3_TO_CFT;
+  const bricksPerCft = wallVolumeCft > 0 ? bricksBeforeWastage / wallVolumeCft : 0;
+  const cementKgPer1000 =
+    bricksBeforeWastage > 0 ? (cementKg / bricksBeforeWastage) * 1000 : 0;
+  const sandCftPer1000 =
+    bricksBeforeWastage > 0 ? (sandCft / bricksBeforeWastage) * 1000 : 0;
 
   const brickCost =
     inp.rates.brickPer1000 != null ? (bricks / 1000) * inp.rates.brickPer1000 : null;
@@ -365,12 +491,15 @@ export function calcBrickwork(inp: BrickInputs): BrickResults {
     netAreaSqFt,
     openingsExceedWall,
     wallVolumeM3,
-    wallVolumeCft: wallVolumeM3 * M3_TO_CFT,
+    wallVolumeCft,
     bricksBeforeWastage,
     wastageBricks,
     bricks,
     bricksPerSqFt,
     bricksPerM2,
+    bricksPerCft,
+    cementKgPer1000,
+    sandCftPer1000,
     wetMortarM3,
     wetMortarCft: wetMortarM3 * M3_TO_CFT,
     dryMortarM3,
@@ -509,6 +638,12 @@ export function calcBrickProject(
   const netAreaSqFt = netAreaM2 * sqFtPerM2;
   const bricksPerSqFt = netAreaSqFt > 0 ? bricksBeforeWastage / netAreaSqFt : 0;
   const bricksPerM2 = netAreaM2 > 0 ? bricksBeforeWastage / netAreaM2 : 0;
+  const wallVolumeCft = wallVolumeM3 * M3_TO_CFT;
+  const bricksPerCft = wallVolumeCft > 0 ? bricksBeforeWastage / wallVolumeCft : 0;
+  const cementKgPer1000 =
+    bricksBeforeWastage > 0 ? (cementKg / bricksBeforeWastage) * 1000 : 0;
+  const sandCftPer1000 =
+    bricksBeforeWastage > 0 ? (sandCft / bricksBeforeWastage) * 1000 : 0;
   const brickCost =
     settings.rates.brickPer1000 != null ? (bricks / 1000) * settings.rates.brickPer1000 : null;
   const cementCost =
@@ -531,12 +666,15 @@ export function calcBrickProject(
     netAreaSqFt,
     openingsExceedWall: perWall.some((w) => w.results.openingsExceedWall),
     wallVolumeM3,
-    wallVolumeCft: wallVolumeM3 * M3_TO_CFT,
+    wallVolumeCft,
     bricksBeforeWastage,
     wastageBricks,
     bricks,
     bricksPerSqFt,
     bricksPerM2,
+    bricksPerCft,
+    cementKgPer1000,
+    sandCftPer1000,
     wetMortarM3,
     wetMortarCft: wetMortarM3 * M3_TO_CFT,
     dryMortarM3,
@@ -603,6 +741,172 @@ export function mixGuide(mix: [number, number]): {
     cementBagsPerM3Dry,
     cementKgPerM3Dry: cementBagsPerM3Dry * 50,
     sandM3PerM3Dry: sParts / totalParts,
+  };
+}
+
+/**
+ * Reverse mode: how much wall area does a quantity of bricks cover?
+ * Inverts the exact volume method — area = bricks × brick-with-mortar
+ * volume ÷ thickness — so it agrees with the forward calculator.
+ */
+export function reverseBricksToArea(
+  bricks: number,
+  thicknessMm: number,
+  brick: BrickPreset,
+  opts: { customBrick?: { l: number; w: number; h: number }; jointMm?: number } = {},
+): { areaM2: number; areaSqFt: number; bricksPerSqFt: number; bricksPerM2: number } {
+  const b = brick.id === "custom" && opts.customBrick ? opts.customBrick : brick;
+  const jointM = Math.max(0, opts.jointMm ?? 10) / 1000;
+  const brickWithMortarM3 =
+    (b.l / 1000 + jointM) * (b.w / 1000 + jointM) * (b.h / 1000 + jointM);
+  const thicknessM = Math.max(0, thicknessMm) / 1000;
+  const areaM2 =
+    thicknessM > 0 && brickWithMortarM3 > 0
+      ? (Math.max(0, bricks) * brickWithMortarM3) / thicknessM
+      : 0;
+  const per = bricksPerArea(thicknessMm, brick, opts);
+  return {
+    areaM2,
+    areaSqFt: areaM2 / (FT_TO_M * FT_TO_M),
+    bricksPerSqFt: per.perSqFt,
+    bricksPerM2: per.perM2,
+  };
+}
+
+export interface BudgetResult {
+  /** bricks needed for the area (to order, with wastage) */
+  bricks: number;
+  bricksBeforeWastage: number;
+  /** budget ÷ net wall area */
+  pricePerSqFt: number | null;
+  pricePerM2: number | null;
+  /** budget ÷ bricks to order × 1,000 */
+  pricePer1000: number | null;
+  /** bricks the budget buys at the entered brick rate (null when no rate) */
+  bricksAffordable: number | null;
+  /** material cost of the bricks needed, at the entered rate (null when no rate) */
+  bricksCost: number | null;
+  netAreaSqFt: number;
+  netAreaM2: number;
+}
+
+/**
+ * Budget mode: a wall area and a budget → what the budget buys per sq ft
+ * and per 1,000 bricks, and how many bricks the budget covers at the
+ * entered brick rate. Quantities come from the same engine as the forward
+ * calculator; only the money is divided up differently.
+ */
+export function budgetMode(
+  netAreaM2: number,
+  budget: number,
+  thicknessMm: number,
+  brick: BrickPreset,
+  opts: {
+    customBrick?: { l: number; w: number; h: number };
+    jointMm?: number;
+    wastagePct?: number;
+    mix?: [number, number];
+    currency?: Currency;
+    rates?: BrickRates;
+  } = {},
+): BudgetResult {
+  const results = calcBrickworkFromArea(Math.max(0, netAreaM2), thicknessMm, brick, {
+    customBrick: opts.customBrick,
+    jointMm: opts.jointMm ?? 10,
+    wastagePct: opts.wastagePct ?? 5,
+    mix: opts.mix ?? [1, 4],
+    currency: opts.currency ?? "PKR",
+    rates: opts.rates ?? { brickPer1000: null, cementPerBag: null, sandPerUnit: null },
+  });
+  const b = Math.max(0, budget);
+  const per1000 = opts.rates?.brickPer1000;
+  return {
+    bricks: results.bricks,
+    bricksBeforeWastage: results.bricksBeforeWastage,
+    pricePerSqFt: results.netAreaSqFt > 0 ? b / results.netAreaSqFt : null,
+    pricePerM2: results.netAreaM2 > 0 ? b / results.netAreaM2 : null,
+    pricePer1000: results.bricks > 0 ? (b / results.bricks) * 1000 : null,
+    bricksAffordable:
+      per1000 != null && per1000 > 0 ? Math.floor(b / (per1000 / 1000)) : null,
+    bricksCost: results.brickCost,
+    netAreaSqFt: results.netAreaSqFt,
+    netAreaM2: results.netAreaM2,
+  };
+}
+
+export interface PackingResult {
+  packSize: number;
+  /** full packs to order (rounded up) */
+  packs: number;
+  /** spare bricks inside the last pack */
+  spareBricks: number;
+  palletSize: number;
+  /** pallets to order (rounded up) */
+  pallets: number;
+  truckCapacity: number | null;
+  /** truckloads to order, null when no capacity entered or not needed */
+  trucks: number | null;
+}
+
+/**
+ * Packs / pallets / trucks to order. Pack and pallet sizes are editable —
+ * they vary by supplier (UK/US packs commonly run 400–520 bricks; a
+ * pallet is commonly about 400–550). Trucks only appear when the user
+ * enters a truck capacity, because lorry loads vary too much to assume.
+ */
+export function packingFor(
+  bricks: number,
+  opts: { packSize?: number; palletSize?: number; truckCapacity?: number | null } = {},
+): PackingResult {
+  const n = Math.max(0, Math.ceil(bricks));
+  const packSize = opts.packSize != null && opts.packSize > 0 ? Math.floor(opts.packSize) : 500;
+  const palletSize =
+    opts.palletSize != null && opts.palletSize > 0 ? Math.floor(opts.palletSize) : 500;
+  const truckCapacity =
+    opts.truckCapacity != null && opts.truckCapacity > 0
+      ? Math.floor(opts.truckCapacity)
+      : null;
+  const packs = Math.ceil(n / packSize);
+  return {
+    packSize,
+    packs,
+    spareBricks: packs * packSize - n,
+    palletSize,
+    pallets: Math.ceil(n / palletSize),
+    truckCapacity,
+    trucks: truckCapacity != null && n >= truckCapacity ? Math.ceil(n / truckCapacity) : null,
+  };
+}
+
+export type LabourBasis = "perSqFt" | "per1000" | "perDay";
+
+/** Optional labour cost — off by default; the materials total is unchanged. */
+export function calcLabourCost(args: {
+  netAreaSqFt: number;
+  bricks: number;
+  basis: LabourBasis;
+  rate: number | null;
+  days?: number;
+}): number | null {
+  const { basis, rate } = args;
+  if (rate == null || !isFinite(rate) || rate < 0) return null;
+  if (basis === "perSqFt") return rate * Math.max(0, args.netAreaSqFt);
+  if (basis === "per1000") return (rate * Math.max(0, args.bricks)) / 1000;
+  return rate * Math.max(0, args.days ?? 0);
+}
+
+/** Persistent rate strip: per-cubic-foot rates for the current wall + mix. */
+export function rateStrip(results: BrickResults): {
+  bricksPerCft: number;
+  cementBagsPerCft: number;
+  sandCftPerCft: number;
+} {
+  const vol = results.wallVolumeCft;
+  if (!(vol > 0)) return { bricksPerCft: 0, cementBagsPerCft: 0, sandCftPerCft: 0 };
+  return {
+    bricksPerCft: results.bricksBeforeWastage / vol,
+    cementBagsPerCft: results.cementBags / vol,
+    sandCftPerCft: results.sandCft / vol,
   };
 }
 
@@ -698,5 +1002,33 @@ export const BRICK_FAQS: FaqItem[] = [
   {
     q: "How many bricks will I need for a wall of a given area?",
     a: "Use the Total Wall Area mode in the calculator: enter the net wall area (in sq ft or m²) and the wall thickness, and it gives the brick count directly — no length and height needed. As a check, multiply the area by the per-square-foot rate for your thickness: about 8.7 bricks per sq ft for a 9-inch wall (9 as a safe thumb rule), 4.4 for a 4½-inch wall. Going the other way, a quantity of bricks covers area = bricks ÷ bricks-per-square-foot — for example, 1,000 bricks cover about 115 sq ft of 9-inch wall before wastage.",
+  },
+  {
+    q: "How many packs or pallets of bricks should I order?",
+    a: "Bricks are delivered in packs, not loose — so order packs, not individual bricks. This calculator converts your brick count into packs (default 500 per pack, editable — UK and US packs commonly run 400–520), pallets and, where the count justifies it, truckloads. For example, 917 bricks need 2 packs of 500, leaving 83 spare bricks in the second pack. Always confirm the pack size with your supplier before ordering, because it varies by kiln and merchant.",
+  },
+  {
+    q: "Does the calculator include labour cost?",
+    a: "Labour is optional and off by default, because the headline total is materials only. Turn it on to add a labour rate per square foot, per 1,000 bricks or per day — the total then reads materials plus labour. As a guide, UK bricklayers charge about £400–700 in labour per 1,000 bricks laid (Q3 2026) and US masons about $1,500–2,000 per 1,000 (2026 guides); in Pakistan, India and the UAE, enter your mason's own rate, since no verified per-1,000 labour rate was found for those markets.",
+  },
+  {
+    q: "How much wall area will my bricks cover?",
+    a: "Use the Reverse mode: enter the number of bricks and the wall thickness, and it tells you the wall area they cover — 1,000 standard Pakistani bricks cover about 115 sq ft of 9-inch wall (about 10.7 m²) before wastage, or about 109 sq ft after 5% wastage. It uses the same exact volume method as the forward calculator, so the two modes always agree.",
+  },
+  {
+    q: "How do I work out bricks from a budget?",
+    a: "Use the Budget mode: enter the wall area and your budget, and it gives the price per square foot and per 1,000 bricks your budget allows, plus how many bricks the budget buys at your entered brick rate. For example, a PKR 20,000 budget for 100 sq ft of 9-inch wall allows PKR 200 per sq ft, or about PKR 21,800 per 1,000 bricks to order — and at PKR 20,000 per 1,000, that budget buys 1,000 bricks. The brick count itself still comes from the wall area, not from the money.",
+  },
+  {
+    q: "How do I calculate bricks for a gable end or a curved wall?",
+    a: "For a gable end, enter the wall's length and height as usual, then add the triangle: base × rise ÷ 2. A 10 ft wide gable with a 3 ft rise adds 15 sq ft of brickwork — about 131 extra bricks for a 9-inch wall before wastage — and 10% wastage instead of 5%, because of the cut bricks. For a curved wall, measure along the centre line: length = average radius × angle in radians (a full circle is 2 × π × radius), then use 10–15% wastage. The calculator has a gable input and a curved-wall input that do both calculations for you.",
+  },
+  {
+    q: "What is the standard brick size in the UK, and how many bricks per square metre?",
+    a: "The UK standard clay brick is 215 × 102.5 × 65 mm (BS EN 771-1). A single-leaf wall needs about 60 bricks per square metre of wall face — 1 ÷ ((215 + 10) × (65 + 10) mm) — or about 5.6 per square foot. UK bricks are sold in packs of about 400–520, cement comes in 25 kg bags (not 50 kg), and facing bricks run about £400–900 per 1,000 (Q3 2026 guides). For a single leaf, work from the 60-per-m² face figure; a UK cavity wall is two leaves, so calculate each leaf separately.",
+  },
+  {
+    q: "What is the standard brick size in the US, and what do bricks cost there?",
+    a: "The US standard brick is 7½″ × 3½″ × 2¼″ (190.5 × 88.9 × 57.2 mm), and the US modular face brick is 7⅝″ × 3⅝″ × 2¼″. US face brickwork needs about 6.6–6.9 bricks per square foot of single-leaf face with a 3/8-inch joint. Standard clay bricks cost about $350–850 per 1,000 in 2026, averaging about $550 (Angi, July 2026). US cement is sold in 94 lb (42.6 kg) bags, so the calculator defaults to a 42.6 kg bag when USD is selected.",
   },
 ];

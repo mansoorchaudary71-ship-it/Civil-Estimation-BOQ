@@ -7,7 +7,7 @@
  * HTTP 200 for each clean URL (no 404.html fallback, no hash redirect).
  *
  * Content is REUSED from the app's own SEO data — nothing is invented:
- *  - titles/descriptions: ALL_MODULES (Dashboard) — the same strings SEOHead
+ *  - titles/descriptions: ALL_MODULES (src/lib/allModules) — the same strings SEOHead
  *    puts in <title>/<meta description> at runtime;
  *  - guide copy (intro, formulas, tables, worked example, related links):
  *    TOOL_GUIDES (src/seo/toolGuides.ts), the verified guide the SPA renders
@@ -33,7 +33,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { ALL_MODULES } from "../src/components/Dashboard";
+import { ALL_MODULES } from "../src/lib/allModules";
 import { TOOL_GUIDES, type ToolGuide } from "../src/seo/toolGuides";
 import { SPECIFIC_FAQS, type FAQItem } from "../src/components/ui/GlobalFAQ";
 import {

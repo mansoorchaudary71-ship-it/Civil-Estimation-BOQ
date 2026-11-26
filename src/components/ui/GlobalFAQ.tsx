@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
-import { ALL_MODULES } from '../Dashboard';
+import { ALL_MODULES } from '../../lib/allModules';
 import { BBS_FAQS } from "../../lib/bbsCalc";
 import { BEAM_FAQS } from "../../lib/beamDesign";
 import { COLUMN_FAQS } from "../../lib/columnDesign";

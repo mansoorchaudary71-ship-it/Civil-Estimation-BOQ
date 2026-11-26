@@ -220,7 +220,7 @@ export function PlywoodEstimator() {
           <div className="flex items-center gap-4">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-50 text-accent-700"><Layers size={24} /></div>
             <div>
-              <h1 className="text-2xl font-bold text-txt-primary">Formwork &amp; Plywood Estimator</h1>
+              <h2 className="text-2xl font-bold text-txt-primary">Formwork &amp; Plywood Estimator</h2>
               <p className="text-txt-secondary text-sm">Sheets, wastage, reuse and cost — calculated in your browser, no server needed.</p>
             </div>
           </div>

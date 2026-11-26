@@ -62,7 +62,10 @@ interface SettingsContextType {
 
 const defaultSettings: SettingsState = {
   currency: 'PKR',
-  measurement: 'FPS',
+  // Metric-first: the tools' own defaults are metric (plywood 10 m, NumberInput
+  // internals are SI), so the global default must agree — otherwise the header
+  // toggle shows Imperial on load while the tool on screen is metric.
+  measurement: 'SI',
   theme: 'system',
   fontSize: 'medium',
   role: undefined,

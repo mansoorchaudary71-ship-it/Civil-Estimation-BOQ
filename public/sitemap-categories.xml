@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- HOST: live GitHub Pages project page. civilestimationpro.com does NOT resolve (DNS NXDOMAIN) — flip every loc back to https://civilestimationpro.com when/if DNS is fixed. -->
-  <!-- Categories & Hubs -->
   <url>
-    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/category/structural-calculators</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/ae</loc>
     <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/category/geotechnical-soil-testing</loc>
-    <lastmod>2026-11-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/category/quantity-surveying</loc>
     <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -32,10 +25,14 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- Country/Region specific portals -->
   <url>
-    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/pk</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/category/quantity-surveying</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/category/structural-calculators</loc>
     <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -47,7 +44,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/ae</loc>
+    <loc>https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ/pk</loc>
     <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

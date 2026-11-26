@@ -190,7 +190,7 @@ export default function Blog() {
             </div>
 
             <div className="prose prose-lg prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-accent-800 dark:prose-a:text-accent-400 prose-img:rounded-2xl">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ h1: 'h2' }}>
                 {selectedPost.content || ''}
               </ReactMarkdown>
             </div>

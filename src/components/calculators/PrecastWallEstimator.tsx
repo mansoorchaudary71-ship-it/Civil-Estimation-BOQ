@@ -173,7 +173,7 @@ export function PrecastWallEstimator() {
           <div className="flex items-center gap-4">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-100 text-accent-800"><Layers size={24} /></div>
             <div>
-              <h1 className="text-2xl font-bold text-txt-primary">Precast Compound Wall</h1>
+              <h2 className="text-2xl font-bold text-txt-primary">Precast Compound Wall</h2>
               <p className="text-txt-secondary text-sm">Panels, posts, footing concrete and total cost — with wastage, labour and closed-loop layouts.</p>
             </div>
           </div>

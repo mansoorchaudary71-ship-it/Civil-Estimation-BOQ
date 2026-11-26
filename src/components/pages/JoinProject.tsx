@@ -93,7 +93,8 @@ export default function JoinProject({ projectId: projectIdProp, shareToken: shar
       />
       <main className="flex-1 max-w-lg w-full mx-auto px-4 py-20 flex flex-col items-center justify-center">
         <div className="w-full bg-surface-default p-8 rounded-2xl border border-ui-borderSubtle shadow-brand-sm text-center">
-          
+          <h1 className="text-2xl font-bold text-txt-primary mb-2">Join a Shared Project Team</h1>
+          <p className="text-txt-secondary text-sm mb-6">Accept a project invite and join a shared workspace.</p>
           {status === 'loading' && (
             <div className="py-8 flex flex-col items-center">
               <div className="w-10 h-10 border-4 border-accent-200 border-t-indigo-600 rounded-full animate-spin mb-4"></div>

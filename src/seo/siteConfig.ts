@@ -1,24 +1,27 @@
 /**
  * Single source of truth for the site's canonical host and organisation.
  *
- * IMPORTANT: civilestimationpro.com did NOT resolve (DNS NXDOMAIN) when
- * checked on 2026-11-10, and still does not. SITE_URL below is therefore
- * only the FALLBACK / intended custom-domain host — never use it directly
- * for a canonical, OG or JSON-LD URL. Use getSiteUrl() instead: it derives
- * the base from the runtime origin (window.location.origin + the hosting
- * subpath from getBasename()), so on the live GitHub Pages project page
- * canonicals point at the host that actually serves the page, and on the
- * custom domain they point at it once DNS is fixed. When/if DNS is fixed,
- * nothing needs to change — getSiteUrl() will return the custom domain
- * automatically. The static sitemaps/robots.txt are the only place a host
- * is still written out literally (public/sitemap*.xml, public/robots.txt);
- * flip those back to civilestimationpro.com when DNS resolves.
+ * IMPORTANT (Leg 3, 2026-11-26): civilestimationpro.com does NOT resolve
+ * (DNS NXDOMAIN, last checked 2026-11-12), and public/CNAME was deleted
+ * in the same change — while it shipped, GitHub Pages redirected the
+ * github.io URL to the dead domain and nothing opened. SITE_URL is
+ * therefore the LIVE GitHub Pages project-page host, and every canonical,
+ * OG and JSON-LD URL in the app derives from it (directly, or at runtime
+ * via getSiteUrl(), which returns the origin actually serving the page).
+ * The static sitemaps/robots.txt already use this same host, so host,
+ * canonicals and sitemaps cannot disagree. WHEN DNS IS FIXED, flip this
+ * ONE constant back to https://civilestimationpro.com, re-add
+ * public/CNAME with that host, and flip the static sitemaps/robots.txt
+ * to match — nothing else needs to change.
  */
 import { getBasename } from "../lib/toolRoutes";
 
-export const SITE_URL = "https://civilestimationpro.com";
+export const SITE_URL = "https://mansoorchaudary71-ship-it.github.io/Civil-Estimation-BOQ";
 export const SITE_NAME = "Civil Estimation Pro";
 export const SITE_TAGLINE = "BOQ & Construction Cost Calculators";
+// Contact mailbox (a mailto: address, not a canonical host): unchanged.
+// It only becomes reachable once the domain's MX records exist; the
+// address itself stays valid as the published contact either way.
 export const CONTACT_EMAIL = "support@civilestimationpro.com";
 
 /**

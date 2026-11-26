@@ -38,6 +38,39 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             if (id.includes('react-router')) return 'vendor-router';
             if (id.includes('recharts') || id.includes('/d3-') || id.includes('/d3/')) return 'vendor-charts';
+            // Leg 3 (2026-11-26): the generic 'vendor' chunk below is a
+            // STATIC import of the entry, so EVERYTHING mapped into it
+            // rides in first paint — including libraries only used by
+            // lazy routes. Measured baseline: vendor was 1,112 kB raw
+            // (344 kB gzip) yet its biggest members were lazy-only:
+            // konva (Takeoff/ReinforcementVisualizer), the react-markdown
+            // chain (Blog/AIAssistant), canvg/core-js/dompurify
+            // (html2pdf/html2canvas), re2js (firestore), pako/fast-png
+            // (jspdf), decimal.js-light/es-toolkit/@reduxjs/toolkit
+            // (recharts) and qrcode (lazy report/share flows). Each gets
+            // its own chunk here, so Rollup loads it only when the lazy
+            // route that needs it loads. Nothing below is imported by the
+            // entry or any eager home component (verified by chunk-module
+            // analysis 2026-11-26); if a future eager import is added,
+            // its chunk becomes a static preload again — keep it that way
+            // only deliberately.
+            if (id.includes('konva') || id.includes('react-reconciler')) return 'vendor-konva';
+            if (
+              id.includes('react-markdown') || id.includes('micromark') ||
+              id.includes('mdast') || id.includes('/unified/') ||
+              id.includes('remark-') || id.includes('rehype-') ||
+              id.includes('hast-') || id.includes('/vfile/') ||
+              id.includes('vfile-message') || id.includes('property-information') ||
+              id.includes('unist-') || id.includes('decode-named-character-reference') ||
+              id.includes('character-entities') || id.includes('stringify-entities') ||
+              id.includes('/ccount/') || id.includes('/bail/') || id.includes('/trough/')
+            ) return 'vendor-markdown';
+            if (id.includes('canvg') || id.includes('core-js') || id.includes('dompurify')) return 'vendor-html2pdf';
+            if (id.includes('re2js')) return 'vendor-firebase';
+            if (id.includes('fast-png') || id.includes('/pako/')) return 'vendor-pdf';
+            if (id.includes('jszip')) return 'vendor-spreadsheet';
+            if (id.includes('decimal.js-light') || id.includes('es-toolkit') || id.includes('@reduxjs/toolkit')) return 'vendor-charts';
+            if (id.includes('qrcode')) return 'vendor-qrcode';
             // NOTE (Wave 1 verification, corrected Wave 2-C): html2pdf/
             // html2canvas must NOT be forced into vendor-pdf. They are
             // dynamically imported by eager ToolHeader (await
